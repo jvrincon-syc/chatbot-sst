@@ -4,6 +4,8 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from ingestion.schemas.common import NonBooleanFloat
+
 
 class LegacyModel(BaseModel):
     """Permissive reader models for the historic schema 1.0 payloads."""
@@ -16,7 +18,9 @@ class LegacyPageRecord(LegacyModel):
     text_raw: str
     text_normalized: str
     extraction_method: Literal["markdown", "pdf_digital", "ocr"]
-    ocr_confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    ocr_confidence: Optional[NonBooleanFloat] = Field(
+        default=None, ge=0.0, le=1.0
+    )
     has_handwriting_warning: bool = False
     warnings: list[str] = Field(default_factory=list)
 
@@ -30,11 +34,11 @@ class LegacyPagesArtifact(LegacyModel):
 
 class LegacyOcrPage(LegacyModel):
     page_number: int = Field(ge=1)
-    confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    confidence: Optional[NonBooleanFloat] = Field(default=None, ge=0.0, le=1.0)
     word_count: int = Field(ge=0)
     low_confidence_word_count: Optional[int] = Field(default=None, ge=0)
     deskew_applied: bool = False
-    rotation_detected_degrees: Optional[float] = None
+    rotation_detected_degrees: Optional[NonBooleanFloat] = None
     contains_handwriting: Optional[bool] = None
     warnings: list[str] = Field(default_factory=list)
 
@@ -45,7 +49,9 @@ class LegacyOcrArtifact(LegacyModel):
     engine: Optional[str] = None
     engine_version: Optional[str] = None
     language: Optional[str] = None
-    overall_confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    overall_confidence: Optional[NonBooleanFloat] = Field(
+        default=None, ge=0.0, le=1.0
+    )
     pages: list[LegacyOcrPage]
 
 
@@ -56,7 +62,7 @@ class LegacyTableRecord(LegacyModel):
     headers: list[str] = Field(default_factory=list)
     rows: list[list[str]] = Field(default_factory=list)
     markdown_representation: str
-    quality: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    quality: Optional[NonBooleanFloat] = Field(default=None, ge=0.0, le=1.0)
     warnings: list[str] = Field(default_factory=list)
 
 
@@ -83,10 +89,12 @@ class LegacyMetadataArtifact(LegacyModel):
     language: str = "es"
     extraction_method: Literal["markdown", "pdf_digital", "ocr"]
     ocr_engine: Optional[str] = None
-    ocr_confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    ocr_confidence: Optional[NonBooleanFloat] = Field(
+        default=None, ge=0.0, le=1.0
+    )
     contains_handwriting: Optional[bool] = None
     contains_tables: Optional[bool] = None
-    classification_confidence: Optional[float] = Field(
+    classification_confidence: Optional[NonBooleanFloat] = Field(
         default=None, ge=0.0, le=1.0
     )
     content_hash: str

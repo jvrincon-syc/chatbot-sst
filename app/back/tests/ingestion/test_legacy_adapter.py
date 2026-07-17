@@ -97,6 +97,22 @@ def test_every_legacy_ocr_confidence_is_estimated(confidence: float) -> None:
     assert artifact.pages[0].confidence.value == confidence
 
 
+@pytest.mark.parametrize(
+    ("payload", "artifact_type"),
+    [
+        (legacy_metadata(ocr_confidence=True), "metadata"),
+        (legacy_metadata(classification_confidence=False), "metadata"),
+        (legacy_ocr(True), "ocr"),
+    ],
+)
+def test_legacy_boolean_confidence_is_rejected_before_float_coercion(
+    payload: dict,
+    artifact_type: str,
+) -> None:
+    with pytest.raises(ValidationError):
+        load_artifact(payload, artifact_type, {})
+
+
 def test_legacy_false_or_missing_features_are_not_evaluated() -> None:
     false_features = adapt_v1_to_v2(legacy_metadata(), "metadata", {})
     missing_features_payload = legacy_metadata()
@@ -164,6 +180,44 @@ def test_unknown_absolute_legacy_path_is_preserved_only_as_legacy_path() -> None
     assert adapted.legacy_path == str(outside)
     assert not Path(adapted.source_relpath).is_absolute()
     assert "legacy_absolute_path_not_relativized" in adapted.warnings
+
+
+def test_both_unknown_absolute_metadata_paths_are_preserved_explicitly() -> None:
+    source = str(PureWindowsPath("D:/outside/policy.pdf"))
+    normalized = str(PureWindowsPath("E:/archive/policy.md"))
+    adapted = adapt_v1_to_v2(
+        legacy_metadata(source_path=source, normalized_path=normalized),
+        "metadata",
+        {
+            "raw_root": PureWindowsPath("C:/known/raw"),
+            "normalized_root": PureWindowsPath("C:/known/normalized"),
+        },
+    )
+
+    assert adapted.legacy_source_path == source
+    assert adapted.legacy_normalized_path == normalized
+    assert adapted.legacy_path == source
+
+
+def test_legacy_metadata_ocr_engine_is_retained_on_estimated_confidence() -> None:
+    adapted = adapt_v1_to_v2(
+        legacy_metadata(ocr_engine="legacy-tesseract", ocr_confidence=0.8),
+        "metadata",
+        {},
+    )
+
+    assert adapted.ocr_confidence.engine == "legacy-tesseract"
+
+
+def test_unsafe_relative_legacy_path_has_traversal_specific_warning() -> None:
+    adapted = adapt_v1_to_v2(
+        legacy_metadata(source_path="../outside/policy.pdf"),
+        "metadata",
+        {},
+    )
+
+    assert "legacy_relative_path_unsafe" in adapted.warnings
+    assert "legacy_absolute_path_not_relativized" not in adapted.warnings
 
 
 def test_canonical_v2_payload_rejects_unknown_fields_in_loader() -> None:

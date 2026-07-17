@@ -3,8 +3,14 @@ from __future__ import annotations
 import re
 from typing import Annotated, Any, Literal, Optional
 
-from pydantic import AfterValidator, ConfigDict, Field, model_validator
-from pydantic.main import BaseModel
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Field,
+    model_validator,
+)
 
 
 class StrictModel(BaseModel):
@@ -27,6 +33,15 @@ def _validate_relative_posix_path(value: str) -> str:
 
 
 RelativePosixPath = Annotated[str, AfterValidator(_validate_relative_posix_path)]
+
+
+def _reject_boolean_number(value: Any) -> Any:
+    if isinstance(value, bool):
+        raise ValueError("numeric value must not be boolean")
+    return value
+
+
+NonBooleanFloat = Annotated[float, BeforeValidator(_reject_boolean_number)]
 
 
 class BBox(StrictModel):
@@ -81,7 +96,7 @@ class Observation(StrictModel):
 
 class ConfidenceMetric(StrictModel):
     kind: Literal["measured", "estimated", "unavailable"]
-    value: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    value: Optional[NonBooleanFloat] = Field(default=None, ge=0.0, le=1.0)
     engine: Optional[str] = None
     engine_version: Optional[str] = None
     unit: Optional[str] = None
@@ -92,8 +107,6 @@ class ConfidenceMetric(StrictModel):
 
     @model_validator(mode="after")
     def validate_metric_provenance(self) -> "ConfidenceMetric":
-        if isinstance(self.value, bool):
-            raise ValueError("confidence value must be numeric, not boolean")
         if self.kind == "measured":
             if self.value is None:
                 raise ValueError("measured confidence requires a numeric value")
@@ -117,7 +130,7 @@ class ConfidenceMetric(StrictModel):
 
 class MeasuredValue(StrictModel):
     status: Literal["measured", "estimated", "unavailable"]
-    value: Optional[float] = None
+    value: Optional[NonBooleanFloat] = None
     unit: Optional[str] = None
     engine: Optional[str] = None
     engine_version: Optional[str] = None
@@ -128,8 +141,6 @@ class MeasuredValue(StrictModel):
 
     @model_validator(mode="after")
     def validate_measurement(self) -> "MeasuredValue":
-        if isinstance(self.value, bool):
-            raise ValueError("measured value must be numeric, not boolean")
         if self.status == "measured":
             if self.value is None:
                 raise ValueError("measured status requires a numeric value")

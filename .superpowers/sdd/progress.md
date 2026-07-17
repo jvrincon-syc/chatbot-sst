@@ -4,8 +4,8 @@ Plan: `docs/superpowers/plans/2026-07-17-robust-pdf-ingestion-schema2.md`
 
 Baseline: 34 ingestion tests passed on Python 3.12.13.
 
-Task 1: in progress
-Task 2: pending
+Task 1: complete (59 focused tests passed; independent review approved; changes span user commit 8999118 plus working tree)
+Task 2: in progress
 Task 3: pending
 Task 4: pending
 Task 5: pending

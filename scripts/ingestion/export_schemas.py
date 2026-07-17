@@ -8,7 +8,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
 
-from ingestion.schemas.artifacts import MetadataArtifact, OcrArtifact, PagesArtifact, TablesArtifact  # noqa: E402
+from ingestion.manifests.writer import write_text_atomic  # noqa: E402
+from ingestion.schemas.artifacts import (  # noqa: E402
+    FormsArtifact,
+    MetadataArtifact,
+    OcrArtifact,
+    PagesArtifact,
+    TablesArtifact,
+)
+from ingestion.schemas.manifests import (  # noqa: E402
+    BundleManifest,
+    ErrorManifest,
+    InventoryManifest,
+    ReviewManifest,
+    RunManifest,
+)
 
 
 SCHEMAS = {
@@ -16,6 +30,12 @@ SCHEMAS = {
     "pages.schema.json": PagesArtifact,
     "ocr.schema.json": OcrArtifact,
     "tables.schema.json": TablesArtifact,
+    "forms.schema.json": FormsArtifact,
+    "inventory.schema.json": InventoryManifest,
+    "run.schema.json": RunManifest,
+    "review.schema.json": ReviewManifest,
+    "errors.schema.json": ErrorManifest,
+    "bundle.schema.json": BundleManifest,
 }
 
 
@@ -25,9 +45,15 @@ def main() -> int:
     for filename, model in SCHEMAS.items():
         schema = model.model_json_schema()
         schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
-        (output_dir / filename).write_text(
-            json.dumps(schema, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
+        write_text_atomic(
+            output_dir / filename,
+            json.dumps(
+                schema,
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
         )
     print(f"Exported {len(SCHEMAS)} schemas -> {output_dir}")
     return 0

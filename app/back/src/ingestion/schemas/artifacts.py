@@ -11,6 +11,7 @@ from ingestion.schemas.common import (
     DocumentField,
     Evidence,
     MeasuredValue,
+    NonBooleanFloat,
     NormalizationAction,
     Observation,
     PageBlock,
@@ -70,7 +71,7 @@ class PagesArtifact(StrictModel):
 class OcrWord(StrictModel):
     text: str
     bbox: BBox
-    confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    confidence: Optional[NonBooleanFloat] = Field(default=None, ge=0.0, le=1.0)
     warnings: list[str] = Field(default_factory=list)
 
 
@@ -217,6 +218,8 @@ class MetadataArtifact(StrictModel):
     source_relpath: RelativePosixPath
     normalized_relpath: RelativePosixPath
     legacy_path: Optional[str] = None
+    legacy_source_path: Optional[str] = None
+    legacy_normalized_path: Optional[str] = None
     document_control: DocumentControl
     classification: Classification
     page_count: int = Field(ge=0)

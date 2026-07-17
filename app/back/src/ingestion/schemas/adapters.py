@@ -54,12 +54,20 @@ def _unavailable_confidence() -> ConfidenceMetric:
     return ConfidenceMetric(kind="unavailable", value=None)
 
 
-def _legacy_confidence(value: Optional[float], label: str) -> ConfidenceMetric:
+def _legacy_confidence(
+    value: Optional[float],
+    label: str,
+    *,
+    engine: Optional[str] = None,
+    engine_version: Optional[str] = None,
+) -> ConfidenceMetric:
     if value is None:
         return _unavailable_confidence()
     return ConfidenceMetric(
         kind="estimated",
         value=value,
+        engine=engine,
+        engine_version=engine_version,
         method="legacy_assertion",
         provenance=label,
         warnings=["legacy_confidence_not_measured"],
@@ -124,7 +132,8 @@ def _adapt_path(
     document_id: str,
     fallback_name: str,
 ) -> tuple[str, Optional[str], list[str]]:
-    if not _is_absolute(value):
+    is_absolute = _is_absolute(value)
+    if not is_absolute:
         normalized = value.replace("\\", "/")
         parts = normalized.split("/")
         if normalized and all(part not in {"", ".", ".."} for part in parts):
@@ -140,7 +149,12 @@ def _adapt_path(
 
     basename = _safe_basename(value, fallback_name)
     placeholder = f"legacy/{document_id}/{basename}"
-    return placeholder, value, ["legacy_absolute_path_not_relativized"]
+    warning = (
+        "legacy_absolute_path_not_relativized"
+        if is_absolute
+        else "legacy_relative_path_unsafe"
+    )
+    return placeholder, value, [warning]
 
 
 def _adapt_metadata(
@@ -196,6 +210,8 @@ def _adapt_metadata(
         source_relpath=source_relpath,
         normalized_relpath=normalized_relpath,
         legacy_path=legacy_path,
+        legacy_source_path=source_legacy_path,
+        legacy_normalized_path=normalized_legacy_path,
         document_control=DocumentControl(
             title=DocumentField(value=None, status="not_evaluated"),
             code=DocumentField(value=None, status="not_evaluated"),
@@ -222,7 +238,9 @@ def _adapt_metadata(
         language=legacy.language,
         extraction_method=legacy.extraction_method,
         ocr_confidence=_legacy_confidence(
-            legacy.ocr_confidence, "legacy_metadata_ocr_confidence"
+            legacy.ocr_confidence,
+            "legacy_metadata_ocr_confidence",
+            engine=legacy.ocr_engine,
         ),
         handwriting=_legacy_feature(
             legacy.contains_handwriting, "contains_handwriting"
@@ -284,7 +302,10 @@ def _adapt_ocr(payload: Mapping[str, Any]) -> OcrArtifact:
             OcrPage(
                 page_number=page.page_number,
                 confidence=_legacy_confidence(
-                    page.confidence, "legacy_page_ocr_confidence"
+                    page.confidence,
+                    "legacy_page_ocr_confidence",
+                    engine=legacy.engine,
+                    engine_version=legacy.engine_version,
                 ),
                 word_count=page.word_count,
                 low_confidence_word_count=page.low_confidence_word_count,
@@ -303,7 +324,10 @@ def _adapt_ocr(payload: Mapping[str, Any]) -> OcrArtifact:
         engine_version=legacy.engine_version,
         language=legacy.language,
         document_confidence=_legacy_confidence(
-            legacy.overall_confidence, "legacy_document_ocr_confidence"
+            legacy.overall_confidence,
+            "legacy_document_ocr_confidence",
+            engine=legacy.engine,
+            engine_version=legacy.engine_version,
         ),
         pages=pages,
     )

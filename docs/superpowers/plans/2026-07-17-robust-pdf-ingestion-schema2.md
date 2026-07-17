@@ -47,11 +47,11 @@
 - Produces: canonical `MetadataArtifact`, `PagesArtifact`, `OcrArtifact`, `TablesArtifact`, `FormsArtifact`, all schema `2.0`.
 - Produces: `load_artifact(payload, artifact_type, context)` and `adapt_v1_to_v2(...)`.
 
-- [ ] **Step 1: Write failing primitive-contract tests**
+- [x] **Step 1: Write failing primitive-contract tests**
 
   Cover required schema version, rejected extras, POSIX relative paths, traversal rejection, all observation invariants, measured confidence provenance and nullable/unavailable confidence.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
   Run:
 
@@ -61,27 +61,27 @@
 
   Expected: collection/import failures because schema 2.0 primitives do not exist.
 
-- [ ] **Step 3: Implement strict primitives**
+- [x] **Step 3: Implement strict primitives**
 
   Use `ConfigDict(extra="forbid")`. `Observation` supports only boolean feature observations; `MeasuredValue` carries numeric rotation/deskew measurements separately. `BBox` stores page coordinates plus coordinate system.
 
-- [ ] **Step 4: Write failing artifact relationship tests**
+- [x] **Step 4: Write failing artifact relationship tests**
 
   Cover `hybrid`, page blocks, removed spans, normalization actions, OCR words, table cells/spans, form label/control associations, document-control fields, independent classification confidences, conflicts, review reasons and artifact hashes in manifests rather than self-referential metadata.
 
-- [ ] **Step 5: Implement canonical artifacts**
+- [x] **Step 5: Implement canonical artifacts**
 
   Preserve public artifact class names to reduce import churn. Add `FormsArtifact`; keep all historic document types plus `programa`, `matriz` and `otro`.
 
-- [ ] **Step 6: Write failing legacy dispatch tests**
+- [x] **Step 6: Write failing legacy dispatch tests**
 
   Assert explicit 1.0/2.0 dispatch, missing/unknown rejection, all legacy confidence as `estimated`, false/missing observations as `not_evaluated`, true observations as warned legacy assertions, nullable document fields as `not_evaluated`, and absolute path handling with/without known roots.
 
-- [ ] **Step 7: Implement exact legacy models, adapter and loader**
+- [x] **Step 7: Implement exact legacy models, adapter and loader**
 
   Never instantiate canonical models directly from unknown-version dictionaries. Preserve non-relativizable absolute paths only in `legacy_path` with a warning.
 
-- [ ] **Step 8: Verify GREEN and regression**
+- [x] **Step 8: Verify GREEN and regression**
 
   ```powershell
   .venv\Scripts\python.exe -m pytest app/back/tests/ingestion/test_schemas_v2.py app/back/tests/ingestion/test_legacy_adapter.py app/back/tests/ingestion/test_schemas.py -q
@@ -437,4 +437,3 @@
 - [ ] **Step 9: Complete audit trail**
 
   Check every task in this plan and `memory/plan_trabajo.md`. Record commands, counts, exceptions, unresolved review reasons and whether promotion occurred. Do not declare Phase 1 closed unless every closure criterion passes or the user explicitly accepts documented exceptions.
-

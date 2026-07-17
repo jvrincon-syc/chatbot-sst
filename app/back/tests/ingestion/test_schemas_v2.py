@@ -216,6 +216,31 @@ def test_confidence_metric_distinguishes_measured_estimated_and_unavailable() ->
     assert unavailable.value is None
 
 
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {
+            "kind": "estimated",
+            "value": True,
+            "method": "proxy",
+        },
+        {
+            "kind": "measured",
+            "value": False,
+            "engine": "tesseract",
+            "engine_version": "5.5",
+            "unit": "mean_word_confidence",
+            "sample_size": 1,
+        },
+    ],
+)
+def test_confidence_metric_rejects_boolean_values_before_float_coercion(
+    payload: dict,
+) -> None:
+    with pytest.raises(ValidationError):
+        ConfidenceMetric(**payload)
+
+
 def test_measured_value_keeps_numeric_rotation_separate_from_observations() -> None:
     rotation = MeasuredValue(
         status="estimated",
@@ -231,6 +256,19 @@ def test_measured_value_keeps_numeric_rotation_separate_from_observations() -> N
             status="unavailable",
             value=0,
             unit="degrees",
+        )
+
+
+@pytest.mark.parametrize("value", [True, False])
+def test_measured_value_rejects_boolean_values_before_float_coercion(
+    value: bool,
+) -> None:
+    with pytest.raises(ValidationError):
+        MeasuredValue(
+            status="estimated",
+            value=value,
+            unit="degrees",
+            method="proxy",
         )
 
 

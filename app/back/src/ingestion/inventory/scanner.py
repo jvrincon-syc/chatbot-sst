@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, List, Optional
 
+from ingestion.paths import canonical_relpath, stable_document_id
 from ingestion.schemas.inventory import InventoryRecord
 
 
@@ -41,11 +42,6 @@ def detect_mime_type(path: Path, detected_extension: Optional[str]) -> str:
     return guessed or "application/octet-stream"
 
 
-def stable_document_id(relative_path: Path, content_hash: str = "") -> str:
-    identity = relative_path.as_posix().encode("utf-8")
-    return "doc_" + hashlib.sha1(identity).hexdigest()[:16]
-
-
 def infer_category(relative_path: Path) -> str:
     return relative_path.parts[0] if len(relative_path.parts) > 1 else "root"
 
@@ -65,13 +61,16 @@ def scan_docs_raw(
     records: List[InventoryRecord] = []
     for path in iter_files(docs_raw):
         relative_path = path.relative_to(docs_raw)
+        source_relpath = canonical_relpath(relative_path.as_posix())
         content_hash = compute_content_hash(path)
         detected_extension = detect_extension(path)
         reported_extension = path.suffix.lower() or None
         records.append(
             InventoryRecord(
-                document_id=stable_document_id(relative_path, content_hash),
-                source_path=str(path),
+                schema_version="2.0",
+                identity_version="relpath-posix-v1",
+                document_id=stable_document_id(source_relpath),
+                source_relpath=source_relpath,
                 document_name=path.name,
                 detected_extension=detected_extension,
                 reported_extension=reported_extension,

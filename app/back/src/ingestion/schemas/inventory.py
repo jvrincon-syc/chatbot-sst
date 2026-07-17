@@ -9,6 +9,7 @@ from ingestion.schemas.common import RelativePosixPath, StrictModel
 
 class InventoryRecord(StrictModel):
     schema_version: Literal["2.0"]
+    identity_version: Literal["relpath-posix-v1"] = "relpath-posix-v1"
     document_id: str = Field(min_length=1)
     source_relpath: RelativePosixPath
     legacy_path: Optional[str] = None
