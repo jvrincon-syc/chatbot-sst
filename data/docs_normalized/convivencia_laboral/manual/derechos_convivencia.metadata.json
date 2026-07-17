@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_5773d940742c0a47",
+  "document_name": "derechos_convivencia.md",
+  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/convivencia_laboral/manual/derechos_convivencia.md",
+  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/convivencia_laboral/manual/derechos_convivencia.md",
+  "document_type": "manual",
+  "topic": "Comite de Convivencia Laboral",
+  "subtopic": null,
+  "version": null,
+  "publication_date": null,
+  "effective_date": null,
+  "page_count": 1,
+  "language": "es",
+  "extraction_method": "markdown",
+  "ocr_engine": null,
+  "ocr_confidence": null,
+  "contains_handwriting": false,
+  "contains_tables": false,
+  "classification_confidence": 0.98,
+  "content_hash": "a768314ba1320e37c45e7d9ea528882c38ed1b28cbd669ecaa9bfebf7a1cb846",
+  "corpus_version": "1",
+  "pipeline_version": "1.0.0",
+  "processing_status": "processed",
+  "warnings": [
+    "missing_title"
+  ],
+  "processed_at": "2026-07-16T23:50:41.176813-05:00"
+}

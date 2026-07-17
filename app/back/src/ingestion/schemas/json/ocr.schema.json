@@ -1,0 +1,106 @@
+{
+  "$defs": {
+    "OcrPage": {
+      "properties": {
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "word_count": {
+          "minimum": 0,
+          "title": "Word Count",
+          "type": "integer"
+        },
+        "low_confidence_word_count": {
+          "minimum": 0,
+          "title": "Low Confidence Word Count",
+          "type": "integer"
+        },
+        "deskew_applied": {
+          "title": "Deskew Applied",
+          "type": "boolean"
+        },
+        "rotation_detected_degrees": {
+          "title": "Rotation Detected Degrees",
+          "type": "integer"
+        },
+        "contains_handwriting": {
+          "title": "Contains Handwriting",
+          "type": "boolean"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "page_number",
+        "confidence",
+        "word_count",
+        "low_confidence_word_count",
+        "deskew_applied",
+        "rotation_detected_degrees",
+        "contains_handwriting"
+      ],
+      "title": "OcrPage",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "document_id": {
+      "title": "Document Id",
+      "type": "string"
+    },
+    "engine": {
+      "title": "Engine",
+      "type": "string"
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "language": {
+      "title": "Language",
+      "type": "string"
+    },
+    "overall_confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Overall Confidence",
+      "type": "number"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/OcrPage"
+      },
+      "title": "Pages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "document_id",
+    "engine",
+    "engine_version",
+    "language",
+    "overall_confidence",
+    "pages"
+  ],
+  "title": "OcrArtifact",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

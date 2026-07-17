@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_33db5a236b33527d",
+  "page_count": 1,
+  "pages": [
+    {
+      "page_number": 1,
+      "text_raw": "Se cuenta con un Comite Paritario de Seguridad y salud en el trabajo (COPASST), dando cumplimiento a la resolucion 2013 de 1986 y el Decreto 1295 de 1994.\n\nEl comite paritario desarrolla actividades en seguridad y salud en el trabajo participando de manera activa en el funcionamiento del sistema de gestion de la seguridad y salud en el trabajo.  ",
+      "text_normalized": "Se cuenta con un Comite Paritario de Seguridad y salud en el trabajo (COPASST), dando cumplimiento a la resolucion 2013 de 1986 y el Decreto 1295 de 1994.\n\nEl comite paritario desarrolla actividades en seguridad y salud en el trabajo participando de manera activa en el funcionamiento del sistema de gestion de la seguridad y salud en el trabajo.",
+      "extraction_method": "markdown",
+      "ocr_confidence": null,
+      "has_handwriting_warning": false,
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_2fd43b5d3bcb833b",
+  "page_count": 1,
+  "pages": [
+    {
+      "page_number": 1,
+      "text_raw": "Escribir al correo:\ncopasst@syc.com.co\nSeguridadysalud@syc.com.co\nLlamadas y WhatsApp: 3176451139 ",
+      "text_normalized": "Escribir al correo:\ncopasst@syc.com.co\nSeguridadysalud@syc.com.co\nLlamadas y WhatsApp: 3176451139",
+      "extraction_method": "markdown",
+      "ocr_confidence": null,
+      "has_handwriting_warning": false,
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ]
+}

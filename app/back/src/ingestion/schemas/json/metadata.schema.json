@@ -1,0 +1,201 @@
+{
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "document_id": {
+      "title": "Document Id",
+      "type": "string"
+    },
+    "document_name": {
+      "title": "Document Name",
+      "type": "string"
+    },
+    "source_path": {
+      "title": "Source Path",
+      "type": "string"
+    },
+    "normalized_path": {
+      "title": "Normalized Path",
+      "type": "string"
+    },
+    "document_type": {
+      "title": "Document Type",
+      "type": "string"
+    },
+    "topic": {
+      "title": "Topic",
+      "type": "string"
+    },
+    "subtopic": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Subtopic"
+    },
+    "version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Version"
+    },
+    "publication_date": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publication Date"
+    },
+    "effective_date": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective Date"
+    },
+    "page_count": {
+      "minimum": 0,
+      "title": "Page Count",
+      "type": "integer"
+    },
+    "language": {
+      "default": "es",
+      "title": "Language",
+      "type": "string"
+    },
+    "extraction_method": {
+      "enum": [
+        "markdown",
+        "pdf_digital",
+        "ocr"
+      ],
+      "title": "Extraction Method",
+      "type": "string"
+    },
+    "ocr_engine": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ocr Engine"
+    },
+    "ocr_confidence": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ocr Confidence"
+    },
+    "contains_handwriting": {
+      "default": false,
+      "title": "Contains Handwriting",
+      "type": "boolean"
+    },
+    "contains_tables": {
+      "default": false,
+      "title": "Contains Tables",
+      "type": "boolean"
+    },
+    "classification_confidence": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Classification Confidence"
+    },
+    "content_hash": {
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "corpus_version": {
+      "title": "Corpus Version",
+      "type": "string"
+    },
+    "pipeline_version": {
+      "title": "Pipeline Version",
+      "type": "string"
+    },
+    "processing_status": {
+      "enum": [
+        "pending",
+        "processed",
+        "failed",
+        "needs_review",
+        "skipped"
+      ],
+      "title": "Processing Status",
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "processed_at": {
+      "title": "Processed At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "document_id",
+    "document_name",
+    "source_path",
+    "normalized_path",
+    "document_type",
+    "topic",
+    "page_count",
+    "extraction_method",
+    "content_hash",
+    "corpus_version",
+    "pipeline_version",
+    "processing_status"
+  ],
+  "title": "MetadataArtifact",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

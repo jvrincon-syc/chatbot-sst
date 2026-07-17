@@ -1,0 +1,21 @@
+{
+  "name": "chatbot-sst",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pipeline de ingesta y normalizacion documental para chatbot SST.",
+  "scripts": {
+    "setup": "python3 -m venv .venv && ./.venv/bin/python -m pip install --upgrade pip setuptools wheel && ./.venv/bin/python -m pip install -e '.[dev]'",
+    "setup:python": "python3 -m venv .venv && ./.venv/bin/python -m pip install --upgrade pip setuptools wheel && ./.venv/bin/python -m pip install -e '.[dev]'",
+    "setup:ocr:mac": "brew install ocrmypdf tesseract tesseract-lang",
+    "secrets:init": "test -f secrets.env || cp secrets.example.env secrets.env",
+    "doctor:ocr": "./.venv/bin/python scripts/ingestion/doctor_ocr.py",
+    "test:ingestion": "./.venv/bin/python -m pytest app/back/tests/ingestion",
+    "ingestion:inventory": "./.venv/bin/python scripts/ingestion/run_inventory.py",
+    "ingestion:run": "./.venv/bin/python scripts/ingestion/run_pipeline.py",
+    "ingestion:validate": "./.venv/bin/python scripts/ingestion/validate_normalized.py",
+    "schemas:export": "./.venv/bin/python scripts/ingestion/export_schemas.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_dec6dc6770fea917",
+  "page_count": 1,
+  "pages": [
+    {
+      "page_number": 1,
+      "text_raw": "Se cuenta con el comite de convivencia laboral dando cumplimiento a lo establecido en las resoluciones 652 y 1356 de 2012, creado como medida preventiva para el acoso laboral. Sesiona de manera trimestral o en casos que requieran intervencion inmediata. El comite de convivencia cuenta con un reglamento en donde se establecen las funciones y responsabilidades de los miembros y describe el funcionamiento del mismo.",
+      "text_normalized": "Se cuenta con el comite de convivencia laboral dando cumplimiento a lo establecido en las resoluciones 652 y 1356 de 2012, creado como medida preventiva para el acoso laboral. Sesiona de manera trimestral o en casos que requieran intervencion inmediata. El comite de convivencia cuenta con un reglamento en donde se establecen las funciones y responsabilidades de los miembros y describe el funcionamiento del mismo.",
+      "extraction_method": "markdown",
+      "ocr_confidence": null,
+      "has_handwriting_warning": false,
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ]
+}

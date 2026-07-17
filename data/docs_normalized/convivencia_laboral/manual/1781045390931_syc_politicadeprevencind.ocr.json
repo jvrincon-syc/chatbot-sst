@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_d57d21ff836e1ec0",
+  "engine": "tesseract",
+  "engine_version": "5.5.2",
+  "language": "spa",
+  "overall_confidence": 1.0,
+  "pages": [
+    {
+      "page_number": 1,
+      "confidence": 1.0,
+      "word_count": 313,
+      "low_confidence_word_count": 0,
+      "deskew_applied": true,
+      "rotation_detected_degrees": 0,
+      "contains_handwriting": false,
+      "warnings": []
+    }
+  ]
+}

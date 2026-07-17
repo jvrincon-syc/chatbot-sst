@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "PageRecord": {
+      "properties": {
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "text_raw": {
+          "title": "Text Raw",
+          "type": "string"
+        },
+        "text_normalized": {
+          "title": "Text Normalized",
+          "type": "string"
+        },
+        "extraction_method": {
+          "enum": [
+            "markdown",
+            "pdf_digital",
+            "ocr"
+          ],
+          "title": "Extraction Method",
+          "type": "string"
+        },
+        "ocr_confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ocr Confidence"
+        },
+        "has_handwriting_warning": {
+          "default": false,
+          "title": "Has Handwriting Warning",
+          "type": "boolean"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "page_number",
+        "text_raw",
+        "text_normalized",
+        "extraction_method"
+      ],
+      "title": "PageRecord",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "document_id": {
+      "title": "Document Id",
+      "type": "string"
+    },
+    "page_count": {
+      "minimum": 0,
+      "title": "Page Count",
+      "type": "integer"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/PageRecord"
+      },
+      "title": "Pages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "document_id",
+    "page_count",
+    "pages"
+  ],
+  "title": "PagesArtifact",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

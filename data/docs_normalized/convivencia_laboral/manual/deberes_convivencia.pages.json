@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_7a0f56a63a930105",
+  "page_count": 1,
+  "pages": [
+    {
+      "page_number": 1,
+      "text_raw": "La calidad de los servidores enaltece a los miembros de la empresa, ademas todos tienen el deber de engrandecerla y dignificarla. Son deberes de los funcionarios las aca establecidos.\n\nSon deberes de los trabajadores:\n\n1.        Cumplir con todas las normas internas adoptadas por el trabajador para el buen funcionamiento de la institucion.\n\n2.        Respetar a los companeros en todo momento y lugar (incluyendo a todo el personal que labore en la empresa, incluso trabajadores temporales y practicantes).\n\n3.        Dar trato respetuoso a los demas frente a raza, creencia religiosa o preferencia sexual.\n\n4.        Comunicarse de manera asertiva y tranquila.\n\n5.        Dar cumplimiento de las obligaciones derivadas de su vinculacion con la entidad.\n\n6.        Comunicar oportunamente a la institucion las observaciones que estime puedan provocar danos o perjuicios en cuanto al acoso laboral se refiere.",
+      "text_normalized": "La calidad de los servidores enaltece a los miembros de la empresa, ademas todos tienen el deber de engrandecerla y dignificarla. Son deberes de los funcionarios las aca establecidos.\n\nSon deberes de los trabajadores:\n\n1. Cumplir con todas las normas internas adoptadas por el trabajador para el buen funcionamiento de la institucion.\n\n2. Respetar a los companeros en todo momento y lugar (incluyendo a todo el personal que labore en la empresa, incluso trabajadores temporales y practicantes).\n\n3. Dar trato respetuoso a los demas frente a raza, creencia religiosa o preferencia sexual.\n\n4. Comunicarse de manera asertiva y tranquila.\n\n5. Dar cumplimiento de las obligaciones derivadas de su vinculacion con la entidad.\n\n6. Comunicar oportunamente a la institucion las observaciones que estime puedan provocar danos o perjuicios en cuanto al acoso laboral se refiere.",
+      "extraction_method": "markdown",
+      "ocr_confidence": null,
+      "has_handwriting_warning": false,
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ]
+}

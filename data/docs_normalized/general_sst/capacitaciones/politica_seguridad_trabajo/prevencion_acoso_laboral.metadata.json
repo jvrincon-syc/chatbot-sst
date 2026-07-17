@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_1ff1756177bf1b1f",
+  "document_name": "prevencion_acoso_laboral.md",
+  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md",
+  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md",
+  "document_type": "politica",
+  "topic": "Politica de seguridad",
+  "subtopic": null,
+  "version": null,
+  "publication_date": null,
+  "effective_date": null,
+  "page_count": 1,
+  "language": "es",
+  "extraction_method": "markdown",
+  "ocr_engine": null,
+  "ocr_confidence": null,
+  "contains_handwriting": false,
+  "contains_tables": false,
+  "classification_confidence": 0.98,
+  "content_hash": "d9f0d382b81b5ae79ac47d4319ba395bb339abeea69030af4e2074ae0bc60cfe",
+  "corpus_version": "1",
+  "pipeline_version": "1.0.0",
+  "processing_status": "processed",
+  "warnings": [
+    "missing_title"
+  ],
+  "processed_at": "2026-07-16T23:50:44.613514-05:00"
+}

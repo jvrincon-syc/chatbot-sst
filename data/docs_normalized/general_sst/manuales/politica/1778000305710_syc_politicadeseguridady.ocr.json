@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_f38f9f98d854feed",
+  "engine": "tesseract",
+  "engine_version": "5.5.2",
+  "language": "spa",
+  "overall_confidence": 1.0,
+  "pages": [
+    {
+      "page_number": 1,
+      "confidence": 1.0,
+      "word_count": 358,
+      "low_confidence_word_count": 0,
+      "deskew_applied": true,
+      "rotation_detected_degrees": 0,
+      "contains_handwriting": false,
+      "warnings": []
+    },
+    {
+      "page_number": 2,
+      "confidence": 1.0,
+      "word_count": 224,
+      "low_confidence_word_count": 0,
+      "deskew_applied": true,
+      "rotation_detected_degrees": 0,
+      "contains_handwriting": false,
+      "warnings": []
+    }
+  ]
+}

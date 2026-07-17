@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_eb34bb480d443513",
+  "page_count": 1,
+  "pages": [
+    {
+      "page_number": 1,
+      "text_raw": "El presidente del Comite Paritario de Seguridad y Salud en el Trabajo (COPASST) es designado por el empleador y tiene las siguientes funciones principales:\n\n1 -Representar al empleador dentro del comite.\n2 -Convocar y presidir las reuniones del COPASST.\n3 -Coordinar la elaboracion del plan de trabajo anual del comite.\n4 -Velar por el cumplimiento de las decisiones tomadas en el comite.\n5 -Canalizar ante la alta direccion las recomendaciones del COPASST.\n6 -Apoyar la implementacion de medidas correctivas y preventivas frente a los riesgos identificados.\n7 -Fomentar la participacion activa de los miembros y trabajadores en temas de seguridad y salud.",
+      "text_normalized": "El presidente del Comite Paritario de Seguridad y Salud en el Trabajo (COPASST) es designado por el empleador y tiene las siguientes funciones principales:\n\n1 -Representar al empleador dentro del comite.\n2 -Convocar y presidir las reuniones del COPASST.\n3 -Coordinar la elaboracion del plan de trabajo anual del comite.\n4 -Velar por el cumplimiento de las decisiones tomadas en el comite.\n5 -Canalizar ante la alta direccion las recomendaciones del COPASST.\n6 -Apoyar la implementacion de medidas correctivas y preventivas frente a los riesgos identificados.\n7 -Fomentar la participacion activa de los miembros y trabajadores en temas de seguridad y salud.",
+      "extraction_method": "markdown",
+      "ocr_confidence": null,
+      "has_handwriting_warning": false,
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ]
+}

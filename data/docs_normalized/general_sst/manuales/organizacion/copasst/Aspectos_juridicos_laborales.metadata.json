@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_33db5a236b33527d",
+  "document_name": "Aspectos_juridicos_laborales.md",
+  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+  "document_type": "manual",
+  "topic": "COPASST",
+  "subtopic": null,
+  "version": null,
+  "publication_date": null,
+  "effective_date": null,
+  "page_count": 1,
+  "language": "es",
+  "extraction_method": "markdown",
+  "ocr_engine": null,
+  "ocr_confidence": null,
+  "contains_handwriting": false,
+  "contains_tables": false,
+  "classification_confidence": 0.85,
+  "content_hash": "78d83e21a8c528311c83a34422c836481157caad7e17ce409e8b9863a922e8c1",
+  "corpus_version": "1",
+  "pipeline_version": "1.0.0",
+  "processing_status": "processed",
+  "warnings": [
+    "missing_title"
+  ],
+  "processed_at": "2026-07-16T23:50:44.798027-05:00"
+}

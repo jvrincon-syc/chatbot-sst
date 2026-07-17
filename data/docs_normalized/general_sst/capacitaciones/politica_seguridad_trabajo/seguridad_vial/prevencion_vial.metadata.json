@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "document_id": "doc_d15d9f2596c32bed",
+  "document_name": "prevencion_vial.md",
+  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+  "document_type": "politica",
+  "topic": "Seguridad vial",
+  "subtopic": null,
+  "version": null,
+  "publication_date": null,
+  "effective_date": null,
+  "page_count": 1,
+  "language": "es",
+  "extraction_method": "markdown",
+  "ocr_engine": null,
+  "ocr_confidence": null,
+  "contains_handwriting": false,
+  "contains_tables": false,
+  "classification_confidence": 0.85,
+  "content_hash": "a95a58feb5f63d7c65d26176505aa339e4acef87bd0fed1b8b3577bde60e08cb",
+  "corpus_version": "1",
+  "pipeline_version": "1.0.0",
+  "processing_status": "processed",
+  "warnings": [
+    "missing_title"
+  ],
+  "processed_at": "2026-07-16T23:50:44.739176-05:00"
+}

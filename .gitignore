@@ -151,11 +151,16 @@ activemq-data/
 .env
 .envrc
 .venv
+secrets.env
+secrets.local.env
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Local isolated workspaces
+.worktrees/
 
 # Spyder project settings
 .spyderproject
