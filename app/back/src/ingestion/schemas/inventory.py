@@ -2,13 +2,17 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from ingestion.schemas.common import RelativePosixPath, StrictModel
 
 
-class InventoryRecord(BaseModel):
-    document_id: str
-    source_path: str
-    document_name: str
+class InventoryRecord(StrictModel):
+    schema_version: Literal["2.0"]
+    document_id: str = Field(min_length=1)
+    source_relpath: RelativePosixPath
+    legacy_path: Optional[str] = None
+    document_name: str = Field(min_length=1)
     detected_extension: Optional[str]
     reported_extension: Optional[str]
     mime_type: str
@@ -18,6 +22,9 @@ class InventoryRecord(BaseModel):
     category_inferred: str
     document_version: Optional[str] = None
     page_count: Optional[int] = Field(default=None, ge=0)
-    processing_status: Literal["pending", "processed", "failed", "needs_review", "skipped"] = "pending"
+    processing_status: Literal[
+        "pending", "processed", "failed", "needs_review"
+    ] = "pending"
     pipeline_version: str
     corpus_version: str
+    warnings: list[str] = Field(default_factory=list)
