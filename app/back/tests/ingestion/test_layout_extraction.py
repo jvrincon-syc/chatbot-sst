@@ -124,6 +124,34 @@ def test_pdfplumber_layout_extractor_emits_supported_block_types_in_reading_orde
     assert page.blocks[4].source == "pdfplumber.rects"
 
 
+def test_pdfplumber_layout_extractor_preserves_detected_table_rows(
+    tmp_path: Path,
+) -> None:
+    class FakeTable:
+        bbox = (20, 100, 500, 180)
+
+        def extract(self) -> list[list[str]]:
+            return [["OBJETIVOS", "METAS"], ["Reducir incidentes", "95%"]]
+
+    class TablePage(FakePage):
+        def find_tables(self) -> list[FakeTable]:
+            return [FakeTable()]
+
+    page = PdfLayoutExtractor(
+        pdfplumber_module=FakePdfPlumber([TablePage()])
+    ).extract_pages(tmp_path / "table.pdf")[0]
+
+    assert page.tables == [
+        {
+            "bbox": (20.0, 100.0, 500.0, 180.0),
+            "rows": [
+                ["OBJETIVOS", "METAS"],
+                ["Reducir incidentes", "95%"],
+            ],
+        }
+    ]
+
+
 def test_layout_extractor_converts_y_coordinates_to_top_left_pdf_points(
     tmp_path: Path,
 ) -> None:

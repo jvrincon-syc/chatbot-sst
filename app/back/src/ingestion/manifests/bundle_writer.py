@@ -6,7 +6,7 @@ import os
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Mapping
+from typing import Mapping, TypeAlias
 
 from pydantic import BaseModel
 
@@ -19,6 +19,8 @@ from ingestion.schemas.artifacts import (
     TablesArtifact,
 )
 from ingestion.schemas.manifests import ArtifactHash, BundleManifest, DocumentStatus
+
+RootHandle: TypeAlias = int | Path
 
 
 @dataclass
@@ -83,7 +85,7 @@ def compute_artifact_hashes(
                 )
             )
     finally:
-        os.close(root_fd)
+        _close_root_handle(root_fd)
     return hashes
 
 
@@ -161,22 +163,32 @@ def _snapshot_targets(root: Path, relpaths: tuple[str, ...]) -> dict[Path, bytes
             target = root / Path(canonical_relpath(relpath))
             snapshots[target] = _read_bytes_secure(root_fd, relpath)
     finally:
-        os.close(root_fd)
+        _close_root_handle(root_fd)
     return snapshots
 
 
-def _open_root_fd(root: Path) -> int:
+def _open_root_fd(root: Path) -> RootHandle:
     if root.is_symlink():
         raise ValueError("candidate root must not be a symlink")
+    if os.name == "nt":
+        return root.resolve(strict=True)
     return os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
 
 
+def _close_root_handle(root_handle: RootHandle) -> None:
+    if isinstance(root_handle, int):
+        os.close(root_handle)
+
+
 def _open_parent_fd(
-    root_fd: int,
+    root_fd: RootHandle,
     relpath: str,
     *,
     create: bool,
-) -> tuple[int | None, str]:
+) -> tuple[RootHandle | None, str]:
+    if isinstance(root_fd, Path):
+        return _open_parent_path(root_fd, relpath, create=create)
+
     parts = canonical_relpath(relpath).split("/")
     leaf = parts[-1]
     current_fd = os.dup(root_fd)
@@ -203,10 +215,52 @@ def _open_parent_fd(
     return current_fd, leaf
 
 
-def _read_bytes_secure(root_fd: int, relpath: str) -> bytes | None:
+def _open_parent_path(
+    root: Path,
+    relpath: str,
+    *,
+    create: bool,
+) -> tuple[Path | None, str]:
+    parts = canonical_relpath(relpath).split("/")
+    leaf = parts[-1]
+    current = root
+    for part in parts[:-1]:
+        candidate = current / part
+        if candidate.exists():
+            if candidate.is_symlink() or not candidate.is_dir():
+                raise ValueError("artifact target escapes candidate root")
+        elif create:
+            candidate.mkdir()
+        else:
+            return None, leaf
+        _ensure_within_root(root, candidate)
+        current = candidate
+    return current, leaf
+
+
+def _ensure_within_root(root: Path, target: Path) -> Path:
+    resolved_root = root.resolve(strict=True)
+    try:
+        resolved_target = target.resolve(strict=False)
+        resolved_target.relative_to(resolved_root)
+    except (OSError, ValueError) as exc:
+        raise ValueError("artifact target escapes candidate root") from exc
+    return resolved_target
+
+
+def _read_bytes_secure(root_fd: RootHandle, relpath: str) -> bytes | None:
     parent_fd, leaf = _open_parent_fd(root_fd, relpath, create=False)
     if parent_fd is None:
         return None
+    if isinstance(parent_fd, Path):
+        target = parent_fd / leaf
+        if not target.exists():
+            return None
+        if target.is_symlink() or not target.is_file():
+            raise ValueError("artifact target escapes candidate root")
+        _ensure_within_root(root_fd, target)
+        return target.read_bytes()
+
     try:
         try:
             file_fd = os.open(leaf, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=parent_fd)
@@ -227,10 +281,14 @@ def _read_bytes_secure(root_fd: int, relpath: str) -> bytes | None:
         os.close(parent_fd)
 
 
-def _write_bytes_secure(root_fd: int, relpath: str, content: bytes) -> None:
+def _write_bytes_secure(root_fd: RootHandle, relpath: str, content: bytes) -> None:
     parent_fd, leaf = _open_parent_fd(root_fd, relpath, create=True)
     if parent_fd is None:
         raise FileNotFoundError(relpath)
+    if isinstance(parent_fd, Path):
+        _write_bytes_secure_windows(root_fd, parent_fd, leaf, content)
+        return
+
     temp_name = f".{leaf}.{uuid.uuid4().hex}.tmp"
     temp_created = False
     try:
@@ -261,14 +319,48 @@ def _write_bytes_secure(root_fd: int, relpath: str, content: bytes) -> None:
         os.close(parent_fd)
 
 
-def _write_text_secure(root_fd: int, relpath: str, text: str) -> None:
+def _write_bytes_secure_windows(
+    root: Path,
+    parent: Path,
+    leaf: str,
+    content: bytes,
+) -> None:
+    target = parent / leaf
+    if target.exists() and (target.is_symlink() or not target.is_file()):
+        raise ValueError("artifact target escapes candidate root")
+    _ensure_within_root(root, target)
+    temp = parent / f".{leaf}.{uuid.uuid4().hex}.tmp"
+    try:
+        with temp.open("xb") as stream:
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temp, target)
+    finally:
+        try:
+            temp.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def _write_text_secure(root_fd: RootHandle, relpath: str, text: str) -> None:
     _write_bytes_secure(root_fd, relpath, text.encode("utf-8"))
 
 
-def _unlink_secure(root_fd: int, relpath: str) -> None:
+def _unlink_secure(root_fd: RootHandle, relpath: str) -> None:
     parent_fd, leaf = _open_parent_fd(root_fd, relpath, create=False)
     if parent_fd is None:
         return
+    if isinstance(parent_fd, Path):
+        target = parent_fd / leaf
+        if target.is_symlink():
+            raise ValueError("artifact target escapes candidate root")
+        try:
+            target.unlink()
+        except FileNotFoundError:
+            pass
+        return
+
     try:
         try:
             os.unlink(leaf, dir_fd=parent_fd)
@@ -316,7 +408,7 @@ def _restore_snapshots(root: Path, snapshots: Mapping[Path, bytes | None]) -> No
             else:
                 _write_bytes_secure(root_fd, relpath, content)
     finally:
-        os.close(root_fd)
+        _close_root_handle(root_fd)
 
 
 def _reject_symlinks(root: Path) -> None:
@@ -335,14 +427,6 @@ def write_bundle_atomic(
     root.mkdir(parents=True, exist_ok=True)
     _reject_symlinks(root)
 
-    unexpected = [
-        path
-        for path in root.rglob("*")
-        if path.is_file() and path.relative_to(root).as_posix() not in set(required)
-    ]
-    if unexpected:
-        raise ValueError("candidate root contains files outside the required artifact set")
-
     snapshots = _snapshot_targets(root, required)
     try:
         root_fd = _open_root_fd(root)
@@ -350,7 +434,7 @@ def write_bundle_atomic(
             for relpath in required:
                 _write_text_secure(root_fd, relpath, _artifact_text(payload.artifacts[relpath]))
         finally:
-            os.close(root_fd)
+            _close_root_handle(root_fd)
     except BaseException:
         _restore_snapshots(root, snapshots)
         raise

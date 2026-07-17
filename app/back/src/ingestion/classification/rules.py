@@ -13,7 +13,7 @@ ClassificationResult = Classification
 _TYPE_RULES = (
     ("formulario", ("formato", "formulario", "fr-sst")),
     ("programa", ("programa",)),
-    ("matriz", ("matriz",)),
+    ("matriz", ("matriz", "objetivos y metas")),
     ("procedimiento", ("procedimiento",)),
     ("reglamento", ("reglamento",)),
     ("politica", ("politica",)),
@@ -24,11 +24,24 @@ _TYPE_RULES = (
     ("acta", ("acta",)),
     ("norma", ("norma",)),
     ("guia", ("guia",)),
-    ("informacion_general", ("comunicacion", "miembros", "valores", "introduccion", "aplicacion")),
+    (
+        "informacion_general",
+        (
+            "comunicacion",
+            "miembros",
+            "valores",
+            "introduccion",
+            "aplicacion",
+            "funciones",
+            "objetivo",
+        ),
+    ),
 )
+
 _TOPIC_RULES = (
     ("COPASST", ("copasst", "comite paritario")),
-    ("Comite de Convivencia Laboral", ("convivencia laboral", "comite de convivencia", "convivencia")),
+    ("Comite de Convivencia Laboral", ("comite de convivencia",)),
+    ("Convivencia laboral", ("convivencia laboral", "convivencia")),
     ("Politica de seguridad", ("politica",)),
     ("Capacitaciones", ("capacitacion",)),
     ("Formularios", ("formulario", "formato", "fr-sst")),
@@ -42,6 +55,30 @@ _TOPIC_RULES = (
     ("Verificacion", ("verificacion",)),
     ("Organizacion", ("organizacion",)),
     ("ARL", ("arl",)),
+)
+_SUBTOPIC_RULES = (
+    (
+        "Queja por presunto acoso laboral",
+        ("interponer queja", "presunto acoso"),
+    ),
+    (
+        "Funcionamiento del comite",
+        ("reglamento comite", "funcionamiento del comite"),
+    ),
+    (
+        "Prevencion de fatiga y desordenes musculoesqueleticos",
+        ("pausas activas", "fatiga", "musculoesquelet"),
+    ),
+    (
+        "Objetivos, metas e indicadores",
+        ("objetivos y metas", "metas e indicadores"),
+    ),
+    ("Desconexion laboral", ("desconexion laboral",)),
+    (
+        "Prevencion del acoso laboral, sexual, violencia basada en genero y discriminacion",
+        ("prevencion de acoso", "violencia basada en genero"),
+    ),
+    ("Politica de SST", ("politica de seguridad y salud",)),
 )
 _AUTHORITY = {
     "title_control": 0.95,
@@ -84,9 +121,14 @@ def classify_document(
     )
     type_choice, type_signals = _choose(_TYPE_RULES, sources)
     topic_choice, topic_signals = _choose(_TOPIC_RULES, sources)
+    subtopic_choice, subtopic_signals = _choose(
+        _SUBTOPIC_RULES,
+        (("title_control", control),),
+    )
 
     type_value, type_source = type_choice or ("otro", None)
     topic_value, topic_source = topic_choice or ("SST", None)
+    subtopic_value = subtopic_choice[0] if subtopic_choice else None
     conflicts = _conflicts(_TYPE_RULES, control, route, "type") + _conflicts(
         _TOPIC_RULES, control, route, "topic"
     )
@@ -94,8 +136,9 @@ def classify_document(
         document_type=type_value,
         document_type_confidence=_confidence(type_source),
         topic=topic_value,
+        subtopic=subtopic_value,
         topic_confidence=_confidence(topic_source),
-        signals=type_signals + topic_signals,
+        signals=type_signals + topic_signals + subtopic_signals,
         route_prior=_route_prior(route),
         content_prediction=_first_prediction(_TYPE_RULES, page_text),
         conflict_status="conflicting" if conflicts else "none",
@@ -142,21 +185,23 @@ def _choose(
     rules: tuple[tuple[str, tuple[str, ...]], ...],
     sources: tuple[tuple[str, str], ...],
 ) -> tuple[tuple[str, str] | None, list[str]]:
-    matches: list[tuple[float, str, str, str]] = []
+    matches: list[tuple[float, int, str, str, str]] = []
     for source, text in sources:
         normalized = _normalize(text)
-        for value, tokens in rules:
+        for rule_index, (value, tokens) in enumerate(rules):
             token = next((item for item in tokens if _normalize(item) in normalized), None)
             if token:
-                matches.append((_AUTHORITY[source], value, source, token))
+                matches.append(
+                    (_AUTHORITY[source], rule_index, value, source, token)
+                )
     if not matches:
         return None, []
-    matches.sort(reverse=True)
+    matches.sort(key=lambda item: (-item[0], item[1]))
     best = matches[0]
-    return (best[1], best[2]), [
+    return (best[2], best[3]), [
         f"{value}:{token}:{source}"
-        for _score, value, source, token in matches
-        if value == best[1] or source == "title_control"
+        for _score, _rule_index, value, source, token in matches
+        if value == best[2] or source == "title_control"
     ]
 
 

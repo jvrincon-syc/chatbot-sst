@@ -7,9 +7,10 @@ from pathlib import Path
 from statistics import mean
 from typing import Callable, Optional
 
+import pypdfium2 as pdfium
 from pydantic import Field
 
-from ingestion.ocr.rasterizer import RasterRegion
+from ingestion.ocr.rasterizer import PageRasterizer, RasterRegion
 from ingestion.schemas.artifacts import OcrPage, OcrWord
 from ingestion.schemas.common import BBox, ConfidenceMetric, MeasuredValue, Observation, StrictModel
 
@@ -58,7 +59,14 @@ class TesseractEngine:
             "tsv",
         ]
         try:
-            result = self.runner(command, check=True, capture_output=True, text=True)
+            result = self.runner(
+                command,
+                check=True,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
         except FileNotFoundError as exc:
             raise TesseractCapabilityError("Tesseract is not installed.", ["tesseract_unavailable"]) from exc
         except subprocess.CalledProcessError as exc:
@@ -70,6 +78,47 @@ class TesseractEngine:
             region_bbox=region.bbox,
             low_confidence_threshold=self.low_confidence_threshold,
         )
+
+
+class TesseractPdfEngine:
+    engine = "tesseract"
+
+    def __init__(
+        self,
+        *,
+        region_engine: TesseractEngine,
+        rasterizer: PageRasterizer | None = None,
+        page_count: Callable[[Path], int] | None = None,
+    ) -> None:
+        self.region_engine = region_engine
+        self.rasterizer = rasterizer or PageRasterizer()
+        self.page_count = page_count or _pdf_page_count
+        self.engine_version = region_engine.engine_version
+        self.language = region_engine.language
+
+    def extract_pages(self, source_path: Path) -> list[dict]:
+        pages: list[dict] = []
+        for page_number in range(1, self.page_count(source_path) + 1):
+            region = self.rasterizer.render(source_path, page_number, None)
+            try:
+                result = self.region_engine.recognize(region)
+            finally:
+                region.image_path.unlink(missing_ok=True)
+            pages.append(
+                {
+                    "page_number": page_number,
+                    "text": result.text,
+                    "confidence": result.confidence.value,
+                    "contains_handwriting": None,
+                    "deskew_applied": None,
+                    "rotation_detected_degrees": None,
+                }
+            )
+        return pages
+
+
+def _pdf_page_count(path: Path) -> int:
+    return len(pdfium.PdfDocument(str(path)))
 
 
 def parse_tesseract_tsv(

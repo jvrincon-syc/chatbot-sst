@@ -3,7 +3,11 @@ from pathlib import Path
 import pytest
 
 from ingestion.ocr.rasterizer import RasterRegion
-from ingestion.ocr.tesseract_engine import TesseractEngine, parse_tesseract_tsv
+from ingestion.ocr.tesseract_engine import (
+    TesseractEngine,
+    TesseractPdfEngine,
+    parse_tesseract_tsv,
+)
 from ingestion.schemas.common import BBox
 
 
@@ -50,7 +54,7 @@ def test_tesseract_engine_invokes_tsv_mode_and_parses_stdout(tmp_path: Path) -> 
     calls = []
 
     def runner(command, **kwargs):
-        calls.append(command)
+        calls.append((command, kwargs))
 
         class Result:
             stdout = TSV
@@ -75,6 +79,49 @@ def test_tesseract_engine_invokes_tsv_mode_and_parses_stdout(tmp_path: Path) -> 
         runner=runner,
     ).recognize(region)
 
-    assert calls[0] == ["/usr/local/bin/tesseract", str(image), "stdout", "-l", "spa", "tsv"]
+    assert calls[0][0] == ["/usr/local/bin/tesseract", str(image), "stdout", "-l", "spa", "tsv"]
+    assert calls[0][1]["encoding"] == "utf-8"
+    assert calls[0][1]["errors"] == "replace"
     assert result.confidence.kind == "measured"
     assert result.bbox == region.bbox
+
+
+def test_tesseract_pdf_engine_extracts_every_page_with_measured_confidence(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "scan.pdf"
+    source.write_bytes(b"%PDF fake")
+
+    class FakeRasterizer:
+        def render(self, path, page_number, clip=None):
+            image = tmp_path / f"page-{page_number}.png"
+            image.write_bytes(b"png")
+            return RasterRegion(
+                image_path=image,
+                page_number=page_number,
+                dpi=300,
+                width=100,
+                height=100,
+            )
+
+    class FakeRegionEngine:
+        engine = "tesseract"
+        engine_version = "5.4.0"
+        language = "spa"
+
+        def recognize(self, region):
+            return parse_tesseract_tsv(
+                TSV.replace("Texto", f"Pagina{region.page_number}"),
+                page_number=region.page_number,
+                engine_version=self.engine_version,
+            )
+
+    pages = TesseractPdfEngine(
+        region_engine=FakeRegionEngine(),
+        rasterizer=FakeRasterizer(),
+        page_count=lambda _path: 2,
+    ).extract_pages(source)
+
+    assert [page["page_number"] for page in pages] == [1, 2]
+    assert [page["text"] for page in pages] == ["Pagina1 bajo", "Pagina2 bajo"]
+    assert all(page["confidence"] == pytest.approx(0.795) for page in pages)

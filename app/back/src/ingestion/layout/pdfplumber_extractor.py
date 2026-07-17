@@ -64,6 +64,7 @@ class PdfLayoutExtractor:
             rotation=int(getattr(page, "rotation", 0) or 0),
             text_raw=text_raw,
             blocks=blocks,
+            tables=_table_candidates(page),
         )
 
 
@@ -75,6 +76,31 @@ def _extract_text(page: Any) -> str:
         return extract_text(layout=True) or ""
     except TypeError:
         return extract_text() or ""
+
+
+def _table_candidates(page: Any) -> list[dict[str, Any]]:
+    finder = getattr(page, "find_tables", None)
+    if not callable(finder):
+        return []
+    candidates: list[dict[str, Any]] = []
+    for table in finder() or []:
+        extract = getattr(table, "extract", None)
+        rows = extract() if callable(extract) else []
+        if not rows:
+            continue
+        bbox = getattr(table, "bbox", None)
+        if not isinstance(bbox, (tuple, list)) or len(bbox) != 4:
+            continue
+        candidates.append(
+            {
+                "bbox": tuple(float(value) for value in bbox),
+                "rows": [
+                    [str(cell or "").strip() for cell in row]
+                    for row in rows
+                ],
+            }
+        )
+    return candidates
 
 
 def _text_candidates(page: Any) -> list[dict[str, Any]]:

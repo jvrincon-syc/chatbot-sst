@@ -151,6 +151,7 @@ activemq-data/
 .env
 .envrc
 .venv312/
+.venv_windows_trabajo/
 secrets.env
 secrets.local.env
 env/
@@ -161,6 +162,7 @@ venv.bak/
 
 # Local isolated workspaces
 .worktrees/
+.tmp/
 
 # Local planning/context notes
 memory/

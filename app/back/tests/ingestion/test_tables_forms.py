@@ -125,3 +125,71 @@ def test_form_extractor_distinguishes_not_detected_from_unavailable() -> None:
 
     assert FormExtractor().evaluate(empty_page).observation.status == "not_detected"
     assert FormExtractor(backend_available=False).evaluate(empty_page).observation.status == "not_evaluated"
+
+
+def test_form_extractor_does_not_treat_unlabelled_table_geometry_as_form() -> None:
+    page = SimpleNamespace(
+        page_number=1,
+        blocks=[
+            PageBlock(
+                block_id="table_rect",
+                text="",
+                bbox=box(20, 100, 580, 230),
+                extraction_method="pdf_digital",
+                role="rect",
+            )
+        ],
+    )
+
+    result = FormExtractor().evaluate(page)
+
+    assert result.observation.status == "not_detected"
+    assert result.groups == []
+
+
+def test_form_extractor_uses_page_text_labels_with_vector_rectangles() -> None:
+    page = SimpleNamespace(
+        page_number=1,
+        text=(
+            "FORMATO DE QUEJA\n"
+            "NOMBRE:\nDOCUMENTO DE IDENTIDAD:\nCARGO:"
+        ),
+        blocks=[
+            PageBlock(
+                block_id="response_rect",
+                text="",
+                bbox=box(100, 100, 500, 180),
+                extraction_method="pdf_digital",
+                role="rect",
+            )
+        ],
+    )
+
+    result = FormExtractor().evaluate(page)
+
+    assert result.observation.status == "detected"
+    assert [label.text for label in result.groups[0].labels] == [
+        "NOMBRE:",
+        "DOCUMENTO DE IDENTIDAD:",
+        "CARGO:",
+    ]
+
+
+def test_form_extractor_rejects_generic_colon_text_inside_bordered_document() -> None:
+    page = SimpleNamespace(
+        page_number=1,
+        text="OBJETIVO:\nALCANCE:\nRESPONSABILIDADES:",
+        blocks=[
+            PageBlock(
+                block_id="header_rect",
+                text="",
+                bbox=box(20, 20, 580, 90),
+                extraction_method="pdf_digital",
+                role="rect",
+            )
+        ],
+    )
+
+    result = FormExtractor().evaluate(page)
+
+    assert result.observation.status == "not_detected"

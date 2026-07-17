@@ -83,3 +83,119 @@ def test_history_extraction_stops_before_unrelated_tables() -> None:
     control = extract_document_control(pages, "x.pdf")
 
     assert len(control.change_history) == 1
+
+
+def test_extracts_conservative_plain_pdf_title_from_first_page() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": (
+                "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO\n"
+                "CÃ³digo: RE.RH-04 SST\n"
+                "VersiÃ³n: 0.3\n"
+                "Datos de la persona que interpone la queja"
+            ),
+        }
+    ]
+
+    control = extract_document_control(pages, "formato.pdf")
+
+    assert control.title.value == "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO"
+
+
+def test_code_pattern_does_not_treat_hyphenated_prose_as_document_codes() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": (
+                "MANUAL DE CONVIVENCIA LABORAL\n"
+                "M.RH-03-SST\n"
+                "La convivencia laboral-no constituye una sanciÃ³n.\n"
+                "Consulte www.syc.com.co"
+            ),
+        }
+    ]
+
+    control = extract_document_control(pages, "manual.pdf")
+
+    assert control.code.status == "extracted"
+    assert control.code.value == "M-RH-03-SST"
+
+
+def test_version_pattern_does_not_consume_unrelated_prose() -> None:
+    control = extract_document_control(
+        [
+            {
+                "page_number": 1,
+                "text_raw": (
+                    "REGLAMENTO DEL COMITÃ‰\n"
+                    "Se escucharÃ¡n las versiones de los hechos."
+                ),
+            }
+        ],
+        "reglamento.pdf",
+    )
+
+    assert control.version.status == "not_found"
+
+
+def test_uses_page_text_when_layout_blocks_split_control_label_and_value() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": (
+                "MANUAL DE CONVIVENCIA LABORAL\n"
+                "CODIGO M.RH-03-SST VERSION 0.2"
+            ),
+            "blocks": [
+                {"text": "MANUAL DE CONVIVENCIA LABORAL", "role": "body"},
+                {"text": "CODIGO", "role": "body"},
+                {"text": "M.RH-03-SST", "role": "body"},
+                {"text": "VERSION", "role": "body"},
+                {"text": "0.2", "role": "body"},
+            ],
+        }
+    ]
+
+    control = extract_document_control(pages, "manual.pdf")
+
+    assert control.code.value == "M-RH-03-SST"
+    assert control.version.value == "0.2"
+
+
+def test_prefers_specific_plain_title_over_corporate_header() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": (
+                "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO\n"
+                "MANUAL DE CONVIVENCIA LABORAL\n"
+                "CODIGO M.RH-03-SST VERSION 0.2"
+            ),
+        }
+    ]
+
+    control = extract_document_control(pages, "manual.pdf")
+
+    assert control.title.value == "MANUAL DE CONVIVENCIA LABORAL"
+
+
+def test_later_referenced_code_does_not_override_first_page_control_code() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": (
+                "MANUAL DE CONVIVENCIA LABORAL\n"
+                "CODIGO M.RH-03-SST VERSION 0.2"
+            ),
+        },
+        {
+            "page_number": 2,
+            "text_raw": "Consulte el formato RE-RH-004-SST para presentar una queja.",
+        },
+    ]
+
+    control = extract_document_control(pages, "manual.pdf")
+
+    assert control.code.status == "extracted"
+    assert control.code.value == "M-RH-03-SST"

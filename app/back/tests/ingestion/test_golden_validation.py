@@ -1,7 +1,16 @@
 import json
 from pathlib import Path
 
-from ingestion.validation.golden import GoldenCorpus, GoldenDocument, load_golden, validate_pdf_corpus
+from ingestion.paths import stable_document_id
+from ingestion.pipeline import run_pipeline
+from ingestion.validation.golden import (
+    GoldenContentExpectation,
+    GoldenCorpus,
+    GoldenDocument,
+    GoldenExpected,
+    load_golden,
+    validate_pdf_corpus,
+)
 
 
 def test_golden_loader_strips_raw_root_prefix_and_keeps_77_page_total() -> None:
@@ -36,3 +45,99 @@ def test_golden_validator_requires_exact_source_bijection(tmp_path: Path) -> Non
 
     assert report.status == "failed"
     assert any(check.check == "golden_bijection" and check.status == "failed" for check in report.checks)
+
+
+def test_golden_validator_compares_actual_metadata_status_and_pages(
+    tmp_path: Path,
+) -> None:
+    raw = tmp_path / "raw"
+    candidate = tmp_path / "candidate"
+    raw.mkdir()
+    (raw / "expected.md").write_text("# Manual\n\nContenido", encoding="utf-8")
+    run_pipeline(
+        docs_raw=raw,
+        docs_normalized=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="golden_fixture",
+    )
+    source_relpath = "expected.md"
+    golden = GoldenCorpus(
+        audit_schema_version="test",
+        documents=[
+            GoldenDocument(
+                document_id=stable_document_id(source_relpath),
+                source_relpath=source_relpath,
+                page_count=2,
+                expected=GoldenExpected(
+                    title="Manual",
+                    document_type="formulario",
+                    topic="SST",
+                    extraction_method="markdown",
+                    contains_tables="not_evaluated",
+                    contains_form="not_evaluated",
+                    contains_handwriting="not_evaluated",
+                ),
+                review_status="needs_review",
+            )
+        ],
+    )
+
+    report = validate_pdf_corpus(candidate, raw, golden)
+
+    assert report.status == "failed"
+    assert any(
+        check.check == "golden_metadata" and check.status == "failed"
+        for check in report.checks
+    )
+    assert any(
+        check.check == "golden_pages" and check.status == "failed"
+        for check in report.checks
+    )
+
+
+def test_golden_validator_executes_minimum_content_expectations(
+    tmp_path: Path,
+) -> None:
+    raw = tmp_path / "raw"
+    candidate = tmp_path / "candidate"
+    raw.mkdir()
+    (raw / "expected.md").write_text(
+        "# Manual\n\nContenido presente",
+        encoding="utf-8",
+    )
+    run_pipeline(
+        docs_raw=raw,
+        docs_normalized=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="golden_content_fixture",
+    )
+    source_relpath = "expected.md"
+    golden = GoldenCorpus(
+        audit_schema_version="test",
+        documents=[
+            GoldenDocument(
+                document_id=stable_document_id(source_relpath),
+                source_relpath=source_relpath,
+                page_count=1,
+                expected=GoldenExpected(),
+                minimum_content=[
+                    GoldenContentExpectation(
+                        pages="1",
+                        must_preserve=["contenido ausente"],
+                        structure="Preserve the heading.",
+                    )
+                ],
+                review_status="processed",
+            )
+        ],
+    )
+
+    report = validate_pdf_corpus(candidate, raw, golden)
+
+    assert any(
+        check.check == "golden_content" and check.status == "failed"
+        and "contenido ausente" in " ".join(check.details)
+        for check in report.checks
+    )

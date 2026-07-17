@@ -1,163 +1,122 @@
-# Pipeline de ingesta documental
+# Pipeline de ingesta y normalización
 
-Este modulo implementa Fase 1 de `memory/fase1.md`:
+Este directorio documenta la Fase 1 local que transforma `data/docs_raw` en
+bundles Schema 2.0. El pipeline no incluye PostgreSQL, chunking, embeddings,
+RAG, Redis ni frontend.
 
-- Inventario recursivo de `data/docs_raw`.
-- Contratos Pydantic para metadata, pages, OCR y tables.
-- Lector Markdown funcional.
-- Lector PDF digital con `pypdf` e interfaz inyectable.
-- Lector OCR por interfaz inyectable con `MockOcrEngine`.
-- Motor OCRmyPDF + Tesseract español con diagnóstico de dependencias.
-- Normalización textual conservadora.
-- Manifiestos, logs JSON Lines y validación post-procesamiento.
-- Ejecucion incremental por `source_path`, `document_id` y `content_hash`.
+## Estado
+
+El estado reproducible está en:
+
+- `phase1_checklist.md`;
+- `phase1_closure_report.md`;
+- `pdf_corpus_quality_audit.md`;
+- `pdf_corpus_expected.json`.
+
+El candidato vigente es `.tmp/task6_candidate_full3`: contiene 9 bundles y 77
+páginas. El gate estructural pasa; el golden semántico continúa fallido. No se
+ha promovido a `data/docs_normalized`.
 
 ## Entorno
 
-Instalacion recomendada en un equipo nuevo:
+Usar Python 3.12 desde:
 
-```bash
-npm run setup:ocr:mac
-npm run setup
-npm run secrets:init
-npm run doctor:ocr
+```powershell
+.\.venv_windows_trabajo\Scripts\python.exe
 ```
 
-`npm run setup` crea `.venv` aislado, actualiza herramientas de build dentro del entorno e instala el paquete Python con dependencias de desarrollo.
+Capacidades verificadas:
 
-La forma manual equivalente es:
+- OCRmyPDF 16.13.0;
+- Tesseract 5.4.0 con `spa`;
+- PDFium;
+- pdfplumber;
+- OpenCV.
 
-```bash
-python3 -m venv .venv
-./.venv/bin/python -m pip install --upgrade pip setuptools wheel
-./.venv/bin/python -m pip install -e ".[dev]"
+Ghostscript 10.07.1 x64 está pendiente de instalación por soporte IT.
+
+Las rutas locales se configuran en `secrets.env`, que no se versiona:
+
+```text
+OCR_TEMP_DIR
+OCR_LOW_CONFIDENCE_THRESHOLD
+OCR_TIMEOUT_SECONDS
+TESSERACT_CMD
+TESSERACT_LANGUAGE
+TESSERACT_VERSION
+OCRMYPDF_CMD
+GHOSTSCRIPT_CMD
 ```
 
-Los scripts cargan variables locales desde `secrets.env` cuando existe. Ese archivo está ignorado por Git.
+## Diagnóstico
 
-## Comandos
-
-Inventario:
-
-```bash
-./.venv/bin/python scripts/ingestion/run_inventory.py
+```powershell
+.\.venv_windows_trabajo\Scripts\python.exe scripts\ingestion\doctor_ocr.py
+.\.venv_windows_trabajo\Scripts\python.exe -m pip check
 ```
 
-Pipeline completo:
+## Pipeline candidato
 
-```bash
-./.venv/bin/python scripts/ingestion/run_pipeline.py --run-id run_phase1_mocked
+El pipeline es incremental por defecto. Para una corrida de cierre se usa un
+staging root y `--force`; nunca se escribe directamente sobre el corpus
+normalizado antes de aprobar ambos gates.
+
+Ejemplo para una fuente:
+
+```powershell
+.\.venv_windows_trabajo\Scripts\python.exe scripts\ingestion\run_pipeline.py `
+  --staging-root .tmp\candidate `
+  --force `
+  --pipeline-version 2.0.1 `
+  --run-id candidate `
+  --only-source ruta/relativa/documento.pdf
 ```
 
-El pipeline es incremental por defecto. En una segunda corrida sin cambios:
+## Validación
 
-- Lee `_manifests/inventory.json`.
-- Compara `source_path`, `document_id` y `content_hash`.
-- Reusa los artefactos normalizados existentes.
-- Marca el documento como `skipped`.
+Validación estructural y semántica:
 
-Corrida incremental:
-
-```bash
-npm run ingestion:run -- --run-id phase1_incremental_check
+```powershell
+.\.venv_windows_trabajo\Scripts\python.exe scripts\ingestion\validate_normalized.py `
+  --docs-normalized .tmp\candidate `
+  --raw-root data\docs_raw `
+  --mode closure `
+  --golden docs\ingestion\pdf_corpus_expected.json `
+  --run-id candidate_gate
 ```
 
-Reprocesamiento por cambio:
+La promoción solo procede cuando el gate estructural y el golden pasan en la
+misma corrida.
 
-- Modifica o reemplaza el archivo en `data/docs_raw`.
-- Ejecuta otra corrida.
-- El hash cambia y el documento se procesa de nuevo.
+## Pruebas
 
-Validación independiente:
-
-```bash
-./.venv/bin/python scripts/ingestion/validate_normalized.py --run-id manual
+```powershell
+.\.venv_windows_trabajo\Scripts\python.exe -m pytest app\back\tests\ingestion -q
+.\.venv_windows_trabajo\Scripts\python.exe -m pytest `
+  app\back\tests\ingestion\test_pdf_corpus_golden.py -m corpus -q
 ```
 
-Exportar JSON Schemas:
+Un skip por capacidades externas no equivale a aprobación del gate.
 
-```bash
-./.venv/bin/python scripts/ingestion/export_schemas.py
-```
+## Artefactos
 
-Pruebas:
+Cada bundle canónico contiene:
 
-```bash
-./.venv/bin/python -m pytest app/back/tests/ingestion
-```
+- `.md`;
+- `.metadata.json`;
+- `.pages.json`;
+- `.ocr.json`;
+- `.tables.json`;
+- `.forms.json`.
 
-Con `package.json`:
+Los manifiestos de inventario, corrida, validación, errores y revisión viven
+en `_manifests/`.
 
-```bash
-npm run test:ingestion
-npm run ingestion:run
-npm run ingestion:validate
-```
+## Reglas de integridad
 
-## Estado de PDFs y OCR
-
-El pipeline intenta primero extraccion PDF digital. Si la capa de texto es insuficiente o no hay extractor PDF configurado, cae al motor OCRmyPDF + Tesseract espanol.
-
-El entorno local actual tiene OCRmyPDF, Tesseract y el idioma `spa`. La corrida `run_phase1_main_pdf_ocr_active` procesó todos los documentos del corpus:
-
-- 46 Markdown.
-- 6 PDFs digitales con `pypdf`.
-- 3 PDFs por OCR con Tesseract.
-- 0 documentos en `needs_review`.
-- 0 documentos fallidos.
-
-La corrida de cierre `phase1_final_full` reproceso 55 documentos. La corrida inmediata `phase1_final_incremental` omitio 55 documentos por hash sin cambios. La corrida posterior `phase1_final_post_skip_fix` confirmo que el skip incremental se mantiene tambien cuando el inventario anterior ya venia en estado `skipped`.
-
-Para diagnosticar OCR:
-
-```bash
-npm run doctor:ocr
-```
-
-Variables relevantes en `secrets.env`:
-
-- `OCRMYPDF_CMD`
-- `TESSERACT_CMD`
-- `TESSERACT_LANGUAGE`
-- `OCR_TEMP_DIR`
-- `OCR_LOW_CONFIDENCE_THRESHOLD`
-- `OCR_TIMEOUT_SECONDS`
-
-## Salidas
-
-Las corridas generan:
-
-- `data/docs_normalized/**/*.md`
-- `data/docs_normalized/**/*.metadata.json`
-- `data/docs_normalized/**/*.pages.json`
-- `data/docs_normalized/_manifests/inventory.json`
-- `data/docs_normalized/_manifests/run_<id>.json`
-- `data/docs_normalized/_manifests/<id>_details.log`
-- `data/docs_normalized/_manifests/needs_review.json`
-- `data/docs_normalized/_manifests/errors.json`
-- `data/docs_normalized/_manifests/validation_<id>.json`
-
-## Revision de errores
-
-Documentos que requieran revision quedan en:
-
-```bash
-data/docs_normalized/_manifests/needs_review.json
-```
-
-Documentos fallidos quedan en:
-
-```bash
-data/docs_normalized/_manifests/errors.json
-```
-
-Cada entrada incluye `document_id`, `source_path`, razones, etapa y accion recomendada.
-
-## Cierre de Fase 1
-
-Documentos de seguimiento:
-
-- `docs/ingestion/exploratory_analysis.md`
-- `docs/ingestion/phase1_checklist.md`
-- `docs/ingestion/phase1_closure_report.md`
-- `docs/ingestion/sprint_1_1_to_1_4_compliance.md`
+- El original en `data/docs_raw` no se modifica.
+- Las rutas canónicas son relativas POSIX.
+- Una capacidad desconocida queda `not_evaluated`.
+- La confianza OCR solo es `measured` con motor, versión, unidad y muestra.
+- Un warning material obliga `needs_review`.
+- No se insertan frases artificiales en Markdown para satisfacer el golden.

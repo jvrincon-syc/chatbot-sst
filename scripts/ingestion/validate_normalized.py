@@ -17,11 +17,38 @@ def main() -> int:
     load_secrets_env(ROOT / "secrets.env")
     parser = argparse.ArgumentParser(description="Validate data/docs_normalized artifacts.")
     parser.add_argument("--docs-normalized", type=Path, default=ROOT / "data" / "docs_normalized")
+    parser.add_argument(
+        "--raw-root",
+        type=Path,
+        default=None,
+        help="Raw corpus root used for source hashes and golden validation.",
+    )
+    parser.add_argument(
+        "--mode",
+        choices=("normal", "closure"),
+        default="normal",
+        help="Use closure to reject legacy artifacts and require every PDF sidecar.",
+    )
+    parser.add_argument(
+        "--golden",
+        type=Path,
+        default=None,
+        help="Optional semantic corpus expectation JSON; requires --raw-root.",
+    )
     parser.add_argument("--run-id", default="manual")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
 
-    report = validate_normalized_tree(args.docs_normalized, run_id=args.run_id)
+    if args.golden is not None and args.raw_root is None:
+        parser.error("--golden requires --raw-root")
+
+    report = validate_normalized_tree(
+        args.docs_normalized,
+        raw_root=args.raw_root,
+        mode=args.mode,
+        golden_path=args.golden,
+        run_id=args.run_id,
+    )
     output = args.output or args.docs_normalized / "_manifests" / f"validation_{args.run_id}.json"
     dump_json(output, report)
     print(f"{report.status}: {report.errors} error(s) -> {output}")

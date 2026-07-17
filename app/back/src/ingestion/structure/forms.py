@@ -38,7 +38,10 @@ class FormExtractor:
 
         labels = _labels(page)
         controls = _controls(page, labels)
-        if not labels and not controls:
+        # Vector table borders are not form controls on their own. Requiring
+        # multiple visible labels plus geometry prevents every bordered table
+        # from being reported as a form.
+        if len(labels) < 2 or not controls or not _has_form_signal(page):
             return FormExtractionResult(
                 page_number=page_number,
                 observation=Observation(status="not_detected", value=False, method=self.method),
@@ -92,6 +95,29 @@ def _labels(page: Any) -> list[FormLabel]:
             text = normalize_text(str(getattr(block, "text", "") or ""))
             if text:
                 labels.append(FormLabel(label_id=_slug(text), text=text, bbox=getattr(block, "bbox", None)))
+    if len(labels) < 2:
+        page_text = str(
+            getattr(page, "text", getattr(page, "text_raw", ""))
+            or ""
+        )
+        for line in page_text.splitlines():
+            for raw_label in re.findall(
+                r"(?:^|\s)([A-Za-z\u00c0-\u017f][A-Za-z\u00c0-\u017f ]{1,40}:)",
+                line,
+            ):
+                text = normalize_text(raw_label)
+                if (
+                    text
+                    and _looks_like_label(text)
+                    and all(label.text != text for label in labels)
+                ):
+                    labels.append(
+                        FormLabel(
+                            label_id=_slug(text),
+                            text=text,
+                            bbox=None,
+                        )
+                    )
     return labels
 
 
@@ -103,7 +129,16 @@ def _controls(page: Any, labels: list[FormLabel]) -> list[FormControl]:
         bbox = getattr(block, "bbox", None)
         if not isinstance(bbox, BBox):
             continue
-        if role not in {"control", "blank_area"} and kind not in {"line", "rect", "rectangle"}:
+        if (
+            role not in {
+                "control",
+                "blank_area",
+                "line",
+                "rect",
+                "rectangle",
+            }
+            and kind not in {"line", "rect", "rectangle"}
+        ):
             continue
         nearest = _nearest_label(bbox, labels)
         width = bbox.x1 - bbox.x0
@@ -135,8 +170,49 @@ def _looks_like_label(text: str) -> bool:
         "firma",
         "telefono",
         "correo",
+        "proyecto",
+        "celular",
+        "documento de identidad",
+        "correo electronico",
     }
-    return text.strip().endswith(":") or normalized in known
+    return text.strip().endswith(":") and (
+        normalized in known
+        or any(
+            normalized.startswith(f"{prefix} ")
+            for prefix in (
+                "nombre",
+                "cargo",
+                "documento",
+                "descripcion",
+                "firma",
+                "telefono",
+                "correo",
+                "proyecto",
+                "celular",
+            )
+        )
+    )
+
+
+def _has_form_signal(page: Any) -> bool:
+    page_text = str(
+        getattr(page, "text", getattr(page, "text_raw", ""))
+        or ""
+    )
+    block_text = "\n".join(
+        str(getattr(block, "text", "") or "")
+        for block in getattr(page, "blocks", []) or []
+    )
+    folded = normalize_text(f"{page_text}\n{block_text}").casefold()
+    return any(
+        signal in folded
+        for signal in (
+            "formato",
+            "formulario",
+            "diligencie",
+            "datos de la persona",
+        )
+    )
 
 
 def _nearest_label(control_bbox: BBox, labels: list[FormLabel]) -> FormLabel | None:

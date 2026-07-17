@@ -202,6 +202,7 @@ class Classification(StrictModel):
     document_type: DocumentType
     document_type_confidence: ConfidenceMetric
     topic: str
+    subtopic: Optional[str] = None
     topic_confidence: ConfidenceMetric
     signals: list[str] = Field(default_factory=list)
     route_prior: Optional[str] = None

@@ -1,95 +1,128 @@
-# Cierre Fase 1
+# Estado de cierre de Fase 1 — Ingesta Schema 2.0
 
-Fecha de cierre: 2026-07-16
+Fecha de verificación: 2026-07-17
 
-## Resultado ejecutivo
+## Decisión vigente
 
-Fase 1 queda cerrada para el alcance de ingesta y normalizacion documental local:
+Fase 1 tiene cierre estructural, pero todavía no tiene cierre semántico.
 
-- Corpus inventariado: 55 archivos.
-- Documentos procesados en corrida completa final: 55.
-- Documentos omitidos por hash sin cambios en corrida incremental final: 55.
-- Fallidos: 0.
-- En revision: 0.
-- Validacion post-procesamiento: passed, 0 errores criticos.
-- Validacion post-procesamiento: 14 checks, 0 warnings.
-- Pruebas automatizadas: 34 passing.
-- OCR local: OCRmyPDF + Tesseract `spa` disponible.
+No se promovió ningún candidato y no se autoriza todavía chunking, indexación
+ni RAG. La promoción permanece condicionada a que los gates estructural y
+golden pasen simultáneamente.
 
-## Evidencia de corrida
+## Capacidades del entorno
 
-Corridas de cierre:
+Verificado:
 
 ```text
-phase1_final_full
-phase1_final_incremental
-phase1_final_post_skip_fix
+OCRmyPDF: 16.13.0
+Tesseract: 5.4.0.20240606
+Idiomas Tesseract: spa, eng, osd
+pdfplumber: available
+PDFium: available
+OpenCV: available
+pip check: No broken requirements found
 ```
 
-La corrida completa reprocesa documentos cuando cambia el hash o cuando cambia la identidad documental calculada. La corrida incremental posterior compara `source_path`, `document_id` y `content_hash` contra `_manifests/inventory.json`; si no hay cambios y existen `.md` + `.metadata.json`, marca el documento como `skipped`.
-
-Resultado medido:
+Pendiente:
 
 ```text
-phase1_final_full: processed=55, failed=0, needs_review=0, skipped=0
-phase1_final_incremental: processed=0, failed=0, needs_review=0, skipped=55
-phase1_final_post_skip_fix: processed=0, failed=0, needs_review=0, skipped=55
-validation_phase1_final_incremental: passed, errors=0, warnings=0, checks=14
+Ghostscript: unavailable
+Versión solicitada a IT: Ghostscript 10.07.1 x64
 ```
 
-Cobertura por metodo:
+El entorno usa PDFium → Tesseract como fallback directo para materializar
+escaneos mientras Ghostscript no está disponible. Ghostscript sigue siendo
+necesario para completar y verificar el camino OCRmyPDF de preprocesamiento.
+
+## Candidato vigente
 
 ```text
-markdown: 46
-pdf_digital: 6
-ocr: 3
+.tmp/task6_candidate_full3
+run_id: task6_full3
+pipeline_version: 2.0.1
 ```
 
-Clasificacion:
+Resultado:
 
 ```text
-min_classification_confidence: 0.70
-metadata_statuses: processed=55
+PDF inventariados: 9
+Bundles materializados: 9
+Páginas esperadas: 77
+Páginas materializadas: 77
+processed: 4
+needs_review: 5
+failed: 0
 ```
 
-## Que quedo implementado
+Los tres PDF escaneados ya producen bundles. El programa de pausas activas se
+procesa como `hybrid` y conserva OCR regional con confianza Tesseract medida.
 
-- Inventario recursivo de `data/docs_raw`.
-- `document_id` estable por ruta documental.
-- `content_hash` SHA-256 para detectar cambios.
-- Skip incremental de documentos sin cambios.
-- Lectores aislados para Markdown, PDF digital y PDF escaneado/OCR.
-- OCRmyPDF con Tesseract en espanol.
-- Normalizacion conservadora con preservacion de datos criticos.
-- Clasificacion documental por reglas de ruta, nombre y contenido.
-- Markdown normalizado con front matter.
-- Artefactos `.metadata.json`, `.pages.json`, `.ocr.json` cuando aplica.
-- Manifiestos de corrida, inventario, errores, revision y validacion.
-- Validacion obligatoria de hashes, schemas, IDs, estados y auxiliares.
-- Pruebas unitarias e integracion basica.
+## Gates
 
-## Gaps aceptados para fases posteriores
+Gate estructural:
 
-- Persistencia real en PostgreSQL de `documents_inventory`.
-- Extraccion robusta de tablas complejas desde PDF.
-- Deteccion avanzada de estructura visual en PDFs: fuentes, negritas, columnas, encabezados y pies por layout.
-- Confianza OCR palabra a palabra real.
-- Capturas visuales en `_review_queue/` para paginas dudosas.
-- Clasificacion asistida por LLM para ambiguedades futuras.
-- Prueba lenta con PDF escaneado real controlado como fixture.
+```text
+16 checks estructurales: passed
+golden_bijection: passed
+golden_pages: passed
+golden_page_total: passed
+```
 
-## Posibles cambios recomendados
+Gate semántico:
 
-- Migrar el inventario a PostgreSQL antes de Fase 2 si se necesita auditoria multiusuario.
-- Introducir una libreria de layout PDF si tablas y estilos se vuelven decisivos.
-- Agregar `--force` o `--only-source` al pipeline si se requiere reprocesamiento manual selectivo desde CLI.
-- Versionar fixtures PDF sinteticos pequenos para pruebas OCR lentas reproducibles.
-- Definir politica de retencion de manifiestos y logs para no acumular corridas indefinidamente.
+```text
+golden_metadata: failed, 44 detalles
+golden_content: failed, 69 detalles
+```
 
-## Correccion de cierre incremental
+El aumento respecto al candidato anterior no representa pérdida de cobertura.
+El candidato anterior solo tenía seis bundles y no evaluaba las expectativas
+de los tres escaneos. El candidato vigente evalúa los nueve documentos.
 
-Durante el cierre se detecto que una tercera corrida podia reprocesar documentos si el inventario previo venia de una corrida incremental con estado `skipped`. Se corrigio la politica para reutilizar artefactos cuando el estado previo sea `processed` o `skipped`, siempre que `source_path`, `document_id`, `content_hash`, `.md` y `.metadata.json` coincidan.
+## Diferencias semánticas principales
 
-## Decision de cierre
+### Escaneos
 
-La Fase 1 queda lista para alimentar chunking, indexacion y recuperacion en fases posteriores. Los gaps restantes no bloquean el objetivo de convertir `docs_raw` en `docs_normalized` validado, trazable y reproducible.
+- Parte de la salida TSV aparece mezclada con el texto OCR y contamina títulos.
+- Códigos OCR como `PL.RH-035ST` no coinciden con el control visible.
+- Versiones y fechas permanecen sin extraer.
+- Las tablas y firmas siguen `not_evaluated`.
+- La clasificación resultante puede ser `formulario`, `procedimiento` o
+  `programa` cuando el golden exige `politica`.
+
+### Documentos digitales
+
+- Persisten diferencias de normalización exacta en títulos y códigos.
+- Faltan fechas visibles de pausas activas y del reglamento interno.
+- Algunos documentos quedan `processed` cuando la auditoría exige
+  `needs_review`.
+- Forms y handwriting permanecen `not_evaluated` cuando el golden exige una
+  evaluación capaz.
+
+### Contrato golden
+
+Parte de `minimum_content` contiene descripciones de auditoría —por ejemplo,
+`three objective rows` o `cover and January 2025 date`— que el comparador busca
+literalmente en documentos en español. Estas entradas deben convertirse en
+aserciones estructuradas o anclas textuales reales. No deben copiarse al
+Markdown para hacer pasar el gate.
+
+## Trabajo restante
+
+1. Instalar y verificar Ghostscript 10.07.1 x64.
+2. Limpiar y reconciliar la salida TSV de los escaneos.
+3. Extraer títulos, códigos, versiones y fechas con evidencia.
+4. Conectar un backend capaz para handwriting/firma.
+5. Evaluar tablas/formularios de los escaneos.
+6. Corregir el contrato ejecutable de contenido mínimo.
+7. Regenerar un candidato limpio.
+8. Ejecutar suite, gate estructural y golden.
+9. Promover solo si todos pasan.
+
+## Evidencia conservada
+
+- Auditoría visual: `docs/ingestion/pdf_corpus_quality_audit.md`.
+- Golden ejecutable: `docs/ingestion/pdf_corpus_expected.json`.
+- Diseño vigente: `docs/superpowers/specs/2026-07-17-robust-pdf-ingestion-quality-design.md`.
+- Plan vigente: `docs/superpowers/plans/2026-07-17-pipeline-gap-closure.md`.

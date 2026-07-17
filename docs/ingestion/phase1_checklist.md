@@ -1,129 +1,73 @@
-# Checklist Fase 1 parcial
+# Checklist vigente de Fase 1 — Ingesta Schema 2.0
 
-Alcance ejecutado: sprints 1.0 a 1.7, con PostgreSQL pendiente de persistencia real.
+Fecha de corte: 2026-07-17
 
-## Sprint 1.0 - Analisis exploratorio
+Este checklist reemplaza los cierres históricos de Schema 1.0. La fuente de
+alcance permanece en `memory/`; el contrato técnico vigente está en el diseño
+de calidad Schema 2.0 y el trabajo pendiente en el plan de gap closure.
 
-- [x] Inventariar corpus real completo como muestra inicial.
-- [x] Identificar distribucion Markdown/PDF digital/PDF OCR.
-- [x] Documentar patrones y riesgos.
-- [x] Documentar umbrales iniciales.
-- [x] Crear `docs/ingestion/exploratory_analysis.md`.
+## Contratos y pipeline
 
-## Sprint 1.1 - Inventario, contratos y esqueleto
+- [x] Contratos canónicos Schema 2.0 y adaptador legacy explícito.
+- [x] Escritura nueva exclusivamente en Schema 2.0.
+- [x] Identidad estable y paths POSIX relativos.
+- [x] Bundles atómicos con Markdown, metadata, pages, OCR, tables y forms.
+- [x] Capacidades desconocidas representadas como `not_evaluated`.
+- [x] Confianza OCR medida solo con procedencia real.
+- [x] Warnings materiales propagados a `needs_review`.
+- [x] Pipeline candidato aislado y promoción fail-closed.
 
-- [x] Crear estructura `app/back/src/ingestion/`.
-- [x] Crear estructura `app/back/tests/ingestion/`.
-- [x] Definir modelos Pydantic para metadata, pages, OCR, tables e inventario.
-- [x] Exportar JSON Schemas versionados.
-- [x] Escanear recursivamente `data/docs_raw`.
-- [x] Calcular hash, tamaño, MIME y categoría inferida.
-- [x] Generar `data/docs_normalized/_manifests/inventory.json`.
-- [x] Implementar `scripts/ingestion/run_inventory.py`.
-- [x] Mantener `document_id` estable por ruta documental.
-- [x] Usar `content_hash` para detectar cambios.
-- [x] Mantener PostgreSQL como integración pendiente/mockeada.
+## Extracción
 
-## Sprint 1.2 - Lectores base y primeras pruebas
+- [x] PDF digital procesado antes del fallback OCR.
+- [x] Tablas y formularios digitales conectados al bundle.
+- [x] OCRmyPDF 16.13.0 instalado en el entorno del proyecto.
+- [x] Tesseract 5.4.0 instalado con idiomas `spa`, `eng` y `osd`.
+- [x] PDFium conectado como rasterizador regional y de página completa.
+- [x] Fallback PDFium → Tesseract para escaneos sin Ghostscript.
+- [x] Tres PDF escaneados materializados.
+- [x] Nueve bundles PDF materializados.
+- [x] Las 77 páginas del corpus PDF materializadas.
+- [x] Pausas activas procesado como `hybrid` con OCR regional.
+- [ ] Ghostscript 10.07.1 x64 instalado y habilitado por soporte IT.
+- [ ] Backend capaz de handwriting/firma conectado.
+- [ ] Tablas y firmas de los escaneos evaluadas con capacidad suficiente.
 
-- [x] Implementar lector Markdown.
-- [x] Implementar lector PDF digital con `pypdf` e interfaz inyectable.
-- [x] Generar Markdown normalizado con front matter.
-- [x] Generar `.pages.json`.
-- [x] Dejar `.tables.json` soportado por contrato.
-- [x] Agregar pruebas unitarias de Markdown y PDF digital con extractor fake.
-- [x] Procesar PDFs digitales antes de caer a OCR.
+## Validación vigente
 
-## Sprint 1.3 - OCR y documentos problemáticos
+Candidato de trabajo:
 
-- [x] Definir interfaz de OCR.
-- [x] Implementar `MockOcrEngine`.
-- [x] Implementar motor OCRmyPDF + Tesseract español.
-- [x] Trabajar sobre copia temporal del PDF.
-- [x] Configurar `--deskew` y `--rotate-pages`.
-- [x] Diagnosticar dependencia faltante de OCRmyPDF/Tesseract/idioma.
-- [x] Registrar confianza OCR por página en contrato.
-- [x] Marcar baja confianza y posible escritura manual como razones de revisión.
-- [x] Generar `needs_review.json` y `errors.json`.
-- [x] Agregar prueba unitaria de OCR mockeado.
-- [x] Integrar OCRmyPDF/Tesseract real por wrapper de comandos.
-- [x] Instalar `ocrmypdf` en el sistema local.
-- [x] Instalar idioma `spa` de Tesseract en el sistema local.
-- [x] Generar texto desde OCRmyPDF con `--sidecar`.
-- [x] Configurar timeout OCR por documento.
-- [ ] Crear prueba lenta con escaneado real.
+```text
+.tmp/task6_candidate_full3
+```
 
-## Sprint 1.4 - Normalización y preservación
+- [x] 9 fuentes PDF inventariadas.
+- [x] 9 bundles presentes.
+- [x] 77 páginas presentes y contiguas.
+- [x] 0 documentos fallidos.
+- [x] Gate estructural aprobado.
+- [x] Golden de bijección aprobado.
+- [x] Golden de total de páginas aprobado.
+- [ ] Golden de metadata aprobado; quedan 44 diferencias.
+- [ ] Golden de contenido aprobado; quedan 69 diferencias.
+- [ ] Expectativas descriptivas del golden convertidas a aserciones
+  semánticas o anclas textuales ejecutables.
+- [ ] Estados `processed`/`needs_review` alineados con la auditoría visual.
+- [ ] Suite completa reproducida sin errores ni skips de capacidades.
+- [ ] Gate golden completo aprobado.
+- [ ] Candidato promovido a `data/docs_normalized`.
 
-- [x] Normalizar Unicode a NFC.
-- [x] Normalizar saltos de línea.
-- [x] Eliminar caracteres de control.
-- [x] Corregir palabras partidas por salto de línea.
-- [x] Reducir espacios duplicados.
-- [x] Preservar fechas, códigos, porcentajes e identificadores en pruebas.
-- [x] Mantener `text_raw` y `text_normalized` por página.
+## Bloqueos para el cierre
 
-## Sprint 1.5 - Clasificación documental
+- Ghostscript requiere instalación corporativa.
+- El TSV de los escaneos necesita reconciliación limpia antes de usarlo para
+  título, clasificación y control documental.
+- Las observaciones de handwriting permanecen `not_evaluated`.
+- El golden mezcla anclas textuales con descripciones de auditoría; no se
+  permite insertar esas descripciones artificialmente en el Markdown.
 
-- [x] Implementar reglas por ruta y nombre.
-- [x] Implementar patrones por encabezado.
-- [x] Registrar `classification_confidence` en metadata.
-- [x] Enviar casos de baja confianza a `needs_review`.
-- [x] Añadir pruebas para reglas y umbrales.
-- [x] Clasificar todo el corpus real con confianza mínima 0.70.
-- [ ] Añadir clasificación asistida por LLM para ambigüedades futuras.
+## Regla de cierre
 
-## Sprint 1.6 - Manifiestos, logs y validación post-procesamiento
-
-- [x] Generar `.metadata.json` completo por documento procesado.
-- [x] Generar manifiesto global por corrida.
-- [x] Generar `run_<timestamp>_details.log`.
-- [x] Registrar eventos por documento y etapa.
-- [x] Implementar `scripts/ingestion/validate_normalized.py`.
-- [x] Generar `validation_<run_id>.json`.
-- [x] Validar `.md` con metadata asociada.
-- [x] Validar metadata de documentos `processed` contra Markdown existente.
-- [x] Validar IDs duplicados en metadatos.
-- [x] Validar auxiliares huérfanos.
-- [x] Validar que auxiliares pertenezcan al mismo `document_id` de su metadata.
-- [x] Validar esquema y versión de metadata, pages, OCR y tables.
-- [x] Validar consistencia de `page_count` en pages/OCR/tables.
-- [x] Validar hashes de origen contra `inventory.json`.
-- [x] Validar que `needs_review` esté en `needs_review.json`.
-- [x] Validar que `failed` esté en `errors.json`.
-- [x] Validar que no haya documentos `processed` también presentes en `errors.json`.
-- [x] Validar que inventario no quede con estado `pending`.
-- [x] Crear pruebas de IDs/auxiliares, archivos huérfanos, hashes inconsistentes y estados finales.
-
-## Sprint 1.7 - Integracion end-to-end y cierre
-
-- [x] Ejecutar pipeline completo sobre corpus real.
-- [x] Verificar segunda corrida sin cambios como incremental.
-- [x] Reprocesar documentos cuando cambia el hash.
-- [x] Revisar `needs_review.json` y `errors.json`.
-- [x] Medir cobertura de corpus y metodos de extraccion.
-- [x] Ejecutar pruebas automatizadas.
-- [x] Ejecutar validacion final.
-- [x] Documentar ejecucion incremental y reprocesamiento por hash.
-- [x] Crear `docs/ingestion/phase1_closure_report.md`.
-
-## Instalación y configuración
-
-- [x] Crear `package.json` con scripts de instalación y operación.
-- [x] Crear `requirements.txt` y `requirements-dev.txt`.
-- [x] Crear `secrets.example.env`.
-- [x] Mantener `secrets.env` ignorado por Git.
-- [x] Crear doctor OCR (`scripts/ingestion/doctor_ocr.py`).
-
-## Validación actual
-
-- [x] Pruebas automatizadas: 34 passing.
-- [x] Corrida real: 55 documentos procesados.
-- [x] Corrida incremental real: 55 documentos omitidos por hash sin cambios.
-- [x] Corrida real: 0 documentos en `needs_review`.
-- [x] Corrida real: 6 PDFs digitales procesados.
-- [x] Corrida real: 3 PDFs procesados por OCR.
-- [x] Corrida real: confianza de clasificación mínima 0.70.
-- [x] Corrida real: 0 fallidos.
-- [x] Validación final: passed, 0 errores críticos, 14 checks.
-- [x] Segunda corrida sin cambios: documentos marcados como `skipped`.
+No se autoriza chunking, indexación ni RAG sobre este candidato. La promoción
+solo procede cuando el gate estructural y el golden semántico pasan en la misma
+corrida y el diff de promoción ha sido revisado.

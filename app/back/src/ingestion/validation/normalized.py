@@ -199,10 +199,19 @@ def _validate_inventory(
             elif compute_content_hash(source) != record.content_hash:
                 hash_errors.append(f"{record.document_id}: source hash mismatch")
     metadata_ids = {metadata.document_id for metadata in metadata_by_base.values()}
-    inventory_ids = {record.document_id for record in records if record.processing_status == "processed"}
+    inventory_ids = {record.document_id for record in records}
+    processed_ids = {
+        record.document_id
+        for record in records
+        if record.processing_status == "processed"
+    }
+    bijection_errors = sorted(
+        (metadata_ids - inventory_ids)
+        | (processed_ids - metadata_ids)
+    )
     return [
         _check("inventory_schema", schema_errors),
-        _check("inventory_metadata_bijection", sorted(metadata_ids.symmetric_difference(inventory_ids))),
+        _check("inventory_metadata_bijection", bijection_errors),
         _check("inventory_source_hashes", hash_errors),
         _check("inventory_final_statuses", final_status_errors),
     ]
@@ -237,7 +246,8 @@ def _validate_closure_requirements(
     for base, metadata in metadata_by_base.items():
         if metadata.document_name.lower().endswith(".pdf"):
             for suffix in (".pages.json", ".ocr.json", ".tables.json", ".forms.json"):
-                if not base.with_suffix(suffix).exists():
+                artifact_path = base.with_name(base.name + suffix)
+                if not artifact_path.exists():
                     missing.append(f"{metadata.source_relpath}: missing {suffix}")
     return [_check("closure_required_artifacts", missing)]
 

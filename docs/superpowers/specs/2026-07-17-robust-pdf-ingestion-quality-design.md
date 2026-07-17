@@ -2,9 +2,15 @@
 
 Fecha: 2026-07-17
 
-Estado: propuesta para revisión
+Estado: diseño vigente; implementación parcial
 
 Alcance: Fase 1 local; sin persistencia PostgreSQL
+
+Estado operativo: los contratos Schema 2.0, bundles atómicos, PDFium,
+Tesseract, OCR regional, validación estructural y candidato de 9 bundles/77
+páginas están implementados. El cierre semántico, handwriting, Ghostscript y
+la promoción siguen pendientes; véase
+`docs/ingestion/phase1_closure_report.md`.
 
 ## Problema
 

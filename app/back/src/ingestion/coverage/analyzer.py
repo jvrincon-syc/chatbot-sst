@@ -23,9 +23,18 @@ class CoverageAssessment(StrictModel):
 
 
 class CoverageAnalyzer:
-    def __init__(self, *, sparse_page_word_threshold: int = 20, logo_max_area_ratio: float = 0.04) -> None:
+    def __init__(
+        self,
+        *,
+        sparse_page_word_threshold: int = 20,
+        logo_max_area_ratio: float = 0.04,
+        instruction_image_min_area_ratio: float = 0.08,
+        instruction_image_min_area: float = 10_000,
+    ) -> None:
         self.sparse_page_word_threshold = sparse_page_word_threshold
         self.logo_max_area_ratio = logo_max_area_ratio
+        self.instruction_image_min_area_ratio = instruction_image_min_area_ratio
+        self.instruction_image_min_area = instruction_image_min_area
 
     def assess(self, page: Any) -> CoverageAssessment:
         page_number = int(getattr(page, "page_number"))
@@ -44,12 +53,22 @@ class CoverageAnalyzer:
                 continue
             if _is_logo_like(role, bbox, page_area, self.logo_max_area_ratio):
                 continue
-            if word_count < self.sparse_page_word_threshold:
+            area = (bbox.x1 - bbox.x0) * (bbox.bottom - bbox.top)
+            is_large = (
+                area / page_area >= self.instruction_image_min_area_ratio
+                if page_area
+                else area >= self.instruction_image_min_area
+            )
+            if word_count < self.sparse_page_word_threshold or is_large:
                 candidates.append(
                     CandidateRegion(
                         page_number=page_number,
                         bbox=bbox,
-                        reason="image_region_on_sparse_page",
+                        reason=(
+                            "image_region_on_sparse_page"
+                            if word_count < self.sparse_page_word_threshold
+                            else "large_image_region"
+                        ),
                         source_block_id=getattr(block, "block_id", None),
                     )
                 )

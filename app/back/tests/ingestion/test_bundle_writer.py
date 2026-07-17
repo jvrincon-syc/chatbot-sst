@@ -511,7 +511,13 @@ def test_write_bundle_atomic_rejects_symlink_inserted_during_write(
         nonlocal swapped
         if not swapped:
             swapped = True
-            (candidate / "manual").symlink_to(outside, target_is_directory=True)
+            try:
+                (candidate / "manual").symlink_to(
+                    outside,
+                    target_is_directory=True,
+                )
+            except OSError as exc:
+                pytest.skip(f"symlink creation unavailable: {exc}")
         original_write(root_fd, relpath, text)
 
     monkeypatch.setattr(

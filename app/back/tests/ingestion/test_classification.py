@@ -29,6 +29,17 @@ def test_title_beats_policy_route_for_matrix_and_records_conflict() -> None:
     assert result.conflicts
 
 
+def test_objectives_and_metrics_title_is_classified_as_matrix() -> None:
+    result = classify_document(
+        "general_sst/capacitaciones/politica_seguridad_trabajo/"
+        "seguridad_vial/documento.pdf",
+        [{"text_raw": "La matriz define indicadores de medicion."}],
+        _control("Objetivos y metas de seguridad vial"),
+    )
+
+    assert result.document_type == "matriz"
+
+
 def test_route_only_result_is_low_confidence() -> None:
     result = classify_document("sst/manuales/archivo.pdf", [{"text_raw": "contenido generico"}], _control("Documento"))
     assert result.document_type == "manual"

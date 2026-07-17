@@ -4,7 +4,12 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from ingestion.schemas.artifacts import OcrArtifact, PageRecord, TablesArtifact
+from ingestion.schemas.artifacts import (
+    FormsArtifact,
+    OcrArtifact,
+    PageRecord,
+    TablesArtifact,
+)
 
 
 class ReadResult(BaseModel):
@@ -14,6 +19,7 @@ class ReadResult(BaseModel):
     warnings: List[str] = Field(default_factory=list)
     review_reasons: List[str] = Field(default_factory=list)
     tables: Optional[TablesArtifact] = None
+    forms: Optional[FormsArtifact] = None
     ocr: Optional[OcrArtifact] = None
 
     @property

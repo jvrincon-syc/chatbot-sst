@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -11,18 +12,39 @@ from ingestion.classification.rules import classify_document
 from ingestion.document_control.extractor import extract_document_control
 from ingestion.inventory.scanner import scan_docs_raw
 from ingestion.logging.jsonl import JsonlLogger
+from ingestion.manifests.bundle_writer import BundlePayload, write_bundle_atomic
 from ingestion.manifests.writer import dump_json, write_inventory
+from ingestion.fingerprint import processing_fingerprint
+from ingestion.paths import ArtifactPaths, canonical_relpath
 from ingestion.promotion import promote_candidate
 from ingestion.readers.base import ReadResult
 from ingestion.ocr.ocrmypdf_engine import OcrDependencyError, OcrMyPdfEngine
+from ingestion.ocr.tesseract_engine import TesseractEngine, TesseractPdfEngine
 from ingestion.readers.markdown_reader import MarkdownReader
+from ingestion.readers.hybrid_reader import HybridReader
 from ingestion.readers.pdf_digital_reader import PdfDigitalReader
 from ingestion.readers.pdf_scanned_reader import PdfScannedReader
-from ingestion.schemas.artifacts import MetadataArtifact, PagesArtifact
+from ingestion.schemas.artifacts import (
+    FormsArtifact,
+    MetadataArtifact,
+    OcrArtifact,
+    PagesArtifact,
+    TablesArtifact,
+)
 from ingestion.schemas.common import ConfidenceMetric, Evidence, Observation
 from ingestion.schemas.inventory import InventoryRecord
 from ingestion.schemas.manifests import ErrorManifest, ErrorItem, ReviewManifest, ReviewItem, RunDocument, RunManifest
 from ingestion.validation.normalized import validate_normalized_tree
+
+_MATERIAL_PAGE_WARNINGS = {
+    "incomplete_coverage",
+    "insufficient_coverage",
+    "partial_extraction",
+    "uncovered_substantive_region",
+    "ocr_unavailable_for_substantive_gap",
+    "table_detected_not_reconstructed",
+    "form_detected_not_reconstructed",
+}
 
 
 def _now() -> str:
@@ -115,6 +137,8 @@ def _set_artifact_document_id(result: ReadResult, document_id: str) -> None:
         for index, table in enumerate(result.tables.tables, start=1):
             if table.table_id == "pending":
                 table.table_id = f"{document_id}_table_{index:03d}"
+    if result.forms is not None:
+        result.forms.document_id = document_id
 
 
 def _build_metadata(
@@ -141,16 +165,50 @@ def _build_metadata(
             warnings=["table_evidence_available_in_tables_artifact"],
         )
         if result.tables is not None and result.tables.table_count > 0
-        else Observation(status="not_detected", value=False, method="reader_tables")
+        else _artifact_observation(
+            result.tables.page_observations if result.tables is not None else []
+        )
     )
-    forms = Observation(status="not_evaluated", value=None)
-    warnings = list(result.warnings)
-    review_reasons = list(result.review_reasons)
+    forms = (
+        Observation(
+            status="detected",
+            value=True,
+            method="reader_forms",
+            evidence=[Evidence(source="forms_artifact")],
+            warnings=["form_evidence_available_in_forms_artifact"],
+        )
+        if result.forms is not None and result.forms.groups
+        else _artifact_observation(
+            result.forms.page_observations if result.forms is not None else []
+        )
+    )
+    page_warnings = [
+        warning
+        for page in result.pages
+        for warning in page.warnings
+    ]
+    warnings = _unique(
+        list(result.warnings)
+        + page_warnings
+        + document_control.warnings
+        + classification.warnings
+        + classification.conflicts
+    )
+    review_reasons = _unique(
+        list(result.review_reasons)
+        + [
+            warning
+            for warning in page_warnings
+            if warning in _MATERIAL_PAGE_WARNINGS
+        ]
+        + document_control.warnings
+        + (["classification_conflict"] if classification.conflicts else [])
+    )
     if (classification.document_type_confidence.value or 0) < classification_review_threshold:
         warnings.append("ambiguous_classification")
         review_reasons.append("ambiguous_classification")
-    result.review_reasons = review_reasons
-    result.warnings = warnings
+    result.review_reasons = _unique(review_reasons)
+    result.warnings = _unique(warnings)
     return MetadataArtifact(
         schema_version="2.0",
         document_id=record.document_id,
@@ -185,12 +243,9 @@ def _write_success_artifacts(
     corpus_version: str,
     pipeline_version: str,
     classification_review_threshold: float,
-) -> MetadataArtifact:
-    output_base = _output_base_for_record(record, docs_normalized)
-    normalized_md = output_base.with_suffix(".md")
-    metadata_path = output_base.with_suffix(".metadata.json")
-    pages_path = output_base.with_suffix(".pages.json")
-    normalized_md.parent.mkdir(parents=True, exist_ok=True)
+) -> tuple[MetadataArtifact, object]:
+    paths = ArtifactPaths.for_source(record.source_relpath)
+    normalized_md = docs_normalized / Path(paths.markdown)
 
     _set_artifact_document_id(result, record.document_id)
     metadata = _build_metadata(
@@ -202,24 +257,91 @@ def _write_success_artifacts(
         classification_review_threshold=classification_review_threshold,
     )
     pages = PagesArtifact(schema_version="2.0", document_id=record.document_id, page_count=result.page_count, pages=result.pages)
+    ocr = result.ocr or OcrArtifact(
+        schema_version="2.0",
+        document_id=record.document_id,
+        document_confidence=ConfidenceMetric(kind="unavailable", value=None),
+        pages=[],
+        warnings=["ocr_not_evaluated"],
+    )
+    tables = result.tables or TablesArtifact(
+        schema_version="2.0",
+        document_id=record.document_id,
+        table_count=0,
+        tables=[],
+        page_observations=[
+            Observation(status="not_evaluated", value=None)
+            for _page in result.pages
+        ],
+        warnings=["table_detection_not_evaluated"],
+    )
+    forms = result.forms or FormsArtifact(
+        schema_version="2.0",
+        document_id=record.document_id,
+        groups=[],
+        page_observations=[
+            Observation(status="not_evaluated", value=None)
+            for _page in result.pages
+        ],
+        warnings=["form_detection_not_evaluated"],
+    )
+    artifacts = {
+        paths.markdown: _front_matter(metadata) + result.markdown + "\n",
+        paths.metadata: metadata,
+        paths.pages: pages,
+        paths.ocr: ocr,
+        paths.tables: tables,
+        paths.forms: forms,
+    }
+    fingerprint = processing_fingerprint(
+        {
+            "pipeline_version": pipeline_version,
+            "corpus_version": corpus_version,
+            "classification_review_threshold": classification_review_threshold,
+        },
+        {},
+    )
+    bundle = write_bundle_atomic(
+        docs_normalized,
+        BundlePayload(
+            document_id=record.document_id,
+            source_relpath=record.source_relpath,
+            source_hash=record.content_hash,
+            processing_fingerprint=fingerprint,
+            document_status=metadata.processing_status,
+            artifacts=artifacts,
+        ),
+    )
+    return metadata, bundle
 
-    normalized_md.write_text(_front_matter(metadata) + result.markdown + "\n", encoding="utf-8")
-    dump_json(metadata_path, metadata)
-    dump_json(pages_path, pages)
-    if result.ocr is not None:
-        dump_json(output_base.with_suffix(".ocr.json"), result.ocr)
-    if result.tables is not None:
-        dump_json(output_base.with_suffix(".tables.json"), result.tables)
-    return metadata
+
+def _unique(values: list[str]) -> list[str]:
+    return list(dict.fromkeys(value for value in values if value))
 
 
 def _handwriting_observation(result: ReadResult) -> Observation:
-    if result.ocr is None:
+    if result.ocr is None or not result.ocr.pages:
         return Observation(status="not_evaluated", value=None)
     for page in result.ocr.pages:
         if page.handwriting.status == "detected":
             return page.handwriting
-    return Observation(status="not_detected", value=False, method="ocr_reader")
+    if all(page.handwriting.status == "not_detected" for page in result.ocr.pages):
+        return result.ocr.pages[0].handwriting
+    return Observation(status="not_evaluated", value=None)
+
+
+def _artifact_observation(observations: list[Observation]) -> Observation:
+    if not observations:
+        return Observation(status="not_evaluated", value=None)
+    detected = next(
+        (observation for observation in observations if observation.status == "detected"),
+        None,
+    )
+    if detected is not None:
+        return detected
+    if all(observation.status == "not_detected" for observation in observations):
+        return observations[0]
+    return Observation(status="not_evaluated", value=None)
 
 
 def _source_path_for_record(record: InventoryRecord, docs_raw: Optional[Path] = None) -> Path:
@@ -228,6 +350,21 @@ def _source_path_for_record(record: InventoryRecord, docs_raw: Optional[Path] = 
     if record.legacy_path:
         return Path(record.legacy_path)
     return Path(record.source_relpath)
+
+
+def _configured_tesseract_engine() -> TesseractEngine:
+    return TesseractEngine(
+        tesseract_cmd=os.getenv("TESSERACT_CMD", "tesseract"),
+        language=os.getenv("TESSERACT_LANGUAGE", "spa"),
+        engine_version=os.getenv("TESSERACT_VERSION", "unknown"),
+        low_confidence_threshold=float(
+            os.getenv("OCR_LOW_CONFIDENCE_THRESHOLD", "0.70")
+        ),
+    )
+
+
+def _configured_tesseract_pdf_engine() -> TesseractPdfEngine:
+    return TesseractPdfEngine(region_engine=_configured_tesseract_engine())
 
 
 def _read_document(
@@ -240,12 +377,23 @@ def _read_document(
     if record.detected_extension == ".md":
         return MarkdownReader().read(source_path)
     if record.detected_extension == ".pdf":
-        pdf_reader_or_extractor = pdf_reader_factory() if pdf_reader_factory else PdfDigitalReader()
-        pdf_reader = (
-            pdf_reader_or_extractor
-            if hasattr(pdf_reader_or_extractor, "read")
-            else PdfDigitalReader(extractor=pdf_reader_or_extractor)
-        )
+        if pdf_reader_factory:
+            pdf_reader_or_extractor = pdf_reader_factory()
+            pdf_reader = (
+                pdf_reader_or_extractor
+                if hasattr(pdf_reader_or_extractor, "read")
+                else PdfDigitalReader(extractor=pdf_reader_or_extractor)
+            )
+        else:
+            region_ocr = (
+                ocr_engine
+                if ocr_engine is not None and hasattr(ocr_engine, "recognize")
+                else _configured_tesseract_engine()
+            )
+            pdf_reader = HybridReader(
+                digital_reader=PdfDigitalReader(),
+                ocr_engine=region_ocr,
+            )
         try:
             return pdf_reader.read(source_path)
         except RuntimeError as exc:
@@ -256,7 +404,8 @@ def _read_document(
             )
             if not any(signal in str(exc) for signal in fallback_signals):
                 raise
-            return PdfScannedReader(ocr_engine=ocr_engine or OcrMyPdfEngine()).read(source_path)
+            fallback_engine = ocr_engine or _configured_tesseract_pdf_engine()
+            return PdfScannedReader(ocr_engine=fallback_engine).read(source_path)
     raise ValueError(f"Unsupported format: {record.detected_extension or 'unknown'}")
 
 
@@ -297,12 +446,16 @@ def run_pipeline(
     previous_records = _load_previous_inventory(manifests_dir / "inventory.json")
     records = scan_docs_raw(docs_raw, corpus_version=corpus_version, pipeline_version=pipeline_version)
     if only_sources is not None:
-        selected = set(only_sources)
+        selected = {
+            canonical_relpath(str(source).replace("\\", "/"))
+            for source in only_sources
+        }
         records = [record for record in records if record.source_relpath in selected]
     summary = {"processed": 0, "failed": 0, "needs_review": 0, "skipped": 0}
     errors: List[dict] = []
     needs_review: List[dict] = []
     run_documents: List[dict] = []
+    bundle_manifests = []
 
     for record in records:
         if not force and _can_skip_record(record, previous_records, docs_raw, output_root):
@@ -336,7 +489,7 @@ def run_pipeline(
         )
         try:
             result = _read_document(record, docs_raw=docs_raw)
-            metadata = _write_success_artifacts(
+            metadata, bundle = _write_success_artifacts(
                 record=record,
                 result=result,
                 docs_raw=docs_raw,
@@ -345,6 +498,7 @@ def run_pipeline(
                 pipeline_version=pipeline_version,
                 classification_review_threshold=classification_review_threshold,
             )
+            bundle_manifests.append(bundle)
             record.processing_status = metadata.processing_status
             if metadata.processing_status == "needs_review":
                 summary["needs_review"] += 1
@@ -430,7 +584,7 @@ def run_pipeline(
             fingerprints={},
             summary=summary,
             documents=run_documents,
-            bundles=[],
+            bundles=bundle_manifests,
         ),
     )
     dump_json(

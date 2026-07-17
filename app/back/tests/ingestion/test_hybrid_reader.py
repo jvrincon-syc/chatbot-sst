@@ -1,7 +1,10 @@
 from pathlib import Path
 
+from PIL import Image
+from pypdf import PdfWriter
+
 from ingestion.coverage.analyzer import CoverageAnalyzer
-from ingestion.ocr.rasterizer import RasterRegion
+from ingestion.ocr.rasterizer import PageRasterizer, RasterRegion
 from ingestion.ocr.tesseract_engine import OcrRegionResult, parse_tesseract_tsv
 from ingestion.readers.base import ReadResult
 from ingestion.readers.hybrid_reader import HybridReader
@@ -109,3 +112,38 @@ def test_hybrid_reader_requires_review_when_ocr_unavailable_for_substantive_gap(
     assert result.extraction_method == "pdf_digital"
     assert "ocr_unavailable_for_uncovered_region" in result.review_reasons
     assert result.ocr is None
+
+
+def test_default_page_rasterizer_renders_a_pdf_region(tmp_path: Path) -> None:
+    source = tmp_path / "one-page.pdf"
+    writer = PdfWriter()
+    writer.add_blank_page(width=200, height=300)
+    with source.open("wb") as handle:
+        writer.write(handle)
+
+    region = PageRasterizer(dpi=72).render(
+        source,
+        page_number=1,
+        clip=box(20, 30, 120, 180),
+    )
+
+    assert region.image_path.exists()
+    assert region.page_number == 1
+    assert region.bbox == box(20, 30, 120, 180)
+    assert region.width == 100
+    assert region.height == 150
+    with Image.open(region.image_path) as image:
+        assert image.size == (100, 150)
+
+
+def test_default_page_rasterizer_renders_a_full_pdf_page(tmp_path: Path) -> None:
+    source = tmp_path / "one-page.pdf"
+    writer = PdfWriter()
+    writer.add_blank_page(width=200, height=300)
+    with source.open("wb") as handle:
+        writer.write(handle)
+
+    page = PageRasterizer(dpi=72).render(source, page_number=1)
+
+    assert page.width == 200
+    assert page.height == 300

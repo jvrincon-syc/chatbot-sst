@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from ingestion.inventory.scanner import compute_content_hash
+from ingestion.pipeline import run_pipeline
 from ingestion.validation.normalized import validate_normalized_tree
 
 
@@ -179,6 +180,53 @@ def test_validation_checks_inventory_hashes_and_bijection_with_raw_root(tmp_path
     assert any(check.check == "inventory_source_hashes" and check.status == "failed" for check in report.checks)
 
 
+def test_inventory_bijection_includes_needs_review_artifacts(tmp_path: Path) -> None:
+    normalized = tmp_path / "normalized"
+    _write_document(
+        normalized,
+        processing_status="needs_review",
+        review_reasons=["manual_review"],
+    )
+    manifests = normalized / "_manifests"
+    manifests.mkdir()
+    (manifests / "inventory.json").write_text(
+        json.dumps(
+            [
+                {
+                    "schema_version": "2.0",
+                    "document_id": "doc_1",
+                    "source_relpath": "manual.md",
+                    "document_name": "manual.md",
+                    "detected_extension": ".md",
+                    "reported_extension": ".md",
+                    "mime_type": "text/markdown",
+                    "content_hash": "abc",
+                    "file_size": 1,
+                    "ingestion_date": "2026-07-17T00:00:00-05:00",
+                    "category_inferred": "root",
+                    "processing_status": "needs_review",
+                    "pipeline_version": "1.0.0",
+                    "corpus_version": "test",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    (manifests / "needs_review.json").write_text(
+        json.dumps({"items": [{"document_id": "doc_1"}]}),
+        encoding="utf-8",
+    )
+
+    report = validate_normalized_tree(normalized)
+
+    check = next(
+        item
+        for item in report.checks
+        if item.check == "inventory_metadata_bijection"
+    )
+    assert check.status == "passed"
+
+
 def test_validation_closure_rejects_legacy_and_missing_pdf_sidecars(tmp_path: Path) -> None:
     normalized = tmp_path / "normalized"
     _write_document(normalized, document_name="manual.pdf", source_relpath="manual.pdf", normalized_relpath="manual.md")
@@ -201,3 +249,29 @@ def test_validation_rejects_processed_documents_with_review_reasons(tmp_path: Pa
 
     assert report.status == "failed"
     assert any(check.check == "processed_with_review_reasons" and check.status == "failed" for check in report.checks)
+
+
+def test_closure_preserves_multipoint_artifact_stems(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    normalized = tmp_path / "normalized"
+    raw.mkdir()
+    (raw / "RE.RH-04.md").write_text("# Manual\n", encoding="utf-8")
+    run_pipeline(
+        docs_raw=raw,
+        docs_normalized=normalized,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="multipoint",
+    )
+    metadata_path = normalized / "RE.RH-04.metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    metadata["document_name"] = "RE.RH-04.pdf"
+    metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+
+    report = validate_normalized_tree(normalized, mode="closure")
+
+    closure = next(
+        check for check in report.checks
+        if check.check == "closure_required_artifacts"
+    )
+    assert closure.status == "passed"

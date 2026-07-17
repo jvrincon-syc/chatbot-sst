@@ -9,15 +9,17 @@ from ingestion.layout.boilerplate import build_indexable_text, detect_boilerplat
 from ingestion.layout.pdfplumber_extractor import LayoutCapabilityUnavailableError, PdfLayoutExtractor
 from ingestion.normalization.text import normalize_text
 from ingestion.readers.base import ReadResult
-from ingestion.schemas.artifacts import PageRecord, TableRecord, TablesArtifact
+from ingestion.schemas.artifacts import PageRecord
 from ingestion.schemas.common import ConfidenceMetric, PageBlock
+from ingestion.structure.forms import FormExtractor
+from ingestion.structure.tables import TableExtractor
 
 
 class PdfPage(BaseModel):
     page_number: int
     text: str
     blocks: List[PageBlock] = Field(default_factory=list)
-    tables: List[TableRecord] = Field(default_factory=list)
+    tables: List[Any] = Field(default_factory=list)
 
 
 class PdfExtractor(Protocol):
@@ -45,21 +47,30 @@ class PypdfTextExtractor:
 
 
 class PdfDigitalReader:
-    def __init__(self, extractor: PdfExtractor = None, min_extractable_words: int = 10) -> None:
+    def __init__(
+        self,
+        extractor: PdfExtractor = None,
+        min_extractable_words: int = 10,
+        table_extractor: TableExtractor | None = None,
+        form_extractor: FormExtractor | None = None,
+    ) -> None:
         self.extractor = extractor or PdfLayoutExtractor()
         self.min_extractable_words = min_extractable_words
+        self.table_extractor = table_extractor or TableExtractor()
+        self.form_extractor = form_extractor or FormExtractor()
 
     def read(self, source_path: Path) -> ReadResult:
+        layout_capable = True
         try:
             extracted_pages = self.extractor.extract_pages(source_path)
         except LayoutCapabilityUnavailableError:
             extracted_pages = PypdfTextExtractor().extract_pages(source_path)
+            layout_capable = False
 
         digital_pages = [_coerce_page(extracted) for extracted in extracted_pages]
         boilerplate = detect_boilerplate(digital_pages) if any(page.blocks for page in digital_pages) else None
         pages: List[PageRecord] = []
         markdown_parts: List[str] = []
-        table_records: List[TableRecord] = []
 
         for extracted in digital_pages:
             text_raw = extracted.text
@@ -78,20 +89,20 @@ class PdfDigitalReader:
                     warnings=[] if text_normalized else ["partial_extraction"],
                 )
             )
-            table_records.extend(extracted.tables)
-
         word_count = sum(len(page.text_normalized.split()) for page in pages)
         if word_count < self.min_extractable_words:
             raise RuntimeError("PDF text layer insufficient; OCR required.")
 
-        tables = None
-        if table_records:
-            tables = TablesArtifact(
-                schema_version="2.0",
-                document_id="pending",
-                table_count=len(table_records),
-                tables=table_records,
-            )
+        tables = (
+            self.table_extractor
+            if layout_capable
+            else TableExtractor(backend_available=False)
+        ).evaluate_pages(digital_pages)
+        forms = (
+            self.form_extractor
+            if layout_capable
+            else FormExtractor(backend_available=False)
+        ).evaluate_pages(digital_pages)
 
         return ReadResult(
             extraction_method="pdf_digital",
@@ -100,6 +111,7 @@ class PdfDigitalReader:
             warnings=[],
             review_reasons=[],
             tables=tables,
+            forms=forms,
         )
 
 

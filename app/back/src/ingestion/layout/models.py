@@ -40,6 +40,7 @@ class LayoutPage(StrictModel):
     rotation: int = 0
     text_raw: str = ""
     blocks: list[LayoutBlock] = Field(default_factory=list)
+    tables: list[dict[str, Any]] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")

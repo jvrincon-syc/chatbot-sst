@@ -2,6 +2,14 @@
 
 Fecha: 2026-07-17
 
+## Vigencia
+
+Este documento conserva la auditoría visual que define el resultado esperado,
+no el estado operativo del candidato actual. Desde esta auditoría se
+materializaron los 9 bundles y las 77 páginas y se conectó OCR regional. El
+estado reproducible vigente se mantiene en `phase1_closure_report.md`; las
+expectativas ejecutables permanecen en `pdf_corpus_expected.json`.
+
 ## Resultado técnico
 
 Se revisaron visualmente los **9 PDF y sus 77 páginas** bajo `data/docs_raw`, y se compararon con sus `.md`, `.metadata.json`, `.pages.json`, `.ocr.json` y tablas auxiliares disponibles.

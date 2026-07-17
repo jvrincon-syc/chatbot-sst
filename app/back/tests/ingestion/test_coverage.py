@@ -62,3 +62,18 @@ def test_coverage_analyzer_ignores_logo_like_images() -> None:
 
     assert assessment.status == "complete"
     assert assessment.candidate_regions == []
+
+
+def test_coverage_analyzer_flags_large_instruction_image_even_with_digital_text() -> None:
+    page = SimpleNamespace(
+        page_number=13,
+        width=612,
+        height=792,
+        text_normalized=" ".join(["texto"] * 80),
+        blocks=[image_block("ergonomic_instruction", box(90, 170, 500, 620))],
+    )
+
+    assessment = CoverageAnalyzer(sparse_page_word_threshold=20).assess(page)
+
+    assert assessment.status == "partial"
+    assert assessment.candidate_regions[0].reason == "large_image_region"
