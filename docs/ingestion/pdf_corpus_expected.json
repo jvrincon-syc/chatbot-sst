@@ -1,0 +1,475 @@
+{
+  "audit_schema_version": "1.0",
+  "audit_date": "2026-07-17",
+  "scope": {
+    "root": "data/docs_raw",
+    "pdf_documents": 9,
+    "pages_reviewed": 77,
+    "review_mode": "visual_page_by_page_plus_normalized_artifact_comparison",
+    "coverage_rule": "Every visible body-text region must be represented. Tables, form fields, image-embedded instructions, signatures and repeated layout regions must be evaluated explicitly rather than inferred from extracted text."
+  },
+  "semantic_states": {
+    "detected": "The feature was evaluated and found.",
+    "not_detected": "The feature was evaluated with a capable detector and was not found.",
+    "not_evaluated": "No capable detector evaluated the feature.",
+    "not_found": "Extraction was attempted but no supported value was found."
+  },
+  "documents": [
+    {
+      "document_id": "doc_864d906c5eae1183",
+      "source_relpath": "data/docs_raw/convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "page_count": 2,
+      "source_kind": "pdf_digital",
+      "expected": {
+        "title": "Formato para interponer queja por presunto acoso ante el Comité de Convivencia",
+        "document_type": "formulario",
+        "topic": "Comité de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "document_code": "RE.RH-04 SST",
+        "version": "0.3",
+        "publication_date": null,
+        "effective_date": null,
+        "extraction_method": "pdf_digital",
+        "contains_tables": "detected",
+        "contains_form": "detected",
+        "contains_handwriting": "not_detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1-2",
+          "must_preserve": [
+            "datos de la persona que interpone la queja",
+            "modalidad de la queja",
+            "datos del presunto acosador",
+            "relato de los hechos",
+            "pruebas",
+            "sugerencias o solicitudes",
+            "firma"
+          ],
+          "structure": "Form groups and cells must remain associated with their labels; blank response areas are layout, not missing text."
+        }
+      ],
+      "known_current_defects": [
+        "Classified as manual because route evidence outweighs the explicit title.",
+        "Form and table layout are flattened and contains_tables is false.",
+        "Version 0.3 and the visually rendered code RE.RH-04 SST are not materialized.",
+        "Page 2 includes a repeated header from the PDF text layer that is outside the visible crop.",
+        "Extracted text splits the visible word 'destrucción'."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_c392ec7bf8d98194",
+      "source_relpath": "data/docs_raw/convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "page_count": 12,
+      "source_kind": "pdf_digital",
+      "expected": {
+        "title": "Manual de convivencia laboral",
+        "document_type": "manual",
+        "topic": "Convivencia laboral",
+        "subtopic": null,
+        "document_code": "M.RH-03-SST",
+        "version": "0.2",
+        "publication_date": null,
+        "effective_date": null,
+        "extraction_method": "pdf_digital",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "not_detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1-12",
+          "must_preserve": [
+            "introducción",
+            "políticas de prevención y desconexión",
+            "definición, objetivos y funciones del Comité de Convivencia",
+            "marco legal",
+            "valores",
+            "normas y conductas",
+            "deberes y derechos",
+            "canales de contacto"
+          ],
+          "structure": "Preserve headings and lists; extract the repeated control header once as document metadata and not as repeated RAG body text."
+        }
+      ],
+      "known_current_defects": [
+        "Version 0.2 and code M.RH-03-SST are visible on every page but metadata.version is null.",
+        "The control header is repeated in all twelve normalized page bodies.",
+        "Header cells are not represented as table/control metadata.",
+        "There are intraword spacing defects such as 'c umplimiento'."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_caf88d615e56edd4",
+      "source_relpath": "data/docs_raw/convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "page_count": 1,
+      "source_kind": "pdf_scanned",
+      "expected": {
+        "title": "Política de desconexión laboral",
+        "document_type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Desconexión laboral",
+        "document_code": "PL.RH-03SST",
+        "version": "0.1",
+        "publication_date": null,
+        "effective_date": null,
+        "extraction_method": "ocr",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1",
+          "must_preserve": [
+            "fundamento en la Ley 2191 de 2022",
+            "balance entre vida laboral y familiar",
+            "mecanismos para ejercer el derecho",
+            "canal de queja",
+            "horarios y comunicaciones fuera de jornada",
+            "función del Comité de Convivencia",
+            "nombre y cargo del firmante"
+          ],
+          "structure": "Extract the control header as structured fields and retain a handwriting/signature observation separate from OCR text."
+        }
+      ],
+      "known_current_defects": [
+        "OCR confidence 1.0 is a hard-coded proxy, not an engine measurement.",
+        "The visual code PL.RH-03SST is OCR'd as PL.RH-035ST.",
+        "OCR errors include 'Sistomas', 'huestros', 'mecanísmos' and a split title.",
+        "The handwritten signature is reported as contains_handwriting false."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_d57d21ff836e1ec0",
+      "source_relpath": "data/docs_raw/convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "page_count": 1,
+      "source_kind": "pdf_scanned",
+      "expected": {
+        "title": "Política de prevención de acoso laboral",
+        "document_type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Prevención del acoso laboral, sexual, violencia basada en género y discriminación",
+        "document_code": "PL.RH-01SST",
+        "version": "0.2",
+        "publication_date": "2025-12-06",
+        "effective_date": null,
+        "extraction_method": "ocr",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1",
+          "must_preserve": [
+            "alcance de la política",
+            "ambiente digno, respetuoso, seguro y saludable",
+            "conductas prohibidas",
+            "función del Comité de Convivencia",
+            "confidencialidad e imparcialidad",
+            "igualdad de oportunidades",
+            "aplicación obligatoria",
+            "fecha y firmante"
+          ],
+          "structure": "Extract the control header and signature observation separately from body text."
+        }
+      ],
+      "known_current_defects": [
+        "OCR confidence 1.0 is not measured.",
+        "The visual code PL.RH-01SST is OCR'd as PL.RH-018ST.",
+        "Version 0.2 is visible but omitted.",
+        "OCR inserts 'DN humana' and changes Joan Mauricio to Joan Nauricio.",
+        "The handwritten signature is reported as contains_handwriting false."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_d4fca71ff51cb27b",
+      "source_relpath": "data/docs_raw/convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "page_count": 6,
+      "source_kind": "pdf_digital",
+      "expected": {
+        "title": "Reglamento del Comité de Convivencia Laboral",
+        "document_type": "reglamento",
+        "topic": "Comité de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comité",
+        "document_code": "RG.RH-01SST",
+        "version": "0.0",
+        "publication_date": null,
+        "effective_date": null,
+        "extraction_method": "pdf_digital",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "not_detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1-6",
+          "must_preserve": [
+            "objetivo",
+            "conformación, designación y periodo",
+            "obligaciones, inhabilidades y retiro",
+            "roles y metodología de reuniones",
+            "funciones",
+            "etapas de atención de quejas",
+            "vigencia y modificaciones"
+          ],
+          "structure": "Preserve section hierarchy and pagination; store the repeated control header once."
+        }
+      ],
+      "known_current_defects": [
+        "Version 0.0 and code are visible but not materialized.",
+        "The header and page counter are repeated in every normalized body.",
+        "The index lists section 7 ANEXO on page 6, but the source body ends at section 6.2 and contains no annex.",
+        "There are word-splitting defects such as 'de n a conocer'."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_f2cf7868a801af0e",
+      "source_relpath": "data/docs_raw/general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "page_count": 16,
+      "source_kind": "pdf_hybrid_content",
+      "expected": {
+        "title": "Programa de pausas activas",
+        "document_type": "programa",
+        "topic": "Pausas activas",
+        "subtopic": "Prevención de fatiga y desórdenes musculoesqueléticos",
+        "document_code": "PG-RH-10-SST",
+        "version": "0.0",
+        "publication_date": "2024-03",
+        "effective_date": null,
+        "extraction_method": "hybrid",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "not_detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1-7",
+          "must_preserve": [
+            "problema",
+            "objetivos",
+            "marco conceptual",
+            "beneficios",
+            "actividades",
+            "metodología",
+            "estrategias y responsabilidades"
+          ],
+          "structure": "Reconstruct the page 6 AUMENTAN/DISMINUYEN table and preserve headings/lists."
+        },
+        {
+          "pages": "8-12",
+          "must_preserve": [
+            "rutinas de movimiento y estiramiento",
+            "ejercicios para rodillas y pies",
+            "ejercicios para ojos",
+            "masaje para dolor de cabeza"
+          ],
+          "structure": "OCR image regions containing instructional text even when the page also has a sufficient digital text layer."
+        },
+        {
+          "pages": "13-15",
+          "must_preserve": [
+            "posturas adecuadas",
+            "distancia de 45 a 70 cm",
+            "ajuste de silla, teclado y pantalla",
+            "zonas usual, ocasional y poco común",
+            "labels Bien/Mal"
+          ],
+          "structure": "These pages require region/page OCR; the current digital extraction misses most image-embedded instructions."
+        },
+        {
+          "pages": "16",
+          "must_preserve": [
+            "bibliografía y cierre del programa"
+          ],
+          "structure": "Preserve final section and remove repeated control header from indexable body."
+        }
+      ],
+      "known_current_defects": [
+        "Classified as capacitacion although the explicit title is programa.",
+        "Version 0.0 and March 2024 are visible but omitted.",
+        "The benefits table is flattened.",
+        "Pages 8-15 contain image-embedded instructional text missed in whole or in part; pages 14-15 normalize almost only the repeated header.",
+        "The repeated header appears on all sixteen pages.",
+        "Numerous intraword spaces affect retrieval."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_3e55236f58440bf5",
+      "source_relpath": "data/docs_raw/general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "page_count": 1,
+      "source_kind": "pdf_digital",
+      "expected": {
+        "title": "Objetivos y metas de seguridad vial",
+        "document_type": "matriz",
+        "topic": "Seguridad vial",
+        "subtopic": "Objetivos, metas e indicadores",
+        "document_code": null,
+        "version": null,
+        "publication_date": null,
+        "effective_date": null,
+        "extraction_method": "pdf_digital",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "not_detected",
+        "version_status": "not_found"
+      },
+      "minimum_content": [
+        {
+          "pages": "1",
+          "must_preserve": [
+            "three objective rows",
+            "the target associated with each objective",
+            "the indicator/formula associated with each objective and target"
+          ],
+          "structure": "Represent the visible OBJETIVOS/METAS/INDICADORES matrix as three associated rows; formulas must retain numerator, denominator and multiplication by 100."
+        }
+      ],
+      "known_current_defects": [
+        "Classified as politica despite the explicit matrix title.",
+        "The central three-column matrix is flattened and contains_tables is false.",
+        "Indicator formulas lose semantic grouping.",
+        "There is no visible date, code or version; timestamps in the filename are not documentary evidence."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_31b00a8b31847796",
+      "source_relpath": "data/docs_raw/general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "page_count": 36,
+      "source_kind": "pdf_digital",
+      "expected": {
+        "title": "Reglamento interno de trabajo",
+        "document_type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "subtopic": null,
+        "document_code": null,
+        "version": null,
+        "publication_date": "2025-01",
+        "effective_date": null,
+        "extraction_method": "pdf_digital",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "not_detected",
+        "version_status": "not_found"
+      },
+      "minimum_content": [
+        {
+          "pages": "1-3",
+          "must_preserve": [
+            "cover and January 2025 date",
+            "table of contents",
+            "approval table with roles, positions and names"
+          ],
+          "structure": "Reconstruct the approval table and treat the CONFIDENCIAL watermark and repeated footer as layout."
+        },
+        {
+          "pages": "4-28",
+          "must_preserve": [
+            "chapters I-XVIII",
+            "articles 1-79",
+            "employment conditions, working time, leave, safety, duties, prohibitions and disciplinary rules",
+            "article 79 sanction table"
+          ],
+          "structure": "Preserve chapter/article numbering, ordered lists and the sanction table."
+        },
+        {
+          "pages": "29-36",
+          "must_preserve": [
+            "claims",
+            "collective dismissals",
+            "workplace and sexual harassment",
+            "prevention and internal procedure",
+            "disconnection",
+            "remote work",
+            "sexual harassment measures",
+            "reinforced job stability",
+            "validity, publication and final provisions"
+          ],
+          "structure": "Preserve chapters XIX-XXVI and articles through 105. Literal double asterisks visible in the source must be flagged as source-content anomalies, not silently interpreted as Markdown."
+        }
+      ],
+      "known_current_defects": [
+        "Publication date January 2025 is visible but omitted.",
+        "Filename suggests update 2026-05-29, conflicting with the cover; the date must not be inferred as effective date.",
+        "The page 3 approval table and page 28 sanction table are flattened.",
+        "The confidential watermark and repeated contact footer are not modeled as layout.",
+        "There are intraword defects in legal citations and terms.",
+        "Pages 35-36 visibly contain literal Markdown-style double asterisks in the PDF source."
+      ],
+      "review_status": "needs_review"
+    },
+    {
+      "document_id": "doc_f38f9f98d854feed",
+      "source_relpath": "data/docs_raw/general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "page_count": 2,
+      "source_kind": "pdf_scanned",
+      "expected": {
+        "title": "Política de seguridad y salud en el trabajo",
+        "document_type": "politica",
+        "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
+        "subtopic": "Política de SST",
+        "document_code": "PL.RH-01-SST",
+        "version": "0.6",
+        "publication_date": "2025-12-16",
+        "effective_date": null,
+        "extraction_method": "ocr",
+        "contains_tables": "detected",
+        "contains_form": "not_detected",
+        "contains_handwriting": "detected"
+      },
+      "minimum_content": [
+        {
+          "pages": "1",
+          "must_preserve": [
+            "company and policy scope",
+            "SG-SST implementation commitments",
+            "hazard identification, risk evaluation and controls",
+            "continuous improvement",
+            "resources",
+            "legal compliance",
+            "annual review",
+            "date and signatory"
+          ],
+          "structure": "Extract control header fields and signature observation separately."
+        },
+        {
+          "pages": "2",
+          "must_preserve": [
+            "elaborated, approved and verified roles/names",
+            "change-control rows for versions 0.0 through 0.6",
+            "dates and descriptions for every revision"
+          ],
+          "structure": "Reconstruct both approval and change-control tables. Resolve the header/row version from visual evidence and flag conflicts."
+        }
+      ],
+      "known_current_defects": [
+        "OCR confidence 1.0 is not measured.",
+        "Page 2 OCR reads header version 0.5 and final change version 10.6 although visual evidence supports current version 0.6.",
+        "The approval and change-control tables are flattened and contains_tables is false.",
+        "The handwritten signature is reported as contains_handwriting false.",
+        "OCR introduces errors in names and revision descriptions."
+      ],
+      "review_status": "needs_review"
+    }
+  ],
+  "global_acceptance_criteria": [
+    "All 77 pages remain present, ordered, unique and contiguous.",
+    "A page is not considered complete merely because another page in the same document contains enough words.",
+    "Real OCR confidence is nullable and may be called measured only when returned by a capable OCR engine or library.",
+    "Unknown detection capability is represented as not_evaluated, never as false.",
+    "Route is provenance/prior evidence and cannot override an explicit document title without a conflict warning.",
+    "Version, code and date values include source evidence; filename timestamps are not documentary evidence.",
+    "Tables and forms preserve row, column, field and label relationships.",
+    "Repeated headers, footers and watermarks are retained as auditable layout observations and excluded from repeated indexable body text.",
+    "Raw text remains auditable; normalized corrections and removed spans are recorded.",
+    "Any unresolved source inconsistency or materially incomplete page sets processing_status to needs_review."
+  ]
+}
