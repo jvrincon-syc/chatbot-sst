@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+import ingestion.manifests.bundle_writer as bundle_writer_module
 from ingestion.manifests.bundle_writer import BundlePayload, write_bundle_atomic
 from ingestion.manifests.writer import dump_json_atomic, write_text_atomic
 from ingestion.paths import ArtifactPaths, stable_document_id
@@ -27,6 +28,7 @@ from ingestion.schemas.common import (
 from ingestion.schemas.inventory import InventoryRecord
 from ingestion.schemas.legacy_v1 import LegacyPagesArtifact
 from ingestion.schemas.manifests import (
+    ArtifactHash,
     BundleManifest,
     ErrorItem,
     ErrorManifest,
@@ -155,19 +157,29 @@ def test_manifest_models_are_strict_schema_2_envelopes() -> None:
         records=[_inventory_record()],
     )
     run_document = RunDocument(
+        schema_version="2.0",
         document_id="doc_1",
         source_relpath="manual/document.pdf",
         document_status="processed",
         disposition="reused",
     )
+    paths = ArtifactPaths.for_source("manual/document.pdf")
     bundle = BundleManifest(
         schema_version="2.0",
         document_id="doc_1",
         source_relpath="manual/document.pdf",
         source_hash="a" * 64,
-        normalized_base="manual/document",
-        required_artifacts=[],
-        artifact_hashes=[],
+        normalized_base=paths.normalized_base,
+        required_artifacts=list(paths.required_relpaths()),
+        artifact_hashes=[
+            ArtifactHash(
+                schema_version="2.0",
+                relpath=relpath,
+                sha256="0" * 64,
+                byte_size=0,
+            )
+            for relpath in paths.required_relpaths()
+        ],
         processing_fingerprint="pipeline:test",
         document_status="processed",
     )
@@ -186,6 +198,7 @@ def test_manifest_models_are_strict_schema_2_envelopes() -> None:
         generated_at="2026-07-17T00:00:00Z",
         items=[
             ReviewItem(
+                schema_version="2.0",
                 document_id="doc_1",
                 source_relpath="manual/document.pdf",
                 reasons=["low_confidence"],
@@ -198,6 +211,7 @@ def test_manifest_models_are_strict_schema_2_envelopes() -> None:
         generated_at="2026-07-17T00:00:00Z",
         items=[
             ErrorItem(
+                schema_version="2.0",
                 document_id="doc_1",
                 source_relpath="manual/document.pdf",
                 stage="extract",
@@ -215,6 +229,55 @@ def test_manifest_models_are_strict_schema_2_envelopes() -> None:
         InventoryManifest(**{**inventory.model_dump(), "unexpected": True})
     with pytest.raises(ValidationError):
         RunDocument(**{**run_document.model_dump(), "disposition": "skipped"})
+    with pytest.raises(ValidationError):
+        RunDocument(
+            document_id="doc_1",
+            source_relpath="manual/document.pdf",
+            document_status="processed",
+            disposition="reused",
+        )
+
+
+def test_bundle_manifest_requires_source_derived_artifact_paths() -> None:
+    with pytest.raises(ValidationError, match="normalized_base"):
+        BundleManifest(
+            schema_version="2.0",
+            document_id="doc_1",
+            source_relpath="manual/document.pdf",
+            source_hash="a" * 64,
+            normalized_base="wrong/base",
+            required_artifacts=["elsewhere.txt"],
+            artifact_hashes=[
+                ArtifactHash(
+                    schema_version="2.0",
+                    relpath="elsewhere.txt",
+                    sha256="0" * 64,
+                    byte_size=0,
+                )
+            ],
+            processing_fingerprint="pipeline:test",
+            document_status="processed",
+        )
+
+    with pytest.raises(ValidationError, match="required_artifacts"):
+        BundleManifest(
+            schema_version="2.0",
+            document_id="doc_1",
+            source_relpath="manual/document.pdf",
+            source_hash="a" * 64,
+            normalized_base="manual/document",
+            required_artifacts=["elsewhere.txt"],
+            artifact_hashes=[
+                ArtifactHash(
+                    schema_version="2.0",
+                    relpath="elsewhere.txt",
+                    sha256="0" * 64,
+                    byte_size=0,
+                )
+            ],
+            processing_fingerprint="pipeline:test",
+            document_status="processed",
+        )
 
 
 def test_schema_export_includes_all_canonical_artifacts_and_manifests() -> None:
@@ -279,6 +342,15 @@ def test_dump_json_atomic_refuses_legacy_outputs(
 
     assert target.read_text(encoding="utf-8") == '{"existing": true}\n'
     assert list(tmp_path.glob(f".{target.name}.*.tmp")) == []
+
+
+def test_dump_json_atomic_refuses_standalone_inventory_record(tmp_path: Path) -> None:
+    target = tmp_path / "inventory.json"
+
+    with pytest.raises(ValueError, match="canonical schema 2.0"):
+        dump_json_atomic(target, _inventory_record())
+
+    assert not target.exists()
 
 
 def test_atomic_replace_failure_preserves_existing_target_and_removes_temp(
@@ -363,6 +435,24 @@ def test_write_bundle_atomic_rejects_artifact_document_id_mismatch_before_write(
     assert list(tmp_path.rglob("*")) == []
 
 
+def test_write_bundle_atomic_rejects_wrong_model_for_artifact_relpath(
+    tmp_path: Path,
+) -> None:
+    payload = _bundle_payload()
+    paths = ArtifactPaths.for_source(payload.source_relpath)
+    payload.artifacts[paths.pages] = _inventory_record().model_copy(
+        update={
+            "document_id": payload.document_id,
+            "source_relpath": payload.source_relpath,
+        }
+    )
+
+    with pytest.raises(TypeError, match="PagesArtifact"):
+        write_bundle_atomic(tmp_path, payload)
+
+    assert list(tmp_path.rglob("*")) == []
+
+
 def test_write_bundle_atomic_validates_manifest_fields_before_write(
     tmp_path: Path,
 ) -> None:
@@ -387,3 +477,76 @@ def test_write_bundle_atomic_rejects_traversing_artifact_relpath(
         write_bundle_atomic(tmp_path, payload)
 
     assert not (tmp_path.parent / "outside.md").exists()
+
+
+def test_write_bundle_atomic_rejects_symlink_escape(
+    tmp_path: Path,
+) -> None:
+    outside = tmp_path / "outside"
+    candidate = tmp_path / "candidate"
+    outside.mkdir()
+    candidate.mkdir()
+    try:
+        (candidate / "manual").symlink_to(outside, target_is_directory=True)
+    except (NotImplementedError, OSError) as exc:
+        pytest.skip(f"symlink creation unavailable: {exc}")
+
+    with pytest.raises(ValueError, match="symlinks"):
+        write_bundle_atomic(candidate, _bundle_payload("manual/document.pdf"))
+
+    assert not (outside / "document.md").exists()
+
+
+def test_write_bundle_atomic_rejects_symlink_inserted_during_write(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    outside = tmp_path / "outside"
+    candidate = tmp_path / "candidate"
+    outside.mkdir()
+    candidate.mkdir()
+    original_write = bundle_writer_module._write_text_secure
+    swapped = False
+
+    def swap_directory_then_write(root_fd: int, relpath: str, text: str) -> None:
+        nonlocal swapped
+        if not swapped:
+            swapped = True
+            (candidate / "manual").symlink_to(outside, target_is_directory=True)
+        original_write(root_fd, relpath, text)
+
+    monkeypatch.setattr(
+        bundle_writer_module,
+        "_write_text_secure",
+        swap_directory_then_write,
+    )
+
+    with pytest.raises(ValueError, match="escapes candidate root"):
+        write_bundle_atomic(candidate, _bundle_payload("manual/document.pdf"))
+
+    assert not (outside / "document.md").exists()
+
+
+def test_write_bundle_atomic_rolls_back_when_later_artifact_write_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    payload = _bundle_payload()
+    original_write = bundle_writer_module._write_text_secure
+    calls = 0
+
+    def fail_second_write(root_fd: int, relpath: str, text: str) -> None:
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise OSError("artifact write failed")
+        original_write(root_fd, relpath, text)
+
+    monkeypatch.setattr(
+        bundle_writer_module,
+        "_write_text_secure",
+        fail_second_write,
+    )
+
+    with pytest.raises(OSError, match="artifact write failed"):
+        write_bundle_atomic(tmp_path, payload)
+
+    assert [path for path in tmp_path.rglob("*") if path.is_file()] == []

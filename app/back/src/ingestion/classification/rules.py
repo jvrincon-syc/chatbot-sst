@@ -1,118 +1,206 @@
 from __future__ import annotations
 
+import unicodedata
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, overload
+
+from ingestion.schemas.artifacts import Classification, DocumentControl
+from ingestion.schemas.common import ConfidenceMetric, DocumentField
+
+ClassificationResult = Classification
+
+_TYPE_RULES = (
+    ("formulario", ("formato", "formulario", "fr-sst")),
+    ("programa", ("programa",)),
+    ("matriz", ("matriz",)),
+    ("procedimiento", ("procedimiento",)),
+    ("reglamento", ("reglamento",)),
+    ("politica", ("politica",)),
+    ("manual", ("manual",)),
+    ("anexo", ("anexo",)),
+    ("instructivo", ("instructivo",)),
+    ("capacitacion", ("capacitacion",)),
+    ("acta", ("acta",)),
+    ("norma", ("norma",)),
+    ("guia", ("guia",)),
+    ("informacion_general", ("comunicacion", "miembros", "valores", "introduccion", "aplicacion")),
+)
+_TOPIC_RULES = (
+    ("COPASST", ("copasst", "comite paritario")),
+    ("Comite de Convivencia Laboral", ("convivencia laboral", "comite de convivencia", "convivencia")),
+    ("Politica de seguridad", ("politica",)),
+    ("Capacitaciones", ("capacitacion",)),
+    ("Formularios", ("formulario", "formato", "fr-sst")),
+    ("Reglamento interno de trabajo", ("reglamento interno",)),
+    ("Seguridad vial", ("seguridad vial",)),
+    ("Pausas activas", ("pausas activas",)),
+    ("Prevencion de alcohol y drogas", ("alcohol", "drogas")),
+    ("Auditoria", ("auditoria",)),
+    ("Mejora", ("mejora",)),
+    ("Planificacion", ("planificacion",)),
+    ("Verificacion", ("verificacion",)),
+    ("Organizacion", ("organizacion",)),
+    ("ARL", ("arl",)),
+)
+_AUTHORITY = {
+    "title_control": 0.95,
+    "content": 0.78,
+    "filename": 0.65,
+    "route": 0.45,
+}
 
 
-TOPIC_RULES: List[Tuple[str, str]] = [
-    ("copasst", "COPASST"),
-    ("comite paritario", "COPASST"),
-    ("convivencia laboral", "Comite de Convivencia Laboral"),
-    ("convivencia", "Comite de Convivencia Laboral"),
-    ("comite de convivencia", "Comite de Convivencia Laboral"),
-    ("general sst", "SST"),
-    ("sgsst", "SST"),
-    ("reglamento interno", "Reglamento interno de trabajo"),
-    ("seguridad vial", "Seguridad vial"),
-    ("seguridad_vial", "Seguridad vial"),
-    ("pausas activas", "Pausas activas"),
-    ("pausas", "Pausas activas"),
-    ("alcohol", "Prevencion de alcohol y drogas"),
-    ("drogas", "Prevencion de alcohol y drogas"),
-    ("auditoria", "Auditoria"),
-    ("mejora", "Mejora"),
-    ("planificacion", "Planificacion"),
-    ("verificacion", "Verificacion"),
-    ("organizacion", "Organizacion"),
-    ("arl", "ARL"),
-    ("formulario", "Formularios"),
-    ("formato", "Formularios"),
-    ("fr-sst", "Formularios"),
-    ("capacitacion", "Capacitaciones"),
-    ("capacitaciones", "Capacitaciones"),
-    ("politica", "Politica de seguridad"),
-]
-
-TYPE_RULES: List[Tuple[str, str]] = [
-    ("procedimiento", "procedimiento"),
-    ("reglamento", "reglamento"),
-    ("politica", "politica"),
-    ("formato", "formulario"),
-    ("formulario", "formulario"),
-    ("fr-sst", "formulario"),
-    ("anexo", "anexo"),
-    ("instructivo", "instructivo"),
-    ("capacitacion", "capacitacion"),
-    ("acta", "acta"),
-    ("norma", "norma"),
-    ("guia", "guia"),
-    ("comunicacion", "informacion_general"),
-    ("miembros", "informacion_general"),
-    ("valores", "informacion_general"),
-    ("introduccion", "informacion_general"),
-    ("aplicacion", "informacion_general"),
-    ("manual", "manual"),
-]
+@overload
+def classify_document(source_relpath: str, pages: Iterable[Any], document_control: DocumentControl) -> ClassificationResult: ...
 
 
-def classify_document(path: Path, text: str = "") -> dict:
-    path_text = _normalize(path.as_posix())
-    file_text = _normalize(path.name)
-    heading_text = _normalize(_first_heading(text))
-    sample_text = _normalize(text[:1000])
-    haystacks = [
-        ("heading", heading_text, 0.35),
-        ("file_name", file_text, 0.30),
-        ("path", path_text, 0.35),
-        ("content", sample_text, 0.15),
-    ]
+@overload
+def classify_document(source_relpath: Path, pages: str = "", document_control: None = None) -> dict[str, Any]: ...
 
-    type_result = _score_rules(TYPE_RULES, haystacks)
-    topic_result = _score_rules(TOPIC_RULES, haystacks)
 
-    document_type = type_result["value"] or "otro"
-    topic = topic_result["value"] or "SST"
-    confidence = max(0.45, min(0.98, type_result["confidence"] + topic_result["confidence"]))
-    reasons = type_result["reasons"] + topic_result["reasons"]
+def classify_document(
+    source_relpath: str | Path,
+    pages: Iterable[Any] | str = (),
+    document_control: DocumentControl | None = None,
+) -> ClassificationResult | dict[str, Any]:
+    """Classify from strongest documentary evidence, with a narrow legacy adapter."""
+    if document_control is None and isinstance(source_relpath, Path):
+        return _classify_legacy(source_relpath, str(pages))
+    if document_control is None:
+        raise TypeError("document_control is required for the schema 2.0 classification interface")
 
-    if document_type == "formulario" and topic == "SST":
-        topic = "Formularios"
-        confidence = max(confidence, 0.80)
-        reasons.append("topic_inferred_from_form_type")
+    source = str(source_relpath)
+    title = _field_text(document_control.title)
+    control = " ".join(filter(None, (title, _field_text(document_control.code))))
+    page_text = "\n".join(_page_text(page) for page in pages)
+    filename = Path(source).name
+    route = str(Path(source).parent)
+    sources = (
+        ("title_control", control),
+        ("content", page_text),
+        ("filename", filename),
+        ("route", route),
+    )
+    type_choice, type_signals = _choose(_TYPE_RULES, sources)
+    topic_choice, topic_signals = _choose(_TOPIC_RULES, sources)
 
+    type_value, type_source = type_choice or ("otro", None)
+    topic_value, topic_source = topic_choice or ("SST", None)
+    conflicts = _conflicts(_TYPE_RULES, control, route, "type") + _conflicts(
+        _TOPIC_RULES, control, route, "topic"
+    )
+    return ClassificationResult(
+        document_type=type_value,
+        document_type_confidence=_confidence(type_source),
+        topic=topic_value,
+        topic_confidence=_confidence(topic_source),
+        signals=type_signals + topic_signals,
+        route_prior=_route_prior(route),
+        content_prediction=_first_prediction(_TYPE_RULES, page_text),
+        conflict_status="conflicting" if conflicts else "none",
+        conflicts=conflicts,
+        warnings=(
+            ["route_only_low_confidence"]
+            if type_source == "route" or topic_source == "route"
+            else []
+        ),
+    )
+
+
+def _classify_legacy(path: Path, text: str) -> dict[str, Any]:
+    title = next(
+        (
+            line.lstrip("#").strip()
+            for line in text.splitlines()
+            if line.lstrip().startswith("#")
+        ),
+        "",
+    )
+    control = DocumentControl(
+        title=(
+            DocumentField(value=title, value_raw=title, status="extracted")
+            if title
+            else DocumentField(value=None, status="not_found")
+        ),
+        code=DocumentField(value=None, status="not_found"),
+        version=DocumentField(value=None, status="not_found"),
+        publication_date=DocumentField(value=None, status="not_found"),
+        effective_date=DocumentField(value=None, status="not_found"),
+    )
+    result = classify_document(path.as_posix(), [{"text_raw": text}], control)
+    confidence = max(result.document_type_confidence.value or 0, result.topic_confidence.value or 0)
     return {
-        "document_type": document_type,
-        "topic": topic,
+        "document_type": result.document_type,
+        "topic": result.topic,
         "classification_confidence": round(confidence, 2),
-        "reasons": reasons,
+        "reasons": result.signals,
     }
 
 
-def _score_rules(rules: List[Tuple[str, str]], haystacks: List[Tuple[str, str, float]]) -> Dict:
-    best = {"value": None, "confidence": 0.0, "reasons": []}
-    for token, value in rules:
-        token_norm = _normalize(token)
-        matched_sources = [source for source, haystack, _weight in haystacks if token_norm and token_norm in haystack]
-        if not matched_sources:
-            continue
-        confidence = sum(weight for source, haystack, weight in haystacks if token_norm in haystack)
-        if confidence > best["confidence"]:
-            best = {
-                "value": value,
-                "confidence": confidence,
-                "reasons": [f"{value}:{token}:{source}" for source in matched_sources],
-            }
-    return best
+def _choose(
+    rules: tuple[tuple[str, tuple[str, ...]], ...],
+    sources: tuple[tuple[str, str], ...],
+) -> tuple[tuple[str, str] | None, list[str]]:
+    matches: list[tuple[float, str, str, str]] = []
+    for source, text in sources:
+        normalized = _normalize(text)
+        for value, tokens in rules:
+            token = next((item for item in tokens if _normalize(item) in normalized), None)
+            if token:
+                matches.append((_AUTHORITY[source], value, source, token))
+    if not matches:
+        return None, []
+    matches.sort(reverse=True)
+    best = matches[0]
+    return (best[1], best[2]), [
+        f"{value}:{token}:{source}"
+        for _score, value, source, token in matches
+        if value == best[1] or source == "title_control"
+    ]
 
 
-def _first_heading(text: str) -> str:
-    for line in text.splitlines():
-        stripped = line.strip()
-        if stripped.startswith("#"):
-            return stripped.lstrip("#").strip()
-    return ""
+def _confidence(source: str | None) -> ConfidenceMetric:
+    return ConfidenceMetric(kind="estimated", value=_AUTHORITY.get(source, 0.35), method="evidence_precedence")
+
+
+def _conflicts(
+    rules: tuple[tuple[str, tuple[str, ...]], ...],
+    control: str,
+    route: str,
+    label: str,
+) -> list[str]:
+    title_value = _first_prediction(rules, control)
+    route_value = _first_prediction(rules, route)
+    if title_value and route_value and title_value != route_value:
+        return [f"{label}_title_control={title_value};{label}_route={route_value}"]
+    return []
+
+
+def _first_prediction(rules: tuple[tuple[str, tuple[str, ...]], ...], text: str) -> str | None:
+    normalized = _normalize(text)
+    return next((value for value, tokens in rules if any(_normalize(token) in normalized for token in tokens)), None)
+
+
+def _page_text(page: Any) -> str:
+    if isinstance(page, Mapping):
+        return str(page.get("text_raw", page.get("text_normalized", page.get("text", ""))))
+    return str(
+        getattr(page, "text_raw", getattr(page, "text_normalized", getattr(page, "text", "")))
+    )
+
+
+def _field_text(field: DocumentField) -> str:
+    return field.value if isinstance(field.value, str) else ""
+
+
+def _route_prior(route: str) -> str | None:
+    return _first_prediction(_TYPE_RULES, route)
 
 
 def _normalize(value: str) -> str:
-    accents = str.maketrans("áéíóúüñÁÉÍÓÚÜÑ", "aeiouunAEIOUUN")
-    return value.translate(accents).replace("_", " ").replace("-", "-").lower()
+    decomposed = unicodedata.normalize("NFD", value.lower())
+    without_accents = "".join(
+        char for char in decomposed if unicodedata.category(char) != "Mn"
+    )
+    return " ".join(without_accents.replace("_", " ").replace("-", " ").split())

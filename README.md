@@ -1,5 +1,34 @@
 # chatbot-sst
 
+## Instalación rápida
+
+Requisitos previos:
+- Python 3.12.x
+- Node.js 18 o superior
+- npm
+
+Pasos para instalar y configurar el proyecto en cualquier máquina:
+
+1. Clona el repositorio y entra a la carpeta del proyecto.
+2. Ejecuta:
+   - macOS / Linux: `npm run setup`
+   - Windows PowerShell: `npm run setup`
+3. El comando crea un entorno virtual en `.venv`, instala las dependencias Python necesarias en modo editable y genera `secrets.env` a partir de `secrets.example.env`.
+4. Activa el entorno virtual:
+   - macOS / Linux: `source .venv/bin/activate`
+   - Windows PowerShell: `.venv\Scripts\Activate.ps1`
+   - Windows CMD: `.venv\Scripts\activate.bat`
+5. Si necesitas instalar dependencias adicionales de OCR en macOS, puedes ejecutar:
+   - `npm run setup:ocr:mac`
+
+Comandos útiles:
+- `npm run doctor:ocr`
+- `npm run test:ingestion`
+- `npm run ingestion:inventory`
+- `npm run ingestion:run`
+- `npm run ingestion:validate`
+- `npm run schemas:export`
+
 RAG: si uso rag tengo que usar embedings y usar una bd vectorizada
 
 

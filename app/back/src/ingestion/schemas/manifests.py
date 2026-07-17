@@ -4,6 +4,7 @@ from typing import Literal, Optional
 
 from pydantic import Field, model_validator
 
+from ingestion.paths import ArtifactPaths
 from ingestion.schemas.common import RelativePosixPath, StrictModel
 from ingestion.schemas.inventory import InventoryRecord
 
@@ -16,6 +17,7 @@ Sha256 = str
 
 
 class ArtifactHash(StrictModel):
+    schema_version: Literal["2.0"]
     relpath: RelativePosixPath
     sha256: Sha256 = Field(pattern=r"^[0-9a-f]{64}$")
     byte_size: int = Field(ge=0)
@@ -34,9 +36,15 @@ class BundleManifest(StrictModel):
 
     @model_validator(mode="after")
     def validate_artifact_set(self) -> "BundleManifest":
+        paths = ArtifactPaths.for_source(self.source_relpath)
+        expected_artifacts = set(paths.required_relpaths())
+        if self.normalized_base != paths.normalized_base:
+            raise ValueError("normalized_base must be derived from source_relpath")
         required = set(self.required_artifacts)
         if len(required) != len(self.required_artifacts):
             raise ValueError("required_artifacts must be unique")
+        if required != expected_artifacts:
+            raise ValueError("required_artifacts must match source-derived sidecars")
         hashed = {item.relpath for item in self.artifact_hashes}
         if len(hashed) != len(self.artifact_hashes):
             raise ValueError("artifact_hashes relpaths must be unique")
@@ -55,6 +63,7 @@ class InventoryManifest(StrictModel):
 
 
 class RunDocument(StrictModel):
+    schema_version: Literal["2.0"]
     document_id: str = Field(min_length=1)
     source_relpath: RelativePosixPath
     document_status: DocumentStatus
@@ -79,6 +88,7 @@ class RunManifest(StrictModel):
 
 
 class ReviewItem(StrictModel):
+    schema_version: Literal["2.0"]
     document_id: str = Field(min_length=1)
     source_relpath: RelativePosixPath
     reasons: list[str] = Field(min_length=1)
@@ -93,6 +103,7 @@ class ReviewManifest(StrictModel):
 
 
 class ErrorItem(StrictModel):
+    schema_version: Literal["2.0"]
     document_id: Optional[str] = None
     source_relpath: Optional[RelativePosixPath] = None
     stage: str = Field(min_length=1)

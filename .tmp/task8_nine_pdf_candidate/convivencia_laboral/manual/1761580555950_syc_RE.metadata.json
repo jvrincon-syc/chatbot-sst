@@ -1,0 +1,164 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "politica",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "politica:politica:content",
+      "Politica de seguridad:politica:content"
+    ],
+    "topic": "Politica de seguridad",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "pdf-golden-2026-07-17",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 106.75159999999994,
+            "coordinate_system": "pdf_points",
+            "top": 96.79160000000002,
+            "x0": 236.69,
+            "x1": 284.94404000000003
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "RE.RH-04",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.75159999999994,
+            "coordinate_system": "pdf_points",
+            "top": 96.79160000000002,
+            "x0": 236.69,
+            "x1": 284.94404000000003
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "RE.RH-04",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "RE-RH-04",
+      "value_raw": "RE.RH-04",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_864d906c5eae1183",
+  "document_name": "1761580555950_syc_RE.RH-04SST23102025.pdf",
+  "extraction_method": "pdf_digital",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/task8_nine_pdf_candidate/convivencia_laboral/manual/1761580555950_syc_RE.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 2,
+  "pipeline_version": "2.0.0-task8",
+  "processed_at": "2026-07-17T13:48:12.620623-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "6eb13cd6e4aeccd1322bd05e2c857bfbf34a2bec760bbd6d1762d220294964b3",
+  "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "reader_tables",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "warnings": []
+}

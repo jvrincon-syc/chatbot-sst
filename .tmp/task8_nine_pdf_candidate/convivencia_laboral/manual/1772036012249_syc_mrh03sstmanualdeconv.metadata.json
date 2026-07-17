@@ -1,0 +1,475 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "reglamento:reglamento:content",
+      "Reglamento interno de trabajo:reglamento interno:content"
+    ],
+    "topic": "Reglamento interno de trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "pdf-golden-2026-07-17",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.78999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 85.78999999999996,
+            "x0": 209.09,
+            "x1": 268.112
+          },
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "M.RH-03-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 342.3284,
+            "coordinate_system": "pdf_points",
+            "top": 331.28839999999997,
+            "x0": 85.104,
+            "x1": 529.9668799999998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "ambiente laboral. No está demás informar que las normas que se encuentran contenidas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.1484,
+            "coordinate_system": "pdf_points",
+            "top": 564.1084000000001,
+            "x0": 85.104,
+            "x1": 530.19664
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "respeto por los derechos de todas las personas que integran SYC. Se prohíben de manera",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 662.4184,
+            "coordinate_system": "pdf_points",
+            "top": 651.3784,
+            "x0": 85.104,
+            "x1": 530.19904
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "conforme a los procedimientos establecidos y a la normatividad vigente. Toda conducta",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 154.49839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 143.45839999999998,
+            "x0": 85.104,
+            "x1": 485.08319999999964
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "estado civil, nivel socioeconómico, género u orientación sexual. La empresa",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 532.7884,
+            "coordinate_system": "pdf_points",
+            "top": 521.7484,
+            "x0": 85.104,
+            "x1": 529.9828799999995
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "se encuentre ejecutando su labor. Los trabajadores no están obligados a responder correos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 605.5384,
+            "coordinate_system": "pdf_points",
+            "top": 594.4984,
+            "x0": 85.104,
+            "x1": 530.1560800000001
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "desconectarse fuera del horario laboral. En caso de que exista una novedad podrá solicitar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 620.0584,
+            "coordinate_system": "pdf_points",
+            "top": 609.0184,
+            "x0": 85.104,
+            "x1": 530.0237599999999
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "el procedimiento de quejas (Re-Rh-004-sst Formato para interponer queja por presunto",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 603.1384,
+            "coordinate_system": "pdf_points",
+            "top": 592.0984,
+            "x0": 121.1,
+            "x1": 542.8611199999996
+          },
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "del CCL en entidades públicas y empresas privadas. Esta es la norma más reciente",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 343.6484,
+            "coordinate_system": "pdf_points",
+            "top": 332.60839999999996,
+            "x0": 85.104,
+            "x1": 221.87912
+          },
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "convivencia@syc.com.co",
+          "warnings": []
+        }
+      ],
+      "status": "conflicting",
+      "value": [
+        "RH-03-SST",
+        "LABORAL-NO",
+        "SYC-SE",
+        "VIGENTE-TODA",
+        "SEXUAL-LA",
+        "LABOR-LOS",
+        "LABORAL-EN",
+        "RE-RH-004-SST",
+        "PRIVADAS-ESTA",
+        "SYC-COM-CO"
+      ],
+      "value_raw": [
+        "RH-03-SST",
+        "laboral. No",
+        "SYC. Se",
+        "vigente. Toda",
+        "sexual. La",
+        "labor. Los",
+        "laboral. En",
+        "Re-Rh-004-sst",
+        "privadas. Esta",
+        "syc.com.co"
+      ],
+      "warnings": [
+        "multiple_visible_candidates"
+      ]
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": [
+      "conflicting_code"
+    ]
+  },
+  "document_id": "doc_c392ec7bf8d98194",
+  "document_name": "1772036012249_syc_mrh03sstmanualdeconv.pdf",
+  "extraction_method": "pdf_digital",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/task8_nine_pdf_candidate/convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 12,
+  "pipeline_version": "2.0.0-task8",
+  "processed_at": "2026-07-17T13:48:22.130246-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
+  "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "reader_tables",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "warnings": []
+}

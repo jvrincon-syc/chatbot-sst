@@ -122,18 +122,18 @@ class OcrMyPdfEngine:
             return {
                 "page_number": page.page_number,
                 "text": page.text,
-                "confidence": 1.0 if page.text.strip() else 0.0,
-                "contains_handwriting": False,
-                "deskew_applied": True,
-                "rotation_detected_degrees": 0,
+                "confidence": None,
+                "contains_handwriting": None,
+                "deskew_applied": None,
+                "rotation_detected_degrees": None,
             }
         return {
             "page_number": getattr(page, "page_number", 1),
             "text": getattr(page, "text", ""),
-            "confidence": 1.0,
-            "contains_handwriting": False,
-            "deskew_applied": True,
-            "rotation_detected_degrees": 0,
+            "confidence": _non_boolean_or_none(getattr(page, "confidence", None)),
+            "contains_handwriting": getattr(page, "contains_handwriting", None),
+            "deskew_applied": getattr(page, "deskew_applied", None),
+            "rotation_detected_degrees": _non_boolean_or_none(getattr(page, "rotation_detected_degrees", None)),
         }
 
     @staticmethod
@@ -144,10 +144,14 @@ class OcrMyPdfEngine:
             {
                 "page_number": index,
                 "text": page.strip(),
-                "confidence": 1.0 if page.strip() else 0.0,
-                "contains_handwriting": False,
-                "deskew_applied": True,
-                "rotation_detected_degrees": 0,
+                "confidence": None,
+                "contains_handwriting": None,
+                "deskew_applied": None,
+                "rotation_detected_degrees": None,
             }
             for index, page in enumerate(raw_pages, start=1)
         ]
+
+
+def _non_boolean_or_none(value):
+    return None if isinstance(value, bool) else value

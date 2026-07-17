@@ -27,6 +27,10 @@ def main() -> int:
         print(f"OCRmyPDF: {report.ocrmypdf_cmd} ({report.ocrmypdf_version or 'unavailable'})")
         print(f"Tesseract: {report.tesseract_cmd} ({report.tesseract_version or 'unavailable'})")
         print(f"Language: {report.language} ({'available' if report.language_available else 'missing'})")
+        print(f"pdfplumber: {'available' if report.pdfplumber_available else 'unavailable'}")
+        print(f"PDFium: {'available' if report.pdfium_available else 'unavailable'}")
+        print(f"OpenCV: {'available' if report.opencv_available else 'unavailable'}")
+        print(f"Ghostscript: {report.ghostscript_version or 'unavailable'}")
         if report.issues:
             print("Issues: " + ", ".join(report.issues))
     return 0 if report.ok else 1

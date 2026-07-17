@@ -1,0 +1,652 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "programa",
+    "document_type": "programa",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "capacitacion",
+    "signals": [
+      "programa:programa:content",
+      "Planificacion:planificacion:content"
+    ],
+    "topic": "Planificacion",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "pdf-golden-2026-07-17",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 13,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 14,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 15,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 106.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 97.42999999999995,
+            "x0": 202.01,
+            "x1": 267.032
+          },
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 221.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 209.17999999999995,
+            "x0": 85.104,
+            "x1": 513.3240000000003
+          },
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "durante la jornada laboral. Estas pausas, que consisten en breves interrupciones",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 233.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 221.17999999999995,
+            "x0": 85.104,
+            "x1": 511.252
+          },
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "realizados de manera consciente y programada durante la jornada laboral. Estas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.80999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 305.80999999999995,
+            "x0": 85.104,
+            "x1": 513.2160000000003
+          },
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "como en su vida personal. Promovemos activamente prácticas preventivas con",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 221.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 209.17999999999995,
+            "x0": 85.104,
+            "x1": 513.2040000000004
+          },
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "disminución del rendimiento laboral. Ante esta situación, se hace evidente la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.80999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 305.80999999999995,
+            "x0": 85.104,
+            "x1": 513.374
+          },
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "áreas de la empresa. Esta iniciativa aprovecha los recursos proporcionados por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 193.57999999999993,
+            "coordinate_system": "pdf_points",
+            "top": 181.57999999999993,
+            "x0": 85.104,
+            "x1": 513.616
+          },
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "pausas activas, las cuales serán coordinadas por el líder a cargo. El cual de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 492.42999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 480.42999999999995,
+            "x0": 85.104,
+            "x1": 513.1560000000005
+          },
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "cuando un músculo se relaja, su antagonista se contrae. Cada una de estas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 506.22999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 494.22999999999996,
+            "x0": 85.104,
+            "x1": 513.2400000000004
+          },
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "posturas se mantiene durante 15 segundos. Si la persona siente la necesidad de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 407.56999999999994,
+            "coordinate_system": "pdf_points",
+            "top": 395.56999999999994,
+            "x0": 85.104,
+            "x1": 513.3000000000002
+          },
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "de descanso visual. Durante estas pausas, es aconsejable realizar movimientos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 399.40999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 387.40999999999997,
+            "x0": 331.87,
+            "x1": 480.676
+          },
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "orejas. Repetirlo 10 veces.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 542.1099999999999,
+            "coordinate_system": "pdf_points",
+            "top": 530.1099999999999,
+            "x0": 329.35,
+            "x1": 466.87600000000003
+          },
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "cejas. Repetirlo 8 veces.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 455.8299999999999,
+            "coordinate_system": "pdf_points",
+            "top": 443.8299999999999,
+            "x0": 85.104,
+            "x1": 509.7320000000001
+          },
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "[https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/ENT/a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 469.62999999999994,
+            "coordinate_system": "pdf_points",
+            "top": 457.62999999999994,
+            "x0": 85.104,
+            "x1": 308.546
+          },
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "bece-actividad-fisica-entorno-laboral.pdf].",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 566.23,
+            "coordinate_system": "pdf_points",
+            "top": 554.23,
+            "x0": 85.104,
+            "x1": 422.446
+          },
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "[https://repositorio.sena.edu.co/handle/11404/7179?show=full].",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 621.46,
+            "coordinate_system": "pdf_points",
+            "top": 609.46,
+            "x0": 85.104,
+            "x1": 508.216
+          },
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "[https://www.paho.org/es/noticias/9-5-2012-recomendaciones-mundiales-sobre-",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 635.26,
+            "coordinate_system": "pdf_points",
+            "top": 623.26,
+            "x0": 85.104,
+            "x1": 444.226
+          },
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "actividad-fisica-para-salud#:~:text=se%20recomienda%20que%3A-",
+          "warnings": []
+        }
+      ],
+      "status": "conflicting",
+      "value": [
+        "PG-RH-10-SST",
+        "LABORAL-ESTAS",
+        "PERSONAL-PROMOVEMOS",
+        "LABORAL-ANTE",
+        "EMPRESA-ESTA",
+        "CARGO-EL",
+        "CONTRAE-CADA",
+        "SEGUNDOS-SI",
+        "VISUAL-DURANTE",
+        "OREJAS-REPETIRLO",
+        "CEJAS-REPETIRLO",
+        "WWW-MINSALUD-GOV-CO",
+        "BECE-ACTIVIDAD-FISICA-ENTORNO-LABORAL-PDF",
+        "SENA-EDU-CO",
+        "WWW-PAHO-ORG",
+        "FISICA-PARA-SALUD"
+      ],
+      "value_raw": [
+        "PG-RH-10-SST",
+        "laboral. Estas",
+        "personal. Promovemos",
+        "laboral. Ante",
+        "empresa. Esta",
+        "cargo. El",
+        "contrae. Cada",
+        "segundos. Si",
+        "visual. Durante",
+        "orejas. Repetirlo",
+        "cejas. Repetirlo",
+        "www.minsalud.gov.co",
+        "bece-actividad-fisica-entorno-laboral.pdf",
+        "sena.edu.co",
+        "www.paho.org",
+        "fisica-para-salud"
+      ],
+      "warnings": [
+        "multiple_visible_candidates"
+      ]
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": [
+      "conflicting_code"
+    ]
+  },
+  "document_id": "doc_f2cf7868a801af0e",
+  "document_name": "1711493199040_syc_pg-rh-10-sst.program.pdf",
+  "extraction_method": "pdf_digital",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/task8_nine_pdf_candidate/general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 16,
+  "pipeline_version": "2.0.0-task8",
+  "processed_at": "2026-07-17T13:48:44.915872-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
+  "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "reader_tables",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "warnings": []
+}

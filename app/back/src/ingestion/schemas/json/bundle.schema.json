@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "ArtifactHash": {
+      "additionalProperties": false,
+      "properties": {
+        "byte_size": {
+          "minimum": 0,
+          "title": "Byte Size",
+          "type": "integer"
+        },
+        "relpath": {
+          "title": "Relpath",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "relpath",
+        "sha256",
+        "byte_size"
+      ],
+      "title": "ArtifactHash",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact_hashes": {
+      "items": {
+        "$ref": "#/$defs/ArtifactHash"
+      },
+      "title": "Artifact Hashes",
+      "type": "array"
+    },
+    "document_id": {
+      "minLength": 1,
+      "title": "Document Id",
+      "type": "string"
+    },
+    "document_status": {
+      "enum": [
+        "pending",
+        "processed",
+        "failed",
+        "needs_review"
+      ],
+      "title": "Document Status",
+      "type": "string"
+    },
+    "normalized_base": {
+      "title": "Normalized Base",
+      "type": "string"
+    },
+    "processing_fingerprint": {
+      "minLength": 1,
+      "title": "Processing Fingerprint",
+      "type": "string"
+    },
+    "required_artifacts": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Artifacts",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Hash",
+      "type": "string"
+    },
+    "source_relpath": {
+      "title": "Source Relpath",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "document_id",
+    "source_relpath",
+    "source_hash",
+    "normalized_base",
+    "required_artifacts",
+    "artifact_hashes",
+    "processing_fingerprint",
+    "document_status"
+  ],
+  "title": "BundleManifest",
+  "type": "object"
+}

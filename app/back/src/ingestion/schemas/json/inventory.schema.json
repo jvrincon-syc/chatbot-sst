@@ -1,0 +1,203 @@
+{
+  "$defs": {
+    "InventoryRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "category_inferred": {
+          "title": "Category Inferred",
+          "type": "string"
+        },
+        "content_hash": {
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "corpus_version": {
+          "title": "Corpus Version",
+          "type": "string"
+        },
+        "detected_extension": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Detected Extension"
+        },
+        "document_id": {
+          "minLength": 1,
+          "title": "Document Id",
+          "type": "string"
+        },
+        "document_name": {
+          "minLength": 1,
+          "title": "Document Name",
+          "type": "string"
+        },
+        "document_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Version"
+        },
+        "file_size": {
+          "minimum": 0,
+          "title": "File Size",
+          "type": "integer"
+        },
+        "identity_version": {
+          "const": "relpath-posix-v1",
+          "default": "relpath-posix-v1",
+          "title": "Identity Version",
+          "type": "string"
+        },
+        "ingestion_date": {
+          "title": "Ingestion Date",
+          "type": "string"
+        },
+        "legacy_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Path"
+        },
+        "mime_type": {
+          "title": "Mime Type",
+          "type": "string"
+        },
+        "page_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page Count"
+        },
+        "pipeline_version": {
+          "title": "Pipeline Version",
+          "type": "string"
+        },
+        "processing_status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "processed",
+            "failed",
+            "needs_review"
+          ],
+          "title": "Processing Status",
+          "type": "string"
+        },
+        "reported_extension": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reported Extension"
+        },
+        "schema_version": {
+          "const": "2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_relpath": {
+          "title": "Source Relpath",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "schema_version",
+        "document_id",
+        "source_relpath",
+        "document_name",
+        "detected_extension",
+        "reported_extension",
+        "mime_type",
+        "content_hash",
+        "file_size",
+        "ingestion_date",
+        "category_inferred",
+        "pipeline_version",
+        "corpus_version"
+      ],
+      "title": "InventoryRecord",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "corpus_version": {
+      "minLength": 1,
+      "title": "Corpus Version",
+      "type": "string"
+    },
+    "generated_at": {
+      "minLength": 1,
+      "title": "Generated At",
+      "type": "string"
+    },
+    "identity_version": {
+      "const": "relpath-posix-v1",
+      "default": "relpath-posix-v1",
+      "title": "Identity Version",
+      "type": "string"
+    },
+    "pipeline_version": {
+      "minLength": 1,
+      "title": "Pipeline Version",
+      "type": "string"
+    },
+    "records": {
+      "items": {
+        "$ref": "#/$defs/InventoryRecord"
+      },
+      "title": "Records",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "generated_at",
+    "corpus_version",
+    "pipeline_version",
+    "records"
+  ],
+  "title": "InventoryManifest",
+  "type": "object"
+}

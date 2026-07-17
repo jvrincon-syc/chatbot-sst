@@ -1,39 +1,137 @@
 {
   "$defs": {
-    "OcrPage": {
+    "BBox": {
+      "additionalProperties": false,
       "properties": {
-        "page_number": {
-          "minimum": 1,
-          "title": "Page Number",
-          "type": "integer"
-        },
-        "confidence": {
-          "maximum": 1.0,
-          "minimum": 0.0,
-          "title": "Confidence",
+        "bottom": {
+          "title": "Bottom",
           "type": "number"
         },
-        "word_count": {
-          "minimum": 0,
-          "title": "Word Count",
-          "type": "integer"
+        "coordinate_system": {
+          "minLength": 1,
+          "title": "Coordinate System",
+          "type": "string"
         },
-        "low_confidence_word_count": {
-          "minimum": 0,
-          "title": "Low Confidence Word Count",
-          "type": "integer"
+        "top": {
+          "title": "Top",
+          "type": "number"
         },
-        "deskew_applied": {
-          "title": "Deskew Applied",
-          "type": "boolean"
+        "x0": {
+          "title": "X0",
+          "type": "number"
         },
-        "rotation_detected_degrees": {
-          "title": "Rotation Detected Degrees",
-          "type": "integer"
+        "x1": {
+          "title": "X1",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x0",
+        "top",
+        "x1",
+        "bottom",
+        "coordinate_system"
+      ],
+      "title": "BBox",
+      "type": "object"
+    },
+    "ConfidenceMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
         },
-        "contains_handwriting": {
-          "title": "Contains Handwriting",
-          "type": "boolean"
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "kind": {
+          "enum": [
+            "measured",
+            "estimated",
+            "unavailable"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provenance"
+        },
+        "sample_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sample Size"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "ge": 0.0,
+              "le": 1.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
         },
         "warnings": {
           "items": {
@@ -44,45 +142,433 @@
         }
       },
       "required": [
+        "kind"
+      ],
+      "title": "ConfidenceMetric",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BBox"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "page_number": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page Number"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "Evidence",
+      "type": "object"
+    },
+    "MeasuredValue": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provenance"
+        },
+        "status": {
+          "enum": [
+            "measured",
+            "estimated",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "MeasuredValue",
+      "type": "object"
+    },
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method"
+        },
+        "status": {
+          "enum": [
+            "detected",
+            "not_detected",
+            "not_evaluated"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "value"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "OcrPage": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "$ref": "#/$defs/ConfidenceMetric"
+        },
+        "deskew": {
+          "$ref": "#/$defs/Observation"
+        },
+        "handwriting": {
+          "$ref": "#/$defs/Observation"
+        },
+        "low_confidence_word_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Low Confidence Word Count"
+        },
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "rotation": {
+          "$ref": "#/$defs/MeasuredValue"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        },
+        "word_count": {
+          "minimum": 0,
+          "title": "Word Count",
+          "type": "integer"
+        },
+        "words": {
+          "items": {
+            "$ref": "#/$defs/OcrWord"
+          },
+          "title": "Words",
+          "type": "array"
+        }
+      },
+      "required": [
         "page_number",
         "confidence",
         "word_count",
-        "low_confidence_word_count",
-        "deskew_applied",
-        "rotation_detected_degrees",
-        "contains_handwriting"
+        "deskew",
+        "rotation",
+        "handwriting"
       ],
       "title": "OcrPage",
       "type": "object"
+    },
+    "OcrWord": {
+      "additionalProperties": false,
+      "properties": {
+        "bbox": {
+          "$ref": "#/$defs/BBox"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "ge": 0.0,
+              "le": 1.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "bbox"
+      ],
+      "title": "OcrWord",
+      "type": "object"
     }
   },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
   "properties": {
-    "schema_version": {
-      "default": "1.0",
-      "title": "Schema Version",
-      "type": "string"
+    "document_confidence": {
+      "$ref": "#/$defs/ConfidenceMetric"
     },
     "document_id": {
+      "minLength": 1,
       "title": "Document Id",
       "type": "string"
     },
     "engine": {
-      "title": "Engine",
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Engine"
     },
     "engine_version": {
-      "title": "Engine Version",
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Engine Version"
     },
     "language": {
-      "title": "Language",
-      "type": "string"
-    },
-    "overall_confidence": {
-      "maximum": 1.0,
-      "minimum": 0.0,
-      "title": "Overall Confidence",
-      "type": "number"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Language"
     },
     "pages": {
       "items": {
@@ -90,17 +576,26 @@
       },
       "title": "Pages",
       "type": "array"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
     }
   },
   "required": [
+    "schema_version",
     "document_id",
-    "engine",
-    "engine_version",
-    "language",
-    "overall_confidence",
+    "document_confidence",
     "pages"
   ],
   "title": "OcrArtifact",
-  "type": "object",
-  "$schema": "https://json-schema.org/draft/2020-12/schema"
+  "type": "object"
 }

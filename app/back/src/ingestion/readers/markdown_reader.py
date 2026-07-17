@@ -5,6 +5,7 @@ from pathlib import Path
 from ingestion.normalization.text import normalize_text
 from ingestion.readers.base import ReadResult
 from ingestion.schemas.artifacts import PageRecord
+from ingestion.schemas.common import ConfidenceMetric
 
 
 class MarkdownReader:
@@ -19,6 +20,7 @@ class MarkdownReader:
             text_raw=text_raw,
             text_normalized=text_normalized,
             extraction_method="markdown",
+            ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
             warnings=warnings,
         )
         return ReadResult(

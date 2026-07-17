@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Set
+from typing import Iterable, Literal
 
 from pydantic import ValidationError
 
 from ingestion.inventory.scanner import compute_content_hash
 from ingestion.schemas.artifacts import (
+    FormsArtifact,
     MetadataArtifact,
     OcrArtifact,
     PagesArtifact,
@@ -16,213 +17,268 @@ from ingestion.schemas.artifacts import (
     ValidationReport,
 )
 from ingestion.schemas.inventory import InventoryRecord
+from ingestion.validation.front_matter import parse_front_matter
+from ingestion.validation.golden import load_golden, validate_pdf_corpus
 
 
-AUX_SUFFIXES = [".pages.json", ".ocr.json", ".tables.json"]
+Mode = Literal["normal", "closure"]
+AUX_SUFFIXES = {
+    ".pages.json": PagesArtifact,
+    ".ocr.json": OcrArtifact,
+    ".tables.json": TablesArtifact,
+    ".forms.json": FormsArtifact,
+}
 FINAL_STATUSES = {"processed", "failed", "needs_review", "skipped"}
 
 
-def _metadata_base(path: Path) -> Path:
-    return path.with_name(path.name[: -len(".metadata.json")])
+def validate_normalized_tree(
+    normalized_root: Path,
+    raw_root: Path | None = None,
+    mode: Mode = "normal",
+    golden_path: Path | None = None,
+    run_id: str = "manual",
+) -> ValidationReport:
+    checks: list[ValidationCheck] = []
+    manifests_root = normalized_root / "_manifests"
+    metadata_files = sorted(normalized_root.rglob("*.metadata.json"))
+    markdown_files = [
+        path for path in sorted(normalized_root.rglob("*.md")) if "_manifests" not in path.parts
+    ]
+    aux_files = [
+        path
+        for path in sorted(normalized_root.rglob("*.json"))
+        if any(path.name.endswith(suffix) for suffix in AUX_SUFFIXES)
+    ]
 
+    metadata_by_base: dict[Path, MetadataArtifact] = {}
+    metadata_errors: list[str] = []
+    legacy_warnings: list[str] = []
+    document_ids: list[str] = []
+    for path in metadata_files:
+        try:
+            payload = _read_json(path)
+            if payload.get("schema_version") != "2.0":
+                message = f"{path}: legacy schema_version={payload.get('schema_version')!r}"
+                if mode == "closure":
+                    metadata_errors.append(message)
+                else:
+                    legacy_warnings.append(message)
+                continue
+            metadata = MetadataArtifact(**payload)
+        except (json.JSONDecodeError, ValidationError, TypeError) as exc:
+            metadata_errors.append(f"{path}: {exc}")
+            continue
+        metadata_by_base[_artifact_base(path, ".metadata.json")] = metadata
+        document_ids.append(metadata.document_id)
 
-def _aux_base(path: Path) -> Path:
-    for suffix in AUX_SUFFIXES:
-        if path.name.endswith(suffix):
-            return path.with_name(path.name[: -len(suffix)])
-    return path
+    checks.append(_check("metadata_schema", metadata_errors, warning=legacy_warnings))
+    checks.append(_check("unique_document_ids", _duplicates(document_ids)))
+    checks.append(
+        _check(
+            "markdown_has_metadata",
+            [
+                str(path)
+                for path in markdown_files
+                if _artifact_base(path, ".md") not in metadata_by_base
+            ],
+        )
+    )
 
+    checks.extend(_validate_auxiliary(aux_files, metadata_by_base))
+    checks.extend(_validate_front_matter(markdown_files, metadata_by_base))
+    checks.extend(_validate_inventory(manifests_root / "inventory.json", metadata_by_base, raw_root))
+    checks.extend(_validate_status_manifests(manifests_root, metadata_by_base))
 
-def _check(name: str, details: Iterable[str]) -> ValidationCheck:
-    detail_list = list(details)
-    return ValidationCheck(
-        check=name,
-        status="failed" if detail_list else "passed",
-        details=detail_list,
+    if mode == "closure":
+        checks.extend(_validate_closure_requirements(metadata_by_base, normalized_root))
+    if golden_path is not None and raw_root is not None:
+        checks.extend(validate_pdf_corpus(normalized_root, raw_root, load_golden(golden_path)).checks)
+
+    errors = sum(1 for check in checks if check.status == "failed")
+    return ValidationReport(
+        schema_version="2.0",
+        run_id=run_id,
+        status="failed" if errors else "passed",
+        documents_checked=len(metadata_by_base),
+        errors=errors,
+        warnings=sum(1 for check in checks if check.status == "warning"),
+        checks=checks,
     )
 
 
-def _read_json(path: Path) -> object:
-    return json.loads(path.read_text(encoding="utf-8"))
+def _validate_auxiliary(
+    aux_files: list[Path],
+    metadata_by_base: dict[Path, MetadataArtifact],
+) -> list[ValidationCheck]:
+    orphan_errors: list[str] = []
+    schema_errors: list[str] = []
+    document_id_errors: list[str] = []
+    page_errors: list[str] = []
+    ordering_errors: list[str] = []
+    for path in aux_files:
+        suffix = _aux_suffix(path)
+        base = _artifact_base(path, suffix)
+        metadata = metadata_by_base.get(base)
+        if metadata is None:
+            orphan_errors.append(str(path))
+            continue
+        try:
+            artifact = AUX_SUFFIXES[suffix](**_read_json(path))
+        except (json.JSONDecodeError, ValidationError, TypeError) as exc:
+            schema_errors.append(f"{path}: {exc}")
+            continue
+        if getattr(artifact, "document_id", None) != metadata.document_id:
+            document_id_errors.append(f"{path}: document_id mismatch")
+        if isinstance(artifact, PagesArtifact):
+            if artifact.page_count != metadata.page_count:
+                page_errors.append(f"{path}: page_count {artifact.page_count} != metadata {metadata.page_count}")
+            numbers = [page.page_number for page in artifact.pages]
+            expected = list(range(1, len(numbers) + 1))
+            if numbers != expected:
+                ordering_errors.append(f"{path}: page numbers {numbers} != {expected}")
+        if isinstance(artifact, TablesArtifact) and artifact.table_count != len(artifact.tables):
+            page_errors.append(f"{path}: table_count mismatch")
+    return [
+        _check("orphan_files", orphan_errors),
+        _check("auxiliary_schema", schema_errors),
+        _check("auxiliary_document_ids", document_id_errors),
+        _check("page_count_consistency", page_errors),
+        _check("page_ordering_contiguity", ordering_errors),
+    ]
 
 
-def _load_manifest_document_ids(path: Path) -> Set[str]:
+def _validate_front_matter(
+    markdown_files: list[Path],
+    metadata_by_base: dict[Path, MetadataArtifact],
+) -> list[ValidationCheck]:
+    errors: list[str] = []
+    for path in markdown_files:
+        metadata = metadata_by_base.get(_artifact_base(path, ".md"))
+        if metadata is None:
+            continue
+        front_matter = parse_front_matter(path)
+        if front_matter.get("document_id") != metadata.document_id:
+            errors.append(f"{path}: front matter document_id mismatch")
+        if front_matter.get("source_relpath") and front_matter["source_relpath"] != metadata.source_relpath:
+            errors.append(f"{path}: front matter source_relpath mismatch")
+    return [_check("front_matter_parity", errors)]
+
+
+def _validate_inventory(
+    inventory_path: Path,
+    metadata_by_base: dict[Path, MetadataArtifact],
+    raw_root: Path | None,
+) -> list[ValidationCheck]:
+    if not inventory_path.exists():
+        return [
+            _check("inventory_schema", []),
+            _check("inventory_metadata_bijection", []),
+            _check("inventory_source_hashes", []),
+            _check("inventory_final_statuses", []),
+        ]
+    schema_errors: list[str] = []
+    hash_errors: list[str] = []
+    final_status_errors: list[str] = []
+    records: list[InventoryRecord] = []
+    try:
+        payload = _read_json(inventory_path)
+        if isinstance(payload, dict) and isinstance(payload.get("records"), list):
+            payload = payload["records"]
+        if not isinstance(payload, list):
+            raise ValueError("inventory.json must be a list")
+        records = [InventoryRecord(**item) for item in payload]
+    except (json.JSONDecodeError, ValidationError, ValueError, TypeError) as exc:
+        schema_errors.append(f"{inventory_path}: {exc}")
+    for record in records:
+        if record.processing_status not in FINAL_STATUSES:
+            final_status_errors.append(f"{record.document_id}: {record.processing_status}")
+        if raw_root is not None:
+            source = raw_root / record.source_relpath
+            if not source.exists():
+                hash_errors.append(f"{record.document_id}: source missing")
+            elif compute_content_hash(source) != record.content_hash:
+                hash_errors.append(f"{record.document_id}: source hash mismatch")
+    metadata_ids = {metadata.document_id for metadata in metadata_by_base.values()}
+    inventory_ids = {record.document_id for record in records if record.processing_status == "processed"}
+    return [
+        _check("inventory_schema", schema_errors),
+        _check("inventory_metadata_bijection", sorted(metadata_ids.symmetric_difference(inventory_ids))),
+        _check("inventory_source_hashes", hash_errors),
+        _check("inventory_final_statuses", final_status_errors),
+    ]
+
+
+def _validate_status_manifests(
+    manifests_root: Path,
+    metadata_by_base: dict[Path, MetadataArtifact],
+) -> list[ValidationCheck]:
+    review_ids = _load_manifest_document_ids(manifests_root / "needs_review.json")
+    error_ids = _load_manifest_document_ids(manifests_root / "errors.json")
+    errors: list[str] = []
+    processed_with_review_reasons: list[str] = []
+    for metadata in metadata_by_base.values():
+        if metadata.processing_status == "needs_review" and metadata.document_id not in review_ids:
+            errors.append(f"{metadata.document_id}: missing from needs_review.json")
+        if metadata.processing_status == "failed" and metadata.document_id not in error_ids:
+            errors.append(f"{metadata.document_id}: missing from errors.json")
+        if metadata.processing_status == "processed" and metadata.review_reasons:
+            processed_with_review_reasons.append(metadata.document_id)
+    return [
+        _check("status_manifests", errors),
+        _check("processed_with_review_reasons", processed_with_review_reasons),
+    ]
+
+
+def _validate_closure_requirements(
+    metadata_by_base: dict[Path, MetadataArtifact],
+    normalized_root: Path,
+) -> list[ValidationCheck]:
+    missing: list[str] = []
+    for base, metadata in metadata_by_base.items():
+        if metadata.document_name.lower().endswith(".pdf"):
+            for suffix in (".pages.json", ".ocr.json", ".tables.json", ".forms.json"):
+                if not base.with_suffix(suffix).exists():
+                    missing.append(f"{metadata.source_relpath}: missing {suffix}")
+    return [_check("closure_required_artifacts", missing)]
+
+
+def _load_manifest_document_ids(path: Path) -> set[str]:
     if not path.exists():
         return set()
     payload = _read_json(path)
     if not isinstance(payload, dict):
         return set()
-    documents = payload.get("documents", [])
-    if not isinstance(documents, list):
-        return set()
-    ids: Set[str] = set()
-    for document in documents:
-        if isinstance(document, dict) and isinstance(document.get("document_id"), str):
-            ids.add(document["document_id"])
-    return ids
+    items = payload.get("items", payload.get("documents", []))
+    return {
+        item["document_id"]
+        for item in items
+        if isinstance(item, dict) and isinstance(item.get("document_id"), str)
+    }
 
 
-def _parse_auxiliary(path: Path) -> object:
-    payload = _read_json(path)
-    if path.name.endswith(".pages.json"):
-        return PagesArtifact(**payload)
-    if path.name.endswith(".ocr.json"):
-        return OcrArtifact(**payload)
-    if path.name.endswith(".tables.json"):
-        return TablesArtifact(**payload)
+def _read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _artifact_base(path: Path, suffix: str) -> Path:
+    return path.with_name(path.name[: -len(suffix)])
+
+
+def _aux_suffix(path: Path) -> str:
+    for suffix in AUX_SUFFIXES:
+        if path.name.endswith(suffix):
+            return suffix
     raise ValueError(f"Unsupported auxiliary artifact: {path}")
 
 
-def _schema_version_error(path: Path, artifact: object) -> Optional[str]:
-    schema_version = getattr(artifact, "schema_version", None)
-    if schema_version != "1.0":
-        return f"{path}: unsupported schema_version={schema_version!r}"
-    return None
+def _duplicates(values: Iterable[str]) -> list[str]:
+    value_list = list(values)
+    return sorted({value for value in value_list if value_list.count(value) > 1})
 
 
-def validate_normalized_tree(normalized_root: Path, run_id: str = "manual") -> ValidationReport:
-    checks: List[ValidationCheck] = []
-    manifests_root = normalized_root / "_manifests"
-
-    markdown_files = [
-        path
-        for path in normalized_root.rglob("*.md")
-        if "_manifests" not in path.parts
-    ]
-    metadata_files = list(normalized_root.rglob("*.metadata.json"))
-    aux_files = [
-        path
-        for path in normalized_root.rglob("*.json")
-        if any(path.name.endswith(suffix) for suffix in AUX_SUFFIXES)
-    ]
-
-    missing_metadata = [
-        str(path)
-        for path in markdown_files
-        if not path.with_name(path.stem + ".metadata.json").exists()
-    ]
-    checks.append(_check("markdown_has_metadata", missing_metadata))
-
-    metadata_by_base: Dict[Path, MetadataArtifact] = {}
-    invalid_metadata: List[str] = []
-    document_ids: List[str] = []
-    for path in metadata_files:
-        try:
-            metadata = MetadataArtifact(**_read_json(path))
-            version_error = _schema_version_error(path, metadata)
-            if version_error:
-                invalid_metadata.append(version_error)
-            metadata_by_base[_metadata_base(path)] = metadata
-            document_ids.append(metadata.document_id)
-        except (json.JSONDecodeError, ValidationError) as exc:
-            invalid_metadata.append(f"{path}: {exc}")
-    checks.append(_check("metadata_schema", invalid_metadata))
-
-    duplicate_ids = sorted({document_id for document_id in document_ids if document_ids.count(document_id) > 1})
-    checks.append(_check("unique_document_ids", duplicate_ids))
-
-    missing_markdown = [
-        metadata.normalized_path
-        for metadata in metadata_by_base.values()
-        if metadata.processing_status == "processed" and not Path(metadata.normalized_path).exists()
-    ]
-    checks.append(_check("processed_metadata_references_markdown", missing_markdown))
-
-    metadata_bases: Set[Path] = set(metadata_by_base)
-    orphan_files = [str(path) for path in aux_files if _aux_base(path) not in metadata_bases]
-    checks.append(_check("orphan_files", orphan_files))
-
-    aux_document_id_errors: List[str] = []
-    aux_schema_errors: List[str] = []
-    page_count_errors: List[str] = []
-    for path in aux_files:
-        base = _aux_base(path)
-        metadata = metadata_by_base.get(base)
-        if metadata is None:
-            continue
-        try:
-            artifact = _parse_auxiliary(path)
-            version_error = _schema_version_error(path, artifact)
-            if version_error:
-                aux_schema_errors.append(version_error)
-                continue
-        except (json.JSONDecodeError, ValidationError, ValueError) as exc:
-            aux_schema_errors.append(f"{path}: {exc}")
-            continue
-
-        artifact_document_id = getattr(artifact, "document_id", None)
-        if artifact_document_id != metadata.document_id:
-            aux_document_id_errors.append(f"{path}: {artifact_document_id} != {metadata.document_id}")
-
-        if isinstance(artifact, PagesArtifact):
-            if artifact.page_count != len(artifact.pages):
-                page_count_errors.append(f"{path}: page_count={artifact.page_count} pages={len(artifact.pages)}")
-            if artifact.page_count != metadata.page_count:
-                page_count_errors.append(
-                    f"{path}: page_count={artifact.page_count} metadata={metadata.page_count}"
-                )
-        elif isinstance(artifact, OcrArtifact):
-            if metadata.extraction_method == "ocr" and len(artifact.pages) != metadata.page_count:
-                page_count_errors.append(f"{path}: ocr_pages={len(artifact.pages)} metadata={metadata.page_count}")
-        elif isinstance(artifact, TablesArtifact):
-            if artifact.table_count != len(artifact.tables):
-                page_count_errors.append(f"{path}: table_count={artifact.table_count} tables={len(artifact.tables)}")
-
-    checks.append(_check("auxiliary_schema", aux_schema_errors))
-    checks.append(_check("auxiliary_document_ids", aux_document_id_errors))
-    checks.append(_check("page_count_consistency", page_count_errors))
-
-    inventory_errors: List[str] = []
-    inventory_hash_errors: List[str] = []
-    inventory_final_status_errors: List[str] = []
-    inventory_ids: List[str] = []
-    inventory_path = manifests_root / "inventory.json"
-    if inventory_path.exists():
-        try:
-            inventory_payload = _read_json(inventory_path)
-            if not isinstance(inventory_payload, list):
-                raise ValueError("inventory.json must be a list")
-            inventory_records = [InventoryRecord(**item) for item in inventory_payload]
-            inventory_ids = [record.document_id for record in inventory_records]
-            for record in inventory_records:
-                if record.processing_status not in FINAL_STATUSES:
-                    inventory_final_status_errors.append(f"{record.document_id}: {record.processing_status}")
-                source_path = Path(record.source_path)
-                if source_path.exists():
-                    actual_hash = compute_content_hash(source_path)
-                    if actual_hash != record.content_hash:
-                        inventory_hash_errors.append(f"{record.document_id}: {actual_hash} != {record.content_hash}")
-        except (json.JSONDecodeError, ValidationError, ValueError) as exc:
-            inventory_errors.append(f"{inventory_path}: {exc}")
-
-    inventory_duplicate_ids = sorted(
-        {document_id for document_id in inventory_ids if inventory_ids.count(document_id) > 1}
-    )
-    checks.append(_check("inventory_schema", inventory_errors))
-    checks.append(_check("inventory_unique_document_ids", inventory_duplicate_ids))
-    checks.append(_check("inventory_source_hashes", inventory_hash_errors))
-    checks.append(_check("inventory_final_statuses", inventory_final_status_errors))
-
-    review_ids = _load_manifest_document_ids(manifests_root / "needs_review.json")
-    error_ids = _load_manifest_document_ids(manifests_root / "errors.json")
-    status_manifest_errors: List[str] = []
-    processed_failed_conflicts: List[str] = []
-    for metadata in metadata_by_base.values():
-        if metadata.processing_status == "needs_review" and metadata.document_id not in review_ids:
-            status_manifest_errors.append(f"{metadata.document_id}: needs_review missing from needs_review.json")
-        if metadata.processing_status == "failed" and metadata.document_id not in error_ids:
-            status_manifest_errors.append(f"{metadata.document_id}: failed missing from errors.json")
-        if metadata.processing_status == "processed" and metadata.document_id in error_ids:
-            processed_failed_conflicts.append(f"{metadata.document_id}: processed metadata and errors.json")
-
-    checks.append(_check("status_manifests", status_manifest_errors))
-    checks.append(_check("processed_failed_conflicts", processed_failed_conflicts))
-
-    errors = sum(1 for check in checks if check.status == "failed")
-    return ValidationReport(
-        run_id=run_id,
-        status="failed" if errors else "passed",
-        documents_checked=len(metadata_files),
-        errors=errors,
-        checks=checks,
-    )
+def _check(name: str, details: list[str], *, warning: list[str] | None = None) -> ValidationCheck:
+    if details:
+        return ValidationCheck(check=name, status="failed", details=details)
+    if warning:
+        return ValidationCheck(check=name, status="warning", details=warning)
+    return ValidationCheck(check=name, status="passed", details=[])

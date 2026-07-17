@@ -29,6 +29,7 @@ def test_markdown_reader_preserves_title_list_and_table(tmp_path: Path) -> None:
     assert result.page_count == 1
     assert result.pages[0].text_raw.startswith("# Manual")
     assert "| A | B |" in result.pages[0].text_normalized
+    assert result.pages[0].ocr_confidence.kind == "unavailable"
     assert result.warnings == []
 
 
@@ -53,6 +54,7 @@ def test_pdf_digital_reader_uses_injected_extractor_and_adds_page_markers(tmp_pa
     assert "<!-- page: 1 -->" in result.markdown
     assert "<!-- page: 2 -->" in result.markdown
     assert result.pages[1].page_number == 2
+    assert result.pages[0].ocr_confidence.kind == "unavailable"
 
 
 def test_pdf_digital_reader_rejects_pdf_without_enough_text(tmp_path: Path) -> None:
@@ -90,6 +92,28 @@ def test_pdf_scanned_reader_uses_mock_ocr_engine_and_flags_low_confidence(tmp_pa
     assert result.extraction_method == "ocr"
     assert result.page_count == 1
     assert result.ocr is not None
-    assert result.ocr.overall_confidence == 0.42
+    assert result.ocr.document_confidence.value == 0.42
+    assert result.pages[0].ocr_confidence.value == 0.42
     assert "low_ocr_confidence" in result.review_reasons
     assert "possible_handwriting" in result.review_reasons
+
+
+def test_pdf_scanned_reader_rejects_boolean_confidence_before_numeric_coercion(tmp_path: Path) -> None:
+    source = tmp_path / "scan.pdf"
+    source.write_bytes(b"%PDF-1.4 fake scan")
+    engine = MockOcrEngine(
+        pages=[
+            {
+                "page_number": 1,
+                "text": "Texto OCR",
+                "confidence": True,
+            }
+        ]
+    )
+
+    result = PdfScannedReader(ocr_engine=engine, low_confidence_threshold=0.70).read(source)
+
+    assert result.pages[0].ocr_confidence.kind == "unavailable"
+    assert result.ocr is not None
+    assert result.ocr.document_confidence.kind == "unavailable"
+    assert "boolean_ocr_confidence_rejected" in result.review_reasons

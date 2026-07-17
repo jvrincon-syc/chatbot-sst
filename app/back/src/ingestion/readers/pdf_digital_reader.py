@@ -1,23 +1,27 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Protocol
+from typing import Any, List, Protocol
 
 from pydantic import BaseModel, Field
 
+from ingestion.layout.boilerplate import build_indexable_text, detect_boilerplate
+from ingestion.layout.pdfplumber_extractor import LayoutCapabilityUnavailableError, PdfLayoutExtractor
 from ingestion.normalization.text import normalize_text
 from ingestion.readers.base import ReadResult
 from ingestion.schemas.artifacts import PageRecord, TableRecord, TablesArtifact
+from ingestion.schemas.common import ConfidenceMetric, PageBlock
 
 
 class PdfPage(BaseModel):
     page_number: int
     text: str
+    blocks: List[PageBlock] = Field(default_factory=list)
     tables: List[TableRecord] = Field(default_factory=list)
 
 
 class PdfExtractor(Protocol):
-    def extract_pages(self, source_path: Path) -> List[PdfPage]:
+    def extract_pages(self, source_path: Path) -> List[Any]:
         ...
 
 
@@ -42,18 +46,25 @@ class PypdfTextExtractor:
 
 class PdfDigitalReader:
     def __init__(self, extractor: PdfExtractor = None, min_extractable_words: int = 10) -> None:
-        self.extractor = extractor or PypdfTextExtractor()
+        self.extractor = extractor or PdfLayoutExtractor()
         self.min_extractable_words = min_extractable_words
 
     def read(self, source_path: Path) -> ReadResult:
-        extracted_pages = self.extractor.extract_pages(source_path)
+        try:
+            extracted_pages = self.extractor.extract_pages(source_path)
+        except LayoutCapabilityUnavailableError:
+            extracted_pages = PypdfTextExtractor().extract_pages(source_path)
+
+        digital_pages = [_coerce_page(extracted) for extracted in extracted_pages]
+        boilerplate = detect_boilerplate(digital_pages) if any(page.blocks for page in digital_pages) else None
         pages: List[PageRecord] = []
         markdown_parts: List[str] = []
         table_records: List[TableRecord] = []
 
-        for extracted in extracted_pages:
+        for extracted in digital_pages:
             text_raw = extracted.text
-            text_normalized = normalize_text(text_raw)
+            removed_spans = boilerplate.removed_spans_for_page(extracted.page_number) if boilerplate else []
+            text_normalized = build_indexable_text(extracted, boilerplate) if boilerplate else normalize_text(text_raw)
             markdown_parts.append(f"<!-- page: {extracted.page_number} -->\n\n{text_normalized}")
             pages.append(
                 PageRecord(
@@ -61,6 +72,9 @@ class PdfDigitalReader:
                     text_raw=text_raw,
                     text_normalized=text_normalized,
                     extraction_method="pdf_digital",
+                    blocks=extracted.blocks,
+                    removed_spans=removed_spans,
+                    ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
                     warnings=[] if text_normalized else ["partial_extraction"],
                 )
             )
@@ -72,7 +86,12 @@ class PdfDigitalReader:
 
         tables = None
         if table_records:
-            tables = TablesArtifact(document_id="pending", table_count=len(table_records), tables=table_records)
+            tables = TablesArtifact(
+                schema_version="2.0",
+                document_id="pending",
+                table_count=len(table_records),
+                tables=table_records,
+            )
 
         return ReadResult(
             extraction_method="pdf_digital",
@@ -82,3 +101,37 @@ class PdfDigitalReader:
             review_reasons=[],
             tables=tables,
         )
+
+
+def _coerce_page(extracted: Any) -> PdfPage:
+    if isinstance(extracted, PdfPage):
+        return extracted
+    page_number = int(getattr(extracted, "page_number"))
+    text = str(
+        getattr(
+            extracted,
+            "text",
+            getattr(extracted, "text_raw", ""),
+        )
+        or ""
+    )
+    layout_blocks = list(getattr(extracted, "blocks", []) or [])
+    blocks = [_coerce_block(page_number, block) for block in layout_blocks]
+    if not text and blocks:
+        text = "\n".join(block.text for block in blocks if block.text)
+    tables = list(getattr(extracted, "tables", []) or [])
+    return PdfPage(page_number=page_number, text=text, tables=tables, blocks=blocks)
+
+
+def _coerce_block(page_number: int, block: Any) -> PageBlock:
+    if isinstance(block, PageBlock):
+        return block
+    block_type = str(getattr(block, "block_type", "") or "")
+    return PageBlock(
+        block_id=str(getattr(block, "block_id", f"p{page_number}_block_{id(block)}")),
+        text=str(getattr(block, "text", "") or ""),
+        bbox=getattr(block, "bbox", None),
+        extraction_method="pdf_digital",
+        role="body" if block_type == "text" else block_type or None,
+        warnings=list(getattr(block, "warnings", []) or []),
+    )

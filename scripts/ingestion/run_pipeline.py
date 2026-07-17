@@ -17,6 +17,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run ingestion normalization pipeline.")
     parser.add_argument("--docs-raw", type=Path, default=ROOT / "data" / "docs_raw")
     parser.add_argument("--docs-normalized", type=Path, default=ROOT / "data" / "docs_normalized")
+    parser.add_argument("--staging-root", type=Path, default=None)
+    parser.add_argument("--promote", action="store_true")
+    parser.add_argument("--only-source", action="append", dest="only_sources")
+    parser.add_argument("--force", action="store_true")
     parser.add_argument("--corpus-version", default="1")
     parser.add_argument("--pipeline-version", default="1.0.0")
     parser.add_argument("--run-id", default=None)
@@ -25,6 +29,10 @@ def main() -> int:
     summary = run_pipeline(
         docs_raw=args.docs_raw,
         docs_normalized=args.docs_normalized,
+        staging_root=args.staging_root,
+        promote=args.promote,
+        only_sources=args.only_sources,
+        force=args.force,
         corpus_version=args.corpus_version,
         pipeline_version=args.pipeline_version,
         run_id=args.run_id,

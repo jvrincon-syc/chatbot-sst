@@ -1,102 +1,620 @@
 {
+  "$defs": {
+    "BBox": {
+      "additionalProperties": false,
+      "properties": {
+        "bottom": {
+          "title": "Bottom",
+          "type": "number"
+        },
+        "coordinate_system": {
+          "minLength": 1,
+          "title": "Coordinate System",
+          "type": "string"
+        },
+        "top": {
+          "title": "Top",
+          "type": "number"
+        },
+        "x0": {
+          "title": "X0",
+          "type": "number"
+        },
+        "x1": {
+          "title": "X1",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x0",
+        "top",
+        "x1",
+        "bottom",
+        "coordinate_system"
+      ],
+      "title": "BBox",
+      "type": "object"
+    },
+    "ChangeHistoryEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "ChangeHistoryEntry",
+      "type": "object"
+    },
+    "Classification": {
+      "additionalProperties": false,
+      "properties": {
+        "conflict_status": {
+          "default": "none",
+          "title": "Conflict Status",
+          "type": "string"
+        },
+        "conflicts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Conflicts",
+          "type": "array"
+        },
+        "content_prediction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Prediction"
+        },
+        "document_type": {
+          "enum": [
+            "manual",
+            "formulario",
+            "politica",
+            "reglamento",
+            "programa",
+            "matriz",
+            "procedimiento",
+            "anexo",
+            "instructivo",
+            "capacitacion",
+            "acta",
+            "norma",
+            "guia",
+            "informacion_general",
+            "otro"
+          ],
+          "title": "Document Type",
+          "type": "string"
+        },
+        "document_type_confidence": {
+          "$ref": "#/$defs/ConfidenceMetric"
+        },
+        "route_prior": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Route Prior"
+        },
+        "signals": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Signals",
+          "type": "array"
+        },
+        "topic": {
+          "title": "Topic",
+          "type": "string"
+        },
+        "topic_confidence": {
+          "$ref": "#/$defs/ConfidenceMetric"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "document_type",
+        "document_type_confidence",
+        "topic",
+        "topic_confidence"
+      ],
+      "title": "Classification",
+      "type": "object"
+    },
+    "ConfidenceMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "kind": {
+          "enum": [
+            "measured",
+            "estimated",
+            "unavailable"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provenance"
+        },
+        "sample_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sample Size"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "ge": 0.0,
+              "le": 1.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "ConfidenceMetric",
+      "type": "object"
+    },
+    "DocumentControl": {
+      "additionalProperties": false,
+      "properties": {
+        "change_history": {
+          "items": {
+            "$ref": "#/$defs/ChangeHistoryEntry"
+          },
+          "title": "Change History",
+          "type": "array"
+        },
+        "code": {
+          "$ref": "#/$defs/DocumentField"
+        },
+        "effective_date": {
+          "$ref": "#/$defs/DocumentField"
+        },
+        "publication_date": {
+          "$ref": "#/$defs/DocumentField"
+        },
+        "title": {
+          "$ref": "#/$defs/DocumentField"
+        },
+        "version": {
+          "$ref": "#/$defs/DocumentField"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "code",
+        "version",
+        "publication_date",
+        "effective_date"
+      ],
+      "title": "DocumentControl",
+      "type": "object"
+    },
+    "DocumentField": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "extracted",
+            "not_found",
+            "not_evaluated",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "value_raw": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Raw"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "value",
+        "status"
+      ],
+      "title": "DocumentField",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BBox"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "page_number": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page Number"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method"
+        },
+        "status": {
+          "enum": [
+            "detected",
+            "not_detected",
+            "not_evaluated"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "value"
+      ],
+      "title": "Observation",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
   "properties": {
-    "schema_version": {
-      "default": "1.0",
-      "title": "Schema Version",
+    "classification": {
+      "$ref": "#/$defs/Classification"
+    },
+    "corpus_version": {
+      "title": "Corpus Version",
       "type": "string"
     },
+    "document_control": {
+      "$ref": "#/$defs/DocumentControl"
+    },
     "document_id": {
+      "minLength": 1,
       "title": "Document Id",
       "type": "string"
     },
     "document_name": {
+      "minLength": 1,
       "title": "Document Name",
-      "type": "string"
-    },
-    "source_path": {
-      "title": "Source Path",
-      "type": "string"
-    },
-    "normalized_path": {
-      "title": "Normalized Path",
-      "type": "string"
-    },
-    "document_type": {
-      "title": "Document Type",
-      "type": "string"
-    },
-    "topic": {
-      "title": "Topic",
-      "type": "string"
-    },
-    "subtopic": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Subtopic"
-    },
-    "version": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Version"
-    },
-    "publication_date": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Publication Date"
-    },
-    "effective_date": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Effective Date"
-    },
-    "page_count": {
-      "minimum": 0,
-      "title": "Page Count",
-      "type": "integer"
-    },
-    "language": {
-      "default": "es",
-      "title": "Language",
       "type": "string"
     },
     "extraction_method": {
       "enum": [
         "markdown",
         "pdf_digital",
-        "ocr"
+        "ocr",
+        "hybrid"
       ],
       "title": "Extraction Method",
       "type": "string"
     },
-    "ocr_engine": {
+    "feature_observations": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Observation"
+      },
+      "title": "Feature Observations",
+      "type": "object"
+    },
+    "forms": {
+      "$ref": "#/$defs/Observation"
+    },
+    "handwriting": {
+      "$ref": "#/$defs/Observation"
+    },
+    "language": {
+      "default": "es",
+      "title": "Language",
+      "type": "string"
+    },
+    "legacy_normalized_path": {
       "anyOf": [
         {
           "type": "string"
@@ -106,56 +624,50 @@
         }
       ],
       "default": null,
-      "title": "Ocr Engine"
+      "title": "Legacy Normalized Path"
+    },
+    "legacy_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Legacy Path"
+    },
+    "legacy_source_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Legacy Source Path"
+    },
+    "normalized_relpath": {
+      "title": "Normalized Relpath",
+      "type": "string"
     },
     "ocr_confidence": {
-      "anyOf": [
-        {
-          "maximum": 1.0,
-          "minimum": 0.0,
-          "type": "number"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Ocr Confidence"
+      "$ref": "#/$defs/ConfidenceMetric"
     },
-    "contains_handwriting": {
-      "default": false,
-      "title": "Contains Handwriting",
-      "type": "boolean"
-    },
-    "contains_tables": {
-      "default": false,
-      "title": "Contains Tables",
-      "type": "boolean"
-    },
-    "classification_confidence": {
-      "anyOf": [
-        {
-          "maximum": 1.0,
-          "minimum": 0.0,
-          "type": "number"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Classification Confidence"
-    },
-    "content_hash": {
-      "title": "Content Hash",
-      "type": "string"
-    },
-    "corpus_version": {
-      "title": "Corpus Version",
-      "type": "string"
+    "page_count": {
+      "minimum": 0,
+      "title": "Page Count",
+      "type": "integer"
     },
     "pipeline_version": {
       "title": "Pipeline Version",
+      "type": "string"
+    },
+    "processed_at": {
+      "title": "Processed At",
       "type": "string"
     },
     "processing_status": {
@@ -163,11 +675,33 @@
         "pending",
         "processed",
         "failed",
-        "needs_review",
-        "skipped"
+        "needs_review"
       ],
       "title": "Processing Status",
       "type": "string"
+    },
+    "review_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Review Reasons",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_hash": {
+      "title": "Source Hash",
+      "type": "string"
+    },
+    "source_relpath": {
+      "title": "Source Relpath",
+      "type": "string"
+    },
+    "tables": {
+      "$ref": "#/$defs/Observation"
     },
     "warnings": {
       "items": {
@@ -175,27 +709,27 @@
       },
       "title": "Warnings",
       "type": "array"
-    },
-    "processed_at": {
-      "title": "Processed At",
-      "type": "string"
     }
   },
   "required": [
+    "schema_version",
     "document_id",
     "document_name",
-    "source_path",
-    "normalized_path",
-    "document_type",
-    "topic",
+    "source_relpath",
+    "normalized_relpath",
+    "document_control",
+    "classification",
     "page_count",
     "extraction_method",
-    "content_hash",
+    "ocr_confidence",
+    "handwriting",
+    "tables",
+    "forms",
+    "source_hash",
     "corpus_version",
     "pipeline_version",
     "processing_status"
   ],
   "title": "MetadataArtifact",
-  "type": "object",
-  "$schema": "https://json-schema.org/draft/2020-12/schema"
+  "type": "object"
 }

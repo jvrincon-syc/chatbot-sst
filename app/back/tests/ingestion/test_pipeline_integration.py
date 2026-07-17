@@ -26,8 +26,8 @@ def test_pipeline_processes_markdown_and_tracks_pdf_needing_review(tmp_path: Pat
     assert (normalized / "copasst" / "manual.pages.json").exists()
 
     needs_review = json.loads((normalized / "_manifests" / "needs_review.json").read_text(encoding="utf-8"))
-    assert needs_review["documents"][0]["source_path"].endswith("scan.pdf")
-    assert set(needs_review["documents"][0]["reasons"]) & {
+    assert needs_review["items"][0]["source_relpath"].endswith("scan.pdf")
+    assert set(needs_review["items"][0]["reasons"]) & {
         "pdf_extractor_unconfigured",
         "ocrmypdf_unavailable",
         "ocrmypdf_processing_failed",
@@ -72,12 +72,9 @@ def test_pipeline_skips_unchanged_documents_on_second_run(tmp_path: Path) -> Non
     assert third == {"processed": 0, "failed": 0, "needs_review": 0, "skipped": 1}
 
     second_manifest = json.loads((normalized / "_manifests" / "second.json").read_text(encoding="utf-8"))
-    assert second_manifest["documents"] == [
-        {
-            "document_id": second_manifest["documents"][0]["document_id"],
-            "status": "skipped",
-        }
-    ]
+    assert second_manifest["documents"][0]["document_id"]
+    assert second_manifest["documents"][0]["document_status"] == "processed"
+    assert second_manifest["documents"][0]["disposition"] == "reused"
 
 
 def test_pipeline_reprocesses_modified_documents_by_hash(tmp_path: Path) -> None:
@@ -107,3 +104,28 @@ def test_pipeline_reprocesses_modified_documents_by_hash(tmp_path: Path) -> None
     assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
     normalized_text = (normalized / "manual.md").read_text(encoding="utf-8")
     assert "Contenido modificado" in normalized_text
+
+
+def test_pipeline_writes_candidate_tree_without_touching_live_root(tmp_path: Path) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    live = tmp_path / "data" / "docs_normalized"
+    staging = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    live.mkdir(parents=True)
+    (docs_raw / "manual.md").write_text("# Manual\n\nContenido", encoding="utf-8")
+    (live / "live.md").write_text("live", encoding="utf-8")
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=live,
+        staging_root=staging,
+        only_sources=["manual.md"],
+        corpus_version="test",
+        pipeline_version="1.0.0",
+        run_id="candidate",
+    )
+
+    assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
+    assert (staging / "manual.md").exists()
+    assert (live / "live.md").read_text(encoding="utf-8") == "live"
+    assert not (live / "manual.md").exists()

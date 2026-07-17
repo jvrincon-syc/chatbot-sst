@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from typing import Iterable
+
+from ingestion.schemas.common import RemovedSpan
 
 
 CONTROL_CHARS = dict.fromkeys(i for i in range(32) if i not in (9, 10, 13))
@@ -16,3 +19,14 @@ def normalize_text(text: str) -> str:
     normalized = re.sub(r" *\n *", "\n", normalized)
     normalized = re.sub(r"\n{3,}", "\n\n", normalized)
     return normalized.strip()
+
+
+def normalize_indexable_text(
+    text: str,
+    removed_spans: Iterable[RemovedSpan] = (),
+) -> str:
+    indexable = text
+    for span in removed_spans:
+        if span.text:
+            indexable = indexable.replace(span.text, " ", 1)
+    return normalize_text(indexable)

@@ -15,15 +15,17 @@ from ingestion.schemas.artifacts import (
     OcrArtifact,
     PagesArtifact,
     TablesArtifact,
+    ValidationReport,
 )
-from ingestion.schemas.inventory import InventoryRecord
 from ingestion.schemas.manifests import (
     BundleManifest,
     ErrorManifest,
     InventoryManifest,
+    ReviewItem,
     ReviewManifest,
     RunManifest,
 )
+from ingestion.schemas.inventory import InventoryRecord
 
 
 _CANONICAL_TOP_LEVEL_MODELS = (
@@ -32,12 +34,12 @@ _CANONICAL_TOP_LEVEL_MODELS = (
     OcrArtifact,
     TablesArtifact,
     FormsArtifact,
+    ValidationReport,
     InventoryManifest,
     RunManifest,
     ReviewManifest,
     ErrorManifest,
     BundleManifest,
-    InventoryRecord,
 )
 
 
@@ -128,10 +130,16 @@ def write_inventory(path: Path, records: Iterable[InventoryRecord]) -> None:
 
 
 def write_review_list(path: Path, documents: List[dict]) -> None:
+    items = []
+    for item in documents:
+        if "schema_version" in item:
+            items.append(item)
+        else:
+            items.append({"schema_version": "2.0", **item})
     payload = {
         "schema_version": "2.0",
         "run_id": "manual",
         "generated_at": datetime.now(timezone.utc).astimezone().isoformat(),
-        "items": documents,
+        "items": [ReviewItem.model_validate(item).model_dump(mode="json") for item in items],
     }
     dump_json_atomic(path, payload)

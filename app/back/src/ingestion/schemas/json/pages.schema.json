@@ -1,34 +1,129 @@
 {
   "$defs": {
-    "PageRecord": {
+    "BBox": {
+      "additionalProperties": false,
       "properties": {
-        "page_number": {
-          "minimum": 1,
-          "title": "Page Number",
-          "type": "integer"
+        "bottom": {
+          "title": "Bottom",
+          "type": "number"
         },
-        "text_raw": {
-          "title": "Text Raw",
+        "coordinate_system": {
+          "minLength": 1,
+          "title": "Coordinate System",
           "type": "string"
         },
-        "text_normalized": {
-          "title": "Text Normalized",
-          "type": "string"
+        "top": {
+          "title": "Top",
+          "type": "number"
         },
-        "extraction_method": {
-          "enum": [
-            "markdown",
-            "pdf_digital",
-            "ocr"
-          ],
-          "title": "Extraction Method",
-          "type": "string"
+        "x0": {
+          "title": "X0",
+          "type": "number"
         },
-        "ocr_confidence": {
+        "x1": {
+          "title": "X1",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x0",
+        "top",
+        "x1",
+        "bottom",
+        "coordinate_system"
+      ],
+      "title": "BBox",
+      "type": "object"
+    },
+    "ConfidenceMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
           "anyOf": [
             {
-              "maximum": 1.0,
-              "minimum": 0.0,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "engine_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine Version"
+        },
+        "kind": {
+          "enum": [
+            "measured",
+            "estimated",
+            "unavailable"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provenance"
+        },
+        "sample_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sample Size"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "ge": 0.0,
+              "le": 1.0,
               "type": "number"
             },
             {
@@ -36,12 +131,288 @@
             }
           ],
           "default": null,
-          "title": "Ocr Confidence"
+          "title": "Value"
         },
-        "has_handwriting_warning": {
-          "default": false,
-          "title": "Has Handwriting Warning",
-          "type": "boolean"
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "ConfidenceMetric",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BBox"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "page_number": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page Number"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "Evidence",
+      "type": "object"
+    },
+    "NormalizationAction": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "minLength": 1,
+          "title": "Action",
+          "type": "string"
+        },
+        "after": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After"
+        },
+        "before": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Before"
+        },
+        "details": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Details"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "title": "NormalizationAction",
+      "type": "object"
+    },
+    "PageBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BBox"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "block_id": {
+          "minLength": 1,
+          "title": "Block Id",
+          "type": "string"
+        },
+        "extraction_method": {
+          "enum": [
+            "markdown",
+            "pdf_digital",
+            "ocr",
+            "hybrid"
+          ],
+          "title": "Extraction Method",
+          "type": "string"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "block_id",
+        "text",
+        "extraction_method"
+      ],
+      "title": "PageBlock",
+      "type": "object"
+    },
+    "PageRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/PageBlock"
+          },
+          "title": "Blocks",
+          "type": "array"
+        },
+        "extraction_method": {
+          "enum": [
+            "markdown",
+            "pdf_digital",
+            "ocr",
+            "hybrid"
+          ],
+          "title": "Extraction Method",
+          "type": "string"
+        },
+        "normalization_actions": {
+          "items": {
+            "$ref": "#/$defs/NormalizationAction"
+          },
+          "title": "Normalization Actions",
+          "type": "array"
+        },
+        "ocr_confidence": {
+          "$ref": "#/$defs/ConfidenceMetric"
+        },
+        "page_number": {
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "removed_spans": {
+          "items": {
+            "$ref": "#/$defs/RemovedSpan"
+          },
+          "title": "Removed Spans",
+          "type": "array"
+        },
+        "text_normalized": {
+          "title": "Text Normalized",
+          "type": "string"
+        },
+        "text_raw": {
+          "title": "Text Raw",
+          "type": "string"
         },
         "warnings": {
           "items": {
@@ -55,19 +426,68 @@
         "page_number",
         "text_raw",
         "text_normalized",
-        "extraction_method"
+        "extraction_method",
+        "ocr_confidence"
       ],
       "title": "PageRecord",
       "type": "object"
+    },
+    "RemovedSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BBox"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "block_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Block Id"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "reason"
+      ],
+      "title": "RemovedSpan",
+      "type": "object"
     }
   },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
   "properties": {
-    "schema_version": {
-      "default": "1.0",
-      "title": "Schema Version",
-      "type": "string"
-    },
     "document_id": {
+      "minLength": 1,
       "title": "Document Id",
       "type": "string"
     },
@@ -82,14 +502,19 @@
       },
       "title": "Pages",
       "type": "array"
+    },
+    "schema_version": {
+      "const": "2.0",
+      "title": "Schema Version",
+      "type": "string"
     }
   },
   "required": [
+    "schema_version",
     "document_id",
     "page_count",
     "pages"
   ],
   "title": "PagesArtifact",
-  "type": "object",
-  "$schema": "https://json-schema.org/draft/2020-12/schema"
+  "type": "object"
 }
