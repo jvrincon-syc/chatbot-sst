@@ -162,6 +162,9 @@ venv.bak/
 # Local isolated workspaces
 .worktrees/
 
+# Local planning/context notes
+memory/
+
 # Spyder project settings
 .spyderproject
 .spyproject
