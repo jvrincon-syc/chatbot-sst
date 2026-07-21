@@ -54,7 +54,7 @@ Los mismos rangos de dependencias aplican a ambos entornos:
 | `opencv-python-headless` | `>=4.9,<5` | 4.13.0.92 |
 | `pdfplumber` | `>=0.11,<0.12` | 0.11.9 |
 | `Pillow` | `>=10,<12` | 11.3.0 |
-| `pydantic` | `>=2.0,<2.11` | 2.10.6 |
+| `pydantic` | `>=2.11.5,<3` | 2.13.4 |
 | `pypdf` | `>=4,<6` | 5.9.0 |
 | `pypdfium2` | `>=4.30,<5` | 4.30.0 |
 | `pytesseract` | `>=0.3,<0.4` | 0.3.13 |
@@ -105,6 +105,53 @@ Comandos útiles:
 - `npm run ingestion:run`
 - `npm run ingestion:validate`
 - `npm run schemas:export`
+- `npm run test:indexing`
+- `npm run indexing:run -- --dry-run`
+- `npm run indexing:validate`
+- `npm run evaluation:llama-first`
+
+## Modo experimental Llama-first
+
+La rama `llamaparse_experiment` incluye un camino experimental para:
+
+```text
+PDF -> LlamaParse/Classify/Extract -> validacion local -> bundles -> LlamaIndex -> pgvector
+```
+
+Las dependencias cloud/indexing son opcionales y granulares:
+
+```powershell
+npm run python -- -m pip install -e ".[llama-cloud,llama-indexing]" -c constraints/llama-first.txt
+npm run python -- scripts/experiments/check_llama_dependencies.py
+```
+
+Variables principales en `secrets.env`:
+
+- `LLAMA_CLOUD_ENABLED`
+- `LLAMA_CLOUD_API_KEY`
+- `LLAMA_PARSE_TIER`
+- `LLAMA_PARSE_VERSION`
+- `LLAMA_PARSE_MAX_CREDITS_PER_RUN`
+- `LLAMA_LOCAL_FALLBACK_ENABLED`
+
+El smoke test live no debe subir documentos corporativos hasta tener aprobados
+autorizacion de datos, region, retencion/eliminacion y presupuesto de creditos.
+Mientras tanto, los tests usan fakes o fixtures locales y no consumen creditos.
+
+Politica de clasificacion documental:
+
+- La ruta/carpeta en `data/docs_raw` es organizacion operativa y puede ser
+  arbitraria; no es fuente de verdad documental.
+- La evidencia interna del documento (titulo/control documental, contenido,
+  codigo y tablas de control) tiene prioridad sobre carpetas como `manual`,
+  `capacitaciones`, `politica` o `convivencia_laboral`.
+- Una diferencia entre carpeta y evidencia interna no debe generar
+  `classification_conflict` ni `needs_review` si el tipo/topic se puede
+  resolver con evidencia documental fuerte.
+- Para topicos, una carpeta especifica como `seguridad_vial` pesa mas que un
+  contenedor generico como `capacitaciones`.
+- Los codigos encontrados en tablas/header de control documental tienen
+  prioridad sobre referencias narrativas a otros formatos.
 
 ## GUI de ingesta Fase 1
 

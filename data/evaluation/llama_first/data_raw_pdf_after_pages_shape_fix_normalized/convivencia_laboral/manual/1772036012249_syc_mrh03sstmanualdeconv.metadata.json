@@ -1,0 +1,231 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "formulario",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "formulario:formato:content",
+      "Sistema de Gestion de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+    ],
+    "subtopic": null,
+    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-pages-shape-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><th>CODIGO</th><th>M.RH-03-SST</th><th>NIVEL DE CLASIFICACIÓN</th><th>USO INTERNO (NC2)</th><th>VERSION</th><th>0.2</th></tr>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "M.RH-03-SST",
+      "value_raw": "M.RH-03-SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# MANUAL DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SISTEMAS Y COMPUTADORES S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## INTRODUCCIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## POLÍTICA DE CONVIVENCIA LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "conflicting",
+      "value": [
+        "MANUAL DE CONVIVENCIA LABORAL",
+        "SISTEMAS Y COMPUTADORES S.A.",
+        "INTRODUCCIÓN",
+        "POLÍTICA DE CONVIVENCIA LABORAL"
+      ],
+      "value_raw": [
+        "MANUAL DE CONVIVENCIA LABORAL",
+        "SISTEMAS Y COMPUTADORES S.A.",
+        "INTRODUCCIÓN",
+        "POLÍTICA DE CONVIVENCIA LABORAL"
+      ],
+      "warnings": [
+        "multiple_visible_candidates"
+      ]
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | M.RH-03-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | VERSION | 0.2</td></tr>",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO M.RH-03-SST</td><td>NIVEL DE CLASIFICACIÓN USO INTERNO (NC2)</td><td>VERSION 0.2</td></tr>",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | M.RH-03-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | VERSION | 0.2</td></tr>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.2",
+      "value_raw": "0.2",
+      "warnings": []
+    },
+    "warnings": [
+      "conflicting_title"
+    ]
+  },
+  "document_id": "doc_c392ec7bf8d98194",
+  "document_name": "1772036012249_syc_mrh03sstmanualdeconv.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_pages_shape_fix_normalized\\convivencia_laboral\\manual\\1772036012249_syc_mrh03sstmanualdeconv.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 12,
+  "pipeline_version": "2.0.2",
+  "processed_at": "2026-07-21T17:04:18.296622-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "conflicting_title",
+    "pdf_semantic_review_required",
+    "tables_not_evaluated",
+    "forms_not_evaluated"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
+  "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "llama_parse_job:pjb-rrjo97gns4p3be98tqymlfur9jvf",
+    "conflicting_title"
+  ]
+}

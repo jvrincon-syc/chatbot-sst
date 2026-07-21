@@ -11,7 +11,7 @@ dependencies = [
   "opencv-python-headless>=4.9,<5",
   "pdfplumber>=0.11,<0.12",
   "Pillow>=10,<12",
-  "pydantic>=2.0,<2.11",
+  "pydantic>=2.11.5,<3",
   "pypdf>=4,<6",
   "pypdfium2>=4.30,<5",
   "pytesseract>=0.3,<0.4",
@@ -20,6 +20,13 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0,<9",
+]
+llama-cloud = [
+  "llama-cloud==2.12.0",
+]
+llama-indexing = [
+  "llama-index-core==0.14.23",
+  "llama-index-vector-stores-postgres==0.8.1",
 ]
 
 [tool.setuptools]

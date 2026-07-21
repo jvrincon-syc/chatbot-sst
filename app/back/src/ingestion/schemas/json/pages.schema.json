@@ -315,7 +315,9 @@
             "markdown",
             "pdf_digital",
             "ocr",
-            "hybrid"
+            "hybrid",
+            "llamaparse",
+            "hybrid_llamaparse"
           ],
           "title": "Extraction Method",
           "type": "string"
@@ -379,7 +381,9 @@
             "markdown",
             "pdf_digital",
             "ocr",
-            "hybrid"
+            "hybrid",
+            "llamaparse",
+            "hybrid_llamaparse"
           ],
           "title": "Extraction Method",
           "type": "string"

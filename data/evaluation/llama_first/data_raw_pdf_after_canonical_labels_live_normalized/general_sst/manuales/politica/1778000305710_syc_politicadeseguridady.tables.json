@@ -1,0 +1,867 @@
+{
+  "document_id": "doc_f38f9f98d854feed",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 4,
+  "tables": [
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Sistemas y Computadores S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PL.RH-01-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN Y ETIQUETADO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.6",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "SYC",
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| SYC | PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |\n| Sistemas y Computadores S.A. | POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO |  |  |\n| CODIGO | PL.RH-01-SST | NIVEL DE CLASIFICACIÓN Y ETIQUETADO | USO INTERNO (NC2) | Versión | 0.6 |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "SYC",
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          ""
+        ],
+        [
+          "Sistemas y Computadores S.A.",
+          "POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "PL.RH-01-SST",
+          "NIVEL DE CLASIFICACIÓN Y ETIQUETADO",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.6"
+        ]
+      ],
+      "table_id": "pjb-7u7qysy2rczcmpo9y92alfv49o4i_p1_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Sistemas y Computadores S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PL.RH-01-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN Y ETIQUETADO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.6",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "SYC",
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| SYC | PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |\n| Sistemas y Computadores S.A. | POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |\n| CODIGO | PL.RH-01-SST | NIVEL DE CLASIFICACIÓN Y ETIQUETADO | USO INTERNO (NC2) | Versión | 0.6 |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "SYC",
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Sistemas y Computadores S.A.",
+          "POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "PL.RH-01-SST",
+          "NIVEL DE CLASIFICACIÓN Y ETIQUETADO",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.6"
+        ]
+      ],
+      "table_id": "pjb-7u7qysy2rczcmpo9y92alfv49o4i_p2_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CARGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "NOMBRES",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "ELABORADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Líder Funcional de SG SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Yesnei Astrid Julio Areniz",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "APROBADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Gerente General",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Tomas Navas Corona",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "VERIFICADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Líder e integrador administrativo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Joan Mauricio Arenas",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "CARGO",
+        "NOMBRES"
+      ],
+      "markdown_representation": "|  | CARGO | NOMBRES |\n| ELABORADO POR | Líder Funcional de SG SST | Yesnei Astrid Julio Areniz |\n| APROBADO POR | Gerente General | Tomas Navas Corona |\n| VERIFICADO POR | Líder e integrador administrativo | Joan Mauricio Arenas |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "",
+          "CARGO",
+          "NOMBRES"
+        ],
+        [
+          "ELABORADO POR",
+          "Líder Funcional de SG SST",
+          "Yesnei Astrid Julio Areniz"
+        ],
+        [
+          "APROBADO POR",
+          "Gerente General",
+          "Tomas Navas Corona"
+        ],
+        [
+          "VERIFICADO POR",
+          "Líder e integrador administrativo",
+          "Joan Mauricio Arenas"
+        ]
+      ],
+      "table_id": "pjb-7u7qysy2rczcmpo9y92alfv49o4i_p2_table_002",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CONTROL DE CAMBIOS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "FECHA",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "DESCRIPCION DEL CAMBIO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "23/09/2019",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Se revisa la política y se mantiene.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "0.1",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "23/12/2020",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Se revisa la política en la revisión por la dirección y se mantiene.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "10/12/2021",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Se revisa la política en la revisión por la dirección y se mantiene.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 5,
+          "row_span": 1,
+          "text": "0.3",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 5,
+          "row_span": 1,
+          "text": "09/12/2022",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 5,
+          "row_span": 1,
+          "text": "Se revisa la política en la revisión por la dirección y se mantiene el compromiso con el SG SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 6,
+          "row_span": 1,
+          "text": "0.4",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 6,
+          "row_span": 1,
+          "text": "07/12/2023",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 6,
+          "row_span": 1,
+          "text": "Se revisa la política en la revisión por la dirección y se complementa los objetivos manteniendo el compromiso del SG SST.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 7,
+          "row_span": 1,
+          "text": "0.5",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 7,
+          "row_span": 1,
+          "text": "06/12/2024",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 7,
+          "row_span": 1,
+          "text": "Se revisa política en la revisión por la alta dirección y se mantiene el compromiso con el SG SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 8,
+          "row_span": 1,
+          "text": "0.6",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 8,
+          "row_span": 1,
+          "text": "16/12/2025",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 8,
+          "row_span": 1,
+          "text": "Se revisa política en la revisión por la alta dirección y se mantiene el compromiso con el SG SST",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "CONTROL DE CAMBIOS"
+      ],
+      "markdown_representation": "| CONTROL DE CAMBIOS |\n| VERSION | FECHA | DESCRIPCION DEL CAMBIO |\n| 0.0 | 23/09/2019 | Se revisa la política y se mantiene. |\n| 0.1 | 23/12/2020 | Se revisa la política en la revisión por la dirección y se mantiene. |\n| 0.2 | 10/12/2021 | Se revisa la política en la revisión por la dirección y se mantiene. |\n| 0.3 | 09/12/2022 | Se revisa la política en la revisión por la dirección y se mantiene el compromiso con el SG SST |\n| 0.4 | 07/12/2023 | Se revisa la política en la revisión por la dirección y se complementa los objetivos manteniendo el compromiso del SG SST. |\n| 0.5 | 06/12/2024 | Se revisa política en la revisión por la alta dirección y se mantiene el compromiso con el SG SST |\n| 0.6 | 16/12/2025 | Se revisa política en la revisión por la alta dirección y se mantiene el compromiso con el SG SST |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "CONTROL DE CAMBIOS"
+        ],
+        [
+          "VERSION",
+          "FECHA",
+          "DESCRIPCION DEL CAMBIO"
+        ],
+        [
+          "0.0",
+          "23/09/2019",
+          "Se revisa la política y se mantiene."
+        ],
+        [
+          "0.1",
+          "23/12/2020",
+          "Se revisa la política en la revisión por la dirección y se mantiene."
+        ],
+        [
+          "0.2",
+          "10/12/2021",
+          "Se revisa la política en la revisión por la dirección y se mantiene."
+        ],
+        [
+          "0.3",
+          "09/12/2022",
+          "Se revisa la política en la revisión por la dirección y se mantiene el compromiso con el SG SST"
+        ],
+        [
+          "0.4",
+          "07/12/2023",
+          "Se revisa la política en la revisión por la dirección y se complementa los objetivos manteniendo el compromiso del SG SST."
+        ],
+        [
+          "0.5",
+          "06/12/2024",
+          "Se revisa política en la revisión por la alta dirección y se mantiene el compromiso con el SG SST"
+        ],
+        [
+          "0.6",
+          "16/12/2025",
+          "Se revisa política en la revisión por la alta dirección y se mantiene el compromiso con el SG SST"
+        ]
+      ],
+      "table_id": "pjb-7u7qysy2rczcmpo9y92alfv49o4i_p2_table_003",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

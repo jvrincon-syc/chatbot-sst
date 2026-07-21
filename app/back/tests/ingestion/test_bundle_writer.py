@@ -408,6 +408,26 @@ def test_write_bundle_atomic_writes_required_files_and_hashes_final_bytes(
         assert artifact_hash.byte_size == len(final_bytes)
 
 
+def test_write_bundle_atomic_uses_short_temp_names_for_deep_windows_paths(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / ("root_" + "a" * 60)
+    source_relpath = (
+        "general_sst/capacitaciones/politica_seguridad_trabajo/"
+        "prevencion_alcohol_drogas/prevencion_alcohol_drogas.md"
+    )
+
+    manifest = write_bundle_atomic(root, _bundle_payload(source_relpath))
+
+    assert len(manifest.required_artifacts) == 6
+    metadata_hash = next(
+        item
+        for item in manifest.artifact_hashes
+        if item.relpath.endswith("prevencion_alcohol_drogas.metadata.json")
+    )
+    assert metadata_hash.byte_size > 0
+
+
 def test_write_bundle_atomic_accepts_a_strict_mapping_payload(tmp_path: Path) -> None:
     typed = _bundle_payload()
     payload = {

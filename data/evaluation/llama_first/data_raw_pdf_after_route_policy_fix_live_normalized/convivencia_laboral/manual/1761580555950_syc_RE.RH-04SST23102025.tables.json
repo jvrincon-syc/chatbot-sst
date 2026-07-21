@@ -1,0 +1,449 @@
+{
+  "document_id": "doc_864d906c5eae1183",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 3,
+  "tables": [
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "SYC Sistemas y Computadores S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CÓDIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "RE.RH-04 SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Versión 0.3",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [],
+      "markdown_representation": "| SYC Sistemas y Computadores S.A. | CÓDIGO | RE.RH-04 SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión 0.3 |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "SYC Sistemas y Computadores S.A.",
+          "CÓDIGO",
+          "RE.RH-04 SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión 0.3"
+        ]
+      ],
+      "table_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p1_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "INFORMACIÓN DEL PRESUNTO ACOSADOR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Nombre del presunto acosador:",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Cargo:",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Proyecto:",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "INFORMACIÓN DEL PRESUNTO ACOSADOR"
+      ],
+      "markdown_representation": "| INFORMACIÓN DEL PRESUNTO ACOSADOR |\n| Nombre del presunto acosador: | Cargo: | Proyecto: |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "INFORMACIÓN DEL PRESUNTO ACOSADOR"
+        ],
+        [
+          "Nombre del presunto acosador:",
+          "Cargo:",
+          "Proyecto:"
+        ]
+      ],
+      "table_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p1_table_002",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Sistemas y Computadores S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CÓDIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RE.RH-04 SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.3",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "|  | PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n|  | FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA. |  |  |  |  |  |\n| Sistemas y Computadores S.A. | CÓDIGO | RE.RH-04 SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.3 |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "",
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Sistemas y Computadores S.A.",
+          "CÓDIGO",
+          "RE.RH-04 SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.3"
+        ]
+      ],
+      "table_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p2_table_001",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

@@ -1,0 +1,29 @@
+{
+  "document_id": "doc_f38f9f98d854feed",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 0,
+  "tables": [],
+  "warnings": [
+    "table_detection_not_evaluated"
+  ]
+}

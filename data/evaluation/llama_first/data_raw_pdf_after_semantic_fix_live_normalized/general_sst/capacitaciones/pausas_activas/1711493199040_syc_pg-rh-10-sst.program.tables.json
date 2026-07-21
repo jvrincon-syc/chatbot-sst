@@ -1,0 +1,2492 @@
+{
+  "document_id": "doc_f2cf7868a801af0e",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_markdown_table",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 13,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 14,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 15,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "html_table",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_markdown_table",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 17,
+  "tables": [
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p1_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p2_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 3,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p3_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 4,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p4_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "|  | GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |\n|  | PROGRAMA DE PAUSAS ACTIVAS |  |  |  |  |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 5,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "",
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "PROGRAMA DE PAUSAS ACTIVAS",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p5_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 6,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p6_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "AUMENTAN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "DISMINUYEN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Mejora la salud física y mental de los trabajadores.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Menor riesgo de accidentes laborales.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Incremento de la concentración y la productividad.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Reducción del estrés y la fatiga laboral.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Prevención de lesiones musculoesqueléticas.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Disminución del ausentismo laboral.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Fomento de trabajo en equipo y la comunicación.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Los factores generadores de trastornos músculo-esqueléticos de origen laboral que repercuten principalmente en cuello y extremidades superiores.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 5,
+          "row_span": 1,
+          "text": "Mejora del clima laboral y la satisfacción de los trabajadores.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 5,
+          "row_span": 1,
+          "text": "Las ausencias al trabajo.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 6,
+          "row_span": 1,
+          "text": "Aumento de la motivación y el compromiso de los trabajadores.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 6,
+          "row_span": 1,
+          "text": "Menor incidencia de enfermedades relacionadas con el sedentarismo.",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "AUMENTAN",
+        "DISMINUYEN"
+      ],
+      "markdown_representation": "| AUMENTAN | DISMINUYEN |\n| Mejora la salud física y mental de los trabajadores. | Menor riesgo de accidentes laborales. |\n| Incremento de la concentración y la productividad. | Reducción del estrés y la fatiga laboral. |\n| Prevención de lesiones musculoesqueléticas. | Disminución del ausentismo laboral. |\n| Fomento de trabajo en equipo y la comunicación. | Los factores generadores de trastornos músculo-esqueléticos de origen laboral que repercuten principalmente en cuello y extremidades superiores. |\n| Mejora del clima laboral y la satisfacción de los trabajadores. | Las ausencias al trabajo. |\n| Aumento de la motivación y el compromiso de los trabajadores. | Menor incidencia de enfermedades relacionadas con el sedentarismo. |",
+      "page_number": 6,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "AUMENTAN",
+          "DISMINUYEN"
+        ],
+        [
+          "Mejora la salud física y mental de los trabajadores.",
+          "Menor riesgo de accidentes laborales."
+        ],
+        [
+          "Incremento de la concentración y la productividad.",
+          "Reducción del estrés y la fatiga laboral."
+        ],
+        [
+          "Prevención de lesiones musculoesqueléticas.",
+          "Disminución del ausentismo laboral."
+        ],
+        [
+          "Fomento de trabajo en equipo y la comunicación.",
+          "Los factores generadores de trastornos músculo-esqueléticos de origen laboral que repercuten principalmente en cuello y extremidades superiores."
+        ],
+        [
+          "Mejora del clima laboral y la satisfacción de los trabajadores.",
+          "Las ausencias al trabajo."
+        ],
+        [
+          "Aumento de la motivación y el compromiso de los trabajadores.",
+          "Menor incidencia de enfermedades relacionadas con el sedentarismo."
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p6_table_002",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 7,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p7_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "**CODIGO**",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "**NIVEL DE CLASIFICACIÓN**",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "**Versión**",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [],
+      "markdown_representation": "| **CODIGO** | PG-RH-10-SST | **NIVEL DE CLASIFICACIÓN** | USO INTERNO (NC2) | **Versión** | 0.0 |",
+      "page_number": 8,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "**CODIGO**",
+          "PG-RH-10-SST",
+          "**NIVEL DE CLASIFICACIÓN**",
+          "USO INTERNO (NC2)",
+          "**Versión**",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p8_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "EJERCICIOS DE MOVILIDAD ARTICULAR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "EJERCICIO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "EXLICACIÓN GRÁFICA",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "EJERCICIO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "EXPLICACIÓN GRÁFICA",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "EJERCICIO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "EXPLICACIÓN GRÁFICA",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Mueva lentamente la cabeza arriba y abajo. Repitálo 10 veces",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Mueva lentamente la cabeza arriba y abajo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Mueva los hombros adelante y atrás. Reptálo 10 veces",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Mueva los hombros adelante y atrás",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Mueva los brazos de manera circular. Repita 10 veces por brazo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Mueva los brazos de manera circular",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Doble y estire el codo. Repita 10 veces por brazo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Doble y estire el codo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Suba y baje la muñeca. Repita 10 veces por mano",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Suba y baje la muñeca",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Incline el tronco a un lado y al otro, pasando una mano sobre la cabeza. 10 veces por lado",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Incline el tronco a un lado y al otro",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Sostenido de una silla, lleve la pierna adelante y atrás. Repita 10 veces por pierna",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Sostenido de una silla, lleve la pierna adelante y atrás",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Doblar un poco las rodillas y regresar a la posición inicial. Repita 10 veces",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Doblar un poco las rodillas",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Sostenido de una silla, mueva el tobillo de manera circular. Repita 10 veces por tobillo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 4,
+          "row_span": 1,
+          "text": "Sostenido de una silla, mueva el tobillo de manera circular",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "EJERCICIOS DE MOVILIDAD ARTICULAR"
+      ],
+      "markdown_representation": "| EJERCICIOS DE MOVILIDAD ARTICULAR |\n| EJERCICIO | EXLICACIÓN GRÁFICA | EJERCICIO | EXPLICACIÓN GRÁFICA | EJERCICIO | EXPLICACIÓN GRÁFICA |\n| Mueva lentamente la cabeza arriba y abajo. Repitálo 10 veces | Mueva lentamente la cabeza arriba y abajo | Mueva los hombros adelante y atrás. Reptálo 10 veces | Mueva los hombros adelante y atrás | Mueva los brazos de manera circular. Repita 10 veces por brazo | Mueva los brazos de manera circular |\n| Doble y estire el codo. Repita 10 veces por brazo | Doble y estire el codo | Suba y baje la muñeca. Repita 10 veces por mano | Suba y baje la muñeca | Incline el tronco a un lado y al otro, pasando una mano sobre la cabeza. 10 veces por lado | Incline el tronco a un lado y al otro |\n| Sostenido de una silla, lleve la pierna adelante y atrás. Repita 10 veces por pierna | Sostenido de una silla, lleve la pierna adelante y atrás | Doblar un poco las rodillas y regresar a la posición inicial. Repita 10 veces | Doblar un poco las rodillas | Sostenido de una silla, mueva el tobillo de manera circular. Repita 10 veces por tobillo | Sostenido de una silla, mueva el tobillo de manera circular |",
+      "page_number": 8,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "EJERCICIOS DE MOVILIDAD ARTICULAR"
+        ],
+        [
+          "EJERCICIO",
+          "EXLICACIÓN GRÁFICA",
+          "EJERCICIO",
+          "EXPLICACIÓN GRÁFICA",
+          "EJERCICIO",
+          "EXPLICACIÓN GRÁFICA"
+        ],
+        [
+          "Mueva lentamente la cabeza arriba y abajo. Repitálo 10 veces",
+          "Mueva lentamente la cabeza arriba y abajo",
+          "Mueva los hombros adelante y atrás. Reptálo 10 veces",
+          "Mueva los hombros adelante y atrás",
+          "Mueva los brazos de manera circular. Repita 10 veces por brazo",
+          "Mueva los brazos de manera circular"
+        ],
+        [
+          "Doble y estire el codo. Repita 10 veces por brazo",
+          "Doble y estire el codo",
+          "Suba y baje la muñeca. Repita 10 veces por mano",
+          "Suba y baje la muñeca",
+          "Incline el tronco a un lado y al otro, pasando una mano sobre la cabeza. 10 veces por lado",
+          "Incline el tronco a un lado y al otro"
+        ],
+        [
+          "Sostenido de una silla, lleve la pierna adelante y atrás. Repita 10 veces por pierna",
+          "Sostenido de una silla, lleve la pierna adelante y atrás",
+          "Doblar un poco las rodillas y regresar a la posición inicial. Repita 10 veces",
+          "Doblar un poco las rodillas",
+          "Sostenido de una silla, mueva el tobillo de manera circular. Repita 10 veces por tobillo",
+          "Sostenido de una silla, mueva el tobillo de manera circular"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p8_table_002",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 9,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p9_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 10,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p10_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 12,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p12_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 13,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p13_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 14,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p14_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PG-RH-10-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 15,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO",
+          "PG-RH-10-SST",
+          "NIVEL DE CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión",
+          "0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p15_table_001",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "SYC GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "PROGRAMA DE PAUSAS ACTIVAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "llamaparse_markdown_table",
+      "headers": [
+        "SYC GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| SYC GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO |\n| PROGRAMA DE PAUSAS ACTIVAS |\n| CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0 |",
+      "page_number": 16,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "SYC GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+        ],
+        [
+          "PROGRAMA DE PAUSAS ACTIVAS"
+        ],
+        [
+          "CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0"
+        ]
+      ],
+      "table_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld_p16_table_001",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

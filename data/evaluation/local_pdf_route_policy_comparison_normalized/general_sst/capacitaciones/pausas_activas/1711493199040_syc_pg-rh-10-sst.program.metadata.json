@@ -1,0 +1,460 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "programa",
+    "document_type": "programa",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "capacitacion",
+    "signals": [
+      "programa:programa:title_control",
+      "programa:programa:content",
+      "Pausas activas:pausas activas:title_control",
+      "Pausas activas:pausas activas:content",
+      "Pausas activas:pausas activas:route",
+      "Prevencion de fatiga y desordenes musculoesqueleticos:pausas activas:title_control"
+    ],
+    "subtopic": "Prevencion de fatiga y desordenes musculoesqueleticos",
+    "topic": "Pausas activas",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "local-pdf-route-policy-compare",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 13,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 14,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 15,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PG-RH-10-SST",
+      "value_raw": "PG-RH-10-SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "Marzo 2024",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "2024-03",
+      "value_raw": "Marzo 2024",
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "PROGRAMA  DE PAUSAS ACTIVAS",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PROGRAMA DE PAUSAS ACTIVAS",
+      "value_raw": "PROGRAMA  DE PAUSAS ACTIVAS",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 13,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 14,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 15,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 16,
+          "pattern": null,
+          "region": null,
+          "source": "hybrid",
+          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.0",
+      "value_raw": "0.0",
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_f2cf7868a801af0e",
+  "document_name": "1711493199040_syc_pg-rh-10-sst.program.pdf",
+  "extraction_method": "hybrid",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "vector_geometry",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\local_pdf_route_policy_comparison_normalized\\general_sst\\capacitaciones\\pausas_activas\\1711493199040_syc_pg-rh-10-sst.program.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+  "ocr_confidence": {
+    "engine": "tesseract",
+    "engine_version": "5.4.0.20240606",
+    "kind": "measured",
+    "method": null,
+    "provenance": null,
+    "sample_size": 485,
+    "unit": "mean_word_confidence",
+    "value": 0.8693550611958762,
+    "warnings": []
+  },
+  "page_count": 16,
+  "pipeline_version": "2.0.4",
+  "processed_at": "2026-07-21T17:47:53.642537-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
+  "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": []
+}

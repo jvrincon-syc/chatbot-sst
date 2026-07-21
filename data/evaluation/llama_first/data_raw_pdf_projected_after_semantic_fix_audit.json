@@ -1,0 +1,194 @@
+{
+  "summary": {
+    "documents": 9,
+    "statuses": {
+      "needs_review": 6,
+      "processed": 3
+    },
+    "reason_counts": {
+      "classification_conflict": 6,
+      "conflicting_code": 1
+    },
+    "old_reason_counts": {
+      "conflicting_title": 5,
+      "pdf_semantic_review_required": 9,
+      "tables_not_evaluated": 9,
+      "forms_not_evaluated": 9,
+      "conflicting_code": 1,
+      "classification_conflict": 3
+    },
+    "title_conflicts_old": 5,
+    "title_conflicts_new": 0,
+    "tables_detected": 9,
+    "forms_detected": 1,
+    "forms_evaluated": 9
+  },
+  "documents": [
+    {
+      "rel": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "old_reasons": [
+        "conflicting_title",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [
+        "classification_conflict"
+      ],
+      "old_title_status": "conflicting",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "detected",
+      "status": "needs_review",
+      "table_count": 3,
+      "form_groups": 1
+    },
+    {
+      "rel": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "old_reasons": [
+        "conflicting_title",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [],
+      "old_title_status": "conflicting",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "processed",
+      "table_count": 12,
+      "form_groups": 0
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "old_reasons": [
+        "conflicting_code",
+        "classification_conflict",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [
+        "conflicting_code",
+        "classification_conflict"
+      ],
+      "old_title_status": "extracted",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "needs_review",
+      "table_count": 1,
+      "form_groups": 0
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "old_reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [
+        "classification_conflict"
+      ],
+      "old_title_status": "extracted",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "needs_review",
+      "table_count": 1,
+      "form_groups": 0
+    },
+    {
+      "rel": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "old_reasons": [
+        "conflicting_title",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [
+        "classification_conflict"
+      ],
+      "old_title_status": "conflicting",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "needs_review",
+      "table_count": 6,
+      "form_groups": 0
+    },
+    {
+      "rel": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "old_reasons": [
+        "conflicting_title",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [
+        "classification_conflict"
+      ],
+      "old_title_status": "conflicting",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "needs_review",
+      "table_count": 17,
+      "form_groups": 0
+    },
+    {
+      "rel": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "old_reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [
+        "classification_conflict"
+      ],
+      "old_title_status": "extracted",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "needs_review",
+      "table_count": 1,
+      "form_groups": 0
+    },
+    {
+      "rel": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "old_reasons": [
+        "conflicting_title",
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [],
+      "old_title_status": "conflicting",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "processed",
+      "table_count": 2,
+      "form_groups": 0
+    },
+    {
+      "rel": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "old_reasons": [
+        "pdf_semantic_review_required",
+        "tables_not_evaluated",
+        "forms_not_evaluated"
+      ],
+      "new_reasons": [],
+      "old_title_status": "extracted",
+      "new_title_status": "extracted",
+      "tables_status": "detected",
+      "forms_status": "not_detected",
+      "status": "processed",
+      "table_count": 4,
+      "form_groups": 0
+    }
+  ]
+}

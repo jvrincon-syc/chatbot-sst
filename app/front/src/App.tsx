@@ -56,6 +56,23 @@ type StatusPayload = {
     generatedAt: string | null;
     schemaVersion: string | null;
   };
+  llamaFirst: {
+    provider: string;
+    configurationStatus: string;
+    cloudEnabled?: boolean;
+    localFallbackEnabled?: boolean;
+    parseTier?: string;
+    parseVersion?: string;
+    parseMaxCreditsPerRun?: number;
+    classifyMode?: string;
+    classifyMaxPages?: number;
+    extractTier?: string;
+    extractParseTier?: string;
+    extractMaxPages?: number;
+    classifyEnabled?: boolean;
+    extractEnabled?: boolean;
+    error?: string;
+  };
   documents: DocumentRecord[];
   needsReview: DocumentRecord[];
   errors: unknown[];
@@ -261,6 +278,8 @@ function App() {
           <MetricCard label="Rechazados" value={status?.summary.rejected ?? 0} icon={<X />} tone="danger" />
         </section>
 
+        <LlamaStatusPanel status={status?.llamaFirst ?? null} />
+
         <section className="primary-grid">
           <UploadPanel
             categories={categories}
@@ -297,6 +316,40 @@ function App() {
           onValidate={runValidation}
         />
       </main>
+    </div>
+  );
+}
+
+function LlamaStatusPanel({
+  status,
+}: {
+  status: StatusPayload["llamaFirst"] | null;
+}) {
+  if (!status) return null;
+  return (
+    <section className="panel llama-status" aria-label="Llama-first">
+      <div className="panel-heading">
+        <h2>Llama-first</h2>
+        <span>{status.configurationStatus}</span>
+      </div>
+      <div className="llama-status-grid">
+        <StatusDatum label="Provider" value={status.provider} />
+        <StatusDatum label="Cloud" value={status.cloudEnabled ? "Activo" : "Inactivo"} />
+        <StatusDatum label="Tier" value={status.parseTier ?? "n/a"} />
+        <StatusDatum label="Version" value={status.parseVersion ?? "n/a"} />
+        <StatusDatum label="Classify" value={`${status.classifyMode ?? "FAST"} / ${status.classifyMaxPages ?? 5}p`} />
+        <StatusDatum label="Extract" value={`${status.extractTier ?? "cost_effective"} + ${status.extractParseTier ?? "fast"}`} />
+        <StatusDatum label="Creditos" value={String(status.parseMaxCreditsPerRun ?? 0)} />
+      </div>
+    </section>
+  );
+}
+
+function StatusDatum({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="status-datum">
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }

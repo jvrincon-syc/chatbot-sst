@@ -36,6 +36,27 @@ def test_extracts_visible_title_block_role() -> None:
     assert control.title.evidence[0].source == "pdf_digital"
 
 
+def test_extracts_document_title_from_llamaparse_headings_without_section_conflicts() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": "# REGLAMENTO INTERNO DE TRABAJO\n\n# Tabla de contenido\n\n# CAPITULO I\n\n## CONDICIONES DE ADMISION",
+            "extraction_method": "llamaparse",
+        },
+        {
+            "page_number": 2,
+            "text_raw": "### CAPITULO II\n\n### OBLIGACIONES ESPECIALES",
+            "extraction_method": "llamaparse",
+        },
+    ]
+
+    control = extract_document_control(pages, "reglamento.pdf")
+
+    assert control.title.status == "extracted"
+    assert control.title.value == "REGLAMENTO INTERNO DE TRABAJO"
+    assert "multiple_visible_candidates" not in control.title.warnings
+
+
 def test_preserves_raw_code_while_normalizing_delimiter_only() -> None:
     control = extract_document_control([{"page_number": 1, "text_raw": "Codigo: fr - sst - 01"}], "x.pdf")
     assert control.code.value == "FR-SST-01"
@@ -416,6 +437,25 @@ def test_labeled_primary_code_ignores_same_page_prose_code_like_noise() -> None:
 
     assert control.code.status == "extracted"
     assert control.code.value == "PL.RH-01SST"
+
+
+def test_labeled_table_control_code_beats_same_page_internal_reference_code() -> None:
+    pages = [
+        {
+            "page_number": 1,
+            "text_raw": (
+                "<tr><td>CODIGO</td><td>PL.RH-03SST</td><td>Versión</td><td>0.1</td></tr>\n"
+                "En caso de novedad podrá solicitar el procedimiento de quejas "
+                "(Re-Rh-004-sst Formato para interponer queja)."
+            ),
+        }
+    ]
+
+    control = extract_document_control(pages, "politica.pdf")
+
+    assert control.code.status == "extracted"
+    assert control.code.value == "PL.RH-03SST"
+    assert "conflicting_code" not in control.warnings
 
 
 def test_code_extraction_does_not_promote_later_prose_reference() -> None:

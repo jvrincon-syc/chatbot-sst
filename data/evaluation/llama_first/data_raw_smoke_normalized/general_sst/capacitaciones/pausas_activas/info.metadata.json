@@ -1,0 +1,143 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": null,
+    "document_type": "capacitacion",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "route_prior": "capacitacion",
+    "signals": [
+      "capacitacion:capacitacion:route",
+      "Pausas activas:pausas activas:content",
+      "Pausas activas:pausas activas:route"
+    ],
+    "subtopic": null,
+    "topic": "Pausas activas",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": [
+      "route_only_low_confidence"
+    ]
+  },
+  "corpus_version": "llama-live-smoke",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_7d2eb40310345805",
+  "document_name": "info.md",
+  "extraction_method": "markdown",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_smoke_normalized\\general_sst\\capacitaciones\\pausas_activas\\info.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/capacitaciones/pausas_activas/info.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-21T16:49:30.311814-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "ambiguous_classification"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "f418dd10d03cb4c896f4656dd0ea18d81171bac1cb6e8db463d66ad8c13b0268",
+  "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "missing_title",
+    "route_only_low_confidence",
+    "ambiguous_classification"
+  ]
+}

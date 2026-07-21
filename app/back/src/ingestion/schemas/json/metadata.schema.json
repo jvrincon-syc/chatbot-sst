@@ -162,6 +162,18 @@
           "title": "Signals",
           "type": "array"
         },
+        "subtopic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subtopic"
+        },
         "topic": {
           "title": "Topic",
           "type": "string"
@@ -591,7 +603,9 @@
         "markdown",
         "pdf_digital",
         "ocr",
-        "hybrid"
+        "hybrid",
+        "llamaparse",
+        "hybrid_llamaparse"
       ],
       "title": "Extraction Method",
       "type": "string"

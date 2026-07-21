@@ -11,6 +11,12 @@ from ingestion.schemas.artifacts import FormsArtifact, PageRecord, TablesArtifac
 from ingestion.schemas.common import ConfidenceMetric, Observation
 
 
+@pytest.fixture(autouse=True)
+def _disable_llama_cloud_for_local_pipeline_tests(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LLAMA_CLOUD_ENABLED", "false")
+    monkeypatch.delenv("LLAMA_CLOUD_API_KEY", raising=False)
+
+
 def test_pipeline_processes_markdown_and_tracks_pdf_needing_review(tmp_path: Path) -> None:
     docs_raw = tmp_path / "data" / "docs_raw"
     normalized = tmp_path / "data" / "docs_normalized"
@@ -280,7 +286,7 @@ def test_pipeline_marks_pdf_with_unevaluated_material_features_as_needs_review(
     assert "handwriting_not_evaluated" in metadata["review_reasons"]
 
 
-def test_pipeline_keeps_pdf_under_semantic_review_after_feature_evaluation(
+def test_pipeline_does_not_keep_pdf_under_semantic_review_after_feature_evaluation(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -344,12 +350,70 @@ def test_pipeline_keeps_pdf_under_semantic_review_after_feature_evaluation(
         classification_review_threshold=0.0,
     )
 
-    assert summary["needs_review"] == 1
+    assert summary["processed"] == 1
     metadata = json.loads(
         (candidate / "documento.metadata.json").read_text(encoding="utf-8")
     )
-    assert metadata["processing_status"] == "needs_review"
-    assert "pdf_semantic_review_required" in metadata["review_reasons"]
+    assert metadata["processing_status"] == "processed"
+    assert "pdf_semantic_review_required" not in metadata["review_reasons"]
+
+
+def test_pipeline_processes_pdf_when_material_features_are_evaluated(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "politica.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    result = ReadResult(
+        extraction_method="llamaparse",
+        markdown="# Politica SST\n\nContenido.",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="# Politica SST\n\nContenido.",
+                text_normalized="Politica SST\n\nContenido.",
+                extraction_method="llamaparse",
+                ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+            )
+        ],
+        tables=TablesArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            table_count=0,
+            tables=[],
+            page_observations=[Observation(status="not_detected", value=False, method="llamaparse_markdown_table")],
+        ),
+        forms=FormsArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            groups=[],
+            page_observations=[Observation(status="not_detected", value=False, method="llamaparse_form_heuristic")],
+        ),
+    )
+    monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(status="not_detected", value=False, method="test"),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="pdf_features_evaluated",
+        classification_review_threshold=0.0,
+    )
+
+    metadata = json.loads((candidate / "politica.metadata.json").read_text(encoding="utf-8"))
+    assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
+    assert metadata["processing_status"] == "processed"
+    assert "pdf_semantic_review_required" not in metadata["review_reasons"]
 
 
 def test_pipeline_normalizes_windows_only_source_paths(tmp_path: Path) -> None:

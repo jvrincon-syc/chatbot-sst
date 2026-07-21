@@ -1,0 +1,379 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "manual",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "manual:manual:title_control",
+      "manual:manual:content",
+      "manual:manual:filename",
+      "manual:manual:route",
+      "Convivencia laboral:convivencia laboral:title_control",
+      "Convivencia laboral:convivencia laboral:content",
+      "Convivencia laboral:convivencia laboral:route"
+    ],
+    "subtopic": null,
+    "topic": "Convivencia laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "local-pdf-route-policy-compare",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "M.RH-03-SST",
+      "value_raw": "M.RH-03-SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "MANUAL DE CONVIVENCIA LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "MANUAL DE CONVIVENCIA LABORAL",
+      "value_raw": "MANUAL DE CONVIVENCIA LABORAL",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 7,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 8,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 11,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "pdf_digital",
+          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.2",
+      "value_raw": "0.2",
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_c392ec7bf8d98194",
+  "document_name": "1772036012249_syc_mrh03sstmanualdeconv.pdf",
+  "extraction_method": "pdf_digital",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "vector_geometry",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\local_pdf_route_policy_comparison_normalized\\convivencia_laboral\\manual\\1772036012249_syc_mrh03sstmanualdeconv.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 12,
+  "pipeline_version": "2.0.4",
+  "processed_at": "2026-07-21T17:47:31.968785-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
+  "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": []
+}

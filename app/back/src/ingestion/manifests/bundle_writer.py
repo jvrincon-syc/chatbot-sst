@@ -254,12 +254,14 @@ def _read_bytes_secure(root_fd: RootHandle, relpath: str) -> bytes | None:
         return None
     if isinstance(parent_fd, Path):
         target = parent_fd / leaf
-        if not target.exists():
+        target_path = _windows_extended_path(target)
+        if not os.path.exists(target_path):
             return None
-        if target.is_symlink() or not target.is_file():
+        if os.path.islink(target_path) or not os.path.isfile(target_path):
             raise ValueError("artifact target escapes candidate root")
         _ensure_within_root(root_fd, target)
-        return target.read_bytes()
+        with open(target_path, "rb") as stream:
+            return stream.read()
 
     try:
         try:
@@ -289,7 +291,7 @@ def _write_bytes_secure(root_fd: RootHandle, relpath: str, content: bytes) -> No
         _write_bytes_secure_windows(root_fd, parent_fd, leaf, content)
         return
 
-    temp_name = f".{leaf}.{uuid.uuid4().hex}.tmp"
+    temp_name = _short_temp_name()
     temp_created = False
     try:
         file_fd = os.open(
@@ -329,22 +331,37 @@ def _write_bytes_secure_windows(
     if target.exists() and (target.is_symlink() or not target.is_file()):
         raise ValueError("artifact target escapes candidate root")
     _ensure_within_root(root, target)
-    temp = parent / f".{leaf}.{uuid.uuid4().hex}.tmp"
+    temp = parent / _short_temp_name()
     try:
-        with temp.open("xb") as stream:
+        with open(_windows_extended_path(temp), "xb") as stream:
             stream.write(content)
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(temp, target)
+        os.replace(_windows_extended_path(temp), _windows_extended_path(target))
     finally:
         try:
-            temp.unlink()
+            os.unlink(_windows_extended_path(temp))
         except FileNotFoundError:
             pass
 
 
 def _write_text_secure(root_fd: RootHandle, relpath: str, text: str) -> None:
     _write_bytes_secure(root_fd, relpath, text.encode("utf-8"))
+
+
+def _short_temp_name() -> str:
+    return f".tmp-{uuid.uuid4().hex[:12]}"
+
+
+def _windows_extended_path(path: Path) -> str:
+    if os.name != "nt":
+        return str(path)
+    absolute = str(path.resolve(strict=False))
+    if absolute.startswith("\\\\?\\"):
+        return absolute
+    if absolute.startswith("\\\\"):
+        return "\\\\?\\UNC\\" + absolute.lstrip("\\")
+    return "\\\\?\\" + absolute
 
 
 def _unlink_secure(root_fd: RootHandle, relpath: str) -> None:
@@ -356,7 +373,7 @@ def _unlink_secure(root_fd: RootHandle, relpath: str) -> None:
         if target.is_symlink():
             raise ValueError("artifact target escapes candidate root")
         try:
-            target.unlink()
+            os.unlink(_windows_extended_path(target))
         except FileNotFoundError:
             pass
         return

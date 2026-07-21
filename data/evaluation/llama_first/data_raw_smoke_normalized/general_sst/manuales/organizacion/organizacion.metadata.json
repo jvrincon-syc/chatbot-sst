@@ -1,0 +1,155 @@
+{
+  "classification": {
+    "conflict_status": "conflicting",
+    "conflicts": [
+      "type_title_control=reglamento;type_route=manual",
+      "topic_title_control=Reglamento interno de trabajo;topic_route=Organizacion"
+    ],
+    "content_prediction": "programa",
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "reglamento:reglamento:title_control",
+      "reglamento:reglamento:content",
+      "Reglamento interno de trabajo:reglamento interno:title_control",
+      "Reglamento interno de trabajo:reglamento interno:content"
+    ],
+    "subtopic": null,
+    "topic": "Reglamento interno de trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-smoke",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "markdown",
+          "text": "Reglamento Interno de Trabajo:",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "Reglamento Interno de Trabajo:",
+      "value_raw": "Reglamento Interno de Trabajo:",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_81325f8c3222110c",
+  "document_name": "organizacion.md",
+  "extraction_method": "markdown",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_smoke_normalized\\general_sst\\manuales\\organizacion\\organizacion.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/manuales/organizacion/organizacion.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-21T16:49:49.125531-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "classification_conflict"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "d80d4f15e95ae97ca53186a02a5da4ba1816d051c63e423d46f6d66c7c49722d",
+  "source_relpath": "general_sst/manuales/organizacion/organizacion.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "missing_title",
+    "type_title_control=reglamento;type_route=manual",
+    "topic_title_control=Reglamento interno de trabajo;topic_route=Organizacion"
+  ]
+}

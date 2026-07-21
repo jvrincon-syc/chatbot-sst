@@ -1,0 +1,30 @@
+{
+  "document_id": "doc_221c00facfd6a2e8",
+  "page_count": 1,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "markdown",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "El Decreto 1072 de 2015 establece nuevas funciones del COPASST al compilar del Decreto 1443 de 2014.\n\nEstas son:\n\nRecibir por parte de la alta direccion la comunicacion de la politica de seguridad y salud en el trabajo (articulo 2.2.4.6.5).\nRecibir por parte del empleador informacion sobre el desarrollo de todas las etapas del Sistema de Gestion de Seguridad de la Salud en el Trabajo (SG-SST) (articulo 2.2.4.6.8).\nRendir cuentas internamente en relacion con su desempeno (articulo 2.2.4.6.8).\nDar recomendaciones para el mejoramiento del SG-SST (articulo 2.2.4.6.8).\nParticipar en las capacitaciones que realice la Administradora de Riesgos Laborales (articulo 2.2.4.6.9).\nRevision del programa de capacitacion en Seguridad y Salud en el Trabajo (articulo 2.2.4.6.11).\nRecibir los resultados de las evaluaciones de los ambientes de trabajo y emitir recomendaciones (articulo 2.2.4.6.15).\nApoyar la adopcion de las medidas de prevencion y control derivadas de la gestion del cambio (articulo 2.2.4.6.26).\nParticipar en la planificacion de las auditorias (articulo 2.2.4.6.29).\nTener conocimiento de los resultados de la revision de la alta direccion (articulo 2.2.4.6.31).\nFormar parte del equipo investigador de incidentes, accidentes de trabajo y enfermedades laborales (articulos 2.2.4.1.6 y 2.2.4.6.32).\npara comunicarse con el COPASST debe escribir al correo electronico COPASST@SYC.COM.CO",
+      "text_raw": "El Decreto 1072 de 2015 establece nuevas funciones del COPASST al compilar del Decreto 1443 de 2014.\n\n Estas son:\n\nRecibir por parte de la alta direccion la comunicacion de la politica de seguridad y salud en el trabajo (articulo 2.2.4.6.5).\nRecibir por parte del empleador informacion sobre el desarrollo de todas las etapas del Sistema de Gestion de Seguridad de la Salud en el Trabajo (SG-SST) (articulo 2.2.4.6.8).\nRendir cuentas internamente en relacion con su desempeno (articulo 2.2.4.6.8).\nDar recomendaciones para el mejoramiento del SG-SST (articulo 2.2.4.6.8).\nParticipar en las capacitaciones que realice la Administradora de Riesgos Laborales  (articulo 2.2.4.6.9).\nRevision del programa de capacitacion en Seguridad y Salud en el Trabajo (articulo 2.2.4.6.11).\nRecibir los resultados de las evaluaciones de los ambientes de trabajo y emitir recomendaciones (articulo 2.2.4.6.15).\nApoyar la adopcion de las medidas de prevencion y control derivadas de la gestion del cambio (articulo 2.2.4.6.26).\nParticipar en la planificacion de las auditorias (articulo 2.2.4.6.29).\nTener conocimiento de los resultados de la revision de la alta direccion (articulo 2.2.4.6.31).\nFormar parte del equipo investigador de incidentes, accidentes de trabajo y enfermedades laborales (articulos 2.2.4.1.6 y 2.2.4.6.32).\npara comunicarse con el COPASST debe escribir al correo electronico COPASST@SYC.COM.CO  ",
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ],
+  "schema_version": "2.0"
+}

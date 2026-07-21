@@ -1,0 +1,144 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": null,
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.65,
+      "warnings": []
+    },
+    "route_prior": "reglamento",
+    "signals": [
+      "reglamento:reglamento:filename",
+      "reglamento:reglamento:route",
+      "Reglamento interno de trabajo:reglamento interno:route"
+    ],
+    "subtopic": null,
+    "topic": "Reglamento interno de trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "warnings": [
+      "route_only_low_confidence"
+    ]
+  },
+  "corpus_version": "llama-live-pdf-get-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_31b00a8b31847796",
+  "document_name": "1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_get_fix_normalized\\general_sst\\manuales\\organizacion\\reglamento_interno_trabajo\\1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 0,
+  "pipeline_version": "2.0.1",
+  "processed_at": "2026-07-21T17:02:14.340743-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "pdf_semantic_review_required",
+    "tables_not_evaluated",
+    "forms_not_evaluated"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
+  "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq",
+    "route_only_low_confidence"
+  ]
+}

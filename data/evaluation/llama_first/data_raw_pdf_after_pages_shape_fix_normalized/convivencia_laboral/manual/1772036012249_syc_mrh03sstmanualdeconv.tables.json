@@ -1,0 +1,119 @@
+{
+  "document_id": "doc_c392ec7bf8d98194",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 0,
+  "tables": [],
+  "warnings": [
+    "table_detection_not_evaluated"
+  ]
+}

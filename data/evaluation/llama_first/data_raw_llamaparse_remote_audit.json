@@ -1,0 +1,796 @@
+{
+  "documents": [
+    {
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "job_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 2192,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '# PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO\\n## FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CON"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 1914,
+        "entries": 1,
+        "sample": "# PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO ## FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.  <table>     <tr"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "job_id": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 22700,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '<table>\\n<tr><th colspan=\"2\">PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th></tr>\\n"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 21425,
+        "entries": 1,
+        "sample": "  <table> <tr><th colspan=\"2\">PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th></tr> <tr><th colspan=\"2\">MANUA"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "job_id": "pjb-8868hmusisvc13oqbjhc2ugkj14z",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 2288,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '<table>\\n<tr><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th><th></th></tr>\\n<tr"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 2169,
+        "entries": 1,
+        "sample": "  <table> <tr><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th><th></th></tr> <tr><th>POLÍTICA DE DESCONEX"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "job_id": "pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 2242,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '<table>\\n<tr><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th></tr>\\n<tr><th>POLÍTICA DE PREVENCION DE ACOSO LABORAL<"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 2127,
+        "entries": 1,
+        "sample": "  <table> <tr><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th></tr> <tr><th>POLÍTICA DE PREVENCION DE ACOSO LABORAL</th></tr> <tr><td>CODIGO "
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "job_id": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 18089,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '<table>\\n<tr><th></th><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th><th></th><"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 17375,
+        "entries": 1,
+        "sample": "  <table> <tr><th></th><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th><th></th></tr> <tr><th></th><th>RE"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "job_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 24184,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': 'SYC\\nSistemas y Computadores Ltda.\\n\\n\\n<table>\\n  <thead>\\n    <tr>\\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y S"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 21824,
+        "entries": 1,
+        "sample": "SYC Sistemas y Computadores Ltda.  <table>   <thead>     <tr>       <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>     </tr>"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "job_id": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 2061,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '# OBJETIVOS Y METAS\\nSEGURIDAD VIAL\\n\\nSISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten planear de mane"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 1949,
+        "entries": 1,
+        "sample": "# OBJETIVOS Y METAS SEGURIDAD VIAL  SISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten planear de manera estratégica la seguridad "
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "job_id": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 113207,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': 'SYC Sistemas y Computadores S.A. logo\\n\\n# REGLAMENTO INTERNO DE TRABAJO\\n\\nSYC Sistemas y Computadores S.A. logo\\n\\n**SISTEMAS Y COMPU"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 109230,
+        "entries": 1,
+        "sample": "SYC Sistemas y Computadores S.A. logo  # REGLAMENTO INTERNO DE TRABAJO  SYC Sistemas y Computadores S.A. logo  **SISTEMAS Y COMPUTADORES S.A**  **NIT 890.206.35"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    },
+    {
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "job_id": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+      "keys": [
+        "debug",
+        "forms",
+        "images_content_metadata",
+        "items",
+        "job",
+        "job_metadata",
+        "markdown",
+        "markdown_full",
+        "metadata",
+        "raw_parameters",
+        "result_content_metadata",
+        "text",
+        "text_full"
+      ],
+      "status": "COMPLETED",
+      "markdown": {
+        "present": true,
+        "kind": "dict",
+        "chars": 4485,
+        "entries": 1,
+        "sample": "{'pages': [{'markdown': '<table>\\n<tr><th>SYC</th><th colspan=\"3\">PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th></tr>\\n<tr><t"
+      },
+      "markdown_full": {
+        "present": true,
+        "kind": "str",
+        "chars": 4275,
+        "entries": 1,
+        "sample": "  <table> <tr><th>SYC</th><th colspan=\"3\">PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th></tr> <tr><th>Sistemas y Computadores"
+      },
+      "text": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "text_full": {
+        "present": false,
+        "kind": null,
+        "chars": 0,
+        "entries": 0,
+        "sample": ""
+      },
+      "items": {
+        "present": true,
+        "pages_or_entries": 0,
+        "total_nested_items": 0,
+        "top_level_types": []
+      },
+      "metadata": {
+        "present": true,
+        "entries": 1,
+        "keys": [
+          "pages"
+        ]
+      },
+      "job_metadata": {
+        "present": true,
+        "entries": 21,
+        "keys": [
+          "pdf-high-res-ocr",
+          "pdf-image-convertTime",
+          "pdf-image-ocr-count",
+          "pdf-image-ocr-empty-count",
+          "pdf-image-ocr-failed-count",
+          "pdf-image-ocr-hadText-count",
+          "pdf-image-ocr-pixels",
+          "pdf-image-ocr-success-count",
+          "pdf-inputTokens",
+          "pdf-llmTime",
+          "pdf-mdLength",
+          "pdf-multimodal-pdf2Image",
+          "pdf-multimodal-time",
+          "pdf-ocrTime",
+          "pdf-outputTokens",
+          "pdf-pages",
+          "pdf-pdfToHTMLTime",
+          "pdf-rawTextLength",
+          "pdf-real-pages",
+          "pdf-time",
+          "state_transitions"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "summary": {
+    "documents": 9,
+    "statuses": {
+      "processed": 9
+    },
+    "reason_counts": {},
+    "old_reason_counts": {
+      "classification_conflict": 6,
+      "conflicting_code": 1
+    },
+    "new_type_matches_expected": 9,
+    "new_topic_matches_expected": 6,
+    "old_topic_matches_expected": 5,
+    "new_classification_conflicts": 0,
+    "old_classification_conflicts": 6
+  },
+  "documents": [
+    {
+      "rel": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "old_reasons": [
+        "classification_conflict"
+      ],
+      "new_reasons": [],
+      "old_type": "formulario",
+      "new_type": "formulario",
+      "expected_type": "formulario",
+      "old_topic": "Comite de Convivencia Laboral",
+      "new_topic": "Comite de Convivencia Laboral",
+      "expected_topic": "Comité de Convivencia Laboral",
+      "old_conflicts": [
+        "type_title_control=formulario;type_route=manual",
+        "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+      ],
+      "new_conflicts": [],
+      "old_code_status": "extracted",
+      "new_code_status": "extracted",
+      "new_code": "RE.RH-04 SST",
+      "expected_code": "RE.RH-04 SST",
+      "status": "processed"
+    },
+    {
+      "rel": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "old_reasons": [],
+      "new_reasons": [],
+      "old_type": "manual",
+      "new_type": "manual",
+      "expected_type": "manual",
+      "old_topic": "Convivencia laboral",
+      "new_topic": "Convivencia laboral",
+      "expected_topic": "Convivencia laboral",
+      "old_conflicts": [],
+      "new_conflicts": [],
+      "old_code_status": "extracted",
+      "new_code_status": "extracted",
+      "new_code": "M.RH-03-SST",
+      "expected_code": "M.RH-03-SST",
+      "status": "processed"
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "old_reasons": [
+        "conflicting_code",
+        "classification_conflict"
+      ],
+      "new_reasons": [],
+      "old_type": "politica",
+      "new_type": "politica",
+      "expected_type": "politica",
+      "old_topic": "Convivencia laboral",
+      "new_topic": "Convivencia laboral",
+      "expected_topic": "Convivencia laboral",
+      "old_conflicts": [
+        "type_title_control=politica;type_route=manual"
+      ],
+      "new_conflicts": [],
+      "old_code_status": "conflicting",
+      "new_code_status": "extracted",
+      "new_code": "PL.RH-03SST",
+      "expected_code": "PL.RH-03SST",
+      "status": "processed"
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "old_reasons": [
+        "classification_conflict"
+      ],
+      "new_reasons": [],
+      "old_type": "politica",
+      "new_type": "politica",
+      "expected_type": "politica",
+      "old_topic": "Convivencia laboral",
+      "new_topic": "Convivencia laboral",
+      "expected_topic": "Convivencia laboral",
+      "old_conflicts": [
+        "type_title_control=politica;type_route=manual"
+      ],
+      "new_conflicts": [],
+      "old_code_status": "extracted",
+      "new_code_status": "extracted",
+      "new_code": "PL.RH-01SST",
+      "expected_code": "PL.RH-01SST",
+      "status": "processed"
+    },
+    {
+      "rel": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "old_reasons": [
+        "classification_conflict"
+      ],
+      "new_reasons": [],
+      "old_type": "reglamento",
+      "new_type": "reglamento",
+      "expected_type": "reglamento",
+      "old_topic": "Comite de Convivencia Laboral",
+      "new_topic": "Comite de Convivencia Laboral",
+      "expected_topic": "Comité de Convivencia Laboral",
+      "old_conflicts": [
+        "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+      ],
+      "new_conflicts": [],
+      "old_code_status": "extracted",
+      "new_code_status": "extracted",
+      "new_code": "RG.RH-01SST",
+      "expected_code": "RG.RH-01SST",
+      "status": "processed"
+    },
+    {
+      "rel": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "old_reasons": [
+        "classification_conflict"
+      ],
+      "new_reasons": [],
+      "old_type": "programa",
+      "new_type": "programa",
+      "expected_type": "programa",
+      "old_topic": "Pausas activas",
+      "new_topic": "Pausas activas",
+      "expected_topic": "Pausas activas",
+      "old_conflicts": [
+        "type_title_control=programa;type_route=capacitacion",
+        "topic_title_control=Pausas activas;topic_route=Capacitaciones"
+      ],
+      "new_conflicts": [],
+      "old_code_status": "extracted",
+      "new_code_status": "extracted",
+      "new_code": "PG-RH-10-SST",
+      "expected_code": "PG-RH-10-SST",
+      "status": "processed"
+    },
+    {
+      "rel": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "old_reasons": [
+        "classification_conflict"
+      ],
+      "new_reasons": [],
+      "old_type": "matriz",
+      "new_type": "matriz",
+      "expected_type": "matriz",
+      "old_topic": "Capacitaciones",
+      "new_topic": "Seguridad vial",
+      "expected_topic": "Seguridad vial",
+      "old_conflicts": [
+        "type_title_control=matriz;type_route=politica"
+      ],
+      "new_conflicts": [],
+      "old_code_status": "not_found",
+      "new_code_status": "not_found",
+      "new_code": null,
+      "expected_code": null,
+      "status": "processed"
+    },
+    {
+      "rel": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "old_reasons": [],
+      "new_reasons": [],
+      "old_type": "reglamento",
+      "new_type": "reglamento",
+      "expected_type": "reglamento",
+      "old_topic": "Reglamento interno de trabajo",
+      "new_topic": "Reglamento interno de trabajo",
+      "expected_topic": "Reglamento interno de trabajo",
+      "old_conflicts": [],
+      "new_conflicts": [],
+      "old_code_status": "not_found",
+      "new_code_status": "not_found",
+      "new_code": null,
+      "expected_code": null,
+      "status": "processed"
+    },
+    {
+      "rel": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "old_reasons": [],
+      "new_reasons": [],
+      "old_type": "politica",
+      "new_type": "politica",
+      "expected_type": "politica",
+      "old_topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+      "new_topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+      "expected_topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
+      "old_conflicts": [],
+      "new_conflicts": [],
+      "old_code_status": "extracted",
+      "new_code_status": "extracted",
+      "new_code": "PL.RH-01-SST",
+      "expected_code": "PL.RH-01-SST",
+      "status": "processed"
+    }
+  ]
+}

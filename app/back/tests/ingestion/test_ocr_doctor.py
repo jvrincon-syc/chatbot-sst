@@ -50,10 +50,31 @@ def test_ocr_doctor_reports_missing_dependencies_and_language() -> None:
     report = check_ocr_environment(runner=runner, module_available=lambda name: name == "pdfplumber")
 
     assert report.ok is False
-    assert "ocrmypdf_unavailable" in report.issues
     assert "tesseract_language_missing" in report.issues
     assert "pdfium_unavailable" in report.issues
     assert "opencv_unavailable" in report.issues
+    assert "ocrmypdf_unavailable" not in report.issues
+    assert "ghostscript_unavailable" not in report.issues
+
+
+def test_ocr_doctor_requires_ghostscript_only_when_ocrmypdf_is_enabled(monkeypatch) -> None:
+    monkeypatch.setenv("OCR_ENABLE_OCRMYPDF", "true")
+
+    def runner(command, **kwargs):
+        if command[:2] == ["ocrmypdf", "--version"]:
+            raise FileNotFoundError("ocrmypdf")
+        if command[:2] == ["tesseract", "--version"]:
+            return FakeCompletedProcess(stdout="tesseract 5.5.2\n")
+        if command[:2] == ["tesseract", "--list-langs"]:
+            return FakeCompletedProcess(stdout="spa\n")
+        if command[:2] == ["gs", "--version"]:
+            raise FileNotFoundError("gs")
+        raise AssertionError(command)
+
+    report = check_ocr_environment(runner=runner, module_available=lambda name: True)
+
+    assert report.ocrmypdf_enabled is True
+    assert "ocrmypdf_unavailable" in report.issues
     assert "ghostscript_unavailable" in report.issues
 
 

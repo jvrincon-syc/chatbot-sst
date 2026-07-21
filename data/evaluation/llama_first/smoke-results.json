@@ -1,0 +1,84 @@
+{
+  "capabilities": [
+    "parse",
+    "classify",
+    "extract"
+  ],
+  "credits": 0,
+  "document_id": "synthetic-llama-smoke",
+  "elapsed_seconds": 22.692,
+  "provider_job_ids": [
+    "pjb-g05y0jzu8law2xy820haloreyu5e",
+    "clj-gez9e4ucpa1pdcl3c6vv06fd9pes",
+    "ext-zzz5se6fsmx5d2qlqs6wcm7n9dfs"
+  ],
+  "result_shapes": {
+    "classify": [
+      "configuration",
+      "configuration_id",
+      "created_at",
+      "document_input_type",
+      "document_input_value",
+      "error_message",
+      "file_input",
+      "id",
+      "parse_job_id",
+      "project_id",
+      "result",
+      "status",
+      "transaction_id",
+      "updated_at",
+      "user_id"
+    ],
+    "extract": [
+      "configuration",
+      "configuration_id",
+      "created_at",
+      "document_input_value",
+      "error_message",
+      "extract_metadata",
+      "extract_result",
+      "file_input",
+      "grounded_items",
+      "id",
+      "metadata",
+      "project_id",
+      "status",
+      "updated_at"
+    ],
+    "parse": [
+      "debug",
+      "forms",
+      "images_content_metadata",
+      "items",
+      "job",
+      "job_metadata",
+      "markdown_full",
+      "metadata",
+      "raw_parameters",
+      "result_content_metadata",
+      "text",
+      "text_full"
+    ]
+  },
+  "run_id": "llama-smoke-1784670232",
+  "schema_version": "1.0",
+  "settings": {
+    "classify_max_pages": 5,
+    "classify_mode": "FAST",
+    "extract_max_pages": 5,
+    "extract_parse_tier": "fast",
+    "extract_tier": "cost_effective",
+    "parse_expand": [
+      "markdown",
+      "items",
+      "metadata",
+      "job_metadata"
+    ],
+    "parse_tier": "cost_effective",
+    "parse_version": "latest"
+  },
+  "source_kind": "synthetic",
+  "status": "completed",
+  "warnings": []
+}

@@ -1,0 +1,30 @@
+{
+  "document_id": "doc_d5f04608cf512575",
+  "page_count": 1,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "markdown",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "6.1 El presente Reglamento rige a partir de su publicacion y podra modificarse con la intervencion de los miembros del Comite mediante decision adoptada a traves de una reunion especial.\n\n6.2 Se solicitara con los lideres de SYC para que den a conocer este reglamento y sus actualizaciones a todos los empleados de la compania y se publicara en EDOCS comite de convivencia laboral.\n\nAprobado por:\n\n_________________________________\n\nJOAN MAURICIO ARENAS CLAVIJO\n\nLIDER E INTEGRADOR DE ADMINISTRACION",
+      "text_raw": "6.1 El presente Reglamento rige a partir de su publicacion y podra modificarse con la intervencion de los miembros del Comite mediante decision adoptada a traves de una reunion especial.\n\n6.2 Se solicitara con los lideres de SYC para que den a conocer este reglamento y sus actualizaciones a todos los empleados de la compania y se publicara en EDOCS comite de convivencia laboral.     \n\nAprobado por: \n\n_________________________________\n\nJOAN MAURICIO ARENAS CLAVIJO\n\nLIDER E INTEGRADOR DE ADMINISTRACION    ",
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ],
+  "schema_version": "2.0"
+}

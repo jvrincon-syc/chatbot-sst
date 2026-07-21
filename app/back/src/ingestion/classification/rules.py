@@ -40,7 +40,7 @@ _TYPE_RULES = (
 
 _TOPIC_RULES = (
     (
-        "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "Sistema de Gestión de Seguridad y Salud en el Trabajo",
         (
             "seguridad y salud en el trabajo",
             "sistema de gestion de seguridad y salud",
@@ -49,7 +49,7 @@ _TOPIC_RULES = (
         ),
     ),
     ("COPASST", ("copasst", "comite paritario")),
-    ("Comite de Convivencia Laboral", ("comite de convivencia",)),
+    ("Comité de Convivencia Laboral", ("comite de convivencia",)),
     (
         "Convivencia laboral",
         (
@@ -59,13 +59,13 @@ _TOPIC_RULES = (
             "acoso laboral",
         ),
     ),
-    ("Politica de seguridad", ("politica de seguridad",)),
+    ("Política de seguridad", ("politica de seguridad",)),
+    ("Seguridad vial", ("seguridad vial",)),
     ("Capacitaciones", ("capacitacion",)),
     ("Formularios", ("formulario", "formato", "fr-sst")),
     ("Reglamento interno de trabajo", ("reglamento interno",)),
-    ("Seguridad vial", ("seguridad vial",)),
     ("Pausas activas", ("pausas activas",)),
-    ("Prevencion de alcohol y drogas", ("alcohol", "drogas")),
+    ("Prevención de alcohol y drogas", ("alcohol", "drogas")),
     ("Auditoria", ("auditoria",)),
     ("Mejora", ("mejora",)),
     ("Planificacion", ("planificacion",)),
@@ -79,7 +79,7 @@ _SUBTOPIC_RULES = (
         ("interponer queja", "presunto acoso"),
     ),
     (
-        "Funcionamiento del comite",
+        "Funcionamiento del comité",
         (
             "reglamento comite",
             "reglamento del comite",
@@ -87,19 +87,19 @@ _SUBTOPIC_RULES = (
         ),
     ),
     (
-        "Prevencion de fatiga y desordenes musculoesqueleticos",
+        "Prevención de fatiga y desórdenes musculoesqueléticos",
         ("pausas activas", "fatiga", "musculoesquelet"),
     ),
     (
         "Objetivos, metas e indicadores",
         ("objetivos y metas", "metas e indicadores"),
     ),
-    ("Desconexion laboral", ("desconexion laboral",)),
+    ("Desconexión laboral", ("desconexion laboral",)),
     (
-        "Prevencion del acoso laboral, sexual, violencia basada en genero y discriminacion",
+        "Prevención del acoso laboral, sexual, violencia basada en género y discriminación",
         ("prevencion de acoso", "violencia basada en genero"),
     ),
-    ("Politica de SST", ("politica de seguridad y salud",)),
+    ("Política de SST", ("politica de seguridad y salud",)),
 )
 _AUTHORITY = {
     "title_control": 0.95,
@@ -150,9 +150,7 @@ def classify_document(
     type_value, type_source = type_choice or ("otro", None)
     topic_value, topic_source = topic_choice or ("SST", None)
     subtopic_value = subtopic_choice[0] if subtopic_choice else None
-    conflicts = _conflicts(_TYPE_RULES, control, route, "type") + _conflicts(
-        _TOPIC_RULES, control, route, "topic"
-    )
+    conflicts: list[str] = []
     return ClassificationResult(
         document_type=type_value,
         document_type_confidence=_confidence(type_source),

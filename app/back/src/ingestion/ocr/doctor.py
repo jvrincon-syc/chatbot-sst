@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 class OcrDoctorReport(BaseModel):
     ok: bool
+    ocrmypdf_enabled: bool
     ocrmypdf_cmd: str
     tesseract_cmd: str
     language: str
@@ -36,9 +37,10 @@ def check_ocr_environment(
     runner: Callable = subprocess.run,
     module_available: Callable[[str], bool] | None = None,
 ) -> OcrDoctorReport:
-    resolved_ocrmypdf = ocrmypdf_cmd or os.getenv("OCRMYPDF_CMD", "ocrmypdf")
+    ocrmypdf_enabled = _env_flag("OCR_ENABLE_OCRMYPDF", default=False)
+    resolved_ocrmypdf = ocrmypdf_cmd or _env_value("OCRMYPDF_CMD", "ocrmypdf")
     resolved_tesseract = tesseract_cmd or os.getenv("TESSERACT_CMD", "tesseract")
-    resolved_ghostscript = ghostscript_cmd or os.getenv("GHOSTSCRIPT_CMD", "gs")
+    resolved_ghostscript = ghostscript_cmd or _env_value("GHOSTSCRIPT_CMD", "gs")
     resolved_language = language or os.getenv("TESSERACT_LANGUAGE", "spa")
     module_available = module_available or _module_available
     issues: List[str] = []
@@ -51,7 +53,8 @@ def check_ocr_environment(
         version_output = (result.stdout or result.stderr or "").strip()
         ocrmypdf_version = version_output.splitlines()[0] if version_output else "unknown"
     except (FileNotFoundError, subprocess.CalledProcessError):
-        issues.append("ocrmypdf_unavailable")
+        if ocrmypdf_enabled:
+            issues.append("ocrmypdf_unavailable")
 
     tesseract_available = False
     tesseract_version = None
@@ -86,10 +89,12 @@ def check_ocr_environment(
         ghostscript_available = True
         ghostscript_version = (gs.stdout or gs.stderr or "").strip().splitlines()[0] or "unknown"
     except (FileNotFoundError, subprocess.CalledProcessError):
-        issues.append("ghostscript_unavailable")
+        if ocrmypdf_enabled:
+            issues.append("ghostscript_unavailable")
 
     return OcrDoctorReport(
         ok=not issues,
+        ocrmypdf_enabled=ocrmypdf_enabled,
         ocrmypdf_cmd=resolved_ocrmypdf,
         tesseract_cmd=resolved_tesseract,
         language=resolved_language,
@@ -126,3 +131,18 @@ def _parse_languages(output: str) -> List[str]:
 
 def _module_available(name: str) -> bool:
     return importlib.util.find_spec(name) is not None
+
+
+def _env_flag(name: str, *, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _env_value(name: str, default: str) -> str:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    stripped = raw.strip()
+    return stripped or default

@@ -1,0 +1,1067 @@
+{
+  "summary": {
+    "documents": 9,
+    "run_elapsed": {
+      "llama_new": {
+        "events": 18,
+        "elapsed_wall_seconds": 47.108,
+        "start": "2026-07-21T17:47:30.027741-05:00",
+        "end": "2026-07-21T17:48:17.135453-05:00"
+      },
+      "llama_prev": {
+        "events": 18,
+        "elapsed_wall_seconds": 42.981,
+        "start": "2026-07-21T17:22:29.468654-05:00",
+        "end": "2026-07-21T17:23:12.449913-05:00"
+      },
+      "local_new": {
+        "events": 18,
+        "elapsed_wall_seconds": 41.399,
+        "start": "2026-07-21T17:47:30.027741-05:00",
+        "end": "2026-07-21T17:48:11.426371-05:00"
+      }
+    },
+    "pages": {
+      "llama_new": 77,
+      "llama_prev": 77,
+      "local_new": 77,
+      "gold": 77
+    },
+    "md_chars": {
+      "llama_new": 186225,
+      "llama_prev": 186189,
+      "local_new": 182177,
+      "gold": 182111
+    },
+    "statuses": {
+      "llama_new": {
+        "processed": 9
+      },
+      "llama_prev": {
+        "needs_review": 6,
+        "processed": 3
+      },
+      "local_new": {
+        "processed": 9
+      },
+      "gold": {
+        "needs_review": 9
+      }
+    },
+    "reason_counts": {
+      "llama_new": {},
+      "llama_prev": {
+        "classification_conflict": 6,
+        "conflicting_code": 1
+      },
+      "local_new": {},
+      "gold": {
+        "classification_conflict": 6,
+        "pdf_semantic_review_required": 9
+      }
+    },
+    "type_matches_expected": {
+      "llama_new": 9,
+      "llama_prev": 9,
+      "local_new": 9,
+      "gold": 9
+    },
+    "topic_matches_expected": {
+      "llama_new": 6,
+      "llama_prev": 5,
+      "local_new": 6,
+      "gold": 6
+    },
+    "code_matches_expected": {
+      "llama_new": 9,
+      "llama_prev": 8,
+      "local_new": 9,
+      "gold": 9
+    },
+    "tables_detected": {
+      "llama_new": 9,
+      "llama_prev": 9,
+      "local_new": 9,
+      "gold": 9
+    },
+    "forms_evaluated": {
+      "llama_new": 9,
+      "llama_prev": 9,
+      "local_new": 9,
+      "gold": 9
+    },
+    "jobs": {
+      "llama_new": 9,
+      "llama_prev": 9,
+      "local_new": 0,
+      "gold": 0
+    }
+  },
+  "mismatches": [
+    {
+      "rel": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "problems": [
+        "topic"
+      ],
+      "expected": {
+        "pages": 2,
+        "type": "formulario",
+        "topic": "Comité de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "code_value": "RE.RH-04 SST",
+        "tables": "detected",
+        "forms": "detected"
+      },
+      "llama_new": {
+        "job": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 2301,
+        "method": "llamaparse",
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RE.RH-04 SST",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 3,
+        "form_groups": 1
+      }
+    },
+    {
+      "rel": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "problems": [
+        "topic"
+      ],
+      "expected": {
+        "pages": 6,
+        "type": "reglamento",
+        "topic": "Comité de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comité",
+        "code_value": "RG.RH-01SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+        "status": "processed",
+        "reasons": [],
+        "pages": 6,
+        "md_chars": 17730,
+        "method": "llamaparse",
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comite",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RG.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "problems": [
+        "topic"
+      ],
+      "expected": {
+        "pages": 2,
+        "type": "politica",
+        "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
+        "subtopic": "Política de SST",
+        "code_value": "PL.RH-01-SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 4632,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "subtopic": "Politica de SST",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 4,
+        "form_groups": 0
+      }
+    }
+  ],
+  "documents": [
+    {
+      "rel": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "expected": {
+        "pages": 2,
+        "type": "formulario",
+        "topic": "Comité de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "code_value": "RE.RH-04 SST",
+        "tables": "detected",
+        "forms": "detected"
+      },
+      "llama_new": {
+        "job": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 2301,
+        "method": "llamaparse",
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RE.RH-04 SST",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 3,
+        "form_groups": 1
+      },
+      "llama_prev": {
+        "job": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 2,
+        "md_chars": 2297,
+        "method": "llamaparse",
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "conflicts": [
+          "type_title_control=formulario;type_route=manual",
+          "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RE.RH-04 SST",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 3,
+        "form_groups": 1
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 3083,
+        "method": "pdf_digital",
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RE.RH-04 SST",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 6,
+        "form_groups": 1
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 2,
+        "md_chars": 3064,
+        "method": "pdf_digital",
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Queja por presunto acoso laboral",
+        "conflicts": [
+          "type_title_control=formulario;type_route=manual",
+          "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RE.RH-04 SST",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 6,
+        "form_groups": 1
+      }
+    },
+    {
+      "rel": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "expected": {
+        "pages": 12,
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "subtopic": null,
+        "code_value": "M.RH-03-SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+        "status": "processed",
+        "reasons": [],
+        "pages": 12,
+        "md_chars": 21861,
+        "method": "llamaparse",
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "M.RH-03-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 12,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+        "status": "processed",
+        "reasons": [],
+        "pages": 12,
+        "md_chars": 21857,
+        "method": "llamaparse",
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "M.RH-03-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 12,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 12,
+        "md_chars": 19789,
+        "method": "pdf_digital",
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "M.RH-03-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 12,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required"
+        ],
+        "pages": 12,
+        "md_chars": 19770,
+        "method": "pdf_digital",
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "M.RH-03-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 12,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "expected": {
+        "pages": 1,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Desconexión laboral",
+        "code_value": "PL.RH-03SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-8868hmusisvc13oqbjhc2ugkj14z",
+        "status": "processed",
+        "reasons": [],
+        "pages": 1,
+        "md_chars": 2482,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Desconexion laboral",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-03SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-8868hmusisvc13oqbjhc2ugkj14z",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_code",
+          "classification_conflict"
+        ],
+        "pages": 1,
+        "md_chars": 2478,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Desconexion laboral",
+        "conflicts": [
+          "type_title_control=politica;type_route=manual"
+        ],
+        "title_status": "extracted",
+        "code_status": "conflicting",
+        "code_value": [
+          "PL.RH-03SST",
+          "RE-RH-004-SST"
+        ],
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 1,
+        "md_chars": 3047,
+        "method": "ocr",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Desconexion laboral",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-03SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 3,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 1,
+        "md_chars": 3016,
+        "method": "ocr",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Desconexion laboral",
+        "conflicts": [
+          "type_title_control=politica;type_route=manual"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-03SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 3,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "expected": {
+        "pages": 1,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Prevención del acoso laboral, sexual, violencia basada en género y discriminación",
+        "code_value": "PL.RH-01SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+        "status": "processed",
+        "reasons": [],
+        "pages": 1,
+        "md_chars": 2440,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Prevencion del acoso laboral, sexual, violencia basada en genero y discriminacion",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 1,
+        "md_chars": 2436,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Prevencion del acoso laboral, sexual, violencia basada en genero y discriminacion",
+        "conflicts": [
+          "type_title_control=politica;type_route=manual"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 1,
+        "md_chars": 3420,
+        "method": "ocr",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Prevencion del acoso laboral, sexual, violencia basada en genero y discriminacion",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 3,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 1,
+        "md_chars": 3400,
+        "method": "ocr",
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "subtopic": "Prevencion del acoso laboral, sexual, violencia basada en genero y discriminacion",
+        "conflicts": [
+          "type_title_control=politica;type_route=manual"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 3,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "expected": {
+        "pages": 6,
+        "type": "reglamento",
+        "topic": "Comité de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comité",
+        "code_value": "RG.RH-01SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+        "status": "processed",
+        "reasons": [],
+        "pages": 6,
+        "md_chars": 17730,
+        "method": "llamaparse",
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comite",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RG.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 6,
+        "md_chars": 17726,
+        "method": "llamaparse",
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comite",
+        "conflicts": [
+          "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RG.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 6,
+        "md_chars": 16383,
+        "method": "pdf_digital",
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comite",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RG.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 6,
+        "md_chars": 16364,
+        "method": "pdf_digital",
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "subtopic": "Funcionamiento del comite",
+        "conflicts": [
+          "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "RG.RH-01SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "expected": {
+        "pages": 16,
+        "type": "programa",
+        "topic": "Pausas activas",
+        "subtopic": "Prevención de fatiga y desórdenes musculoesqueléticos",
+        "code_value": "PG-RH-10-SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+        "status": "processed",
+        "reasons": [],
+        "pages": 16,
+        "md_chars": 22395,
+        "method": "llamaparse",
+        "type": "programa",
+        "topic": "Pausas activas",
+        "subtopic": "Prevencion de fatiga y desordenes musculoesqueleticos",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PG-RH-10-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 17,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 16,
+        "md_chars": 22391,
+        "method": "llamaparse",
+        "type": "programa",
+        "topic": "Pausas activas",
+        "subtopic": "Prevencion de fatiga y desordenes musculoesqueleticos",
+        "conflicts": [
+          "type_title_control=programa;type_route=capacitacion",
+          "topic_title_control=Pausas activas;topic_route=Capacitaciones"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PG-RH-10-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 17,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 16,
+        "md_chars": 18800,
+        "method": "hybrid",
+        "type": "programa",
+        "topic": "Pausas activas",
+        "subtopic": "Prevencion de fatiga y desordenes musculoesqueleticos",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PG-RH-10-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 17,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 16,
+        "md_chars": 18793,
+        "method": "hybrid",
+        "type": "programa",
+        "topic": "Pausas activas",
+        "subtopic": "Prevencion de fatiga y desordenes musculoesqueleticos",
+        "conflicts": [
+          "type_title_control=programa;type_route=capacitacion",
+          "topic_title_control=Pausas activas;topic_route=Capacitaciones"
+        ],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PG-RH-10-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 17,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "expected": {
+        "pages": 1,
+        "type": "matriz",
+        "topic": "Seguridad vial",
+        "subtopic": "Objetivos, metas e indicadores",
+        "code_value": null,
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+        "status": "processed",
+        "reasons": [],
+        "pages": 1,
+        "md_chars": 2301,
+        "method": "llamaparse",
+        "type": "matriz",
+        "topic": "Seguridad vial",
+        "subtopic": "Objetivos, metas e indicadores",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 1,
+        "md_chars": 2297,
+        "method": "llamaparse",
+        "type": "matriz",
+        "topic": "Capacitaciones",
+        "subtopic": "Objetivos, metas e indicadores",
+        "conflicts": [
+          "type_title_control=matriz;type_route=politica"
+        ],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 1,
+        "md_chars": 2113,
+        "method": "pdf_digital",
+        "type": "matriz",
+        "topic": "Seguridad vial",
+        "subtopic": "Objetivos, metas e indicadores",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 1,
+        "md_chars": 2094,
+        "method": "pdf_digital",
+        "type": "matriz",
+        "topic": "Seguridad vial",
+        "subtopic": "Objetivos, metas e indicadores",
+        "conflicts": [
+          "type_title_control=matriz;type_route=politica",
+          "topic_title_control=Seguridad vial;topic_route=Capacitaciones"
+        ],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "expected": {
+        "pages": 36,
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "subtopic": null,
+        "code_value": null,
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+        "status": "processed",
+        "reasons": [],
+        "pages": 36,
+        "md_chars": 110083,
+        "method": "llamaparse",
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 2,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+        "status": "processed",
+        "reasons": [],
+        "pages": 36,
+        "md_chars": 110079,
+        "method": "llamaparse",
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 2,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 36,
+        "md_chars": 110306,
+        "method": "pdf_digital",
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 2,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required"
+        ],
+        "pages": 36,
+        "md_chars": 110287,
+        "method": "pdf_digital",
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "subtopic": null,
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "code_value": null,
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 2,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "expected": {
+        "pages": 2,
+        "type": "politica",
+        "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
+        "subtopic": "Política de SST",
+        "code_value": "PL.RH-01-SST",
+        "tables": "detected",
+        "forms": "not_detected"
+      },
+      "llama_new": {
+        "job": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 4632,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "subtopic": "Politica de SST",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 4,
+        "form_groups": 0
+      },
+      "llama_prev": {
+        "job": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 4628,
+        "method": "llamaparse",
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "subtopic": "Politica de SST",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 4,
+        "form_groups": 0
+      },
+      "local_new": {
+        "job": null,
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 5236,
+        "method": "ocr",
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "subtopic": "Politica de SST",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 14,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required"
+        ],
+        "pages": 2,
+        "md_chars": 5323,
+        "method": "ocr",
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "subtopic": "Politica de SST",
+        "conflicts": [],
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "code_value": "PL.RH-01-SST",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 15,
+        "form_groups": 0
+      }
+    }
+  ]
+}

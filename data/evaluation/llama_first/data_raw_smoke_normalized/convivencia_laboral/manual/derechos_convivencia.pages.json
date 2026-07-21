@@ -1,0 +1,30 @@
+{
+  "document_id": "doc_5773d940742c0a47",
+  "page_count": 1,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "markdown",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "1. Derecho a ser respetado.\n\n2. Derecho a recibir un trato digno frente a creencias religiosas o identidad sexual.\n\n3. Derecho a manifestar su opinion o emociones.\n\n4. Derecho a ser escuchado cuando expone un argumento o punto de vista.\n\n5. Derecho a realizar las labores que se encuentren dentro del manual de sus funciones.\n\n6. Derecho a ser escuchado por el comite de convivencia cuando identifique conductas que atenten contra la convivencia laboral de la empresa. (Incluyendo maltrato laboral o conductas de acoso).\n\n“Las conductas que sean denunciadas ante el Comite de Convivencia Laboral seran tratadas bajo absoluta confidencialidad y reserva”\n\nComite de Convivencia Laboral SYC\n\nconvivencia@syc.com.co",
+      "text_raw": "1.    Derecho a ser respetado.\n\n2.    Derecho a recibir un trato digno frente a creencias religiosas o identidad sexual.\n\n3.    Derecho a manifestar su opinion o emociones.\n\n4.    Derecho a ser escuchado cuando expone un argumento o punto de vista.\n\n5.    Derecho a realizar las labores que se encuentren dentro del manual de sus funciones.\n\n6.    Derecho a ser escuchado por el comite de convivencia cuando identifique conductas que atenten contra la convivencia laboral de la empresa. (Incluyendo maltrato laboral o conductas de acoso).\n\n“Las conductas que sean denunciadas ante el Comite de Convivencia Laboral seran tratadas bajo absoluta confidencialidad y reserva”\n\nComite de Convivencia Laboral SYC\n\nconvivencia@syc.com.co",
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ],
+  "schema_version": "2.0"
+}

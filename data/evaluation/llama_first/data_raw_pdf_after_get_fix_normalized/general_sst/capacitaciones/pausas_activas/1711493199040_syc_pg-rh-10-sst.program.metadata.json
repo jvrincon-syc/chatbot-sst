@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": null,
+    "document_type": "capacitacion",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "route_prior": "capacitacion",
+    "signals": [
+      "capacitacion:capacitacion:route",
+      "Capacitaciones:capacitacion:route"
+    ],
+    "subtopic": null,
+    "topic": "Capacitaciones",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "warnings": [
+      "route_only_low_confidence"
+    ]
+  },
+  "corpus_version": "llama-live-pdf-get-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_f2cf7868a801af0e",
+  "document_name": "1711493199040_syc_pg-rh-10-sst.program.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_get_fix_normalized\\general_sst\\capacitaciones\\pausas_activas\\1711493199040_syc_pg-rh-10-sst.program.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 0,
+  "pipeline_version": "2.0.1",
+  "processed_at": "2026-07-21T17:02:03.664113-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "pdf_semantic_review_required",
+    "tables_not_evaluated",
+    "forms_not_evaluated",
+    "ambiguous_classification"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
+  "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "llama_parse_job:pjb-7y0nl29rghh6vu49sia8fjij11ld",
+    "route_only_low_confidence",
+    "ambiguous_classification"
+  ]
+}

@@ -15,6 +15,9 @@ from ingestion.logging.jsonl import JsonlLogger
 from ingestion.manifests.bundle_writer import BundlePayload, write_bundle_atomic
 from ingestion.manifests.writer import dump_json, write_inventory
 from ingestion.fingerprint import processing_fingerprint
+from ingestion.config.llama_settings import load_llama_settings
+from ingestion.infrastructure.llama_cloud.parse_adapter import LlamaParseAdapter
+from ingestion.infrastructure.llama_cloud.parse_config import LlamaParseConfig
 from ingestion.paths import ArtifactPaths, canonical_relpath
 from ingestion.promotion import PromotionError, promote_candidate
 from ingestion.readers.base import ReadResult
@@ -22,6 +25,7 @@ from ingestion.ocr.ocrmypdf_engine import OcrDependencyError, OcrMyPdfEngine
 from ingestion.ocr.tesseract_engine import TesseractEngine, TesseractPdfEngine
 from ingestion.readers.markdown_reader import MarkdownReader
 from ingestion.readers.hybrid_reader import HybridReader
+from ingestion.readers.llama_parse_reader import LlamaParseReader
 from ingestion.readers.pdf_digital_reader import PdfDigitalReader
 from ingestion.readers.pdf_scanned_reader import PdfScannedReader
 from ingestion.schemas.artifacts import (
@@ -371,7 +375,7 @@ def _material_feature_review_reasons(
 ) -> list[str]:
     if record.detected_extension != ".pdf":
         return []
-    reasons = ["pdf_semantic_review_required"]
+    reasons = []
     for name, observation in (
         ("handwriting", handwriting),
         ("tables", tables),
@@ -379,6 +383,8 @@ def _material_feature_review_reasons(
     ):
         if observation.status == "not_evaluated":
             reasons.append(f"{name}_not_evaluated")
+    if reasons:
+        reasons.insert(0, "pdf_semantic_review_required")
     return reasons
 
 
@@ -419,6 +425,48 @@ def _configured_tesseract_pdf_engine() -> TesseractPdfEngine:
     return TesseractPdfEngine(region_engine=_configured_tesseract_engine())
 
 
+def _choose_pdf_reader(
+    *,
+    llama_cloud_enabled: bool,
+    local_fallback_enabled: bool,
+    local_reader_factory,
+    llama_reader_factory=None,
+):
+    if llama_cloud_enabled and llama_reader_factory is not None:
+        return llama_reader_factory()
+    if local_fallback_enabled:
+        return local_reader_factory()
+    if llama_reader_factory is None:
+        raise RuntimeError("Llama Cloud PDF reader is not configured and local fallback is disabled")
+    return llama_reader_factory()
+
+
+def _configured_llama_parse_reader() -> LlamaParseReader:
+    from ingestion.infrastructure.llama_cloud.client_factory import (
+        create_async_llama_cloud_client,
+    )
+
+    settings = load_llama_settings()
+    config = LlamaParseConfig.from_settings(settings)
+    client = create_async_llama_cloud_client(settings)
+    return LlamaParseReader(
+        adapter=LlamaParseAdapter(client=client, config=config),
+        configuration_hash=config.configuration_hash(),
+    )
+
+
+def _configured_local_pdf_reader(ocr_engine=None):
+    region_ocr = (
+        ocr_engine
+        if ocr_engine is not None and hasattr(ocr_engine, "recognize")
+        else _configured_tesseract_engine()
+    )
+    return HybridReader(
+        digital_reader=PdfDigitalReader(),
+        ocr_engine=region_ocr,
+    )
+
+
 def _read_document(
     record: InventoryRecord,
     pdf_reader_factory=None,
@@ -437,16 +485,20 @@ def _read_document(
                 else PdfDigitalReader(extractor=pdf_reader_or_extractor)
             )
         else:
-            region_ocr = (
-                ocr_engine
-                if ocr_engine is not None and hasattr(ocr_engine, "recognize")
-                else _configured_tesseract_engine()
-            )
-            pdf_reader = HybridReader(
-                digital_reader=PdfDigitalReader(),
-                ocr_engine=region_ocr,
+            settings = load_llama_settings()
+            pdf_reader = _choose_pdf_reader(
+                llama_cloud_enabled=settings.cloud_enabled,
+                local_fallback_enabled=settings.local_fallback_enabled,
+                local_reader_factory=lambda: _configured_local_pdf_reader(ocr_engine),
+                llama_reader_factory=_configured_llama_parse_reader if settings.cloud_enabled else None,
             )
         try:
+            if isinstance(pdf_reader, LlamaParseReader):
+                return pdf_reader.read(
+                    source_path,
+                    document_id=record.document_id,
+                    source_hash=record.content_hash,
+                )
             return pdf_reader.read(source_path)
         except RuntimeError as exc:
             fallback_signals = (
@@ -458,6 +510,14 @@ def _read_document(
                 raise
             fallback_engine = ocr_engine or _configured_tesseract_pdf_engine()
             return PdfScannedReader(ocr_engine=fallback_engine).read(source_path)
+        except Exception as exc:
+            settings = load_llama_settings()
+            if settings.cloud_enabled and settings.local_fallback_enabled:
+                result = _configured_local_pdf_reader(ocr_engine).read(source_path)
+                result.warnings.append(f"cloud_fallback_used:{type(exc).__name__}")
+                result.review_reasons.append("cloud_fallback_used")
+                return result
+            raise
     raise ValueError(f"Unsupported format: {record.detected_extension or 'unknown'}")
 
 

@@ -1,0 +1,30 @@
+{
+  "document_id": "doc_d15d9f2596c32bed",
+  "page_count": 1,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "markdown",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "Para reducir el riesgo de accidentes viales y proteger la vida propia y la de los demas, es fundamental adoptar conductas responsables al conducir:\n\nUtilizar siempre el cinturon de seguridad.\nSenalizar correctamente las maniobras mediante las luces direccionales.\nEvitar el uso del telefono movil u otros dispositivos que generen distraccion.\nDescansar adecuadamente antes de conducir y detenerse si se presenta fatiga.\nMantener una distancia segura con respecto a otros vehiculos.\nRespetar las normas de transito y priorizar la seguridad de los peatones.\nAjustar correctamente los espejos antes de iniciar la marcha.\nReducir la velocidad en zonas escolares y areas de alta afluencia peatonal.\nRealizar mantenimientos preventivos periodicos al vehiculo.\nLa seguridad vial es una responsabilidad compartida.\nLa prevencion comienza con cada decision al conducir.",
+      "text_raw": "Para reducir el riesgo de accidentes viales y proteger la vida propia y la de los demas, es fundamental adoptar conductas responsables al conducir:\n\nUtilizar siempre el cinturon de seguridad.\nSenalizar correctamente las maniobras mediante las luces direccionales.\nEvitar el uso del telefono movil u otros dispositivos que generen distraccion.\nDescansar adecuadamente antes de conducir y detenerse si se presenta fatiga.\nMantener una distancia segura con respecto a otros vehiculos.\nRespetar las normas de transito y priorizar la seguridad de los peatones.\nAjustar correctamente los espejos antes de iniciar la marcha.\nReducir la velocidad en zonas escolares y areas de alta afluencia peatonal.\nRealizar mantenimientos preventivos periodicos al vehiculo.\nLa seguridad vial es una responsabilidad compartida.\nLa prevencion comienza con cada decision al conducir.\n",
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ],
+  "schema_version": "2.0"
+}

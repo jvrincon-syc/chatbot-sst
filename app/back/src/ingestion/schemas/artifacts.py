@@ -22,7 +22,7 @@ from ingestion.schemas.common import (
 
 
 SchemaVersion = Literal["2.0"]
-ExtractionMethod = Literal["markdown", "pdf_digital", "ocr", "hybrid"]
+ExtractionMethod = Literal["markdown", "pdf_digital", "ocr", "hybrid", "llamaparse", "hybrid_llamaparse"]
 ProcessingStatus = Literal["pending", "processed", "failed", "needs_review"]
 DocumentType = Literal[
     "manual",

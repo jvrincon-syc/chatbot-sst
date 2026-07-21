@@ -1,0 +1,152 @@
+{
+  "document_id": "doc_f2cf7868a801af0e",
+  "groups": [],
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

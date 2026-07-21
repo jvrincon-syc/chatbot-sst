@@ -1,0 +1,151 @@
+{
+  "checks": [
+    {
+      "check": "metadata_schema",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "unique_document_ids",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "markdown_has_metadata",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "orphan_files",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "auxiliary_schema",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "auxiliary_document_ids",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "page_count_consistency",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "page_ordering_contiguity",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "front_matter_parity",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_schema",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_metadata_bijection",
+      "details": [
+        "doc_04c42c6f64c9d79e",
+        "doc_0b8a9be32b2222f6",
+        "doc_133e0d5e86f00f91",
+        "doc_18e1e8a89146e6fc",
+        "doc_1d62a305753cb42e",
+        "doc_1edf1a3d50d85305",
+        "doc_1ff1756177bf1b1f",
+        "doc_221c00facfd6a2e8",
+        "doc_27d458b700f2924d",
+        "doc_2fd43b5d3bcb833b",
+        "doc_312e0abf441fcf34",
+        "doc_33db5a236b33527d",
+        "doc_362801fe7bc968cb",
+        "doc_4815e73a2a6125e3",
+        "doc_4c525cef1e737235",
+        "doc_4d54425dfa884153",
+        "doc_56429da7ea5244e1",
+        "doc_5773d940742c0a47",
+        "doc_5d2b57616d019b89",
+        "doc_5e403a88299d2dc3",
+        "doc_6035540fc4c4a90a",
+        "doc_65a09a83e5685e3a",
+        "doc_761c9402c48e05c7",
+        "doc_78c719156efb1dfd",
+        "doc_798b9dac49774271",
+        "doc_7a0f56a63a930105",
+        "doc_7d2eb40310345805",
+        "doc_81325f8c3222110c",
+        "doc_842df95c94a7e50d",
+        "doc_864d906c5eae1183",
+        "doc_86b6f64f1c869610",
+        "doc_89b7978304549ddd",
+        "doc_99e74963bf956ead",
+        "doc_9b35bf058b1a3a38",
+        "doc_a72c9be0df1f92fa",
+        "doc_af426c4c9052023e",
+        "doc_b87ef9d031af518e",
+        "doc_c392ec7bf8d98194",
+        "doc_caf88d615e56edd4",
+        "doc_cfca5f1723e21e1c",
+        "doc_d15d9f2596c32bed",
+        "doc_d4fca71ff51cb27b",
+        "doc_d57d21ff836e1ec0",
+        "doc_d5f04608cf512575",
+        "doc_d9b80cd19e111195",
+        "doc_dec6dc6770fea917",
+        "doc_e91e2fb644a2717c",
+        "doc_eb34bb480d443513",
+        "doc_f2cf7868a801af0e",
+        "doc_f38f9f98d854feed",
+        "doc_f3bdcdea0cf60ee0",
+        "doc_ff1fcf5ee88afc3b"
+      ],
+      "status": "failed"
+    },
+    {
+      "check": "inventory_source_hashes",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_final_statuses",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "status_manifests",
+      "details": [
+        "doc_864d906c5eae1183: missing from needs_review.json",
+        "doc_c392ec7bf8d98194: missing from needs_review.json",
+        "doc_caf88d615e56edd4: missing from needs_review.json",
+        "doc_d57d21ff836e1ec0: missing from needs_review.json",
+        "doc_d4fca71ff51cb27b: missing from needs_review.json",
+        "doc_f2cf7868a801af0e: missing from needs_review.json",
+        "doc_7d2eb40310345805: missing from needs_review.json",
+        "doc_4c525cef1e737235: missing from needs_review.json",
+        "doc_33db5a236b33527d: missing from needs_review.json",
+        "doc_81325f8c3222110c: missing from needs_review.json",
+        "doc_86b6f64f1c869610: missing from needs_review.json",
+        "doc_f38f9f98d854feed: missing from needs_review.json"
+      ],
+      "status": "failed"
+    },
+    {
+      "check": "processed_with_review_reasons",
+      "details": [],
+      "status": "passed"
+    }
+  ],
+  "documents_checked": 55,
+  "errors": 2,
+  "run_id": "llama_data_raw_retry_after_longpath_fix",
+  "schema_version": "2.0",
+  "status": "failed",
+  "warnings": 0
+}

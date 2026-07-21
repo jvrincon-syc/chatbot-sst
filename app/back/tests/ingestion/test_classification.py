@@ -15,18 +15,22 @@ def test_title_beats_manual_route_for_a_form() -> None:
     assert isinstance(result, ClassificationResult)
     assert result.document_type == "formulario"
     assert result.document_type_confidence.value == 0.95
+    assert result.conflict_status == "none"
+    assert result.conflicts == []
 
 
 def test_title_beats_capacitaciones_route_for_program() -> None:
     result = classify_document("sst/capacitaciones/programa.pdf", [{"text_raw": "# Programa anual"}], _control("Programa anual"))
     assert result.document_type == "programa"
+    assert result.conflict_status == "none"
+    assert result.conflicts == []
 
 
-def test_title_beats_policy_route_for_matrix_and_records_conflict() -> None:
+def test_title_beats_policy_route_for_matrix_without_folder_conflict() -> None:
     result = classify_document("sst/politica/matriz.pdf", [{"text_raw": "# Matriz de riesgos"}], _control("Matriz de riesgos"))
     assert result.document_type == "matriz"
-    assert result.conflict_status == "conflicting"
-    assert result.conflicts
+    assert result.conflict_status == "none"
+    assert result.conflicts == []
 
 
 def test_objectives_and_metrics_title_is_classified_as_matrix() -> None:
@@ -38,6 +42,20 @@ def test_objectives_and_metrics_title_is_classified_as_matrix() -> None:
     )
 
     assert result.document_type == "matriz"
+
+
+def test_specific_security_vial_route_beats_generic_capacitaciones_container() -> None:
+    result = classify_document(
+        "general_sst/capacitaciones/politica_seguridad_trabajo/"
+        "seguridad_vial/objetivos.pdf",
+        [{"text_raw": "# OBJETIVOS Y METAS\n\nMatriz de objetivos, metas e indicadores del PESV."}],
+        _control("Objetivos y metas"),
+    )
+
+    assert result.document_type == "matriz"
+    assert result.topic == "Seguridad vial"
+    assert result.conflict_status == "none"
+    assert result.conflicts == []
 
 
 def test_convivencia_policy_keeps_convivencia_topic_from_route() -> None:
@@ -70,7 +88,7 @@ def test_sst_policy_uses_sgsst_topic_from_explicit_title() -> None:
     )
 
     assert result.document_type == "politica"
-    assert result.topic == "Sistema de Gestion de Seguridad y Salud en el Trabajo"
+    assert result.topic == "Sistema de Gestión de Seguridad y Salud en el Trabajo"
 
 
 def test_reglamento_del_comite_keeps_committee_operation_subtopic() -> None:
@@ -81,7 +99,7 @@ def test_reglamento_del_comite_keeps_committee_operation_subtopic() -> None:
     )
 
     assert result.document_type == "reglamento"
-    assert result.subtopic == "Funcionamiento del comite"
+    assert result.subtopic == "Funcionamiento del comité"
 
 
 def test_route_only_result_is_low_confidence() -> None:

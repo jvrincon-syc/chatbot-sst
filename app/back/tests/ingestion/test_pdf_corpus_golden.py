@@ -41,7 +41,8 @@ def test_audited_pdf_candidate_passes_structural_and_semantic_gates(
     load_secrets_env(Path("secrets.env"))
     capabilities = check_ocr_environment()
     required_ocr = (
-        capabilities.ocrmypdf_available
+        capabilities.ocrmypdf_enabled
+        and capabilities.ocrmypdf_available
         and capabilities.tesseract_available
         and capabilities.language_available
         and capabilities.ghostscript_available

@@ -1,0 +1,145 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": null,
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "route_prior": "reglamento",
+    "signals": [
+      "reglamento:reglamento:route",
+      "Convivencia laboral:convivencia laboral:route"
+    ],
+    "subtopic": null,
+    "topic": "Convivencia laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "warnings": [
+      "route_only_low_confidence"
+    ]
+  },
+  "corpus_version": "llama-live-pdf-get-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_d4fca71ff51cb27b",
+  "document_name": "1761609513260_syc_RG.RH-01-SST23102025.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_get_fix_normalized\\convivencia_laboral\\reglamento_comite\\1761609513260_syc_RG.RH-01-SST23102025.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 0,
+  "pipeline_version": "2.0.1",
+  "processed_at": "2026-07-21T17:01:58.190823-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "pdf_semantic_review_required",
+    "tables_not_evaluated",
+    "forms_not_evaluated",
+    "ambiguous_classification"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "cf261e96874a2ae1f8f88428229c76221dd346d10403ca95b5714ea56026c1dc",
+  "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "llama_parse_job:pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+    "route_only_low_confidence",
+    "ambiguous_classification"
+  ]
+}

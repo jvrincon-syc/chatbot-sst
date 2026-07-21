@@ -1,0 +1,67 @@
+{
+  "document_id": "doc_864d906c5eae1183",
+  "groups": [
+    {
+      "bbox": null,
+      "controls": [],
+      "group_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p1_form_001",
+      "labels": [
+        {
+          "bbox": null,
+          "label_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p1_label_001",
+          "text": "Nombre del presunto acosador",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "label_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p1_label_002",
+          "text": "Cargo",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "label_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r_p1_label_003",
+          "text": "Proyecto",
+          "warnings": []
+        }
+      ],
+      "page_number": 1,
+      "title": null,
+      "warnings": [
+        "generated_from_llamaparse_markdown_form_cues"
+      ]
+    }
+  ],
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "Nombre del presunto acosador, Cargo, Proyecto",
+          "warnings": []
+        }
+      ],
+      "method": "llamaparse_form_heuristic",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "llamaparse_form_heuristic",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

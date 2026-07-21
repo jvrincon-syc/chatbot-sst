@@ -1,0 +1,202 @@
+{
+  "classification": {
+    "conflict_status": "conflicting",
+    "conflicts": [
+      "type_title_control=formulario;type_route=manual",
+      "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+    ],
+    "content_prediction": "formulario",
+    "document_type": "formulario",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "formulario:formato:title_control",
+      "formulario:formato:content",
+      "Comite de Convivencia Laboral:comite de convivencia:title_control",
+      "Convivencia laboral:convivencia:title_control",
+      "Formularios:formato:title_control",
+      "Comite de Convivencia Laboral:comite de convivencia:content",
+      "Queja por presunto acoso laboral:interponer queja:title_control"
+    ],
+    "subtopic": "Queja por presunto acoso laboral",
+    "topic": "Comite de Convivencia Laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-semantic-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<td>RE.RH-04 SST</td>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "RE.RH-04 SST",
+      "value_raw": "RE.RH-04 SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.",
+      "value_raw": "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<td>Versión 0.3</td>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.3",
+      "value_raw": "0.3",
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_864d906c5eae1183",
+  "document_name": "1761580555950_syc_RE.RH-04SST23102025.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "forms_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_forms",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "form_evidence_available_in_forms_artifact"
+    ]
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_semantic_fix_live_normalized\\convivencia_laboral\\manual\\1761580555950_syc_RE.RH-04SST23102025.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 2,
+  "pipeline_version": "2.0.3",
+  "processed_at": "2026-07-21T17:22:34.866798-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "classification_conflict"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "6eb13cd6e4aeccd1322bd05e2c857bfbf34a2bec760bbd6d1762d220294964b3",
+  "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": [
+    "llama_parse_job:pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+    "type_title_control=formulario;type_route=manual",
+    "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+  ]
+}

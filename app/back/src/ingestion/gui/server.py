@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import unquote, urlparse
 
-from ingestion.config.env import load_secrets_env
+from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
 from ingestion.gui.review_store import (
     ReviewDecision,
     load_review_decisions,
@@ -139,6 +139,7 @@ def build_status_payload() -> dict[str, Any]:
 
     return {
         "summary": summary,
+        "llamaFirst": _llama_first_status_payload(),
         "documents": documents,
         "needsReview": pending_review,
         "errors": error_items,
@@ -149,6 +150,33 @@ def build_status_payload() -> dict[str, Any]:
             "errors": "data/docs_normalized/_manifests/errors.json",
             "reviewDecisions": "data/docs_normalized/_manifests/review_decisions.json",
         },
+    }
+
+
+def _llama_first_status_payload() -> dict[str, Any]:
+    try:
+        settings = load_runtime_llama_settings(ROOT / "secrets.env")
+    except ValueError as exc:
+        return {
+            "provider": "llama_cloud",
+            "configurationStatus": "invalid",
+            "error": str(exc),
+        }
+    return {
+        "provider": "llama_cloud",
+        "configurationStatus": "ready" if settings.cloud_enabled else "disabled",
+        "cloudEnabled": settings.cloud_enabled,
+        "localFallbackEnabled": settings.local_fallback_enabled,
+        "parseTier": settings.parse_tier,
+        "parseVersion": settings.parse_version,
+        "parseMaxCreditsPerRun": settings.parse_max_credits_per_run,
+        "classifyMode": settings.classify_mode,
+        "classifyMaxPages": settings.classify_max_pages,
+        "extractTier": settings.extract_tier,
+        "extractParseTier": settings.extract_parse_tier,
+        "extractMaxPages": settings.extract_max_pages,
+        "classifyEnabled": settings.classify_enabled,
+        "extractEnabled": settings.extract_enabled,
     }
 
 

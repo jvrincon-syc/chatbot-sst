@@ -114,6 +114,17 @@ en `_manifests/`.
 
 ## Reglas de integridad
 
+- Las carpetas de `data/docs_raw` son organizacion operativa y no fuente de
+  verdad documental. La clasificacion debe priorizar evidencia interna:
+  titulo/control documental, contenido visible, codigo y tablas de control.
+  Una discrepancia entre carpeta y evidencia fuerte no debe producir
+  `classification_conflict` ni `needs_review`.
+- Los contenedores genericos (`manual`, `capacitaciones`, `politica`,
+  `convivencia_laboral`) no penalizan tipos o topicos resueltos por el
+  documento. Segmentos especificos como `seguridad_vial` si pueden ayudar a
+  elegir un topic mas preciso que el contenedor.
+- Los codigos en header o tabla de control documental tienen prioridad sobre
+  referencias narrativas a otros formatos dentro del cuerpo.
 - El original en `data/docs_raw` no se modifica.
 - Las rutas canónicas son relativas POSIX.
 - Una capacidad desconocida queda `not_evaluated`.

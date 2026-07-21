@@ -1,0 +1,49 @@
+{
+  "document_id": "doc_864d906c5eae1183",
+  "page_count": 2,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "# PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO\n## FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.\n\n<table>\n<tr>\n<td>SYC Sistemas y Computadores S.A.</td>\n<td>CÓDIGO</td>\n<td>RE.RH-04 SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión 0.3</td>\n</tr>\n</table>\n**NOMBRE:**\n**DOCUMENTO DE IDENTIDAD:**\n**PROYECTO:**\n**CARGO:**\n**CORREO ELECTRÓNICO:**\n\n**QUEJAS:** Si va a presentar una queja, diligencie la opción 1.\n**SUGERENCIAS:** Si va a presentar una sugerencia diligencie la opción 2.\n\n### 1. QUEJAS\n\nSi usted quiere presentar una queja, seleccione la modalidad de acoso que va a presentar diligencie los siguientes datos:\n\n<table>\n<thead>\n<tr>\n<th colspan=\"3\">INFORMACIÓN DEL PRESUNTO ACOSADOR</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Nombre del presunto acosador:</td>\n<td>Cargo:</td>\n<td>Proyecto:</td>\n</tr>\n</tbody>\n</table>",
+      "text_raw": "# PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO\n## FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.\n\n<table>\n    <tr>\n        <td>SYC Sistemas y Computadores S.A.</td>\n        <td>CÓDIGO</td>\n        <td>RE.RH-04 SST</td>\n        <td>NIVEL DE CLASIFICACIÓN</td>\n        <td>USO INTERNO (NC2)</td>\n        <td>Versión 0.3</td>\n    </tr>\n</table>\n**NOMBRE:**\n**DOCUMENTO DE IDENTIDAD:**\n**PROYECTO:**\n**CARGO:**\n**CORREO ELECTRÓNICO:**\n\n**QUEJAS:** Si va a presentar una queja, diligencie la opción 1.\n**SUGERENCIAS:** Si va a presentar una sugerencia diligencie la opción 2.\n\n### 1. QUEJAS\n\nSi usted quiere presentar una queja, seleccione la modalidad de acoso que va a presentar diligencie los siguientes datos:\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"3\">INFORMACIÓN DEL PRESUNTO ACOSADOR</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Nombre del presunto acosador:</td>\n      <td>Cargo:</td>\n      <td>Proyecto:</td>\n    </tr>\n  </tbody>\n</table>",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 2,
+      "removed_spans": [],
+      "text_normalized": "<table>\n<tr><th></th><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th><th></th></tr>\n<tr><th></th><th>FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.</th><th></th><th></th><th></th><th></th><th></th></tr>\n<tr><th>Sistemas y Computadores S.A.</th><th>CÓDIGO</th><th>RE.RH-04 SST</th><th>NIVEL DE CLASIFICACIÓN</th><th>USO INTERNO (NC2)</th><th>Versión</th><th>0.3</th></tr>\n</table>\n\n**RELACIÓN DE LOS HECHOS CONSTITUTIVOS DE LA QUEJA:**\nDeben incluirse todos los elementos en los que se identifiquen las circunstancias del sujeto o los sujetos, tiempo (cuándo), modo (cómo) y lugar (dónde).\n\nRelacione, adjunte, o describa las pruebas con las cuales cuenta para sustentar su queja.\n\n**2. SUGERENCIAS**\n\n_________________________________________\n**FIRMA DEL QUE INTERPONE LA QUEJA**\n**Número de identificación:**\n**Celular:** _____________________________________",
+      "text_raw": "<table>\n<tr><th></th><th>PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th><th></th></tr>\n<tr><th></th><th>FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.</th><th></th><th></th><th></th><th></th><th></th></tr>\n<tr><th>Sistemas y Computadores S.A.</th><th>CÓDIGO</th><th>RE.RH-04 SST</th><th>NIVEL DE CLASIFICACIÓN</th><th>USO INTERNO (NC2)</th><th>Versión</th><th>0.3</th></tr>\n</table>\n\n**RELACIÓN DE LOS HECHOS CONSTITUTIVOS DE LA QUEJA:**\nDeben incluirse todos los elementos en los que se identifiquen las circunstancias del sujeto o los sujetos, tiempo (cuándo), modo (cómo) y lugar (dónde).\n\nRelacione, adjunte, o describa las pruebas con las cuales cuenta para sustentar su queja.\n\n**2. SUGERENCIAS**\n\n_________________________________________\n**FIRMA DEL QUE INTERPONE LA QUEJA**\n**Número de identificación:**\n**Celular:** _____________________________________",
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0"
+}
