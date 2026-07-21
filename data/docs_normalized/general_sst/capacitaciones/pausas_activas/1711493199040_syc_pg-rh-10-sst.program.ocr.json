@@ -1,0 +1,6258 @@
+{
+  "document_confidence": {
+    "engine": "tesseract",
+    "engine_version": "unknown",
+    "kind": "measured",
+    "method": null,
+    "provenance": null,
+    "sample_size": 488,
+    "unit": "mean_word_confidence",
+    "value": 0.8677450645081967,
+    "warnings": []
+  },
+  "document_id": "doc_f2cf7868a801af0e",
+  "engine": "tesseract",
+  "engine_version": "unknown",
+  "language": "spa",
+  "pages": [
+    {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "unknown",
+        "kind": "measured",
+        "method": null,
+        "provenance": null,
+        "sample_size": 274,
+        "unit": "mean_word_confidence",
+        "value": 0.846213963649635,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 44,
+      "page_number": 8,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 274,
+      "words": [
+        {
+          "bbox": {
+            "bottom": 137.0,
+            "coordinate_system": "pixels",
+            "top": 101.0,
+            "x0": 535.0,
+            "x1": 772.0
+          },
+          "confidence": 0.9619864699999999,
+          "text": "EJERCICIOS",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 136.0,
+            "coordinate_system": "pixels",
+            "top": 101.0,
+            "x0": 785.0,
+            "x1": 838.0
+          },
+          "confidence": 0.9619864699999999,
+          "text": "DE",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 137.0,
+            "coordinate_system": "pixels",
+            "top": 101.0,
+            "x0": 853.0,
+            "x1": 1105.0
+          },
+          "confidence": 0.95791573,
+          "text": "MOVILIDAD",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 137.0,
+            "coordinate_system": "pixels",
+            "top": 101.0,
+            "x0": 1116.0,
+            "x1": 1362.0
+          },
+          "confidence": 0.96227974,
+          "text": "ARTICULAR",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 204.0,
+            "coordinate_system": "pixels",
+            "top": 160.0,
+            "x0": 463.0,
+            "x1": 635.0
+          },
+          "confidence": 0.91596313,
+          "text": "EXLICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 204.0,
+            "coordinate_system": "pixels",
+            "top": 160.0,
+            "x0": 1032.0,
+            "x1": 1224.0
+          },
+          "confidence": 0.9670860299999999,
+          "text": "EXPLICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 194.0,
+            "coordinate_system": "pixels",
+            "top": 170.0,
+            "x0": 1587.0,
+            "x1": 1665.0
+          },
+          "confidence": 0.12265732,
+          "text": "A",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 350.0,
+            "coordinate_system": "pixels",
+            "top": 329.0,
+            "x0": 107.0,
+            "x1": 193.0
+          },
+          "confidence": 0.92878754,
+          "text": "Mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 350.0,
+            "coordinate_system": "pixels",
+            "top": 327.0,
+            "x0": 201.0,
+            "x1": 347.0
+          },
+          "confidence": 0.96197449,
+          "text": "lentamente",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 350.0,
+            "coordinate_system": "pixels",
+            "top": 327.0,
+            "x0": 354.0,
+            "x1": 373.0
+          },
+          "confidence": 0.97004349,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 391.0,
+            "coordinate_system": "pixels",
+            "top": 369.0,
+            "x0": 99.0,
+            "x1": 186.0
+          },
+          "confidence": 0.9680543500000001,
+          "text": "cabeza",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 391.0,
+            "coordinate_system": "pixels",
+            "top": 369.0,
+            "x0": 194.0,
+            "x1": 268.0
+          },
+          "confidence": 0.9681204999999999,
+          "text": "arriba",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 396.0,
+            "coordinate_system": "pixels",
+            "top": 375.0,
+            "x0": 276.0,
+            "x1": 290.0
+          },
+          "confidence": 0.9680619,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 396.0,
+            "coordinate_system": "pixels",
+            "top": 369.0,
+            "x0": 298.0,
+            "x1": 378.0
+          },
+          "confidence": 0.9693672200000001,
+          "text": "abajo.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 437.0,
+            "coordinate_system": "pixels",
+            "top": 409.0,
+            "x0": 131.0,
+            "x1": 233.0
+          },
+          "confidence": 0.9303348499999999,
+          "text": "Repitálo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 432.0,
+            "coordinate_system": "pixels",
+            "top": 411.0,
+            "x0": 243.0,
+            "x1": 272.0
+          },
+          "confidence": 0.96825745,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 432.0,
+            "coordinate_system": "pixels",
+            "top": 416.0,
+            "x0": 278.0,
+            "x1": 348.0
+          },
+          "confidence": 0.9650992599999999,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 328.0,
+            "coordinate_system": "pixels",
+            "top": 308.0,
+            "x0": 1266.0,
+            "x1": 1352.0
+          },
+          "confidence": 0.8521983299999999,
+          "text": "Mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 328.0,
+            "coordinate_system": "pixels",
+            "top": 306.0,
+            "x0": 1361.0,
+            "x1": 1395.0
+          },
+          "confidence": 0.96200821,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 328.0,
+            "coordinate_system": "pixels",
+            "top": 306.0,
+            "x0": 1404.0,
+            "x1": 1488.0
+          },
+          "confidence": 0.9661119100000001,
+          "text": "brazos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 328.0,
+            "coordinate_system": "pixels",
+            "top": 306.0,
+            "x0": 1496.0,
+            "x1": 1527.0
+          },
+          "confidence": 0.96804558,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 350.0,
+            "coordinate_system": "pixels",
+            "top": 329.0,
+            "x0": 719.0,
+            "x1": 805.0
+          },
+          "confidence": 0.9268206800000001,
+          "text": "Mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 350.0,
+            "coordinate_system": "pixels",
+            "top": 327.0,
+            "x0": 813.0,
+            "x1": 848.0
+          },
+          "confidence": 0.9699214899999999,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 350.0,
+            "coordinate_system": "pixels",
+            "top": 328.0,
+            "x0": 856.0,
+            "x1": 971.0
+          },
+          "confidence": 0.9657285299999999,
+          "text": "hombros",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 353.0,
+            "coordinate_system": "pixels",
+            "top": 350.0,
+            "x0": 1081.0,
+            "x1": 1084.0
+          },
+          "confidence": 0.64041634,
+          "text": ":",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 351.0,
+            "coordinate_system": "pixels",
+            "top": 270.0,
+            "x0": 1105.0,
+            "x1": 1185.0
+          },
+          "confidence": 0.7346215100000001,
+          "text": "2.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 341.0,
+            "coordinate_system": "pixels",
+            "top": 337.0,
+            "x0": 1203.0,
+            "x1": 1205.0
+          },
+          "confidence": 0.0,
+          "text": ";",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 356.0,
+            "coordinate_system": "pixels",
+            "top": 353.0,
+            "x0": 1084.0,
+            "x1": 1087.0
+          },
+          "confidence": 0.81691452,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 370.0,
+            "coordinate_system": "pixels",
+            "top": 353.0,
+            "x0": 1296.0,
+            "x1": 1391.0
+          },
+          "confidence": 0.95928093,
+          "text": "manera",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 370.0,
+            "coordinate_system": "pixels",
+            "top": 347.0,
+            "x0": 1399.0,
+            "x1": 1498.0
+          },
+          "confidence": 0.96780632,
+          "text": "circular.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 391.0,
+            "coordinate_system": "pixels",
+            "top": 369.0,
+            "x0": 739.0,
+            "x1": 850.0
+          },
+          "confidence": 0.9663365899999999,
+          "text": "adelante",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 396.0,
+            "coordinate_system": "pixels",
+            "top": 375.0,
+            "x0": 858.0,
+            "x1": 872.0
+          },
+          "confidence": 0.9697847,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 391.0,
+            "coordinate_system": "pixels",
+            "top": 368.0,
+            "x0": 879.0,
+            "x1": 950.0
+          },
+          "confidence": 0.9684651200000001,
+          "text": "atrás.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 388.0,
+            "coordinate_system": "pixels",
+            "top": 379.0,
+            "x0": 1177.0,
+            "x1": 1193.0
+          },
+          "confidence": 0.04822418,
+          "text": "A",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 394.0,
+            "coordinate_system": "pixels",
+            "top": 389.0,
+            "x0": 1324.0,
+            "x1": 1330.0
+          },
+          "confidence": 0.47183746,
+          "text": ".",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 415.0,
+            "coordinate_system": "pixels",
+            "top": 389.0,
+            "x0": 1275.0,
+            "x1": 1354.0
+          },
+          "confidence": 0.95964142,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 410.0,
+            "coordinate_system": "pixels",
+            "top": 389.0,
+            "x0": 1363.0,
+            "x1": 1392.0
+          },
+          "confidence": 0.95964142,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 410.0,
+            "coordinate_system": "pixels",
+            "top": 394.0,
+            "x0": 1398.0,
+            "x1": 1468.0
+          },
+          "confidence": 0.9637735700000001,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 415.0,
+            "coordinate_system": "pixels",
+            "top": 394.0,
+            "x0": 1477.0,
+            "x1": 1522.0
+          },
+          "confidence": 0.9637735700000001,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 437.0,
+            "coordinate_system": "pixels",
+            "top": 409.0,
+            "x0": 740.0,
+            "x1": 837.0
+          },
+          "confidence": 0.9194152099999999,
+          "text": "Reptálo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 432.0,
+            "coordinate_system": "pixels",
+            "top": 411.0,
+            "x0": 846.0,
+            "x1": 875.0
+          },
+          "confidence": 0.96509377,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 432.0,
+            "coordinate_system": "pixels",
+            "top": 416.0,
+            "x0": 881.0,
+            "x1": 951.0
+          },
+          "confidence": 0.9643131300000001,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 452.0,
+            "coordinate_system": "pixels",
+            "top": 429.0,
+            "x0": 1361.0,
+            "x1": 1432.0
+          },
+          "confidence": 0.9693711899999999,
+          "text": "brazo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 544.0,
+            "coordinate_system": "pixels",
+            "top": 522.0,
+            "x0": 1283.0,
+            "x1": 1366.0
+          },
+          "confidence": 0.9248504599999999,
+          "text": "Incline",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 544.0,
+            "coordinate_system": "pixels",
+            "top": 522.0,
+            "x0": 1373.0,
+            "x1": 1394.0
+          },
+          "confidence": 0.9687621300000001,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 544.0,
+            "coordinate_system": "pixels",
+            "top": 525.0,
+            "x0": 1400.0,
+            "x1": 1485.0
+          },
+          "confidence": 0.96169678,
+          "text": "tronco",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 544.0,
+            "coordinate_system": "pixels",
+            "top": 528.0,
+            "x0": 1494.0,
+            "x1": 1507.0
+          },
+          "confidence": 0.96355789,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 569.0,
+            "x0": 1287.0,
+            "x1": 1319.0
+          },
+          "confidence": 0.9689585099999999,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 1328.0,
+            "x1": 1382.0
+          },
+          "confidence": 0.96950684,
+          "text": "lado",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 594.0,
+            "coordinate_system": "pixels",
+            "top": 559.0,
+            "x0": 1385.0,
+            "x1": 1397.0
+          },
+          "confidence": 0.96648209,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 1412.0,
+            "x1": 1433.0
+          },
+          "confidence": 0.8991838099999999,
+          "text": "al",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 589.0,
+            "coordinate_system": "pixels",
+            "top": 566.0,
+            "x0": 1440.0,
+            "x1": 1502.0
+          },
+          "confidence": 0.8991838099999999,
+          "text": "otro,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 631.0,
+            "coordinate_system": "pixels",
+            "top": 604.0,
+            "x0": 1272.0,
+            "x1": 1382.0
+          },
+          "confidence": 0.9683682299999999,
+          "text": "pasando",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 626.0,
+            "coordinate_system": "pixels",
+            "top": 610.0,
+            "x0": 1391.0,
+            "x1": 1438.0
+          },
+          "confidence": 0.9632534800000001,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 626.0,
+            "coordinate_system": "pixels",
+            "top": 610.0,
+            "x0": 1447.0,
+            "x1": 1518.0
+          },
+          "confidence": 0.9673633599999999,
+          "text": "mano",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 667.0,
+            "coordinate_system": "pixels",
+            "top": 645.0,
+            "x0": 1276.0,
+            "x1": 1349.0
+          },
+          "confidence": 0.9618914,
+          "text": "sobre",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 667.0,
+            "coordinate_system": "pixels",
+            "top": 645.0,
+            "x0": 1356.0,
+            "x1": 1376.0
+          },
+          "confidence": 0.96792313,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 668.0,
+            "coordinate_system": "pixels",
+            "top": 645.0,
+            "x0": 1384.0,
+            "x1": 1479.0
+          },
+          "confidence": 0.96380501,
+          "text": "cabeza.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 667.0,
+            "coordinate_system": "pixels",
+            "top": 646.0,
+            "x0": 1488.0,
+            "x1": 1517.0
+          },
+          "confidence": 0.96910408,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 708.0,
+            "coordinate_system": "pixels",
+            "top": 692.0,
+            "x0": 1303.0,
+            "x1": 1373.0
+          },
+          "confidence": 0.96348969,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 714.0,
+            "coordinate_system": "pixels",
+            "top": 692.0,
+            "x0": 1382.0,
+            "x1": 1427.0
+          },
+          "confidence": 0.9611869,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 708.0,
+            "coordinate_system": "pixels",
+            "top": 686.0,
+            "x0": 1434.0,
+            "x1": 1487.0
+          },
+          "confidence": 0.95747917,
+          "text": "lado",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 698.0,
+            "x1": 762.0
+          },
+          "confidence": 0.96862633,
+          "text": "Suba",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 595.0,
+            "coordinate_system": "pixels",
+            "top": 559.0,
+            "x0": 763.0,
+            "x1": 775.0
+          },
+          "confidence": 0.97007874,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 792.0,
+            "x1": 847.0
+          },
+          "confidence": 0.96750099,
+          "text": "baje",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 854.0,
+            "x1": 873.0
+          },
+          "confidence": 0.96738686,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 882.0,
+            "x1": 990.0
+          },
+          "confidence": 0.9682321899999999,
+          "text": "muñeca.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 605.0,
+            "coordinate_system": "pixels",
+            "top": 582.0,
+            "x0": 100.0,
+            "x1": 174.0
+          },
+          "confidence": 0.95450287,
+          "text": "Doble",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 610.0,
+            "coordinate_system": "pixels",
+            "top": 589.0,
+            "x0": 181.0,
+            "x1": 196.0
+          },
+          "confidence": 0.93306145,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 605.0,
+            "coordinate_system": "pixels",
+            "top": 583.0,
+            "x0": 203.0,
+            "x1": 273.0
+          },
+          "confidence": 0.9328638499999999,
+          "text": "estire",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 605.0,
+            "coordinate_system": "pixels",
+            "top": 582.0,
+            "x0": 281.0,
+            "x1": 302.0
+          },
+          "confidence": 0.9699909200000001,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 605.0,
+            "coordinate_system": "pixels",
+            "top": 583.0,
+            "x0": 308.0,
+            "x1": 380.0
+          },
+          "confidence": 0.9700386799999999,
+          "text": "codo.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 606.0,
+            "coordinate_system": "pixels",
+            "top": 601.0,
+            "x0": 574.0,
+            "x1": 579.0
+          },
+          "confidence": 0.0,
+          "text": ":",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 590.0,
+            "coordinate_system": "pixels",
+            "top": 564.0,
+            "x0": 769.0,
+            "x1": 830.0
+          },
+          "confidence": 0.06826477,
+          "text": "ve",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 622.0,
+            "coordinate_system": "pixels",
+            "top": 609.0,
+            "x0": 574.0,
+            "x1": 581.0
+          },
+          "confidence": 0.45121901999999997,
+          "text": ":",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.0,
+            "coordinate_system": "pixels",
+            "top": 604.0,
+            "x0": 723.0,
+            "x1": 802.0
+          },
+          "confidence": 0.9685853600000001,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 626.0,
+            "coordinate_system": "pixels",
+            "top": 605.0,
+            "x0": 812.0,
+            "x1": 841.0
+          },
+          "confidence": 0.9696991,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 626.0,
+            "coordinate_system": "pixels",
+            "top": 610.0,
+            "x0": 847.0,
+            "x1": 917.0
+          },
+          "confidence": 0.96426735,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 631.0,
+            "coordinate_system": "pixels",
+            "top": 610.0,
+            "x0": 925.0,
+            "x1": 970.0
+          },
+          "confidence": 0.96426735,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 651.0,
+            "coordinate_system": "pixels",
+            "top": 624.0,
+            "x0": 77.0,
+            "x1": 156.0
+          },
+          "confidence": 0.96435165,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 646.0,
+            "coordinate_system": "pixels",
+            "top": 625.0,
+            "x0": 165.0,
+            "x1": 194.0
+          },
+          "confidence": 0.9697773700000001,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 646.0,
+            "coordinate_system": "pixels",
+            "top": 630.0,
+            "x0": 200.0,
+            "x1": 270.0
+          },
+          "confidence": 0.96939774,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 651.0,
+            "coordinate_system": "pixels",
+            "top": 630.0,
+            "x0": 279.0,
+            "x1": 323.0
+          },
+          "confidence": 0.9637142900000001,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 646.0,
+            "coordinate_system": "pixels",
+            "top": 623.0,
+            "x0": 331.0,
+            "x1": 402.0
+          },
+          "confidence": 0.96884842,
+          "text": "brazo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 645.0,
+            "coordinate_system": "pixels",
+            "top": 627.0,
+            "x0": 555.0,
+            "x1": 584.0
+          },
+          "confidence": 0.7186170199999999,
+          "text": "ES",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 656.0,
+            "coordinate_system": "pixels",
+            "top": 651.0,
+            "x0": 578.0,
+            "x1": 585.0
+          },
+          "confidence": 0.3196273,
+          "text": "A",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 667.0,
+            "coordinate_system": "pixels",
+            "top": 651.0,
+            "x0": 809.0,
+            "x1": 880.0
+          },
+          "confidence": 0.9662933300000001,
+          "text": "mano",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 799.0,
+            "coordinate_system": "pixels",
+            "top": 777.0,
+            "x0": 99.0,
+            "x1": 227.0
+          },
+          "confidence": 0.9171798699999999,
+          "text": "Sostenido",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 799.0,
+            "coordinate_system": "pixels",
+            "top": 777.0,
+            "x0": 235.0,
+            "x1": 267.0
+          },
+          "confidence": 0.9632096099999999,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 799.0,
+            "coordinate_system": "pixels",
+            "top": 783.0,
+            "x0": 274.0,
+            "x1": 322.0
+          },
+          "confidence": 0.9661615,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 803.0,
+            "coordinate_system": "pixels",
+            "top": 777.0,
+            "x0": 330.0,
+            "x1": 384.0
+          },
+          "confidence": 0.9652020299999999,
+          "text": "silla,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 840.0,
+            "coordinate_system": "pixels",
+            "top": 818.0,
+            "x0": 83.0,
+            "x1": 140.0
+          },
+          "confidence": 0.96333359,
+          "text": "lleve",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 840.0,
+            "coordinate_system": "pixels",
+            "top": 818.0,
+            "x0": 147.0,
+            "x1": 167.0
+          },
+          "confidence": 0.96333359,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 845.0,
+            "coordinate_system": "pixels",
+            "top": 818.0,
+            "x0": 176.0,
+            "x1": 255.0
+          },
+          "confidence": 0.96529068,
+          "text": "pierna",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 840.0,
+            "coordinate_system": "pixels",
+            "top": 818.0,
+            "x0": 263.0,
+            "x1": 375.0
+          },
+          "confidence": 0.9649099699999999,
+          "text": "adelante",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 845.0,
+            "coordinate_system": "pixels",
+            "top": 824.0,
+            "x0": 381.0,
+            "x1": 396.0
+          },
+          "confidence": 0.9700479900000001,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 881.0,
+            "coordinate_system": "pixels",
+            "top": 858.0,
+            "x0": 76.0,
+            "x1": 147.0
+          },
+          "confidence": 0.9675634,
+          "text": "atrás.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 886.0,
+            "coordinate_system": "pixels",
+            "top": 859.0,
+            "x0": 157.0,
+            "x1": 236.0
+          },
+          "confidence": 0.9675634,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 881.0,
+            "coordinate_system": "pixels",
+            "top": 860.0,
+            "x0": 245.0,
+            "x1": 274.0
+          },
+          "confidence": 0.9697358699999999,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 881.0,
+            "coordinate_system": "pixels",
+            "top": 865.0,
+            "x0": 280.0,
+            "x1": 350.0
+          },
+          "confidence": 0.9656353799999999,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 886.0,
+            "coordinate_system": "pixels",
+            "top": 865.0,
+            "x0": 359.0,
+            "x1": 403.0
+          },
+          "confidence": 0.96550034,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 927.0,
+            "coordinate_system": "pixels",
+            "top": 900.0,
+            "x0": 199.0,
+            "x1": 279.0
+          },
+          "confidence": 0.96368706,
+          "text": "pierna",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 777.0,
+            "coordinate_system": "pixels",
+            "top": 755.0,
+            "x0": 1285.0,
+            "x1": 1412.0
+          },
+          "confidence": 0.9166793099999999,
+          "text": "Sostenido",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 777.0,
+            "coordinate_system": "pixels",
+            "top": 755.0,
+            "x0": 1420.0,
+            "x1": 1452.0
+          },
+          "confidence": 0.9577737399999999,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 777.0,
+            "coordinate_system": "pixels",
+            "top": 761.0,
+            "x0": 1460.0,
+            "x1": 1507.0
+          },
+          "confidence": 0.9577737399999999,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 799.0,
+            "coordinate_system": "pixels",
+            "top": 777.0,
+            "x0": 727.0,
+            "x1": 813.0
+          },
+          "confidence": 0.9567903099999999,
+          "text": "Doblar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 799.0,
+            "coordinate_system": "pixels",
+            "top": 783.0,
+            "x0": 820.0,
+            "x1": 851.0
+          },
+          "confidence": 0.96533249,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 804.0,
+            "coordinate_system": "pixels",
+            "top": 783.0,
+            "x0": 861.0,
+            "x1": 923.0
+          },
+          "confidence": 0.9649347699999999,
+          "text": "poco",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 799.0,
+            "coordinate_system": "pixels",
+            "top": 777.0,
+            "x0": 932.0,
+            "x1": 964.0
+          },
+          "confidence": 0.96926163,
+          "text": "las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 822.0,
+            "coordinate_system": "pixels",
+            "top": 796.0,
+            "x0": 1308.0,
+            "x1": 1362.0
+          },
+          "confidence": 0.9674981699999999,
+          "text": "silla,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 819.0,
+            "coordinate_system": "pixels",
+            "top": 802.0,
+            "x0": 1371.0,
+            "x1": 1455.0
+          },
+          "confidence": 0.9680024,
+          "text": "mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 819.0,
+            "coordinate_system": "pixels",
+            "top": 796.0,
+            "x0": 1464.0,
+            "x1": 1485.0
+          },
+          "confidence": 0.9655410000000001,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 840.0,
+            "coordinate_system": "pixels",
+            "top": 818.0,
+            "x0": 710.0,
+            "x1": 800.0
+          },
+          "confidence": 0.9673762499999999,
+          "text": "rodillas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 845.0,
+            "coordinate_system": "pixels",
+            "top": 824.0,
+            "x0": 808.0,
+            "x1": 823.0
+          },
+          "confidence": 0.9701570100000001,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 845.0,
+            "coordinate_system": "pixels",
+            "top": 824.0,
+            "x0": 831.0,
+            "x1": 935.0
+          },
+          "confidence": 0.96919174,
+          "text": "regresar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 840.0,
+            "coordinate_system": "pixels",
+            "top": 824.0,
+            "x0": 942.0,
+            "x1": 955.0
+          },
+          "confidence": 0.96919174,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 840.0,
+            "coordinate_system": "pixels",
+            "top": 818.0,
+            "x0": 964.0,
+            "x1": 984.0
+          },
+          "confidence": 0.96982033,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 881.0,
+            "coordinate_system": "pixels",
+            "top": 859.0,
+            "x0": 753.0,
+            "x1": 794.0
+          },
+          "confidence": 0.64883095,
+          "text": "ición",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 881.0,
+            "coordinate_system": "pixels",
+            "top": 859.0,
+            "x0": 820.0,
+            "x1": 890.0
+          },
+          "confidence": 0.6421051799999999,
+          "text": "inicial.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 881.0,
+            "coordinate_system": "pixels",
+            "top": 859.0,
+            "x0": 906.0,
+            "x1": 971.0
+          },
+          "confidence": 0.21721015999999999,
+          "text": "Repit",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 859.0,
+            "coordinate_system": "pixels",
+            "top": 837.0,
+            "x0": 1284.0,
+            "x1": 1365.0
+          },
+          "confidence": 0.96729828,
+          "text": "tobillo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 859.0,
+            "coordinate_system": "pixels",
+            "top": 837.0,
+            "x0": 1373.0,
+            "x1": 1405.0
+          },
+          "confidence": 0.9677306400000001,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 860.0,
+            "coordinate_system": "pixels",
+            "top": 843.0,
+            "x0": 1412.0,
+            "x1": 1507.0
+          },
+          "confidence": 0.9675283100000001,
+          "text": "manera",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 886.0,
+            "coordinate_system": "pixels",
+            "top": 865.0,
+            "x0": 705.0,
+            "x1": 751.0
+          },
+          "confidence": 0.61508137,
+          "text": "pos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 922.0,
+            "coordinate_system": "pixels",
+            "top": 865.0,
+            "x0": 795.0,
+            "x1": 823.0
+          },
+          "confidence": 0.20556358,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 926.0,
+            "coordinate_system": "pixels",
+            "top": 861.0,
+            "x0": 829.0,
+            "x1": 900.0
+          },
+          "confidence": 0.24735176,
+          "text": "ecos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 886.0,
+            "coordinate_system": "pixels",
+            "top": 865.0,
+            "x0": 922.0,
+            "x1": 986.0
+          },
+          "confidence": 0.0,
+          "text": "».es",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 901.0,
+            "coordinate_system": "pixels",
+            "top": 878.0,
+            "x0": 1282.0,
+            "x1": 1382.0
+          },
+          "confidence": 0.9678683499999999,
+          "text": "circular.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 906.0,
+            "coordinate_system": "pixels",
+            "top": 879.0,
+            "x0": 1391.0,
+            "x1": 1471.0
+          },
+          "confidence": 0.96997887,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 901.0,
+            "coordinate_system": "pixels",
+            "top": 879.0,
+            "x0": 1480.0,
+            "x1": 1509.0
+          },
+          "confidence": 0.96821457,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 941.0,
+            "coordinate_system": "pixels",
+            "top": 925.0,
+            "x0": 1290.0,
+            "x1": 1361.0
+          },
+          "confidence": 0.96630013,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 947.0,
+            "coordinate_system": "pixels",
+            "top": 926.0,
+            "x0": 1369.0,
+            "x1": 1414.0
+          },
+          "confidence": 0.96735237,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 941.0,
+            "coordinate_system": "pixels",
+            "top": 919.0,
+            "x0": 1420.0,
+            "x1": 1500.0
+          },
+          "confidence": 0.96735237,
+          "text": "tobillo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 73.0,
+            "coordinate_system": "pixels",
+            "top": 37.0,
+            "x0": 471.0,
+            "x1": 707.0
+          },
+          "confidence": 0.9619864699999999,
+          "text": "EJERCICIOS",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 72.0,
+            "coordinate_system": "pixels",
+            "top": 37.0,
+            "x0": 721.0,
+            "x1": 774.0
+          },
+          "confidence": 0.9619864699999999,
+          "text": "DE",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 73.0,
+            "coordinate_system": "pixels",
+            "top": 37.0,
+            "x0": 790.0,
+            "x1": 1041.0
+          },
+          "confidence": 0.95791573,
+          "text": "MOVILIDAD",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 72.0,
+            "coordinate_system": "pixels",
+            "top": 37.0,
+            "x0": 1052.0,
+            "x1": 1298.0
+          },
+          "confidence": 0.96227974,
+          "text": "ARTICULAR",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 140.0,
+            "coordinate_system": "pixels",
+            "top": 96.0,
+            "x0": 399.0,
+            "x1": 571.0
+          },
+          "confidence": 0.91596313,
+          "text": "EXLICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 140.0,
+            "coordinate_system": "pixels",
+            "top": 96.0,
+            "x0": 968.0,
+            "x1": 1159.0
+          },
+          "confidence": 0.9667543000000001,
+          "text": "EXPLICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 130.0,
+            "coordinate_system": "pixels",
+            "top": 100.0,
+            "x0": 1523.0,
+            "x1": 1711.0
+          },
+          "confidence": 0.96595451,
+          "text": "EXPLICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 265.0,
+            "coordinate_system": "pixels",
+            "top": 206.0,
+            "x0": 1041.0,
+            "x1": 1094.0
+          },
+          "confidence": 0.6661833199999999,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 264.0,
+            "coordinate_system": "pixels",
+            "top": 244.0,
+            "x0": 1202.0,
+            "x1": 1288.0
+          },
+          "confidence": 0.8521983299999999,
+          "text": "Mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 264.0,
+            "coordinate_system": "pixels",
+            "top": 242.0,
+            "x0": 1297.0,
+            "x1": 1331.0
+          },
+          "confidence": 0.96200821,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 264.0,
+            "coordinate_system": "pixels",
+            "top": 242.0,
+            "x0": 1340.0,
+            "x1": 1424.0
+          },
+          "confidence": 0.9661119100000001,
+          "text": "brazos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 264.0,
+            "coordinate_system": "pixels",
+            "top": 242.0,
+            "x0": 1432.0,
+            "x1": 1463.0
+          },
+          "confidence": 0.96804558,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 286.0,
+            "coordinate_system": "pixels",
+            "top": 265.0,
+            "x0": 43.0,
+            "x1": 129.0
+          },
+          "confidence": 0.90074623,
+          "text": "Mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 286.0,
+            "coordinate_system": "pixels",
+            "top": 264.0,
+            "x0": 138.0,
+            "x1": 282.0
+          },
+          "confidence": 0.96623222,
+          "text": "lentamente",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 286.0,
+            "coordinate_system": "pixels",
+            "top": 264.0,
+            "x0": 290.0,
+            "x1": 309.0
+          },
+          "confidence": 0.96913589,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 277.0,
+            "coordinate_system": "pixels",
+            "top": 271.0,
+            "x0": 520.0,
+            "x1": 551.0
+          },
+          "confidence": 0.36739433,
+          "text": "qe",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 286.0,
+            "coordinate_system": "pixels",
+            "top": 265.0,
+            "x0": 655.0,
+            "x1": 741.0
+          },
+          "confidence": 0.90974052,
+          "text": "Mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 286.0,
+            "coordinate_system": "pixels",
+            "top": 264.0,
+            "x0": 749.0,
+            "x1": 784.0
+          },
+          "confidence": 0.96172485,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 286.0,
+            "coordinate_system": "pixels",
+            "top": 264.0,
+            "x0": 792.0,
+            "x1": 907.0
+          },
+          "confidence": 0.96700104,
+          "text": "hombros",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 278.0,
+            "coordinate_system": "pixels",
+            "top": 271.0,
+            "x0": 1028.0,
+            "x1": 1032.0
+          },
+          "confidence": 0.50614464,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 287.0,
+            "coordinate_system": "pixels",
+            "top": 267.0,
+            "x0": 1110.0,
+            "x1": 1120.0
+          },
+          "confidence": 0.20986267000000003,
+          "text": "p\"",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 306.0,
+            "coordinate_system": "pixels",
+            "top": 290.0,
+            "x0": 587.0,
+            "x1": 593.0
+          },
+          "confidence": 0.85973862,
+          "text": "3",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.0,
+            "coordinate_system": "pixels",
+            "top": 303.0,
+            "x0": 1024.0,
+            "x1": 1029.0
+          },
+          "confidence": 0.8581634499999999,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 305.0,
+            "coordinate_system": "pixels",
+            "top": 289.0,
+            "x0": 1232.0,
+            "x1": 1327.0
+          },
+          "confidence": 0.95928093,
+          "text": "manera",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 305.0,
+            "coordinate_system": "pixels",
+            "top": 283.0,
+            "x0": 1335.0,
+            "x1": 1434.0
+          },
+          "confidence": 0.96780632,
+          "text": "circular.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 327.0,
+            "coordinate_system": "pixels",
+            "top": 305.0,
+            "x0": 35.0,
+            "x1": 122.0
+          },
+          "confidence": 0.96767876,
+          "text": "cabeza",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 327.0,
+            "coordinate_system": "pixels",
+            "top": 305.0,
+            "x0": 130.0,
+            "x1": 204.0
+          },
+          "confidence": 0.96917648,
+          "text": "arriba",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 332.0,
+            "coordinate_system": "pixels",
+            "top": 311.0,
+            "x0": 212.0,
+            "x1": 226.0
+          },
+          "confidence": 0.96550766,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 332.0,
+            "coordinate_system": "pixels",
+            "top": 305.0,
+            "x0": 234.0,
+            "x1": 313.0
+          },
+          "confidence": 0.9689565299999999,
+          "text": "abajo.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 327.0,
+            "coordinate_system": "pixels",
+            "top": 305.0,
+            "x0": 675.0,
+            "x1": 786.0
+          },
+          "confidence": 0.96261734,
+          "text": "adelante",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 332.0,
+            "coordinate_system": "pixels",
+            "top": 311.0,
+            "x0": 794.0,
+            "x1": 808.0
+          },
+          "confidence": 0.96969032,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 327.0,
+            "coordinate_system": "pixels",
+            "top": 305.0,
+            "x0": 816.0,
+            "x1": 886.0
+          },
+          "confidence": 0.9679808,
+          "text": "atrás.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 333.0,
+            "coordinate_system": "pixels",
+            "top": 309.0,
+            "x0": 1108.0,
+            "x1": 1147.0
+          },
+          "confidence": 0.13169243,
+          "text": "cd",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 330.0,
+            "coordinate_system": "pixels",
+            "top": 325.0,
+            "x0": 1260.0,
+            "x1": 1265.0
+          },
+          "confidence": 0.40472103,
+          "text": ".",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 348.0,
+            "coordinate_system": "pixels",
+            "top": 331.0,
+            "x0": 480.0,
+            "x1": 505.0
+          },
+          "confidence": 0.0,
+          "text": "Z",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 335.0,
+            "coordinate_system": "pixels",
+            "top": 332.0,
+            "x0": 1104.0,
+            "x1": 1120.0
+          },
+          "confidence": 0.0,
+          "text": "=",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 351.0,
+            "coordinate_system": "pixels",
+            "top": 326.0,
+            "x0": 1211.0,
+            "x1": 1290.0
+          },
+          "confidence": 0.95964142,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 346.0,
+            "coordinate_system": "pixels",
+            "top": 325.0,
+            "x0": 1299.0,
+            "x1": 1328.0
+          },
+          "confidence": 0.95964142,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 346.0,
+            "coordinate_system": "pixels",
+            "top": 330.0,
+            "x0": 1334.0,
+            "x1": 1404.0
+          },
+          "confidence": 0.9637735700000001,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 351.0,
+            "coordinate_system": "pixels",
+            "top": 330.0,
+            "x0": 1413.0,
+            "x1": 1458.0
+          },
+          "confidence": 0.9637735700000001,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 373.0,
+            "coordinate_system": "pixels",
+            "top": 345.0,
+            "x0": 67.0,
+            "x1": 169.0
+          },
+          "confidence": 0.9303348499999999,
+          "text": "Repitálo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 368.0,
+            "coordinate_system": "pixels",
+            "top": 347.0,
+            "x0": 179.0,
+            "x1": 208.0
+          },
+          "confidence": 0.96825745,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 368.0,
+            "coordinate_system": "pixels",
+            "top": 352.0,
+            "x0": 214.0,
+            "x1": 284.0
+          },
+          "confidence": 0.9650992599999999,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 373.0,
+            "coordinate_system": "pixels",
+            "top": 346.0,
+            "x0": 676.0,
+            "x1": 773.0
+          },
+          "confidence": 0.91473907,
+          "text": "Reptálo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 368.0,
+            "coordinate_system": "pixels",
+            "top": 347.0,
+            "x0": 782.0,
+            "x1": 811.0
+          },
+          "confidence": 0.9691350599999999,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 368.0,
+            "coordinate_system": "pixels",
+            "top": 352.0,
+            "x0": 817.0,
+            "x1": 887.0
+          },
+          "confidence": 0.96803658,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 354.0,
+            "coordinate_system": "pixels",
+            "top": 351.0,
+            "x0": 1149.0,
+            "x1": 1151.0
+          },
+          "confidence": 0.67897995,
+          "text": "]",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 387.0,
+            "coordinate_system": "pixels",
+            "top": 365.0,
+            "x0": 1297.0,
+            "x1": 1368.0
+          },
+          "confidence": 0.45745354,
+          "text": "uo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 480.0,
+            "coordinate_system": "pixels",
+            "top": 458.0,
+            "x0": 1220.0,
+            "x1": 1302.0
+          },
+          "confidence": 0.92258957,
+          "text": "Incline",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 480.0,
+            "coordinate_system": "pixels",
+            "top": 458.0,
+            "x0": 1309.0,
+            "x1": 1330.0
+          },
+          "confidence": 0.95772514,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 480.0,
+            "coordinate_system": "pixels",
+            "top": 461.0,
+            "x0": 1336.0,
+            "x1": 1421.0
+          },
+          "confidence": 0.95772514,
+          "text": "tronco",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 480.0,
+            "coordinate_system": "pixels",
+            "top": 464.0,
+            "x0": 1430.0,
+            "x1": 1443.0
+          },
+          "confidence": 0.96976196,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 541.0,
+            "coordinate_system": "pixels",
+            "top": 519.0,
+            "x0": 36.0,
+            "x1": 110.0
+          },
+          "confidence": 0.96396652,
+          "text": "Doble",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 546.0,
+            "coordinate_system": "pixels",
+            "top": 525.0,
+            "x0": 117.0,
+            "x1": 132.0
+          },
+          "confidence": 0.9328961200000001,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 541.0,
+            "coordinate_system": "pixels",
+            "top": 519.0,
+            "x0": 139.0,
+            "x1": 209.0
+          },
+          "confidence": 0.93284264,
+          "text": "estire",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 541.0,
+            "coordinate_system": "pixels",
+            "top": 519.0,
+            "x0": 217.0,
+            "x1": 238.0
+          },
+          "confidence": 0.96986122,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 541.0,
+            "coordinate_system": "pixels",
+            "top": 519.0,
+            "x0": 244.0,
+            "x1": 315.0
+          },
+          "confidence": 0.9700109100000001,
+          "text": "codo.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 542.0,
+            "coordinate_system": "pixels",
+            "top": 537.0,
+            "x0": 510.0,
+            "x1": 515.0
+          },
+          "confidence": 0.35932228,
+          "text": ":",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.0,
+            "coordinate_system": "pixels",
+            "top": 499.0,
+            "x0": 635.0,
+            "x1": 698.0
+          },
+          "confidence": 0.96652168,
+          "text": "Suba",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 526.0,
+            "coordinate_system": "pixels",
+            "top": 505.0,
+            "x0": 705.0,
+            "x1": 720.0
+          },
+          "confidence": 0.96944351,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 526.0,
+            "coordinate_system": "pixels",
+            "top": 499.0,
+            "x0": 728.0,
+            "x1": 782.0
+          },
+          "confidence": 0.96614746,
+          "text": "baje",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.0,
+            "coordinate_system": "pixels",
+            "top": 499.0,
+            "x0": 790.0,
+            "x1": 809.0
+          },
+          "confidence": 0.9664389,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.0,
+            "coordinate_system": "pixels",
+            "top": 499.0,
+            "x0": 818.0,
+            "x1": 925.0
+          },
+          "confidence": 0.96736351,
+          "text": "muñeca.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.0,
+            "coordinate_system": "pixels",
+            "top": 505.0,
+            "x0": 1223.0,
+            "x1": 1255.0
+          },
+          "confidence": 0.9689585099999999,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.0,
+            "coordinate_system": "pixels",
+            "top": 499.0,
+            "x0": 1264.0,
+            "x1": 1318.0
+          },
+          "confidence": 0.96950684,
+          "text": "lado",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 530.0,
+            "coordinate_system": "pixels",
+            "top": 495.0,
+            "x0": 1321.0,
+            "x1": 1333.0
+          },
+          "confidence": 0.96648209,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.0,
+            "coordinate_system": "pixels",
+            "top": 499.0,
+            "x0": 1348.0,
+            "x1": 1369.0
+          },
+          "confidence": 0.8991838099999999,
+          "text": "al",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 525.0,
+            "coordinate_system": "pixels",
+            "top": 502.0,
+            "x0": 1376.0,
+            "x1": 1438.0
+          },
+          "confidence": 0.8991838099999999,
+          "text": "otro,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 565.0,
+            "coordinate_system": "pixels",
+            "top": 560.0,
+            "x0": 62.0,
+            "x1": 67.0
+          },
+          "confidence": 0.0,
+          "text": "s",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 558.0,
+            "coordinate_system": "pixels",
+            "top": 545.0,
+            "x0": 510.0,
+            "x1": 517.0
+          },
+          "confidence": 0.08189788999999999,
+          "text": "i",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 567.0,
+            "coordinate_system": "pixels",
+            "top": 541.0,
+            "x0": 659.0,
+            "x1": 738.0
+          },
+          "confidence": 0.96805847,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 562.0,
+            "coordinate_system": "pixels",
+            "top": 542.0,
+            "x0": 748.0,
+            "x1": 776.0
+          },
+          "confidence": 0.9697538,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 562.0,
+            "coordinate_system": "pixels",
+            "top": 546.0,
+            "x0": 783.0,
+            "x1": 852.0
+          },
+          "confidence": 0.96919556,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 567.0,
+            "coordinate_system": "pixels",
+            "top": 546.0,
+            "x0": 861.0,
+            "x1": 906.0
+          },
+          "confidence": 0.96923637,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 567.0,
+            "coordinate_system": "pixels",
+            "top": 540.0,
+            "x0": 1208.0,
+            "x1": 1318.0
+          },
+          "confidence": 0.96626953,
+          "text": "pasando",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 562.0,
+            "coordinate_system": "pixels",
+            "top": 546.0,
+            "x0": 1327.0,
+            "x1": 1374.0
+          },
+          "confidence": 0.9526296200000001,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 562.0,
+            "coordinate_system": "pixels",
+            "top": 546.0,
+            "x0": 1383.0,
+            "x1": 1453.0
+          },
+          "confidence": 0.95849861,
+          "text": "mano",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 581.0,
+            "coordinate_system": "pixels",
+            "top": 561.0,
+            "x0": 13.0,
+            "x1": 77.0
+          },
+          "confidence": 0.9610343899999999,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 581.0,
+            "coordinate_system": "pixels",
+            "top": 561.0,
+            "x0": 101.0,
+            "x1": 130.0
+          },
+          "confidence": 0.96912247,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 581.0,
+            "coordinate_system": "pixels",
+            "top": 559.0,
+            "x0": 267.0,
+            "x1": 281.0
+          },
+          "confidence": 0.93253677,
+          "text": "b",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 581.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 492.0,
+            "x1": 520.0
+          },
+          "confidence": 0.32345664999999996,
+          "text": "ES",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 587.0,
+            "coordinate_system": "pixels",
+            "top": 566.0,
+            "x0": 29.0,
+            "x1": 206.0
+          },
+          "confidence": 0.11273407,
+          "text": "A",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 592.0,
+            "coordinate_system": "pixels",
+            "top": 588.0,
+            "x0": 515.0,
+            "x1": 521.0
+          },
+          "confidence": 0.0,
+          "text": "s",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 603.0,
+            "coordinate_system": "pixels",
+            "top": 587.0,
+            "x0": 745.0,
+            "x1": 816.0
+          },
+          "confidence": 0.9662933300000001,
+          "text": "mano",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 603.0,
+            "coordinate_system": "pixels",
+            "top": 581.0,
+            "x0": 1212.0,
+            "x1": 1284.0
+          },
+          "confidence": 0.9618914,
+          "text": "sobre",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 603.0,
+            "coordinate_system": "pixels",
+            "top": 581.0,
+            "x0": 1292.0,
+            "x1": 1312.0
+          },
+          "confidence": 0.96792313,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 603.0,
+            "coordinate_system": "pixels",
+            "top": 581.0,
+            "x0": 1320.0,
+            "x1": 1415.0
+          },
+          "confidence": 0.96380501,
+          "text": "cabeza.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 603.0,
+            "coordinate_system": "pixels",
+            "top": 582.0,
+            "x0": 1424.0,
+            "x1": 1453.0
+          },
+          "confidence": 0.96910408,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 644.0,
+            "coordinate_system": "pixels",
+            "top": 628.0,
+            "x0": 1239.0,
+            "x1": 1309.0
+          },
+          "confidence": 0.96348969,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 650.0,
+            "coordinate_system": "pixels",
+            "top": 628.0,
+            "x0": 1318.0,
+            "x1": 1363.0
+          },
+          "confidence": 0.9611869,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 644.0,
+            "coordinate_system": "pixels",
+            "top": 622.0,
+            "x0": 1370.0,
+            "x1": 1423.0
+          },
+          "confidence": 0.95747917,
+          "text": "lado",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 713.0,
+            "coordinate_system": "pixels",
+            "top": 691.0,
+            "x0": 1221.0,
+            "x1": 1330.0
+          },
+          "confidence": 0.9157795,
+          "text": "Sostenido",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 713.0,
+            "coordinate_system": "pixels",
+            "top": 691.0,
+            "x0": 1356.0,
+            "x1": 1371.0
+          },
+          "confidence": 0.93166786,
+          "text": "d",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 735.0,
+            "coordinate_system": "pixels",
+            "top": 713.0,
+            "x0": 35.0,
+            "x1": 163.0
+          },
+          "confidence": 0.9171798699999999,
+          "text": "Sostenido",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 735.0,
+            "coordinate_system": "pixels",
+            "top": 713.0,
+            "x0": 172.0,
+            "x1": 203.0
+          },
+          "confidence": 0.9632096099999999,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 735.0,
+            "coordinate_system": "pixels",
+            "top": 719.0,
+            "x0": 211.0,
+            "x1": 258.0
+          },
+          "confidence": 0.9661615,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 739.0,
+            "coordinate_system": "pixels",
+            "top": 713.0,
+            "x0": 266.0,
+            "x1": 320.0
+          },
+          "confidence": 0.9652020299999999,
+          "text": "silla,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 735.0,
+            "coordinate_system": "pixels",
+            "top": 713.0,
+            "x0": 664.0,
+            "x1": 749.0
+          },
+          "confidence": 0.9639801,
+          "text": "Doblar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 735.0,
+            "coordinate_system": "pixels",
+            "top": 719.0,
+            "x0": 756.0,
+            "x1": 787.0
+          },
+          "confidence": 0.96659836,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 740.0,
+            "coordinate_system": "pixels",
+            "top": 719.0,
+            "x0": 797.0,
+            "x1": 859.0
+          },
+          "confidence": 0.95752724,
+          "text": "poco",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 735.0,
+            "coordinate_system": "pixels",
+            "top": 713.0,
+            "x0": 868.0,
+            "x1": 900.0
+          },
+          "confidence": 0.96210197,
+          "text": "las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 713.0,
+            "coordinate_system": "pixels",
+            "top": 697.0,
+            "x0": 1236.0,
+            "x1": 1264.0
+          },
+          "confidence": 0.165242,
+          "text": "pe",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 713.0,
+            "coordinate_system": "pixels",
+            "top": 697.0,
+            "x0": 1333.0,
+            "x1": 1388.0
+          },
+          "confidence": 0.0,
+          "text": "a0Je",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 713.0,
+            "coordinate_system": "pixels",
+            "top": 697.0,
+            "x0": 1396.0,
+            "x1": 1443.0
+          },
+          "confidence": 0.76515007,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 760.0,
+            "coordinate_system": "pixels",
+            "top": 758.0,
+            "x0": 486.0,
+            "x1": 488.0
+          },
+          "confidence": 0.40763824,
+          "text": "3",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 758.0,
+            "coordinate_system": "pixels",
+            "top": 732.0,
+            "x0": 1244.0,
+            "x1": 1298.0
+          },
+          "confidence": 0.96829674,
+          "text": "silla,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 755.0,
+            "coordinate_system": "pixels",
+            "top": 738.0,
+            "x0": 1308.0,
+            "x1": 1391.0
+          },
+          "confidence": 0.96662994,
+          "text": "mueva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 755.0,
+            "coordinate_system": "pixels",
+            "top": 732.0,
+            "x0": 1400.0,
+            "x1": 1420.0
+          },
+          "confidence": 0.96964111,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 776.0,
+            "coordinate_system": "pixels",
+            "top": 754.0,
+            "x0": 19.0,
+            "x1": 76.0
+          },
+          "confidence": 0.96333359,
+          "text": "lleve",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 776.0,
+            "coordinate_system": "pixels",
+            "top": 754.0,
+            "x0": 84.0,
+            "x1": 103.0
+          },
+          "confidence": 0.96333359,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 781.0,
+            "coordinate_system": "pixels",
+            "top": 754.0,
+            "x0": 112.0,
+            "x1": 191.0
+          },
+          "confidence": 0.96529068,
+          "text": "pierna",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 776.0,
+            "coordinate_system": "pixels",
+            "top": 754.0,
+            "x0": 199.0,
+            "x1": 311.0
+          },
+          "confidence": 0.9649099699999999,
+          "text": "adelante",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 781.0,
+            "coordinate_system": "pixels",
+            "top": 760.0,
+            "x0": 317.0,
+            "x1": 332.0
+          },
+          "confidence": 0.9700479900000001,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 767.0,
+            "coordinate_system": "pixels",
+            "top": 764.0,
+            "x0": 480.0,
+            "x1": 484.0
+          },
+          "confidence": 0.0,
+          "text": "á",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 776.0,
+            "coordinate_system": "pixels",
+            "top": 754.0,
+            "x0": 646.0,
+            "x1": 736.0
+          },
+          "confidence": 0.9673762499999999,
+          "text": "rodillas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 781.0,
+            "coordinate_system": "pixels",
+            "top": 760.0,
+            "x0": 744.0,
+            "x1": 759.0
+          },
+          "confidence": 0.9701570100000001,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 781.0,
+            "coordinate_system": "pixels",
+            "top": 760.0,
+            "x0": 767.0,
+            "x1": 871.0
+          },
+          "confidence": 0.96919174,
+          "text": "regresar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 776.0,
+            "coordinate_system": "pixels",
+            "top": 760.0,
+            "x0": 878.0,
+            "x1": 891.0
+          },
+          "confidence": 0.96919174,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 776.0,
+            "coordinate_system": "pixels",
+            "top": 754.0,
+            "x0": 900.0,
+            "x1": 920.0
+          },
+          "confidence": 0.96982033,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 769.0,
+            "coordinate_system": "pixels",
+            "top": 766.0,
+            "x0": 1008.0,
+            "x1": 1011.0
+          },
+          "confidence": 0.4682848,
+          "text": ",",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 795.0,
+            "coordinate_system": "pixels",
+            "top": 773.0,
+            "x0": 1220.0,
+            "x1": 1301.0
+          },
+          "confidence": 0.0,
+          "text": "vob",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 795.0,
+            "coordinate_system": "pixels",
+            "top": 773.0,
+            "x0": 1309.0,
+            "x1": 1341.0
+          },
+          "confidence": 0.68427155,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 796.0,
+            "coordinate_system": "pixels",
+            "top": 779.0,
+            "x0": 1348.0,
+            "x1": 1443.0
+          },
+          "confidence": 0.0,
+          "text": "manera",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 817.0,
+            "coordinate_system": "pixels",
+            "top": 795.0,
+            "x0": 12.0,
+            "x1": 83.0
+          },
+          "confidence": 0.96344246,
+          "text": "atrás.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 822.0,
+            "coordinate_system": "pixels",
+            "top": 796.0,
+            "x0": 93.0,
+            "x1": 172.0
+          },
+          "confidence": 0.96344246,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 817.0,
+            "coordinate_system": "pixels",
+            "top": 796.0,
+            "x0": 181.0,
+            "x1": 210.0
+          },
+          "confidence": 0.95915001,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 817.0,
+            "coordinate_system": "pixels",
+            "top": 801.0,
+            "x0": 216.0,
+            "x1": 286.0
+          },
+          "confidence": 0.95915001,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 822.0,
+            "coordinate_system": "pixels",
+            "top": 801.0,
+            "x0": 295.0,
+            "x1": 339.0
+          },
+          "confidence": 0.96528053,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 822.0,
+            "coordinate_system": "pixels",
+            "top": 795.0,
+            "x0": 642.0,
+            "x1": 746.0
+          },
+          "confidence": 0.96784554,
+          "text": "posición",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 817.0,
+            "coordinate_system": "pixels",
+            "top": 795.0,
+            "x0": 756.0,
+            "x1": 833.0
+          },
+          "confidence": 0.9676475499999999,
+          "text": "inicial.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 822.0,
+            "coordinate_system": "pixels",
+            "top": 795.0,
+            "x0": 842.0,
+            "x1": 922.0
+          },
+          "confidence": 0.96916,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 858.0,
+            "coordinate_system": "pixels",
+            "top": 836.0,
+            "x0": 152.0,
+            "x1": 215.0
+          },
+          "confidence": 0.2546756,
+          "text": "E",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 858.0,
+            "coordinate_system": "pixels",
+            "top": 837.0,
+            "x0": 731.0,
+            "x1": 835.0
+          },
+          "confidence": 0.24810089000000002,
+          "text": "DOS",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 837.0,
+            "coordinate_system": "pixels",
+            "top": 814.0,
+            "x0": 1218.0,
+            "x1": 1318.0
+          },
+          "confidence": 0.9691272,
+          "text": "circular.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 841.0,
+            "coordinate_system": "pixels",
+            "top": 815.0,
+            "x0": 1327.0,
+            "x1": 1407.0
+          },
+          "confidence": 0.96956421,
+          "text": "Repita",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 837.0,
+            "coordinate_system": "pixels",
+            "top": 815.0,
+            "x0": 1416.0,
+            "x1": 1444.0
+          },
+          "confidence": 0.9693492100000001,
+          "text": "10",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 863.0,
+            "coordinate_system": "pixels",
+            "top": 842.0,
+            "x0": 135.0,
+            "x1": 150.0
+          },
+          "confidence": 0.562005,
+          "text": "P",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 865.0,
+            "coordinate_system": "pixels",
+            "top": 861.0,
+            "x0": 405.0,
+            "x1": 436.0
+          },
+          "confidence": 0.43362808,
+          "text": "veni",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 877.0,
+            "coordinate_system": "pixels",
+            "top": 862.0,
+            "x0": 1227.0,
+            "x1": 1297.0
+          },
+          "confidence": 0.96938454,
+          "text": "veces",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 883.0,
+            "coordinate_system": "pixels",
+            "top": 862.0,
+            "x0": 1305.0,
+            "x1": 1350.0
+          },
+          "confidence": 0.9696653000000001,
+          "text": "por",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 877.0,
+            "coordinate_system": "pixels",
+            "top": 855.0,
+            "x0": 1356.0,
+            "x1": 1436.0
+          },
+          "confidence": 0.9637899,
+          "text": "tobillo",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "unknown",
+        "kind": "measured",
+        "method": null,
+        "provenance": null,
+        "sample_size": 9,
+        "unit": "mean_word_confidence",
+        "value": 0.37135241555555554,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 8,
+      "page_number": 9,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 9,
+      "words": [
+        {
+          "bbox": {
+            "bottom": 347.0,
+            "coordinate_system": "pixels",
+            "top": 285.0,
+            "x0": 228.0,
+            "x1": 321.0
+          },
+          "confidence": 0.04062759,
+          "text": "”",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 268.0,
+            "coordinate_system": "pixels",
+            "top": 43.0,
+            "x0": 228.0,
+            "x1": 344.0
+          },
+          "confidence": 0.27236908,
+          "text": ".o",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 246.0,
+            "coordinate_system": "pixels",
+            "top": 64.0,
+            "x0": 70.0,
+            "x1": 324.0
+          },
+          "confidence": 0.47911929999999997,
+          "text": "ep",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 214.0,
+            "coordinate_system": "pixels",
+            "top": 73.0,
+            "x0": 442.0,
+            "x1": 681.0
+          },
+          "confidence": 0.56250313,
+          "text": "5%",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 413.0,
+            "coordinate_system": "pixels",
+            "top": 282.0,
+            "x0": 239.0,
+            "x1": 616.0
+          },
+          "confidence": 0.39018913,
+          "text": "¡4",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 323.0,
+            "coordinate_system": "pixels",
+            "top": 291.0,
+            "x0": 272.0,
+            "x1": 284.0
+          },
+          "confidence": 0.8447968299999999,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 351.0,
+            "coordinate_system": "pixels",
+            "top": 219.0,
+            "x0": 174.0,
+            "x1": 551.0
+          },
+          "confidence": 0.52748764,
+          "text": "vam)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 671.0,
+            "coordinate_system": "pixels",
+            "top": 658.0,
+            "x0": 0.0,
+            "x1": 7.0
+          },
+          "confidence": 0.19135437,
+          "text": "o",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 671.0,
+            "coordinate_system": "pixels",
+            "top": 647.0,
+            "x0": 25.0,
+            "x1": 181.0
+          },
+          "confidence": 0.03372467,
+          "text": "rnarara",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 0,
+      "page_number": 10,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 0,
+      "words": []
+    },
+    {
+      "confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 0,
+      "page_number": 11,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 0,
+      "words": []
+    },
+    {
+      "confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 0,
+      "page_number": 12,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 0,
+      "words": []
+    },
+    {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "unknown",
+        "kind": "measured",
+        "method": null,
+        "provenance": null,
+        "sample_size": 1,
+        "unit": "mean_word_confidence",
+        "value": 0.0,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 1,
+      "page_number": 13,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 1,
+      "words": [
+        {
+          "bbox": {
+            "bottom": 716.0,
+            "coordinate_system": "pixels",
+            "top": 705.0,
+            "x0": 585.0,
+            "x1": 719.0
+          },
+          "confidence": 0.0,
+          "text": "¡ERTIZAZ",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "unknown",
+        "kind": "measured",
+        "method": null,
+        "provenance": null,
+        "sample_size": 197,
+        "unit": "mean_word_confidence",
+        "value": 0.9213243103045685,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 9,
+      "page_number": 14,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 197,
+      "words": [
+        {
+          "bbox": {
+            "bottom": 108.0,
+            "coordinate_system": "pixels",
+            "top": 80.0,
+            "x0": 776.0,
+            "x1": 937.0
+          },
+          "confidence": 0.91943611,
+          "text": "Siéntese",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 108.0,
+            "coordinate_system": "pixels",
+            "top": 81.0,
+            "x0": 949.0,
+            "x1": 990.0
+          },
+          "confidence": 0.96250015,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 107.0,
+            "coordinate_system": "pixels",
+            "top": 81.0,
+            "x0": 1004.0,
+            "x1": 1098.0
+          },
+          "confidence": 0.96389694,
+          "text": "modo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 113.0,
+            "coordinate_system": "pixels",
+            "top": 86.0,
+            "x0": 1111.0,
+            "x1": 1174.0
+          },
+          "confidence": 0.7847174800000001,
+          "text": "quel",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 142.0,
+            "coordinate_system": "pixels",
+            "top": 115.0,
+            "x0": 775.0,
+            "x1": 845.0
+          },
+          "confidence": 0.96734528,
+          "text": "sólo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 142.0,
+            "coordinate_system": "pixels",
+            "top": 116.0,
+            "x0": 857.0,
+            "x1": 947.0
+          },
+          "confidence": 0.96415398,
+          "text": "entre",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 142.0,
+            "coordinate_system": "pixels",
+            "top": 122.0,
+            "x0": 960.0,
+            "x1": 1000.0
+          },
+          "confidence": 0.95987961,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 148.0,
+            "coordinate_system": "pixels",
+            "top": 115.0,
+            "x0": 1015.0,
+            "x1": 1098.0
+          },
+          "confidence": 0.96824944,
+          "text": "puño",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 177.0,
+            "coordinate_system": "pixels",
+            "top": 150.0,
+            "x0": 775.0,
+            "x1": 862.0
+          },
+          "confidence": 0.96765518,
+          "text": "entre",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 177.0,
+            "coordinate_system": "pixels",
+            "top": 149.0,
+            "x0": 877.0,
+            "x1": 905.0
+          },
+          "confidence": 0.96885551,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 177.0,
+            "coordinate_system": "pixels",
+            "top": 150.0,
+            "x0": 919.0,
+            "x1": 983.0
+          },
+          "confidence": 0.96773598,
+          "text": "silla",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 185.0,
+            "coordinate_system": "pixels",
+            "top": 157.0,
+            "x0": 996.0,
+            "x1": 1014.0
+          },
+          "confidence": 0.96524246,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 177.0,
+            "coordinate_system": "pixels",
+            "top": 150.0,
+            "x0": 1029.0,
+            "x1": 1055.0
+          },
+          "confidence": 0.96360641,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.0,
+            "coordinate_system": "pixels",
+            "top": 150.0,
+            "x0": 1068.0,
+            "x1": 1155.0
+          },
+          "confidence": 0.97005974,
+          "text": "parte",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.0,
+            "coordinate_system": "pixels",
+            "top": 185.0,
+            "x0": 776.0,
+            "x1": 896.0
+          },
+          "confidence": 0.96672058,
+          "text": "inferior",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.0,
+            "coordinate_system": "pixels",
+            "top": 185.0,
+            "x0": 907.0,
+            "x1": 949.0
+          },
+          "confidence": 0.96757378,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.0,
+            "coordinate_system": "pixels",
+            "top": 185.0,
+            "x0": 963.0,
+            "x1": 1009.0
+          },
+          "confidence": 0.9599606300000001,
+          "text": "las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 219.0,
+            "coordinate_system": "pixels",
+            "top": 185.0,
+            "x0": 1023.0,
+            "x1": 1157.0
+          },
+          "confidence": 0.96219002,
+          "text": "piernas.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 126.0,
+            "coordinate_system": "pixels",
+            "top": 99.0,
+            "x0": 100.0,
+            "x1": 147.0
+          },
+          "confidence": 0.96576027,
+          "text": "De",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 131.0,
+            "coordinate_system": "pixels",
+            "top": 99.0,
+            "x0": 161.0,
+            "x1": 214.0
+          },
+          "confidence": 0.96576027,
+          "text": "pie",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 132.0,
+            "coordinate_system": "pixels",
+            "top": 99.0,
+            "x0": 226.0,
+            "x1": 329.0
+          },
+          "confidence": 0.96630127,
+          "text": "ajuste",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 126.0,
+            "coordinate_system": "pixels",
+            "top": 99.0,
+            "x0": 341.0,
+            "x1": 369.0
+          },
+          "confidence": 0.96701233,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 161.0,
+            "coordinate_system": "pixels",
+            "top": 134.0,
+            "x0": 99.0,
+            "x1": 222.0
+          },
+          "confidence": 0.9668499,
+          "text": "asiento",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 170.0,
+            "coordinate_system": "pixels",
+            "top": 129.0,
+            "x0": 228.0,
+            "x1": 242.0
+          },
+          "confidence": 0.95823448,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 160.0,
+            "coordinate_system": "pixels",
+            "top": 133.0,
+            "x0": 269.0,
+            "x1": 296.0
+          },
+          "confidence": 0.95823448,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 161.0,
+            "coordinate_system": "pixels",
+            "top": 134.0,
+            "x0": 309.0,
+            "x1": 404.0
+          },
+          "confidence": 0.9629547100000001,
+          "text": "altura",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 195.0,
+            "coordinate_system": "pixels",
+            "top": 168.0,
+            "x0": 98.0,
+            "x1": 139.0
+          },
+          "confidence": 0.96620087,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 195.0,
+            "coordinate_system": "pixels",
+            "top": 168.0,
+            "x0": 155.0,
+            "x1": 181.0
+          },
+          "confidence": 0.96620087,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 195.0,
+            "coordinate_system": "pixels",
+            "top": 168.0,
+            "x0": 195.0,
+            "x1": 304.0
+          },
+          "confidence": 0.9644464899999999,
+          "text": "rodilla.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 571.0,
+            "coordinate_system": "pixels",
+            "top": 544.0,
+            "x0": 74.0,
+            "x1": 175.0
+          },
+          "confidence": 0.96991348,
+          "text": "Altura",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 594.0,
+            "coordinate_system": "pixels",
+            "top": 503.0,
+            "x0": 236.0,
+            "x1": 290.0
+          },
+          "confidence": 0.03705582,
+          "text": "7",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 552.0,
+            "coordinate_system": "pixels",
+            "top": 536.0,
+            "x0": 364.0,
+            "x1": 368.0
+          },
+          "confidence": 0.40022774,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 562.0,
+            "coordinate_system": "pixels",
+            "top": 522.0,
+            "x0": 504.0,
+            "x1": 675.0
+          },
+          "confidence": 0.96268257,
+          "text": "Superficie",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 618.0,
+            "coordinate_system": "pixels",
+            "top": 575.0,
+            "x0": 54.0,
+            "x1": 208.0
+          },
+          "confidence": 0.96340553,
+          "text": "ajustable",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 664.0,
+            "coordinate_system": "pixels",
+            "top": 554.0,
+            "x0": 386.0,
+            "x1": 716.0
+          },
+          "confidence": 0.31698006,
+          "text": "Pr",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 610.0,
+            "coordinate_system": "pixels",
+            "top": 575.0,
+            "x0": 806.0,
+            "x1": 928.0
+          },
+          "confidence": 0.96535751,
+          "text": "Ajuste",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 601.0,
+            "coordinate_system": "pixels",
+            "top": 575.0,
+            "x0": 939.0,
+            "x1": 967.0
+          },
+          "confidence": 0.96643379,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 608.0,
+            "coordinate_system": "pixels",
+            "top": 575.0,
+            "x0": 983.0,
+            "x1": 1128.0
+          },
+          "confidence": 0.9638707,
+          "text": "respaldo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 640.0,
+            "coordinate_system": "pixels",
+            "top": 614.0,
+            "x0": 32.0,
+            "x1": 73.0
+          },
+          "confidence": 0.96605972,
+          "text": "del",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 648.0,
+            "coordinate_system": "pixels",
+            "top": 614.0,
+            "x0": 97.0,
+            "x1": 243.0
+          },
+          "confidence": 0.96777252,
+          "text": "respaldo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 635.0,
+            "coordinate_system": "pixels",
+            "top": 616.0,
+            "x0": 829.0,
+            "x1": 883.0
+          },
+          "confidence": 0.96474243,
+          "text": "ara",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 643.0,
+            "coordinate_system": "pixels",
+            "top": 616.0,
+            "x0": 898.0,
+            "x1": 962.0
+          },
+          "confidence": 0.9649276,
+          "text": "que",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 643.0,
+            "coordinate_system": "pixels",
+            "top": 612.0,
+            "x0": 974.0,
+            "x1": 1103.0
+          },
+          "confidence": 0.9648498499999999,
+          "text": "soporte",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 672.0,
+            "coordinate_system": "pixels",
+            "top": 652.0,
+            "x0": 816.0,
+            "x1": 835.0
+          },
+          "confidence": 0.9031317099999999,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 672.0,
+            "coordinate_system": "pixels",
+            "top": 652.0,
+            "x0": 849.0,
+            "x1": 944.0
+          },
+          "confidence": 0.96881294,
+          "text": "curva",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 672.0,
+            "coordinate_system": "pixels",
+            "top": 644.0,
+            "x0": 958.0,
+            "x1": 1075.0
+          },
+          "confidence": 0.96196594,
+          "text": "inferior",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 672.0,
+            "coordinate_system": "pixels",
+            "top": 645.0,
+            "x0": 1087.0,
+            "x1": 1128.0
+          },
+          "confidence": 0.96196594,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 738.0,
+            "coordinate_system": "pixels",
+            "top": 705.0,
+            "x0": 63.0,
+            "x1": 170.0
+          },
+          "confidence": 0.96786514,
+          "text": "Ajuste",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 766.0,
+            "coordinate_system": "pixels",
+            "top": 740.0,
+            "x0": 64.0,
+            "x1": 105.0
+          },
+          "confidence": 0.96979134,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 766.0,
+            "coordinate_system": "pixels",
+            "top": 739.0,
+            "x0": 120.0,
+            "x1": 146.0
+          },
+          "confidence": 0.96955544,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 766.0,
+            "coordinate_system": "pixels",
+            "top": 712.0,
+            "x0": 161.0,
+            "x1": 339.0
+          },
+          "confidence": 0.90595093,
+          "text": "inclinación",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 829.0,
+            "coordinate_system": "pixels",
+            "top": 679.0,
+            "x0": 281.0,
+            "x1": 541.0
+          },
+          "confidence": 0.19118263,
+          "text": "e:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 801.0,
+            "coordinate_system": "pixels",
+            "top": 774.0,
+            "x0": 64.0,
+            "x1": 114.0
+          },
+          "confidence": 0.9684706900000001,
+          "text": "del",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 808.0,
+            "coordinate_system": "pixels",
+            "top": 773.0,
+            "x0": 129.0,
+            "x1": 275.0
+          },
+          "confidence": 0.96408012,
+          "text": "respaldo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 706.0,
+            "coordinate_system": "pixels",
+            "top": 680.0,
+            "x0": 809.0,
+            "x1": 835.0
+          },
+          "confidence": 0.96970634,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 713.0,
+            "coordinate_system": "pixels",
+            "top": 680.0,
+            "x0": 848.0,
+            "x1": 994.0
+          },
+          "confidence": 0.96541122,
+          "text": "espalda.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 860.0,
+            "coordinate_system": "pixels",
+            "top": 833.0,
+            "x0": 115.0,
+            "x1": 187.0
+          },
+          "confidence": 0.96397316,
+          "text": "Giro",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 861.0,
+            "coordinate_system": "pixels",
+            "top": 833.0,
+            "x0": 200.0,
+            "x1": 262.0
+          },
+          "confidence": 0.9695424699999999,
+          "text": "360",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 868.0,
+            "coordinate_system": "pixels",
+            "top": 798.0,
+            "x0": 275.0,
+            "x1": 392.0
+          },
+          "confidence": 0.2053096,
+          "text": "dell",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 907.0,
+            "coordinate_system": "pixels",
+            "top": 830.0,
+            "x0": 526.0,
+            "x1": 644.0
+          },
+          "confidence": 0.71596954,
+          "text": "==",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 861.0,
+            "coordinate_system": "pixels",
+            "top": 833.0,
+            "x0": 735.0,
+            "x1": 837.0
+          },
+          "confidence": 0.9640010800000001,
+          "text": "Altura",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 903.0,
+            "coordinate_system": "pixels",
+            "top": 868.0,
+            "x0": 716.0,
+            "x1": 869.0
+          },
+          "confidence": 0.9658139,
+          "text": "ajustable",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 924.0,
+            "coordinate_system": "pixels",
+            "top": 897.0,
+            "x0": 33.0,
+            "x1": 66.0
+          },
+          "confidence": 0.9520510899999999,
+          "text": "Al",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 925.0,
+            "coordinate_system": "pixels",
+            "top": 905.0,
+            "x0": 81.0,
+            "x1": 194.0
+          },
+          "confidence": 0.9158338899999999,
+          "text": "menos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 922.0,
+            "coordinate_system": "pixels",
+            "top": 901.0,
+            "x0": 211.0,
+            "x1": 336.0
+          },
+          "confidence": 0.20904990999999998,
+          "text": "--——G",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 933.0,
+            "coordinate_system": "pixels",
+            "top": 922.0,
+            "x0": 446.0,
+            "x1": 458.0
+          },
+          "confidence": 0.17639816,
+          "text": "Y,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 939.0,
+            "coordinate_system": "pixels",
+            "top": 831.0,
+            "x0": 522.0,
+            "x1": 675.0
+          },
+          "confidence": 0.06695824,
+          "text": "==",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 929.0,
+            "coordinate_system": "pixels",
+            "top": 905.0,
+            "x0": 704.0,
+            "x1": 754.0
+          },
+          "confidence": 0.9650412,
+          "text": "del",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 929.0,
+            "coordinate_system": "pixels",
+            "top": 905.0,
+            "x0": 767.0,
+            "x1": 894.0
+          },
+          "confidence": 0.9650412,
+          "text": "asiento",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 959.0,
+            "coordinate_system": "pixels",
+            "top": 933.0,
+            "x0": 35.0,
+            "x1": 54.0
+          },
+          "confidence": 0.96897034,
+          "text": "5",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 965.0,
+            "coordinate_system": "pixels",
+            "top": 933.0,
+            "x0": 67.0,
+            "x1": 214.0
+          },
+          "confidence": 0.96597336,
+          "text": "soportes",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 993.0,
+            "coordinate_system": "pixels",
+            "top": 973.0,
+            "x0": 35.0,
+            "x1": 94.0
+          },
+          "confidence": 0.96605019,
+          "text": "con",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 994.0,
+            "coordinate_system": "pixels",
+            "top": 966.0,
+            "x0": 109.0,
+            "x1": 224.0
+          },
+          "confidence": 0.96424118,
+          "text": "ruedas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 101.0,
+            "coordinate_system": "pixels",
+            "top": 78.0,
+            "x0": 349.0,
+            "x1": 400.0
+          },
+          "confidence": 0.96451393,
+          "text": "Las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 107.0,
+            "coordinate_system": "pixels",
+            "top": 78.0,
+            "x0": 411.0,
+            "x1": 520.0
+          },
+          "confidence": 0.96557785,
+          "text": "piernas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 101.0,
+            "coordinate_system": "pixels",
+            "top": 77.0,
+            "x0": 531.0,
+            "x1": 622.0
+          },
+          "confidence": 0.9682397500000001,
+          "text": "deben",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 101.0,
+            "coordinate_system": "pixels",
+            "top": 79.0,
+            "x0": 633.0,
+            "x1": 710.0
+          },
+          "confidence": 0.96268471,
+          "text": "tener",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 102.0,
+            "coordinate_system": "pixels",
+            "top": 84.0,
+            "x0": 720.0,
+            "x1": 754.0
+          },
+          "confidence": 0.96630707,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 138.0,
+            "coordinate_system": "pixels",
+            "top": 110.0,
+            "x0": 347.0,
+            "x1": 463.0
+          },
+          "confidence": 0.9683342,
+          "text": "espacio",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 131.0,
+            "coordinate_system": "pixels",
+            "top": 109.0,
+            "x0": 473.0,
+            "x1": 620.0
+          },
+          "confidence": 0.96288513,
+          "text": "adecuado",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 138.0,
+            "coordinate_system": "pixels",
+            "top": 109.0,
+            "x0": 630.0,
+            "x1": 728.0
+          },
+          "confidence": 0.96288513,
+          "text": "debajo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 131.0,
+            "coordinate_system": "pixels",
+            "top": 109.0,
+            "x0": 739.0,
+            "x1": 783.0
+          },
+          "confidence": 0.95414665,
+          "text": "del",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 164.0,
+            "coordinate_system": "pixels",
+            "top": 139.0,
+            "x0": 348.0,
+            "x1": 462.0
+          },
+          "confidence": 0.9222839399999999,
+          "text": "teclado.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 163.0,
+            "coordinate_system": "pixels",
+            "top": 139.0,
+            "x0": 473.0,
+            "x1": 520.0
+          },
+          "confidence": 0.96671227,
+          "text": "Allí",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 164.0,
+            "coordinate_system": "pixels",
+            "top": 146.0,
+            "x0": 533.0,
+            "x1": 566.0
+          },
+          "confidence": 0.95754593,
+          "text": "no",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 163.0,
+            "coordinate_system": "pixels",
+            "top": 146.0,
+            "x0": 577.0,
+            "x1": 612.0
+          },
+          "confidence": 0.95754593,
+          "text": "se",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 164.0,
+            "coordinate_system": "pixels",
+            "top": 140.0,
+            "x0": 623.0,
+            "x1": 712.0
+          },
+          "confidence": 0.96423294,
+          "text": "deben",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 164.0,
+            "coordinate_system": "pixels",
+            "top": 140.0,
+            "x0": 724.0,
+            "x1": 761.0
+          },
+          "confidence": 0.96423294,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 157.0,
+            "coordinate_system": "pixels",
+            "top": 133.0,
+            "x0": 858.0,
+            "x1": 891.0
+          },
+          "confidence": 0.9697531100000001,
+          "text": "La",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 157.0,
+            "coordinate_system": "pixels",
+            "top": 133.0,
+            "x0": 902.0,
+            "x1": 985.0
+          },
+          "confidence": 0.96592125,
+          "text": "altura",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 157.0,
+            "coordinate_system": "pixels",
+            "top": 133.0,
+            "x0": 996.0,
+            "x1": 1038.0
+          },
+          "confidence": 0.96799492,
+          "text": "del",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 157.0,
+            "coordinate_system": "pixels",
+            "top": 133.0,
+            "x0": 1050.0,
+            "x1": 1158.0
+          },
+          "confidence": 0.96079826,
+          "text": "teclado",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 157.0,
+            "coordinate_system": "pixels",
+            "top": 133.0,
+            "x0": 1169.0,
+            "x1": 1241.0
+          },
+          "confidence": 0.96626808,
+          "text": "debe",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 194.0,
+            "coordinate_system": "pixels",
+            "top": 170.0,
+            "x0": 347.0,
+            "x1": 504.0
+          },
+          "confidence": 0.96379257,
+          "text": "almacenar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 194.0,
+            "coordinate_system": "pixels",
+            "top": 170.0,
+            "x0": 515.0,
+            "x1": 714.0
+          },
+          "confidence": 0.96449753,
+          "text": "herramientas.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 193.0,
+            "coordinate_system": "pixels",
+            "top": 165.0,
+            "x0": 857.0,
+            "x1": 991.0
+          },
+          "confidence": 0.9621844500000001,
+          "text": "ajustarse",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.0,
+            "coordinate_system": "pixels",
+            "top": 161.0,
+            "x0": 994.0,
+            "x1": 1009.0
+          },
+          "confidence": 0.9674884,
+          "text": "a",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 186.0,
+            "coordinate_system": "pixels",
+            "top": 165.0,
+            "x0": 1029.0,
+            "x1": 1053.0
+          },
+          "confidence": 0.9618148,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 187.0,
+            "coordinate_system": "pixels",
+            "top": 165.0,
+            "x0": 1066.0,
+            "x1": 1147.0
+          },
+          "confidence": 0.9618148,
+          "text": "altura",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 186.0,
+            "coordinate_system": "pixels",
+            "top": 165.0,
+            "x0": 1159.0,
+            "x1": 1193.0
+          },
+          "confidence": 0.96402573,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 186.0,
+            "coordinate_system": "pixels",
+            "top": 165.0,
+            "x0": 1206.0,
+            "x1": 1247.0
+          },
+          "confidence": 0.9622039800000001,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 219.0,
+            "coordinate_system": "pixels",
+            "top": 195.0,
+            "x0": 857.0,
+            "x1": 946.0
+          },
+          "confidence": 0.96367332,
+          "text": "codos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 219.0,
+            "coordinate_system": "pixels",
+            "top": 201.0,
+            "x0": 955.0,
+            "x1": 1007.0
+          },
+          "confidence": 0.96134781,
+          "text": "con",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 219.0,
+            "coordinate_system": "pixels",
+            "top": 195.0,
+            "x0": 1020.0,
+            "x1": 1060.0
+          },
+          "confidence": 0.96365303,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 219.0,
+            "coordinate_system": "pixels",
+            "top": 195.0,
+            "x0": 1072.0,
+            "x1": 1171.0
+          },
+          "confidence": 0.96671234,
+          "text": "brazos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 223.0,
+            "coordinate_system": "pixels",
+            "top": 195.0,
+            "x0": 1181.0,
+            "x1": 1324.0
+          },
+          "confidence": 0.95871368,
+          "text": "colgando.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 259.0,
+            "coordinate_system": "pixels",
+            "top": 236.0,
+            "x0": 347.0,
+            "x1": 381.0
+          },
+          "confidence": 0.959571,
+          "text": "La",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 264.0,
+            "coordinate_system": "pixels",
+            "top": 236.0,
+            "x0": 393.0,
+            "x1": 535.0
+          },
+          "confidence": 0.959571,
+          "text": "superficie",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 259.0,
+            "coordinate_system": "pixels",
+            "top": 237.0,
+            "x0": 547.0,
+            "x1": 580.0
+          },
+          "confidence": 0.9687451199999999,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 265.0,
+            "coordinate_system": "pixels",
+            "top": 237.0,
+            "x0": 591.0,
+            "x1": 694.0
+          },
+          "confidence": 0.96318085,
+          "text": "trabajo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 259.0,
+            "coordinate_system": "pixels",
+            "top": 236.0,
+            "x0": 704.0,
+            "x1": 778.0
+          },
+          "confidence": 0.96346001,
+          "text": "debe",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 290.0,
+            "coordinate_system": "pixels",
+            "top": 266.0,
+            "x0": 345.0,
+            "x1": 451.0
+          },
+          "confidence": 0.95875023,
+          "text": "ofrecer",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 290.0,
+            "coordinate_system": "pixels",
+            "top": 273.0,
+            "x0": 461.0,
+            "x1": 494.0
+          },
+          "confidence": 0.95875023,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 295.0,
+            "coordinate_system": "pixels",
+            "top": 266.0,
+            "x0": 506.0,
+            "x1": 621.0
+          },
+          "confidence": 0.96448273,
+          "text": "espacio",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 290.0,
+            "coordinate_system": "pixels",
+            "top": 266.0,
+            "x0": 632.0,
+            "x1": 772.0
+          },
+          "confidence": 0.9686013800000001,
+          "text": "suficiente",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 327.0,
+            "coordinate_system": "pixels",
+            "top": 303.0,
+            "x0": 346.0,
+            "x1": 410.0
+          },
+          "confidence": 0.96947174,
+          "text": "para",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 321.0,
+            "coordinate_system": "pixels",
+            "top": 296.0,
+            "x0": 422.0,
+            "x1": 502.0
+          },
+          "confidence": 0.96488235,
+          "text": "todas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 320.0,
+            "coordinate_system": "pixels",
+            "top": 296.0,
+            "x0": 515.0,
+            "x1": 554.0
+          },
+          "confidence": 0.9654805000000001,
+          "text": "las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 323.0,
+            "coordinate_system": "pixels",
+            "top": 296.0,
+            "x0": 566.0,
+            "x1": 768.0
+          },
+          "confidence": 0.96059975,
+          "text": "herramientas,",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 352.0,
+            "coordinate_system": "pixels",
+            "top": 328.0,
+            "x0": 347.0,
+            "x1": 389.0
+          },
+          "confidence": 0.96422432,
+          "text": "las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 356.0,
+            "coordinate_system": "pixels",
+            "top": 333.0,
+            "x0": 397.0,
+            "x1": 453.0
+          },
+          "confidence": 0.96422432,
+          "text": "que",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 352.0,
+            "coordinate_system": "pixels",
+            "top": 333.0,
+            "x0": 464.0,
+            "x1": 534.0
+          },
+          "confidence": 0.96078957,
+          "text": "sean",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 352.0,
+            "coordinate_system": "pixels",
+            "top": 329.0,
+            "x0": 547.0,
+            "x1": 651.0
+          },
+          "confidence": 0.9520695499999999,
+          "text": "usadas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 352.0,
+            "coordinate_system": "pixels",
+            "top": 333.0,
+            "x0": 663.0,
+            "x1": 713.0
+          },
+          "confidence": 0.95847107,
+          "text": "con",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 357.0,
+            "coordinate_system": "pixels",
+            "top": 333.0,
+            "x0": 727.0,
+            "x1": 796.0
+          },
+          "confidence": 0.96418625,
+          "text": "poca",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 383.0,
+            "coordinate_system": "pixels",
+            "top": 358.0,
+            "x0": 345.0,
+            "x1": 498.0
+          },
+          "confidence": 0.96716629,
+          "text": "frecuencia",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 383.0,
+            "coordinate_system": "pixels",
+            "top": 358.0,
+            "x0": 510.0,
+            "x1": 639.0
+          },
+          "confidence": 0.96430031,
+          "text": "deberían",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 382.0,
+            "coordinate_system": "pixels",
+            "top": 359.0,
+            "x0": 651.0,
+            "x1": 688.0
+          },
+          "confidence": 0.96818932,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 383.0,
+            "coordinate_system": "pixels",
+            "top": 360.0,
+            "x0": 699.0,
+            "x1": 774.0
+          },
+          "confidence": 0.96625282,
+          "text": "estar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 412.0,
+            "coordinate_system": "pixels",
+            "top": 389.0,
+            "x0": 347.0,
+            "x1": 478.0
+          },
+          "confidence": 0.94465172,
+          "text": "ubicadas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 412.0,
+            "coordinate_system": "pixels",
+            "top": 395.0,
+            "x0": 489.0,
+            "x1": 525.0
+          },
+          "confidence": 0.95928635,
+          "text": "en",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 412.0,
+            "coordinate_system": "pixels",
+            "top": 390.0,
+            "x0": 536.0,
+            "x1": 610.0
+          },
+          "confidence": 0.95928635,
+          "text": "otros",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 419.0,
+            "coordinate_system": "pixels",
+            "top": 389.0,
+            "x0": 621.0,
+            "x1": 735.0
+          },
+          "confidence": 0.96545609,
+          "text": "lugares.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 309.0,
+            "coordinate_system": "pixels",
+            "top": 284.0,
+            "x0": 858.0,
+            "x1": 885.0
+          },
+          "confidence": 0.96527237,
+          "text": "Si",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 309.0,
+            "coordinate_system": "pixels",
+            "top": 291.0,
+            "x0": 897.0,
+            "x1": 934.0
+          },
+          "confidence": 0.9682048000000001,
+          "text": "se",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 309.0,
+            "coordinate_system": "pixels",
+            "top": 285.0,
+            "x0": 946.0,
+            "x1": 1036.0
+          },
+          "confidence": 0.95814339,
+          "text": "utiliza",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 314.0,
+            "coordinate_system": "pixels",
+            "top": 285.0,
+            "x0": 1048.0,
+            "x1": 1287.0
+          },
+          "confidence": 0.9658558700000001,
+          "text": "temporalmente",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 309.0,
+            "coordinate_system": "pixels",
+            "top": 291.0,
+            "x0": 1300.0,
+            "x1": 1356.0
+          },
+          "confidence": 0.9659565000000001,
+          "text": "una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 339.0,
+            "coordinate_system": "pixels",
+            "top": 321.0,
+            "x0": 858.0,
+            "x1": 941.0
+          },
+          "confidence": 0.96344734,
+          "text": "mesa",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 339.0,
+            "coordinate_system": "pixels",
+            "top": 315.0,
+            "x0": 950.0,
+            "x1": 989.0
+          },
+          "confidence": 0.96326859,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 345.0,
+            "coordinate_system": "pixels",
+            "top": 315.0,
+            "x0": 1000.0,
+            "x1": 1110.0
+          },
+          "confidence": 0.964002,
+          "text": "trabajo",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 345.0,
+            "coordinate_system": "pixels",
+            "top": 321.0,
+            "x0": 1121.0,
+            "x1": 1181.0
+          },
+          "confidence": 0.9691294899999999,
+          "text": "que",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 339.0,
+            "coordinate_system": "pixels",
+            "top": 321.0,
+            "x0": 1191.0,
+            "x1": 1230.0
+          },
+          "confidence": 0.96868599,
+          "text": "no",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 345.0,
+            "coordinate_system": "pixels",
+            "top": 315.0,
+            "x0": 1243.0,
+            "x1": 1339.0
+          },
+          "confidence": 0.96409004,
+          "text": "puede",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 370.0,
+            "coordinate_system": "pixels",
+            "top": 351.0,
+            "x0": 857.0,
+            "x1": 907.0
+          },
+          "confidence": 0.9652909099999999,
+          "text": "ser",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 376.0,
+            "coordinate_system": "pixels",
+            "top": 347.0,
+            "x0": 916.0,
+            "x1": 1059.0
+          },
+          "confidence": 0.9652909099999999,
+          "text": "ajustada:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 437.0,
+            "coordinate_system": "pixels",
+            "top": 407.0,
+            "x0": 856.0,
+            "x1": 948.0
+          },
+          "confidence": 0.96135887,
+          "text": "Ajuste",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 431.0,
+            "coordinate_system": "pixels",
+            "top": 407.0,
+            "x0": 959.0,
+            "x1": 983.0
+          },
+          "confidence": 0.9671938299999999,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 432.0,
+            "coordinate_system": "pixels",
+            "top": 407.0,
+            "x0": 995.0,
+            "x1": 1076.0
+          },
+          "confidence": 0.9671758300000001,
+          "text": "altura",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 431.0,
+            "coordinate_system": "pixels",
+            "top": 408.0,
+            "x0": 1089.0,
+            "x1": 1123.0
+          },
+          "confidence": 0.97001167,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 431.0,
+            "coordinate_system": "pixels",
+            "top": 408.0,
+            "x0": 1135.0,
+            "x1": 1159.0
+          },
+          "confidence": 0.9693718,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 431.0,
+            "coordinate_system": "pixels",
+            "top": 407.0,
+            "x0": 1171.0,
+            "x1": 1225.0
+          },
+          "confidence": 0.96933151,
+          "text": "silla",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 431.0,
+            "coordinate_system": "pixels",
+            "top": 407.0,
+            "x0": 1238.0,
+            "x1": 1318.0
+          },
+          "confidence": 0.9607083900000001,
+          "text": "hasta",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 468.0,
+            "coordinate_system": "pixels",
+            "top": 443.0,
+            "x0": 857.0,
+            "x1": 911.0
+          },
+          "confidence": 0.9621665199999999,
+          "text": "que",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 462.0,
+            "coordinate_system": "pixels",
+            "top": 440.0,
+            "x0": 923.0,
+            "x1": 962.0
+          },
+          "confidence": 0.9621665199999999,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 462.0,
+            "coordinate_system": "pixels",
+            "top": 439.0,
+            "x0": 973.0,
+            "x1": 1062.0
+          },
+          "confidence": 0.96251663,
+          "text": "codos",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 467.0,
+            "coordinate_system": "pixels",
+            "top": 439.0,
+            "x0": 1073.0,
+            "x1": 1184.0
+          },
+          "confidence": 0.9645862599999999,
+          "text": "queden",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 462.0,
+            "coordinate_system": "pixels",
+            "top": 440.0,
+            "x0": 1193.0,
+            "x1": 1218.0
+          },
+          "confidence": 0.9645862599999999,
+          "text": "al",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 462.0,
+            "coordinate_system": "pixels",
+            "top": 439.0,
+            "x0": 1231.0,
+            "x1": 1296.0
+          },
+          "confidence": 0.96952179,
+          "text": "nivel",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 493.0,
+            "coordinate_system": "pixels",
+            "top": 469.0,
+            "x0": 857.0,
+            "x1": 898.0
+          },
+          "confidence": 0.96989616,
+          "text": "del",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 493.0,
+            "coordinate_system": "pixels",
+            "top": 469.0,
+            "x0": 911.0,
+            "x1": 1025.0
+          },
+          "confidence": 0.95465935,
+          "text": "teclado.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 554.0,
+            "coordinate_system": "pixels",
+            "top": 531.0,
+            "x0": 858.0,
+            "x1": 883.0
+          },
+          "confidence": 0.92070808,
+          "text": "Si",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 554.0,
+            "coordinate_system": "pixels",
+            "top": 532.0,
+            "x0": 896.0,
+            "x1": 938.0
+          },
+          "confidence": 0.92070808,
+          "text": "los",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 560.0,
+            "coordinate_system": "pixels",
+            "top": 532.0,
+            "x0": 948.0,
+            "x1": 1008.0
+          },
+          "confidence": 0.96748695,
+          "text": "pies",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 559.0,
+            "coordinate_system": "pixels",
+            "top": 532.0,
+            "x0": 1019.0,
+            "x1": 1128.0
+          },
+          "confidence": 0.94708321,
+          "text": "quedan",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 554.0,
+            "coordinate_system": "pixels",
+            "top": 532.0,
+            "x0": 1140.0,
+            "x1": 1181.0
+          },
+          "confidence": 0.96476059,
+          "text": "sin",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 554.0,
+            "coordinate_system": "pixels",
+            "top": 534.0,
+            "x0": 1191.0,
+            "x1": 1266.0
+          },
+          "confidence": 0.96516289,
+          "text": "tocar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 554.0,
+            "coordinate_system": "pixels",
+            "top": 531.0,
+            "x0": 1275.0,
+            "x1": 1300.0
+          },
+          "confidence": 0.96293503,
+          "text": "el",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 595.0,
+            "coordinate_system": "pixels",
+            "top": 562.0,
+            "x0": 858.0,
+            "x1": 917.0
+          },
+          "confidence": 0.9699791000000001,
+          "text": "piso",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 591.0,
+            "coordinate_system": "pixels",
+            "top": 569.0,
+            "x0": 928.0,
+            "x1": 942.0
+          },
+          "confidence": 0.96984039,
+          "text": "y",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 586.0,
+            "coordinate_system": "pixels",
+            "top": 561.0,
+            "x0": 953.0,
+            "x1": 977.0
+          },
+          "confidence": 0.9687709,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 590.0,
+            "coordinate_system": "pixels",
+            "top": 561.0,
+            "x0": 990.0,
+            "x1": 1097.0
+          },
+          "confidence": 0.9687709,
+          "text": "presión",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 562.0,
+            "x0": 1107.0,
+            "x1": 1190.0
+          },
+          "confidence": 0.9676906599999999,
+          "text": "sobre",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 585.0,
+            "coordinate_system": "pixels",
+            "top": 561.0,
+            "x0": 1202.0,
+            "x1": 1225.0
+          },
+          "confidence": 0.9692749,
+          "text": "la",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 591.0,
+            "coordinate_system": "pixels",
+            "top": 563.0,
+            "x0": 1238.0,
+            "x1": 1313.0
+          },
+          "confidence": 0.96923637,
+          "text": "parte",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 615.0,
+            "coordinate_system": "pixels",
+            "top": 591.0,
+            "x0": 858.0,
+            "x1": 958.0
+          },
+          "confidence": 0.96183563,
+          "text": "inferior",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 615.0,
+            "coordinate_system": "pixels",
+            "top": 591.0,
+            "x0": 967.0,
+            "x1": 1004.0
+          },
+          "confidence": 0.96861969,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 615.0,
+            "coordinate_system": "pixels",
+            "top": 591.0,
+            "x0": 1016.0,
+            "x1": 1056.0
+          },
+          "confidence": 0.96783348,
+          "text": "las",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 621.0,
+            "coordinate_system": "pixels",
+            "top": 592.0,
+            "x0": 1068.0,
+            "x1": 1177.0
+          },
+          "confidence": 0.95816246,
+          "text": "piernas",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 616.0,
+            "coordinate_system": "pixels",
+            "top": 598.0,
+            "x0": 1185.0,
+            "x1": 1221.0
+          },
+          "confidence": 0.9329841600000001,
+          "text": "es",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 615.0,
+            "coordinate_system": "pixels",
+            "top": 592.0,
+            "x0": 1231.0,
+            "x1": 1323.0
+          },
+          "confidence": 0.92786293,
+          "text": "dema-",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 647.0,
+            "coordinate_system": "pixels",
+            "top": 624.0,
+            "x0": 858.0,
+            "x1": 935.0
+          },
+          "confidence": 0.92589493,
+          "text": "siada",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 647.0,
+            "coordinate_system": "pixels",
+            "top": 628.0,
+            "x0": 946.0,
+            "x1": 979.0
+          },
+          "confidence": 0.96977165,
+          "text": "se",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 647.0,
+            "coordinate_system": "pixels",
+            "top": 623.0,
+            "x0": 990.0,
+            "x1": 1064.0
+          },
+          "confidence": 0.96122353,
+          "text": "debe",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 647.0,
+            "coordinate_system": "pixels",
+            "top": 624.0,
+            "x0": 1075.0,
+            "x1": 1172.0
+          },
+          "confidence": 0.7278363,
+          "text": "utilizar",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 647.0,
+            "coordinate_system": "pixels",
+            "top": 628.0,
+            "x0": 1183.0,
+            "x1": 1216.0
+          },
+          "confidence": 0.9329241899999999,
+          "text": "un",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 651.0,
+            "coordinate_system": "pixels",
+            "top": 628.0,
+            "x0": 1229.0,
+            "x1": 1304.0
+          },
+          "confidence": 0.9310848199999999,
+          "text": "repo-",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 683.0,
+            "coordinate_system": "pixels",
+            "top": 653.0,
+            "x0": 858.0,
+            "x1": 951.0
+          },
+          "confidence": 0.93059494,
+          "text": "sapiés",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.0,
+            "coordinate_system": "pixels",
+            "top": 655.0,
+            "x0": 962.0,
+            "x1": 1027.0
+          },
+          "confidence": 0.96587456,
+          "text": "(una",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 683.0,
+            "coordinate_system": "pixels",
+            "top": 653.0,
+            "x0": 1038.0,
+            "x1": 1103.0
+          },
+          "confidence": 0.9615587600000001,
+          "text": "guía",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 678.0,
+            "coordinate_system": "pixels",
+            "top": 653.0,
+            "x0": 1113.0,
+            "x1": 1257.0
+          },
+          "confidence": 0.9672554,
+          "text": "telefónica",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 704.0,
+            "coordinate_system": "pixels",
+            "top": 696.0,
+            "x0": 827.0,
+            "x1": 835.0
+          },
+          "confidence": 0.0,
+          "text": "/",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 714.0,
+            "coordinate_system": "pixels",
+            "top": 684.0,
+            "x0": 858.0,
+            "x1": 948.0
+          },
+          "confidence": 0.9629589799999999,
+          "text": "puede",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 707.0,
+            "coordinate_system": "pixels",
+            "top": 690.0,
+            "x0": 958.0,
+            "x1": 1006.0
+          },
+          "confidence": 0.9650518800000001,
+          "text": "ser",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 707.0,
+            "coordinate_system": "pixels",
+            "top": 684.0,
+            "x0": 1016.0,
+            "x1": 1050.0
+          },
+          "confidence": 0.96793785,
+          "text": "de",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 714.0,
+            "coordinate_system": "pixels",
+            "top": 690.0,
+            "x0": 1061.0,
+            "x1": 1126.0
+          },
+          "confidence": 0.93293686,
+          "text": "gran",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 714.0,
+            "coordinate_system": "pixels",
+            "top": 684.0,
+            "x0": 1138.0,
+            "x1": 1257.0
+          },
+          "confidence": 0.78137741,
+          "text": "ayuda!).",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "unknown",
+        "kind": "measured",
+        "method": null,
+        "provenance": null,
+        "sample_size": 7,
+        "unit": "mean_word_confidence",
+        "value": 0.96484351,
+        "warnings": []
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": 0,
+      "page_number": 15,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 7,
+      "words": [
+        {
+          "bbox": {
+            "bottom": 168.0,
+            "coordinate_system": "pixels",
+            "top": 124.0,
+            "x0": 758.0,
+            "x1": 851.0
+          },
+          "confidence": 0.96952583,
+          "text": "Zona",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 239.0,
+            "coordinate_system": "pixels",
+            "top": 193.0,
+            "x0": 693.0,
+            "x1": 784.0
+          },
+          "confidence": 0.96851097,
+          "text": "poco",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.0,
+            "coordinate_system": "pixels",
+            "top": 182.0,
+            "x0": 798.0,
+            "x1": 927.0
+          },
+          "confidence": 0.96946068,
+          "text": "común",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 361.0,
+            "coordinate_system": "pixels",
+            "top": 317.0,
+            "x0": 755.0,
+            "x1": 849.0
+          },
+          "confidence": 0.96036163,
+          "text": "Zona",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 420.0,
+            "coordinate_system": "pixels",
+            "top": 376.0,
+            "x0": 713.0,
+            "x1": 893.0
+          },
+          "confidence": 0.9574536100000001,
+          "text": "ocasional",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 582.0,
+            "coordinate_system": "pixels",
+            "top": 522.0,
+            "x0": 703.0,
+            "x1": 776.0
+          },
+          "confidence": 0.96853699,
+          "text": "Zona",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 582.0,
+            "coordinate_system": "pixels",
+            "top": 522.0,
+            "x0": 809.0,
+            "x1": 914.0
+          },
+          "confidence": 0.9600548600000001,
+          "text": "usual",
+          "warnings": []
+        }
+      ]
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

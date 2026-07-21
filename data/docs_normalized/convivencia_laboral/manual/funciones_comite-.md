@@ -1,12 +1,12 @@
 ---
 document_id: doc_0b8a9be32b2222f6
-document_type: manual
-topic: Comite de Convivencia Laboral
-source_file: funciones_comite-.md
+document_type: informacion_general
+topic: Convivencia laboral
+source_relpath: convivencia_laboral/manual/funciones_comite-.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 1. Recibir y dar tramite a las quejas presentadas en las que se describan situaciones que puedan constituir acoso laboral, asi como pruebas que la soportan.

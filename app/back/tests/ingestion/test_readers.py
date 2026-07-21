@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 
 from ingestion.ocr.mock_engine import MockOcrEngine
+from ingestion.ocr.tesseract_engine import parse_tesseract_tsv
 from ingestion.readers.markdown_reader import MarkdownReader
+from ingestion.readers.base import ReadResult
+from ingestion.readers.hybrid_reader import HybridReader
 from ingestion.readers.pdf_digital_reader import PdfDigitalReader, PdfPage
-from ingestion.schemas.common import BBox, PageBlock
+from ingestion.schemas.artifacts import FormsArtifact, PageRecord, TablesArtifact
+from ingestion.schemas.common import BBox, ConfidenceMetric, Observation, PageBlock
 from ingestion.readers.pdf_scanned_reader import PdfScannedReader
 
 
@@ -133,6 +138,151 @@ def test_pdf_digital_reader_evaluates_table_and_form_capabilities(tmp_path: Path
     assert result.forms.page_observations[0].status == "detected"
 
 
+def test_hybrid_reader_preserves_forms_from_digital_reader_when_ocr_adds_text(tmp_path: Path) -> None:
+    class FakeDigitalReader:
+        def read(self, source_path: Path) -> ReadResult:
+            return ReadResult(
+                extraction_method="pdf_digital",
+                markdown="texto digital",
+                pages=[
+                    PageRecord(
+                        page_number=1,
+                        text_raw="texto digital",
+                        text_normalized="texto digital",
+                        extraction_method="pdf_digital",
+                        ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+                    )
+                ],
+                tables=TablesArtifact(
+                    schema_version="2.0",
+                    document_id="pending",
+                    table_count=0,
+                    tables=[],
+                    page_observations=[
+                        Observation(status="not_detected", value=False, method="test")
+                    ],
+                ),
+                forms=FormsArtifact(
+                    schema_version="2.0",
+                    document_id="pending",
+                    groups=[],
+                    page_observations=[
+                        Observation(status="not_detected", value=False, method="test")
+                    ],
+                ),
+            )
+
+    class FakeCoverageAnalyzer:
+        def assess(self, page):
+            return SimpleNamespace(
+                candidate_regions=[
+                    SimpleNamespace(page_number=page.page_number, bbox=None)
+                ]
+            )
+
+    class FakeRasterizer:
+        def render(self, source_path, page_number, bbox):
+            return SimpleNamespace(
+                image_path=source_path,
+                page_number=page_number,
+                bbox=bbox,
+                dpi=300,
+                width=100,
+                height=30,
+            )
+
+    class FakeOcrEngine:
+        engine_version = "5.5.2"
+        language = "spa"
+
+        def recognize(self, region):
+            return parse_tesseract_tsv(
+                "level\tpage_num\tblock_num\tpar_num\tline_num\tword_num\tleft\ttop\twidth\theight\tconf\ttext\n"
+                "5\t1\t1\t1\t1\t1\t0\t0\t20\t10\t96\tadicional\n",
+                page_number=region.page_number,
+                engine_version=self.engine_version,
+            )
+
+    source = tmp_path / "hybrid.pdf"
+    source.write_bytes(b"%PDF-1.4 fake")
+
+    result = HybridReader(
+        digital_reader=FakeDigitalReader(),
+        coverage_analyzer=FakeCoverageAnalyzer(),
+        rasterizer=FakeRasterizer(),
+        ocr_engine=FakeOcrEngine(),
+    ).read(source)
+
+    assert result.extraction_method == "hybrid"
+    assert result.forms is not None
+    assert result.forms.page_observations[0].status == "not_detected"
+
+
+def test_hybrid_reader_keeps_digital_method_when_ocr_adds_no_unique_text(
+    tmp_path: Path,
+) -> None:
+    class FakeDigitalReader:
+        def read(self, source_path: Path) -> ReadResult:
+            return ReadResult(
+                extraction_method="pdf_digital",
+                markdown="texto digital",
+                pages=[
+                    PageRecord(
+                        page_number=1,
+                        text_raw="texto digital",
+                        text_normalized="texto digital",
+                        extraction_method="pdf_digital",
+                        ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+                    )
+                ],
+            )
+
+    class FakeCoverageAnalyzer:
+        def assess(self, page):
+            return SimpleNamespace(
+                candidate_regions=[
+                    SimpleNamespace(page_number=page.page_number, bbox=None)
+                ]
+            )
+
+    class FakeRasterizer:
+        def render(self, source_path, page_number, bbox):
+            return SimpleNamespace(
+                image_path=source_path,
+                page_number=page_number,
+                bbox=bbox,
+                dpi=300,
+                width=100,
+                height=30,
+            )
+
+    class FakeOcrEngine:
+        engine_version = "5.5.2"
+        language = "spa"
+
+        def recognize(self, region):
+            return parse_tesseract_tsv(
+                "level\tpage_num\tblock_num\tpar_num\tline_num\tword_num\tleft\ttop\twidth\theight\tconf\ttext\n"
+                "5\t1\t1\t1\t1\t1\t0\t0\t20\t10\t96\ttexto\n"
+                "5\t1\t1\t1\t1\t2\t25\t0\t20\t10\t96\tdigital\n",
+                page_number=region.page_number,
+                engine_version=self.engine_version,
+            )
+
+    source = tmp_path / "hybrid.pdf"
+    source.write_bytes(b"%PDF-1.4 fake")
+
+    result = HybridReader(
+        digital_reader=FakeDigitalReader(),
+        coverage_analyzer=FakeCoverageAnalyzer(),
+        rasterizer=FakeRasterizer(),
+        ocr_engine=FakeOcrEngine(),
+    ).read(source)
+
+    assert result.extraction_method == "pdf_digital"
+    assert result.pages[0].extraction_method == "pdf_digital"
+
+
 def test_pdf_digital_reader_rejects_pdf_without_enough_text(tmp_path: Path) -> None:
     class EmptyPdfExtractor:
         def extract_pages(self, source_path: Path) -> list[PdfPage]:
@@ -172,6 +322,31 @@ def test_pdf_scanned_reader_uses_mock_ocr_engine_and_flags_low_confidence(tmp_pa
     assert result.pages[0].ocr_confidence.value == 0.42
     assert "low_ocr_confidence" in result.review_reasons
     assert "possible_handwriting" in result.review_reasons
+
+
+def test_pdf_scanned_reader_evaluates_text_tables_and_forms(tmp_path: Path) -> None:
+    source = tmp_path / "scan.pdf"
+    source.write_bytes(b"%PDF-1.4 fake scan")
+    engine = MockOcrEngine(
+        pages=[
+            {
+                "page_number": 1,
+                "text": (
+                    "CODIGO PL.RH-01-SST | CLASIFICACION | USO INTERNO\n"
+                    "Politica sin campos diligenciables"
+                ),
+                "confidence": 0.91,
+            }
+        ]
+    )
+
+    result = PdfScannedReader(ocr_engine=engine).read(source)
+
+    assert result.tables is not None
+    assert result.tables.table_count == 1
+    assert result.tables.page_observations[0].status == "detected"
+    assert result.forms is not None
+    assert result.forms.page_observations[0].status == "not_detected"
 
 
 def test_pdf_scanned_reader_rejects_boolean_confidence_before_numeric_coercion(tmp_path: Path) -> None:

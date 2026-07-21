@@ -1,12 +1,12 @@
 ---
 document_id: doc_27d458b700f2924d
-document_type: reglamento
-topic: Comite de Convivencia Laboral
-source_file: funcionamiento_comite.md
+document_type: acta
+topic: Convivencia laboral
+source_relpath: convivencia_laboral/reglamento_comite/funcionamiento_comite.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 3.1 Conformacion

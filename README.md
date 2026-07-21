@@ -106,6 +106,38 @@ Comandos útiles:
 - `npm run ingestion:validate`
 - `npm run schemas:export`
 
+## GUI de ingesta Fase 1
+
+La GUI permite consultar inventario, revisar documentos `needs_review`,
+registrar aprobacion/rechazo humano, subir nuevos `.pdf` o `.md` a
+`data/docs_raw`, ejecutar ingesta en staging y validar la salida oficial.
+
+Instala dependencias del frontend:
+
+```bash
+npm install --prefix app/front
+```
+
+Ejecuta API y frontend en terminales separadas:
+
+```bash
+npm run gui:api
+npm run gui:front
+```
+
+Abre `http://127.0.0.1:5173`.
+
+Si estas usando el entorno local de Fase 1 documentado en los reportes de
+cierre, el API tambien puede levantarse directamente con:
+
+```bash
+.venv312/bin/python -m ingestion.gui.server
+```
+
+La accion de revision no modifica bundles ni metadata normalizada; guarda
+decisiones humanas en
+`data/docs_normalized/_manifests/review_decisions.json`.
+
 RAG: si uso rag tengo que usar embedings y usar una bd vectorizada
 
 
@@ -142,4 +174,3 @@ CONSIDERACION 8: METADATOS PARA LOS CHUNKS PARA PREFILTRADO; CLASIFICA TEXTOS
 
 
 REVISAR SI ALGUNA PLANTILLA DE MASTRA ME SIRVE (https://mastra.ai/templates/chat-with-pdf) (https://mastra.ai/templates/docs-chatbot)
-

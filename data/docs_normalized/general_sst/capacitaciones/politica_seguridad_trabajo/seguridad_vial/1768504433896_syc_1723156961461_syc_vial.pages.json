@@ -1,16 +1,2744 @@
 {
-  "schema_version": "1.0",
   "document_id": "doc_3e55236f58440bf5",
   "page_count": 1,
   "pages": [
     {
-      "page_number": 1,
-      "text_raw": "OBJETIVOS Y METAS \nSEGURIDAD VIAL \n \n \nSISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten \nplanear de manera estratégica la seguridad vial. \n \nLa matriz define indicadores de medición que permiten realizar seguimiento al cumplimiento \nde los objetivos y metas tratados. Este seguimiento se realiza de manera trimestral con el \npropósito de identificar planes de acción de mejora en caso que sea necesario. \n \nOBJETIVOS METAS INDICADORES \nPlanear, organizar y ejecutar \nacciones necesarias para \ncontrola en forma oportuna  y \nsegura el normal desarrollo de \nlas actividades cotidianas de \nlos conductores. \n95% del plan de trabajo \nanual ejecutado para el \ndiseño, implementación y \nmantenimiento del PESV. \n/# de metas alcanzadas o \nlogradas en el PESV x trimestre \n/ # total de metas definidas \nPESV x trimestre ) *100 \nContribuir a generar \nconciencia, hábitos, \ncomportamientos y conductas \nseguras en la vía en todos los \ntrabajadores como actores de \nla vía, a través de mecanismos \nde campañas y/o \nsensibilizaciones. \n \n90% del programa de \nformación y capacitación en \nseguridad vial ejecutado. \n(# de capacitaciones en \nseguridad vial ejecutadas por \ntrimestre /# Total de \ncapacitaciones en seguridad \nvial programadas por trimestre) \n*100 \nRealizar seguimiento periódico \na cada uno de los vehículos y \nconductores que labores en \nSistemas y computadores S.A. \n100% de los vehículos \npropios inspeccionados \nmensualmente y con hoja \nde vida y registro de \ntrazabilidad de \nmantenimiento. \n(# de vehiculos inspeccionados \ndiariamente / # total de \nvehiculos que trabajan \ndiariamente) * 100 \n \n \n“Juntos, cada esfuerzo cuenta. Alcanzar \nnuestras metas viales es posible gracias a tu \ndedicación y compromiso. Sigamos \navanzando con entusiasmo y unidad hacia \nun futuro mejor para todos.” \n \n",
-      "text_normalized": "OBJETIVOS Y METAS\nSEGURIDAD VIAL\n\nSISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten\nplanear de manera estratégica la seguridad vial.\n\nLa matriz define indicadores de medición que permiten realizar seguimiento al cumplimiento\nde los objetivos y metas tratados. Este seguimiento se realiza de manera trimestral con el\npropósito de identificar planes de acción de mejora en caso que sea necesario.\n\nOBJETIVOS METAS INDICADORES\nPlanear, organizar y ejecutar\nacciones necesarias para\ncontrola en forma oportuna y\nsegura el normal desarrollo de\nlas actividades cotidianas de\nlos conductores.\n95% del plan de trabajo\nanual ejecutado para el\ndiseño, implementación y\nmantenimiento del PESV.\n/# de metas alcanzadas o\nlogradas en el PESV x trimestre\n/ # total de metas definidas\nPESV x trimestre ) *100\nContribuir a generar\nconciencia, hábitos,\ncomportamientos y conductas\nseguras en la vía en todos los\ntrabajadores como actores de\nla vía, a través de mecanismos\nde campañas y/o\nsensibilizaciones.\n\n90% del programa de\nformación y capacitación en\nseguridad vial ejecutado.\n(# de capacitaciones en\nseguridad vial ejecutadas por\ntrimestre /# Total de\ncapacitaciones en seguridad\nvial programadas por trimestre)\n*100\nRealizar seguimiento periódico\na cada uno de los vehículos y\nconductores que labores en\nSistemas y computadores S.A.\n100% de los vehículos\npropios inspeccionados\nmensualmente y con hoja\nde vida y registro de\ntrazabilidad de\nmantenimiento.\n(# de vehiculos inspeccionados\ndiariamente / # total de\nvehiculos que trabajan\ndiariamente) * 100\n\n“Juntos, cada esfuerzo cuenta. Alcanzar\nnuestras metas viales es posible gracias a tu\ndedicación y compromiso. Sigamos\navanzando con entusiasmo y unidad hacia\nun futuro mejor para todos.”",
+      "blocks": [
+        {
+          "bbox": {
+            "bottom": 84.12527999999998,
+            "coordinate_system": "pdf_points",
+            "top": 73.08528000000001,
+            "x0": 248.57,
+            "x1": 366.66472
+          },
+          "block_id": "p1_text_0000",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "OBJETIVOS Y METAS ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 97.4652799999999,
+            "coordinate_system": "pdf_points",
+            "top": 86.42527999999993,
+            "x0": 257.33,
+            "x1": 357.90472
+          },
+          "block_id": "p1_text_0001",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "SEGURIDAD VIAL ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 110.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 99.0584,
+            "x0": 85.104,
+            "x1": 88.17312
+          },
+          "block_id": "p1_text_0002",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 122.69839999999999,
+            "coordinate_system": "pdf_points",
+            "top": 111.65840000000003,
+            "x0": 85.104,
+            "x1": 88.17312
+          },
+          "block_id": "p1_text_0003",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 135.41840000000002,
+            "coordinate_system": "pdf_points",
+            "top": 124.37840000000006,
+            "x0": 85.104,
+            "x1": 529.9608799999999
+          },
+          "block_id": "p1_text_0004",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "SISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 148.01840000000004,
+            "coordinate_system": "pdf_points",
+            "top": 136.97840000000008,
+            "x0": 85.104,
+            "x1": 323.03912
+          },
+          "block_id": "p1_text_0005",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "planear de manera estratégica la seguridad vial. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 160.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 149.5784,
+            "x0": 85.104,
+            "x1": 88.17312
+          },
+          "block_id": "p1_text_0006",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 173.33839999999998,
+            "coordinate_system": "pdf_points",
+            "top": 162.29840000000002,
+            "x0": 85.104,
+            "x1": 529.8835199999995
+          },
+          "block_id": "p1_text_0007",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "La matriz define indicadores de medición que permiten realizar seguimiento al cumplimiento ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 185.9384,
+            "coordinate_system": "pdf_points",
+            "top": 174.89840000000004,
+            "x0": 85.104,
+            "x1": 529.8015199999999
+          },
+          "block_id": "p1_text_0008",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de los objetivos y metas tratados. Este seguimiento se realiza de manera trimestral con el ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 198.65840000000003,
+            "coordinate_system": "pdf_points",
+            "top": 187.61840000000007,
+            "x0": 85.104,
+            "x1": 474.04912
+          },
+          "block_id": "p1_text_0009",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "propósito de identificar planes de acción de mejora en caso que sea necesario. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.25840000000005,
+            "coordinate_system": "pdf_points",
+            "top": 200.2184000000001,
+            "x0": 306.05,
+            "x1": 309.11912
+          },
+          "block_id": "p1_text_0010",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0011",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0012",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 76.824,
+            "x1": 236.56400000000002
+          },
+          "block_id": "p1_rect_0013",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0014",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 237.05,
+            "x1": 382.27
+          },
+          "block_id": "p1_rect_0015",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0016",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 382.75,
+            "x1": 549.81
+          },
+          "block_id": "p1_rect_0017",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0018",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.70000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 211.22000000000003,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0019",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.70000000000005,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0020",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.70000000000005,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0021",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.70000000000005,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0022",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.70000000000005,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0023",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.82000000000005,
+            "x0": 76.824,
+            "x1": 236.56400000000002
+          },
+          "block_id": "p1_rect_0024",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 226.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 211.82000000000005,
+            "x0": 81.864,
+            "x1": 231.404
+          },
+          "block_id": "p1_rect_0025",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.82000000000005,
+            "x0": 237.05,
+            "x1": 382.27
+          },
+          "block_id": "p1_rect_0026",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 226.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 211.82000000000005,
+            "x0": 242.21,
+            "x1": 377.11
+          },
+          "block_id": "p1_rect_0027",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 228.98000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 211.82000000000005,
+            "x0": 382.75,
+            "x1": 549.81
+          },
+          "block_id": "p1_rect_0028",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 226.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 211.82000000000005,
+            "x0": 387.91,
+            "x1": 544.6500000000001
+          },
+          "block_id": "p1_rect_0029",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 224.45839999999998,
+            "coordinate_system": "pdf_points",
+            "top": 213.41840000000002,
+            "x0": 125.06,
+            "x1": 191.12912
+          },
+          "block_id": "p1_text_0030",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "OBJETIVOS ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 224.45839999999998,
+            "coordinate_system": "pdf_points",
+            "top": 213.41840000000002,
+            "x0": 290.33,
+            "x1": 331.91912
+          },
+          "block_id": "p1_text_0031",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "METAS ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 224.45839999999998,
+            "coordinate_system": "pdf_points",
+            "top": 213.41840000000002,
+            "x0": 427.75,
+            "x1": 507.88912
+          },
+          "block_id": "p1_text_0032",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "INDICADORES ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0033",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 76.824,
+            "x1": 236.56400000000002
+          },
+          "block_id": "p1_rect_0034",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0035",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 237.05,
+            "x1": 382.27
+          },
+          "block_id": "p1_rect_0036",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0037",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 382.75,
+            "x1": 549.81
+          },
+          "block_id": "p1_rect_0038",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 229.46000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 228.98000000000002,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0039",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 316.73,
+            "coordinate_system": "pdf_points",
+            "top": 229.466,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0040",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 316.73,
+            "coordinate_system": "pdf_points",
+            "top": 229.466,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0041",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 316.73,
+            "coordinate_system": "pdf_points",
+            "top": 229.466,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0042",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 316.73,
+            "coordinate_system": "pdf_points",
+            "top": 229.466,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0043",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 80.064,
+            "x1": 124.15775999999998
+          },
+          "block_id": "p1_text_0044",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "Planear, ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 128.39711999999997,
+            "x1": 177.13871999999995
+          },
+          "block_id": "p1_text_0045",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "organizar ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 181.40015999999994,
+            "x1": 189.86783999999994
+          },
+          "block_id": "p1_text_0046",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 194.10719999999992,
+            "x1": 236.29103999999995
+          },
+          "block_id": "p1_text_0047",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "ejecutar ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 240.29,
+            "x1": 265.41704
+          },
+          "block_id": "p1_text_0048",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "95% ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 271.24616,
+            "x1": 288.95432
+          },
+          "block_id": "p1_text_0049",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "del ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 294.75032,
+            "x1": 318.58568
+          },
+          "block_id": "p1_text_0050",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "plan ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 324.38167999999996,
+            "x1": 339.57272
+          },
+          "block_id": "p1_text_0051",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 345.36871999999994,
+            "x1": 381.88904
+          },
+          "block_id": "p1_text_0052",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "trabajo ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 242.09839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 231.0584,
+            "x0": 403.51,
+            "x1": 531.9272799999999
+          },
+          "block_id": "p1_text_0053",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "/# de metas alcanzadas o ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 254.6984,
+            "coordinate_system": "pdf_points",
+            "top": 243.65840000000003,
+            "x0": 388.27,
+            "x1": 547.2680799999999
+          },
+          "block_id": "p1_text_0054",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "logradas en el PESV x trimestre ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 80.064,
+            "x1": 126.59759999999999
+          },
+          "block_id": "p1_text_0055",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "acciones ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 140.8944,
+            "x1": 196.98863999999998
+          },
+          "block_id": "p1_text_0056",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "necesarias ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 211.30751999999995,
+            "x1": 236.32415999999995
+          },
+          "block_id": "p1_text_0057",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "para ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 240.29,
+            "x1": 270.24152
+          },
+          "block_id": "p1_text_0058",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "anual ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 278.3228,
+            "x1": 329.28344
+          },
+          "block_id": "p1_text_0059",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "ejecutado ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 337.34263999999996,
+            "x1": 362.23783999999995
+          },
+          "block_id": "p1_text_0060",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "para ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 256.61839999999995,
+            "coordinate_system": "pdf_points",
+            "top": 245.5784,
+            "x0": 370.31912,
+            "x1": 381.91112
+          },
+          "block_id": "p1_text_0061",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "el ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 267.4484,
+            "coordinate_system": "pdf_points",
+            "top": 256.40840000000003,
+            "x0": 400.51,
+            "x1": 535.1262399999999
+          },
+          "block_id": "p1_text_0062",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "/ # total de metas definidas ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 80.064,
+            "x1": 122.38031999999998
+          },
+          "block_id": "p1_text_0063",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "controla ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 125.52671999999998,
+            "x1": 140.83919999999998
+          },
+          "block_id": "p1_text_0064",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "en ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 143.87519999999998,
+            "x1": 175.14047999999997
+          },
+          "block_id": "p1_text_0065",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "forma ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 178.28687999999997,
+            "x1": 224.75912
+          },
+          "block_id": "p1_text_0066",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "oportuna ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 227.93,
+            "x1": 236.39912
+          },
+          "block_id": "p1_text_0067",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 240.29,
+            "x1": 278.85272
+          },
+          "block_id": "p1_text_0068",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "diseño, ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 286.24951999999996,
+            "x1": 366.23431999999997
+          },
+          "block_id": "p1_text_0069",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "implementación ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.1684,
+            "coordinate_system": "pdf_points",
+            "top": 260.12840000000006,
+            "x0": 373.59799999999996,
+            "x1": 381.9442399999999
+          },
+          "block_id": "p1_text_0070",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 280.0484,
+            "coordinate_system": "pdf_points",
+            "top": 269.00840000000005,
+            "x0": 408.19,
+            "x1": 527.44912
+          },
+          "block_id": "p1_text_0071",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "PESV x trimestre ) *100 ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 285.8084,
+            "coordinate_system": "pdf_points",
+            "top": 274.76840000000004,
+            "x0": 80.064,
+            "x1": 236.30207999999996
+          },
+          "block_id": "p1_text_0072",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "segura el normal desarrollo de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 285.8084,
+            "coordinate_system": "pdf_points",
+            "top": 274.76840000000004,
+            "x0": 240.29,
+            "x1": 368.65912
+          },
+          "block_id": "p1_text_0073",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "mantenimiento del PESV. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 300.3284,
+            "coordinate_system": "pdf_points",
+            "top": 289.28839999999997,
+            "x0": 80.064,
+            "x1": 97.18704
+          },
+          "block_id": "p1_text_0074",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "las ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 300.3284,
+            "coordinate_system": "pdf_points",
+            "top": 289.28839999999997,
+            "x0": 101.6472,
+            "x1": 159.67343999999997
+          },
+          "block_id": "p1_text_0075",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "actividades ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 300.3284,
+            "coordinate_system": "pdf_points",
+            "top": 289.28839999999997,
+            "x0": 164.15567999999996,
+            "x1": 216.68399999999997
+          },
+          "block_id": "p1_text_0076",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "cotidianas ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 300.3284,
+            "coordinate_system": "pdf_points",
+            "top": 289.28839999999997,
+            "x0": 221.14415999999997,
+            "x1": 236.33519999999996
+          },
+          "block_id": "p1_text_0077",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 314.84839999999997,
+            "coordinate_system": "pdf_points",
+            "top": 303.80839999999995,
+            "x0": 80.064,
+            "x1": 163.28912
+          },
+          "block_id": "p1_text_0078",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "los conductores. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0079",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 76.824,
+            "x1": 236.56400000000002
+          },
+          "block_id": "p1_rect_0080",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0081",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 237.05,
+            "x1": 382.27
+          },
+          "block_id": "p1_rect_0082",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0083",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 382.75,
+            "x1": 549.81
+          },
+          "block_id": "p1_rect_0084",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 317.21,
+            "coordinate_system": "pdf_points",
+            "top": 316.72999,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0085",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 433.63,
+            "coordinate_system": "pdf_points",
+            "top": 317.21,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0086",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 433.63,
+            "coordinate_system": "pdf_points",
+            "top": 317.21,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0087",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 433.63,
+            "coordinate_system": "pdf_points",
+            "top": 317.21,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0088",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 433.63,
+            "coordinate_system": "pdf_points",
+            "top": 317.21,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0089",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 329.9684,
+            "coordinate_system": "pdf_points",
+            "top": 318.92839999999995,
+            "x0": 81.864,
+            "x1": 132.65904
+          },
+          "block_id": "p1_text_0090",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "Contribuir ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 329.9684,
+            "coordinate_system": "pdf_points",
+            "top": 318.92839999999995,
+            "x0": 158.50368,
+            "x1": 167.71104
+          },
+          "block_id": "p1_text_0091",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "a ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 329.9684,
+            "coordinate_system": "pdf_points",
+            "top": 318.92839999999995,
+            "x0": 193.41216,
+            "x1": 234.28224
+          },
+          "block_id": "p1_text_0092",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "generar ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 329.9684,
+            "coordinate_system": "pdf_points",
+            "top": 318.92839999999995,
+            "x0": 242.21,
+            "x1": 245.27912
+          },
+          "block_id": "p1_text_0093",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 329.9684,
+            "coordinate_system": "pdf_points",
+            "top": 318.92839999999995,
+            "x0": 408.07,
+            "x1": 527.40136
+          },
+          "block_id": "p1_text_0094",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "(# de capacitaciones en ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 342.5684,
+            "coordinate_system": "pdf_points",
+            "top": 331.5284,
+            "x0": 394.63,
+            "x1": 540.81064
+          },
+          "block_id": "p1_text_0095",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "seguridad vial ejecutadas por ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 344.4884,
+            "coordinate_system": "pdf_points",
+            "top": 333.4484,
+            "x0": 81.864,
+            "x1": 139.97856000000002
+          },
+          "block_id": "p1_text_0096",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "conciencia, ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 344.4884,
+            "coordinate_system": "pdf_points",
+            "top": 333.4484,
+            "x0": 192.84912,
+            "x1": 234.30432
+          },
+          "block_id": "p1_text_0097",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "hábitos, ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 344.4884,
+            "coordinate_system": "pdf_points",
+            "top": 333.4484,
+            "x0": 242.21,
+            "x1": 267.33704
+          },
+          "block_id": "p1_text_0098",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "90% ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 344.4884,
+            "coordinate_system": "pdf_points",
+            "top": 333.4484,
+            "x0": 277.23992,
+            "x1": 294.94808
+          },
+          "block_id": "p1_text_0099",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "del ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 344.4884,
+            "coordinate_system": "pdf_points",
+            "top": 333.4484,
+            "x0": 304.82888,
+            "x1": 355.0388
+          },
+          "block_id": "p1_text_0100",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "programa ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 344.4884,
+            "coordinate_system": "pdf_points",
+            "top": 333.4484,
+            "x0": 364.77608,
+            "x1": 380.08856000000003
+          },
+          "block_id": "p1_text_0101",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 355.1684,
+            "coordinate_system": "pdf_points",
+            "top": 344.1284,
+            "x0": 417.31,
+            "x1": 518.2156
+          },
+          "block_id": "p1_text_0102",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "trimestre /# Total de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 359.0084,
+            "coordinate_system": "pdf_points",
+            "top": 347.9684,
+            "x0": 81.864,
+            "x1": 234.28224
+          },
+          "block_id": "p1_text_0103",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "comportamientos y conductas ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 359.0084,
+            "coordinate_system": "pdf_points",
+            "top": 347.9684,
+            "x0": 242.21,
+            "x1": 380.16584
+          },
+          "block_id": "p1_text_0104",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "formación y capacitación en ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 367.8884,
+            "coordinate_system": "pdf_points",
+            "top": 356.84839999999997,
+            "x0": 396.55,
+            "x1": 539.0653599999999
+          },
+          "block_id": "p1_text_0105",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "capacitaciones en seguridad ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 373.5284,
+            "coordinate_system": "pdf_points",
+            "top": 362.48839999999996,
+            "x0": 81.864,
+            "x1": 234.21599999999995
+          },
+          "block_id": "p1_text_0106",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "seguras en la vía en todos los ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 373.5284,
+            "coordinate_system": "pdf_points",
+            "top": 362.48839999999996,
+            "x0": 242.21,
+            "x1": 366.97912
+          },
+          "block_id": "p1_text_0107",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "seguridad vial ejecutado. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 380.4884,
+            "coordinate_system": "pdf_points",
+            "top": 369.4484,
+            "x0": 389.83,
+            "x1": 545.69272
+          },
+          "block_id": "p1_text_0108",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "vial programadas por trimestre) ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 388.0484,
+            "coordinate_system": "pdf_points",
+            "top": 377.0084,
+            "x0": 81.864,
+            "x1": 234.24911999999995
+          },
+          "block_id": "p1_text_0109",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "trabajadores como actores de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 393.2084,
+            "coordinate_system": "pdf_points",
+            "top": 382.16839999999996,
+            "x0": 454.87,
+            "x1": 480.64912
+          },
+          "block_id": "p1_text_0110",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "*100 ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 402.6884,
+            "coordinate_system": "pdf_points",
+            "top": 391.6484,
+            "x0": 81.864,
+            "x1": 234.26015999999996
+          },
+          "block_id": "p1_text_0111",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "la vía, a través de mecanismos ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 417.2084,
+            "coordinate_system": "pdf_points",
+            "top": 406.16839999999996,
+            "x0": 81.864,
+            "x1": 97.17648
+          },
+          "block_id": "p1_text_0112",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 417.2084,
+            "coordinate_system": "pdf_points",
+            "top": 406.16839999999996,
+            "x0": 130.09776,
+            "x1": 183.79631999999998
+          },
+          "block_id": "p1_text_0113",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "campañas ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 417.2084,
+            "coordinate_system": "pdf_points",
+            "top": 406.16839999999996,
+            "x0": 216.71759999999998,
+            "x1": 234.29327999999998
+          },
+          "block_id": "p1_text_0114",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y/o ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 431.7284,
+            "coordinate_system": "pdf_points",
+            "top": 420.6884,
+            "x0": 81.864,
+            "x1": 170.48911999999999
+          },
+          "block_id": "p1_text_0115",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "sensibilizaciones. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0116",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 76.824,
+            "x1": 236.56400000000002
+          },
+          "block_id": "p1_rect_0117",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0118",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 237.05,
+            "x1": 382.27
+          },
+          "block_id": "p1_rect_0119",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0120",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 382.75,
+            "x1": 549.81
+          },
+          "block_id": "p1_rect_0121",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 434.11,
+            "coordinate_system": "pdf_points",
+            "top": 433.62999,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0122",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.47,
+            "coordinate_system": "pdf_points",
+            "top": 434.11,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0123",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.47,
+            "coordinate_system": "pdf_points",
+            "top": 434.11,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0124",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.47,
+            "coordinate_system": "pdf_points",
+            "top": 434.11,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0125",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.47,
+            "coordinate_system": "pdf_points",
+            "top": 434.11,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0126",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 446.7484,
+            "coordinate_system": "pdf_points",
+            "top": 435.7084,
+            "x0": 81.864,
+            "x1": 234.29327999999998
+          },
+          "block_id": "p1_text_0127",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "Realizar seguimiento periódico ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 446.7484,
+            "coordinate_system": "pdf_points",
+            "top": 435.7084,
+            "x0": 242.21,
+            "x1": 273.47528
+          },
+          "block_id": "p1_text_0128",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "100% ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 446.7484,
+            "coordinate_system": "pdf_points",
+            "top": 435.7084,
+            "x0": 281.79944,
+            "x1": 296.99048
+          },
+          "block_id": "p1_text_0129",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 446.7484,
+            "coordinate_system": "pdf_points",
+            "top": 435.7084,
+            "x0": 305.31464,
+            "x1": 322.43768
+          },
+          "block_id": "p1_text_0130",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "los ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 446.7484,
+            "coordinate_system": "pdf_points",
+            "top": 435.7084,
+            "x0": 330.73976,
+            "x1": 380.13271999999995
+          },
+          "block_id": "p1_text_0131",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "vehículos ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 446.7484,
+            "coordinate_system": "pdf_points",
+            "top": 435.7084,
+            "x0": 389.83,
+            "x1": 545.7920799999999
+          },
+          "block_id": "p1_text_0132",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "(# de vehiculos inspeccionados ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 461.3884,
+            "coordinate_system": "pdf_points",
+            "top": 450.34839999999997,
+            "x0": 81.864,
+            "x1": 234.26015999999998
+          },
+          "block_id": "p1_text_0133",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "a cada uno de los vehículos y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 461.3884,
+            "coordinate_system": "pdf_points",
+            "top": 450.34839999999997,
+            "x0": 242.21,
+            "x1": 281.41304
+          },
+          "block_id": "p1_text_0134",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "propios ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 461.3884,
+            "coordinate_system": "pdf_points",
+            "top": 450.34839999999997,
+            "x0": 301.35128,
+            "x1": 380.14376
+          },
+          "block_id": "p1_text_0135",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "inspeccionados ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 461.3884,
+            "coordinate_system": "pdf_points",
+            "top": 450.34839999999997,
+            "x0": 410.23,
+            "x1": 525.22264
+          },
+          "block_id": "p1_text_0136",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "diariamente / # total de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 81.864,
+            "x1": 144.93552
+          },
+          "block_id": "p1_text_0137",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "conductores ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 149.41776,
+            "x1": 170.83535999999998
+          },
+          "block_id": "p1_text_0138",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "que ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 175.43903999999998,
+            "x1": 214.52063999999996
+          },
+          "block_id": "p1_text_0139",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "labores ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 219.10223999999997,
+            "x1": 234.29327999999995
+          },
+          "block_id": "p1_text_0140",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "en ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 242.21,
+            "x1": 317.51384
+          },
+          "block_id": "p1_text_0141",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "mensualmente ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 320.66024,
+            "x1": 329.12792
+          },
+          "block_id": "p1_text_0142",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 332.28535999999997,
+            "x1": 353.11784
+          },
+          "block_id": "p1_text_0143",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "con ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 356.27527999999995,
+            "x1": 380.08856
+          },
+          "block_id": "p1_text_0144",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "hoja ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 475.9084,
+            "coordinate_system": "pdf_points",
+            "top": 464.86839999999995,
+            "x0": 411.19,
+            "x1": 524.44912
+          },
+          "block_id": "p1_text_0145",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "vehiculos que trabajan ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 81.864,
+            "x1": 234.35912
+          },
+          "block_id": "p1_text_0146",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "Sistemas y computadores S.A. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 242.21,
+            "x1": 257.52248000000003
+          },
+          "block_id": "p1_text_0147",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 266.56424,
+            "x1": 289.67096000000004
+          },
+          "block_id": "p1_text_0148",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "vida ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 298.71272,
+            "x1": 307.1804
+          },
+          "block_id": "p1_text_0149",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 316.22216000000003,
+            "x1": 355.83367999999996
+          },
+          "block_id": "p1_text_0150",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "registro ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 364.754,
+            "x1": 380.06647999999996
+          },
+          "block_id": "p1_text_0151",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 490.4284,
+            "coordinate_system": "pdf_points",
+            "top": 479.3884,
+            "x0": 421.27,
+            "x1": 514.2491200000001
+          },
+          "block_id": "p1_text_0152",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "diariamente) * 100 ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 504.9484,
+            "coordinate_system": "pdf_points",
+            "top": 493.9084,
+            "x0": 242.21,
+            "x1": 301.42856
+          },
+          "block_id": "p1_text_0153",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "trazabilidad ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 504.9484,
+            "coordinate_system": "pdf_points",
+            "top": 493.9084,
+            "x0": 364.83128,
+            "x1": 380.14376
+          },
+          "block_id": "p1_text_0154",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "de ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 519.5884,
+            "coordinate_system": "pdf_points",
+            "top": 508.54839999999996,
+            "x0": 242.21,
+            "x1": 320.51912
+          },
+          "block_id": "p1_text_0155",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "mantenimiento. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0156",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 76.344,
+            "x1": 76.824
+          },
+          "block_id": "p1_rect_0157",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 76.824,
+            "x1": 236.56400000000002
+          },
+          "block_id": "p1_rect_0158",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 236.57,
+            "x1": 237.04999999999998
+          },
+          "block_id": "p1_rect_0159",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 237.05,
+            "x1": 382.27
+          },
+          "block_id": "p1_rect_0160",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 382.27,
+            "x1": 382.75001
+          },
+          "block_id": "p1_rect_0161",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 382.75,
+            "x1": 549.81
+          },
+          "block_id": "p1_rect_0162",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0163",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.95,
+            "coordinate_system": "pdf_points",
+            "top": 521.46996,
+            "x0": 549.82,
+            "x1": 550.3000400000001
+          },
+          "block_id": "p1_rect_0164",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "rect",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 534.7084,
+            "coordinate_system": "pdf_points",
+            "top": 523.6684,
+            "x0": 85.104,
+            "x1": 88.17312
+          },
+          "block_id": "p1_text_0165",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 559.1884,
+            "coordinate_system": "pdf_points",
+            "top": 548.1484,
+            "x0": 85.104,
+            "x1": 88.17312
+          },
+          "block_id": "p1_text_0166",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 715.669,
+            "coordinate_system": "pdf_points",
+            "top": 559.569,
+            "x0": 312.15,
+            "x1": 555.15
+          },
+          "block_id": "p1_image_0167",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "image",
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 583.6684,
+            "coordinate_system": "pdf_points",
+            "top": 572.6284,
+            "x0": 85.104,
+            "x1": 127.38719999999999
+          },
+          "block_id": "p1_text_0168",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "“Juntos, ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 583.6684,
+            "coordinate_system": "pdf_points",
+            "top": 572.6284,
+            "x0": 132.82992,
+            "x1": 159.80064
+          },
+          "block_id": "p1_text_0169",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "cada ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 583.6684,
+            "coordinate_system": "pdf_points",
+            "top": 572.6284,
+            "x0": 165.22127999999998,
+            "x1": 210.26448
+          },
+          "block_id": "p1_text_0170",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "esfuerzo ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 583.6684,
+            "coordinate_system": "pdf_points",
+            "top": 572.6284,
+            "x0": 215.7072,
+            "x1": 255.00959999999998
+          },
+          "block_id": "p1_text_0171",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "cuenta. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 583.6684,
+            "coordinate_system": "pdf_points",
+            "top": 572.6284,
+            "x0": 260.45232,
+            "x1": 306.21312
+          },
+          "block_id": "p1_text_0172",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "Alcanzar ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 598.1884,
+            "coordinate_system": "pdf_points",
+            "top": 587.1484,
+            "x0": 85.104,
+            "x1": 306.30144
+          },
+          "block_id": "p1_text_0173",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "nuestras metas viales es posible gracias a tu ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 612.7384,
+            "coordinate_system": "pdf_points",
+            "top": 601.6984,
+            "x0": 85.104,
+            "x1": 140.7456
+          },
+          "block_id": "p1_text_0174",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "dedicación ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 612.7384,
+            "coordinate_system": "pdf_points",
+            "top": 601.6984,
+            "x0": 155.78208,
+            "x1": 164.24975999999998
+          },
+          "block_id": "p1_text_0175",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "y ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 612.7384,
+            "coordinate_system": "pdf_points",
+            "top": 601.6984,
+            "x0": 179.28623999999996,
+            "x1": 245.47103999999996
+          },
+          "block_id": "p1_text_0176",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "compromiso. ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 612.7384,
+            "coordinate_system": "pdf_points",
+            "top": 601.6984,
+            "x0": 260.50752,
+            "x1": 306.25728
+          },
+          "block_id": "p1_text_0177",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "Sigamos ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 627.3784,
+            "coordinate_system": "pdf_points",
+            "top": 616.3384,
+            "x0": 85.104,
+            "x1": 306.24623999999994
+          },
+          "block_id": "p1_text_0178",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "avanzando con entusiasmo y unidad hacia ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 642.0183999999999,
+            "coordinate_system": "pdf_points",
+            "top": 630.9784,
+            "x0": 85.104,
+            "x1": 223.91912
+          },
+          "block_id": "p1_text_0179",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": "un futuro mejor para todos.” ",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 666.4984,
+            "coordinate_system": "pdf_points",
+            "top": 655.4584,
+            "x0": 194.18,
+            "x1": 197.24912
+          },
+          "block_id": "p1_text_0180",
+          "extraction_method": "pdf_digital",
+          "region": null,
+          "role": "body",
+          "text": " ",
+          "warnings": []
+        }
+      ],
       "extraction_method": "pdf_digital",
-      "ocr_confidence": null,
-      "has_handwriting_warning": false,
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "OBJETIVOS Y METAS\nSEGURIDAD VIAL\n\nSISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten\nplanear de manera estratégica la seguridad vial.\n\nLa matriz define indicadores de medición que permiten realizar seguimiento al cumplimiento\nde los objetivos y metas tratados. Este seguimiento se realiza de manera trimestral con el\npropósito de identificar planes de acción de mejora en caso que sea necesario.\n\nOBJETIVOS\nMETAS\nINDICADORES\nPlanear,\norganizar\ny\nejecutar\n95%\ndel\nplan\nde\ntrabajo\n/# de metas alcanzadas o\nlogradas en el PESV x trimestre\nacciones\nnecesarias\npara\nanual\nejecutado\npara\nel\n/ # total de metas definidas\ncontrola\nen\nforma\noportuna\ny\ndiseño,\nimplementación\ny\nPESV x trimestre ) *100\nsegura el normal desarrollo de\nmantenimiento del PESV.\nlas\nactividades\ncotidianas\nde\nlos conductores.\nContribuir\na\ngenerar\n\n(# de capacitaciones en\nseguridad vial ejecutadas por\nconciencia,\nhábitos,\n90%\ndel\nprograma\nde\ntrimestre /# Total de\ncomportamientos y conductas\nformación y capacitación en\ncapacitaciones en seguridad\nseguras en la vía en todos los\nseguridad vial ejecutado.\nvial programadas por trimestre)\ntrabajadores como actores de\n*100\nla vía, a través de mecanismos\nde\ncampañas\ny/o\nsensibilizaciones.\nRealizar seguimiento periódico\n100%\nde\nlos\nvehículos\n(# de vehiculos inspeccionados\na cada uno de los vehículos y\npropios\ninspeccionados\ndiariamente / # total de\nconductores\nque\nlabores\nen\nmensualmente\ny\ncon\nhoja\nvehiculos que trabajan\nSistemas y computadores S.A.\nde\nvida\ny\nregistro\nde\ndiariamente) * 100\ntrazabilidad\nde\nmantenimiento.\n\n“Juntos,\ncada\nesfuerzo\ncuenta.\nAlcanzar\nnuestras metas viales es posible gracias a tu\ndedicación\ny\ncompromiso.\nSigamos\navanzando con entusiasmo y unidad hacia\nun futuro mejor para todos.”",
+      "text_raw": "                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                  OBJETIVOS Y METAS                                 \n                                   SEGURIDAD VIAL                                   \n                                                                                    \n                                                                                    \n            SISTEMAS Y COMPUTADORES S.A se ha establecido los objetivos y metas que permiten\n            planear de manera estratégica la seguridad vial.                        \n            La matriz define indicadores de medición que permiten realizar seguimiento al cumplimiento\n            de los objetivos y metas tratados. Este seguimiento se realiza de manera trimestral con el\n            propósito de identificar planes de acción de mejora en caso que sea necesario.\n                                                                                    \n                 OBJETIVOS              METAS              INDICADORES              \n                                                                                    \n           Planear, organizar y ejecutar 95% del plan de trabajo /# de metas alcanzadas o\n           acciones necesarias para anual ejecutado para el logradas en el PESV x trimestre\n                                                       / # total de metas definidas \n           controla en forma oportuna y diseño, implementación y                    \n                                                        PESV x trimestre ) *100     \n           segura el normal desarrollo de mantenimiento del PESV.                   \n           las actividades cotidianas de                                            \n           los conductores.                                                         \n           Contribuir a    generar                      (# de capacitaciones en     \n           conciencia,     hábitos, 90% del programa de seguridad vial ejecutadas por\n                                                          trimestre /# Total de     \n           comportamientos y conductas formación y capacitación en                  \n                                                       capacitaciones en seguridad  \n           seguras en la vía en todos los seguridad vial ejecutado.                 \n                                                      vial programadas por trimestre)\n           trabajadores como actores de                                             \n                                                               *100                 \n           la vía, a través de mecanismos                                           \n           de     campañas    y/o                                                   \n           sensibilizaciones.                                                       \n           Realizar seguimiento periódico 100% de los vehículos (# de vehiculos inspeccionados\n           a cada uno de los vehículos y propios inspeccionados diariamente / # total de\n           conductores que labores en mensualmente y con hoja vehiculos que trabajan\n           Sistemas y computadores S.A. de vida y registro de diariamente) * 100    \n                                 trazabilidad     de                                \n                                 mantenimiento.                                     \n            “Juntos, cada esfuerzo cuenta. Alcanzar                                 \n            nuestras metas viales es posible gracias a tu                           \n            dedicación y compromiso. Sigamos                                        \n            avanzando con entusiasmo y unidad hacia                                 \n                                                                                    \n            un futuro mejor para todos.”                                            \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    \n                                                                                    ",
       "warnings": []
     }
-  ]
+  ],
+  "schema_version": "2.0"
 }

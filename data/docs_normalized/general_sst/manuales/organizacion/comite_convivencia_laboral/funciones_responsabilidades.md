@@ -1,12 +1,12 @@
 ---
 document_id: doc_4815e73a2a6125e3
-document_type: manual
+document_type: informacion_general
 topic: Comite de Convivencia Laboral
-source_file: funciones_responsabilidades.md
+source_relpath: general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Recibir y dar tramite a las quejas presentadas referentes a acoso laboral.

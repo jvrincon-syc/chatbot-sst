@@ -2,11 +2,11 @@
 document_id: doc_5773d940742c0a47
 document_type: manual
 topic: Comite de Convivencia Laboral
-source_file: derechos_convivencia.md
+source_relpath: convivencia_laboral/manual/derechos_convivencia.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 1. Derecho a ser respetado.

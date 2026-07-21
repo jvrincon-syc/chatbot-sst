@@ -1,0 +1,994 @@
+{
+  "document_id": "doc_f38f9f98d854feed",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr_text",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "ocr_text",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "ocr_text",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "ocr_text",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 15,
+  "tables": [
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CODIGO PL. RH-01-SST CLASIFICACIÓN USO INTERNO (Nc2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "CODIGO PL. RH-01-SST CLASIFICACIÓN USO INTERNO (Nc2)",
+        "Versión"
+      ],
+      "markdown_representation": "| CODIGO PL. RH-01-SST CLASIFICACIÓN USO INTERNO (Nc2) | Versión |\n| --- | --- |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "CODIGO PL. RH-01-SST CLASIFICACIÓN USO INTERNO (Nc2)",
+          "Versión"
+        ]
+      ],
+      "table_id": "page_1_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "SA. CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PL.RH-01-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Versión *",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Y ETIQUETADO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "_.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": ".",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "- POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "y )",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "SA. CODIGO",
+        "PL.RH-01-SST",
+        "CLASIFICACIÓN",
+        "USO INTERNO (NC2)",
+        "Versión *"
+      ],
+      "markdown_representation": "| SA. CODIGO | PL.RH-01-SST | CLASIFICACIÓN | USO INTERNO (NC2) | Versión * |\n| --- | --- | --- | --- | --- |\n| Y ETIQUETADO | _. | . |\n| - POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO | y ) |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "SA. CODIGO",
+          "PL.RH-01-SST",
+          "CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión *"
+        ],
+        [
+          "Y ETIQUETADO",
+          "_.",
+          "."
+        ],
+        [
+          "- POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+          "y )"
+        ]
+      ],
+      "table_id": "page_1_table_2",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Ven os",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "l",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "Ven os",
+        "l"
+      ],
+      "markdown_representation": "| Ven os | l |\n| --- | --- |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "Ven os",
+          "l"
+        ]
+      ],
+      "table_id": "page_1_table_3",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "- TAPROBADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Gerente General",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "- TAPROBADO POR",
+        "Gerente General"
+      ],
+      "markdown_representation": "| - TAPROBADO POR | Gerente General |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "- TAPROBADO POR",
+          "Gerente General"
+        ]
+      ],
+      "table_id": "page_2_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "pa 3/12/2020",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Se revisa la política en la revisión por la dirección y se",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "pa 3/12/2020",
+        "Se revisa la política en la revisión por la dirección y se"
+      ],
+      "markdown_representation": "| pa 3/12/2020 | Se revisa la política en la revisión por la dirección y se |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "pa 3/12/2020",
+          "Se revisa la política en la revisión por la dirección y se"
+        ]
+      ],
+      "table_id": "page_2_table_2",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PL.RH-01-SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "CODIGO",
+        "PL.RH-01-SST",
+        "CLASIFICACIÓN",
+        "USO INTERNO (NC2)",
+        "Versión"
+      ],
+      "markdown_representation": "| CODIGO | PL.RH-01-SST | CLASIFICACIÓN | USO INTERNO (NC2) | Versión |\n| --- | --- | --- | --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "CODIGO",
+          "PL.RH-01-SST",
+          "CLASIFICACIÓN",
+          "USO INTERNO (NC2)",
+          "Versión"
+        ]
+      ],
+      "table_id": "page_2_table_3",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "ELABORADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Líder Funcional de SG SST Yesnei Astrid Julio Areniz",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "ELABORADO POR",
+        "Líder Funcional de SG SST Yesnei Astrid Julio Areniz"
+      ],
+      "markdown_representation": "| ELABORADO POR | Líder Funcional de SG SST Yesnei Astrid Julio Areniz |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "ELABORADO POR",
+          "Líder Funcional de SG SST Yesnei Astrid Julio Areniz"
+        ]
+      ],
+      "table_id": "page_2_table_4",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Líder. e . “integrador",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Joan Mauricio Arenas -",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "Líder. e . “integrador",
+        "Joan Mauricio Arenas -"
+      ],
+      "markdown_representation": "| Líder. e . “integrador | Joan Mauricio Arenas - |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "Líder. e . “integrador",
+          "Joan Mauricio Arenas -"
+        ]
+      ],
+      "table_id": "page_2_table_5",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CI 23/09/2019",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Se revisa la política y se mantiene. —",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "CI 23/09/2019",
+        "Se revisa la política y se mantiene. —"
+      ],
+      "markdown_representation": "| CI 23/09/2019 | Se revisa la política y se mantiene. — |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "CI 23/09/2019",
+          "Se revisa la política y se mantiene. —"
+        ]
+      ],
+      "table_id": "page_2_table_6",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "09/12/2022",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Se revisa la política en la revisión por la dirección y semantiene el compromiso con el SG SST ]",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "09/12/2022",
+        "Se revisa la política en la revisión por la dirección y semantiene el compromiso con el SG SST ]"
+      ],
+      "markdown_representation": "| 09/12/2022 | Se revisa la política en la revisión por la dirección y semantiene el compromiso con el SG SST ] |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "09/12/2022",
+          "Se revisa la política en la revisión por la dirección y semantiene el compromiso con el SG SST ]"
+        ]
+      ],
+      "table_id": "page_2_table_7",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Se revisa política en la revisión por la alta dirección y se",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "*",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "Se revisa política en la revisión por la alta dirección y se",
+        "*"
+      ],
+      "markdown_representation": "| Se revisa política en la revisión por la alta dirección y se | * |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "Se revisa política en la revisión por la alta dirección y se",
+          "*"
+        ]
+      ],
+      "table_id": "page_2_table_8",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "( Y ETIQUETADO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "o",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "( Y ETIQUETADO",
+        "o"
+      ],
+      "markdown_representation": "| ( Y ETIQUETADO | o |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "( Y ETIQUETADO",
+          "o"
+        ]
+      ],
+      "table_id": "page_2_table_9",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "JRADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Líder Funcional de SGSST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Yesnei Astrid Julio Areniz",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "BADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Gerente General - (",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "ICADO POR",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Líder. e . ' integrador",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Joan Mauricio Arenas LI",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "JRADO POR",
+        "Líder Funcional de SGSST",
+        "Yesnei Astrid Julio Areniz"
+      ],
+      "markdown_representation": "| JRADO POR | Líder Funcional de SGSST | Yesnei Astrid Julio Areniz |\n| --- | --- | --- |\n| BADO POR | Gerente General - ( |\n| ICADO POR | Líder. e . ' integrador | Joan Mauricio Arenas LI |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "JRADO POR",
+          "Líder Funcional de SGSST",
+          "Yesnei Astrid Julio Areniz"
+        ],
+        [
+          "BADO POR",
+          "Gerente General - ("
+        ],
+        [
+          "ICADO POR",
+          "Líder. e . ' integrador",
+          "Joan Mauricio Arenas LI"
+        ]
+      ],
+      "table_id": "page_2_table_10",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2) Ven [os",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": ".",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "USO INTERNO (NC2) Ven [os",
+        "."
+      ],
+      "markdown_representation": "| USO INTERNO (NC2) Ven [os | . |\n| --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "USO INTERNO (NC2) Ven [os",
+          "."
+        ]
+      ],
+      "table_id": "page_2_table_11",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "NTERNO (NC2) [Verón",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "0.6",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "N",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "NTERNO (NC2) [Verón",
+        "0.6",
+        "N"
+      ],
+      "markdown_representation": "| NTERNO (NC2) [Verón | 0.6 | N |\n| --- | --- | --- |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "NTERNO (NC2) [Verón",
+          "0.6",
+          "N"
+        ]
+      ],
+      "table_id": "page_2_table_12",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

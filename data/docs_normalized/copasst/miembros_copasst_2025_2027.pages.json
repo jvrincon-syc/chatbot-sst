@@ -1,18 +1,30 @@
 {
-  "schema_version": "1.0",
   "document_id": "doc_5e403a88299d2dc3",
   "page_count": 1,
   "pages": [
     {
-      "page_number": 1,
-      "text_raw": "REPRESENTANTES DE LOS TRABAJADORES\n\n Miembros Principales:\n\n1 Juan Camilo Palacios Pedraza - Colpensiones - Bogota\n2 Leidy Salamanca Manrique -Evas -Floridablanca​\n3 Angie Daniela Cardenas Alvarado -Captura -Floridablanca​\n4 Ronal Estiven Barbosa Alquichire -Mantenimiento -Floridablanca​\n\nMiembros Suplentes:\n\n1 Elvia Carolina Rocha Majey - Colpensiones- Girardot \n2 Diego Fernando Porras Lizarazo -Logistica -Floridablanca​\n3 Jose David Corpas Tobias - Infoconsumo - Cartagena \n4 Danilson Reyes Tovar - Colpensiones - Floridablanca \n\nREPRESENTANTES DEL EMPLEADOR\n\nMiembros Principales:\n\n1 Joan Mauricio Arenas Clavijo -Empleador -Floridablanca\n2 Francis Daniel Vera Cordero -Administracion -Floridablanca\n3 Diana Patricia Florez Rueda -Ingenieria -Floridablanca\n4 Sergio Ivan Serrano Solano -Administracion -Floridablanca\n\nMiembros Suplentes:\n\n1 Jose Fernando Herrera Ortiz -Administracion -Floridablanca\n2 Adriana Marcela Bernal Garcia -Colpensiones -Floridablanca\n3 Luz Stella Celis Rios -Administracion -Floridablanca\n4 Luz Fernelly Pinzon Sosa -Auditoria Del Servicio -Floridablanca\n\nEl Senor Joan Mauricio Arenas Clavijo como delegado del Gerente General de SISTEMAS Y COMPUTADORES S.A. nombro como presidente del comite a Jose Fernando Herrera Ortiz. los miembros del comite eligieron de manera unanime a Adriana Marcela Bernal Garcia como secretaria del mismo.​\n\nMiembros del copasst del ano 2025-2027",
-      "text_normalized": "REPRESENTANTES DE LOS TRABAJADORES\n\nMiembros Principales:\n\n1 Juan Camilo Palacios Pedraza - Colpensiones - Bogota\n2 Leidy Salamanca Manrique -Evas -Floridablanca​\n3 Angie Daniela Cardenas Alvarado -Captura -Floridablanca​\n4 Ronal Estiven Barbosa Alquichire -Mantenimiento -Floridablanca​\n\nMiembros Suplentes:\n\n1 Elvia Carolina Rocha Majey - Colpensiones- Girardot\n2 Diego Fernando Porras Lizarazo -Logistica -Floridablanca​\n3 Jose David Corpas Tobias - Infoconsumo - Cartagena\n4 Danilson Reyes Tovar - Colpensiones - Floridablanca\n\nREPRESENTANTES DEL EMPLEADOR\n\nMiembros Principales:\n\n1 Joan Mauricio Arenas Clavijo -Empleador -Floridablanca\n2 Francis Daniel Vera Cordero -Administracion -Floridablanca\n3 Diana Patricia Florez Rueda -Ingenieria -Floridablanca\n4 Sergio Ivan Serrano Solano -Administracion -Floridablanca\n\nMiembros Suplentes:\n\n1 Jose Fernando Herrera Ortiz -Administracion -Floridablanca\n2 Adriana Marcela Bernal Garcia -Colpensiones -Floridablanca\n3 Luz Stella Celis Rios -Administracion -Floridablanca\n4 Luz Fernelly Pinzon Sosa -Auditoria Del Servicio -Floridablanca\n\nEl Senor Joan Mauricio Arenas Clavijo como delegado del Gerente General de SISTEMAS Y COMPUTADORES S.A. nombro como presidente del comite a Jose Fernando Herrera Ortiz. los miembros del comite eligieron de manera unanime a Adriana Marcela Bernal Garcia como secretaria del mismo.​\n\nMiembros del copasst del ano 2025-2027",
+      "blocks": [],
       "extraction_method": "markdown",
-      "ocr_confidence": null,
-      "has_handwriting_warning": false,
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "REPRESENTANTES DE LOS TRABAJADORES\n\nMiembros Principales:\n\n1 Juan Camilo Palacios Pedraza - Colpensiones - Bogota\n2 Leidy Salamanca Manrique -Evas -Floridablanca​\n3 Angie Daniela Cardenas Alvarado -Captura -Floridablanca​\n4 Ronal Estiven Barbosa Alquichire -Mantenimiento -Floridablanca​\n\nMiembros Suplentes:\n\n1 Elvia Carolina Rocha Majey - Colpensiones- Girardot\n2 Diego Fernando Porras Lizarazo -Logistica -Floridablanca​\n3 Jose David Corpas Tobias - Infoconsumo - Cartagena\n4 Danilson Reyes Tovar - Colpensiones - Floridablanca\n\nREPRESENTANTES DEL EMPLEADOR\n\nMiembros Principales:\n\n1 Joan Mauricio Arenas Clavijo -Empleador -Floridablanca\n2 Francis Daniel Vera Cordero -Administracion -Floridablanca\n3 Diana Patricia Florez Rueda -Ingenieria -Floridablanca\n4 Sergio Ivan Serrano Solano -Administracion -Floridablanca\n\nMiembros Suplentes:\n\n1 Jose Fernando Herrera Ortiz -Administracion -Floridablanca\n2 Adriana Marcela Bernal Garcia -Colpensiones -Floridablanca\n3 Luz Stella Celis Rios -Administracion -Floridablanca\n4 Luz Fernelly Pinzon Sosa -Auditoria Del Servicio -Floridablanca\n\nEl Senor Joan Mauricio Arenas Clavijo como delegado del Gerente General de SISTEMAS Y COMPUTADORES S.A. nombro como presidente del comite a Jose Fernando Herrera Ortiz. los miembros del comite eligieron de manera unanime a Adriana Marcela Bernal Garcia como secretaria del mismo.​\n\nMiembros del copasst del ano 2025-2027",
+      "text_raw": "REPRESENTANTES DE LOS TRABAJADORES\n\n Miembros Principales:\n\n1 Juan Camilo Palacios Pedraza - Colpensiones - Bogota\n2 Leidy Salamanca Manrique -Evas -Floridablanca​\n3 Angie Daniela Cardenas Alvarado -Captura -Floridablanca​\n4 Ronal Estiven Barbosa Alquichire -Mantenimiento -Floridablanca​\n\nMiembros Suplentes:\n\n1 Elvia Carolina Rocha Majey - Colpensiones- Girardot \n2 Diego Fernando Porras Lizarazo -Logistica -Floridablanca​\n3 Jose David Corpas Tobias - Infoconsumo - Cartagena \n4 Danilson Reyes Tovar - Colpensiones - Floridablanca \n\nREPRESENTANTES DEL EMPLEADOR\n\nMiembros Principales:\n\n1 Joan Mauricio Arenas Clavijo -Empleador -Floridablanca\n2 Francis Daniel Vera Cordero -Administracion -Floridablanca\n3 Diana Patricia Florez Rueda -Ingenieria -Floridablanca\n4 Sergio Ivan Serrano Solano -Administracion -Floridablanca\n\nMiembros Suplentes:\n\n1 Jose Fernando Herrera Ortiz -Administracion -Floridablanca\n2 Adriana Marcela Bernal Garcia -Colpensiones -Floridablanca\n3 Luz Stella Celis Rios -Administracion -Floridablanca\n4 Luz Fernelly Pinzon Sosa -Auditoria Del Servicio -Floridablanca\n\nEl Senor Joan Mauricio Arenas Clavijo como delegado del Gerente General de SISTEMAS Y COMPUTADORES S.A. nombro como presidente del comite a Jose Fernando Herrera Ortiz. los miembros del comite eligieron de manera unanime a Adriana Marcela Bernal Garcia como secretaria del mismo.​\n\nMiembros del copasst del ano 2025-2027",
       "warnings": [
         "missing_title"
       ]
     }
-  ]
+  ],
+  "schema_version": "2.0"
 }

@@ -213,6 +213,15 @@ cython_debug/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
+# Frontend local artifacts
+node_modules/
+app/front/node_modules/
+app/front/dist/
+app/front/*.tsbuildinfo
+app/front/vite.config.js
+app/front/vite.config.d.ts
+app/front/pnpm-workspace.yaml
+
 # Ruff stuff:
 .ruff_cache/
 

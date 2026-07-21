@@ -1,12 +1,12 @@
 ---
 document_id: doc_78c719156efb1dfd
-document_type: manual
+document_type: formulario
 topic: Comite de Convivencia Laboral
-source_file: quejas_denuncias.md
+source_relpath: convivencia_laboral/manual/quejas_denuncias.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 En caso de considerar que esta siendo victima de acoso, conforme a lo establecido en la Ley 1010, se solicita diligenciar el formato correspondiente y remitirlo al correo electronico convivencia@syc.com.co.

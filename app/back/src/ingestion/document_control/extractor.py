@@ -23,15 +23,22 @@ _CODE_PATTERNS = (
     ),
 )
 _VERSION_PATTERN = re.compile(
-    r"\b(?:versi[o\u00f3]n|version|ver\.)\b\s*[:#-]?\s*"
-    r"(v?\d{1,3}(?:\.\d{1,3}){0,3})\b",
+    r"\b(?:versi[o\u00f3]n|version)\b\s*[:#| -]?\s*"
+    r"([\[(]?\s*v?[0-9oO][A-Za-z0-9]{0,2}(?:[.,]\d{1,3}){0,3})\b",
     re.I,
 )
+_OCR_ABBREVIATED_VERSION_PATTERN = re.compile(
+    r"\b(?:ver\.?|ves)\b\s*[:#| -]?\s*"
+    r"([\[(]?\s*v?[0-9oO][A-Za-z0-9]{0,2}(?:[.,]\d{1,3}){0,3})\b",
+    re.I,
+)
+_MONTH_NAME = r"[A-Za-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00f1]+"
 _DATE_VALUE = (
     r"(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|"
     r"\d{4}[/-]\d{1,2}[/-]\d{1,2}|"
-    r"\d{1,2}\s+de\s+[A-Za-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00f1]+"
-    r"\s+de\s+\d{4})"
+    rf"\d{{1,2}}\s+de\s+{_MONTH_NAME}\s+de\s+\d{{4}}|"
+    rf"\d{{1,2}}\s+d[i\u00ed]as?\s+del\s+mes\s+de\s+{_MONTH_NAME}\s+de\s+\d{{4}}|"
+    rf"{_MONTH_NAME},?\s+\d{{4}})"
 )
 _PUBLICATION_PATTERN = re.compile(
     rf"\b(?:fecha\s+de\s+)?(?:publicaci[o\u00f3]n|emisi[o\u00f3]n)"
@@ -41,6 +48,14 @@ _PUBLICATION_PATTERN = re.compile(
 _EFFECTIVE_PATTERN = re.compile(
     rf"\b(?:fecha\s+de\s+)?(?:vigencia|efectiva|entrada\s+en\s+vigencia)"
     rf"\s*[:#-]?\s*({_DATE_VALUE})",
+    re.I,
+)
+_SIGNATURE_DATE_PATTERN = re.compile(
+    rf"\bfirma(?:'|do|da|r|a)?\b.*?({_DATE_VALUE})",
+    re.I,
+)
+_FIRST_PAGE_MONTH_YEAR_PATTERN = re.compile(
+    rf"\b({_MONTH_NAME},?\s+\d{{4}})\b",
     re.I,
 )
 _HISTORY_HEADER = re.compile(
@@ -58,28 +73,16 @@ def extract_document_control(
 
     records = list(_iter_evidence_lines(pages))
     title = _field_from_candidates(_title_candidates(records))
-    code = _field_from_primary_page(
-        records,
-        _CODE_PATTERNS,
-        _normalize_code,
-    )
-    version = _field_from_primary_page(
-        records,
-        (_VERSION_PATTERN,),
-        _normalize_whitespace,
-    )
+    code = _code_field(records)
+    version = _version_field(records)
     publication_date = _field_from_candidates(
-        _find_candidates(
-            records,
-            (_PUBLICATION_PATTERN,),
-            _normalize_whitespace,
-        )
+        _publication_date_candidates(records)
     )
     effective_date = _field_from_candidates(
         _find_candidates(
             records,
             (_EFFECTIVE_PATTERN,),
-            _normalize_whitespace,
+            _normalize_date,
         )
     )
     history = _extract_history(records)
@@ -157,7 +160,7 @@ def _title_candidates(
     candidates: list[tuple[str, str, Evidence]] = []
     for line, evidence, source in records:
         if _get(source, "role", None) == "title":
-            candidates.append((_normalize_whitespace(line), line, evidence))
+            candidates.append((_normalize_title(line), line, evidence))
             continue
         match = re.match(r"^#{1,6}\s+(.+)$", line)
         if not match:
@@ -169,7 +172,7 @@ def _title_candidates(
             )
         if match:
             raw = match.group(1).strip()
-            candidates.append((_normalize_whitespace(raw), raw, evidence))
+            candidates.append((_normalize_title(raw), raw, evidence))
     if candidates:
         return candidates
     page_one = [
@@ -185,7 +188,7 @@ def _title_candidates(
     if scored:
         _score, negative_index, line, evidence = max(scored)
         index = -negative_index
-        normalized = _normalize_whitespace(line)
+        normalized = _normalize_title(line)
         if _title_needs_continuation(normalized) and index + 1 < len(records):
             next_line, next_evidence, _source = records[index + 1]
             if (
@@ -193,7 +196,7 @@ def _title_candidates(
                 and 0 < _plain_title_score(next_line) < 100
                 and len(next_line.split()) <= 6
             ):
-                normalized = _normalize_whitespace(f"{normalized} {next_line}")
+                normalized = _normalize_title(f"{normalized} {next_line}")
                 line = f"{line} {next_line}"
         return [(normalized, line, evidence)]
     return []
@@ -280,6 +283,90 @@ def _find_candidates(
             for match in pattern.finditer(line):
                 raw = match.group(1).strip().rstrip("|;")
                 candidates.append((normalize(raw), raw, evidence))
+    return candidates
+
+
+def _publication_date_candidates(
+    records: list[tuple[str, Evidence, Any]],
+) -> list[tuple[str, str, Evidence]]:
+    explicit = _find_candidates(records, (_PUBLICATION_PATTERN,), _normalize_date)
+    if explicit:
+        return explicit
+    signed = _find_candidates(records, (_SIGNATURE_DATE_PATTERN,), _normalize_date)
+    if signed:
+        return signed
+    first_page_month_year = [
+        candidate
+        for candidate in _find_candidates(
+            records,
+            (_FIRST_PAGE_MONTH_YEAR_PATTERN,),
+            _normalize_date,
+        )
+        if candidate[2].page_number == 1
+    ]
+    return first_page_month_year
+
+
+def _code_field(records: list[tuple[str, Evidence, Any]]) -> DocumentField:
+    labeled = _find_candidates(records, (_CODE_PATTERNS[0],), _normalize_code)
+    primary_labeled = [
+        candidate
+        for candidate in labeled
+        if candidate[2].page_number == 1
+    ]
+    if primary_labeled:
+        field = _field_from_candidates(primary_labeled)
+        if field.status == "extracted":
+            matching = [
+                candidate
+                for candidate in labeled
+                if candidate[0] == field.value
+            ]
+            return _field_from_candidates(matching)
+        return field
+    first_page_candidates = [
+        candidate
+        for candidate in _find_candidates(records, _CODE_PATTERNS, _normalize_code)
+        if candidate[2].page_number == 1
+    ]
+    return _augment_split_sst_suffix(
+        _field_from_candidates(first_page_candidates),
+        records,
+    )
+
+
+def _version_field(records: list[tuple[str, Evidence, Any]]) -> DocumentField:
+    all_candidates = _version_candidates(records)
+    first_page_candidates = [
+        candidate
+        for candidate in all_candidates
+        if candidate[2].page_number == 1
+    ]
+    primary = first_page_candidates or all_candidates
+    field = _field_from_candidates(primary)
+    if field.status != "extracted" or not isinstance(field.value, str):
+        return field
+    matching = [
+        candidate
+        for candidate in all_candidates
+        if candidate[0] == field.value
+    ]
+    return _field_from_candidates(matching)
+
+
+def _version_candidates(
+    records: list[tuple[str, Evidence, Any]],
+) -> list[tuple[str, str, Evidence]]:
+    candidates: list[tuple[str, str, Evidence]] = []
+    for line, evidence, _source in records:
+        for match in _VERSION_PATTERN.finditer(line):
+            raw = match.group(1).strip().rstrip("|;")
+            candidates.append((_normalize_version(raw), raw, evidence))
+        for match in _OCR_ABBREVIATED_VERSION_PATTERN.finditer(line):
+            raw = match.group(1).strip().rstrip("|;")
+            candidates.append(
+                (_normalize_version(raw, compact_ocr=True), raw, evidence)
+            )
     return candidates
 
 
@@ -423,10 +510,151 @@ def _normalize_whitespace(value: str) -> str:
     return " ".join(value.split())
 
 
+def _normalize_version(value: str, *, compact_ocr: bool = False) -> str:
+    raw = _normalize_whitespace(value)
+    bracketed = raw.strip().startswith(("[", "("))
+    normalized = raw.strip("[]() ")
+    normalized = normalized.replace(",", ".")
+    if (
+        (bracketed or compact_ocr)
+        and len(normalized) == 2
+        and _ocr_digit(normalized[0]) == "0"
+        and _ocr_digit(normalized[1]).isdigit()
+    ):
+        return f"0.{_ocr_digit(normalized[1])}"
+    return normalized
+
+
+def _ocr_digit(value: str) -> str:
+    return {
+        "o": "0",
+        "O": "0",
+        "s": "6",
+        "S": "6",
+    }.get(value, value)
+
+
+def _normalize_title(value: str) -> str:
+    value = re.sub(r"(?<=[A-Za-z\u00c0-\u017f])['’](?=[A-Za-z\u00c0-\u017f])", " ", value)
+    value = re.sub(
+        r"\b(REGLAMENTO)\s+(COMIT[E\u00c9]\s+DE\s+CONVIVENCIA\s+LABORAL)\b",
+        r"\1 DEL \2",
+        value,
+        flags=re.I,
+    )
+    value = re.sub(
+        r"\b(OBJETIVOS\s+Y\s+METAS)\s+(SEGURIDAD\s+VIAL)\b",
+        r"\1 DE \2",
+        value,
+        flags=re.I,
+    )
+    return _normalize_whitespace(value)
+
+
+_MONTHS = {
+    "enero": "01",
+    "febrero": "02",
+    "marzo": "03",
+    "abril": "04",
+    "mayo": "05",
+    "junio": "06",
+    "julio": "07",
+    "agosto": "08",
+    "septiembre": "09",
+    "setiembre": "09",
+    "octubre": "10",
+    "noviembre": "11",
+    "diciembre": "12",
+}
+
+
+def _normalize_date(value: str) -> str:
+    normalized = _normalize_whitespace(value).strip(" .,:;")
+    folded = _fold_accents(normalized).lower()
+    match = re.fullmatch(r"(\d{4})[/-](\d{1,2})[/-](\d{1,2})", folded)
+    if match:
+        year, month, day = match.groups()
+        return f"{year}-{int(month):02d}-{int(day):02d}"
+    match = re.fullmatch(r"(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})", folded)
+    if match:
+        day, month, year = match.groups()
+        year = f"20{year}" if len(year) == 2 else year
+        return f"{year}-{int(month):02d}-{int(day):02d}"
+    match = re.fullmatch(
+        rf"(\d{{1,2}})\s+de\s+({_MONTH_NAME})\s+de\s+(\d{{4}})",
+        folded,
+    )
+    if not match:
+        match = re.fullmatch(
+            rf"(\d{{1,2}})\s+dias?\s+del\s+mes\s+de\s+({_MONTH_NAME})\s+de\s+(\d{{4}})",
+            folded,
+        )
+    if match:
+        day, month_name, year = match.groups()
+        month = _MONTHS.get(_fold_accents(month_name).lower())
+        if month:
+            return f"{year}-{month}-{int(day):02d}"
+    match = re.fullmatch(rf"({_MONTH_NAME}),?\s+(\d{{4}})", folded)
+    if match:
+        month_name, year = match.groups()
+        month = _MONTHS.get(_fold_accents(month_name).lower())
+        if month:
+            return f"{year}-{month}"
+    return ""
+
+
+def _fold_accents(value: str) -> str:
+    replacements = str.maketrans(
+        "áéíóúñüÁÉÍÓÚÑÜ",
+        "aeiounuAEIOUNU",
+    )
+    return value.translate(replacements)
+
+
 def _normalize_code(value: str) -> str:
     normalized = (
         _normalize_whitespace(value)
         .replace("\u2013", "-")
         .replace("\u2014", "-")
     )
-    return re.sub(r"\s*[-.]\s*", "-", normalized).upper()
+    normalized = re.sub(r"\s*([-.])\s*", r"\1", normalized)
+    normalized = _normalize_whitespace(normalized).upper()
+    return re.sub(r"(?<=\d)5ST$", "SST", normalized)
+
+
+def _augment_split_sst_suffix(
+    field: DocumentField,
+    records: list[tuple[str, Evidence, Any]],
+) -> DocumentField:
+    if (
+        field.status != "extracted"
+        or not isinstance(field.value, str)
+        or re.search(r"(?:^|[-.\s])SST$", field.value, re.I)
+    ):
+        return field
+    if not re.search(r"[A-Z]{1,4}[.-][A-Z]{1,4}[-.]\d{1,3}$", field.value, re.I):
+        return field
+    pages = {
+        evidence.page_number
+        for evidence in field.evidence
+        if evidence.page_number is not None
+    }
+    if not pages:
+        return field
+    if not any(
+        evidence.page_number in pages and re.fullmatch(r"SST", line.strip(), re.I)
+        for line, evidence, _source in records
+    ):
+        return field
+    return field.model_copy(
+        update={
+            "value": f"{field.value} SST",
+            "warnings": _unique_warnings(
+                [*field.warnings, "code_suffix_joined_from_split_header"]
+            ),
+        }
+    )
+
+
+def _unique_warnings(values: list[str]) -> list[str]:
+    return list(dict.fromkeys(value for value in values if value))

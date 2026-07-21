@@ -1,12 +1,12 @@
 ---
 document_id: doc_18e1e8a89146e6fc
-document_type: politica
-topic: Politica de seguridad
-source_file: desconexion_laboral_info.md
+document_type: formulario
+topic: Comite de Convivencia Laboral
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 En cumplimiento de lo dispuesto por la ley 2191 de 2022, Sistemas y computadores SA, crea la Politica de Desconexion laboral, la cual esta alineada con el compromiso de la compania, para que exista un balance entre la vida laboral y familiar de todos los trabajadores promoviendo el bienestar de nuestros trabajadores garantizando un equilibrio saludable entre el trabajo y la vida personal al establecer pautas claras para la desconexion laboral fuera del horario de trabajo.

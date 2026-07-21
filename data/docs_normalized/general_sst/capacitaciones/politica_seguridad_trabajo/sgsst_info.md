@@ -1,12 +1,12 @@
 ---
 document_id: doc_798b9dac49774271
-document_type: politica
-topic: SST
-source_file: sgsst_info.md
+document_type: programa
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 La alta direccion con la participacion del COPASST ha definido la politica de Seguridad y Salud en el Trabajo, la cual es comunicada y divulgada a traves de procesos de induccion, re induccion y por medios publicitario en los aplicativos de la empresa.

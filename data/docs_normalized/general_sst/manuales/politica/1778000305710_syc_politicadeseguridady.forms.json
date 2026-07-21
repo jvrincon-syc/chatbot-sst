@@ -1,0 +1,26 @@
+{
+  "document_id": "doc_f38f9f98d854feed",
+  "groups": [],
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "ocr_text",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "ocr_text",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

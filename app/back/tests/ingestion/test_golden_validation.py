@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from ingestion.paths import stable_document_id
 from ingestion.pipeline import run_pipeline
 from ingestion.validation.golden import (
@@ -45,6 +47,42 @@ def test_golden_validator_requires_exact_source_bijection(tmp_path: Path) -> Non
 
     assert report.status == "failed"
     assert any(check.check == "golden_bijection" and check.status == "failed" for check in report.checks)
+
+
+def test_golden_validator_allows_valid_extra_non_pdf_candidate_metadata(
+    tmp_path: Path,
+) -> None:
+    raw = tmp_path / "raw"
+    candidate = tmp_path / "candidate"
+    raw.mkdir()
+    (raw / "expected.md").write_text("# Esperado\n\nContenido", encoding="utf-8")
+    (raw / "extra.md").write_text("# Extra\n\nContenido", encoding="utf-8")
+    run_pipeline(
+        docs_raw=raw,
+        docs_normalized=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="golden_full_candidate_fixture",
+    )
+    golden = GoldenCorpus(
+        audit_schema_version="test",
+        documents=[
+            GoldenDocument(
+                document_id=stable_document_id("expected.md"),
+                source_relpath="expected.md",
+                page_count=1,
+                expected=GoldenExpected(),
+                review_status="processed",
+            )
+        ],
+    )
+
+    report = validate_pdf_corpus(candidate, raw, golden)
+
+    assert any(
+        check.check == "golden_bijection" and check.status == "passed"
+        for check in report.checks
+    )
 
 
 def test_golden_validator_compares_actual_metadata_status_and_pages(
@@ -141,3 +179,12 @@ def test_golden_validator_executes_minimum_content_expectations(
         and "contenido ausente" in " ".join(check.details)
         for check in report.checks
     )
+
+
+def test_golden_content_expectations_reject_descriptive_must_preserve() -> None:
+    with pytest.raises(ValueError, match="literal source anchors"):
+        GoldenContentExpectation(
+            pages="1",
+            must_preserve=["three objective rows"],
+            structure="Keep narrative expectations here instead.",
+        )

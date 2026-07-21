@@ -1,12 +1,12 @@
 ---
 document_id: doc_86b6f64f1c869610
-document_type: manual
-topic: Planificacion
-source_file: planificacion_info.md
+document_type: programa
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/manuales/planificacion/planificacion_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 OBJETIVOS:

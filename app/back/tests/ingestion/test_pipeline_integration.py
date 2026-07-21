@@ -1,11 +1,14 @@
 import json
 from pathlib import Path
 
+import pytest
+
 import ingestion.pipeline as pipeline_module
 from ingestion.pipeline import _configured_tesseract_engine, run_pipeline
+from ingestion.promotion import PromotionError
 from ingestion.readers.base import ReadResult
-from ingestion.schemas.artifacts import PageRecord
-from ingestion.schemas.common import ConfidenceMetric
+from ingestion.schemas.artifacts import FormsArtifact, PageRecord, TablesArtifact
+from ingestion.schemas.common import ConfidenceMetric, Observation
 
 
 def test_pipeline_processes_markdown_and_tracks_pdf_needing_review(tmp_path: Path) -> None:
@@ -233,6 +236,122 @@ def test_pipeline_propagates_material_page_warnings_to_document_status(
     assert metadata["processing_status"] == "needs_review"
 
 
+def test_pipeline_marks_pdf_with_unevaluated_material_features_as_needs_review(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "documento.pdf").write_bytes(b"%PDF-1.4 fake")
+    result = ReadResult(
+        extraction_method="pdf_digital",
+        markdown="Texto PDF",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="Texto PDF",
+                text_normalized="Texto PDF",
+                extraction_method="pdf_digital",
+                ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+            )
+        ],
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "_read_document",
+        lambda *_args, **_kwargs: result,
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="pdf_unevaluated_features",
+    )
+
+    assert summary["needs_review"] == 1
+    metadata = json.loads(
+        (candidate / "documento.metadata.json").read_text(encoding="utf-8")
+    )
+    assert metadata["processing_status"] == "needs_review"
+    assert "handwriting_not_evaluated" in metadata["review_reasons"]
+
+
+def test_pipeline_keeps_pdf_under_semantic_review_after_feature_evaluation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "documento.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    result = ReadResult(
+        extraction_method="pdf_digital",
+        markdown="Documento PDF",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="Documento PDF",
+                text_normalized="Documento PDF",
+                extraction_method="pdf_digital",
+                ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+            )
+        ],
+        tables=TablesArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            table_count=0,
+            tables=[],
+            page_observations=[
+                Observation(status="not_detected", value=False, method="test")
+            ],
+        ),
+        forms=FormsArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            groups=[],
+            page_observations=[
+                Observation(status="not_detected", value=False, method="test")
+            ],
+        ),
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "_read_document",
+        lambda *_args, **_kwargs: result,
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(
+            status="not_detected",
+            value=False,
+            method="test",
+        ),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="pdf_semantic_review",
+        classification_review_threshold=0.0,
+    )
+
+    assert summary["needs_review"] == 1
+    metadata = json.loads(
+        (candidate / "documento.metadata.json").read_text(encoding="utf-8")
+    )
+    assert metadata["processing_status"] == "needs_review"
+    assert "pdf_semantic_review_required" in metadata["review_reasons"]
+
+
 def test_pipeline_normalizes_windows_only_source_paths(tmp_path: Path) -> None:
     docs_raw = tmp_path / "data" / "docs_raw"
     normalized = tmp_path / "data" / "normalized"
@@ -265,3 +384,29 @@ def test_pipeline_configures_region_tesseract_from_environment(monkeypatch) -> N
     assert engine.tesseract_cmd == r"C:\Tools\Tesseract\tesseract.exe"
     assert engine.language == "spa"
     assert engine.engine_version == "5.4.0"
+
+
+def test_pipeline_refuses_promotion_without_explicit_golden_pass(
+    tmp_path: Path,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    live = tmp_path / "data" / "live"
+    staging = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    live.mkdir(parents=True)
+    (docs_raw / "manual.md").write_text("# Manual\n\nContenido", encoding="utf-8")
+    (live / "live.md").write_text("live", encoding="utf-8")
+
+    with pytest.raises(PromotionError):
+        run_pipeline(
+            docs_raw=docs_raw,
+            docs_normalized=live,
+            staging_root=staging,
+            promote=True,
+            corpus_version="test",
+            pipeline_version="2.0.0",
+            run_id="unsafe_promote",
+        )
+
+    assert (live / "live.md").read_text(encoding="utf-8") == "live"
+    assert not (live / "manual.md").exists()

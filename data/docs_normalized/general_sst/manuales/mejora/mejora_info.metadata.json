@@ -1,29 +1,146 @@
 {
-  "schema_version": "1.0",
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "programa",
+    "document_type": "programa",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "programa:programa:content",
+      "Sistema de Gestion de Seguridad y Salud en el Trabajo:sg-sst:content"
+    ],
+    "subtopic": null,
+    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "phase1-main",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "markdown",
+          "text": "ACCIONES CORRECTIVAS Y PREVENTIVAS",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "ACCIONES CORRECTIVAS Y PREVENTIVAS",
+      "value_raw": "ACCIONES CORRECTIVAS Y PREVENTIVAS",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
   "document_id": "doc_1edf1a3d50d85305",
   "document_name": "mejora_info.md",
-  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/general_sst/manuales/mejora/mejora_info.md",
-  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/general_sst/manuales/mejora/mejora_info.md",
-  "document_type": "manual",
-  "topic": "Mejora",
-  "subtopic": null,
-  "version": null,
-  "publication_date": null,
-  "effective_date": null,
-  "page_count": 1,
-  "language": "es",
   "extraction_method": "markdown",
-  "ocr_engine": null,
-  "ocr_confidence": null,
-  "contains_handwriting": false,
-  "contains_tables": false,
-  "classification_confidence": 0.98,
-  "content_hash": "fba80ea6dc00e739995c9627ea73135414e227d32ef785813f596801d4f6f799",
-  "corpus_version": "1",
-  "pipeline_version": "1.0.0",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/mejora/mejora_info.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/manuales/mejora/mejora_info.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-19T22:46:24.322475-05:00",
   "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "fba80ea6dc00e739995c9627ea73135414e227d32ef785813f596801d4f6f799",
+  "source_relpath": "general_sst/manuales/mejora/mejora_info.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
   "warnings": [
     "missing_title"
-  ],
-  "processed_at": "2026-07-16T23:50:44.773128-05:00"
+  ]
 }

@@ -1,12 +1,12 @@
 ---
 document_id: doc_1ff1756177bf1b1f
-document_type: politica
-topic: Politica de seguridad
-source_file: prevencion_acoso_laboral.md
+document_type: procedimiento
+topic: Comite de Convivencia Laboral
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Sistemas y Computadores S.A., en cumplimiento de la normatividad vigente relacionada con la convivencia laboral, adopta la presente Politica de Prevencion de Acoso Laboral, la cual integra de manera general las acciones orientadas a prevenir el acoso laboral, el acoso sexual, la violencia basada en genero y todo tipo de discriminacion dentro de la organizacion.

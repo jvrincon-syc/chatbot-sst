@@ -2,11 +2,11 @@
 document_id: doc_761c9402c48e05c7
 document_type: acta
 topic: COPASST
-source_file: funciones_secretario_copasst.md
+source_relpath: copasst/funciones_secretario_copasst.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 🗂️ Funciones de la Secretaria del COPASST

@@ -89,7 +89,42 @@ def _table_candidates(page: Any) -> list[Any]:
     finder = getattr(page, "find_tables", None)
     if callable(finder):
         return list(finder() or [])
-    return []
+    return _text_table_candidates(page)
+
+
+def _text_table_candidates(page: Any) -> list[dict[str, Any]]:
+    page_text = str(
+        getattr(
+            page,
+            "text",
+            getattr(page, "text_normalized", getattr(page, "text_raw", "")),
+        )
+        or ""
+    )
+    rows: list[list[str]] = []
+    tables: list[dict[str, Any]] = []
+    for line in page_text.splitlines():
+        row = _pipe_row(line)
+        if row is None:
+            if rows:
+                tables.append({"rows": rows})
+                rows = []
+            continue
+        rows.append(row)
+    if rows:
+        tables.append({"rows": rows})
+    return tables
+
+
+def _pipe_row(line: str) -> list[str] | None:
+    if "|" not in line:
+        return None
+    cells = [
+        cell.strip(" \t|«»'\"")
+        for cell in line.split("|")
+    ]
+    cells = [cell for cell in cells if cell]
+    return cells if len(cells) >= 2 else None
 
 
 def _to_table_record(candidate: Any, page_number: int, index: int, method: str) -> TableRecord | None:

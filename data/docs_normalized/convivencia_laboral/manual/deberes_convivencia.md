@@ -1,12 +1,12 @@
 ---
 document_id: doc_7a0f56a63a930105
-document_type: manual
-topic: Comite de Convivencia Laboral
-source_file: deberes_convivencia.md
+document_type: norma
+topic: Convivencia laboral
+source_relpath: convivencia_laboral/manual/deberes_convivencia.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 La calidad de los servidores enaltece a los miembros de la empresa, ademas todos tienen el deber de engrandecerla y dignificarla. Son deberes de los funcionarios las aca establecidos.

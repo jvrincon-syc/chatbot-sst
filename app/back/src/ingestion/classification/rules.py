@@ -39,10 +39,27 @@ _TYPE_RULES = (
 )
 
 _TOPIC_RULES = (
+    (
+        "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        (
+            "seguridad y salud en el trabajo",
+            "sistema de gestion de seguridad y salud",
+            "sg-sst",
+            "sgsst",
+        ),
+    ),
     ("COPASST", ("copasst", "comite paritario")),
     ("Comite de Convivencia Laboral", ("comite de convivencia",)),
-    ("Convivencia laboral", ("convivencia laboral", "convivencia")),
-    ("Politica de seguridad", ("politica",)),
+    (
+        "Convivencia laboral",
+        (
+            "convivencia laboral",
+            "convivencia",
+            "desconexion laboral",
+            "acoso laboral",
+        ),
+    ),
+    ("Politica de seguridad", ("politica de seguridad",)),
     ("Capacitaciones", ("capacitacion",)),
     ("Formularios", ("formulario", "formato", "fr-sst")),
     ("Reglamento interno de trabajo", ("reglamento interno",)),
@@ -63,7 +80,11 @@ _SUBTOPIC_RULES = (
     ),
     (
         "Funcionamiento del comite",
-        ("reglamento comite", "funcionamiento del comite"),
+        (
+            "reglamento comite",
+            "reglamento del comite",
+            "funcionamiento del comite",
+        ),
     ),
     (
         "Prevencion de fatiga y desordenes musculoesqueleticos",

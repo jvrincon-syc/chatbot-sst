@@ -2,11 +2,11 @@
 document_id: doc_af426c4c9052023e
 document_type: capacitacion
 topic: Capacitaciones
-source_file: ventajas_sala_amigas.md
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Sistemas y computadores S.A. cuenta con salas amigas, es un espacio comodo, amigable y con todas las normas tecnico-sanitarias, para las trabajadoras en periodo de lactancia; con el fin de que cada una puede tener su banco de leche. este espacio esta ubicado en el Eco-parque empresarial Natura torre 3 piso 8. este espacio puede ser utilizado todas las veces que las beneficiarias lo requieran.

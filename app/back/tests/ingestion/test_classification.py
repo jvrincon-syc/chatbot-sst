@@ -40,6 +40,50 @@ def test_objectives_and_metrics_title_is_classified_as_matrix() -> None:
     assert result.document_type == "matriz"
 
 
+def test_convivencia_policy_keeps_convivencia_topic_from_route() -> None:
+    result = classify_document(
+        "convivencia_laboral/manual/politica_desconexion.pdf",
+        [{"text_raw": "POLÍTICA DE DESCONEXIÓN LABORAL"}],
+        _control("Política de desconexión laboral"),
+    )
+
+    assert result.document_type == "politica"
+    assert result.topic == "Convivencia laboral"
+
+
+def test_acoso_policy_keeps_convivencia_topic_from_title() -> None:
+    result = classify_document(
+        "convivencia_laboral/manual/politica_acoso.pdf",
+        [{"text_raw": "POLÍTICA DE PREVENCIÓN DE ACOSO LABORAL"}],
+        _control("Política de prevención de acoso laboral"),
+    )
+
+    assert result.document_type == "politica"
+    assert result.topic == "Convivencia laboral"
+
+
+def test_sst_policy_uses_sgsst_topic_from_explicit_title() -> None:
+    result = classify_document(
+        "general_sst/manuales/politica/politica.pdf",
+        [{"text_raw": "POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO"}],
+        _control("Política de seguridad y salud en el trabajo"),
+    )
+
+    assert result.document_type == "politica"
+    assert result.topic == "Sistema de Gestion de Seguridad y Salud en el Trabajo"
+
+
+def test_reglamento_del_comite_keeps_committee_operation_subtopic() -> None:
+    result = classify_document(
+        "convivencia_laboral/reglamento_comite/reglamento.pdf",
+        [{"text_raw": "REGLAMENTO DEL COMITÉ DE CONVIVENCIA LABORAL"}],
+        _control("Reglamento del Comité de Convivencia Laboral"),
+    )
+
+    assert result.document_type == "reglamento"
+    assert result.subtopic == "Funcionamiento del comite"
+
+
 def test_route_only_result_is_low_confidence() -> None:
     result = classify_document("sst/manuales/archivo.pdf", [{"text_raw": "contenido generico"}], _control("Documento"))
     assert result.document_type == "manual"

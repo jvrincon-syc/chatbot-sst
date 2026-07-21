@@ -1,29 +1,146 @@
 {
-  "schema_version": "1.0",
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "formulario",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "formulario:formato:content",
+      "Comite de Convivencia Laboral:comite de convivencia:content"
+    ],
+    "subtopic": null,
+    "topic": "Comite de Convivencia Laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "phase1-main",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "markdown",
+          "text": "El comite de convivencia laboral promovera activamente el derecho de los trabajadores a desconectarse fuera del horario laboral. En caso que exista una novedad podra solicitar el procedimiento de quejas (Re-Rh-004-sst Formato para interponer queja por presunto acoso laboral ante el comite de convivencia laboral).",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "RE-RH-004-SST",
+      "value_raw": "Re-Rh-004-sst",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
   "document_id": "doc_a72c9be0df1f92fa",
   "document_name": "politica_desconexion.md",
-  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/convivencia_laboral/manual/politica_desconexion.md",
-  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/convivencia_laboral/manual/politica_desconexion.md",
-  "document_type": "politica",
-  "topic": "Politica de seguridad",
-  "subtopic": null,
-  "version": null,
-  "publication_date": null,
-  "effective_date": null,
-  "page_count": 1,
-  "language": "es",
   "extraction_method": "markdown",
-  "ocr_engine": null,
-  "ocr_confidence": null,
-  "contains_handwriting": false,
-  "contains_tables": false,
-  "classification_confidence": 0.98,
-  "content_hash": "15000a96e19a59a95cd5efae4de228b2ec07675727310475ce7eb16035b7c1ca",
-  "corpus_version": "1",
-  "pipeline_version": "1.0.0",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/politica_desconexion.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/politica_desconexion.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-19T22:45:59.054958-05:00",
   "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "15000a96e19a59a95cd5efae4de228b2ec07675727310475ce7eb16035b7c1ca",
+  "source_relpath": "convivencia_laboral/manual/politica_desconexion.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
   "warnings": [
     "missing_title"
-  ],
-  "processed_at": "2026-07-16T23:50:41.245182-05:00"
+  ]
 }

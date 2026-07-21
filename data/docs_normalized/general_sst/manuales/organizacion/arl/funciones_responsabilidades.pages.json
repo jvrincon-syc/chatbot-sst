@@ -1,18 +1,30 @@
 {
-  "schema_version": "1.0",
   "document_id": "doc_b87ef9d031af518e",
   "page_count": 1,
   "pages": [
     {
-      "page_number": 1,
-      "text_raw": "Capacitar al Comite Paritario de Seguridad y Salud en el Trabajo en los aspectos relativos al SG-SST y prestar asesoria y asistencia tecnica a sus empresas y trabajadores afiliados, en la implementacion del SG-SST.\nBrindar asesoria para la implementacion los programas de medicina laboral, seguridad e higiene industrial y salud ocupacional sin ninguna discriminacion, preferencia de numero de trabajadores o cotizacion de la empresa.\nOrientar sobre la prevencion y evaluacion de los riesgos, dando recomendaciones que controlen o eliminen el factor de riesgo.",
-      "text_normalized": "Capacitar al Comite Paritario de Seguridad y Salud en el Trabajo en los aspectos relativos al SG-SST y prestar asesoria y asistencia tecnica a sus empresas y trabajadores afiliados, en la implementacion del SG-SST.\nBrindar asesoria para la implementacion los programas de medicina laboral, seguridad e higiene industrial y salud ocupacional sin ninguna discriminacion, preferencia de numero de trabajadores o cotizacion de la empresa.\nOrientar sobre la prevencion y evaluacion de los riesgos, dando recomendaciones que controlen o eliminen el factor de riesgo.",
+      "blocks": [],
       "extraction_method": "markdown",
-      "ocr_confidence": null,
-      "has_handwriting_warning": false,
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "Capacitar al Comite Paritario de Seguridad y Salud en el Trabajo en los aspectos relativos al SG-SST y prestar asesoria y asistencia tecnica a sus empresas y trabajadores afiliados, en la implementacion del SG-SST.\nBrindar asesoria para la implementacion los programas de medicina laboral, seguridad e higiene industrial y salud ocupacional sin ninguna discriminacion, preferencia de numero de trabajadores o cotizacion de la empresa.\nOrientar sobre la prevencion y evaluacion de los riesgos, dando recomendaciones que controlen o eliminen el factor de riesgo.",
+      "text_raw": "Capacitar al Comite Paritario de Seguridad y Salud en el Trabajo en los aspectos relativos al SG-SST y prestar asesoria y asistencia tecnica a sus empresas y trabajadores afiliados, en la implementacion del SG-SST.\nBrindar asesoria para la implementacion los programas de medicina laboral, seguridad e higiene industrial y salud ocupacional sin ninguna discriminacion, preferencia de numero de trabajadores o cotizacion de la empresa.\nOrientar sobre la prevencion y evaluacion de los riesgos, dando recomendaciones que controlen o eliminen el factor de riesgo.",
       "warnings": [
         "missing_title"
       ]
     }
-  ]
+  ],
+  "schema_version": "2.0"
 }

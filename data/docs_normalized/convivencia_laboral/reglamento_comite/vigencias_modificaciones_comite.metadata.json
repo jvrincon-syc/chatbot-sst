@@ -1,29 +1,147 @@
 {
-  "schema_version": "1.0",
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "reglamento",
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "reglamento",
+    "signals": [
+      "reglamento:reglamento:content",
+      "reglamento:reglamento:route",
+      "Comite de Convivencia Laboral:comite de convivencia:content"
+    ],
+    "subtopic": null,
+    "topic": "Comite de Convivencia Laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "phase1-main",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "markdown",
+          "text": "JOAN MAURICIO ARENAS CLAVIJO",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "JOAN MAURICIO ARENAS CLAVIJO",
+      "value_raw": "JOAN MAURICIO ARENAS CLAVIJO",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
   "document_id": "doc_d5f04608cf512575",
   "document_name": "vigencias_modificaciones_comite.md",
-  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
-  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
-  "document_type": "reglamento",
-  "topic": "Comite de Convivencia Laboral",
-  "subtopic": null,
-  "version": null,
-  "publication_date": null,
-  "effective_date": null,
-  "page_count": 1,
-  "language": "es",
   "extraction_method": "markdown",
-  "ocr_engine": null,
-  "ocr_confidence": null,
-  "contains_handwriting": false,
-  "contains_tables": false,
-  "classification_confidence": 0.98,
-  "content_hash": "07ccad0bf22992cc6d3de2933244e3fc605c2898a43ce0f8d88c26f625d0623c",
-  "corpus_version": "1",
-  "pipeline_version": "1.0.0",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-19T22:46:00.816898-05:00",
   "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "07ccad0bf22992cc6d3de2933244e3fc605c2898a43ce0f8d88c26f625d0623c",
+  "source_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
   "warnings": [
     "missing_title"
-  ],
-  "processed_at": "2026-07-16T23:50:42.385812-05:00"
+  ]
 }

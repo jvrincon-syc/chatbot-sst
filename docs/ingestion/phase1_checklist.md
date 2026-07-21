@@ -1,73 +1,104 @@
-# Checklist vigente de Fase 1 — Ingesta Schema 2.0
+# Checklist vigente de Fase 1 - Ingesta Schema 2.0
 
-Fecha de corte: 2026-07-17
+Fecha de corte: 2026-07-20
 
-Este checklist reemplaza los cierres históricos de Schema 1.0. La fuente de
-alcance permanece en `memory/`; el contrato técnico vigente está en el diseño
-de calidad Schema 2.0 y el trabajo pendiente en el plan de gap closure.
+Este checklist reemplaza los cierres historicos de Schema 1.0. La fuente de
+alcance permanece en `memory/`; el contrato ejecutable vigente esta en
+`docs/ingestion/pdf_corpus_expected.json`.
 
 ## Contratos y pipeline
 
-- [x] Contratos canónicos Schema 2.0 y adaptador legacy explícito.
+- [x] Contratos canonicos Schema 2.0 y adaptador legacy explicito.
 - [x] Escritura nueva exclusivamente en Schema 2.0.
 - [x] Identidad estable y paths POSIX relativos.
-- [x] Bundles atómicos con Markdown, metadata, pages, OCR, tables y forms.
+- [x] Bundles atomicos con Markdown, metadata, pages, OCR, tables y forms.
 - [x] Capacidades desconocidas representadas como `not_evaluated`.
 - [x] Confianza OCR medida solo con procedencia real.
 - [x] Warnings materiales propagados a `needs_review`.
-- [x] Pipeline candidato aislado y promoción fail-closed.
+- [x] Pipeline candidato aislado y promocion fail-closed.
+- [x] Promocion bloqueada salvo `golden_status="passed"` explicito.
+- [x] Golden validator permite candidato completo con metadata extra no-PDF
+  valida y rechaza PDF extra o metadata invalida.
+- [x] Golden `minimum_content.must_preserve` acepta anclas literales y rechaza
+  prosa descriptiva no ejecutable.
 
-## Extracción
+## Extraccion
 
 - [x] PDF digital procesado antes del fallback OCR.
 - [x] Tablas y formularios digitales conectados al bundle.
-- [x] OCRmyPDF 16.13.0 instalado en el entorno del proyecto.
-- [x] Tesseract 5.4.0 instalado con idiomas `spa`, `eng` y `osd`.
-- [x] PDFium conectado como rasterizador regional y de página completa.
-- [x] Fallback PDFium → Tesseract para escaneos sin Ghostscript.
+- [x] OCRmyPDF configurado localmente.
+- [x] Ghostscript 10.07.1 configurado localmente.
+- [x] Tesseract 5.5.2 instalado con idioma `spa`.
+- [x] PDFium conectado como rasterizador regional y de pagina completa.
 - [x] Tres PDF escaneados materializados.
 - [x] Nueve bundles PDF materializados.
-- [x] Las 77 páginas del corpus PDF materializadas.
-- [x] Pausas activas procesado como `hybrid` con OCR regional.
-- [ ] Ghostscript 10.07.1 x64 instalado y habilitado por soporte IT.
-- [ ] Backend capaz de handwriting/firma conectado.
-- [ ] Tablas y firmas de los escaneos evaluadas con capacidad suficiente.
+- [x] Las 77 paginas del corpus PDF materializadas.
+- [x] Pausas activas procesado como `hybrid` cuando OCR regional agrega texto.
+- [x] Tablas y forms de escaneos evaluados con sidecars Schema 2.0.
+- [x] Handwriting/firma evaluado con detector visual conservador.
+- [x] Versiones de cabecera `0.2` y `0.6` en escaneos extraidas con evidencia
+  OCR regional de cabecera.
 
-## Validación vigente
+## Validacion vigente
 
-Candidato de trabajo:
+Candidato promovido:
 
 ```text
-.tmp/task6_candidate_full3
+.tmp/phase1_main_full_candidate_20260720_r1
 ```
 
-- [x] 9 fuentes PDF inventariadas.
-- [x] 9 bundles presentes.
-- [x] 77 páginas presentes y contiguas.
+- [x] 55 fuentes inventariadas desde `data/docs_raw`.
+- [x] 46 Markdown inventariados.
+- [x] 9 PDF inventariados.
+- [x] 55 bundles presentes.
+- [x] 55 Markdown normalizados presentes.
+- [x] 55 metadata Schema 2.0 presentes.
+- [x] 55 pages sidecars presentes.
+- [x] 55 OCR sidecars presentes.
+- [x] 55 tables sidecars presentes.
+- [x] 55 forms sidecars presentes.
+- [x] 77 paginas PDF presentes y contiguas.
 - [x] 0 documentos fallidos.
+- [x] 41 documentos `processed`.
+- [x] 14 documentos `needs_review`.
 - [x] Gate estructural aprobado.
-- [x] Golden de bijección aprobado.
-- [x] Golden de total de páginas aprobado.
-- [ ] Golden de metadata aprobado; quedan 44 diferencias.
-- [ ] Golden de contenido aprobado; quedan 69 diferencias.
-- [ ] Expectativas descriptivas del golden convertidas a aserciones
-  semánticas o anclas textuales ejecutables.
-- [ ] Estados `processed`/`needs_review` alineados con la auditoría visual.
-- [ ] Suite completa reproducida sin errores ni skips de capacidades.
-- [ ] Gate golden completo aprobado.
-- [ ] Candidato promovido a `data/docs_normalized`.
+- [x] Golden de bijeccion aprobado.
+- [x] Golden de metadata aprobado.
+- [x] Golden de paginas aprobado.
+- [x] Golden de total de paginas aprobado.
+- [x] Golden de contenido aprobado.
+- [x] Expectativas descriptivas del golden convertidas a anclas textuales
+  ejecutables.
+- [x] Estados `processed`/`needs_review` alineados con auditoria visual y
+  reglas materiales.
+- [x] Corpus gate completo aprobado.
+- [x] Candidato promovido a `data/docs_normalized`.
+- [x] Validacion post-promocion aprobada sobre la salida oficial.
 
-## Bloqueos para el cierre
+## Evidencia de pruebas
 
-- Ghostscript requiere instalación corporativa.
-- El TSV de los escaneos necesita reconciliación limpia antes de usarlo para
-  título, clasificación y control documental.
-- Las observaciones de handwriting permanecen `not_evaluated`.
-- El golden mezcla anclas textuales con descripciones de auditoría; no se
-  permite insertar esas descripciones artificialmente en el Markdown.
+```text
+./.venv312/bin/python scripts/ingestion/validate_normalized.py \
+  --docs-normalized data/docs_normalized \
+  --raw-root data/docs_raw \
+  --mode closure \
+  --golden docs/ingestion/pdf_corpus_expected.json \
+  --run-id phase1_official_20260720_guardrail_gate
+passed: 0 error(s)
 
-## Regla de cierre
+./.venv312/bin/python -m pip check
+No broken requirements found.
 
-No se autoriza chunking, indexación ni RAG sobre este candidato. La promoción
-solo procede cuando el gate estructural y el golden semántico pasan en la misma
-corrida y el diff de promoción ha sido revisado.
+./.venv312/bin/python -m pytest app/back/tests/ingestion -m 'not corpus' -q
+245 passed, 2 deselected in 3.03s
+
+./.venv312/bin/python -m pytest app/back/tests/ingestion/test_pdf_corpus_golden.py -m corpus -q
+2 passed in 69.90s (0:01:09)
+```
+
+## Regla de consumo downstream
+
+Fase 1 queda cerrada como normalizacion trazable y promovida Schema 2.0. Las
+fases de chunking, indexacion y RAG deben filtrar o gestionar explicitamente
+documentos con `processing_status="needs_review"`; esos documentos existen y
+estan auditados, pero no deben tratarse como aprobados automaticamente.

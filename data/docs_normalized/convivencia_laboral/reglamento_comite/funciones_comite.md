@@ -1,12 +1,12 @@
 ---
 document_id: doc_cfca5f1723e21e1c
-document_type: reglamento
+document_type: formulario
 topic: Comite de Convivencia Laboral
-source_file: funciones_comite.md
+source_relpath: convivencia_laboral/reglamento_comite/funciones_comite.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 5.1 Funciones preventivas

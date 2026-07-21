@@ -8,6 +8,8 @@ from ingestion.normalization.text import normalize_text
 from ingestion.readers.base import ReadResult
 from ingestion.schemas.artifacts import OcrArtifact, OcrPage, PageRecord
 from ingestion.schemas.common import ConfidenceMetric, Evidence, MeasuredValue, Observation
+from ingestion.structure.forms import FormExtractor
+from ingestion.structure.tables import TableExtractor
 
 
 class OcrEngine(Protocol):
@@ -29,9 +31,17 @@ class MissingOcrEngine:
 
 
 class PdfScannedReader:
-    def __init__(self, ocr_engine: OcrEngine = None, low_confidence_threshold: float = 0.70) -> None:
+    def __init__(
+        self,
+        ocr_engine: OcrEngine = None,
+        low_confidence_threshold: float = 0.70,
+        table_extractor: TableExtractor | None = None,
+        form_extractor: FormExtractor | None = None,
+    ) -> None:
         self.ocr_engine = ocr_engine or MissingOcrEngine()
         self.low_confidence_threshold = low_confidence_threshold
+        self.table_extractor = table_extractor or TableExtractor(method="ocr_text")
+        self.form_extractor = form_extractor or FormExtractor(method="ocr_text")
 
     def read(self, source_path: Path) -> ReadResult:
         ocr_pages = self.ocr_engine.extract_pages(source_path)
@@ -105,6 +115,8 @@ class PdfScannedReader:
             document_confidence=document_confidence,
             pages=ocr_records,
         )
+        tables = self.table_extractor.evaluate_pages(pages)
+        forms = self.form_extractor.evaluate_pages(pages)
         return ReadResult(
             extraction_method="ocr",
             markdown="\n\n".join(markdown_parts).strip(),
@@ -112,6 +124,8 @@ class PdfScannedReader:
             warnings=review_reasons,
             review_reasons=review_reasons,
             ocr=ocr,
+            tables=tables,
+            forms=forms,
         )
 
 

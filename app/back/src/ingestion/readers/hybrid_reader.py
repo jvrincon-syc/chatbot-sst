@@ -62,6 +62,7 @@ class HybridReader:
 
         pages: list[PageRecord] = []
         markdown_parts: list[str] = []
+        added_any = False
         for page in digital.pages:
             seen_text = {normalize_text(page.text_normalized)}
             additions: list[str] = []
@@ -70,6 +71,8 @@ class HybridReader:
                 if normalized_result and normalized_result not in seen_text:
                     additions.append(normalized_result)
                     seen_text.add(normalized_result)
+            if additions:
+                added_any = True
             text_normalized = normalize_text("\n".join([page.text_normalized, *additions]))
             confidence = _page_confidence(ocr_by_page.get(page.page_number, []))
             pages.append(
@@ -82,6 +85,11 @@ class HybridReader:
                 )
             )
             markdown_parts.append(f"<!-- page: {page.page_number} -->\n\n{text_normalized}")
+
+        if not added_any:
+            digital.warnings = warnings
+            digital.review_reasons = review_reasons
+            return digital
 
         ocr_pages = _ocr_pages_from_regions(ocr_by_page, self.ocr_engine)
         ocr = OcrArtifact(
@@ -100,6 +108,7 @@ class HybridReader:
             warnings=warnings,
             review_reasons=review_reasons,
             tables=digital.tables,
+            forms=digital.forms,
             ocr=ocr,
         )
 

@@ -1,12 +1,12 @@
 ---
 document_id: doc_f3bdcdea0cf60ee0
 document_type: manual
-topic: Comite de Convivencia Laboral
-source_file: principios_convivencia.md
+topic: Convivencia laboral
+source_relpath: convivencia_laboral/manual/principios_convivencia.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Los principios a los cuales se refiere el siguiente manual tienen como objetivo fundamental establecer un referente etico, para guiar las actitudes, practicas y formas de actuacion de los servidores de la empresa.

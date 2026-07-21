@@ -1,12 +1,12 @@
 ---
 document_id: doc_4d54425dfa884153
 document_type: politica
-topic: Politica de seguridad
-source_file: sala_amiga_info.md
+topic: Organizacion
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Sistemas y Computadores S.A., fomenta espacios que promueven la lactancia materna en el entorno laboral entre las mujeres gestantes y en periodo de lactancia, contribuyendo a la salud fisica y psicologica de la madre y el bebe, con el objetivo de garantizar el bienestar, salud e implementacion de practicas idoneas durante la lactancia materna y asi mismo, en los nuevos integrantes de la familia SYC, una alimentacion adecuada desde los inicios de la vida, a traves de la lactancia materna. Por tal razon, la empresa promueve el cumplimiento de las siguientes directrices:

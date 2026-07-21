@@ -5,7 +5,7 @@ import unicodedata
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from ingestion.paths import ArtifactPaths
 from ingestion.schemas.artifacts import (
@@ -41,6 +41,28 @@ class GoldenContentExpectation(StrictModel):
     pages: str
     must_preserve: list[str] = Field(default_factory=list)
     structure: str
+
+    @field_validator("must_preserve")
+    @classmethod
+    def reject_descriptive_anchors(cls, values: list[str]) -> list[str]:
+        descriptive_markers = (
+            " row",
+            " column",
+            " should ",
+            " must ",
+            " contains ",
+            " preserve ",
+            " visible ",
+            " flattened",
+        )
+        for value in values:
+            normalized = f" {_normalized(value)} "
+            if any(marker in normalized for marker in descriptive_markers):
+                raise ValueError(
+                    "must_preserve entries must be literal source anchors; "
+                    f"move descriptive prose to structure: {value}"
+                )
+        return values
 
 
 class GoldenDocument(StrictModel):
@@ -113,7 +135,12 @@ def validate_pdf_corpus(
         for path in candidate_root.rglob("*.metadata.json")
     }
     for extra in sorted(actual_metadata_paths - expected_metadata_paths):
-        bijection_errors.append(f"extra candidate metadata: {extra}")
+        if not _is_allowed_extra_metadata(
+            candidate_root / Path(extra),
+            raw_root,
+            bijection_errors,
+        ):
+            bijection_errors.append(f"extra candidate metadata: {extra}")
 
     for document in golden.documents:
         paths = ArtifactPaths.for_source(document.source_relpath)
@@ -182,6 +209,25 @@ def _load_candidate_artifact(
     except (ValueError, TypeError, json.JSONDecodeError) as exc:
         errors.append(f"{source_relpath}: invalid {artifact_type}: {exc}")
         return None
+
+
+def _is_allowed_extra_metadata(
+    metadata_path: Path,
+    raw_root: Path,
+    errors: list[str],
+) -> bool:
+    try:
+        payload = json.loads(metadata_path.read_text(encoding="utf-8"))
+        metadata = load_artifact(payload, "metadata")
+    except (ValueError, TypeError, json.JSONDecodeError) as exc:
+        errors.append(f"{metadata_path.name}: invalid extra metadata: {exc}")
+        return True
+    if not isinstance(metadata, MetadataArtifact):
+        return False
+    source = raw_root / Path(metadata.source_relpath)
+    if not source.exists():
+        return False
+    return source.suffix.lower() != ".pdf"
 
 
 def _metadata_errors(

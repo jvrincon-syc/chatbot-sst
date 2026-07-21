@@ -1,12 +1,12 @@
 ---
 document_id: doc_56429da7ea5244e1
-document_type: manual
-topic: Verificacion
-source_file: verificacion_info.md
+document_type: programa
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/manuales/verificacion/verificacion_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 SUPERVISION Y MEDICION DE LOS RESULTADOS

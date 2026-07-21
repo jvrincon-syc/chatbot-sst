@@ -1,5 +1,167 @@
 {
-  "schema_version": "1.0",
-  "generated_at": "2026-07-16T23:52:05.427627-05:00",
-  "documents": []
+  "generated_at": "2026-07-19T22:46:46.714506-05:00",
+  "items": [
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_864d906c5eae1183",
+      "reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_c392ec7bf8d98194",
+      "reasons": [
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_caf88d615e56edd4",
+      "reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_d57d21ff836e1ec0",
+      "reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_d4fca71ff51cb27b",
+      "reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_f2cf7868a801af0e",
+      "reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_7d2eb40310345805",
+      "reasons": [
+        "ambiguous_classification"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_3e55236f58440bf5",
+      "reasons": [
+        "classification_conflict",
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_4c525cef1e737235",
+      "reasons": [
+        "classification_conflict"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_33db5a236b33527d",
+      "reasons": [
+        "ambiguous_classification"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_81325f8c3222110c",
+      "reasons": [
+        "classification_conflict"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/organizacion.md"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_31b00a8b31847796",
+      "reasons": [
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_86b6f64f1c869610",
+      "reasons": [
+        "classification_conflict"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/planificacion/planificacion_info.md"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_f38f9f98d854feed",
+      "reasons": [
+        "pdf_semantic_review_required"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf"
+    }
+  ],
+  "run_id": "phase1_main_full_candidate_20260720_r1",
+  "schema_version": "2.0"
 }

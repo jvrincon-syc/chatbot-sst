@@ -1,18 +1,30 @@
 {
-  "schema_version": "1.0",
   "document_id": "doc_133e0d5e86f00f91",
   "page_count": 1,
   "pages": [
     {
-      "page_number": 1,
-      "text_raw": "   RESPETO: Los trabajadores debemos brindar a los externos e internos un trato digno, amable y tolerante, ademas demostramos siempre espiritu de servicio.\n\n·         EQUIDAD: Los trabajadores deben implementar igualdad de oportunidades entre sus empleados.\n\n·         PARTICIPACION: La empresa tiene un camino abierto a la participacion de nuestros empleados en todos los eventos que realizamos.\n\n·         SOLIDARIDAD: Los trabajadores deben ser solidarios con nuestros clientes internos y externos.\n\n·         COMPETITIVIDAD: En la empresa trabajamos para el mejoramiento continuo de nuestras habilidades y garantizar la efectividad, la pertinencia en el desarrollo de nuestros procesos.\n\n·         RESPONSABILIDAD: Los empleados debe hacer las cosas de la mejor manera, de tal forma que no se perjudique el ambiente laboral, asumiendo las consecuencias de nuestras palabras y acciones.",
-      "text_normalized": "RESPETO: Los trabajadores debemos brindar a los externos e internos un trato digno, amable y tolerante, ademas demostramos siempre espiritu de servicio.\n\n· EQUIDAD: Los trabajadores deben implementar igualdad de oportunidades entre sus empleados.\n\n· PARTICIPACION: La empresa tiene un camino abierto a la participacion de nuestros empleados en todos los eventos que realizamos.\n\n· SOLIDARIDAD: Los trabajadores deben ser solidarios con nuestros clientes internos y externos.\n\n· COMPETITIVIDAD: En la empresa trabajamos para el mejoramiento continuo de nuestras habilidades y garantizar la efectividad, la pertinencia en el desarrollo de nuestros procesos.\n\n· RESPONSABILIDAD: Los empleados debe hacer las cosas de la mejor manera, de tal forma que no se perjudique el ambiente laboral, asumiendo las consecuencias de nuestras palabras y acciones.",
+      "blocks": [],
       "extraction_method": "markdown",
-      "ocr_confidence": null,
-      "has_handwriting_warning": false,
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "RESPETO: Los trabajadores debemos brindar a los externos e internos un trato digno, amable y tolerante, ademas demostramos siempre espiritu de servicio.\n\n· EQUIDAD: Los trabajadores deben implementar igualdad de oportunidades entre sus empleados.\n\n· PARTICIPACION: La empresa tiene un camino abierto a la participacion de nuestros empleados en todos los eventos que realizamos.\n\n· SOLIDARIDAD: Los trabajadores deben ser solidarios con nuestros clientes internos y externos.\n\n· COMPETITIVIDAD: En la empresa trabajamos para el mejoramiento continuo de nuestras habilidades y garantizar la efectividad, la pertinencia en el desarrollo de nuestros procesos.\n\n· RESPONSABILIDAD: Los empleados debe hacer las cosas de la mejor manera, de tal forma que no se perjudique el ambiente laboral, asumiendo las consecuencias de nuestras palabras y acciones.",
+      "text_raw": "   RESPETO: Los trabajadores debemos brindar a los externos e internos un trato digno, amable y tolerante, ademas demostramos siempre espiritu de servicio.\n\n·         EQUIDAD: Los trabajadores deben implementar igualdad de oportunidades entre sus empleados.\n\n·         PARTICIPACION: La empresa tiene un camino abierto a la participacion de nuestros empleados en todos los eventos que realizamos.\n\n·         SOLIDARIDAD: Los trabajadores deben ser solidarios con nuestros clientes internos y externos.\n\n·         COMPETITIVIDAD: En la empresa trabajamos para el mejoramiento continuo de nuestras habilidades y garantizar la efectividad, la pertinencia en el desarrollo de nuestros procesos.\n\n·         RESPONSABILIDAD: Los empleados debe hacer las cosas de la mejor manera, de tal forma que no se perjudique el ambiente laboral, asumiendo las consecuencias de nuestras palabras y acciones.",
       "warnings": [
         "missing_title"
       ]
     }
-  ]
+  ],
+  "schema_version": "2.0"
 }

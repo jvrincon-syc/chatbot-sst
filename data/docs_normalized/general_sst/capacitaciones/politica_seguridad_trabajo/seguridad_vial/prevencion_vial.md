@@ -1,12 +1,12 @@
 ---
 document_id: doc_d15d9f2596c32bed
-document_type: politica
+document_type: norma
 topic: Seguridad vial
-source_file: prevencion_vial.md
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Para reducir el riesgo de accidentes viales y proteger la vida propia y la de los demas, es fundamental adoptar conductas responsables al conducir:

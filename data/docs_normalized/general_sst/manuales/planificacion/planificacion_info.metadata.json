@@ -1,29 +1,152 @@
 {
-  "schema_version": "1.0",
+  "classification": {
+    "conflict_status": "conflicting",
+    "conflicts": [
+      "type_title_control=programa;type_route=manual"
+    ],
+    "content_prediction": "programa",
+    "document_type": "programa",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "programa:programa:title_control",
+      "programa:programa:content",
+      "Sistema de Gestion de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+    ],
+    "subtopic": null,
+    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "phase1-main",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "markdown",
+          "text": "PROGRAMA DE MEDICINA PREVENTIVA Y DEL TRABAJO:",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PROGRAMA DE MEDICINA PREVENTIVA Y DEL TRABAJO:",
+      "value_raw": "PROGRAMA DE MEDICINA PREVENTIVA Y DEL TRABAJO:",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
   "document_id": "doc_86b6f64f1c869610",
   "document_name": "planificacion_info.md",
-  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/general_sst/manuales/planificacion/planificacion_info.md",
-  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/general_sst/manuales/planificacion/planificacion_info.md",
-  "document_type": "manual",
-  "topic": "Planificacion",
-  "subtopic": null,
-  "version": null,
-  "publication_date": null,
-  "effective_date": null,
-  "page_count": 1,
-  "language": "es",
   "extraction_method": "markdown",
-  "ocr_engine": null,
-  "ocr_confidence": null,
-  "contains_handwriting": false,
-  "contains_tables": false,
-  "classification_confidence": 0.98,
-  "content_hash": "a4327842e3992672e1658d6d2ca0f08e29b4e90640f721fb139471bcf2c1b77d",
-  "corpus_version": "1",
-  "pipeline_version": "1.0.0",
-  "processing_status": "processed",
-  "warnings": [
-    "missing_title"
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/planificacion/planificacion_info.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/manuales/planificacion/planificacion_info.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-19T22:46:33.677049-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "classification_conflict"
   ],
-  "processed_at": "2026-07-16T23:50:50.663392-05:00"
+  "schema_version": "2.0",
+  "source_hash": "a4327842e3992672e1658d6d2ca0f08e29b4e90640f721fb139471bcf2c1b77d",
+  "source_relpath": "general_sst/manuales/planificacion/planificacion_info.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "missing_title",
+    "type_title_control=programa;type_route=manual"
+  ]
 }

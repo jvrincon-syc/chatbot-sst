@@ -1,12 +1,12 @@
 ---
 document_id: doc_04c42c6f64c9d79e
-document_type: reglamento
+document_type: programa
 topic: Comite de Convivencia Laboral
-source_file: conformacion_comite.md
+source_relpath: convivencia_laboral/reglamento_comite/conformacion_comite.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 2.1 Miembros del Comite de Convivencia Laboral

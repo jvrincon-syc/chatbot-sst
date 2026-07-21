@@ -2,11 +2,11 @@
 document_id: doc_5e403a88299d2dc3
 document_type: informacion_general
 topic: COPASST
-source_file: miembros_copasst_2025_2027.md
+source_relpath: copasst/miembros_copasst_2025_2027.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 REPRESENTANTES DE LOS TRABAJADORES

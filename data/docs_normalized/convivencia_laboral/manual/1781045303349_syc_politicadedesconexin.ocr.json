@@ -1,20 +1,72 @@
 {
-  "schema_version": "1.0",
+  "document_confidence": {
+    "engine": "tesseract",
+    "engine_version": "unknown",
+    "kind": "estimated",
+    "method": "page_confidence_average",
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": 0.9482076936986301,
+    "warnings": [
+      "ocr_confidence_not_word_measured"
+    ]
+  },
   "document_id": "doc_caf88d615e56edd4",
   "engine": "tesseract",
-  "engine_version": "5.5.2",
+  "engine_version": "unknown",
   "language": "spa",
-  "overall_confidence": 1.0,
   "pages": [
     {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "unknown",
+        "kind": "estimated",
+        "method": "engine_page_confidence",
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": 0.9482076936986301,
+        "warnings": [
+          "ocr_confidence_not_word_measured"
+        ]
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": null,
       "page_number": 1,
-      "confidence": 1.0,
-      "word_count": 298,
-      "low_confidence_word_count": 0,
-      "deskew_applied": true,
-      "rotation_detected_degrees": 0,
-      "contains_handwriting": false,
-      "warnings": []
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 432,
+      "words": []
     }
-  ]
+  ],
+  "schema_version": "2.0",
+  "warnings": []
 }

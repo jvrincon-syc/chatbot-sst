@@ -1,12 +1,12 @@
 ---
 document_id: doc_81325f8c3222110c
-document_type: manual
-topic: Organizacion
-source_file: organizacion.md
+document_type: reglamento
+topic: Reglamento interno de trabajo
+source_relpath: general_sst/manuales/organizacion/organizacion.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Sistemas y Computadores S.A. es responsable de proteger la seguridad y salud de sus trabajadores, conforme al Decreto Ley 1295 de 1994, la Ley 1562 de 2012, el Decreto 1072 de 2015, la Resolucion 0312 de 2019 y demas normas aplicables. Para ello, se ha definido un Manual de Funciones donde se asignan responsabilidades especificas en SST a cada cargo.

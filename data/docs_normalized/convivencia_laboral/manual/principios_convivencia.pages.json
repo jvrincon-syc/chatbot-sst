@@ -1,18 +1,30 @@
 {
-  "schema_version": "1.0",
   "document_id": "doc_f3bdcdea0cf60ee0",
   "page_count": 1,
   "pages": [
     {
-      "page_number": 1,
-      "text_raw": "Los principios a los cuales se refiere el siguiente manual tienen como objetivo fundamental establecer un referente etico, para guiar las actitudes, practicas y formas de actuacion de los servidores de la empresa.\n\n1.   Respetar el elemento mas valioso de la institucion que es el talento humano, ademas de la empresa misma.\n\n2.   Escuchar de forma empatica y respetuosa las ideas de los demas, permitiendo una interaccion equitativa y justa para todos.\n\n3.   Propender por el cumplimiento de las normas como medio para una convivencia armonica y productiva.\n\n4.   Promover un ambiente laboral respetuoso y positivo para todos.",
-      "text_normalized": "Los principios a los cuales se refiere el siguiente manual tienen como objetivo fundamental establecer un referente etico, para guiar las actitudes, practicas y formas de actuacion de los servidores de la empresa.\n\n1. Respetar el elemento mas valioso de la institucion que es el talento humano, ademas de la empresa misma.\n\n2. Escuchar de forma empatica y respetuosa las ideas de los demas, permitiendo una interaccion equitativa y justa para todos.\n\n3. Propender por el cumplimiento de las normas como medio para una convivencia armonica y productiva.\n\n4. Promover un ambiente laboral respetuoso y positivo para todos.",
+      "blocks": [],
       "extraction_method": "markdown",
-      "ocr_confidence": null,
-      "has_handwriting_warning": false,
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "Los principios a los cuales se refiere el siguiente manual tienen como objetivo fundamental establecer un referente etico, para guiar las actitudes, practicas y formas de actuacion de los servidores de la empresa.\n\n1. Respetar el elemento mas valioso de la institucion que es el talento humano, ademas de la empresa misma.\n\n2. Escuchar de forma empatica y respetuosa las ideas de los demas, permitiendo una interaccion equitativa y justa para todos.\n\n3. Propender por el cumplimiento de las normas como medio para una convivencia armonica y productiva.\n\n4. Promover un ambiente laboral respetuoso y positivo para todos.",
+      "text_raw": "Los principios a los cuales se refiere el siguiente manual tienen como objetivo fundamental establecer un referente etico, para guiar las actitudes, practicas y formas de actuacion de los servidores de la empresa.\n\n1.   Respetar el elemento mas valioso de la institucion que es el talento humano, ademas de la empresa misma.\n\n2.   Escuchar de forma empatica y respetuosa las ideas de los demas, permitiendo una interaccion equitativa y justa para todos.\n\n3.   Propender por el cumplimiento de las normas como medio para una convivencia armonica y productiva.\n\n4.   Promover un ambiente laboral respetuoso y positivo para todos.",
       "warnings": [
         "missing_title"
       ]
     }
-  ]
+  ],
+  "schema_version": "2.0"
 }

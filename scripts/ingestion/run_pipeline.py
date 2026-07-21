@@ -19,6 +19,7 @@ def main() -> int:
     parser.add_argument("--docs-normalized", type=Path, default=ROOT / "data" / "docs_normalized")
     parser.add_argument("--staging-root", type=Path, default=None)
     parser.add_argument("--promote", action="store_true")
+    parser.add_argument("--golden-status", choices=("passed", "failed"), default=None)
     parser.add_argument("--only-source", action="append", dest="only_sources")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--corpus-version", default="1")
@@ -36,6 +37,7 @@ def main() -> int:
         corpus_version=args.corpus_version,
         pipeline_version=args.pipeline_version,
         run_id=args.run_id,
+        golden_status=args.golden_status,
     )
     print(summary)
     return 0

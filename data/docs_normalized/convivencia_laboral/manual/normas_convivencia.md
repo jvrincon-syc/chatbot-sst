@@ -1,12 +1,12 @@
 ---
 document_id: doc_e91e2fb644a2717c
-document_type: norma
-topic: Comite de Convivencia Laboral
-source_file: normas_convivencia.md
+document_type: programa
+topic: Convivencia laboral
+source_relpath: convivencia_laboral/manual/normas_convivencia.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 1. Trabajar juntos, entregando lo mejor de cada uno y fomentando relaciones de trabajo armonicas y productivas, valorando las necesidades del otro y demostrando solidaridad por los companeros.

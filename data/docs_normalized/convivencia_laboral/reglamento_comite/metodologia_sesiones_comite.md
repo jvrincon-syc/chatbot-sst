@@ -1,12 +1,12 @@
 ---
 document_id: doc_842df95c94a7e50d
-document_type: reglamento
+document_type: acta
 topic: Comite de Convivencia Laboral
-source_file: metodologia_sesiones_comite.md
+source_relpath: convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 4.1. Clasificacion de las reuniones

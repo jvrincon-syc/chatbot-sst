@@ -1,12 +1,12 @@
 ---
 document_id: doc_1edf1a3d50d85305
-document_type: manual
-topic: Mejora
-source_file: mejora_info.md
+document_type: programa
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/manuales/mejora/mejora_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 SISTEMAS Y COMPUTADORES S.A, es consciente de la importancia y beneficios que trae el contar con un SG-SST, razon por la cual cada colaborador sabe la importancia de mejorar cada una de sus actividades del dia a dia, con lo cual tanto ellos como la organizacion obtienen beneficios.

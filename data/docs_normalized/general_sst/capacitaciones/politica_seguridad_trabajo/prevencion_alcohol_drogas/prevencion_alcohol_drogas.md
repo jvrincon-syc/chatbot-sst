@@ -1,12 +1,12 @@
 ---
 document_id: doc_53b1d7b44cf260c0
-document_type: politica
-topic: Prevencion de alcohol y drogas
-source_file: prevencion_alcohol_drogas.md
+document_type: programa
+topic: Capacitaciones
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 SISTEMAS Y COMPUTADORES S.A, al promover un ambiente de trabajo saludable, seguro y exento del consumo de alcohol, tabaco, drogas y cualquier tipo de sustancia que genere dependencia, desarrolla la presente politica dando cumplimiento con los requisitos legales, normatividad aplicable y de otra indole adquiridos por la empresa y reflejando una vez mas el compromiso en la busqueda del bienestar integral y salud de los trabajadores. Por tal la razon la empresa promueve el cumplimiento de las siguientes directrices:

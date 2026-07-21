@@ -1,27 +1,206 @@
 {
-  "schema_version": "1.0",
+  "classification": {
+    "conflict_status": "conflicting",
+    "conflicts": [
+      "type_title_control=politica;type_route=manual"
+    ],
+    "content_prediction": "formulario",
+    "document_type": "politica",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "politica:politica:title_control",
+      "politica:politica:content",
+      "politica:politica:filename",
+      "Convivencia laboral:desconexion laboral:title_control",
+      "Convivencia laboral:convivencia laboral:content",
+      "Convivencia laboral:convivencia laboral:route",
+      "Desconexion laboral:desconexion laboral:title_control"
+    ],
+    "subtopic": "Desconexion laboral",
+    "topic": "Convivencia laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "phase1-main",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr",
+          "text": "«CODIGO PL.RH-035ST | CLASIFICACIÓN | USO INTERNO (NC2)",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PL.RH-03SST",
+      "value_raw": "PL.RH-035ST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr",
+          "text": "POLÍTICA DE DESCONEXIÓN LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "POLÍTICA DE DESCONEXIÓN LABORAL",
+      "value_raw": "POLÍTICA DE DESCONEXIÓN LABORAL",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr",
+          "text": "¡O INTERNO (NC2) | Versión | 0.1",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.1",
+      "value_raw": "0.1",
+      "warnings": []
+    },
+    "warnings": []
+  },
   "document_id": "doc_caf88d615e56edd4",
   "document_name": "1781045303349_syc_politicadedesconexin.pdf",
-  "source_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_raw/convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
-  "normalized_path": "/Users/j.rinconc/Desktop/JUNIOR/trabajo/SYC/chatbot-sst/data/docs_normalized/convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
-  "document_type": "politica",
-  "topic": "Politica de seguridad",
-  "subtopic": null,
-  "version": null,
-  "publication_date": null,
-  "effective_date": null,
-  "page_count": 1,
-  "language": "es",
   "extraction_method": "ocr",
-  "ocr_engine": "tesseract",
-  "ocr_confidence": 1.0,
-  "contains_handwriting": false,
-  "contains_tables": false,
-  "classification_confidence": 0.98,
-  "content_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
-  "corpus_version": "1",
-  "pipeline_version": "1.0.0",
-  "processing_status": "processed",
-  "warnings": [],
-  "processed_at": "2026-07-16T23:50:25.229310-05:00"
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "ocr_text",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": {
+          "bottom": 1441.0,
+          "coordinate_system": "pixels",
+          "top": 1234.0,
+          "x0": 139.0,
+          "x1": 633.0
+        },
+        "page_number": 1,
+        "pattern": null,
+        "region": null,
+        "source": "opencv_signature_stroke",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "opencv_signature_stroke",
+    "status": "detected",
+    "value": true,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+  "ocr_confidence": {
+    "engine": "tesseract",
+    "engine_version": "unknown",
+    "kind": "estimated",
+    "method": "page_confidence_average",
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": 0.9482076936986301,
+    "warnings": [
+      "ocr_confidence_not_word_measured"
+    ]
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "processed_at": "2026-07-19T22:45:52.654334-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "classification_conflict",
+    "pdf_semantic_review_required"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
+  "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": [
+    "type_title_control=politica;type_route=manual"
+  ]
 }

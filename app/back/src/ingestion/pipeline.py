@@ -16,7 +16,7 @@ from ingestion.manifests.bundle_writer import BundlePayload, write_bundle_atomic
 from ingestion.manifests.writer import dump_json, write_inventory
 from ingestion.fingerprint import processing_fingerprint
 from ingestion.paths import ArtifactPaths, canonical_relpath
-from ingestion.promotion import promote_candidate
+from ingestion.promotion import PromotionError, promote_candidate
 from ingestion.readers.base import ReadResult
 from ingestion.ocr.ocrmypdf_engine import OcrDependencyError, OcrMyPdfEngine
 from ingestion.ocr.tesseract_engine import TesseractEngine, TesseractPdfEngine
@@ -34,6 +34,7 @@ from ingestion.schemas.artifacts import (
 from ingestion.schemas.common import ConfidenceMetric, Evidence, Observation
 from ingestion.schemas.inventory import InventoryRecord
 from ingestion.schemas.manifests import ErrorManifest, ErrorItem, ReviewManifest, ReviewItem, RunDocument, RunManifest
+from ingestion.structure.handwriting import HandwritingDetector
 from ingestion.validation.normalized import validate_normalized_tree
 
 _MATERIAL_PAGE_WARNINGS = {
@@ -146,6 +147,7 @@ def _build_metadata(
     record: InventoryRecord,
     normalized_md: Path,
     result: ReadResult,
+    source_path: Path,
     corpus_version: str,
     pipeline_version: str,
     classification_review_threshold: float,
@@ -155,7 +157,7 @@ def _build_metadata(
     ocr_confidence = (
         result.ocr.document_confidence if result.ocr is not None else ConfidenceMetric(kind="unavailable", value=None)
     )
-    handwriting = _handwriting_observation(result)
+    handwriting = _handwriting_observation(result, record=record, source_path=source_path)
     tables = (
         Observation(
             status="detected",
@@ -203,6 +205,12 @@ def _build_metadata(
         ]
         + document_control.warnings
         + (["classification_conflict"] if classification.conflicts else [])
+        + _material_feature_review_reasons(
+            record=record,
+            handwriting=handwriting,
+            tables=tables,
+            forms=forms,
+        )
     )
     if (classification.document_type_confidence.value or 0) < classification_review_threshold:
         warnings.append("ambiguous_classification")
@@ -252,6 +260,7 @@ def _write_success_artifacts(
         record=record,
         normalized_md=normalized_md,
         result=result,
+        source_path=_source_path_for_record(record, docs_raw),
         corpus_version=corpus_version,
         pipeline_version=pipeline_version,
         classification_review_threshold=classification_review_threshold,
@@ -319,15 +328,58 @@ def _unique(values: list[str]) -> list[str]:
     return list(dict.fromkeys(value for value in values if value))
 
 
-def _handwriting_observation(result: ReadResult) -> Observation:
+def _handwriting_observation(
+    result: ReadResult,
+    *,
+    record: InventoryRecord,
+    source_path: Path,
+) -> Observation:
     if result.ocr is None or not result.ocr.pages:
+        if record.detected_extension == ".pdf":
+            return HandwritingDetector().evaluate_pdf(
+                source_path,
+                page_texts=_page_texts_by_number(result),
+            )
         return Observation(status="not_evaluated", value=None)
     for page in result.ocr.pages:
         if page.handwriting.status == "detected":
             return page.handwriting
+    detected = HandwritingDetector().evaluate_pdf(
+        source_path,
+        page_texts=_page_texts_by_number(result),
+    )
+    if detected.status == "detected":
+        return detected
     if all(page.handwriting.status == "not_detected" for page in result.ocr.pages):
         return result.ocr.pages[0].handwriting
-    return Observation(status="not_evaluated", value=None)
+    return detected
+
+
+def _page_texts_by_number(result: ReadResult) -> dict[int, str]:
+    return {
+        page.page_number: page.text_normalized or page.text_raw
+        for page in result.pages
+    }
+
+
+def _material_feature_review_reasons(
+    *,
+    record: InventoryRecord,
+    handwriting: Observation,
+    tables: Observation,
+    forms: Observation,
+) -> list[str]:
+    if record.detected_extension != ".pdf":
+        return []
+    reasons = ["pdf_semantic_review_required"]
+    for name, observation in (
+        ("handwriting", handwriting),
+        ("tables", tables),
+        ("forms", forms),
+    ):
+        if observation.status == "not_evaluated":
+            reasons.append(f"{name}_not_evaluated")
+    return reasons
 
 
 def _artifact_observation(observations: list[Observation]) -> Observation:
@@ -438,6 +490,7 @@ def run_pipeline(
     pipeline_version: str = "1.0.0",
     run_id: Optional[str] = None,
     classification_review_threshold: float = 0.60,
+    golden_status: Optional[str] = None,
 ) -> Dict[str, int]:
     run_id = run_id or "run_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
     output_root = staging_root or docs_normalized
@@ -628,12 +681,16 @@ def run_pipeline(
     validation = validate_normalized_tree(output_root, raw_root=docs_raw, run_id=run_id)
     dump_json(manifests_dir / f"validation_{run_id}.json", validation)
     if promote:
+        if golden_status != "passed":
+            raise PromotionError(
+                "promotion requires an explicit passed golden validation status"
+            )
         promote_candidate(
             output_root,
             docs_normalized,
             {
                 "structural_status": validation.status,
-                "golden_status": "passed",
+                "golden_status": golden_status,
                 "run_id": run_id,
             },
         )

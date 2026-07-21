@@ -1,12 +1,12 @@
 ---
 document_id: doc_221c00facfd6a2e8
-document_type: politica
-topic: COPASST
-source_file: funciones_copasst.md
+document_type: programa
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: copasst/funciones_copasst.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 El Decreto 1072 de 2015 establece nuevas funciones del COPASST al compilar del Decreto 1443 de 2014.

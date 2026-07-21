@@ -2,11 +2,11 @@
 document_id: doc_7d2eb40310345805
 document_type: capacitacion
 topic: Pausas activas
-source_file: info.md
+source_relpath: general_sst/capacitaciones/pausas_activas/info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Las pausas activas son periodos de descanso cortos pero intencionados que se toman durante actividades prolongadas y sedentarias. Estas pausas tienen una importancia significativa para el bienestar fisico y mental de las personas.

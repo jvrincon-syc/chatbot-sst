@@ -1,0 +1,2122 @@
+{
+  "document_id": "doc_d4fca71ff51cb27b",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "page_number": 3,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 6,
+  "tables": [
+    {
+      "bbox": {
+        "bottom": 96.62,
+        "coordinate_system": "pdf_points",
+        "top": 40.08000000000004,
+        "x0": 143.300005,
+        "x1": 544.2999899999999
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RG.RH-01SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE\nCLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO\n(NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n| REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL |  |  |  |  |  |\n| CODIGO | RG.RH-01SST | NIVEL DE\nCLASIFICACIÓN | USO INTERNO\n(NC2) | VERSION | 0.0 |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "RG.RH-01SST",
+          "NIVEL DE\nCLASIFICACIÓN",
+          "USO INTERNO\n(NC2)",
+          "VERSION",
+          "0.0"
+        ]
+      ],
+      "table_id": "page_1_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": {
+        "bottom": 96.62,
+        "coordinate_system": "pdf_points",
+        "top": 40.08000000000004,
+        "x0": 143.300005,
+        "x1": 544.2999899999999
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RG.RH-01SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE\nCLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO\n(NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n| REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL |  |  |  |  |  |\n| CODIGO | RG.RH-01SST | NIVEL DE\nCLASIFICACIÓN | USO INTERNO\n(NC2) | VERSION | 0.0 |",
+      "page_number": 2,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "RG.RH-01SST",
+          "NIVEL DE\nCLASIFICACIÓN",
+          "USO INTERNO\n(NC2)",
+          "VERSION",
+          "0.0"
+        ]
+      ],
+      "table_id": "page_2_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": {
+        "bottom": 96.62,
+        "coordinate_system": "pdf_points",
+        "top": 40.08000000000004,
+        "x0": 143.300005,
+        "x1": 544.2999899999999
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RG.RH-01SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE\nCLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO\n(NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n| REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL |  |  |  |  |  |\n| CODIGO | RG.RH-01SST | NIVEL DE\nCLASIFICACIÓN | USO INTERNO\n(NC2) | VERSION | 0.0 |",
+      "page_number": 3,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "RG.RH-01SST",
+          "NIVEL DE\nCLASIFICACIÓN",
+          "USO INTERNO\n(NC2)",
+          "VERSION",
+          "0.0"
+        ]
+      ],
+      "table_id": "page_3_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": {
+        "bottom": 96.62,
+        "coordinate_system": "pdf_points",
+        "top": 40.08000000000004,
+        "x0": 143.300005,
+        "x1": 544.2999899999999
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RG.RH-01SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE\nCLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO\n(NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n| REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL |  |  |  |  |  |\n| CODIGO | RG.RH-01SST | NIVEL DE\nCLASIFICACIÓN | USO INTERNO\n(NC2) | VERSION | 0.0 |",
+      "page_number": 4,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "RG.RH-01SST",
+          "NIVEL DE\nCLASIFICACIÓN",
+          "USO INTERNO\n(NC2)",
+          "VERSION",
+          "0.0"
+        ]
+      ],
+      "table_id": "page_4_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": {
+        "bottom": 96.62,
+        "coordinate_system": "pdf_points",
+        "top": 40.08000000000004,
+        "x0": 143.300005,
+        "x1": 544.2999899999999
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RG.RH-01SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE\nCLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO\n(NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n| REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL |  |  |  |  |  |\n| CODIGO | RG.RH-01SST | NIVEL DE\nCLASIFICACIÓN | USO INTERNO\n(NC2) | VERSION | 0.0 |",
+      "page_number": 5,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "RG.RH-01SST",
+          "NIVEL DE\nCLASIFICACIÓN",
+          "USO INTERNO\n(NC2)",
+          "VERSION",
+          "0.0"
+        ]
+      ],
+      "table_id": "page_5_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": {
+        "bottom": 96.62,
+        "coordinate_system": "pdf_points",
+        "top": 40.08000000000004,
+        "x0": 143.300005,
+        "x1": 544.2999899999999
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "RG.RH-01SST",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE\nCLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "USO INTERNO\n(NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "VERSION",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 96.62,
+            "coordinate_system": "pdf_points",
+            "top": 40.08000000000004,
+            "x0": 143.300005,
+            "x1": 544.2999899999999
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "0.0",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
+      ],
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- |\n| REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL |  |  |  |  |  |\n| CODIGO | RG.RH-01SST | NIVEL DE\nCLASIFICACIÓN | USO INTERNO\n(NC2) | VERSION | 0.0 |",
+      "page_number": 6,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "RG.RH-01SST",
+          "NIVEL DE\nCLASIFICACIÓN",
+          "USO INTERNO\n(NC2)",
+          "VERSION",
+          "0.0"
+        ]
+      ],
+      "table_id": "page_6_table_1",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

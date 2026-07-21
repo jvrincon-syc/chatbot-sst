@@ -38,13 +38,13 @@
         {
           "pages": "1-2",
           "must_preserve": [
-            "datos de la persona que interpone la queja",
-            "modalidad de la queja",
-            "datos del presunto acosador",
-            "relato de los hechos",
-            "pruebas",
-            "sugerencias o solicitudes",
-            "firma"
+            "QUEJAS: Si va a presentar una queja",
+            "seleccione la modalidad de acoso",
+            "MODALIDADES DE ACOSO LABORAL",
+            "RELACIÓN DE LOS HECHOS CONSTITUTIVOS DE LA QUEJA",
+            "Relacione, adjunte, o describa las pruebas",
+            "SUGERENCIAS",
+            "FIRMA DEL QUE INTERPONE LA QUEJA"
           ],
           "structure": "Form groups and cells must remain associated with their labels; blank response areas are layout, not missing text."
         }
@@ -81,14 +81,18 @@
         {
           "pages": "1-12",
           "must_preserve": [
-            "introducción",
-            "políticas de prevención y desconexión",
-            "definición, objetivos y funciones del Comité de Convivencia",
-            "marco legal",
-            "valores",
-            "normas y conductas",
-            "deberes y derechos",
-            "canales de contacto"
+            "INTRODUCCIÓN",
+            "POLÍTICA DE CONVIVENCIA LABORAL",
+            "POLÍTICA DE DESCONEXIÓN LABORAL",
+            "QUÈ ES UN COMITÉ DE CONVIVENCIA",
+            "OBJETIVO GENERAL",
+            "FUNCIONES DEL COMITÉ",
+            "MARCO LEGAL",
+            "VALORES",
+            "NORMAS DE CONVIVENCIA",
+            "DEBERES DE CONVIVENCIA",
+            "DERECHOS DE CONVIVENCIA LABORAL",
+            "Comité de Convivencia Laboral SYC"
           ],
           "structure": "Preserve headings and lists; extract the repeated control header once as document metadata and not as repeated RAG body text."
         }
@@ -124,13 +128,14 @@
         {
           "pages": "1",
           "must_preserve": [
-            "fundamento en la Ley 2191 de 2022",
-            "balance entre vida laboral y familiar",
-            "mecanismos para ejercer el derecho",
-            "canal de queja",
-            "horarios y comunicaciones fuera de jornada",
-            "función del Comité de Convivencia",
-            "nombre y cargo del firmante"
+            "ley 2191 de 2022",
+            "balance entre la vida laboral y familiar",
+            "mecanismos mediante los cuales se garantiza",
+            "presentar queja frente",
+            "horarios laborales están definidos",
+            "El comité de convivencia laboral promoverá",
+            "En constancia de lo anterior firma",
+            "REPRESENTANTE LEGAL- APODERADO"
           ],
           "structure": "Extract the control header as structured fields and retain a handwriting/signature observation separate from OCR text."
         }
@@ -166,14 +171,15 @@
         {
           "pages": "1",
           "must_preserve": [
-            "alcance de la política",
-            "ambiente digno, respetuoso, seguro y saludable",
-            "conductas prohibidas",
-            "función del Comité de Convivencia",
-            "confidencialidad e imparcialidad",
+            "Sistemas y Computadores S.A., en cumplimiento",
+            "Política de Prevención",
+            "ambientes de trabajo dignos, respetuosos, seguros",
+            "conductas amenazantes",
+            "Comité de Convivencia Laboral",
+            "confidencialidad",
             "igualdad de oportunidades",
             "aplicación obligatoria",
-            "fecha y firmante"
+            "se firma el 6 de diciembre de 2025"
           ],
           "structure": "Extract the control header and signature observation separately from body text."
         }
@@ -210,13 +216,14 @@
         {
           "pages": "1-6",
           "must_preserve": [
-            "objetivo",
-            "conformación, designación y periodo",
-            "obligaciones, inhabilidades y retiro",
-            "roles y metodología de reuniones",
-            "funciones",
-            "etapas de atención de quejas",
-            "vigencia y modificaciones"
+            "OBJETIVO DEL COMITÉ DE CONVIVENCIA LABORAL",
+            "CONFORMACIÓN DEL COMITÉ DE CONVIVENCIA LABORAL",
+            "Obligaciones especiales",
+            "FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+            "METODOLOGÍA DE LAS SESIONES DEL COMITÉ",
+            "Funciones del presidente",
+            "Trámite de las quejas por etapas",
+            "VIGENCIA Y MODIFICACIONES"
           ],
           "structure": "Preserve section hierarchy and pagination; store the repeated control header once."
         }
@@ -258,35 +265,44 @@
             "beneficios",
             "actividades",
             "metodología",
-            "estrategias y responsabilidades"
+            "AUMENTAN",
+            "DISMINUYEN"
           ],
           "structure": "Reconstruct the page 6 AUMENTAN/DISMINUYEN table and preserve headings/lists."
         },
         {
           "pages": "8-12",
           "must_preserve": [
-            "rutinas de movimiento y estiramiento",
-            "ejercicios para rodillas y pies",
-            "ejercicios para ojos",
-            "masaje para dolor de cabeza"
+            "MOVIMIENTO ARTICULAR",
+            "Movimiento de cabeza y cuello",
+            "Movimiento y fortalecimiento de rodilla",
+            "Ejercicios para los ojos",
+            "Masaje para el dolor de cabeza",
+            "Paso 1",
+            "Paso 2",
+            "Paso 3"
           ],
           "structure": "OCR image regions containing instructional text even when the page also has a sufficient digital text layer."
         },
         {
           "pages": "13-15",
           "must_preserve": [
-            "posturas adecuadas",
-            "distancia de 45 a 70 cm",
-            "ajuste de silla, teclado y pantalla",
-            "zonas usual, ocasional y poco común",
-            "labels Bien/Mal"
+            "Posturas adecuadas frente al computador",
+            "Siéntese de modo",
+            "teclado",
+            "Altura",
+            "Zona poco común",
+            "Zona ocasional",
+            "Zona usual"
           ],
           "structure": "These pages require region/page OCR; the current digital extraction misses most image-embedded instructions."
         },
         {
           "pages": "16",
           "must_preserve": [
-            "bibliografía y cierre del programa"
+            "BIBLIOGRAFIA",
+            "Guía Técnica para la Promoción",
+            "Implementación de Pausas Activas"
           ],
           "structure": "Preserve final section and remove repeated control header from indexable body."
         }
@@ -325,9 +341,14 @@
         {
           "pages": "1",
           "must_preserve": [
-            "three objective rows",
-            "the target associated with each objective",
-            "the indicator/formula associated with each objective and target"
+            "OBJETIVOS",
+            "METAS",
+            "INDICADORES",
+            "95% del plan de trabajo",
+            "PESV x trimestre",
+            "90% del programa",
+            "100% de los vehículos",
+            "inspeccionados diariamente"
           ],
           "structure": "Represent the visible OBJETIVOS/METAS/INDICADORES matrix as three associated rows; formulas must retain numerator, denominator and multiplication by 100."
         }
@@ -364,34 +385,38 @@
         {
           "pages": "1-3",
           "must_preserve": [
-            "cover and January 2025 date",
-            "table of contents",
-            "approval table with roles, positions and names"
+            "REGLAMENTO INTERNO DE TRABAJO",
+            "Enero, 2025",
+            "TABLA DE CONTENIDO",
+            "ELABORADO POR",
+            "APROBADO POR"
           ],
           "structure": "Reconstruct the approval table and treat the CONFIDENCIAL watermark and repeated footer as layout."
         },
         {
           "pages": "4-28",
           "must_preserve": [
-            "chapters I-XVIII",
-            "articles 1-79",
-            "employment conditions, working time, leave, safety, duties, prohibitions and disciplinary rules",
-            "article 79 sanction table"
+            "CAPÍTULO I",
+            "ARTÍCULO 1",
+            "CAPÍTULO XVIII",
+            "ARTÍCULO 79",
+            "Faltas disciplinarias",
+            "sanciones"
           ],
           "structure": "Preserve chapter/article numbering, ordered lists and the sanction table."
         },
         {
           "pages": "29-36",
           "must_preserve": [
-            "claims",
-            "collective dismissals",
-            "workplace and sexual harassment",
-            "prevention and internal procedure",
-            "disconnection",
-            "remote work",
-            "sexual harassment measures",
-            "reinforced job stability",
-            "validity, publication and final provisions"
+            "RECLAMOS",
+            "DESPIDOS COLECTIVOS",
+            "EL ACOSO LABORAL Y SEXUAL",
+            "procedimiento interno",
+            "desconexión laboral",
+            "MODALIDADES DE TRABAJO A DISTANCIA",
+            "ACOSO SEXUAL",
+            "ESTABILIDAD LABORAL REFORZADA",
+            "VIGENCIA Y PUBLICACIÓN"
           ],
           "structure": "Preserve chapters XIX-XXVI and articles through 105. Literal double asterisks visible in the source must be flagged as source-content anomalies, not silently interpreted as Markdown."
         }
@@ -429,23 +454,27 @@
         {
           "pages": "1",
           "must_preserve": [
-            "company and policy scope",
-            "SG-SST implementation commitments",
-            "hazard identification, risk evaluation and controls",
-            "continuous improvement",
-            "resources",
-            "legal compliance",
-            "annual review",
-            "date and signatory"
+            "outsourcing",
+            "Implementar. y desarrollar el Sistema de Gestión",
+            "Identificar los peligros",
+            "mejora continua",
+            "recursos financieros",
+            "normatividad",
+            "revisada anualmente",
+            "se firma"
           ],
           "structure": "Extract control header fields and signature observation separately."
         },
         {
           "pages": "2",
           "must_preserve": [
-            "elaborated, approved and verified roles/names",
-            "change-control rows for versions 0.0 through 0.6",
-            "dates and descriptions for every revision"
+            "ELABORADO POR",
+            "APROBADO POR",
+            "VERIFICADO POR",
+            "CONTROL DE CAMBIOS",
+            "23/09/2019",
+            "09/12/2022",
+            "Se revisa la política"
           ],
           "structure": "Reconstruct both approval and change-control tables. Resolve the header/row version from visual evidence and flag conflicts."
         }

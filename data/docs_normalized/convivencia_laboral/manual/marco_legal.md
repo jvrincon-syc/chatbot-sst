@@ -1,12 +1,12 @@
 ---
 document_id: doc_65a09a83e5685e3a
-document_type: manual
+document_type: reglamento
 topic: Comite de Convivencia Laboral
-source_file: marco_legal.md
+source_relpath: convivencia_laboral/manual/marco_legal.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 · Resolucion 652 de 2012: “por la cual se establece la conformacion y funcionamiento del Comite de Convivencia Laboral en entidades publicas y empresas privadas y se dictan otras disposiciones.” Modificada por la Resolucion 1356 de 2012

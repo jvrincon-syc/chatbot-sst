@@ -1,12 +1,12 @@
 ---
 document_id: doc_312e0abf441fcf34
-document_type: manual
-topic: COPASST
-source_file: Funciones_Responsabilidades.md
+document_type: programa
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Proponer a la administracion de la empresa o establecimiento de trabajo la adopcion de medidas y el desarrollo de actividades que procuren y mantengan la salud en los lugares y ambientes de trabajo.

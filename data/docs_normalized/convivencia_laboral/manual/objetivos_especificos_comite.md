@@ -1,12 +1,12 @@
 ---
 document_id: doc_ff1fcf5ee88afc3b
 document_type: manual
-topic: Comite de Convivencia Laboral
-source_file: objetivos_especificos_comite.md
+topic: Convivencia laboral
+source_relpath: convivencia_laboral/manual/objetivos_especificos_comite.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 · Promover un ambiente adecuado para la convivencia, el orden y el bienestar laboral dentro de la empresa.

@@ -1,12 +1,12 @@
 ---
 document_id: doc_33db5a236b33527d
 document_type: manual
-topic: COPASST
-source_file: Aspectos_juridicos_laborales.md
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 Se cuenta con un Comite Paritario de Seguridad y salud en el trabajo (COPASST), dando cumplimiento a la resolucion 2013 de 1986 y el Decreto 1295 de 1994.

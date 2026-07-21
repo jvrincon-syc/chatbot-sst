@@ -1,12 +1,12 @@
 ---
 document_id: doc_4c525cef1e737235
 document_type: politica
-topic: Seguridad vial
-source_file: seguridad_vial_info.md
+topic: Politica de seguridad
+source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 POLITICA DE SEGURIDAD VIAL

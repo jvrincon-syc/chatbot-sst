@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 from pypdf import PdfReader
 
+from ingestion.config.env import load_secrets_env
 from ingestion.ocr.doctor import check_ocr_environment
 from ingestion.pipeline import run_pipeline
 from ingestion.validation.golden import load_golden, validate_pdf_corpus
@@ -37,6 +38,7 @@ def test_audited_pdf_sources_are_exactly_nine_documents_and_77_pages() -> None:
 def test_audited_pdf_candidate_passes_structural_and_semantic_gates(
     tmp_path: Path,
 ) -> None:
+    load_secrets_env(Path("secrets.env"))
     capabilities = check_ocr_environment()
     required_ocr = (
         capabilities.ocrmypdf_available

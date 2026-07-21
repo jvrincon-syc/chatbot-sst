@@ -1,12 +1,12 @@
 ---
 document_id: doc_89b7978304549ddd
-document_type: informacion_general
-topic: SST
-source_file: introduccion.md
+document_type: politica
+topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+source_relpath: general_sst/manuales/introduccion.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 SISTEMAS Y COMPUTADORES S.A., en cumplimiento de la Ley 1562 de 2012, el Decreto 1072 de 2015, la Resolucion 0312 de 2019 y demas normatividad vigente en materia de riesgos laborales, ha estructurado su Sistema de Gestion de la Seguridad y Salud en el Trabajo (SG-SST). Este sistema busca consolidar una accion conjunta entre la empresa y sus trabajadores para mejorar continuamente las condiciones de trabajo, el ambiente laboral y controlar eficazmente los peligros y riesgos presentes en los lugares de trabajo.

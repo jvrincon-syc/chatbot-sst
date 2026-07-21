@@ -1,12 +1,12 @@
 ---
 document_id: doc_d9b80cd19e111195
-document_type: manual
+document_type: procedimiento
 topic: Auditoria
-source_file: auditoria_info.md
+source_relpath: general_sst/manuales/auditoria/auditoria_info.md
 extraction_method: markdown
 page_count: 1
-corpus_version: 1
-pipeline_version: 1.0.0
+corpus_version: phase1-main
+pipeline_version: 2.0.0
 ---
 
 AUDITORIA INTERNA
