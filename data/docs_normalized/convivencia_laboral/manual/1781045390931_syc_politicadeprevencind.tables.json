@@ -106,7 +106,7 @@
           "column_span": 1,
           "row_index": 0,
           "row_span": 1,
-          "text": "CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02",
+          "text": "[CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02",
           "warnings": []
         },
         {
@@ -121,10 +121,10 @@
       ],
       "extractor": "ocr_text",
       "headers": [
-        "CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02",
+        "[CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02",
         "”"
       ],
-      "markdown_representation": "| CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02 | ” |\n| --- | --- |",
+      "markdown_representation": "| [CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02 | ” |\n| --- | --- |",
       "page_number": 1,
       "quality": {
         "engine": null,
@@ -139,7 +139,7 @@
       },
       "rows": [
         [
-          "CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02",
+          "[CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02",
           "”"
         ]
       ],
@@ -156,7 +156,7 @@
           "column_span": 1,
           "row_index": 0,
           "row_span": 1,
-          "text": "earn era",
+          "text": "uoaremene er",
           "warnings": []
         },
         {
@@ -171,10 +171,10 @@
       ],
       "extractor": "ocr_text",
       "headers": [
-        "earn era",
+        "uoaremene er",
         ":"
       ],
-      "markdown_representation": "| earn era | : |\n| --- | --- |",
+      "markdown_representation": "| uoaremene er | : |\n| --- | --- |",
       "page_number": 1,
       "quality": {
         "engine": null,
@@ -189,7 +189,7 @@
       },
       "rows": [
         [
-          "earn era",
+          "uoaremene er",
           ":"
         ]
       ],

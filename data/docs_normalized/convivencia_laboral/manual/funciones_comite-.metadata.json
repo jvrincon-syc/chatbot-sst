@@ -99,9 +99,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/funciones_comite-.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\funciones_comite-.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/funciones_comite-.md",
   "ocr_confidence": {
     "engine": null,
@@ -116,11 +117,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:58.926409-05:00",
+  "processed_at": "2026-07-22T11:46:14.709576-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "2b5341a606ee9e9831d4a8276622a50776cf674bf2bf7106f13c1085329ef93f",
+  "source_hash": "5347469365674a5b836bf1ec993403d275b690cac8239ce8f94dd62045aee2e3",
   "source_relpath": "convivencia_laboral/manual/funciones_comite-.md",
   "tables": {
     "engine": null,

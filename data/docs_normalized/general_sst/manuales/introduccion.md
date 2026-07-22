@@ -1,7 +1,7 @@
 ---
 document_id: doc_89b7978304549ddd
 document_type: politica
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: general_sst/manuales/introduccion.md
 extraction_method: markdown
 page_count: 1

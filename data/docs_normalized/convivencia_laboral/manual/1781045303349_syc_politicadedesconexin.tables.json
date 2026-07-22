@@ -104,16 +104,16 @@
           "column_span": 1,
           "row_index": 0,
           "row_span": 1,
-          "text": "NIVEL DE",
+          "text": "NIVEL DE.",
           "warnings": []
         }
       ],
       "extractor": "ocr_text",
       "headers": [
         "$SA",
-        "NIVEL DE"
+        "NIVEL DE."
       ],
-      "markdown_representation": "| $SA | NIVEL DE |\n| --- | --- |",
+      "markdown_representation": "| $SA | NIVEL DE. |\n| --- | --- |",
       "page_number": 1,
       "quality": {
         "engine": null,
@@ -129,7 +129,7 @@
       "rows": [
         [
           "$SA",
-          "NIVEL DE"
+          "NIVEL DE."
         ]
       ],
       "table_id": "page_1_table_2",

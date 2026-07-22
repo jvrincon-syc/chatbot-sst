@@ -1,7 +1,7 @@
 ---
 document_id: doc_18e1e8a89146e6fc
 document_type: formulario
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md
 extraction_method: markdown
 page_count: 1

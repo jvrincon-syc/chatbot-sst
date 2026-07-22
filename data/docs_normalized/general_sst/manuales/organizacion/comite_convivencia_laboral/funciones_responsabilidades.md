@@ -1,7 +1,7 @@
 ---
 document_id: doc_4815e73a2a6125e3
 document_type: informacion_general
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md
 extraction_method: markdown
 page_count: 1

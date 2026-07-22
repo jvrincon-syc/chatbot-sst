@@ -100,9 +100,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/objetivos_especificos_comite.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\objetivos_especificos_comite.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/objetivos_especificos_comite.md",
   "ocr_confidence": {
     "engine": null,
@@ -117,11 +118,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:59.018930-05:00",
+  "processed_at": "2026-07-22T11:46:15.234117-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "af2500d638fb4321b281a85abe6a2a0c66413dbf73781d128fcd2c2394a16dd3",
+  "source_hash": "471ad164c813cc3ce375bce2c51460df121ceb39a469a2bcb8c433c6a569bb6a",
   "source_relpath": "convivencia_laboral/manual/objetivos_especificos_comite.md",
   "tables": {
     "engine": null,

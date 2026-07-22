@@ -72,6 +72,17 @@ Los manifiestos de inventario, corrida, validacion, errores y revision viven en
   narrativas dentro del cuerpo.
 - Una capacidad desconocida queda `not_evaluated`.
 - La confianza OCR solo es `measured` con motor, version, unidad y muestra.
+- El inventario normalizado expone `ocr_confidence` por documento cuando existe
+  en metadata/OCR; la GUI lo muestra como porcentaje o `N/A`.
+- El umbral minimo de confianza OCR para revision es configurable desde la GUI y
+  por CLI con `--ocr-review-threshold`; el valor por defecto es `0.80`.
+- Un PDF procesado por LlamaParse sin dato de confianza OCR queda
+  `needs_review` con razon `ocr_confidence_unavailable`.
+- La metadata de Llama Cloud se persiste en `.metadata.json` bajo
+  `llama_cloud`, incluyendo job id, hash de configuracion, `page_metadata` y
+  `job_metadata`. La confianza de LlamaParse se registra como `estimated` con
+  `method=llamaparse_page_parse_confidence`; no equivale a confianza OCR por
+  palabra.
 - Un warning material obliga `needs_review`.
 - No se insertan frases artificiales en Markdown para satisfacer el golden.
 

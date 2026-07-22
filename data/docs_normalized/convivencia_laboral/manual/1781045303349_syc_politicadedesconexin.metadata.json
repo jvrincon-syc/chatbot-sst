@@ -1,9 +1,7 @@
 {
   "classification": {
-    "conflict_status": "conflicting",
-    "conflicts": [
-      "type_title_control=politica;type_route=manual"
-    ],
+    "conflict_status": "none",
+    "conflicts": [],
     "content_prediction": "formulario",
     "document_type": "politica",
     "document_type_confidence": {
@@ -25,9 +23,9 @@
       "Convivencia laboral:desconexion laboral:title_control",
       "Convivencia laboral:convivencia laboral:content",
       "Convivencia laboral:convivencia laboral:route",
-      "Desconexion laboral:desconexion laboral:title_control"
+      "Desconexión laboral:desconexion laboral:title_control"
     ],
-    "subtopic": "Desconexion laboral",
+    "subtopic": "Desconexión laboral",
     "topic": "Convivencia laboral",
     "topic_confidence": {
       "engine": null,
@@ -53,7 +51,7 @@
           "pattern": null,
           "region": null,
           "source": "ocr",
-          "text": "«CODIGO PL.RH-035ST | CLASIFICACIÓN | USO INTERNO (NC2)",
+          "text": "\"CODIGO PL.RH-035ST | CLASIFICACIÓN | USO INTERNO (NC2)",
           "warnings": []
         }
       ],
@@ -84,13 +82,13 @@
           "pattern": null,
           "region": null,
           "source": "ocr",
-          "text": "POLÍTICA DE DESCONEXIÓN LABORAL",
+          "text": "POLÍTICA DE DESCONEXION LABORAL",
           "warnings": []
         }
       ],
       "status": "extracted",
-      "value": "POLÍTICA DE DESCONEXIÓN LABORAL",
-      "value_raw": "POLÍTICA DE DESCONEXIÓN LABORAL",
+      "value": "POLÍTICA DE DESCONEXION LABORAL",
+      "value_raw": "POLÍTICA DE DESCONEXION LABORAL",
       "warnings": []
     },
     "version": {
@@ -151,31 +149,29 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\1781045303349_syc_politicadedesconexin.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
   "ocr_confidence": {
     "engine": "tesseract",
-    "engine_version": "unknown",
+    "engine_version": "5.4.0.20240606",
     "kind": "estimated",
     "method": "page_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": 0.9482076936986301,
+    "value": 0.9472077394863013,
     "warnings": [
       "ocr_confidence_not_word_measured"
     ]
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:52.654334-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "classification_conflict",
-    "pdf_semantic_review_required"
-  ],
+  "processed_at": "2026-07-22T11:46:10.952537-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
   "source_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
   "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
@@ -200,7 +196,5 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": [
-    "type_title_control=politica;type_route=manual"
-  ]
+  "warnings": []
 }

@@ -101,9 +101,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/capacitaciones/pausas_activas/info.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\capacitaciones\\pausas_activas\\info.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/capacitaciones/pausas_activas/info.md",
   "ocr_confidence": {
     "engine": null,
@@ -118,13 +119,13 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:23.255269-05:00",
+  "processed_at": "2026-07-22T11:46:29.232794-05:00",
   "processing_status": "needs_review",
   "review_reasons": [
     "ambiguous_classification"
   ],
   "schema_version": "2.0",
-  "source_hash": "f105cb2026b8870e9d2d4b4422657af14c8fcc4cb83742c23db01581e8feb796",
+  "source_hash": "f418dd10d03cb4c896f4656dd0ea18d81171bac1cb6e8db463d66ad8c13b0268",
   "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md",
   "tables": {
     "engine": null,

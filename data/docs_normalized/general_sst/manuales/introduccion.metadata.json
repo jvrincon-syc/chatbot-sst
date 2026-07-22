@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "politica:politica:content",
-      "Sistema de Gestion de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+      "Sistema de Gestión de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
     ],
     "subtopic": null,
-    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -98,9 +98,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/introduccion.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\manuales\\introduccion.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/introduccion.md",
   "ocr_confidence": {
     "engine": null,
@@ -115,11 +116,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.301024-05:00",
+  "processed_at": "2026-07-22T11:46:30.436038-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "5bda48ad6630e956ef68bc336ae94934424ed04a119d418f10277cc92b3b9071",
+  "source_hash": "0f0300224d0960ab4ab2e36f3ca26854bd747e96f0bacf0e0e0ff9da2d3fa48e",
   "source_relpath": "general_sst/manuales/introduccion.md",
   "tables": {
     "engine": null,

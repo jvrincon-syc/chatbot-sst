@@ -13,7 +13,7 @@ pipeline_version: 2.0.0
 
 PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO
 POLÍTICA DE PREVENCION DE ACOSO LABORAL
-1
+J
 : NIVEL DE
 CODIGO PL.RH-01SST | CLASIFICACIÓN | USO INTERNO (NC2) | Versión
 Y ETIQUETADO
@@ -23,9 +23,9 @@ Sistemas y Computadores S.A., en cumplimiento de la normatividad vigente
 relacionada con la convivencia laboral, adopta la presente Política de Prevención
 de Acoso Laboral, la cual integra de manera general las acciones orientadas a
 prevenir el acóso laboral, el acoso sexual, la violencia basada en género y todo
-tipo de discriminación dentro de la organización. )
+tipo de discriminación dentro de la organización.
 La empresa promueve ambientes de trabajo dignos, respetuosos, seguros y '
-saludables, en los que se garantice, la armonía, la integridad física y emocional,
+saludables, en los que se garantice,la armonía, la integridad física y emocional,
 la igualdad de trato y el respeto por los derechos de todas las personas qué
 integran SYC. Se prohíben de manera expresa todas las conductas amenazantes,
 intimidantes, abusivas, coercitivas, discriminatorias o que vulneren la dignidad
@@ -34,7 +34,7 @@ Para este fin, se cuenta con el Comité de Convivencia Laboral, encargado de
 " apoyar la prevención, detectar situaciones que afecten la convivencia, recibir
 quejas y dar trámite conforme a los procedimientos establecidos y a la
 normatividad vigente. Toda conducta reportada será investigada con.
-confidencialidad, "imparcialidad y con las medidas disciplinarias que .
+confidencialidad, “imparcialidad y con las medidas disciplinarias que .
 correspondan.
 SYC se compromete a garantizar la igualdad de oportunidades y a proteger a
 todas las personas, sin distinción de religión, ideología, origen étnico o cultural,
@@ -49,7 +49,7 @@ REPRESENTANTE LEGAL
 PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO
 C , 7 POLÍTICA DE PREVENCION DE ACOSO LABORAL ..
 sy Computadores S.A, , NIVEL DE
-| CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02 | ”
+[CODIGO PLaorssT [CLASIRCACIÓN USO INTERNO (NC2) Ver 02 | ”
 Y ETIQUETADO |
 POLITICA DE PREVENCIÓN DE ACOSO LABORAL o
 
@@ -57,26 +57,26 @@ emas y Computadores S.A., en cumplimiento de la normatividad vigente
 icionada con la convivencia laboral, adopta la presente Política de Prevención |
 Acoso Laboral, la cual integra de manera general las acciones orientadas a |
 venir el acóso laboral, el acoso sexual, la violencia basada en género y todo
-) de discriminación dentro de la organización. s
-empresa [promueve ambientes de trabajo dignos, respetuosos, seguros y :*
-IIA LS L SALUD EN EL ¡JRADAJO
+) de discriminación dentro de la organización. y
+empresa promueve ambientes de trabajo dignos, respetuosos, seguros y *
+IU A LS L SALUD EN EL ¡JRADAJO
+7 A
+N DE ACOSO LABORAL : o
+uoaremene er |:
+)
+)S0 LABORAL o
+IV ALS T YAL UL EM EL JRADAJO
 7 A
 N DE ACOSO LABORAL : _
-earn era |:
-»]
-350 LABORAL o
-JULI ALS T YALULD EN EL JRADAJO
-7 A
-N DE ACOSO LABORAL " a
-[uoaranenes pura
+uoaranene pura
 »
-)S0 LABORAL o
+)SO LABORAL o
+7 A
+ACOSO LABORAL : o
+¿0 INTERNO (NC2) Verón [02 7
 7 A
 ACOSO LABORAL : _
-0 INTERNO (NC2) Veson [02 ”
-7 A
-ACOSO LABORAL " a
-0 INTERNO (NC2) Versión [02 ”
-€ AN Ma Y a Dd MD PUNA -
-0 INTERNO (NC2) e Jus ”
-LABORAL o
+¡0 INTERNO (NC2) Versión [02 ”
+€ AN Ya Y Ma - Dd MD PAS e .
+0 INTERNO (NC2) Ne Js ”
+LABORAL ÓN

@@ -25,6 +25,12 @@ def main() -> int:
     parser.add_argument("--corpus-version", default="1")
     parser.add_argument("--pipeline-version", default="1.0.0")
     parser.add_argument("--run-id", default=None)
+    parser.add_argument(
+        "--ocr-review-threshold",
+        type=float,
+        default=0.80,
+        help="Minimum OCR confidence ratio required before marking a PDF for review.",
+    )
     args = parser.parse_args()
 
     summary = run_pipeline(
@@ -37,6 +43,7 @@ def main() -> int:
         corpus_version=args.corpus_version,
         pipeline_version=args.pipeline_version,
         run_id=args.run_id,
+        ocr_review_threshold=args.ocr_review_threshold,
         golden_status=args.golden_status,
     )
     print(summary)

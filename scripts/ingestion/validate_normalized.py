@@ -33,20 +33,19 @@ def main() -> int:
         "--golden",
         type=Path,
         default=None,
-        help="Optional semantic corpus expectation JSON; requires --raw-root.",
+        help=(
+            "Deprecated and ignored by validate stage. "
+            "Run corpus golden tests separately when auditing fixed fixtures."
+        ),
     )
     parser.add_argument("--run-id", default="manual")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
 
-    if args.golden is not None and args.raw_root is None:
-        parser.error("--golden requires --raw-root")
-
     report = validate_normalized_tree(
         args.docs_normalized,
         raw_root=args.raw_root,
         mode=args.mode,
-        golden_path=args.golden,
         run_id=args.run_id,
     )
     output = args.output or args.docs_normalized / "_manifests" / f"validation_{args.run_id}.json"

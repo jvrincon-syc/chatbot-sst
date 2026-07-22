@@ -19,10 +19,10 @@
     "signals": [
       "reglamento:reglamento:content",
       "reglamento:reglamento:route",
-      "Comite de Convivencia Laboral:comite de convivencia:content"
+      "Comité de Convivencia Laboral:comite de convivencia:content"
     ],
     "subtopic": null,
-    "topic": "Comite de Convivencia Laboral",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -99,9 +99,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/reglamento_comite/objetivo_comite.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\reglamento_comite\\objetivo_comite.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.md",
   "ocr_confidence": {
     "engine": null,
@@ -116,7 +117,7 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.799964-05:00",
+  "processed_at": "2026-07-22T11:46:17.898796-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",

@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-import cgi
 import json
 import shutil
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+from email import policy
+from email.parser import BytesParser
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from io import BytesIO
 from pathlib import Path
-from typing import Any
+from typing import Any, BinaryIO
 from urllib.parse import unquote, urlparse
 
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
@@ -18,9 +20,11 @@ from ingestion.gui.review_store import (
     load_review_decisions,
     save_review_decision,
 )
-from ingestion.manifests.writer import dump_json
+from ingestion.manifests.writer import dump_json, write_text_atomic
+from ingestion.pipeline import DEFAULT_OCR_REVIEW_THRESHOLD
 from ingestion.paths import canonical_relpath
 from ingestion.pipeline import run_pipeline
+from ingestion.promotion import PromotionError, promote_candidate
 from ingestion.validation.normalized import validate_normalized_tree
 
 
@@ -29,8 +33,21 @@ DOCS_RAW = ROOT / "data" / "docs_raw"
 DOCS_NORMALIZED = ROOT / "data" / "docs_normalized"
 MANIFESTS_DIR = DOCS_NORMALIZED / "_manifests"
 REVIEW_DECISIONS_PATH = MANIFESTS_DIR / "review_decisions.json"
-GOLDEN_PATH = ROOT / "docs" / "ingestion" / "pdf_corpus_expected.json"
+GUI_SETTINGS_PATH = MANIFESTS_DIR / "gui_settings.json"
 ALLOWED_UPLOAD_SUFFIXES = {".pdf", ".md", ".markdown"}
+
+
+@dataclass
+class UploadedFormFile:
+    filename: str
+    file: BytesIO
+
+
+@dataclass(frozen=True)
+class ValidationTarget:
+    name: str
+    normalized_root: Path
+    manifests_dir: Path
 
 
 def _now() -> str:
@@ -109,6 +126,8 @@ def build_status_payload() -> dict[str, Any]:
                 "reviewReasons": review_item.get("reasons", []),
                 "reviewDetails": review_item.get("details", []),
                 "decision": asdict(decision) if decision else None,
+                **_ingestion_details_for_record(record),
+                **_document_ocr_confidence_for_record(record),
             }
         )
 
@@ -141,6 +160,7 @@ def build_status_payload() -> dict[str, Any]:
     return {
         "summary": summary,
         "llamaFirst": _llama_first_status_payload(),
+        "settings": _gui_settings_payload(),
         "documents": documents,
         "needsReview": pending_review,
         "errors": error_items,
@@ -150,6 +170,7 @@ def build_status_payload() -> dict[str, Any]:
             "needsReview": "data/docs_normalized/_manifests/needs_review.json",
             "errors": "data/docs_normalized/_manifests/errors.json",
             "reviewDecisions": "data/docs_normalized/_manifests/review_decisions.json",
+            "guiSettings": "data/docs_normalized/_manifests/gui_settings.json",
         },
     }
 
@@ -207,8 +228,14 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         if path == "/api/pipeline/run":
             self._handle_pipeline_run()
             return
+        if path == "/api/settings":
+            self._handle_settings()
+            return
         if path == "/api/validate":
             self._handle_validate()
+            return
+        if path == "/api/promote":
+            self._handle_promote()
             return
         self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
 
@@ -217,19 +244,20 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         if not content_type.startswith("multipart/form-data"):
             self._send_error(HTTPStatus.BAD_REQUEST, "multipart/form-data required")
             return
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={
-                "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": content_type,
-                "CONTENT_LENGTH": self.headers.get("Content-Length", "0"),
-            },
+        form = _parse_multipart_form(
+            content_type=content_type,
+            content_length=self.headers.get("Content-Length", "0"),
+            body=self.rfile,
         )
         category = _field_value(form, "category")
         folder = _field_value(form, "folder")
-        upload = form["file"] if "file" in form else None
-        if not category or not folder or upload is None or not upload.filename:
+        upload = form.get("file")
+        if (
+            not category
+            or not folder
+            or not isinstance(upload, UploadedFormFile)
+            or not upload.filename
+        ):
             self._send_error(HTTPStatus.BAD_REQUEST, "category, folder and file are required")
             return
 
@@ -301,6 +329,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             return
         try:
             llama_settings = _llama_settings_for_pipeline_run(body)
+            pipeline_options = _pipeline_run_options_from_body(body)
         except ValueError as exc:
             self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
             return
@@ -317,6 +346,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                 corpus_version="phase1-main",
                 pipeline_version="2.0.0",
                 run_id=run_id,
+                ocr_review_threshold=pipeline_options["ocr_review_threshold"],
                 llama_settings_override=llama_settings,
             )
         except Exception as exc:
@@ -332,29 +362,91 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         )
 
     def _handle_validate(self) -> None:
+        try:
+            body = self._read_json_body(required=False)
+            target = _validation_target_from_body(body)
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
+            return
         run_id = "gui_validation_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
         try:
-            report = validate_normalized_tree(
+            report, output = _write_validation_report(target, run_id)
+        except Exception as exc:
+            self._send_error(HTTPStatus.INTERNAL_SERVER_ERROR, str(exc))
+            return
+        payload = {
+            "ok": report.status == "passed",
+            "status": report.status,
+            "errors": report.errors,
+            "runId": run_id,
+            "path": output.relative_to(ROOT).as_posix(),
+            "target": target.name,
+        }
+        if target.name == "staging":
+            payload["stagingRoot"] = target.normalized_root.relative_to(ROOT).as_posix()
+        self._send_json(payload)
+
+    def _handle_promote(self) -> None:
+        try:
+            body = self._read_json_body()
+            target = _staging_target_from_body(body)
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
+            return
+        run_id = "gui_promotion_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
+        try:
+            report, output = _write_validation_report(target, run_id)
+            if report.status != "passed":
+                self._send_json(
+                    {
+                        "ok": False,
+                        "status": report.status,
+                        "errors": report.errors,
+                        "runId": run_id,
+                        "path": output.relative_to(ROOT).as_posix(),
+                        "target": target.name,
+                    },
+                    status=HTTPStatus.CONFLICT,
+                )
+                return
+            promote_candidate(
+                target.normalized_root,
                 DOCS_NORMALIZED,
-                raw_root=DOCS_RAW,
-                mode="closure",
-                golden_path=GOLDEN_PATH if GOLDEN_PATH.exists() else None,
-                run_id=run_id,
+                {
+                    "structural_status": report.status,
+                    "run_id": run_id,
+                    "validation_path": output.relative_to(ROOT).as_posix(),
+                },
             )
-            output = MANIFESTS_DIR / f"validation_{run_id}.json"
-            dump_json(output, report)
+        except PromotionError as exc:
+            self._send_error(HTTPStatus.CONFLICT, str(exc))
+            return
         except Exception as exc:
             self._send_error(HTTPStatus.INTERNAL_SERVER_ERROR, str(exc))
             return
         self._send_json(
             {
-                "ok": report.status == "passed",
-                "status": report.status,
+                "ok": True,
+                "status": "promoted",
                 "errors": report.errors,
                 "runId": run_id,
-                "path": output.relative_to(ROOT).as_posix(),
+                "path": DOCS_NORMALIZED.relative_to(ROOT).as_posix(),
+                "sourceStagingRoot": target.normalized_root.relative_to(ROOT).as_posix(),
+                "validationPath": (DOCS_NORMALIZED / "_manifests" / output.name)
+                .relative_to(ROOT)
+                .as_posix(),
+                "target": "official",
             }
         )
+
+    def _handle_settings(self) -> None:
+        try:
+            body = self._read_json_body()
+            settings = _save_gui_settings(body)
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
+            return
+        self._send_json({"ok": True, "settings": settings, "status": build_status_payload()})
 
     def _read_json_body(self, *, required: bool = True) -> dict[str, Any]:
         length = int(self.headers.get("Content-Length", "0"))
@@ -392,12 +484,45 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         print(f"[{timestamp}] {self.address_string()} {format % args}")
 
 
-def _field_value(form: cgi.FieldStorage, name: str) -> str:
-    field = form[name] if name in form else None
-    if field is None or isinstance(field, list):
+def _parse_multipart_form(
+    *,
+    content_type: str,
+    content_length: str,
+    body: BinaryIO,
+) -> dict[str, str | UploadedFormFile]:
+    try:
+        length = int(content_length or "0")
+    except ValueError:
+        length = 0
+    raw_body = body.read(max(length, 0))
+    message = BytesParser(policy=policy.default).parsebytes(
+        b"Content-Type: "
+        + content_type.encode("utf-8")
+        + b"\r\nMIME-Version: 1.0\r\n\r\n"
+        + raw_body
+    )
+    form: dict[str, str | UploadedFormFile] = {}
+    for part in message.iter_parts():
+        if part.get_content_disposition() != "form-data":
+            continue
+        name = part.get_param("name", header="content-disposition")
+        if not name:
+            continue
+        payload = part.get_payload(decode=True) or b""
+        filename = part.get_filename()
+        if filename is not None:
+            form[name] = UploadedFormFile(filename=filename, file=BytesIO(payload))
+            continue
+        charset = part.get_content_charset() or "utf-8"
+        form[name] = payload.decode(charset, errors="replace")
+    return form
+
+
+def _field_value(form: dict[str, str | UploadedFormFile], name: str) -> str:
+    field = form.get(name)
+    if not isinstance(field, str):
         return ""
-    value = field.value
-    return value.strip() if isinstance(value, str) else ""
+    return field.strip()
 
 
 def _find_document(document_id: str) -> dict[str, Any] | None:
@@ -405,6 +530,247 @@ def _find_document(document_id: str) -> dict[str, Any] | None:
         if document["documentId"] == document_id:
             return document
     return None
+
+
+def _gui_settings_payload(
+    *,
+    settings_path: Path = GUI_SETTINGS_PATH,
+) -> dict[str, float]:
+    payload = _read_json(settings_path, {})
+    threshold = DEFAULT_OCR_REVIEW_THRESHOLD
+    if isinstance(payload, dict):
+        raw_threshold = payload.get("ocr_review_threshold")
+        if isinstance(raw_threshold, (int, float)) and not isinstance(raw_threshold, bool):
+            threshold = float(raw_threshold)
+    threshold = _validate_threshold_ratio(threshold)
+    return {
+        "ocrReviewThreshold": threshold,
+        "ocrReviewThresholdPercent": round(threshold * 100, 1),
+    }
+
+
+def _save_gui_settings(
+    body: dict[str, Any],
+    *,
+    settings_path: Path = GUI_SETTINGS_PATH,
+) -> dict[str, float]:
+    if not isinstance(body, dict):
+        raise ValueError("settings body must be an object")
+    threshold = _threshold_ratio_from_body(body)
+    payload = {
+        "ocr_review_threshold": threshold,
+        "updated_at": _now(),
+    }
+    write_text_atomic(
+        settings_path,
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+    )
+    return _gui_settings_payload(settings_path=settings_path)
+
+
+def _pipeline_run_options_from_body(
+    body: dict[str, Any],
+    *,
+    settings_path: Path = GUI_SETTINGS_PATH,
+) -> dict[str, float]:
+    if "ocrReviewThresholdPercent" in body or "ocrReviewThreshold" in body:
+        threshold = _threshold_ratio_from_body(body)
+    else:
+        threshold = _gui_settings_payload(settings_path=settings_path)[
+            "ocrReviewThreshold"
+        ]
+    return {"ocr_review_threshold": threshold}
+
+
+def _threshold_ratio_from_body(body: dict[str, Any]) -> float:
+    if "ocrReviewThresholdPercent" in body:
+        raw = body["ocrReviewThresholdPercent"]
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            raise ValueError("ocrReviewThresholdPercent must be numeric")
+        return _validate_threshold_ratio(float(raw) / 100)
+    if "ocrReviewThreshold" in body:
+        raw = body["ocrReviewThreshold"]
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            raise ValueError("ocrReviewThreshold must be numeric")
+        return _validate_threshold_ratio(float(raw))
+    raise ValueError("ocrReviewThresholdPercent is required")
+
+
+def _validate_threshold_ratio(value: float) -> float:
+    if value < 0 or value > 1:
+        raise ValueError("OCR review threshold must be between 0 and 100 percent")
+    return value
+
+
+def _document_ocr_confidence_for_record(
+    record: dict[str, Any],
+    *,
+    normalized_root: Path = DOCS_NORMALIZED,
+) -> dict[str, Any]:
+    metric = _ocr_confidence_metric_for_record(record, normalized_root=normalized_root)
+    kind = str(metric.get("kind", "unavailable") or "unavailable")
+    value = metric.get("value")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return {
+            "ocrConfidenceKind": kind,
+            "ocrConfidenceValue": None,
+            "ocrConfidencePercent": None,
+            "ocrConfidenceLabel": "N/A",
+        }
+    percent = round(float(value) * 100, 1)
+    return {
+        "ocrConfidenceKind": kind,
+        "ocrConfidenceValue": float(value),
+        "ocrConfidencePercent": percent,
+        "ocrConfidenceLabel": f"{percent:.1f}%",
+    }
+
+
+def _ocr_confidence_metric_for_record(
+    record: dict[str, Any],
+    *,
+    normalized_root: Path,
+) -> dict[str, Any]:
+    inventory_metric = record.get("ocr_confidence")
+    if isinstance(inventory_metric, dict):
+        return inventory_metric
+
+    source_relpath = str(record.get("source_relpath", "") or "")
+    if not source_relpath:
+        return {"kind": "unavailable", "value": None}
+    base_path = normalized_root / Path(source_relpath)
+
+    metadata = _read_json(base_path.with_suffix(".metadata.json"), {})
+    if isinstance(metadata, dict) and isinstance(metadata.get("ocr_confidence"), dict):
+        return metadata["ocr_confidence"]
+
+    ocr = _read_json(base_path.with_suffix(".ocr.json"), {})
+    if isinstance(ocr, dict):
+        document_confidence = ocr.get("document_confidence")
+        if isinstance(document_confidence, dict):
+            return document_confidence
+        page_values = [
+            page.get("confidence", {}).get("value")
+            for page in ocr.get("pages", [])
+            if isinstance(page, dict) and isinstance(page.get("confidence"), dict)
+        ]
+        measured_values = [
+            float(value)
+            for value in page_values
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        ]
+        if measured_values:
+            return {
+                "kind": "estimated",
+                "value": sum(measured_values) / len(measured_values),
+                "method": "page_confidence_average",
+            }
+
+    return {"kind": "unavailable", "value": None}
+
+
+def _ingestion_details_for_record(
+    record: dict[str, Any],
+    *,
+    normalized_root: Path = DOCS_NORMALIZED,
+) -> dict[str, str]:
+    source_relpath = str(record.get("source_relpath", "") or "")
+    metadata = _read_json(
+        (normalized_root / Path(source_relpath)).with_suffix(".metadata.json"),
+        {},
+    )
+    method = (
+        str(metadata.get("extraction_method", "") or "")
+        if isinstance(metadata, dict)
+        else ""
+    )
+    if method == "llamaparse":
+        return _ingestion_details(
+            provider="llama_cloud",
+            provider_label="LlamaCloud",
+            method=method,
+            method_label="LlamaParse",
+        )
+    if method == "hybrid_llamaparse":
+        return _ingestion_details(
+            provider="llama_cloud",
+            provider_label="LlamaCloud",
+            method=method,
+            method_label="LlamaParse + OCR local",
+        )
+    local_labels = {
+        "markdown": "Markdown local",
+        "pdf_digital": "PDF digital local",
+        "ocr": "OCR Tesseract local",
+        "hybrid": "PDF digital + OCR regional",
+    }
+    if method in local_labels:
+        return _ingestion_details(
+            provider="local",
+            provider_label="Local",
+            method=method,
+            method_label=local_labels[method],
+        )
+    return _ingestion_details(
+        provider="unregistered",
+        provider_label="Sin ingesta",
+        method=method or "unregistered",
+        method_label="Sin metadata normalizada",
+    )
+
+
+def _ingestion_details(
+    *,
+    provider: str,
+    provider_label: str,
+    method: str,
+    method_label: str,
+) -> dict[str, str]:
+    return {
+        "ingestionProvider": provider,
+        "ingestionProviderLabel": provider_label,
+        "ingestionMethod": method,
+        "ingestionMethodLabel": method_label,
+    }
+
+
+def _validation_target_from_body(body: dict[str, Any]) -> ValidationTarget:
+    staging_root = body.get("stagingRoot")
+    if staging_root is None or str(staging_root).strip() == "":
+        return ValidationTarget(
+            name="official",
+            normalized_root=DOCS_NORMALIZED,
+            manifests_dir=MANIFESTS_DIR,
+        )
+    candidate = (ROOT / str(staging_root)).resolve()
+    tmp_root = (ROOT / ".tmp").resolve()
+    if not candidate.is_relative_to(tmp_root):
+        raise ValueError("stagingRoot must stay under .tmp")
+    return ValidationTarget(
+        name="staging",
+        normalized_root=candidate,
+        manifests_dir=candidate / "_manifests",
+    )
+
+
+def _staging_target_from_body(body: dict[str, Any]) -> ValidationTarget:
+    target = _validation_target_from_body(body)
+    if target.name != "staging":
+        raise ValueError("stagingRoot is required")
+    return target
+
+
+def _write_validation_report(target: ValidationTarget, run_id: str):
+    report = validate_normalized_tree(
+        target.normalized_root,
+        raw_root=DOCS_RAW,
+        mode="closure",
+        run_id=run_id,
+    )
+    target.manifests_dir.mkdir(parents=True, exist_ok=True)
+    output = target.manifests_dir / f"validation_{run_id}.json"
+    dump_json(output, report)
+    return report, output
 
 
 def _llama_settings_for_pipeline_run(body: dict[str, Any]) -> LlamaSettings:
@@ -423,6 +789,7 @@ def _llama_settings_for_pipeline_run(body: dict[str, Any]) -> LlamaSettings:
     data = settings.model_dump()
     data["api_key"] = settings.api_key.get_secret_value() if settings.api_key else None
     data["cloud_enabled"] = provider_mode == "llama_cloud"
+    data["local_fallback_enabled"] = provider_mode != "llama_cloud"
 
     llama_cloud = body.get("llamaCloud", {})
     if llama_cloud is None:

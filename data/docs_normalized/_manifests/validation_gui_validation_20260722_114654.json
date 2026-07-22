@@ -79,36 +79,11 @@
       "check": "closure_required_artifacts",
       "details": [],
       "status": "passed"
-    },
-    {
-      "check": "golden_bijection",
-      "details": [],
-      "status": "passed"
-    },
-    {
-      "check": "golden_metadata",
-      "details": [],
-      "status": "passed"
-    },
-    {
-      "check": "golden_pages",
-      "details": [],
-      "status": "passed"
-    },
-    {
-      "check": "golden_content",
-      "details": [],
-      "status": "passed"
-    },
-    {
-      "check": "golden_page_total",
-      "details": [],
-      "status": "passed"
     }
   ],
   "documents_checked": 55,
   "errors": 0,
-  "run_id": "phase1_official_20260720_gate",
+  "run_id": "gui_validation_20260722_114654",
   "schema_version": "2.0",
   "status": "passed",
   "warnings": 0

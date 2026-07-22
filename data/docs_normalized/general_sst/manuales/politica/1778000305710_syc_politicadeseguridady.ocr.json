@@ -1,32 +1,32 @@
 {
   "document_confidence": {
     "engine": "tesseract",
-    "engine_version": "unknown",
+    "engine_version": "5.4.0.20240606",
     "kind": "estimated",
     "method": "page_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": 0.8292925021140631,
+    "value": 0.8300184133412263,
     "warnings": [
       "ocr_confidence_not_word_measured"
     ]
   },
   "document_id": "doc_f38f9f98d854feed",
   "engine": "tesseract",
-  "engine_version": "unknown",
+  "engine_version": "5.4.0.20240606",
   "language": "spa",
   "pages": [
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "estimated",
         "method": "engine_page_confidence",
         "provenance": null,
         "sample_size": null,
         "unit": null,
-        "value": 0.8483355127027027,
+        "value": 0.8875306883954155,
         "warnings": [
           "ocr_confidence_not_word_measured"
         ]
@@ -63,19 +63,19 @@
         "warnings": []
       },
       "warnings": [],
-      "word_count": 576,
+      "word_count": 562,
       "words": []
     },
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "estimated",
         "method": "engine_page_confidence",
         "provenance": null,
         "sample_size": null,
         "unit": null,
-        "value": 0.8102494915254237,
+        "value": 0.7725061382870371,
         "warnings": [
           "ocr_confidence_not_word_measured"
         ]
@@ -112,7 +112,7 @@
         "warnings": []
       },
       "warnings": [],
-      "word_count": 334,
+      "word_count": 315,
       "words": []
     }
   ],

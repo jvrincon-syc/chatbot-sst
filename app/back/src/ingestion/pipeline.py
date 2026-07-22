@@ -62,6 +62,8 @@ _MATERIAL_PAGE_WARNINGS = {
     "table_detected_not_reconstructed",
     "form_detected_not_reconstructed",
 }
+DEFAULT_OCR_REVIEW_THRESHOLD = 0.80
+_LLAMA_PARSE_METHODS = {"llamaparse", "hybrid_llamaparse"}
 
 
 def _now() -> str:
@@ -167,6 +169,7 @@ def _build_metadata(
     corpus_version: str,
     pipeline_version: str,
     classification_review_threshold: float,
+    ocr_review_threshold: float,
 ) -> MetadataArtifact:
     document_control = _reconcile_llama_document_control(
         extract_document_control(result.pages, record.document_name),
@@ -176,9 +179,7 @@ def _build_metadata(
         classify_document(record.source_relpath, result.pages, document_control),
         result.llama_understanding,
     )
-    ocr_confidence = (
-        result.ocr.document_confidence if result.ocr is not None else ConfidenceMetric(kind="unavailable", value=None)
-    )
+    ocr_confidence = _document_ocr_confidence_from_result(result)
     handwriting = _handwriting_observation(result, record=record, source_path=source_path)
     tables = (
         Observation(
@@ -211,15 +212,23 @@ def _build_metadata(
         for page in result.pages
         for warning in page.warnings
     ]
+    ocr_review_reasons = _ocr_confidence_review_reasons(
+        record=record,
+        result=result,
+        ocr_confidence=ocr_confidence,
+        ocr_review_threshold=ocr_review_threshold,
+    )
     warnings = _unique(
         list(result.warnings)
         + page_warnings
+        + ocr_review_reasons
         + document_control.warnings
         + classification.warnings
         + classification.conflicts
     )
     review_reasons = _unique(
         list(result.review_reasons)
+        + ocr_review_reasons
         + [
             warning
             for warning in page_warnings
@@ -255,6 +264,7 @@ def _build_metadata(
         handwriting=handwriting,
         tables=tables,
         forms=forms,
+        llama_cloud=result.llama_cloud_metadata,
         source_hash=record.content_hash,
         corpus_version=corpus_version,
         pipeline_version=pipeline_version,
@@ -390,6 +400,42 @@ def _llama_extract_review_reasons(understanding: LlamaUnderstanding | None) -> l
     ]
 
 
+def _ocr_confidence_review_reasons(
+    *,
+    record: InventoryRecord,
+    result: ReadResult,
+    ocr_confidence: ConfidenceMetric,
+    ocr_review_threshold: float,
+) -> list[str]:
+    if record.detected_extension != ".pdf":
+        return []
+    if ocr_confidence.value is None:
+        if result.extraction_method in _LLAMA_PARSE_METHODS:
+            return ["ocr_confidence_unavailable"]
+        return []
+    if ocr_confidence.value < ocr_review_threshold:
+        return ["low_ocr_confidence"]
+    return []
+
+
+def _document_ocr_confidence_from_result(result: ReadResult) -> ConfidenceMetric:
+    if result.ocr is not None:
+        return result.ocr.document_confidence
+    page_metrics = [page.ocr_confidence for page in result.pages]
+    values = [
+        metric.value
+        for metric in page_metrics
+        if metric.value is not None
+    ]
+    if not values:
+        return ConfidenceMetric(kind="unavailable", value=None)
+    return ConfidenceMetric(
+        kind="estimated",
+        value=sum(values) / len(values),
+        method="page_ocr_confidence_average",
+    )
+
+
 def _write_success_artifacts(
     *,
     record: InventoryRecord,
@@ -399,6 +445,7 @@ def _write_success_artifacts(
     corpus_version: str,
     pipeline_version: str,
     classification_review_threshold: float,
+    ocr_review_threshold: float,
 ) -> tuple[MetadataArtifact, object]:
     paths = ArtifactPaths.for_source(record.source_relpath)
     normalized_md = docs_normalized / Path(paths.markdown)
@@ -412,6 +459,7 @@ def _write_success_artifacts(
         corpus_version=corpus_version,
         pipeline_version=pipeline_version,
         classification_review_threshold=classification_review_threshold,
+        ocr_review_threshold=ocr_review_threshold,
     )
     pages = PagesArtifact(schema_version="2.0", document_id=record.document_id, page_count=result.page_count, pages=result.pages)
     ocr = result.ocr or OcrArtifact(
@@ -455,6 +503,7 @@ def _write_success_artifacts(
             "pipeline_version": pipeline_version,
             "corpus_version": corpus_version,
             "classification_review_threshold": classification_review_threshold,
+            "ocr_review_threshold": ocr_review_threshold,
         },
         {},
     )
@@ -632,6 +681,7 @@ def _configured_llama_parse_reader(settings=None) -> LlamaParseReader:
         adapter=parse_adapter,
         configuration_hash=parse_config.configuration_hash(),
         orchestrator=orchestrator,
+        async_client=client,
     )
 
 
@@ -753,6 +803,7 @@ def run_pipeline(
     pipeline_version: str = "1.0.0",
     run_id: Optional[str] = None,
     classification_review_threshold: float = 0.60,
+    ocr_review_threshold: float = DEFAULT_OCR_REVIEW_THRESHOLD,
     golden_status: Optional[str] = None,
     llama_settings_override: LlamaSettings | None = None,
 ) -> Dict[str, int]:
@@ -818,9 +869,11 @@ def run_pipeline(
                 corpus_version=corpus_version,
                 pipeline_version=pipeline_version,
                 classification_review_threshold=classification_review_threshold,
+                ocr_review_threshold=ocr_review_threshold,
             )
             bundle_manifests.append(bundle)
             record.processing_status = metadata.processing_status
+            record.ocr_confidence = metadata.ocr_confidence
             if metadata.processing_status == "needs_review":
                 summary["needs_review"] += 1
                 needs_review.append(
@@ -949,10 +1002,8 @@ def run_pipeline(
     validation = validate_normalized_tree(output_root, raw_root=docs_raw, run_id=run_id)
     dump_json(manifests_dir / f"validation_{run_id}.json", validation)
     if promote:
-        if golden_status != "passed":
-            raise PromotionError(
-                "promotion requires an explicit passed golden validation status"
-            )
+        if validation.status != "passed":
+            raise PromotionError("promotion requires structural validation to pass")
         promote_candidate(
             output_root,
             docs_normalized,

@@ -1,7 +1,7 @@
 ---
 document_id: doc_312e0abf441fcf34
 document_type: programa
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md
 extraction_method: markdown
 page_count: 1

@@ -1,9 +1,7 @@
 {
   "classification": {
-    "conflict_status": "conflicting",
-    "conflicts": [
-      "topic_title_control=Politica de seguridad;topic_route=Capacitaciones"
-    ],
+    "conflict_status": "none",
+    "conflicts": [],
     "content_prediction": "programa",
     "document_type": "politica",
     "document_type_confidence": {
@@ -22,12 +20,12 @@
       "politica:politica:title_control",
       "politica:politica:content",
       "politica:politica:route",
-      "Politica de seguridad:politica de seguridad:title_control",
+      "Política de seguridad:politica de seguridad:title_control",
       "Seguridad vial:seguridad vial:title_control",
-      "Politica de seguridad:politica de seguridad:content"
+      "Política de seguridad:politica de seguridad:content"
     ],
     "subtopic": null,
-    "topic": "Politica de seguridad",
+    "topic": "Política de seguridad",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -114,9 +112,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\capacitaciones\\politica_seguridad_trabajo\\seguridad_vial\\seguridad_vial_info.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
   "ocr_confidence": {
     "engine": null,
@@ -131,13 +130,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.190664-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "classification_conflict"
-  ],
+  "processed_at": "2026-07-22T11:46:30.194554-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "9bc55fec5229eb55e5649af2bc6dddba92c382df2ac42cb62e7d0af5f8391944",
+  "source_hash": "802ae5d6fe0d38e96dfff730a4ae050e9e533144a04cbada0b0592907a3f6a70",
   "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
   "tables": {
     "engine": null,
@@ -149,7 +146,6 @@
     "warnings": []
   },
   "warnings": [
-    "missing_title",
-    "topic_title_control=Politica de seguridad;topic_route=Capacitaciones"
+    "missing_title"
   ]
 }

@@ -1,10 +1,7 @@
 {
   "classification": {
-    "conflict_status": "conflicting",
-    "conflicts": [
-      "type_title_control=programa;type_route=capacitacion",
-      "topic_title_control=Pausas activas;topic_route=Capacitaciones"
-    ],
+    "conflict_status": "none",
+    "conflicts": [],
     "content_prediction": "programa",
     "document_type": "programa",
     "document_type_confidence": {
@@ -25,9 +22,9 @@
       "Pausas activas:pausas activas:title_control",
       "Pausas activas:pausas activas:content",
       "Pausas activas:pausas activas:route",
-      "Prevencion de fatiga y desordenes musculoesqueleticos:pausas activas:title_control"
+      "Prevención de fatiga y desórdenes musculoesqueléticos:pausas activas:title_control"
     ],
-    "subtopic": "Prevencion de fatiga y desordenes musculoesqueleticos",
+    "subtopic": "Prevención de fatiga y desórdenes musculoesqueléticos",
     "topic": "Pausas activas",
     "topic_confidence": {
       "engine": null,
@@ -415,29 +412,27 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\capacitaciones\\pausas_activas\\1711493199040_syc_pg-rh-10-sst.program.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
   "ocr_confidence": {
     "engine": "tesseract",
-    "engine_version": "unknown",
+    "engine_version": "5.4.0.20240606",
     "kind": "measured",
     "method": null,
     "provenance": null,
-    "sample_size": 488,
+    "sample_size": 485,
     "unit": "mean_word_confidence",
-    "value": 0.8677450645081967,
+    "value": 0.8693550611958762,
     "warnings": []
   },
   "page_count": 16,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:23.134515-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "classification_conflict",
-    "pdf_semantic_review_required"
-  ],
+  "processed_at": "2026-07-22T11:46:29.028353-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
   "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
   "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
@@ -462,8 +457,5 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": [
-    "type_title_control=programa;type_route=capacitacion",
-    "topic_title_control=Pausas activas;topic_route=Capacitaciones"
-  ]
+  "warnings": []
 }

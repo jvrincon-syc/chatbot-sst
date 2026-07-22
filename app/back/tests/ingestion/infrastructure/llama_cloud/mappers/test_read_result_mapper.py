@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from ingestion.domain.models.parsed_document import ParsedDocument, ParsedPage
+from ingestion.domain.models.parsed_document import (
+    ParsedDocument,
+    ParsedPage,
+    ParsedPageMetadata,
+)
 from ingestion.domain.models.provider import ProviderJobRef
 from ingestion.infrastructure.llama_cloud.mappers.read_result_mapper import parsed_document_to_read_result
 
@@ -29,6 +33,55 @@ def test_parsed_document_maps_to_read_result_with_llamaparse_method() -> None:
     assert result.pages[0].extraction_method == "llamaparse"
     assert result.pages[0].text_normalized == "Texto"
     assert "llama_parse_job:job_123" in result.warnings
+
+
+def test_parsed_document_preserves_llamaparse_metadata_and_page_confidence() -> None:
+    parsed = ParsedDocument(
+        provider_job=ProviderJobRef(
+            provider="llama_cloud",
+            capability="parse",
+            job_id="job_123",
+            status="completed",
+            configuration_hash="sha256:config",
+            created_at=datetime(2026, 7, 21, tzinfo=timezone.utc),
+        ),
+        markdown_pages=[
+            ParsedPage(page_number=1, markdown="Pagina confiable"),
+            ParsedPage(page_number=2, markdown="Pagina para revisar"),
+        ],
+        page_metadata=[
+            ParsedPageMetadata(
+                page_number=1,
+                metadata={
+                    "confidence": 0.94,
+                    "cost_optimized": False,
+                    "triggered_auto_mode": True,
+                },
+            ),
+            ParsedPageMetadata(
+                page_number=2,
+                metadata={"confidence": 0.76, "original_orientation_angle": 90},
+            ),
+        ],
+        job_metadata={"credits": 2, "elapsed_seconds": 5.5},
+    )
+
+    result = parsed_document_to_read_result(parsed)
+
+    assert result.pages[0].ocr_confidence.kind == "estimated"
+    assert result.pages[0].ocr_confidence.value == 0.94
+    assert result.pages[0].ocr_confidence.method == "llamaparse_page_parse_confidence"
+    assert result.pages[0].ocr_confidence.provenance == "job_123"
+    assert "llamaparse_confidence_not_word_ocr_measured" in result.pages[0].ocr_confidence.warnings
+    assert result.pages[1].ocr_confidence.value == 0.76
+    assert result.llama_cloud_metadata is not None
+    assert result.llama_cloud_metadata.parse_job_id == "job_123"
+    assert result.llama_cloud_metadata.parse_configuration_hash == "sha256:config"
+    assert result.llama_cloud_metadata.page_metadata[0]["cost_optimized"] is False
+    assert result.llama_cloud_metadata.job_metadata == {
+        "credits": 2,
+        "elapsed_seconds": 5.5,
+    }
 
 
 def test_parsed_document_maps_markdown_tables_to_tables_artifact() -> None:

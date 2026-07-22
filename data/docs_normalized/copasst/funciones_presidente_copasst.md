@@ -1,7 +1,7 @@
 ---
 document_id: doc_eb34bb480d443513
 document_type: informacion_general
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: copasst/funciones_presidente_copasst.md
 extraction_method: markdown
 page_count: 1

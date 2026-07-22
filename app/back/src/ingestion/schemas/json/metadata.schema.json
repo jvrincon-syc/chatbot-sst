@@ -493,6 +493,59 @@
       "title": "Evidence",
       "type": "object"
     },
+    "LlamaCloudMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "job_metadata": {
+          "additionalProperties": true,
+          "title": "Job Metadata",
+          "type": "object"
+        },
+        "page_metadata": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Page Metadata",
+          "type": "array"
+        },
+        "parse_configuration_hash": {
+          "minLength": 1,
+          "title": "Parse Configuration Hash",
+          "type": "string"
+        },
+        "parse_job_id": {
+          "minLength": 1,
+          "title": "Parse Job Id",
+          "type": "string"
+        },
+        "parse_status": {
+          "enum": [
+            "pending",
+            "running",
+            "completed",
+            "failed",
+            "cancelled"
+          ],
+          "title": "Parse Status",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "parse_job_id",
+        "parse_status",
+        "parse_configuration_hash"
+      ],
+      "title": "LlamaCloudMetadata",
+      "type": "object"
+    },
     "Observation": {
       "additionalProperties": false,
       "properties": {
@@ -663,6 +716,17 @@
       ],
       "default": null,
       "title": "Legacy Source Path"
+    },
+    "llama_cloud": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LlamaCloudMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "normalized_relpath": {
       "title": "Normalized Relpath",

@@ -1,10 +1,7 @@
 {
   "classification": {
-    "conflict_status": "conflicting",
-    "conflicts": [
-      "type_title_control=reglamento;type_route=manual",
-      "topic_title_control=Reglamento interno de trabajo;topic_route=Organizacion"
-    ],
+    "conflict_status": "none",
+    "conflicts": [],
     "content_prediction": "programa",
     "document_type": "reglamento",
     "document_type_confidence": {
@@ -113,9 +110,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/organizacion/organizacion.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\manuales\\organizacion\\organizacion.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/organizacion/organizacion.md",
   "ocr_confidence": {
     "engine": null,
@@ -130,13 +128,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.458033-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "classification_conflict"
-  ],
+  "processed_at": "2026-07-22T11:46:31.095250-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "e7617b2bd52fac1cd0096d3a2f28408c3661349002d1ef0c60db67ff3b0f5d7f",
+  "source_hash": "d80d4f15e95ae97ca53186a02a5da4ba1816d051c63e423d46f6d66c7c49722d",
   "source_relpath": "general_sst/manuales/organizacion/organizacion.md",
   "tables": {
     "engine": null,
@@ -148,8 +144,6 @@
     "warnings": []
   },
   "warnings": [
-    "missing_title",
-    "type_title_control=reglamento;type_route=manual",
-    "topic_title_control=Reglamento interno de trabajo;topic_route=Organizacion"
+    "missing_title"
   ]
 }

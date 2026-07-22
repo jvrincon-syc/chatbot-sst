@@ -1,5 +1,6 @@
 import {
   AlertCircle,
+  ArrowRight,
   Check,
   CheckCircle2,
   Clock3,
@@ -14,20 +15,28 @@ import {
   RefreshCw,
   Search,
   ShieldCheck,
+  SlidersHorizontal,
   UploadCloud,
   X,
   XCircle,
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import {
+  DEFAULT_LLAMA_ROUTE,
+  LLAMA_ROUTE_OPTIONS,
+  llamaCloudConfigFromRoute,
+  matchingRoutesForServices,
+  routeForServiceSelection,
+  routeFromStatus,
+} from "./llamaRoutes";
+import type { LlamaRoute, LlamaStop } from "./llamaRoutes";
 
 type DecisionKind = "approved" | "rejected";
 type ProviderMode = "local" | "llama_cloud";
 
 type LlamaControls = {
   providerMode: ProviderMode;
-  classifyEnabled: boolean;
-  extractEnabled: boolean;
-  callOrder: string;
+  route: LlamaRoute;
 };
 
 type ReviewDecision = {
@@ -46,6 +55,14 @@ type DocumentRecord = {
   mimeType: string | null;
   category: string | null;
   fileSize: number;
+  ingestionProvider: "local" | "llama_cloud" | "unregistered";
+  ingestionProviderLabel: string;
+  ingestionMethod: string;
+  ingestionMethodLabel: string;
+  ocrConfidenceKind: string;
+  ocrConfidenceValue: number | null;
+  ocrConfidencePercent: number | null;
+  ocrConfidenceLabel: string;
   processingStatus: "pending" | "processed" | "failed" | "needs_review";
   ingestionDate: string | null;
   reviewReasons: string[];
@@ -73,7 +90,6 @@ type StatusPayload = {
     localFallbackEnabled?: boolean;
     parseTier?: string;
     parseVersion?: string;
-    parseMaxCreditsPerRun?: number;
     classifyMode?: string;
     classifyMaxPages?: number;
     extractTier?: string;
@@ -83,6 +99,10 @@ type StatusPayload = {
     extractEnabled?: boolean;
     callOrder?: string[];
     error?: string;
+  };
+  settings: {
+    ocrReviewThreshold: number;
+    ocrReviewThresholdPercent: number;
   };
   documents: DocumentRecord[];
   needsReview: DocumentRecord[];
@@ -102,10 +122,24 @@ type ActionResult = {
   runId?: string;
   path?: string;
   stagingRoot?: string;
+  sourceStagingRoot?: string;
+  validationPath?: string;
   summary?: Record<string, number>;
   errors?: number;
   sourceRelpath?: string;
+  target?: string;
   error?: string;
+};
+
+type PipelineRequest = {
+  force: boolean;
+  providerMode: ProviderMode;
+  ocrReviewThresholdPercent: number;
+  llamaCloud?: {
+    classifyEnabled: boolean;
+    extractEnabled: boolean;
+    callOrder: LlamaRoute;
+  };
 };
 
 const DEFAULT_APPROVE_REASON =
@@ -114,28 +148,23 @@ const DEFAULT_REJECT_REASON =
   "No se aprueba para consumo downstream hasta corregir la extraccion.";
 const DEFAULT_LLAMA_CONTROLS: LlamaControls = {
   providerMode: "local",
-  classifyEnabled: true,
-  extractEnabled: true,
-  callOrder: "classify,parse,extract",
+  route: DEFAULT_LLAMA_ROUTE,
 };
 
-const LLAMA_CALL_ORDER_OPTIONS = [
-  { value: "classify,parse,extract", label: "Classify > Parse > Extract" },
-  { value: "parse,classify,extract", label: "Parse > Classify > Extract" },
+const LOCAL_INGESTION_STEPS = [
+  {
+    title: "PDF digital",
+    body: "pdfplumber lee layout, texto, tablas y formularios; pypdf queda como respaldo de texto.",
+  },
+  {
+    title: "OCR Tesseract",
+    body: "pypdfium2 rasteriza paginas o regiones; Tesseract spa extrae texto con confianza por palabra.",
+  },
+  {
+    title: "Hibrido",
+    body: "si falta cobertura en el PDF digital, se agrega OCR regional y se conserva la trazabilidad local.",
+  },
 ];
-
-function effectiveLlamaCallOrder(controls: LlamaControls) {
-  if (controls.providerMode !== "llama_cloud") return "parse";
-  return controls.callOrder
-    .split(",")
-    .filter((stop) => {
-      if (stop === "parse") return true;
-      if (stop === "classify") return controls.classifyEnabled;
-      if (stop === "extract") return controls.extractEnabled;
-      return false;
-    })
-    .join(",");
-}
 
 const statusLabels: Record<DocumentRecord["processingStatus"], string> = {
   pending: "Pendiente",
@@ -151,9 +180,11 @@ function App() {
   const [notice, setNotice] = useState<string>("");
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [ingestionFilter, setIngestionFilter] = useState("all");
   const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
   const [lastResult, setLastResult] = useState<ActionResult | null>(null);
   const [llamaControls, setLlamaControls] = useState<LlamaControls>(DEFAULT_LLAMA_CONTROLS);
+  const [ocrThresholdPercent, setOcrThresholdPercent] = useState(80);
   const [uploadForm, setUploadForm] = useState({
     category: "general_sst",
     folder: "manuales",
@@ -180,19 +211,12 @@ function App() {
 
   useEffect(() => {
     if (!status?.llamaFirst) return;
-    const configuredOrder = (status.llamaFirst.callOrder ?? ["classify", "parse", "extract"]).join(",");
-    const selectableOrder = LLAMA_CALL_ORDER_OPTIONS.some(
-      (option) => option.value === configuredOrder,
-    )
-      ? configuredOrder
-      : DEFAULT_LLAMA_CONTROLS.callOrder;
     setLlamaControls({
       providerMode: status.llamaFirst.cloudEnabled ? "llama_cloud" : "local",
-      classifyEnabled: status.llamaFirst.classifyEnabled ?? true,
-      extractEnabled: status.llamaFirst.extractEnabled ?? true,
-      callOrder: selectableOrder,
+      route: routeFromStatus(status.llamaFirst),
     });
-  }, [status?.llamaFirst]);
+    setOcrThresholdPercent(status.settings.ocrReviewThresholdPercent);
+  }, [status?.llamaFirst, status?.settings]);
 
   const documents = status?.documents ?? [];
   const pendingReview = status?.needsReview ?? [];
@@ -203,6 +227,22 @@ function App() {
     ).sort() as string[];
   }, [documents]);
 
+  const ingestionMethodOptions = useMemo(() => {
+    return Array.from(
+      new Map(
+        documents
+          .filter((document) => document.ingestionProvider !== "unregistered")
+          .map((document) => [
+            document.ingestionMethod,
+            {
+              value: `method:${document.ingestionMethod}`,
+              label: document.ingestionMethodLabel,
+            },
+          ]),
+      ).values(),
+    ).sort((left, right) => left.label.localeCompare(right.label));
+  }, [documents]);
+
   const filteredDocuments = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return documents.filter((document) => {
@@ -210,14 +250,20 @@ function App() {
         !needle ||
         document.sourceRelpath.toLowerCase().includes(needle) ||
         document.documentId.toLowerCase().includes(needle) ||
-        document.documentName.toLowerCase().includes(needle);
+        document.documentName.toLowerCase().includes(needle) ||
+        document.ingestionProviderLabel.toLowerCase().includes(needle) ||
+        document.ingestionMethodLabel.toLowerCase().includes(needle);
       const matchesStatus =
         statusFilter === "all" ||
         document.processingStatus === statusFilter ||
         document.decision?.decision === statusFilter;
-      return matchesQuery && matchesStatus;
+      const matchesIngestion =
+        ingestionFilter === "all" ||
+        ingestionFilter === `provider:${document.ingestionProvider}` ||
+        ingestionFilter === `method:${document.ingestionMethod}`;
+      return matchesQuery && matchesStatus && matchesIngestion;
     });
-  }, [documents, query, statusFilter]);
+  }, [documents, ingestionFilter, query, statusFilter]);
 
   const handleUpload = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -271,18 +317,18 @@ function App() {
   const runPipeline = async () => {
     setBusyAction("pipeline");
     try {
+      const body: PipelineRequest = {
+        force: false,
+        providerMode: llamaControls.providerMode,
+        ocrReviewThresholdPercent: ocrThresholdPercent,
+      };
+      if (llamaControls.providerMode === "llama_cloud") {
+        body.llamaCloud = llamaCloudConfigFromRoute(llamaControls.route);
+      }
       const response = await fetch("/api/pipeline/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          force: false,
-          providerMode: llamaControls.providerMode,
-          llamaCloud: {
-            classifyEnabled: llamaControls.classifyEnabled,
-            extractEnabled: llamaControls.extractEnabled,
-            callOrder: effectiveLlamaCallOrder(llamaControls),
-          },
-        }),
+        body: JSON.stringify(body),
       });
       const payload = await readJson<ActionResult>(response);
       setLastResult(payload);
@@ -294,16 +340,71 @@ function App() {
     }
   };
 
+  const saveSettings = async () => {
+    setBusyAction("settings");
+    try {
+      const response = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ocrReviewThresholdPercent: ocrThresholdPercent }),
+      });
+      const payload = await readJson<{
+        ok?: boolean;
+        settings?: StatusPayload["settings"];
+      }>(response);
+      const savedPercent = payload.settings?.ocrReviewThresholdPercent ?? ocrThresholdPercent;
+      setLastResult({ ok: payload.ok, summary: { ocrReviewThresholdPercent: savedPercent } });
+      setNotice(`Umbral OCR guardado: ${savedPercent.toFixed(1)}%`);
+      await loadStatus();
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "No se pudo guardar configuracion.");
+    } finally {
+      setBusyAction(null);
+    }
+  };
+
   const runValidation = async () => {
     setBusyAction("validate");
     try {
-      const response = await fetch("/api/validate", { method: "POST" });
+      const body = lastResult?.stagingRoot
+        ? { stagingRoot: lastResult.stagingRoot }
+        : undefined;
+      const response = await fetch("/api/validate", {
+        method: "POST",
+        headers: body ? { "Content-Type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
       const payload = await readJson<ActionResult>(response);
       setLastResult(payload);
-      setNotice(`Validacion ${payload.status}: ${payload.errors ?? 0} errores.`);
+      setNotice(
+        `Validacion ${payload.target === "staging" ? "staging" : "oficial"} ${payload.status}: ${payload.errors ?? 0} errores.`,
+      );
       await loadStatus();
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "No se pudo validar.");
+    } finally {
+      setBusyAction(null);
+    }
+  };
+
+  const promoteStaging = async () => {
+    if (!lastResult?.stagingRoot) {
+      setNotice("Primero ejecuta y valida una ingesta en staging.");
+      return;
+    }
+    setBusyAction("promote");
+    try {
+      const response = await fetch("/api/promote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stagingRoot: lastResult.stagingRoot }),
+      });
+      const payload = await readJson<ActionResult>(response);
+      setLastResult(payload);
+      setNotice(`Staging promovido a salida oficial: ${payload.runId}`);
+      await loadStatus();
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "No se pudo promover staging.");
     } finally {
       setBusyAction(null);
     }
@@ -341,7 +442,11 @@ function App() {
         <LlamaStatusPanel
           status={status?.llamaFirst ?? null}
           controls={llamaControls}
+          ocrThresholdPercent={ocrThresholdPercent}
+          settingsBusy={busyAction === "settings"}
           onControlsChange={setLlamaControls}
+          onOcrThresholdChange={setOcrThresholdPercent}
+          onSaveSettings={saveSettings}
         />
 
         <section className="primary-grid">
@@ -368,16 +473,21 @@ function App() {
           total={documents.length}
           query={query}
           statusFilter={statusFilter}
+          ingestionFilter={ingestionFilter}
+          ingestionMethodOptions={ingestionMethodOptions}
           onQueryChange={setQuery}
           onStatusFilterChange={setStatusFilter}
+          onIngestionFilterChange={setIngestionFilter}
         />
 
         <PipelinePanel
           validation={status?.validation ?? null}
           lastResult={lastResult}
           busyAction={busyAction}
+          controls={llamaControls}
           onRunPipeline={runPipeline}
           onValidate={runValidation}
+          onPromote={promoteStaging}
         />
       </main>
     </div>
@@ -387,30 +497,56 @@ function App() {
 function LlamaStatusPanel({
   status,
   controls,
+  ocrThresholdPercent,
+  settingsBusy,
   onControlsChange,
+  onOcrThresholdChange,
+  onSaveSettings,
 }: {
   status: StatusPayload["llamaFirst"] | null;
   controls: LlamaControls;
+  ocrThresholdPercent: number;
+  settingsBusy: boolean;
   onControlsChange: (controls: LlamaControls) => void;
+  onOcrThresholdChange: (value: number) => void;
+  onSaveSettings: () => void;
 }) {
   if (!status) return null;
   const cloudSelected = controls.providerMode === "llama_cloud";
+  const selectedRoute = llamaCloudConfigFromRoute(controls.route);
+  const selectedRouteLabel =
+    LLAMA_ROUTE_OPTIONS.find((option) => option.value === controls.route)?.summary ?? "Parse";
+  const orderOptions = matchingRoutesForServices({
+    classifyEnabled: selectedRoute.classifyEnabled,
+    extractEnabled: selectedRoute.extractEnabled,
+  });
+  const updateService = (
+    service: "classifyEnabled" | "extractEnabled",
+    enabled: boolean,
+  ) => {
+    const nextServices = { ...selectedRoute, [service]: enabled };
+    onControlsChange({
+      ...controls,
+      route: routeForServiceSelection(controls.route, nextServices),
+    });
+  };
   return (
     <section className="panel llama-status" aria-label="Llama-first">
       <div className="panel-heading">
-        <h2>Llama-first</h2>
-        <span>{status.configurationStatus}</span>
+        <h2>Proveedor de ingesta PDF</h2>
+        <span>{cloudSelected ? `LlamaCloud seleccionado - ${status.configurationStatus}` : "Local seleccionado"}</span>
       </div>
-      <div className="llama-layout">
-        <div className="llama-status-grid">
-          <StatusDatum label="Provider" value={status.provider} />
-          <StatusDatum label="Cloud" value={status.cloudEnabled ? "Activo" : "Inactivo"} />
-          <StatusDatum label="Tier" value={status.parseTier ?? "n/a"} />
-          <StatusDatum label="Version" value={status.parseVersion ?? "n/a"} />
-          <StatusDatum label="Classify" value={`${status.classifyMode ?? "FAST"} / ${status.classifyMaxPages ?? 5}p`} />
-          <StatusDatum label="Extract" value={`${status.extractTier ?? "cost_effective"} + ${status.extractParseTier ?? "fast"}`} />
-          <StatusDatum label="Creditos" value={String(status.parseMaxCreditsPerRun ?? 0)} />
-        </div>
+      <div className={cloudSelected ? "llama-layout cloud" : "llama-layout local"}>
+        {cloudSelected ? (
+          <div className="llama-status-grid">
+            <StatusDatum label="Provider" value={status.provider} />
+            <StatusDatum label="Cloud" value={status.cloudEnabled ? "Activo" : "Inactivo"} />
+            <StatusDatum label="Tier" value={status.parseTier ?? "n/a"} />
+            <StatusDatum label="Version" value={status.parseVersion ?? "n/a"} />
+            <StatusDatum label="Classify" value={`${status.classifyMode ?? "FAST"} / ${status.classifyMaxPages ?? 5}p`} />
+            <StatusDatum label="Extract" value={`${status.extractTier ?? "cost_effective"} + ${status.extractParseTier ?? "fast"}`} />
+          </div>
+        ) : null}
         <div className="llama-controls">
           <div className="segmented-control" aria-label="Proveedor de PDF">
             <button
@@ -432,50 +568,157 @@ function LlamaStatusPanel({
               LlamaCloud
             </button>
           </div>
-          <label className="toggle-row locked">
-            <input type="checkbox" checked={cloudSelected} disabled />
-            <span>LlamaParse</span>
-          </label>
-          <label className={!cloudSelected ? "toggle-row disabled" : "toggle-row"}>
-            <input
-              type="checkbox"
-              checked={controls.classifyEnabled && cloudSelected}
-              disabled={!cloudSelected}
-              onChange={(event) =>
-                onControlsChange({ ...controls, classifyEnabled: event.target.checked })
-              }
-            />
-            <span>LlamaClassify</span>
-          </label>
-          <label className={!cloudSelected ? "toggle-row disabled" : "toggle-row"}>
-            <input
-              type="checkbox"
-              checked={controls.extractEnabled && cloudSelected}
-              disabled={!cloudSelected}
-              onChange={(event) =>
-                onControlsChange({ ...controls, extractEnabled: event.target.checked })
-              }
-            />
-            <span>LlamaExtract</span>
-          </label>
-          <label className="order-field">
-            Orden
-            <select
-              value={controls.callOrder}
-              disabled={!cloudSelected}
-              onChange={(event) => onControlsChange({ ...controls, callOrder: event.target.value })}
-            >
-              {LLAMA_CALL_ORDER_OPTIONS.map((option) => (
-                <option value={option.value} key={option.value}>
-                  {option.label}
-                </option>
+          {cloudSelected ? (
+            <div className="llama-route-builder">
+              <div className="service-toggle-row" aria-label="Servicios LlamaCloud">
+                <ServiceToggle
+                  label="Parse"
+                  icon={<FileText size={15} />}
+                  enabled
+                  locked
+                />
+                <ServiceToggle
+                  label="Classify"
+                  icon={<ListFilter size={15} />}
+                  enabled={selectedRoute.classifyEnabled}
+                  onToggle={(enabled) => updateService("classifyEnabled", enabled)}
+                />
+                <ServiceToggle
+                  label="Extract"
+                  icon={<Database size={15} />}
+                  enabled={selectedRoute.extractEnabled}
+                  onToggle={(enabled) => updateService("extractEnabled", enabled)}
+                />
+              </div>
+              <div className="route-option-list" aria-label="Orden permitido LlamaCloud">
+                {orderOptions.map((option) => (
+                  <button
+                    type="button"
+                    className={
+                      option.value === controls.route
+                        ? "route-option active"
+                        : "route-option"
+                    }
+                    key={option.value}
+                    aria-pressed={option.value === controls.route}
+                    onClick={() => onControlsChange({ ...controls, route: option.value })}
+                  >
+                    <span>{option.label}</span>
+                    <RouteSteps stops={option.stops} />
+                  </button>
+                ))}
+              </div>
+              <div className="route-validity">
+                <CheckCircle2 size={15} />
+                <span>Orden valido</span>
+                <strong>{selectedRouteLabel}</strong>
+              </div>
+            </div>
+          ) : (
+            <div className="local-provider-note">
+              <HardDrive size={15} />
+              <span>Pipeline local con PDF digital, OCR Tesseract y fallback hibrido.</span>
+            </div>
+          )}
+          {!cloudSelected ? (
+            <div className="local-stack-list" aria-label="Detalle de ingesta local">
+              {LOCAL_INGESTION_STEPS.map((step) => (
+                <div className="local-stack-item" key={step.title}>
+                  <strong>{step.title}</strong>
+                  <span>{step.body}</span>
+                </div>
               ))}
-            </select>
-          </label>
+            </div>
+          ) : null}
+          <div className="route-summary">
+            <span>Se enviara al iniciar staging</span>
+            <strong>{cloudSelected ? selectedRouteLabel : "Local"}</strong>
+          </div>
+          <div className="quality-settings" aria-label="Configuracion de confianza OCR">
+            <label>
+              <span>
+                <SlidersHorizontal size={15} />
+                Umbral OCR
+              </span>
+              <input
+                type="number"
+                min={0}
+                max={100}
+                step={0.5}
+                value={ocrThresholdPercent}
+                onChange={(event) =>
+                  onOcrThresholdChange(Number(event.currentTarget.value))
+                }
+              />
+            </label>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={onSaveSettings}
+              disabled={settingsBusy || !Number.isFinite(ocrThresholdPercent)}
+            >
+              {settingsBusy ? <Loader2 className="spin" size={16} /> : <Check size={16} />}
+              Guardar
+            </button>
+          </div>
         </div>
       </div>
     </section>
   );
+}
+
+function ServiceToggle({
+  label,
+  icon,
+  enabled,
+  locked = false,
+  onToggle,
+}: {
+  label: string;
+  icon: JSX.Element;
+  enabled: boolean;
+  locked?: boolean;
+  onToggle?: (enabled: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={[
+        "service-toggle",
+        enabled ? "active" : "",
+        locked ? "locked" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      aria-pressed={enabled}
+      onClick={() => {
+        if (!locked) onToggle?.(!enabled);
+      }}
+      title={locked ? "Parse es obligatorio para LlamaCloud" : undefined}
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+}
+
+function RouteSteps({ stops }: { stops: LlamaStop[] }) {
+  return (
+    <span className="route-steps">
+      {stops.map((stop, index) => (
+        <span className="route-step-fragment" key={`${stop}-${index}`}>
+          {index > 0 ? <ArrowRight size={12} /> : null}
+          <span className={`route-step ${stop}`}>{serviceLabel(stop)}</span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function serviceLabel(stop: LlamaStop) {
+  if (stop === "parse") return "Parse";
+  if (stop === "classify") return "Classify";
+  return "Extract";
 }
 
 function StatusDatum({ label, value }: { label: string; value: string }) {
@@ -687,15 +930,21 @@ function InventoryPanel({
   total,
   query,
   statusFilter,
+  ingestionFilter,
+  ingestionMethodOptions,
   onQueryChange,
   onStatusFilterChange,
+  onIngestionFilterChange,
 }: {
   documents: DocumentRecord[];
   total: number;
   query: string;
   statusFilter: string;
+  ingestionFilter: string;
+  ingestionMethodOptions: { value: string; label: string }[];
   onQueryChange: (value: string) => void;
   onStatusFilterChange: (value: string) => void;
+  onIngestionFilterChange: (value: string) => void;
 }) {
   return (
     <section className="panel inventory-panel">
@@ -729,6 +978,30 @@ function InventoryPanel({
               <option value="rejected">Rechazados</option>
             </select>
           </label>
+          <label className="filter-field">
+            <UploadCloud size={16} />
+            <select
+              value={ingestionFilter}
+              onChange={(event) => onIngestionFilterChange(event.target.value)}
+              aria-label="Filtrar por ingesta"
+            >
+              <option value="all">Toda ingesta</option>
+              <optgroup label="Proveedor">
+                <option value="provider:local">Local</option>
+                <option value="provider:llama_cloud">LlamaCloud</option>
+                <option value="provider:unregistered">Sin ingesta</option>
+              </optgroup>
+              {ingestionMethodOptions.length > 0 ? (
+                <optgroup label="Metodo">
+                  {ingestionMethodOptions.map((option) => (
+                    <option value={option.value} key={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null}
+            </select>
+          </label>
         </div>
       </div>
       <div className="table-wrap">
@@ -737,6 +1010,8 @@ function InventoryPanel({
             <tr>
               <th>Ruta del documento</th>
               <th>Tipo</th>
+              <th>Ingesta</th>
+              <th>Confiabilidad</th>
               <th>Categoria</th>
               <th>Tamano</th>
               <th>Estado</th>
@@ -755,6 +1030,12 @@ function InventoryPanel({
                   </div>
                 </td>
                 <td>{document.detectedExtension?.replace(".", "").toUpperCase() ?? "N/D"}</td>
+                <td>
+                  <IngestionChip document={document} />
+                </td>
+                <td>
+                  <ConfidenceChip document={document} />
+                </td>
                 <td>{document.category}</td>
                 <td>{formatBytes(document.fileSize)}</td>
                 <td>
@@ -773,19 +1054,56 @@ function InventoryPanel({
   );
 }
 
+function IngestionChip({ document }: { document: DocumentRecord }) {
+  return (
+    <div className="ingestion-cell">
+      <span className={`chip ingestion-${document.ingestionProvider}`}>
+        {document.ingestionProviderLabel}
+      </span>
+      <small>{document.ingestionMethodLabel}</small>
+    </div>
+  );
+}
+
+function ConfidenceChip({ document }: { document: DocumentRecord }) {
+  const hasValue = document.ocrConfidencePercent !== null;
+  return (
+    <div className="confidence-cell">
+      <span className={hasValue ? "chip confidence-value" : "chip confidence-na"}>
+        {document.ocrConfidenceLabel}
+      </span>
+      <small>{document.ocrConfidenceKind}</small>
+    </div>
+  );
+}
+
 function PipelinePanel({
   validation,
   lastResult,
   busyAction,
+  controls,
   onRunPipeline,
   onValidate,
+  onPromote,
 }: {
   validation: StatusPayload["validation"];
   lastResult: ActionResult | null;
   busyAction: string | null;
+  controls: LlamaControls;
   onRunPipeline: () => void;
   onValidate: () => void;
+  onPromote: () => void;
 }) {
+  const cloudSelected = controls.providerMode === "llama_cloud";
+  const selectedRouteLabel =
+    LLAMA_ROUTE_OPTIONS.find((option) => option.value === controls.route)?.summary ?? "Parse";
+  const pipelineButtonLabel = cloudSelected
+    ? `Ejecutar LlamaCloud staging: ${selectedRouteLabel}`
+    : "Ejecutar ingesta local en staging";
+  const validationButtonLabel = lastResult?.stagingRoot
+    ? "Validar staging"
+    : "Validar salida oficial";
+  const hasStagingCandidate = Boolean(lastResult?.stagingRoot);
   return (
     <section className="pipeline-band">
       <div className="pipeline-actions">
@@ -798,7 +1116,7 @@ function PipelinePanel({
               disabled={busyAction === "pipeline"}
             >
               {busyAction === "pipeline" ? <Loader2 className="spin" size={16} /> : <Play size={16} />}
-              Ejecutar ingesta en staging
+              {pipelineButtonLabel}
             </button>
             <button
               className="secondary-button"
@@ -806,7 +1124,15 @@ function PipelinePanel({
               disabled={busyAction === "validate"}
             >
               {busyAction === "validate" ? <Loader2 className="spin" size={16} /> : <ShieldCheck size={16} />}
-              Validar salida oficial
+              {validationButtonLabel}
+            </button>
+            <button
+              className="secondary-button"
+              onClick={onPromote}
+              disabled={!hasStagingCandidate || busyAction === "promote"}
+            >
+              {busyAction === "promote" ? <Loader2 className="spin" size={16} /> : <ArrowRight size={16} />}
+              Promover staging
             </button>
           </div>
         </div>

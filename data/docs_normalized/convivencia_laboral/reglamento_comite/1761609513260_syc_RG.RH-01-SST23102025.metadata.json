@@ -1,9 +1,7 @@
 {
   "classification": {
-    "conflict_status": "conflicting",
-    "conflicts": [
-      "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
-    ],
+    "conflict_status": "none",
+    "conflicts": [],
     "content_prediction": "formulario",
     "document_type": "reglamento",
     "document_type_confidence": {
@@ -22,13 +20,13 @@
       "reglamento:reglamento:title_control",
       "reglamento:reglamento:content",
       "reglamento:reglamento:route",
-      "Comite de Convivencia Laboral:comite de convivencia:title_control",
+      "Comité de Convivencia Laboral:comite de convivencia:title_control",
       "Convivencia laboral:convivencia laboral:title_control",
-      "Comite de Convivencia Laboral:comite de convivencia:content",
-      "Funcionamiento del comite:reglamento del comite:title_control"
+      "Comité de Convivencia Laboral:comite de convivencia:content",
+      "Funcionamiento del comité:reglamento del comite:title_control"
     ],
-    "subtopic": "Funcionamiento del comite",
-    "topic": "Comite de Convivencia Laboral",
+    "subtopic": "Funcionamiento del comité",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -225,9 +223,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\reglamento_comite\\1761609513260_syc_RG.RH-01-SST23102025.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
   "ocr_confidence": {
     "engine": null,
@@ -242,12 +241,9 @@
   },
   "page_count": 6,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.655877-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "classification_conflict",
-    "pdf_semantic_review_required"
-  ],
+  "processed_at": "2026-07-22T11:46:17.292795-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
   "source_hash": "cf261e96874a2ae1f8f88428229c76221dd346d10403ca95b5714ea56026c1dc",
   "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
@@ -272,7 +268,5 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": [
-    "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
-  ]
+  "warnings": []
 }

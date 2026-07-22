@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "programa:programa:content",
-      "Sistema de Gestion de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+      "Sistema de Gestión de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
     ],
     "subtopic": null,
-    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -108,9 +108,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/verificacion/verificacion_info.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\manuales\\verificacion\\verificacion_info.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/verificacion/verificacion_info.md",
   "ocr_confidence": {
     "engine": null,
@@ -125,11 +126,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:46.680329-05:00",
+  "processed_at": "2026-07-22T11:46:42.607635-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "11685f525c50a4e0af4dac754c81aba58a889b4854bcd6c75b3bca9b915c8a66",
+  "source_hash": "753d8814893bfa1e2ad7233920bf1748205cffd143995ad7e06c353cecb65be3",
   "source_relpath": "general_sst/manuales/verificacion/verificacion_info.md",
   "tables": {
     "engine": null,

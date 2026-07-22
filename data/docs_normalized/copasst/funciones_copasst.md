@@ -1,7 +1,7 @@
 ---
 document_id: doc_221c00facfd6a2e8
 document_type: programa
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: copasst/funciones_copasst.md
 extraction_method: markdown
 page_count: 1

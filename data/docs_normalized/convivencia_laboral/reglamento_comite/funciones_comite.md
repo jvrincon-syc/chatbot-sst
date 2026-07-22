@@ -1,7 +1,7 @@
 ---
 document_id: doc_cfca5f1723e21e1c
 document_type: formulario
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/reglamento_comite/funciones_comite.md
 extraction_method: markdown
 page_count: 1

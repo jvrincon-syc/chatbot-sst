@@ -331,9 +331,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\1772036012249_syc_mrh03sstmanualdeconv.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
   "ocr_confidence": {
     "engine": null,
@@ -348,11 +349,9 @@
   },
   "page_count": 12,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:46.422699-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "pdf_semantic_review_required"
-  ],
+  "processed_at": "2026-07-22T11:46:06.137163-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
   "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
   "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",

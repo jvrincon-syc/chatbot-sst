@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "test": "tsc -p tsconfig.test.json && node src/llamaRoutes.test.mjs && node -e \"require('fs').rmSync('.tmp-tests', { recursive: true, force: true })\"",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1"
   },

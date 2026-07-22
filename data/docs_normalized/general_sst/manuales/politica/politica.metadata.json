@@ -21,11 +21,11 @@
       "politica:politica:content",
       "politica:politica:filename",
       "politica:politica:route",
-      "Politica de seguridad:politica de seguridad:title_control",
-      "Politica de seguridad:politica de seguridad:content"
+      "Política de seguridad:politica de seguridad:title_control",
+      "Política de seguridad:politica de seguridad:content"
     ],
     "subtopic": null,
-    "topic": "Politica de seguridad",
+    "topic": "Política de seguridad",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -122,9 +122,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/politica/politica.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\manuales\\politica\\politica.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/politica/politica.md",
   "ocr_confidence": {
     "engine": null,
@@ -139,11 +140,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:46.648412-05:00",
+  "processed_at": "2026-07-22T11:46:42.554652-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "4a21bd97acd30a4b0318daf2725fbf066c9b780ef804aeb4d90bfa35d2d08e44",
+  "source_hash": "603a3cb0bebd5a9ed9bb4f5cf391006d497542fb67ffba58c582c3190e6e00d9",
   "source_relpath": "general_sst/manuales/politica/politica.md",
   "tables": {
     "engine": null,

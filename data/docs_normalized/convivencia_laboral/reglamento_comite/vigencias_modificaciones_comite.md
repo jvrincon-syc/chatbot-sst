@@ -1,7 +1,7 @@
 ---
 document_id: doc_d5f04608cf512575
 document_type: reglamento
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md
 extraction_method: markdown
 page_count: 1

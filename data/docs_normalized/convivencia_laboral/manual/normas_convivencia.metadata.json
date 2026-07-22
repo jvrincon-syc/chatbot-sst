@@ -100,9 +100,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/normas_convivencia.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\normas_convivencia.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/normas_convivencia.md",
   "ocr_confidence": {
     "engine": null,
@@ -117,11 +118,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:58.983627-05:00",
+  "processed_at": "2026-07-22T11:46:15.035089-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "c2d04b685bea8477eda92ca7f60b12cc01ead02735c69d454e4f7e7f374ce5d2",
+  "source_hash": "3008eef6656b3cce45a7083dece5f9383c500382dac3fddb3576e10c026a982e",
   "source_relpath": "convivencia_laboral/manual/normas_convivencia.md",
   "tables": {
     "engine": null,

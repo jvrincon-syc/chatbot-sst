@@ -1,7 +1,7 @@
 ---
 document_id: doc_65a09a83e5685e3a
 document_type: reglamento
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/manual/marco_legal.md
 extraction_method: markdown
 page_count: 1

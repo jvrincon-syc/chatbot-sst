@@ -251,6 +251,49 @@ def test_validation_rejects_processed_documents_with_review_reasons(tmp_path: Pa
     assert any(check.check == "processed_with_review_reasons" and check.status == "failed" for check in report.checks)
 
 
+def test_validation_stage_ignores_golden_expectations(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    (raw / "manual.md").write_text("# Manual\n", encoding="utf-8")
+    normalized = tmp_path / "normalized"
+    _write_document(normalized)
+    golden = tmp_path / "golden.json"
+    golden.write_text(
+        json.dumps(
+            {
+                "audit_schema_version": "test",
+                "documents": [
+                    {
+                        "document_id": "doc_1",
+                        "source_relpath": "data/docs_raw/manual.md",
+                        "page_count": 1,
+                        "expected": {"title": "Titulo que no coincide"},
+                        "minimum_content": [
+                            {
+                                "pages": "1",
+                                "must_preserve": ["texto inexistente"],
+                                "structure": "Only standalone golden audits check this.",
+                            }
+                        ],
+                        "review_status": "needs_review",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = validate_normalized_tree(
+        normalized,
+        raw_root=raw,
+        golden_path=golden,
+    )
+
+    assert report.status == "passed"
+    assert report.errors == 0
+    assert all(not check.check.startswith("golden_") for check in report.checks)
+
+
 def test_closure_preserves_multipoint_artifact_stems(tmp_path: Path) -> None:
     raw = tmp_path / "raw"
     normalized = tmp_path / "normalized"

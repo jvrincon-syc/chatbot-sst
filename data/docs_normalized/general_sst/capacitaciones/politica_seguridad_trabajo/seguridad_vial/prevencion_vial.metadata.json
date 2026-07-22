@@ -99,9 +99,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\capacitaciones\\politica_seguridad_trabajo\\seguridad_vial\\prevencion_vial.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
   "ocr_confidence": {
     "engine": null,
@@ -116,11 +117,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.168741-05:00",
+  "processed_at": "2026-07-22T11:46:30.127557-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "a95a58feb5f63d7c65d26176505aa339e4acef87bd0fed1b8b3577bde60e08cb",
+  "source_hash": "7097e30644cd81783cb42d5ce3d5012bedac23e556f00cc5f9241681bb6a0c44",
   "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
   "tables": {
     "engine": null,

@@ -167,6 +167,18 @@ venv.bak/
 # Local planning/context notes
 memory/
 
+# Local agent/rules files
+/.agents/
+/AGENTS.md
+/README_REGLAS.md
+/docs/rules/
+/app/front/AGENTS_FRONT.md
+/app/back/AGENTS_back.md
+/AGENTS_front/
+/agents_back/
+.agents/
+.codex_tmp/
+
 # Spyder project settings
 .spyderproject
 .spyproject

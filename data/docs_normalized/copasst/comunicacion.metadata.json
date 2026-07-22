@@ -99,9 +99,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/copasst/comunicacion.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\copasst\\comunicacion.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "copasst/comunicacion.md",
   "ocr_confidence": {
     "engine": null,
@@ -116,11 +117,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.832786-05:00",
+  "processed_at": "2026-07-22T11:46:18.124278-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "c26602890d001bdc91bce3a35d8f9080356eb54713afc379cdac900689d6e171",
+  "source_hash": "b295121b99d66fdaaaa76ea8b7938e74f8d4aae4d0dcfe0dab51e25b5aa576cb",
   "source_relpath": "copasst/comunicacion.md",
   "tables": {
     "engine": null,

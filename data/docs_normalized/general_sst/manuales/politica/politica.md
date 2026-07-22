@@ -1,7 +1,7 @@
 ---
 document_id: doc_9b35bf058b1a3a38
 document_type: politica
-topic: Politica de seguridad
+topic: Política de seguridad
 source_relpath: general_sst/manuales/politica/politica.md
 extraction_method: markdown
 page_count: 1

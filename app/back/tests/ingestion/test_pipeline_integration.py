@@ -13,9 +13,14 @@ from ingestion.domain.models.extraction import ExtractionField, ExtractionResult
 from ingestion.domain.models.llama_understanding import LlamaUnderstanding
 from ingestion.domain.models.provider import ProviderJobRef
 from ingestion.pipeline import _configured_tesseract_engine, run_pipeline
-from ingestion.promotion import PromotionError
 from ingestion.readers.base import ReadResult
-from ingestion.schemas.artifacts import FormsArtifact, PageRecord, TablesArtifact
+from ingestion.schemas.artifacts import (
+    FormsArtifact,
+    LlamaCloudMetadata,
+    OcrArtifact,
+    PageRecord,
+    TablesArtifact,
+)
 from ingestion.schemas.common import ConfidenceMetric, Evidence, Observation
 
 
@@ -47,6 +52,19 @@ def _llama_classification(capability: str, label: str, confidence: float = 0.96)
             evidence=[Evidence(page_number=1, text=label, source="llama_classify")],
             reasoning_summary="Clasificacion basada en contenido del documento.",
         ),
+    )
+
+
+def _ocr_artifact(confidence: float) -> OcrArtifact:
+    return OcrArtifact(
+        schema_version="2.0",
+        document_id="pending",
+        document_confidence=ConfidenceMetric(
+            kind="estimated",
+            value=confidence,
+            method="test_provider_ocr_confidence",
+        ),
+        pages=[],
     )
 
 
@@ -425,6 +443,7 @@ def test_pipeline_processes_pdf_when_material_features_are_evaluated(
             groups=[],
             page_observations=[Observation(status="not_detected", value=False, method="llamaparse_form_heuristic")],
         ),
+        ocr=_ocr_artifact(0.93),
     )
     monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
     monkeypatch.setattr(
@@ -484,6 +503,7 @@ def test_pipeline_uses_llama_classify_without_penalizing_arbitrary_folder(
             groups=[],
             page_observations=[Observation(status="not_detected", value=False, method="llamaparse_form_heuristic")],
         ),
+        ocr=_ocr_artifact(0.94),
         llama_understanding=LlamaUnderstanding(
             parse_job_id="pjb_classified",
             document_type=_llama_classification("document_type", "formulario"),
@@ -599,6 +619,204 @@ def test_pipeline_marks_unsupported_llama_extract_critical_fields_for_review(
     assert "llama_extract_unsupported_critical_field:code" in metadata["warnings"]
 
 
+def test_pipeline_records_ocr_confidence_in_inventory_and_reviews_below_threshold(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "scan.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    measured_confidence = ConfidenceMetric(
+        kind="measured",
+        value=0.79,
+        engine="tesseract",
+        engine_version="5.4.0",
+        unit="mean_word_confidence",
+        sample_size=42,
+    )
+    result = ReadResult(
+        extraction_method="ocr",
+        markdown="Texto OCR",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="Texto OCR",
+                text_normalized="Texto OCR",
+                extraction_method="ocr",
+                ocr_confidence=measured_confidence,
+            )
+        ],
+    )
+    monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(status="not_detected", value=False, method="test"),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="ocr_confidence_gate",
+        classification_review_threshold=0.0,
+        ocr_review_threshold=0.80,
+    )
+
+    inventory = json.loads((candidate / "_manifests" / "inventory.json").read_text(encoding="utf-8"))
+    metadata = json.loads((candidate / "scan.metadata.json").read_text(encoding="utf-8"))
+    assert summary["needs_review"] == 1
+    assert inventory["records"][0]["processing_status"] == "needs_review"
+    assert inventory["records"][0]["ocr_confidence"]["value"] == 0.79
+    assert metadata["processing_status"] == "needs_review"
+    assert "low_ocr_confidence" in metadata["review_reasons"]
+
+
+def test_pipeline_reviews_llamaparse_pdf_when_ocr_confidence_is_unavailable(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "llama.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    result = ReadResult(
+        extraction_method="llamaparse",
+        markdown="# Documento Llama",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="# Documento Llama",
+                text_normalized="Documento Llama",
+                extraction_method="llamaparse",
+                ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+            )
+        ],
+        tables=TablesArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            table_count=0,
+            tables=[],
+            page_observations=[Observation(status="not_detected", value=False, method="test")],
+        ),
+        forms=FormsArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            groups=[],
+            page_observations=[Observation(status="not_detected", value=False, method="test")],
+        ),
+    )
+    monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(status="not_detected", value=False, method="test"),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="llama_missing_ocr_confidence",
+        classification_review_threshold=0.0,
+        ocr_review_threshold=0.80,
+    )
+
+    metadata = json.loads((candidate / "llama.metadata.json").read_text(encoding="utf-8"))
+    assert summary["needs_review"] == 1
+    assert metadata["ocr_confidence"]["kind"] == "unavailable"
+    assert "ocr_confidence_unavailable" in metadata["review_reasons"]
+
+
+def test_pipeline_persists_llama_cloud_metadata_and_confidence(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "llama.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    result = ReadResult(
+        extraction_method="llamaparse",
+        markdown="# Documento Llama",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="# Documento Llama",
+                text_normalized="Documento Llama",
+                extraction_method="llamaparse",
+                ocr_confidence=ConfidenceMetric(
+                    kind="estimated",
+                    value=0.91,
+                    method="llamaparse_page_parse_confidence",
+                    provenance="pjb_123",
+                    warnings=["llamaparse_confidence_not_word_ocr_measured"],
+                ),
+            )
+        ],
+        tables=TablesArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            table_count=0,
+            tables=[],
+            page_observations=[Observation(status="not_detected", value=False, method="test")],
+        ),
+        forms=FormsArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            groups=[],
+            page_observations=[Observation(status="not_detected", value=False, method="test")],
+        ),
+        llama_cloud_metadata=LlamaCloudMetadata(
+            parse_job_id="pjb_123",
+            parse_status="completed",
+            parse_configuration_hash="sha256:parse",
+            page_metadata=[
+                {
+                    "page_number": 1,
+                    "confidence": 0.91,
+                    "cost_optimized": False,
+                }
+            ],
+            job_metadata={"credits": 2},
+        ),
+    )
+    monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(status="not_detected", value=False, method="test"),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="llama_metadata",
+        classification_review_threshold=0.0,
+        ocr_review_threshold=0.80,
+    )
+
+    metadata = json.loads((candidate / "llama.metadata.json").read_text(encoding="utf-8"))
+    pages = json.loads((candidate / "llama.pages.json").read_text(encoding="utf-8"))
+    assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
+    assert metadata["ocr_confidence"]["value"] == 0.91
+    assert metadata["llama_cloud"]["parse_job_id"] == "pjb_123"
+    assert metadata["llama_cloud"]["page_metadata"][0]["confidence"] == 0.91
+    assert metadata["llama_cloud"]["job_metadata"] == {"credits": 2}
+    assert pages["pages"][0]["ocr_confidence"]["value"] == 0.91
+
+
 def test_pipeline_normalizes_windows_only_source_paths(tmp_path: Path) -> None:
     docs_raw = tmp_path / "data" / "docs_raw"
     normalized = tmp_path / "data" / "normalized"
@@ -633,7 +851,7 @@ def test_pipeline_configures_region_tesseract_from_environment(monkeypatch) -> N
     assert engine.engine_version == "5.4.0"
 
 
-def test_pipeline_refuses_promotion_without_explicit_golden_pass(
+def test_pipeline_promotes_without_explicit_golden_pass(
     tmp_path: Path,
 ) -> None:
     docs_raw = tmp_path / "data" / "docs_raw"
@@ -644,16 +862,17 @@ def test_pipeline_refuses_promotion_without_explicit_golden_pass(
     (docs_raw / "manual.md").write_text("# Manual\n\nContenido", encoding="utf-8")
     (live / "live.md").write_text("live", encoding="utf-8")
 
-    with pytest.raises(PromotionError):
-        run_pipeline(
-            docs_raw=docs_raw,
-            docs_normalized=live,
-            staging_root=staging,
-            promote=True,
-            corpus_version="test",
-            pipeline_version="2.0.0",
-            run_id="unsafe_promote",
-        )
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=live,
+        staging_root=staging,
+        promote=True,
+        golden_status="failed",
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="structural_promote",
+    )
 
-    assert (live / "live.md").read_text(encoding="utf-8") == "live"
-    assert not (live / "manual.md").exists()
+    assert summary["processed"] == 1
+    assert (live / "manual.md").exists()
+    assert not (live / "live.md").exists()

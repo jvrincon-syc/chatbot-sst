@@ -1,7 +1,7 @@
 ---
 document_id: doc_33db5a236b33527d
 document_type: manual
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md
 extraction_method: markdown
 page_count: 1

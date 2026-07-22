@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "reglamento:reglamento:content",
-      "Comite de Convivencia Laboral:comite de convivencia:content"
+      "Comité de Convivencia Laboral:comite de convivencia:content"
     ],
     "subtopic": null,
-    "topic": "Comite de Convivencia Laboral",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -98,9 +98,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/marco_legal.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\marco_legal.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/marco_legal.md",
   "ocr_confidence": {
     "engine": null,
@@ -115,11 +116,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:58.958818-05:00",
+  "processed_at": "2026-07-22T11:46:14.924928-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "8323e8bb427bea7a57c92a7a766f940ec56704a4d1eef3b423d0592dbb6c934a",
+  "source_hash": "fed925314dbb8b7a7fe67c0b03b2f33211a2ef96be5249991cef540b6d239d73",
   "source_relpath": "convivencia_laboral/manual/marco_legal.md",
   "tables": {
     "engine": null,

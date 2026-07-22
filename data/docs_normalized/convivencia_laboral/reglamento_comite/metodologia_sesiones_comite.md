@@ -1,7 +1,7 @@
 ---
 document_id: doc_842df95c94a7e50d
 document_type: acta
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md
 extraction_method: markdown
 page_count: 1

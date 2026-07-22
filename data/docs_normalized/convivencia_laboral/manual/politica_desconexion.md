@@ -1,7 +1,7 @@
 ---
 document_id: doc_a72c9be0df1f92fa
 document_type: formulario
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/manual/politica_desconexion.md
 extraction_method: markdown
 page_count: 1

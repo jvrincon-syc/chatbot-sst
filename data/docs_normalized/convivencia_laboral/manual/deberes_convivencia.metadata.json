@@ -100,9 +100,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/deberes_convivencia.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\deberes_convivencia.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/deberes_convivencia.md",
   "ocr_confidence": {
     "engine": null,
@@ -117,11 +118,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:58.894428-05:00",
+  "processed_at": "2026-07-22T11:46:14.494159-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "cd2bee0b3847568c91f3e0427a1bc358a6221f69bb6fbd901dd46cbbbd4e615c",
+  "source_hash": "a249a478f339f08dc764b6eea3e29759f4d6eb3d943aba02c70ba2ef72c6e071",
   "source_relpath": "convivencia_laboral/manual/deberes_convivencia.md",
   "tables": {
     "engine": null,

@@ -123,9 +123,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\manuales\\organizacion\\reglamento_interno_trabajo\\1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
   "ocr_confidence": {
     "engine": null,
@@ -140,11 +141,9 @@
   },
   "page_count": 36,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:33.457156-05:00",
-  "processing_status": "needs_review",
-  "review_reasons": [
-    "pdf_semantic_review_required"
-  ],
+  "processed_at": "2026-07-22T11:46:36.304885-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
   "schema_version": "2.0",
   "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
   "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",

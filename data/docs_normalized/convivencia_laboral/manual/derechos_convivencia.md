@@ -1,7 +1,7 @@
 ---
 document_id: doc_5773d940742c0a47
 document_type: manual
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/manual/derechos_convivencia.md
 extraction_method: markdown
 page_count: 1

@@ -11,6 +11,7 @@ from ingestion.schemas.artifacts import (
     FormGroup,
     FormLabel,
     FormsArtifact,
+    LlamaCloudMetadata,
     PageRecord,
     TableCell,
     TableRecord,
@@ -23,14 +24,21 @@ def parsed_document_to_read_result(
     parsed: ParsedDocument,
     understanding: LlamaUnderstanding | None = None,
 ) -> ReadResult:
+    metadata_by_page = {
+        metadata.page_number: metadata.metadata
+        for metadata in parsed.page_metadata
+    }
     pages = [
         PageRecord(
             page_number=page.page_number,
             text_raw=page.markdown,
             text_normalized=normalize_text(page.markdown),
             extraction_method="llamaparse",
-            ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
-            warnings=page.warnings,
+            ocr_confidence=_page_parse_confidence(
+                metadata_by_page.get(page.page_number),
+                parse_job_id=parsed.provider_job.job_id,
+            ),
+            warnings=_page_warnings(page.warnings, metadata_by_page.get(page.page_number)),
         )
         for page in parsed.markdown_pages
     ]
@@ -51,7 +59,61 @@ def parsed_document_to_read_result(
         tables=_tables_from_markdown_pages(parsed.provider_job.job_id, parsed.markdown_pages),
         forms=_forms_from_markdown_pages(parsed.provider_job.job_id, parsed.markdown_pages),
         llama_understanding=understanding,
+        llama_cloud_metadata=LlamaCloudMetadata(
+            parse_job_id=parsed.provider_job.job_id,
+            parse_status=parsed.provider_job.status,
+            parse_configuration_hash=parsed.provider_job.configuration_hash,
+            page_metadata=_llama_page_metadata(parsed),
+            job_metadata=parsed.job_metadata,
+            warnings=parsed.warnings,
+        ),
     )
+
+
+def _page_parse_confidence(
+    metadata: dict[str, object] | None,
+    *,
+    parse_job_id: str,
+) -> ConfidenceMetric:
+    raw = metadata.get("confidence") if metadata is not None else None
+    if raw is None or isinstance(raw, bool):
+        return ConfidenceMetric(kind="unavailable", value=None)
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return ConfidenceMetric(kind="unavailable", value=None)
+    if value < 0 or value > 1:
+        return ConfidenceMetric(kind="unavailable", value=None)
+    return ConfidenceMetric(
+        kind="estimated",
+        value=value,
+        method="llamaparse_page_parse_confidence",
+        provenance=parse_job_id,
+        warnings=["llamaparse_confidence_not_word_ocr_measured"],
+    )
+
+
+def _page_warnings(
+    page_warnings: list[str],
+    metadata: dict[str, object] | None,
+) -> list[str]:
+    warnings = list(page_warnings)
+    if metadata is None or metadata.get("confidence") is None:
+        return warnings
+    confidence = _page_parse_confidence(metadata, parse_job_id="metadata_validation")
+    if confidence.value is None:
+        warnings.append("invalid_llamaparse_confidence_rejected")
+    return list(dict.fromkeys(warnings))
+
+
+def _llama_page_metadata(parsed: ParsedDocument) -> list[dict[str, object]]:
+    return [
+        {
+            "page_number": metadata.page_number,
+            **metadata.metadata,
+        }
+        for metadata in parsed.page_metadata
+    ]
 
 
 class _HtmlTableParser(HTMLParser):

@@ -67,6 +67,22 @@ class FakeLlamaOrchestrator:
         )
 
 
+class FakeAsyncCloser:
+    def __init__(self) -> None:
+        self.closed = False
+
+    async def close(self) -> None:
+        self.closed = True
+
+
+class FakeAsyncAcloser:
+    def __init__(self) -> None:
+        self.closed = False
+
+    async def aclose(self) -> None:
+        self.closed = True
+
+
 def test_llama_parse_reader_runs_orchestrator_after_parse(tmp_path: Path) -> None:
     source = tmp_path / "doc.pdf"
     source.write_bytes(b"%PDF")
@@ -82,6 +98,40 @@ def test_llama_parse_reader_runs_orchestrator_after_parse(tmp_path: Path) -> Non
     assert result.llama_understanding is not None
     assert result.llama_understanding.parse_job_id == "pjb_reader"
     assert "llama_parse_job:pjb_reader" in result.warnings
+
+
+def test_llama_parse_reader_closes_async_client_after_orchestrator_run(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "doc.pdf"
+    source.write_bytes(b"%PDF")
+    closer = FakeAsyncCloser()
+
+    LlamaParseReader(
+        adapter=FakeParseAdapter(),
+        configuration_hash="sha256:parse",
+        orchestrator=FakeLlamaOrchestrator(),
+        async_client=closer,
+    ).read(source, document_id="doc_123", source_hash="sha256:source")
+
+    assert closer.closed is True
+
+
+def test_llama_parse_reader_closes_async_client_with_aclose(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "doc.pdf"
+    source.write_bytes(b"%PDF")
+    closer = FakeAsyncAcloser()
+
+    LlamaParseReader(
+        adapter=FakeParseAdapter(),
+        configuration_hash="sha256:parse",
+        orchestrator=FakeLlamaOrchestrator(),
+        async_client=closer,
+    ).read(source, document_id="doc_123", source_hash="sha256:source")
+
+    assert closer.closed is True
 
 
 def test_markdown_reader_preserves_title_list_and_table(tmp_path: Path) -> None:

@@ -1,30 +1,30 @@
 {
   "document_confidence": {
     "engine": "tesseract",
-    "engine_version": "unknown",
+    "engine_version": "5.4.0.20240606",
     "kind": "measured",
     "method": null,
     "provenance": null,
-    "sample_size": 488,
+    "sample_size": 485,
     "unit": "mean_word_confidence",
-    "value": 0.8677450645081967,
+    "value": 0.8693550611958762,
     "warnings": []
   },
   "document_id": "doc_f2cf7868a801af0e",
   "engine": "tesseract",
-  "engine_version": "unknown",
+  "engine_version": "5.4.0.20240606",
   "language": "spa",
   "pages": [
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "measured",
         "method": null,
         "provenance": null,
         "sample_size": 274,
         "unit": "mean_word_confidence",
-        "value": 0.846213963649635,
+        "value": 0.8452526968248175,
         "warnings": []
       },
       "deskew": {
@@ -69,7 +69,7 @@
             "x0": 535.0,
             "x1": 772.0
           },
-          "confidence": 0.9619864699999999,
+          "confidence": 0.9649599499999999,
           "text": "EJERCICIOS",
           "warnings": []
         },
@@ -81,7 +81,7 @@
             "x0": 785.0,
             "x1": 838.0
           },
-          "confidence": 0.9619864699999999,
+          "confidence": 0.9649599499999999,
           "text": "DE",
           "warnings": []
         },
@@ -93,7 +93,7 @@
             "x0": 853.0,
             "x1": 1105.0
           },
-          "confidence": 0.95791573,
+          "confidence": 0.96112099,
           "text": "MOVILIDAD",
           "warnings": []
         },
@@ -105,7 +105,7 @@
             "x0": 1116.0,
             "x1": 1362.0
           },
-          "confidence": 0.96227974,
+          "confidence": 0.96343819,
           "text": "ARTICULAR",
           "warnings": []
         },
@@ -117,7 +117,7 @@
             "x0": 463.0,
             "x1": 635.0
           },
-          "confidence": 0.91596313,
+          "confidence": 0.92482979,
           "text": "EXLICACIÓN",
           "warnings": []
         },
@@ -129,7 +129,7 @@
             "x0": 1032.0,
             "x1": 1224.0
           },
-          "confidence": 0.9670860299999999,
+          "confidence": 0.96421638,
           "text": "EXPLICACIÓN",
           "warnings": []
         },
@@ -141,7 +141,7 @@
             "x0": 1587.0,
             "x1": 1665.0
           },
-          "confidence": 0.12265732,
+          "confidence": 0.16367493,
           "text": "A",
           "warnings": []
         },
@@ -153,7 +153,7 @@
             "x0": 107.0,
             "x1": 193.0
           },
-          "confidence": 0.92878754,
+          "confidence": 0.92794884,
           "text": "Mueva",
           "warnings": []
         },
@@ -165,7 +165,7 @@
             "x0": 201.0,
             "x1": 347.0
           },
-          "confidence": 0.96197449,
+          "confidence": 0.95950172,
           "text": "lentamente",
           "warnings": []
         },
@@ -177,7 +177,7 @@
             "x0": 354.0,
             "x1": 373.0
           },
-          "confidence": 0.97004349,
+          "confidence": 0.96999039,
           "text": "la",
           "warnings": []
         },
@@ -189,7 +189,7 @@
             "x0": 99.0,
             "x1": 186.0
           },
-          "confidence": 0.9680543500000001,
+          "confidence": 0.9674496499999999,
           "text": "cabeza",
           "warnings": []
         },
@@ -201,7 +201,7 @@
             "x0": 194.0,
             "x1": 268.0
           },
-          "confidence": 0.9681204999999999,
+          "confidence": 0.96704872,
           "text": "arriba",
           "warnings": []
         },
@@ -213,7 +213,7 @@
             "x0": 276.0,
             "x1": 290.0
           },
-          "confidence": 0.9680619,
+          "confidence": 0.96807007,
           "text": "y",
           "warnings": []
         },
@@ -225,7 +225,7 @@
             "x0": 298.0,
             "x1": 378.0
           },
-          "confidence": 0.9693672200000001,
+          "confidence": 0.9699303399999999,
           "text": "abajo.",
           "warnings": []
         },
@@ -237,7 +237,7 @@
             "x0": 131.0,
             "x1": 233.0
           },
-          "confidence": 0.9303348499999999,
+          "confidence": 0.92876846,
           "text": "Repitálo",
           "warnings": []
         },
@@ -249,7 +249,7 @@
             "x0": 243.0,
             "x1": 272.0
           },
-          "confidence": 0.96825745,
+          "confidence": 0.9660264599999999,
           "text": "10",
           "warnings": []
         },
@@ -261,7 +261,7 @@
             "x0": 278.0,
             "x1": 348.0
           },
-          "confidence": 0.9650992599999999,
+          "confidence": 0.9660264599999999,
           "text": "veces",
           "warnings": []
         },
@@ -273,7 +273,7 @@
             "x0": 1266.0,
             "x1": 1352.0
           },
-          "confidence": 0.8521983299999999,
+          "confidence": 0.85678528,
           "text": "Mueva",
           "warnings": []
         },
@@ -285,7 +285,7 @@
             "x0": 1361.0,
             "x1": 1395.0
           },
-          "confidence": 0.96200821,
+          "confidence": 0.9621418799999999,
           "text": "los",
           "warnings": []
         },
@@ -297,7 +297,7 @@
             "x0": 1404.0,
             "x1": 1488.0
           },
-          "confidence": 0.9661119100000001,
+          "confidence": 0.9673569500000001,
           "text": "brazos",
           "warnings": []
         },
@@ -309,7 +309,7 @@
             "x0": 1496.0,
             "x1": 1527.0
           },
-          "confidence": 0.96804558,
+          "confidence": 0.9681636,
           "text": "de",
           "warnings": []
         },
@@ -321,7 +321,7 @@
             "x0": 719.0,
             "x1": 805.0
           },
-          "confidence": 0.9268206800000001,
+          "confidence": 0.926427,
           "text": "Mueva",
           "warnings": []
         },
@@ -333,7 +333,7 @@
             "x0": 813.0,
             "x1": 848.0
           },
-          "confidence": 0.9699214899999999,
+          "confidence": 0.9699733700000001,
           "text": "los",
           "warnings": []
         },
@@ -345,7 +345,7 @@
             "x0": 856.0,
             "x1": 971.0
           },
-          "confidence": 0.9657285299999999,
+          "confidence": 0.9643499799999999,
           "text": "hombros",
           "warnings": []
         },
@@ -357,7 +357,7 @@
             "x0": 1081.0,
             "x1": 1084.0
           },
-          "confidence": 0.64041634,
+          "confidence": 0.53479481,
           "text": ":",
           "warnings": []
         },
@@ -369,8 +369,8 @@
             "x0": 1105.0,
             "x1": 1185.0
           },
-          "confidence": 0.7346215100000001,
-          "text": "2.",
+          "confidence": 0.89486687,
+          "text": "e.",
           "warnings": []
         },
         {
@@ -393,7 +393,7 @@
             "x0": 1084.0,
             "x1": 1087.0
           },
-          "confidence": 0.81691452,
+          "confidence": 0.81097733,
           "text": "y",
           "warnings": []
         },
@@ -405,7 +405,7 @@
             "x0": 1296.0,
             "x1": 1391.0
           },
-          "confidence": 0.95928093,
+          "confidence": 0.95468842,
           "text": "manera",
           "warnings": []
         },
@@ -417,7 +417,7 @@
             "x0": 1399.0,
             "x1": 1498.0
           },
-          "confidence": 0.96780632,
+          "confidence": 0.96673721,
           "text": "circular.",
           "warnings": []
         },
@@ -429,7 +429,7 @@
             "x0": 739.0,
             "x1": 850.0
           },
-          "confidence": 0.9663365899999999,
+          "confidence": 0.968395,
           "text": "adelante",
           "warnings": []
         },
@@ -441,7 +441,7 @@
             "x0": 858.0,
             "x1": 872.0
           },
-          "confidence": 0.9697847,
+          "confidence": 0.9696521,
           "text": "y",
           "warnings": []
         },
@@ -453,7 +453,7 @@
             "x0": 879.0,
             "x1": 950.0
           },
-          "confidence": 0.9684651200000001,
+          "confidence": 0.9696386699999999,
           "text": "atrás.",
           "warnings": []
         },
@@ -465,8 +465,8 @@
             "x0": 1177.0,
             "x1": 1193.0
           },
-          "confidence": 0.04822418,
-          "text": "A",
+          "confidence": 0.03077347,
+          "text": "dE",
           "warnings": []
         },
         {
@@ -477,7 +477,7 @@
             "x0": 1324.0,
             "x1": 1330.0
           },
-          "confidence": 0.47183746,
+          "confidence": 0.50833035,
           "text": ".",
           "warnings": []
         },
@@ -489,7 +489,7 @@
             "x0": 1275.0,
             "x1": 1354.0
           },
-          "confidence": 0.95964142,
+          "confidence": 0.9648989899999999,
           "text": "Repita",
           "warnings": []
         },
@@ -501,7 +501,7 @@
             "x0": 1363.0,
             "x1": 1392.0
           },
-          "confidence": 0.95964142,
+          "confidence": 0.96625114,
           "text": "10",
           "warnings": []
         },
@@ -513,7 +513,7 @@
             "x0": 1398.0,
             "x1": 1468.0
           },
-          "confidence": 0.9637735700000001,
+          "confidence": 0.9616361999999999,
           "text": "veces",
           "warnings": []
         },
@@ -525,7 +525,7 @@
             "x0": 1477.0,
             "x1": 1522.0
           },
-          "confidence": 0.9637735700000001,
+          "confidence": 0.9616361999999999,
           "text": "por",
           "warnings": []
         },
@@ -537,7 +537,7 @@
             "x0": 740.0,
             "x1": 837.0
           },
-          "confidence": 0.9194152099999999,
+          "confidence": 0.91932899,
           "text": "Reptálo",
           "warnings": []
         },
@@ -549,7 +549,7 @@
             "x0": 846.0,
             "x1": 875.0
           },
-          "confidence": 0.96509377,
+          "confidence": 0.96583694,
           "text": "10",
           "warnings": []
         },
@@ -561,7 +561,7 @@
             "x0": 881.0,
             "x1": 951.0
           },
-          "confidence": 0.9643131300000001,
+          "confidence": 0.96583694,
           "text": "veces",
           "warnings": []
         },
@@ -573,7 +573,7 @@
             "x0": 1361.0,
             "x1": 1432.0
           },
-          "confidence": 0.9693711899999999,
+          "confidence": 0.96970665,
           "text": "brazo",
           "warnings": []
         },
@@ -585,7 +585,7 @@
             "x0": 1283.0,
             "x1": 1366.0
           },
-          "confidence": 0.9248504599999999,
+          "confidence": 0.91793976,
           "text": "Incline",
           "warnings": []
         },
@@ -597,7 +597,7 @@
             "x0": 1373.0,
             "x1": 1394.0
           },
-          "confidence": 0.9687621300000001,
+          "confidence": 0.9676915700000001,
           "text": "el",
           "warnings": []
         },
@@ -609,7 +609,7 @@
             "x0": 1400.0,
             "x1": 1485.0
           },
-          "confidence": 0.96169678,
+          "confidence": 0.96247406,
           "text": "tronco",
           "warnings": []
         },
@@ -621,7 +621,7 @@
             "x0": 1494.0,
             "x1": 1507.0
           },
-          "confidence": 0.96355789,
+          "confidence": 0.9656880999999999,
           "text": "a",
           "warnings": []
         },
@@ -633,7 +633,7 @@
             "x0": 1287.0,
             "x1": 1319.0
           },
-          "confidence": 0.9689585099999999,
+          "confidence": 0.96814323,
           "text": "un",
           "warnings": []
         },
@@ -645,7 +645,7 @@
             "x0": 1328.0,
             "x1": 1382.0
           },
-          "confidence": 0.96950684,
+          "confidence": 0.96938148,
           "text": "lado",
           "warnings": []
         },
@@ -657,7 +657,7 @@
             "x0": 1385.0,
             "x1": 1397.0
           },
-          "confidence": 0.96648209,
+          "confidence": 0.96467827,
           "text": "y",
           "warnings": []
         },
@@ -669,7 +669,7 @@
             "x0": 1412.0,
             "x1": 1433.0
           },
-          "confidence": 0.8991838099999999,
+          "confidence": 0.92062248,
           "text": "al",
           "warnings": []
         },
@@ -681,7 +681,7 @@
             "x0": 1440.0,
             "x1": 1502.0
           },
-          "confidence": 0.8991838099999999,
+          "confidence": 0.92062248,
           "text": "otro,",
           "warnings": []
         },
@@ -693,7 +693,7 @@
             "x0": 1272.0,
             "x1": 1382.0
           },
-          "confidence": 0.9683682299999999,
+          "confidence": 0.96765068,
           "text": "pasando",
           "warnings": []
         },
@@ -705,7 +705,7 @@
             "x0": 1391.0,
             "x1": 1438.0
           },
-          "confidence": 0.9632534800000001,
+          "confidence": 0.95758347,
           "text": "una",
           "warnings": []
         },
@@ -717,7 +717,7 @@
             "x0": 1447.0,
             "x1": 1518.0
           },
-          "confidence": 0.9673633599999999,
+          "confidence": 0.9666593899999999,
           "text": "mano",
           "warnings": []
         },
@@ -729,7 +729,7 @@
             "x0": 1276.0,
             "x1": 1349.0
           },
-          "confidence": 0.9618914,
+          "confidence": 0.96431839,
           "text": "sobre",
           "warnings": []
         },
@@ -741,7 +741,7 @@
             "x0": 1356.0,
             "x1": 1376.0
           },
-          "confidence": 0.96792313,
+          "confidence": 0.96248131,
           "text": "la",
           "warnings": []
         },
@@ -753,7 +753,7 @@
             "x0": 1384.0,
             "x1": 1479.0
           },
-          "confidence": 0.96380501,
+          "confidence": 0.96478561,
           "text": "cabeza.",
           "warnings": []
         },
@@ -765,7 +765,7 @@
             "x0": 1488.0,
             "x1": 1517.0
           },
-          "confidence": 0.96910408,
+          "confidence": 0.9692700200000001,
           "text": "10",
           "warnings": []
         },
@@ -777,7 +777,7 @@
             "x0": 1303.0,
             "x1": 1373.0
           },
-          "confidence": 0.96348969,
+          "confidence": 0.96880409,
           "text": "veces",
           "warnings": []
         },
@@ -789,7 +789,7 @@
             "x0": 1382.0,
             "x1": 1427.0
           },
-          "confidence": 0.9611869,
+          "confidence": 0.9659978499999999,
           "text": "por",
           "warnings": []
         },
@@ -801,7 +801,7 @@
             "x0": 1434.0,
             "x1": 1487.0
           },
-          "confidence": 0.95747917,
+          "confidence": 0.96143242,
           "text": "lado",
           "warnings": []
         },
@@ -813,7 +813,7 @@
             "x0": 698.0,
             "x1": 762.0
           },
-          "confidence": 0.96862633,
+          "confidence": 0.96809258,
           "text": "Suba",
           "warnings": []
         },
@@ -825,7 +825,7 @@
             "x0": 763.0,
             "x1": 775.0
           },
-          "confidence": 0.97007874,
+          "confidence": 0.97010498,
           "text": "y",
           "warnings": []
         },
@@ -837,7 +837,7 @@
             "x0": 792.0,
             "x1": 847.0
           },
-          "confidence": 0.96750099,
+          "confidence": 0.96596413,
           "text": "baje",
           "warnings": []
         },
@@ -849,7 +849,7 @@
             "x0": 854.0,
             "x1": 873.0
           },
-          "confidence": 0.96738686,
+          "confidence": 0.96831146,
           "text": "la",
           "warnings": []
         },
@@ -861,7 +861,7 @@
             "x0": 882.0,
             "x1": 990.0
           },
-          "confidence": 0.9682321899999999,
+          "confidence": 0.9676862300000001,
           "text": "muñeca.",
           "warnings": []
         },
@@ -873,7 +873,7 @@
             "x0": 100.0,
             "x1": 174.0
           },
-          "confidence": 0.95450287,
+          "confidence": 0.95236336,
           "text": "Doble",
           "warnings": []
         },
@@ -885,7 +885,7 @@
             "x0": 181.0,
             "x1": 196.0
           },
-          "confidence": 0.93306145,
+          "confidence": 0.93306084,
           "text": "y",
           "warnings": []
         },
@@ -897,7 +897,7 @@
             "x0": 203.0,
             "x1": 273.0
           },
-          "confidence": 0.9328638499999999,
+          "confidence": 0.93291168,
           "text": "estire",
           "warnings": []
         },
@@ -909,7 +909,7 @@
             "x0": 281.0,
             "x1": 302.0
           },
-          "confidence": 0.9699909200000001,
+          "confidence": 0.96999023,
           "text": "el",
           "warnings": []
         },
@@ -921,7 +921,7 @@
             "x0": 308.0,
             "x1": 380.0
           },
-          "confidence": 0.9700386799999999,
+          "confidence": 0.9699909999999999,
           "text": "codo.",
           "warnings": []
         },
@@ -933,7 +933,7 @@
             "x0": 574.0,
             "x1": 579.0
           },
-          "confidence": 0.0,
+          "confidence": 0.48307434,
           "text": ":",
           "warnings": []
         },
@@ -945,7 +945,7 @@
             "x0": 769.0,
             "x1": 830.0
           },
-          "confidence": 0.06826477,
+          "confidence": 0.0,
           "text": "ve",
           "warnings": []
         },
@@ -957,7 +957,7 @@
             "x0": 574.0,
             "x1": 581.0
           },
-          "confidence": 0.45121901999999997,
+          "confidence": 0.00249634,
           "text": ":",
           "warnings": []
         },
@@ -969,7 +969,7 @@
             "x0": 723.0,
             "x1": 802.0
           },
-          "confidence": 0.9685853600000001,
+          "confidence": 0.96911469,
           "text": "Repita",
           "warnings": []
         },
@@ -981,7 +981,7 @@
             "x0": 812.0,
             "x1": 841.0
           },
-          "confidence": 0.9696991,
+          "confidence": 0.96977997,
           "text": "10",
           "warnings": []
         },
@@ -993,7 +993,7 @@
             "x0": 847.0,
             "x1": 917.0
           },
-          "confidence": 0.96426735,
+          "confidence": 0.96792198,
           "text": "veces",
           "warnings": []
         },
@@ -1005,7 +1005,7 @@
             "x0": 925.0,
             "x1": 970.0
           },
-          "confidence": 0.96426735,
+          "confidence": 0.96699806,
           "text": "por",
           "warnings": []
         },
@@ -1017,7 +1017,7 @@
             "x0": 77.0,
             "x1": 156.0
           },
-          "confidence": 0.96435165,
+          "confidence": 0.96326881,
           "text": "Repita",
           "warnings": []
         },
@@ -1029,7 +1029,7 @@
             "x0": 165.0,
             "x1": 194.0
           },
-          "confidence": 0.9697773700000001,
+          "confidence": 0.96326881,
           "text": "10",
           "warnings": []
         },
@@ -1041,7 +1041,7 @@
             "x0": 200.0,
             "x1": 270.0
           },
-          "confidence": 0.96939774,
+          "confidence": 0.96946198,
           "text": "veces",
           "warnings": []
         },
@@ -1053,7 +1053,7 @@
             "x0": 279.0,
             "x1": 323.0
           },
-          "confidence": 0.9637142900000001,
+          "confidence": 0.96446487,
           "text": "por",
           "warnings": []
         },
@@ -1065,7 +1065,7 @@
             "x0": 331.0,
             "x1": 402.0
           },
-          "confidence": 0.96884842,
+          "confidence": 0.9692717000000001,
           "text": "brazo",
           "warnings": []
         },
@@ -1077,7 +1077,7 @@
             "x0": 555.0,
             "x1": 584.0
           },
-          "confidence": 0.7186170199999999,
+          "confidence": 0.5333288199999999,
           "text": "ES",
           "warnings": []
         },
@@ -1089,8 +1089,8 @@
             "x0": 578.0,
             "x1": 585.0
           },
-          "confidence": 0.3196273,
-          "text": "A",
+          "confidence": 0.1089756,
+          "text": "3",
           "warnings": []
         },
         {
@@ -1101,7 +1101,7 @@
             "x0": 809.0,
             "x1": 880.0
           },
-          "confidence": 0.9662933300000001,
+          "confidence": 0.96421967,
           "text": "mano",
           "warnings": []
         },
@@ -1113,7 +1113,7 @@
             "x0": 99.0,
             "x1": 227.0
           },
-          "confidence": 0.9171798699999999,
+          "confidence": 0.9168428799999999,
           "text": "Sostenido",
           "warnings": []
         },
@@ -1125,7 +1125,7 @@
             "x0": 235.0,
             "x1": 267.0
           },
-          "confidence": 0.9632096099999999,
+          "confidence": 0.96478577,
           "text": "de",
           "warnings": []
         },
@@ -1137,7 +1137,7 @@
             "x0": 274.0,
             "x1": 322.0
           },
-          "confidence": 0.9661615,
+          "confidence": 0.9669448900000001,
           "text": "una",
           "warnings": []
         },
@@ -1149,7 +1149,7 @@
             "x0": 330.0,
             "x1": 384.0
           },
-          "confidence": 0.9652020299999999,
+          "confidence": 0.96663483,
           "text": "silla,",
           "warnings": []
         },
@@ -1161,7 +1161,7 @@
             "x0": 83.0,
             "x1": 140.0
           },
-          "confidence": 0.96333359,
+          "confidence": 0.96649239,
           "text": "lleve",
           "warnings": []
         },
@@ -1173,7 +1173,7 @@
             "x0": 147.0,
             "x1": 167.0
           },
-          "confidence": 0.96333359,
+          "confidence": 0.96992073,
           "text": "la",
           "warnings": []
         },
@@ -1185,7 +1185,7 @@
             "x0": 176.0,
             "x1": 255.0
           },
-          "confidence": 0.96529068,
+          "confidence": 0.96142319,
           "text": "pierna",
           "warnings": []
         },
@@ -1197,7 +1197,7 @@
             "x0": 263.0,
             "x1": 375.0
           },
-          "confidence": 0.9649099699999999,
+          "confidence": 0.9634229999999999,
           "text": "adelante",
           "warnings": []
         },
@@ -1209,7 +1209,7 @@
             "x0": 381.0,
             "x1": 396.0
           },
-          "confidence": 0.9700479900000001,
+          "confidence": 0.96994522,
           "text": "y",
           "warnings": []
         },
@@ -1221,7 +1221,7 @@
             "x0": 76.0,
             "x1": 147.0
           },
-          "confidence": 0.9675634,
+          "confidence": 0.96568657,
           "text": "atrás.",
           "warnings": []
         },
@@ -1233,7 +1233,7 @@
             "x0": 157.0,
             "x1": 236.0
           },
-          "confidence": 0.9675634,
+          "confidence": 0.96568657,
           "text": "Repita",
           "warnings": []
         },
@@ -1245,7 +1245,7 @@
             "x0": 245.0,
             "x1": 274.0
           },
-          "confidence": 0.9697358699999999,
+          "confidence": 0.96974693,
           "text": "10",
           "warnings": []
         },
@@ -1257,7 +1257,7 @@
             "x0": 280.0,
             "x1": 350.0
           },
-          "confidence": 0.9656353799999999,
+          "confidence": 0.9644940900000001,
           "text": "veces",
           "warnings": []
         },
@@ -1269,7 +1269,7 @@
             "x0": 359.0,
             "x1": 403.0
           },
-          "confidence": 0.96550034,
+          "confidence": 0.9664890300000001,
           "text": "por",
           "warnings": []
         },
@@ -1281,7 +1281,7 @@
             "x0": 199.0,
             "x1": 279.0
           },
-          "confidence": 0.96368706,
+          "confidence": 0.96552307,
           "text": "pierna",
           "warnings": []
         },
@@ -1293,7 +1293,7 @@
             "x0": 1285.0,
             "x1": 1412.0
           },
-          "confidence": 0.9166793099999999,
+          "confidence": 0.92148529,
           "text": "Sostenido",
           "warnings": []
         },
@@ -1305,7 +1305,7 @@
             "x0": 1420.0,
             "x1": 1452.0
           },
-          "confidence": 0.9577737399999999,
+          "confidence": 0.95519867,
           "text": "de",
           "warnings": []
         },
@@ -1317,7 +1317,7 @@
             "x0": 1460.0,
             "x1": 1507.0
           },
-          "confidence": 0.9577737399999999,
+          "confidence": 0.95519867,
           "text": "una",
           "warnings": []
         },
@@ -1329,7 +1329,7 @@
             "x0": 727.0,
             "x1": 813.0
           },
-          "confidence": 0.9567903099999999,
+          "confidence": 0.9568270099999999,
           "text": "Doblar",
           "warnings": []
         },
@@ -1341,7 +1341,7 @@
             "x0": 820.0,
             "x1": 851.0
           },
-          "confidence": 0.96533249,
+          "confidence": 0.96581367,
           "text": "un",
           "warnings": []
         },
@@ -1353,7 +1353,7 @@
             "x0": 861.0,
             "x1": 923.0
           },
-          "confidence": 0.9649347699999999,
+          "confidence": 0.96420761,
           "text": "poco",
           "warnings": []
         },
@@ -1365,7 +1365,7 @@
             "x0": 932.0,
             "x1": 964.0
           },
-          "confidence": 0.96926163,
+          "confidence": 0.9658593799999999,
           "text": "las",
           "warnings": []
         },
@@ -1377,7 +1377,7 @@
             "x0": 1308.0,
             "x1": 1362.0
           },
-          "confidence": 0.9674981699999999,
+          "confidence": 0.9664994,
           "text": "silla,",
           "warnings": []
         },
@@ -1389,7 +1389,7 @@
             "x0": 1371.0,
             "x1": 1455.0
           },
-          "confidence": 0.9680024,
+          "confidence": 0.96278908,
           "text": "mueva",
           "warnings": []
         },
@@ -1401,7 +1401,7 @@
             "x0": 1464.0,
             "x1": 1485.0
           },
-          "confidence": 0.9655410000000001,
+          "confidence": 0.96278908,
           "text": "el",
           "warnings": []
         },
@@ -1413,7 +1413,7 @@
             "x0": 710.0,
             "x1": 800.0
           },
-          "confidence": 0.9673762499999999,
+          "confidence": 0.96814499,
           "text": "rodillas",
           "warnings": []
         },
@@ -1425,7 +1425,7 @@
             "x0": 808.0,
             "x1": 823.0
           },
-          "confidence": 0.9701570100000001,
+          "confidence": 0.97014603,
           "text": "y",
           "warnings": []
         },
@@ -1437,7 +1437,7 @@
             "x0": 831.0,
             "x1": 935.0
           },
-          "confidence": 0.96919174,
+          "confidence": 0.96926056,
           "text": "regresar",
           "warnings": []
         },
@@ -1449,7 +1449,7 @@
             "x0": 942.0,
             "x1": 955.0
           },
-          "confidence": 0.96919174,
+          "confidence": 0.96926056,
           "text": "a",
           "warnings": []
         },
@@ -1461,7 +1461,7 @@
             "x0": 964.0,
             "x1": 984.0
           },
-          "confidence": 0.96982033,
+          "confidence": 0.9699472,
           "text": "la",
           "warnings": []
         },
@@ -1473,7 +1473,7 @@
             "x0": 753.0,
             "x1": 794.0
           },
-          "confidence": 0.64883095,
+          "confidence": 0.52615234,
           "text": "ición",
           "warnings": []
         },
@@ -1485,7 +1485,7 @@
             "x0": 820.0,
             "x1": 890.0
           },
-          "confidence": 0.6421051799999999,
+          "confidence": 0.55543968,
           "text": "inicial.",
           "warnings": []
         },
@@ -1497,8 +1497,8 @@
             "x0": 906.0,
             "x1": 971.0
           },
-          "confidence": 0.21721015999999999,
-          "text": "Repit",
+          "confidence": 0.22589508,
+          "text": "Repit:",
           "warnings": []
         },
         {
@@ -1509,7 +1509,7 @@
             "x0": 1284.0,
             "x1": 1365.0
           },
-          "confidence": 0.96729828,
+          "confidence": 0.96728256,
           "text": "tobillo",
           "warnings": []
         },
@@ -1521,7 +1521,7 @@
             "x0": 1373.0,
             "x1": 1405.0
           },
-          "confidence": 0.9677306400000001,
+          "confidence": 0.9683503,
           "text": "de",
           "warnings": []
         },
@@ -1533,7 +1533,7 @@
             "x0": 1412.0,
             "x1": 1507.0
           },
-          "confidence": 0.9675283100000001,
+          "confidence": 0.96778114,
           "text": "manera",
           "warnings": []
         },
@@ -1545,7 +1545,7 @@
             "x0": 705.0,
             "x1": 751.0
           },
-          "confidence": 0.61508137,
+          "confidence": 0.59483639,
           "text": "pos",
           "warnings": []
         },
@@ -1557,19 +1557,19 @@
             "x0": 795.0,
             "x1": 823.0
           },
-          "confidence": 0.20556358,
+          "confidence": 0.2485762,
           "text": "10",
           "warnings": []
         },
         {
           "bbox": {
-            "bottom": 926.0,
+            "bottom": 922.0,
             "coordinate_system": "pixels",
-            "top": 861.0,
+            "top": 865.0,
             "x0": 829.0,
             "x1": 900.0
           },
-          "confidence": 0.24735176,
+          "confidence": 0.29795692,
           "text": "ecos",
           "warnings": []
         },
@@ -1582,7 +1582,7 @@
             "x1": 986.0
           },
           "confidence": 0.0,
-          "text": "».es",
+          "text": "»pEs",
           "warnings": []
         },
         {
@@ -1593,7 +1593,7 @@
             "x0": 1282.0,
             "x1": 1382.0
           },
-          "confidence": 0.9678683499999999,
+          "confidence": 0.96759499,
           "text": "circular.",
           "warnings": []
         },
@@ -1605,7 +1605,7 @@
             "x0": 1391.0,
             "x1": 1471.0
           },
-          "confidence": 0.96997887,
+          "confidence": 0.96926491,
           "text": "Repita",
           "warnings": []
         },
@@ -1617,7 +1617,7 @@
             "x0": 1480.0,
             "x1": 1509.0
           },
-          "confidence": 0.96821457,
+          "confidence": 0.9681399500000001,
           "text": "10",
           "warnings": []
         },
@@ -1629,7 +1629,7 @@
             "x0": 1290.0,
             "x1": 1361.0
           },
-          "confidence": 0.96630013,
+          "confidence": 0.9691950199999999,
           "text": "veces",
           "warnings": []
         },
@@ -1641,7 +1641,7 @@
             "x0": 1369.0,
             "x1": 1414.0
           },
-          "confidence": 0.96735237,
+          "confidence": 0.96855209,
           "text": "por",
           "warnings": []
         },
@@ -1653,7 +1653,7 @@
             "x0": 1420.0,
             "x1": 1500.0
           },
-          "confidence": 0.96735237,
+          "confidence": 0.9678686500000001,
           "text": "tobillo",
           "warnings": []
         },
@@ -1665,7 +1665,7 @@
             "x0": 471.0,
             "x1": 707.0
           },
-          "confidence": 0.9619864699999999,
+          "confidence": 0.9649599499999999,
           "text": "EJERCICIOS",
           "warnings": []
         },
@@ -1677,7 +1677,7 @@
             "x0": 721.0,
             "x1": 774.0
           },
-          "confidence": 0.9619864699999999,
+          "confidence": 0.9649599499999999,
           "text": "DE",
           "warnings": []
         },
@@ -1689,7 +1689,7 @@
             "x0": 790.0,
             "x1": 1041.0
           },
-          "confidence": 0.95791573,
+          "confidence": 0.96112099,
           "text": "MOVILIDAD",
           "warnings": []
         },
@@ -1701,7 +1701,7 @@
             "x0": 1052.0,
             "x1": 1298.0
           },
-          "confidence": 0.96227974,
+          "confidence": 0.96343819,
           "text": "ARTICULAR",
           "warnings": []
         },
@@ -1713,7 +1713,7 @@
             "x0": 399.0,
             "x1": 571.0
           },
-          "confidence": 0.91596313,
+          "confidence": 0.92482979,
           "text": "EXLICACIÓN",
           "warnings": []
         },
@@ -1725,7 +1725,7 @@
             "x0": 968.0,
             "x1": 1159.0
           },
-          "confidence": 0.9667543000000001,
+          "confidence": 0.96511742,
           "text": "EXPLICACIÓN",
           "warnings": []
         },
@@ -1737,7 +1737,7 @@
             "x0": 1523.0,
             "x1": 1711.0
           },
-          "confidence": 0.96595451,
+          "confidence": 0.96570534,
           "text": "EXPLICACIÓN",
           "warnings": []
         },
@@ -1749,8 +1749,8 @@
             "x0": 1041.0,
             "x1": 1094.0
           },
-          "confidence": 0.6661833199999999,
-          "text": "a",
+          "confidence": 0.65933975,
+          "text": "O",
           "warnings": []
         },
         {
@@ -1761,7 +1761,7 @@
             "x0": 1202.0,
             "x1": 1288.0
           },
-          "confidence": 0.8521983299999999,
+          "confidence": 0.85678528,
           "text": "Mueva",
           "warnings": []
         },
@@ -1773,7 +1773,7 @@
             "x0": 1297.0,
             "x1": 1331.0
           },
-          "confidence": 0.96200821,
+          "confidence": 0.9621418799999999,
           "text": "los",
           "warnings": []
         },
@@ -1785,7 +1785,7 @@
             "x0": 1340.0,
             "x1": 1424.0
           },
-          "confidence": 0.9661119100000001,
+          "confidence": 0.9673569500000001,
           "text": "brazos",
           "warnings": []
         },
@@ -1797,7 +1797,7 @@
             "x0": 1432.0,
             "x1": 1463.0
           },
-          "confidence": 0.96804558,
+          "confidence": 0.9681636,
           "text": "de",
           "warnings": []
         },
@@ -1809,7 +1809,7 @@
             "x0": 43.0,
             "x1": 129.0
           },
-          "confidence": 0.90074623,
+          "confidence": 0.9024940499999999,
           "text": "Mueva",
           "warnings": []
         },
@@ -1821,7 +1821,7 @@
             "x0": 138.0,
             "x1": 282.0
           },
-          "confidence": 0.96623222,
+          "confidence": 0.9659304799999999,
           "text": "lentamente",
           "warnings": []
         },
@@ -1833,7 +1833,7 @@
             "x0": 290.0,
             "x1": 309.0
           },
-          "confidence": 0.96913589,
+          "confidence": 0.96798691,
           "text": "la",
           "warnings": []
         },
@@ -1845,7 +1845,7 @@
             "x0": 520.0,
             "x1": 551.0
           },
-          "confidence": 0.36739433,
+          "confidence": 0.33084389000000003,
           "text": "qe",
           "warnings": []
         },
@@ -1857,7 +1857,7 @@
             "x0": 655.0,
             "x1": 741.0
           },
-          "confidence": 0.90974052,
+          "confidence": 0.90529236,
           "text": "Mueva",
           "warnings": []
         },
@@ -1869,7 +1869,7 @@
             "x0": 749.0,
             "x1": 784.0
           },
-          "confidence": 0.96172485,
+          "confidence": 0.96380829,
           "text": "los",
           "warnings": []
         },
@@ -1881,7 +1881,7 @@
             "x0": 792.0,
             "x1": 907.0
           },
-          "confidence": 0.96700104,
+          "confidence": 0.96718796,
           "text": "hombros",
           "warnings": []
         },
@@ -1893,8 +1893,8 @@
             "x0": 1028.0,
             "x1": 1032.0
           },
-          "confidence": 0.50614464,
-          "text": "y",
+          "confidence": 0.0,
+          "text": "j",
           "warnings": []
         },
         {
@@ -1905,20 +1905,20 @@
             "x0": 1110.0,
             "x1": 1120.0
           },
-          "confidence": 0.20986267000000003,
+          "confidence": 0.7380629000000001,
           "text": "p\"",
           "warnings": []
         },
         {
           "bbox": {
-            "bottom": 306.0,
+            "bottom": 316.0,
             "coordinate_system": "pixels",
-            "top": 290.0,
-            "x0": 587.0,
+            "top": 281.0,
+            "x0": 583.0,
             "x1": 593.0
           },
-          "confidence": 0.85973862,
-          "text": "3",
+          "confidence": 0.30352859,
+          "text": "y]",
           "warnings": []
         },
         {
@@ -1929,7 +1929,7 @@
             "x0": 1024.0,
             "x1": 1029.0
           },
-          "confidence": 0.8581634499999999,
+          "confidence": 0.8385700199999999,
           "text": "y",
           "warnings": []
         },
@@ -1941,7 +1941,7 @@
             "x0": 1232.0,
             "x1": 1327.0
           },
-          "confidence": 0.95928093,
+          "confidence": 0.95468842,
           "text": "manera",
           "warnings": []
         },
@@ -1953,7 +1953,7 @@
             "x0": 1335.0,
             "x1": 1434.0
           },
-          "confidence": 0.96780632,
+          "confidence": 0.96673721,
           "text": "circular.",
           "warnings": []
         },
@@ -1965,7 +1965,7 @@
             "x0": 35.0,
             "x1": 122.0
           },
-          "confidence": 0.96767876,
+          "confidence": 0.96794106,
           "text": "cabeza",
           "warnings": []
         },
@@ -1977,7 +1977,7 @@
             "x0": 130.0,
             "x1": 204.0
           },
-          "confidence": 0.96917648,
+          "confidence": 0.96005638,
           "text": "arriba",
           "warnings": []
         },
@@ -1989,7 +1989,7 @@
             "x0": 212.0,
             "x1": 226.0
           },
-          "confidence": 0.96550766,
+          "confidence": 0.96005638,
           "text": "y",
           "warnings": []
         },
@@ -2001,7 +2001,7 @@
             "x0": 234.0,
             "x1": 313.0
           },
-          "confidence": 0.9689565299999999,
+          "confidence": 0.96810028,
           "text": "abajo.",
           "warnings": []
         },
@@ -2013,7 +2013,7 @@
             "x0": 675.0,
             "x1": 786.0
           },
-          "confidence": 0.96261734,
+          "confidence": 0.96518135,
           "text": "adelante",
           "warnings": []
         },
@@ -2025,7 +2025,7 @@
             "x0": 794.0,
             "x1": 808.0
           },
-          "confidence": 0.96969032,
+          "confidence": 0.96518135,
           "text": "y",
           "warnings": []
         },
@@ -2037,7 +2037,7 @@
             "x0": 816.0,
             "x1": 886.0
           },
-          "confidence": 0.9679808,
+          "confidence": 0.96767189,
           "text": "atrás.",
           "warnings": []
         },
@@ -2049,7 +2049,7 @@
             "x0": 1108.0,
             "x1": 1147.0
           },
-          "confidence": 0.13169243,
+          "confidence": 0.16449623,
           "text": "cd",
           "warnings": []
         },
@@ -2061,7 +2061,7 @@
             "x0": 1260.0,
             "x1": 1265.0
           },
-          "confidence": 0.40472103,
+          "confidence": 0.35239388,
           "text": ".",
           "warnings": []
         },
@@ -2074,7 +2074,7 @@
             "x1": 505.0
           },
           "confidence": 0.0,
-          "text": "Z",
+          "text": "=",
           "warnings": []
         },
         {
@@ -2097,7 +2097,7 @@
             "x0": 1211.0,
             "x1": 1290.0
           },
-          "confidence": 0.95964142,
+          "confidence": 0.9648989899999999,
           "text": "Repita",
           "warnings": []
         },
@@ -2109,7 +2109,7 @@
             "x0": 1299.0,
             "x1": 1328.0
           },
-          "confidence": 0.95964142,
+          "confidence": 0.96625114,
           "text": "10",
           "warnings": []
         },
@@ -2121,7 +2121,7 @@
             "x0": 1334.0,
             "x1": 1404.0
           },
-          "confidence": 0.9637735700000001,
+          "confidence": 0.9616361999999999,
           "text": "veces",
           "warnings": []
         },
@@ -2133,7 +2133,7 @@
             "x0": 1413.0,
             "x1": 1458.0
           },
-          "confidence": 0.9637735700000001,
+          "confidence": 0.9616361999999999,
           "text": "por",
           "warnings": []
         },
@@ -2145,7 +2145,7 @@
             "x0": 67.0,
             "x1": 169.0
           },
-          "confidence": 0.9303348499999999,
+          "confidence": 0.92876846,
           "text": "Repitálo",
           "warnings": []
         },
@@ -2157,7 +2157,7 @@
             "x0": 179.0,
             "x1": 208.0
           },
-          "confidence": 0.96825745,
+          "confidence": 0.9660264599999999,
           "text": "10",
           "warnings": []
         },
@@ -2169,7 +2169,7 @@
             "x0": 214.0,
             "x1": 284.0
           },
-          "confidence": 0.9650992599999999,
+          "confidence": 0.9660264599999999,
           "text": "veces",
           "warnings": []
         },
@@ -2181,7 +2181,7 @@
             "x0": 676.0,
             "x1": 773.0
           },
-          "confidence": 0.91473907,
+          "confidence": 0.91153687,
           "text": "Reptálo",
           "warnings": []
         },
@@ -2193,7 +2193,7 @@
             "x0": 782.0,
             "x1": 811.0
           },
-          "confidence": 0.9691350599999999,
+          "confidence": 0.96825691,
           "text": "10",
           "warnings": []
         },
@@ -2205,7 +2205,7 @@
             "x0": 817.0,
             "x1": 887.0
           },
-          "confidence": 0.96803658,
+          "confidence": 0.96750214,
           "text": "veces",
           "warnings": []
         },
@@ -2217,7 +2217,7 @@
             "x0": 1149.0,
             "x1": 1151.0
           },
-          "confidence": 0.67897995,
+          "confidence": 0.76828934,
           "text": "]",
           "warnings": []
         },
@@ -2229,8 +2229,8 @@
             "x0": 1297.0,
             "x1": 1368.0
           },
-          "confidence": 0.45745354,
-          "text": "uo",
+          "confidence": 0.59229321,
+          "text": "o",
           "warnings": []
         },
         {
@@ -2241,7 +2241,7 @@
             "x0": 1220.0,
             "x1": 1302.0
           },
-          "confidence": 0.92258957,
+          "confidence": 0.92798782,
           "text": "Incline",
           "warnings": []
         },
@@ -2253,7 +2253,7 @@
             "x0": 1309.0,
             "x1": 1330.0
           },
-          "confidence": 0.95772514,
+          "confidence": 0.94778725,
           "text": "el",
           "warnings": []
         },
@@ -2265,7 +2265,7 @@
             "x0": 1336.0,
             "x1": 1421.0
           },
-          "confidence": 0.95772514,
+          "confidence": 0.94778725,
           "text": "tronco",
           "warnings": []
         },
@@ -2277,7 +2277,7 @@
             "x0": 1430.0,
             "x1": 1443.0
           },
-          "confidence": 0.96976196,
+          "confidence": 0.9698243,
           "text": "a",
           "warnings": []
         },
@@ -2289,7 +2289,7 @@
             "x0": 36.0,
             "x1": 110.0
           },
-          "confidence": 0.96396652,
+          "confidence": 0.96458649,
           "text": "Doble",
           "warnings": []
         },
@@ -2301,7 +2301,7 @@
             "x0": 117.0,
             "x1": 132.0
           },
-          "confidence": 0.9328961200000001,
+          "confidence": 0.93289719,
           "text": "y",
           "warnings": []
         },
@@ -2313,7 +2313,7 @@
             "x0": 139.0,
             "x1": 209.0
           },
-          "confidence": 0.93284264,
+          "confidence": 0.9328738400000001,
           "text": "estire",
           "warnings": []
         },
@@ -2325,7 +2325,7 @@
             "x0": 217.0,
             "x1": 238.0
           },
-          "confidence": 0.96986122,
+          "confidence": 0.96177925,
           "text": "el",
           "warnings": []
         },
@@ -2337,7 +2337,7 @@
             "x0": 244.0,
             "x1": 315.0
           },
-          "confidence": 0.9700109100000001,
+          "confidence": 0.97005554,
           "text": "codo.",
           "warnings": []
         },
@@ -2349,7 +2349,7 @@
             "x0": 510.0,
             "x1": 515.0
           },
-          "confidence": 0.35932228,
+          "confidence": 0.32439926,
           "text": ":",
           "warnings": []
         },
@@ -2361,7 +2361,7 @@
             "x0": 635.0,
             "x1": 698.0
           },
-          "confidence": 0.96652168,
+          "confidence": 0.96572838,
           "text": "Suba",
           "warnings": []
         },
@@ -2373,7 +2373,7 @@
             "x0": 705.0,
             "x1": 720.0
           },
-          "confidence": 0.96944351,
+          "confidence": 0.9687383300000001,
           "text": "y",
           "warnings": []
         },
@@ -2385,7 +2385,7 @@
             "x0": 728.0,
             "x1": 782.0
           },
-          "confidence": 0.96614746,
+          "confidence": 0.9676529700000001,
           "text": "baje",
           "warnings": []
         },
@@ -2397,7 +2397,7 @@
             "x0": 790.0,
             "x1": 809.0
           },
-          "confidence": 0.9664389,
+          "confidence": 0.96843735,
           "text": "la",
           "warnings": []
         },
@@ -2409,7 +2409,7 @@
             "x0": 818.0,
             "x1": 925.0
           },
-          "confidence": 0.96736351,
+          "confidence": 0.9675750700000001,
           "text": "muñeca.",
           "warnings": []
         },
@@ -2421,7 +2421,7 @@
             "x0": 1223.0,
             "x1": 1255.0
           },
-          "confidence": 0.9689585099999999,
+          "confidence": 0.96814323,
           "text": "un",
           "warnings": []
         },
@@ -2433,7 +2433,7 @@
             "x0": 1264.0,
             "x1": 1318.0
           },
-          "confidence": 0.96950684,
+          "confidence": 0.96938148,
           "text": "lado",
           "warnings": []
         },
@@ -2445,7 +2445,7 @@
             "x0": 1321.0,
             "x1": 1333.0
           },
-          "confidence": 0.96648209,
+          "confidence": 0.96467827,
           "text": "y",
           "warnings": []
         },
@@ -2457,7 +2457,7 @@
             "x0": 1348.0,
             "x1": 1369.0
           },
-          "confidence": 0.8991838099999999,
+          "confidence": 0.92062248,
           "text": "al",
           "warnings": []
         },
@@ -2469,7 +2469,7 @@
             "x0": 1376.0,
             "x1": 1438.0
           },
-          "confidence": 0.8991838099999999,
+          "confidence": 0.92062248,
           "text": "otro,",
           "warnings": []
         },
@@ -2493,7 +2493,7 @@
             "x0": 510.0,
             "x1": 517.0
           },
-          "confidence": 0.08189788999999999,
+          "confidence": 0.47235176,
           "text": "i",
           "warnings": []
         },
@@ -2505,7 +2505,7 @@
             "x0": 659.0,
             "x1": 738.0
           },
-          "confidence": 0.96805847,
+          "confidence": 0.9687748700000001,
           "text": "Repita",
           "warnings": []
         },
@@ -2517,7 +2517,7 @@
             "x0": 748.0,
             "x1": 776.0
           },
-          "confidence": 0.9697538,
+          "confidence": 0.96966827,
           "text": "10",
           "warnings": []
         },
@@ -2529,7 +2529,7 @@
             "x0": 783.0,
             "x1": 852.0
           },
-          "confidence": 0.96919556,
+          "confidence": 0.96979691,
           "text": "veces",
           "warnings": []
         },
@@ -2541,7 +2541,7 @@
             "x0": 861.0,
             "x1": 906.0
           },
-          "confidence": 0.96923637,
+          "confidence": 0.9679321299999999,
           "text": "por",
           "warnings": []
         },
@@ -2553,7 +2553,7 @@
             "x0": 1208.0,
             "x1": 1318.0
           },
-          "confidence": 0.96626953,
+          "confidence": 0.96779915,
           "text": "pasando",
           "warnings": []
         },
@@ -2565,7 +2565,7 @@
             "x0": 1327.0,
             "x1": 1374.0
           },
-          "confidence": 0.9526296200000001,
+          "confidence": 0.95891525,
           "text": "una",
           "warnings": []
         },
@@ -2577,7 +2577,7 @@
             "x0": 1383.0,
             "x1": 1453.0
           },
-          "confidence": 0.95849861,
+          "confidence": 0.9578239399999999,
           "text": "mano",
           "warnings": []
         },
@@ -2589,7 +2589,7 @@
             "x0": 13.0,
             "x1": 77.0
           },
-          "confidence": 0.9610343899999999,
+          "confidence": 0.96066345,
           "text": "Repita",
           "warnings": []
         },
@@ -2601,7 +2601,7 @@
             "x0": 101.0,
             "x1": 130.0
           },
-          "confidence": 0.96912247,
+          "confidence": 0.96892944,
           "text": "10",
           "warnings": []
         },
@@ -2613,7 +2613,7 @@
             "x0": 267.0,
             "x1": 281.0
           },
-          "confidence": 0.93253677,
+          "confidence": 0.9325057200000001,
           "text": "b",
           "warnings": []
         },
@@ -2625,8 +2625,8 @@
             "x0": 492.0,
             "x1": 520.0
           },
-          "confidence": 0.32345664999999996,
-          "text": "ES",
+          "confidence": 0.47794677999999996,
+          "text": "eS",
           "warnings": []
         },
         {
@@ -2635,10 +2635,10 @@
             "coordinate_system": "pixels",
             "top": 566.0,
             "x0": 29.0,
-            "x1": 206.0
+            "x1": 92.0
           },
-          "confidence": 0.11273407,
-          "text": "A",
+          "confidence": 0.0,
+          "text": "e",
           "warnings": []
         },
         {
@@ -2661,7 +2661,7 @@
             "x0": 745.0,
             "x1": 816.0
           },
-          "confidence": 0.9662933300000001,
+          "confidence": 0.96421967,
           "text": "mano",
           "warnings": []
         },
@@ -2673,7 +2673,7 @@
             "x0": 1212.0,
             "x1": 1284.0
           },
-          "confidence": 0.9618914,
+          "confidence": 0.96431839,
           "text": "sobre",
           "warnings": []
         },
@@ -2685,7 +2685,7 @@
             "x0": 1292.0,
             "x1": 1312.0
           },
-          "confidence": 0.96792313,
+          "confidence": 0.96248131,
           "text": "la",
           "warnings": []
         },
@@ -2697,7 +2697,7 @@
             "x0": 1320.0,
             "x1": 1415.0
           },
-          "confidence": 0.96380501,
+          "confidence": 0.96478561,
           "text": "cabeza.",
           "warnings": []
         },
@@ -2709,7 +2709,7 @@
             "x0": 1424.0,
             "x1": 1453.0
           },
-          "confidence": 0.96910408,
+          "confidence": 0.9692700200000001,
           "text": "10",
           "warnings": []
         },
@@ -2721,7 +2721,7 @@
             "x0": 1239.0,
             "x1": 1309.0
           },
-          "confidence": 0.96348969,
+          "confidence": 0.96880409,
           "text": "veces",
           "warnings": []
         },
@@ -2733,7 +2733,7 @@
             "x0": 1318.0,
             "x1": 1363.0
           },
-          "confidence": 0.9611869,
+          "confidence": 0.9659978499999999,
           "text": "por",
           "warnings": []
         },
@@ -2745,7 +2745,7 @@
             "x0": 1370.0,
             "x1": 1423.0
           },
-          "confidence": 0.95747917,
+          "confidence": 0.96143242,
           "text": "lado",
           "warnings": []
         },
@@ -2757,7 +2757,7 @@
             "x0": 1221.0,
             "x1": 1330.0
           },
-          "confidence": 0.9157795,
+          "confidence": 0.9200794999999999,
           "text": "Sostenido",
           "warnings": []
         },
@@ -2769,7 +2769,7 @@
             "x0": 1356.0,
             "x1": 1371.0
           },
-          "confidence": 0.93166786,
+          "confidence": 0.93208725,
           "text": "d",
           "warnings": []
         },
@@ -2781,7 +2781,7 @@
             "x0": 35.0,
             "x1": 163.0
           },
-          "confidence": 0.9171798699999999,
+          "confidence": 0.9168428799999999,
           "text": "Sostenido",
           "warnings": []
         },
@@ -2793,7 +2793,7 @@
             "x0": 172.0,
             "x1": 203.0
           },
-          "confidence": 0.9632096099999999,
+          "confidence": 0.96478577,
           "text": "de",
           "warnings": []
         },
@@ -2805,7 +2805,7 @@
             "x0": 211.0,
             "x1": 258.0
           },
-          "confidence": 0.9661615,
+          "confidence": 0.9669448900000001,
           "text": "una",
           "warnings": []
         },
@@ -2817,7 +2817,7 @@
             "x0": 266.0,
             "x1": 320.0
           },
-          "confidence": 0.9652020299999999,
+          "confidence": 0.96663483,
           "text": "silla,",
           "warnings": []
         },
@@ -2829,7 +2829,7 @@
             "x0": 664.0,
             "x1": 749.0
           },
-          "confidence": 0.9639801,
+          "confidence": 0.96658333,
           "text": "Doblar",
           "warnings": []
         },
@@ -2841,7 +2841,7 @@
             "x0": 756.0,
             "x1": 787.0
           },
-          "confidence": 0.96659836,
+          "confidence": 0.9665677599999999,
           "text": "un",
           "warnings": []
         },
@@ -2853,7 +2853,7 @@
             "x0": 797.0,
             "x1": 859.0
           },
-          "confidence": 0.95752724,
+          "confidence": 0.9627037,
           "text": "poco",
           "warnings": []
         },
@@ -2865,7 +2865,7 @@
             "x0": 868.0,
             "x1": 900.0
           },
-          "confidence": 0.96210197,
+          "confidence": 0.96764122,
           "text": "las",
           "warnings": []
         },
@@ -2877,8 +2877,8 @@
             "x0": 1236.0,
             "x1": 1264.0
           },
-          "confidence": 0.165242,
-          "text": "pe",
+          "confidence": 0.04851776,
+          "text": "9",
           "warnings": []
         },
         {
@@ -2890,7 +2890,7 @@
             "x1": 1388.0
           },
           "confidence": 0.0,
-          "text": "a0Je",
+          "text": "e0Je",
           "warnings": []
         },
         {
@@ -2901,7 +2901,7 @@
             "x0": 1396.0,
             "x1": 1443.0
           },
-          "confidence": 0.76515007,
+          "confidence": 0.76156349,
           "text": "una",
           "warnings": []
         },
@@ -2913,7 +2913,7 @@
             "x0": 486.0,
             "x1": 488.0
           },
-          "confidence": 0.40763824,
+          "confidence": 0.48427486000000003,
           "text": "3",
           "warnings": []
         },
@@ -2925,7 +2925,7 @@
             "x0": 1244.0,
             "x1": 1298.0
           },
-          "confidence": 0.96829674,
+          "confidence": 0.9673445100000001,
           "text": "silla,",
           "warnings": []
         },
@@ -2937,7 +2937,7 @@
             "x0": 1308.0,
             "x1": 1391.0
           },
-          "confidence": 0.96662994,
+          "confidence": 0.96946854,
           "text": "mueva",
           "warnings": []
         },
@@ -2949,7 +2949,7 @@
             "x0": 1400.0,
             "x1": 1420.0
           },
-          "confidence": 0.96964111,
+          "confidence": 0.96973045,
           "text": "el",
           "warnings": []
         },
@@ -2961,7 +2961,7 @@
             "x0": 19.0,
             "x1": 76.0
           },
-          "confidence": 0.96333359,
+          "confidence": 0.96649239,
           "text": "lleve",
           "warnings": []
         },
@@ -2973,7 +2973,7 @@
             "x0": 84.0,
             "x1": 103.0
           },
-          "confidence": 0.96333359,
+          "confidence": 0.96992073,
           "text": "la",
           "warnings": []
         },
@@ -2985,7 +2985,7 @@
             "x0": 112.0,
             "x1": 191.0
           },
-          "confidence": 0.96529068,
+          "confidence": 0.96142319,
           "text": "pierna",
           "warnings": []
         },
@@ -2997,7 +2997,7 @@
             "x0": 199.0,
             "x1": 311.0
           },
-          "confidence": 0.9649099699999999,
+          "confidence": 0.9634229999999999,
           "text": "adelante",
           "warnings": []
         },
@@ -3009,7 +3009,7 @@
             "x0": 317.0,
             "x1": 332.0
           },
-          "confidence": 0.9700479900000001,
+          "confidence": 0.96994522,
           "text": "y",
           "warnings": []
         },
@@ -3021,8 +3021,8 @@
             "x0": 480.0,
             "x1": 484.0
           },
-          "confidence": 0.0,
-          "text": "á",
+          "confidence": 0.26767593,
+          "text": "F",
           "warnings": []
         },
         {
@@ -3033,7 +3033,7 @@
             "x0": 646.0,
             "x1": 736.0
           },
-          "confidence": 0.9673762499999999,
+          "confidence": 0.96814499,
           "text": "rodillas",
           "warnings": []
         },
@@ -3045,7 +3045,7 @@
             "x0": 744.0,
             "x1": 759.0
           },
-          "confidence": 0.9701570100000001,
+          "confidence": 0.97014603,
           "text": "y",
           "warnings": []
         },
@@ -3057,7 +3057,7 @@
             "x0": 767.0,
             "x1": 871.0
           },
-          "confidence": 0.96919174,
+          "confidence": 0.96926056,
           "text": "regresar",
           "warnings": []
         },
@@ -3069,7 +3069,7 @@
             "x0": 878.0,
             "x1": 891.0
           },
-          "confidence": 0.96919174,
+          "confidence": 0.96926056,
           "text": "a",
           "warnings": []
         },
@@ -3081,7 +3081,7 @@
             "x0": 900.0,
             "x1": 920.0
           },
-          "confidence": 0.96982033,
+          "confidence": 0.9699472,
           "text": "la",
           "warnings": []
         },
@@ -3093,7 +3093,7 @@
             "x0": 1008.0,
             "x1": 1011.0
           },
-          "confidence": 0.4682848,
+          "confidence": 0.31993095,
           "text": ",",
           "warnings": []
         },
@@ -3117,7 +3117,7 @@
             "x0": 1309.0,
             "x1": 1341.0
           },
-          "confidence": 0.68427155,
+          "confidence": 0.6788722199999999,
           "text": "de",
           "warnings": []
         },
@@ -3129,7 +3129,7 @@
             "x0": 1348.0,
             "x1": 1443.0
           },
-          "confidence": 0.0,
+          "confidence": 0.16871414,
           "text": "manera",
           "warnings": []
         },
@@ -3141,7 +3141,7 @@
             "x0": 12.0,
             "x1": 83.0
           },
-          "confidence": 0.96344246,
+          "confidence": 0.96708878,
           "text": "atrás.",
           "warnings": []
         },
@@ -3153,7 +3153,7 @@
             "x0": 93.0,
             "x1": 172.0
           },
-          "confidence": 0.96344246,
+          "confidence": 0.9669845599999999,
           "text": "Repita",
           "warnings": []
         },
@@ -3165,7 +3165,7 @@
             "x0": 181.0,
             "x1": 210.0
           },
-          "confidence": 0.95915001,
+          "confidence": 0.9621073199999999,
           "text": "10",
           "warnings": []
         },
@@ -3177,7 +3177,7 @@
             "x0": 216.0,
             "x1": 286.0
           },
-          "confidence": 0.95915001,
+          "confidence": 0.96029938,
           "text": "veces",
           "warnings": []
         },
@@ -3189,7 +3189,7 @@
             "x0": 295.0,
             "x1": 339.0
           },
-          "confidence": 0.96528053,
+          "confidence": 0.96924149,
           "text": "por",
           "warnings": []
         },
@@ -3201,7 +3201,7 @@
             "x0": 642.0,
             "x1": 746.0
           },
-          "confidence": 0.96784554,
+          "confidence": 0.96756523,
           "text": "posición",
           "warnings": []
         },
@@ -3213,7 +3213,7 @@
             "x0": 756.0,
             "x1": 833.0
           },
-          "confidence": 0.9676475499999999,
+          "confidence": 0.965495,
           "text": "inicial.",
           "warnings": []
         },
@@ -3225,7 +3225,7 @@
             "x0": 842.0,
             "x1": 922.0
           },
-          "confidence": 0.96916,
+          "confidence": 0.96700523,
           "text": "Repita",
           "warnings": []
         },
@@ -3237,8 +3237,8 @@
             "x0": 152.0,
             "x1": 215.0
           },
-          "confidence": 0.2546756,
-          "text": "E",
+          "confidence": 0.25282257,
+          "text": "EG",
           "warnings": []
         },
         {
@@ -3249,8 +3249,8 @@
             "x0": 731.0,
             "x1": 835.0
           },
-          "confidence": 0.24810089000000002,
-          "text": "DOS",
+          "confidence": 0.18620795999999998,
+          "text": "On",
           "warnings": []
         },
         {
@@ -3261,7 +3261,7 @@
             "x0": 1218.0,
             "x1": 1318.0
           },
-          "confidence": 0.9691272,
+          "confidence": 0.9680291699999999,
           "text": "circular.",
           "warnings": []
         },
@@ -3273,7 +3273,7 @@
             "x0": 1327.0,
             "x1": 1407.0
           },
-          "confidence": 0.96956421,
+          "confidence": 0.96974106,
           "text": "Repita",
           "warnings": []
         },
@@ -3285,7 +3285,7 @@
             "x0": 1416.0,
             "x1": 1444.0
           },
-          "confidence": 0.9693492100000001,
+          "confidence": 0.96926231,
           "text": "10",
           "warnings": []
         },
@@ -3297,7 +3297,7 @@
             "x0": 135.0,
             "x1": 150.0
           },
-          "confidence": 0.562005,
+          "confidence": 0.60641808,
           "text": "P",
           "warnings": []
         },
@@ -3309,8 +3309,8 @@
             "x0": 405.0,
             "x1": 436.0
           },
-          "confidence": 0.43362808,
-          "text": "veni",
+          "confidence": 0.26526855,
+          "text": "al",
           "warnings": []
         },
         {
@@ -3321,7 +3321,7 @@
             "x0": 1227.0,
             "x1": 1297.0
           },
-          "confidence": 0.96938454,
+          "confidence": 0.9668247999999999,
           "text": "veces",
           "warnings": []
         },
@@ -3333,7 +3333,7 @@
             "x0": 1305.0,
             "x1": 1350.0
           },
-          "confidence": 0.9696653000000001,
+          "confidence": 0.9699022700000001,
           "text": "por",
           "warnings": []
         },
@@ -3345,7 +3345,7 @@
             "x0": 1356.0,
             "x1": 1436.0
           },
-          "confidence": 0.9637899,
+          "confidence": 0.9669757099999999,
           "text": "tobillo",
           "warnings": []
         }
@@ -3354,13 +3354,13 @@
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "measured",
         "method": null,
         "provenance": null,
-        "sample_size": 9,
+        "sample_size": 6,
         "unit": "mean_word_confidence",
-        "value": 0.37135241555555554,
+        "value": 0.3453714233333333,
         "warnings": []
       },
       "deskew": {
@@ -3381,7 +3381,7 @@
         "value": null,
         "warnings": []
       },
-      "low_confidence_word_count": 8,
+      "low_confidence_word_count": 5,
       "page_number": 9,
       "rotation": {
         "engine": null,
@@ -3395,54 +3395,30 @@
         "warnings": []
       },
       "warnings": [],
-      "word_count": 9,
+      "word_count": 6,
       "words": [
         {
           "bbox": {
             "bottom": 347.0,
             "coordinate_system": "pixels",
-            "top": 285.0,
+            "top": 265.0,
             "x0": 228.0,
             "x1": 321.0
           },
-          "confidence": 0.04062759,
-          "text": "”",
+          "confidence": 0.0,
+          "text": "»",
           "warnings": []
         },
         {
           "bbox": {
-            "bottom": 268.0,
+            "bottom": 263.0,
             "coordinate_system": "pixels",
             "top": 43.0,
             "x0": 228.0,
             "x1": 344.0
           },
-          "confidence": 0.27236908,
+          "confidence": 0.20026024,
           "text": ".o",
-          "warnings": []
-        },
-        {
-          "bbox": {
-            "bottom": 246.0,
-            "coordinate_system": "pixels",
-            "top": 64.0,
-            "x0": 70.0,
-            "x1": 324.0
-          },
-          "confidence": 0.47911929999999997,
-          "text": "ep",
-          "warnings": []
-        },
-        {
-          "bbox": {
-            "bottom": 214.0,
-            "coordinate_system": "pixels",
-            "top": 73.0,
-            "x0": 442.0,
-            "x1": 681.0
-          },
-          "confidence": 0.56250313,
-          "text": "5%",
           "warnings": []
         },
         {
@@ -3453,7 +3429,7 @@
             "x0": 239.0,
             "x1": 616.0
           },
-          "confidence": 0.39018913,
+          "confidence": 0.35824928,
           "text": "¡4",
           "warnings": []
         },
@@ -3465,7 +3441,7 @@
             "x0": 272.0,
             "x1": 284.0
           },
-          "confidence": 0.8447968299999999,
+          "confidence": 0.85671951,
           "text": "y",
           "warnings": []
         },
@@ -3477,20 +3453,8 @@
             "x0": 174.0,
             "x1": 551.0
           },
-          "confidence": 0.52748764,
-          "text": "vam)",
-          "warnings": []
-        },
-        {
-          "bbox": {
-            "bottom": 671.0,
-            "coordinate_system": "pixels",
-            "top": 658.0,
-            "x0": 0.0,
-            "x1": 7.0
-          },
-          "confidence": 0.19135437,
-          "text": "o",
+          "confidence": 0.65699951,
+          "text": "vam",
           "warnings": []
         },
         {
@@ -3498,11 +3462,11 @@
             "bottom": 671.0,
             "coordinate_system": "pixels",
             "top": 647.0,
-            "x0": 25.0,
+            "x0": 0.0,
             "x1": 181.0
           },
-          "confidence": 0.03372467,
-          "text": "rnarara",
+          "confidence": 0.0,
+          "text": "snararra",
           "warnings": []
         }
       ]
@@ -3651,7 +3615,7 @@
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "measured",
         "method": null,
         "provenance": null,
@@ -3703,7 +3667,7 @@
             "x1": 719.0
           },
           "confidence": 0.0,
-          "text": "¡ERTIZAZ",
+          "text": "ERTIZAZ",
           "warnings": []
         }
       ]
@@ -3711,13 +3675,13 @@
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "measured",
         "method": null,
         "provenance": null,
         "sample_size": 197,
         "unit": "mean_word_confidence",
-        "value": 0.9213243103045685,
+        "value": 0.9198434493908629,
         "warnings": []
       },
       "deskew": {
@@ -3738,7 +3702,7 @@
         "value": null,
         "warnings": []
       },
-      "low_confidence_word_count": 9,
+      "low_confidence_word_count": 10,
       "page_number": 14,
       "rotation": {
         "engine": null,
@@ -3762,7 +3726,7 @@
             "x0": 776.0,
             "x1": 937.0
           },
-          "confidence": 0.91943611,
+          "confidence": 0.91574127,
           "text": "Siéntese",
           "warnings": []
         },
@@ -3774,7 +3738,7 @@
             "x0": 949.0,
             "x1": 990.0
           },
-          "confidence": 0.96250015,
+          "confidence": 0.9616488599999999,
           "text": "de",
           "warnings": []
         },
@@ -3786,7 +3750,7 @@
             "x0": 1004.0,
             "x1": 1098.0
           },
-          "confidence": 0.96389694,
+          "confidence": 0.9575581400000001,
           "text": "modo",
           "warnings": []
         },
@@ -3798,8 +3762,8 @@
             "x0": 1111.0,
             "x1": 1174.0
           },
-          "confidence": 0.7847174800000001,
-          "text": "quel",
+          "confidence": 0.8889726299999999,
+          "text": "que",
           "warnings": []
         },
         {
@@ -3810,7 +3774,7 @@
             "x0": 775.0,
             "x1": 845.0
           },
-          "confidence": 0.96734528,
+          "confidence": 0.9688768799999999,
           "text": "sólo",
           "warnings": []
         },
@@ -3822,7 +3786,7 @@
             "x0": 857.0,
             "x1": 947.0
           },
-          "confidence": 0.96415398,
+          "confidence": 0.96583046,
           "text": "entre",
           "warnings": []
         },
@@ -3834,7 +3798,7 @@
             "x0": 960.0,
             "x1": 1000.0
           },
-          "confidence": 0.95987961,
+          "confidence": 0.95753441,
           "text": "un",
           "warnings": []
         },
@@ -3846,7 +3810,7 @@
             "x0": 1015.0,
             "x1": 1098.0
           },
-          "confidence": 0.96824944,
+          "confidence": 0.9682823899999999,
           "text": "puño",
           "warnings": []
         },
@@ -3858,7 +3822,7 @@
             "x0": 775.0,
             "x1": 862.0
           },
-          "confidence": 0.96765518,
+          "confidence": 0.96750488,
           "text": "entre",
           "warnings": []
         },
@@ -3870,7 +3834,7 @@
             "x0": 877.0,
             "x1": 905.0
           },
-          "confidence": 0.96885551,
+          "confidence": 0.9688346099999999,
           "text": "la",
           "warnings": []
         },
@@ -3882,7 +3846,7 @@
             "x0": 919.0,
             "x1": 983.0
           },
-          "confidence": 0.96773598,
+          "confidence": 0.96795975,
           "text": "silla",
           "warnings": []
         },
@@ -3894,7 +3858,7 @@
             "x0": 996.0,
             "x1": 1014.0
           },
-          "confidence": 0.96524246,
+          "confidence": 0.96728821,
           "text": "y",
           "warnings": []
         },
@@ -3906,7 +3870,7 @@
             "x0": 1029.0,
             "x1": 1055.0
           },
-          "confidence": 0.96360641,
+          "confidence": 0.96259598,
           "text": "la",
           "warnings": []
         },
@@ -3918,7 +3882,7 @@
             "x0": 1068.0,
             "x1": 1155.0
           },
-          "confidence": 0.97005974,
+          "confidence": 0.9700404399999999,
           "text": "parte",
           "warnings": []
         },
@@ -3930,7 +3894,7 @@
             "x0": 776.0,
             "x1": 896.0
           },
-          "confidence": 0.96672058,
+          "confidence": 0.9676647199999999,
           "text": "inferior",
           "warnings": []
         },
@@ -3942,7 +3906,7 @@
             "x0": 907.0,
             "x1": 949.0
           },
-          "confidence": 0.96757378,
+          "confidence": 0.96902115,
           "text": "de",
           "warnings": []
         },
@@ -3954,7 +3918,7 @@
             "x0": 963.0,
             "x1": 1009.0
           },
-          "confidence": 0.9599606300000001,
+          "confidence": 0.96240158,
           "text": "las",
           "warnings": []
         },
@@ -3966,7 +3930,7 @@
             "x0": 1023.0,
             "x1": 1157.0
           },
-          "confidence": 0.96219002,
+          "confidence": 0.96451256,
           "text": "piernas.",
           "warnings": []
         },
@@ -3978,7 +3942,7 @@
             "x0": 100.0,
             "x1": 147.0
           },
-          "confidence": 0.96576027,
+          "confidence": 0.96586929,
           "text": "De",
           "warnings": []
         },
@@ -3990,7 +3954,7 @@
             "x0": 161.0,
             "x1": 214.0
           },
-          "confidence": 0.96576027,
+          "confidence": 0.96586929,
           "text": "pie",
           "warnings": []
         },
@@ -4002,7 +3966,7 @@
             "x0": 226.0,
             "x1": 329.0
           },
-          "confidence": 0.96630127,
+          "confidence": 0.9645347599999999,
           "text": "ajuste",
           "warnings": []
         },
@@ -4014,7 +3978,7 @@
             "x0": 341.0,
             "x1": 369.0
           },
-          "confidence": 0.96701233,
+          "confidence": 0.9645347599999999,
           "text": "el",
           "warnings": []
         },
@@ -4026,7 +3990,7 @@
             "x0": 99.0,
             "x1": 222.0
           },
-          "confidence": 0.9668499,
+          "confidence": 0.96512794,
           "text": "asiento",
           "warnings": []
         },
@@ -4038,7 +4002,7 @@
             "x0": 228.0,
             "x1": 242.0
           },
-          "confidence": 0.95823448,
+          "confidence": 0.9572193099999999,
           "text": "a",
           "warnings": []
         },
@@ -4050,7 +4014,7 @@
             "x0": 269.0,
             "x1": 296.0
           },
-          "confidence": 0.95823448,
+          "confidence": 0.9572193099999999,
           "text": "la",
           "warnings": []
         },
@@ -4062,7 +4026,7 @@
             "x0": 309.0,
             "x1": 404.0
           },
-          "confidence": 0.9629547100000001,
+          "confidence": 0.96099197,
           "text": "altura",
           "warnings": []
         },
@@ -4074,7 +4038,7 @@
             "x0": 98.0,
             "x1": 139.0
           },
-          "confidence": 0.96620087,
+          "confidence": 0.9665539599999999,
           "text": "de",
           "warnings": []
         },
@@ -4086,7 +4050,7 @@
             "x0": 155.0,
             "x1": 181.0
           },
-          "confidence": 0.96620087,
+          "confidence": 0.9665539599999999,
           "text": "la",
           "warnings": []
         },
@@ -4098,7 +4062,7 @@
             "x0": 195.0,
             "x1": 304.0
           },
-          "confidence": 0.9644464899999999,
+          "confidence": 0.9613874099999999,
           "text": "rodilla.",
           "warnings": []
         },
@@ -4110,7 +4074,7 @@
             "x0": 74.0,
             "x1": 175.0
           },
-          "confidence": 0.96991348,
+          "confidence": 0.96943184,
           "text": "Altura",
           "warnings": []
         },
@@ -4122,7 +4086,7 @@
             "x0": 236.0,
             "x1": 290.0
           },
-          "confidence": 0.03705582,
+          "confidence": 0.05274994,
           "text": "7",
           "warnings": []
         },
@@ -4134,8 +4098,8 @@
             "x0": 364.0,
             "x1": 368.0
           },
-          "confidence": 0.40022774,
-          "text": "y",
+          "confidence": 0.0,
+          "text": ",",
           "warnings": []
         },
         {
@@ -4146,7 +4110,7 @@
             "x0": 504.0,
             "x1": 675.0
           },
-          "confidence": 0.96268257,
+          "confidence": 0.9632994100000001,
           "text": "Superficie",
           "warnings": []
         },
@@ -4158,7 +4122,7 @@
             "x0": 54.0,
             "x1": 208.0
           },
-          "confidence": 0.96340553,
+          "confidence": 0.96851227,
           "text": "ajustable",
           "warnings": []
         },
@@ -4168,9 +4132,9 @@
             "coordinate_system": "pixels",
             "top": 554.0,
             "x0": 386.0,
-            "x1": 716.0
+            "x1": 522.0
           },
-          "confidence": 0.31698006,
+          "confidence": 0.28203049,
           "text": "Pr",
           "warnings": []
         },
@@ -4182,7 +4146,7 @@
             "x0": 806.0,
             "x1": 928.0
           },
-          "confidence": 0.96535751,
+          "confidence": 0.968657,
           "text": "Ajuste",
           "warnings": []
         },
@@ -4194,7 +4158,7 @@
             "x0": 939.0,
             "x1": 967.0
           },
-          "confidence": 0.96643379,
+          "confidence": 0.96710136,
           "text": "el",
           "warnings": []
         },
@@ -4206,7 +4170,7 @@
             "x0": 983.0,
             "x1": 1128.0
           },
-          "confidence": 0.9638707,
+          "confidence": 0.9643778199999999,
           "text": "respaldo",
           "warnings": []
         },
@@ -4218,7 +4182,7 @@
             "x0": 32.0,
             "x1": 73.0
           },
-          "confidence": 0.96605972,
+          "confidence": 0.96586334,
           "text": "del",
           "warnings": []
         },
@@ -4230,7 +4194,7 @@
             "x0": 97.0,
             "x1": 243.0
           },
-          "confidence": 0.96777252,
+          "confidence": 0.9679819500000001,
           "text": "respaldo",
           "warnings": []
         },
@@ -4242,7 +4206,7 @@
             "x0": 829.0,
             "x1": 883.0
           },
-          "confidence": 0.96474243,
+          "confidence": 0.9667498000000001,
           "text": "ara",
           "warnings": []
         },
@@ -4254,7 +4218,7 @@
             "x0": 898.0,
             "x1": 962.0
           },
-          "confidence": 0.9649276,
+          "confidence": 0.96669815,
           "text": "que",
           "warnings": []
         },
@@ -4266,7 +4230,7 @@
             "x0": 974.0,
             "x1": 1103.0
           },
-          "confidence": 0.9648498499999999,
+          "confidence": 0.96543442,
           "text": "soporte",
           "warnings": []
         },
@@ -4278,7 +4242,7 @@
             "x0": 816.0,
             "x1": 835.0
           },
-          "confidence": 0.9031317099999999,
+          "confidence": 0.94581184,
           "text": "a",
           "warnings": []
         },
@@ -4290,7 +4254,7 @@
             "x0": 849.0,
             "x1": 944.0
           },
-          "confidence": 0.96881294,
+          "confidence": 0.96770966,
           "text": "curva",
           "warnings": []
         },
@@ -4302,7 +4266,7 @@
             "x0": 958.0,
             "x1": 1075.0
           },
-          "confidence": 0.96196594,
+          "confidence": 0.9624276,
           "text": "inferior",
           "warnings": []
         },
@@ -4314,7 +4278,7 @@
             "x0": 1087.0,
             "x1": 1128.0
           },
-          "confidence": 0.96196594,
+          "confidence": 0.96949219,
           "text": "de",
           "warnings": []
         },
@@ -4326,7 +4290,7 @@
             "x0": 63.0,
             "x1": 170.0
           },
-          "confidence": 0.96786514,
+          "confidence": 0.96732491,
           "text": "Ajuste",
           "warnings": []
         },
@@ -4338,7 +4302,7 @@
             "x0": 64.0,
             "x1": 105.0
           },
-          "confidence": 0.96979134,
+          "confidence": 0.96955017,
           "text": "de",
           "warnings": []
         },
@@ -4350,7 +4314,7 @@
             "x0": 120.0,
             "x1": 146.0
           },
-          "confidence": 0.96955544,
+          "confidence": 0.9696478999999999,
           "text": "la",
           "warnings": []
         },
@@ -4362,7 +4326,7 @@
             "x0": 161.0,
             "x1": 339.0
           },
-          "confidence": 0.90595093,
+          "confidence": 0.92395569,
           "text": "inclinación",
           "warnings": []
         },
@@ -4374,8 +4338,8 @@
             "x0": 281.0,
             "x1": 541.0
           },
-          "confidence": 0.19118263,
-          "text": "e:",
+          "confidence": 0.17492943,
+          "text": "E",
           "warnings": []
         },
         {
@@ -4386,7 +4350,7 @@
             "x0": 64.0,
             "x1": 114.0
           },
-          "confidence": 0.9684706900000001,
+          "confidence": 0.96875298,
           "text": "del",
           "warnings": []
         },
@@ -4398,7 +4362,7 @@
             "x0": 129.0,
             "x1": 275.0
           },
-          "confidence": 0.96408012,
+          "confidence": 0.96596039,
           "text": "respaldo",
           "warnings": []
         },
@@ -4410,7 +4374,7 @@
             "x0": 809.0,
             "x1": 835.0
           },
-          "confidence": 0.96970634,
+          "confidence": 0.96967491,
           "text": "la",
           "warnings": []
         },
@@ -4422,7 +4386,7 @@
             "x0": 848.0,
             "x1": 994.0
           },
-          "confidence": 0.96541122,
+          "confidence": 0.96555908,
           "text": "espalda.",
           "warnings": []
         },
@@ -4434,7 +4398,7 @@
             "x0": 115.0,
             "x1": 187.0
           },
-          "confidence": 0.96397316,
+          "confidence": 0.96196388,
           "text": "Giro",
           "warnings": []
         },
@@ -4446,7 +4410,7 @@
             "x0": 200.0,
             "x1": 262.0
           },
-          "confidence": 0.9695424699999999,
+          "confidence": 0.9696249400000001,
           "text": "360",
           "warnings": []
         },
@@ -4458,7 +4422,7 @@
             "x0": 275.0,
             "x1": 392.0
           },
-          "confidence": 0.2053096,
+          "confidence": 0.25591629,
           "text": "dell",
           "warnings": []
         },
@@ -4470,7 +4434,7 @@
             "x0": 526.0,
             "x1": 644.0
           },
-          "confidence": 0.71596954,
+          "confidence": 0.76893906,
           "text": "==",
           "warnings": []
         },
@@ -4482,7 +4446,7 @@
             "x0": 735.0,
             "x1": 837.0
           },
-          "confidence": 0.9640010800000001,
+          "confidence": 0.9597267899999999,
           "text": "Altura",
           "warnings": []
         },
@@ -4494,7 +4458,7 @@
             "x0": 716.0,
             "x1": 869.0
           },
-          "confidence": 0.9658139,
+          "confidence": 0.9657312,
           "text": "ajustable",
           "warnings": []
         },
@@ -4506,7 +4470,7 @@
             "x0": 33.0,
             "x1": 66.0
           },
-          "confidence": 0.9520510899999999,
+          "confidence": 0.95712486,
           "text": "Al",
           "warnings": []
         },
@@ -4518,7 +4482,7 @@
             "x0": 81.0,
             "x1": 194.0
           },
-          "confidence": 0.9158338899999999,
+          "confidence": 0.91918274,
           "text": "menos",
           "warnings": []
         },
@@ -4530,8 +4494,8 @@
             "x0": 211.0,
             "x1": 336.0
           },
-          "confidence": 0.20904990999999998,
-          "text": "--——G",
+          "confidence": 0.0,
+          "text": "--———",
           "warnings": []
         },
         {
@@ -4542,7 +4506,7 @@
             "x0": 446.0,
             "x1": 458.0
           },
-          "confidence": 0.17639816,
+          "confidence": 0.31958023,
           "text": "Y,",
           "warnings": []
         },
@@ -4554,7 +4518,7 @@
             "x0": 522.0,
             "x1": 675.0
           },
-          "confidence": 0.06695824,
+          "confidence": 0.01422623,
           "text": "==",
           "warnings": []
         },
@@ -4566,7 +4530,7 @@
             "x0": 704.0,
             "x1": 754.0
           },
-          "confidence": 0.9650412,
+          "confidence": 0.9686721,
           "text": "del",
           "warnings": []
         },
@@ -4578,7 +4542,7 @@
             "x0": 767.0,
             "x1": 894.0
           },
-          "confidence": 0.9650412,
+          "confidence": 0.96288452,
           "text": "asiento",
           "warnings": []
         },
@@ -4590,7 +4554,7 @@
             "x0": 35.0,
             "x1": 54.0
           },
-          "confidence": 0.96897034,
+          "confidence": 0.9679175600000001,
           "text": "5",
           "warnings": []
         },
@@ -4602,7 +4566,7 @@
             "x0": 67.0,
             "x1": 214.0
           },
-          "confidence": 0.96597336,
+          "confidence": 0.96600044,
           "text": "soportes",
           "warnings": []
         },
@@ -4614,7 +4578,7 @@
             "x0": 35.0,
             "x1": 94.0
           },
-          "confidence": 0.96605019,
+          "confidence": 0.9671084600000001,
           "text": "con",
           "warnings": []
         },
@@ -4626,7 +4590,7 @@
             "x0": 109.0,
             "x1": 224.0
           },
-          "confidence": 0.96424118,
+          "confidence": 0.96397591,
           "text": "ruedas",
           "warnings": []
         },
@@ -4638,7 +4602,7 @@
             "x0": 349.0,
             "x1": 400.0
           },
-          "confidence": 0.96451393,
+          "confidence": 0.96122032,
           "text": "Las",
           "warnings": []
         },
@@ -4650,7 +4614,7 @@
             "x0": 411.0,
             "x1": 520.0
           },
-          "confidence": 0.96557785,
+          "confidence": 0.9658535,
           "text": "piernas",
           "warnings": []
         },
@@ -4662,7 +4626,7 @@
             "x0": 531.0,
             "x1": 622.0
           },
-          "confidence": 0.9682397500000001,
+          "confidence": 0.96289055,
           "text": "deben",
           "warnings": []
         },
@@ -4674,7 +4638,7 @@
             "x0": 633.0,
             "x1": 710.0
           },
-          "confidence": 0.96268471,
+          "confidence": 0.95932777,
           "text": "tener",
           "warnings": []
         },
@@ -4686,7 +4650,7 @@
             "x0": 720.0,
             "x1": 754.0
           },
-          "confidence": 0.96630707,
+          "confidence": 0.9679363999999999,
           "text": "un",
           "warnings": []
         },
@@ -4698,7 +4662,7 @@
             "x0": 347.0,
             "x1": 463.0
           },
-          "confidence": 0.9683342,
+          "confidence": 0.96866005,
           "text": "espacio",
           "warnings": []
         },
@@ -4710,7 +4674,7 @@
             "x0": 473.0,
             "x1": 620.0
           },
-          "confidence": 0.96288513,
+          "confidence": 0.9645841199999999,
           "text": "adecuado",
           "warnings": []
         },
@@ -4722,7 +4686,7 @@
             "x0": 630.0,
             "x1": 728.0
           },
-          "confidence": 0.96288513,
+          "confidence": 0.96509331,
           "text": "debajo",
           "warnings": []
         },
@@ -4734,7 +4698,7 @@
             "x0": 739.0,
             "x1": 783.0
           },
-          "confidence": 0.95414665,
+          "confidence": 0.95750885,
           "text": "del",
           "warnings": []
         },
@@ -4746,7 +4710,7 @@
             "x0": 348.0,
             "x1": 462.0
           },
-          "confidence": 0.9222839399999999,
+          "confidence": 0.92669609,
           "text": "teclado.",
           "warnings": []
         },
@@ -4758,7 +4722,7 @@
             "x0": 473.0,
             "x1": 520.0
           },
-          "confidence": 0.96671227,
+          "confidence": 0.96721802,
           "text": "Allí",
           "warnings": []
         },
@@ -4770,7 +4734,7 @@
             "x0": 533.0,
             "x1": 566.0
           },
-          "confidence": 0.95754593,
+          "confidence": 0.96147774,
           "text": "no",
           "warnings": []
         },
@@ -4782,7 +4746,7 @@
             "x0": 577.0,
             "x1": 612.0
           },
-          "confidence": 0.95754593,
+          "confidence": 0.9594901299999999,
           "text": "se",
           "warnings": []
         },
@@ -4794,7 +4758,7 @@
             "x0": 623.0,
             "x1": 712.0
           },
-          "confidence": 0.96423294,
+          "confidence": 0.9611048099999999,
           "text": "deben",
           "warnings": []
         },
@@ -4806,7 +4770,7 @@
             "x0": 724.0,
             "x1": 761.0
           },
-          "confidence": 0.96423294,
+          "confidence": 0.96749977,
           "text": "de",
           "warnings": []
         },
@@ -4818,7 +4782,7 @@
             "x0": 858.0,
             "x1": 891.0
           },
-          "confidence": 0.9697531100000001,
+          "confidence": 0.96963783,
           "text": "La",
           "warnings": []
         },
@@ -4830,7 +4794,7 @@
             "x0": 902.0,
             "x1": 985.0
           },
-          "confidence": 0.96592125,
+          "confidence": 0.96735161,
           "text": "altura",
           "warnings": []
         },
@@ -4842,7 +4806,7 @@
             "x0": 996.0,
             "x1": 1038.0
           },
-          "confidence": 0.96799492,
+          "confidence": 0.96905823,
           "text": "del",
           "warnings": []
         },
@@ -4854,7 +4818,7 @@
             "x0": 1050.0,
             "x1": 1158.0
           },
-          "confidence": 0.96079826,
+          "confidence": 0.96224556,
           "text": "teclado",
           "warnings": []
         },
@@ -4866,7 +4830,7 @@
             "x0": 1169.0,
             "x1": 1241.0
           },
-          "confidence": 0.96626808,
+          "confidence": 0.96754204,
           "text": "debe",
           "warnings": []
         },
@@ -4878,7 +4842,7 @@
             "x0": 347.0,
             "x1": 504.0
           },
-          "confidence": 0.96379257,
+          "confidence": 0.96167221,
           "text": "almacenar",
           "warnings": []
         },
@@ -4890,7 +4854,7 @@
             "x0": 515.0,
             "x1": 714.0
           },
-          "confidence": 0.96449753,
+          "confidence": 0.96457657,
           "text": "herramientas.",
           "warnings": []
         },
@@ -4902,7 +4866,7 @@
             "x0": 857.0,
             "x1": 991.0
           },
-          "confidence": 0.9621844500000001,
+          "confidence": 0.96543678,
           "text": "ajustarse",
           "warnings": []
         },
@@ -4914,7 +4878,7 @@
             "x0": 994.0,
             "x1": 1009.0
           },
-          "confidence": 0.9674884,
+          "confidence": 0.9680291,
           "text": "a",
           "warnings": []
         },
@@ -4926,7 +4890,7 @@
             "x0": 1029.0,
             "x1": 1053.0
           },
-          "confidence": 0.9618148,
+          "confidence": 0.9657850600000001,
           "text": "la",
           "warnings": []
         },
@@ -4938,7 +4902,7 @@
             "x0": 1066.0,
             "x1": 1147.0
           },
-          "confidence": 0.9618148,
+          "confidence": 0.9646888,
           "text": "altura",
           "warnings": []
         },
@@ -4950,7 +4914,7 @@
             "x0": 1159.0,
             "x1": 1193.0
           },
-          "confidence": 0.96402573,
+          "confidence": 0.96412621,
           "text": "de",
           "warnings": []
         },
@@ -4962,7 +4926,7 @@
             "x0": 1206.0,
             "x1": 1247.0
           },
-          "confidence": 0.9622039800000001,
+          "confidence": 0.95930061,
           "text": "los",
           "warnings": []
         },
@@ -4974,7 +4938,7 @@
             "x0": 857.0,
             "x1": 946.0
           },
-          "confidence": 0.96367332,
+          "confidence": 0.96602821,
           "text": "codos",
           "warnings": []
         },
@@ -4986,7 +4950,7 @@
             "x0": 955.0,
             "x1": 1007.0
           },
-          "confidence": 0.96134781,
+          "confidence": 0.96549477,
           "text": "con",
           "warnings": []
         },
@@ -4998,7 +4962,7 @@
             "x0": 1020.0,
             "x1": 1060.0
           },
-          "confidence": 0.96365303,
+          "confidence": 0.96665665,
           "text": "los",
           "warnings": []
         },
@@ -5010,7 +4974,7 @@
             "x0": 1072.0,
             "x1": 1171.0
           },
-          "confidence": 0.96671234,
+          "confidence": 0.96834572,
           "text": "brazos",
           "warnings": []
         },
@@ -5022,7 +4986,7 @@
             "x0": 1181.0,
             "x1": 1324.0
           },
-          "confidence": 0.95871368,
+          "confidence": 0.96346062,
           "text": "colgando.",
           "warnings": []
         },
@@ -5034,7 +4998,7 @@
             "x0": 347.0,
             "x1": 381.0
           },
-          "confidence": 0.959571,
+          "confidence": 0.96625931,
           "text": "La",
           "warnings": []
         },
@@ -5046,7 +5010,7 @@
             "x0": 393.0,
             "x1": 535.0
           },
-          "confidence": 0.959571,
+          "confidence": 0.96261436,
           "text": "superficie",
           "warnings": []
         },
@@ -5058,7 +5022,7 @@
             "x0": 547.0,
             "x1": 580.0
           },
-          "confidence": 0.9687451199999999,
+          "confidence": 0.96765068,
           "text": "de",
           "warnings": []
         },
@@ -5070,7 +5034,7 @@
             "x0": 591.0,
             "x1": 694.0
           },
-          "confidence": 0.96318085,
+          "confidence": 0.9639825399999999,
           "text": "trabajo",
           "warnings": []
         },
@@ -5082,7 +5046,7 @@
             "x0": 704.0,
             "x1": 778.0
           },
-          "confidence": 0.96346001,
+          "confidence": 0.96300781,
           "text": "debe",
           "warnings": []
         },
@@ -5094,7 +5058,7 @@
             "x0": 345.0,
             "x1": 451.0
           },
-          "confidence": 0.95875023,
+          "confidence": 0.96305931,
           "text": "ofrecer",
           "warnings": []
         },
@@ -5106,7 +5070,7 @@
             "x0": 461.0,
             "x1": 494.0
           },
-          "confidence": 0.95875023,
+          "confidence": 0.96305931,
           "text": "un",
           "warnings": []
         },
@@ -5118,7 +5082,7 @@
             "x0": 506.0,
             "x1": 621.0
           },
-          "confidence": 0.96448273,
+          "confidence": 0.9682165500000001,
           "text": "espacio",
           "warnings": []
         },
@@ -5130,7 +5094,7 @@
             "x0": 632.0,
             "x1": 772.0
           },
-          "confidence": 0.9686013800000001,
+          "confidence": 0.96336983,
           "text": "suficiente",
           "warnings": []
         },
@@ -5142,7 +5106,7 @@
             "x0": 346.0,
             "x1": 410.0
           },
-          "confidence": 0.96947174,
+          "confidence": 0.9694529,
           "text": "para",
           "warnings": []
         },
@@ -5154,7 +5118,7 @@
             "x0": 422.0,
             "x1": 502.0
           },
-          "confidence": 0.96488235,
+          "confidence": 0.96610039,
           "text": "todas",
           "warnings": []
         },
@@ -5166,7 +5130,7 @@
             "x0": 515.0,
             "x1": 554.0
           },
-          "confidence": 0.9654805000000001,
+          "confidence": 0.9642121899999999,
           "text": "las",
           "warnings": []
         },
@@ -5178,7 +5142,7 @@
             "x0": 566.0,
             "x1": 768.0
           },
-          "confidence": 0.96059975,
+          "confidence": 0.96728996,
           "text": "herramientas,",
           "warnings": []
         },
@@ -5190,7 +5154,7 @@
             "x0": 347.0,
             "x1": 389.0
           },
-          "confidence": 0.96422432,
+          "confidence": 0.9643961299999999,
           "text": "las",
           "warnings": []
         },
@@ -5202,7 +5166,7 @@
             "x0": 397.0,
             "x1": 453.0
           },
-          "confidence": 0.96422432,
+          "confidence": 0.9643961299999999,
           "text": "que",
           "warnings": []
         },
@@ -5214,7 +5178,7 @@
             "x0": 464.0,
             "x1": 534.0
           },
-          "confidence": 0.96078957,
+          "confidence": 0.96063026,
           "text": "sean",
           "warnings": []
         },
@@ -5226,7 +5190,7 @@
             "x0": 547.0,
             "x1": 651.0
           },
-          "confidence": 0.9520695499999999,
+          "confidence": 0.94084373,
           "text": "usadas",
           "warnings": []
         },
@@ -5238,7 +5202,7 @@
             "x0": 663.0,
             "x1": 713.0
           },
-          "confidence": 0.95847107,
+          "confidence": 0.96683052,
           "text": "con",
           "warnings": []
         },
@@ -5250,7 +5214,7 @@
             "x0": 727.0,
             "x1": 796.0
           },
-          "confidence": 0.96418625,
+          "confidence": 0.96865417,
           "text": "poca",
           "warnings": []
         },
@@ -5262,7 +5226,7 @@
             "x0": 345.0,
             "x1": 498.0
           },
-          "confidence": 0.96716629,
+          "confidence": 0.96785812,
           "text": "frecuencia",
           "warnings": []
         },
@@ -5274,7 +5238,7 @@
             "x0": 510.0,
             "x1": 639.0
           },
-          "confidence": 0.96430031,
+          "confidence": 0.96318329,
           "text": "deberían",
           "warnings": []
         },
@@ -5286,7 +5250,7 @@
             "x0": 651.0,
             "x1": 688.0
           },
-          "confidence": 0.96818932,
+          "confidence": 0.96553116,
           "text": "de",
           "warnings": []
         },
@@ -5298,7 +5262,7 @@
             "x0": 699.0,
             "x1": 774.0
           },
-          "confidence": 0.96625282,
+          "confidence": 0.96844307,
           "text": "estar",
           "warnings": []
         },
@@ -5310,7 +5274,7 @@
             "x0": 347.0,
             "x1": 478.0
           },
-          "confidence": 0.94465172,
+          "confidence": 0.94662323,
           "text": "ubicadas",
           "warnings": []
         },
@@ -5322,7 +5286,7 @@
             "x0": 489.0,
             "x1": 525.0
           },
-          "confidence": 0.95928635,
+          "confidence": 0.95935196,
           "text": "en",
           "warnings": []
         },
@@ -5334,7 +5298,7 @@
             "x0": 536.0,
             "x1": 610.0
           },
-          "confidence": 0.95928635,
+          "confidence": 0.95935196,
           "text": "otros",
           "warnings": []
         },
@@ -5346,7 +5310,7 @@
             "x0": 621.0,
             "x1": 735.0
           },
-          "confidence": 0.96545609,
+          "confidence": 0.96475975,
           "text": "lugares.",
           "warnings": []
         },
@@ -5358,7 +5322,7 @@
             "x0": 858.0,
             "x1": 885.0
           },
-          "confidence": 0.96527237,
+          "confidence": 0.96614662,
           "text": "Si",
           "warnings": []
         },
@@ -5370,7 +5334,7 @@
             "x0": 897.0,
             "x1": 934.0
           },
-          "confidence": 0.9682048000000001,
+          "confidence": 0.96754898,
           "text": "se",
           "warnings": []
         },
@@ -5382,7 +5346,7 @@
             "x0": 946.0,
             "x1": 1036.0
           },
-          "confidence": 0.95814339,
+          "confidence": 0.9583752400000001,
           "text": "utiliza",
           "warnings": []
         },
@@ -5394,7 +5358,7 @@
             "x0": 1048.0,
             "x1": 1287.0
           },
-          "confidence": 0.9658558700000001,
+          "confidence": 0.96045944,
           "text": "temporalmente",
           "warnings": []
         },
@@ -5406,7 +5370,7 @@
             "x0": 1300.0,
             "x1": 1356.0
           },
-          "confidence": 0.9659565000000001,
+          "confidence": 0.96167397,
           "text": "una",
           "warnings": []
         },
@@ -5418,7 +5382,7 @@
             "x0": 858.0,
             "x1": 941.0
           },
-          "confidence": 0.96344734,
+          "confidence": 0.9654650100000001,
           "text": "mesa",
           "warnings": []
         },
@@ -5430,7 +5394,7 @@
             "x0": 950.0,
             "x1": 989.0
           },
-          "confidence": 0.96326859,
+          "confidence": 0.9651796699999999,
           "text": "de",
           "warnings": []
         },
@@ -5442,7 +5406,7 @@
             "x0": 1000.0,
             "x1": 1110.0
           },
-          "confidence": 0.964002,
+          "confidence": 0.9601976799999999,
           "text": "trabajo",
           "warnings": []
         },
@@ -5454,7 +5418,7 @@
             "x0": 1121.0,
             "x1": 1181.0
           },
-          "confidence": 0.9691294899999999,
+          "confidence": 0.9601976799999999,
           "text": "que",
           "warnings": []
         },
@@ -5466,7 +5430,7 @@
             "x0": 1191.0,
             "x1": 1230.0
           },
-          "confidence": 0.96868599,
+          "confidence": 0.96182121,
           "text": "no",
           "warnings": []
         },
@@ -5478,7 +5442,7 @@
             "x0": 1243.0,
             "x1": 1339.0
           },
-          "confidence": 0.96409004,
+          "confidence": 0.96375908,
           "text": "puede",
           "warnings": []
         },
@@ -5490,7 +5454,7 @@
             "x0": 857.0,
             "x1": 907.0
           },
-          "confidence": 0.9652909099999999,
+          "confidence": 0.9667244700000001,
           "text": "ser",
           "warnings": []
         },
@@ -5502,7 +5466,7 @@
             "x0": 916.0,
             "x1": 1059.0
           },
-          "confidence": 0.9652909099999999,
+          "confidence": 0.9667244700000001,
           "text": "ajustada:",
           "warnings": []
         },
@@ -5514,7 +5478,7 @@
             "x0": 856.0,
             "x1": 948.0
           },
-          "confidence": 0.96135887,
+          "confidence": 0.96017601,
           "text": "Ajuste",
           "warnings": []
         },
@@ -5526,7 +5490,7 @@
             "x0": 959.0,
             "x1": 983.0
           },
-          "confidence": 0.9671938299999999,
+          "confidence": 0.96790237,
           "text": "la",
           "warnings": []
         },
@@ -5538,7 +5502,7 @@
             "x0": 995.0,
             "x1": 1076.0
           },
-          "confidence": 0.9671758300000001,
+          "confidence": 0.9653752900000001,
           "text": "altura",
           "warnings": []
         },
@@ -5550,7 +5514,7 @@
             "x0": 1089.0,
             "x1": 1123.0
           },
-          "confidence": 0.97001167,
+          "confidence": 0.9699932099999999,
           "text": "de",
           "warnings": []
         },
@@ -5562,7 +5526,7 @@
             "x0": 1135.0,
             "x1": 1159.0
           },
-          "confidence": 0.9693718,
+          "confidence": 0.96925629,
           "text": "la",
           "warnings": []
         },
@@ -5574,7 +5538,7 @@
             "x0": 1171.0,
             "x1": 1225.0
           },
-          "confidence": 0.96933151,
+          "confidence": 0.96920982,
           "text": "silla",
           "warnings": []
         },
@@ -5586,7 +5550,7 @@
             "x0": 1238.0,
             "x1": 1318.0
           },
-          "confidence": 0.9607083900000001,
+          "confidence": 0.96031288,
           "text": "hasta",
           "warnings": []
         },
@@ -5598,7 +5562,7 @@
             "x0": 857.0,
             "x1": 911.0
           },
-          "confidence": 0.9621665199999999,
+          "confidence": 0.9627462,
           "text": "que",
           "warnings": []
         },
@@ -5610,7 +5574,7 @@
             "x0": 923.0,
             "x1": 962.0
           },
-          "confidence": 0.9621665199999999,
+          "confidence": 0.9627462,
           "text": "los",
           "warnings": []
         },
@@ -5622,7 +5586,7 @@
             "x0": 973.0,
             "x1": 1062.0
           },
-          "confidence": 0.96251663,
+          "confidence": 0.9677716100000001,
           "text": "codos",
           "warnings": []
         },
@@ -5634,7 +5598,7 @@
             "x0": 1073.0,
             "x1": 1184.0
           },
-          "confidence": 0.9645862599999999,
+          "confidence": 0.9642892500000001,
           "text": "queden",
           "warnings": []
         },
@@ -5646,7 +5610,7 @@
             "x0": 1193.0,
             "x1": 1218.0
           },
-          "confidence": 0.9645862599999999,
+          "confidence": 0.9642892500000001,
           "text": "al",
           "warnings": []
         },
@@ -5658,7 +5622,7 @@
             "x0": 1231.0,
             "x1": 1296.0
           },
-          "confidence": 0.96952179,
+          "confidence": 0.96961876,
           "text": "nivel",
           "warnings": []
         },
@@ -5670,7 +5634,7 @@
             "x0": 857.0,
             "x1": 898.0
           },
-          "confidence": 0.96989616,
+          "confidence": 0.96982857,
           "text": "del",
           "warnings": []
         },
@@ -5682,7 +5646,7 @@
             "x0": 911.0,
             "x1": 1025.0
           },
-          "confidence": 0.95465935,
+          "confidence": 0.95438293,
           "text": "teclado.",
           "warnings": []
         },
@@ -5694,7 +5658,7 @@
             "x0": 858.0,
             "x1": 883.0
           },
-          "confidence": 0.92070808,
+          "confidence": 0.91053841,
           "text": "Si",
           "warnings": []
         },
@@ -5706,7 +5670,7 @@
             "x0": 896.0,
             "x1": 938.0
           },
-          "confidence": 0.92070808,
+          "confidence": 0.91053841,
           "text": "los",
           "warnings": []
         },
@@ -5718,7 +5682,7 @@
             "x0": 948.0,
             "x1": 1008.0
           },
-          "confidence": 0.96748695,
+          "confidence": 0.96522278,
           "text": "pies",
           "warnings": []
         },
@@ -5730,7 +5694,7 @@
             "x0": 1019.0,
             "x1": 1128.0
           },
-          "confidence": 0.94708321,
+          "confidence": 0.96100151,
           "text": "quedan",
           "warnings": []
         },
@@ -5742,7 +5706,7 @@
             "x0": 1140.0,
             "x1": 1181.0
           },
-          "confidence": 0.96476059,
+          "confidence": 0.9612542000000001,
           "text": "sin",
           "warnings": []
         },
@@ -5754,7 +5718,7 @@
             "x0": 1191.0,
             "x1": 1266.0
           },
-          "confidence": 0.96516289,
+          "confidence": 0.9645603199999999,
           "text": "tocar",
           "warnings": []
         },
@@ -5766,7 +5730,7 @@
             "x0": 1275.0,
             "x1": 1300.0
           },
-          "confidence": 0.96293503,
+          "confidence": 0.9620502500000001,
           "text": "el",
           "warnings": []
         },
@@ -5778,7 +5742,7 @@
             "x0": 858.0,
             "x1": 917.0
           },
-          "confidence": 0.9699791000000001,
+          "confidence": 0.96997833,
           "text": "piso",
           "warnings": []
         },
@@ -5790,7 +5754,7 @@
             "x0": 928.0,
             "x1": 942.0
           },
-          "confidence": 0.96984039,
+          "confidence": 0.96968254,
           "text": "y",
           "warnings": []
         },
@@ -5802,7 +5766,7 @@
             "x0": 953.0,
             "x1": 977.0
           },
-          "confidence": 0.9687709,
+          "confidence": 0.96903038,
           "text": "la",
           "warnings": []
         },
@@ -5814,7 +5778,7 @@
             "x0": 990.0,
             "x1": 1097.0
           },
-          "confidence": 0.9687709,
+          "confidence": 0.9679002400000001,
           "text": "presión",
           "warnings": []
         },
@@ -5826,7 +5790,7 @@
             "x0": 1107.0,
             "x1": 1190.0
           },
-          "confidence": 0.9676906599999999,
+          "confidence": 0.96778992,
           "text": "sobre",
           "warnings": []
         },
@@ -5838,7 +5802,7 @@
             "x0": 1202.0,
             "x1": 1225.0
           },
-          "confidence": 0.9692749,
+          "confidence": 0.96796631,
           "text": "la",
           "warnings": []
         },
@@ -5850,7 +5814,7 @@
             "x0": 1238.0,
             "x1": 1313.0
           },
-          "confidence": 0.96923637,
+          "confidence": 0.96795097,
           "text": "parte",
           "warnings": []
         },
@@ -5862,7 +5826,7 @@
             "x0": 858.0,
             "x1": 958.0
           },
-          "confidence": 0.96183563,
+          "confidence": 0.96478004,
           "text": "inferior",
           "warnings": []
         },
@@ -5874,7 +5838,7 @@
             "x0": 967.0,
             "x1": 1004.0
           },
-          "confidence": 0.96861969,
+          "confidence": 0.96613388,
           "text": "de",
           "warnings": []
         },
@@ -5886,7 +5850,7 @@
             "x0": 1016.0,
             "x1": 1056.0
           },
-          "confidence": 0.96783348,
+          "confidence": 0.96878326,
           "text": "las",
           "warnings": []
         },
@@ -5898,7 +5862,7 @@
             "x0": 1068.0,
             "x1": 1177.0
           },
-          "confidence": 0.95816246,
+          "confidence": 0.95413307,
           "text": "piernas",
           "warnings": []
         },
@@ -5910,7 +5874,7 @@
             "x0": 1185.0,
             "x1": 1221.0
           },
-          "confidence": 0.9329841600000001,
+          "confidence": 0.93297348,
           "text": "es",
           "warnings": []
         },
@@ -5922,7 +5886,7 @@
             "x0": 1231.0,
             "x1": 1323.0
           },
-          "confidence": 0.92786293,
+          "confidence": 0.92913742,
           "text": "dema-",
           "warnings": []
         },
@@ -5934,7 +5898,7 @@
             "x0": 858.0,
             "x1": 935.0
           },
-          "confidence": 0.92589493,
+          "confidence": 0.92722427,
           "text": "siada",
           "warnings": []
         },
@@ -5946,7 +5910,7 @@
             "x0": 946.0,
             "x1": 979.0
           },
-          "confidence": 0.96977165,
+          "confidence": 0.9695784000000001,
           "text": "se",
           "warnings": []
         },
@@ -5958,7 +5922,7 @@
             "x0": 990.0,
             "x1": 1064.0
           },
-          "confidence": 0.96122353,
+          "confidence": 0.9624569700000001,
           "text": "debe",
           "warnings": []
         },
@@ -5970,7 +5934,7 @@
             "x0": 1075.0,
             "x1": 1172.0
           },
-          "confidence": 0.7278363,
+          "confidence": 0.60899872,
           "text": "utilizar",
           "warnings": []
         },
@@ -5982,7 +5946,7 @@
             "x0": 1183.0,
             "x1": 1216.0
           },
-          "confidence": 0.9329241899999999,
+          "confidence": 0.93292465,
           "text": "un",
           "warnings": []
         },
@@ -5994,7 +5958,7 @@
             "x0": 1229.0,
             "x1": 1304.0
           },
-          "confidence": 0.9310848199999999,
+          "confidence": 0.9318028300000001,
           "text": "repo-",
           "warnings": []
         },
@@ -6006,7 +5970,7 @@
             "x0": 858.0,
             "x1": 951.0
           },
-          "confidence": 0.93059494,
+          "confidence": 0.92906822,
           "text": "sapiés",
           "warnings": []
         },
@@ -6018,7 +5982,7 @@
             "x0": 962.0,
             "x1": 1027.0
           },
-          "confidence": 0.96587456,
+          "confidence": 0.96627235,
           "text": "(una",
           "warnings": []
         },
@@ -6030,7 +5994,7 @@
             "x0": 1038.0,
             "x1": 1103.0
           },
-          "confidence": 0.9615587600000001,
+          "confidence": 0.96300636,
           "text": "guía",
           "warnings": []
         },
@@ -6042,7 +6006,7 @@
             "x0": 1113.0,
             "x1": 1257.0
           },
-          "confidence": 0.9672554,
+          "confidence": 0.96787155,
           "text": "telefónica",
           "warnings": []
         },
@@ -6055,7 +6019,7 @@
             "x1": 835.0
           },
           "confidence": 0.0,
-          "text": "/",
+          "text": "?",
           "warnings": []
         },
         {
@@ -6066,7 +6030,7 @@
             "x0": 858.0,
             "x1": 948.0
           },
-          "confidence": 0.9629589799999999,
+          "confidence": 0.95740829,
           "text": "puede",
           "warnings": []
         },
@@ -6078,7 +6042,7 @@
             "x0": 958.0,
             "x1": 1006.0
           },
-          "confidence": 0.9650518800000001,
+          "confidence": 0.96455795,
           "text": "ser",
           "warnings": []
         },
@@ -6090,7 +6054,7 @@
             "x0": 1016.0,
             "x1": 1050.0
           },
-          "confidence": 0.96793785,
+          "confidence": 0.9622879000000001,
           "text": "de",
           "warnings": []
         },
@@ -6102,7 +6066,7 @@
             "x0": 1061.0,
             "x1": 1126.0
           },
-          "confidence": 0.93293686,
+          "confidence": 0.93296204,
           "text": "gran",
           "warnings": []
         },
@@ -6114,7 +6078,7 @@
             "x0": 1138.0,
             "x1": 1257.0
           },
-          "confidence": 0.78137741,
+          "confidence": 0.86764389,
           "text": "ayuda!).",
           "warnings": []
         }
@@ -6123,13 +6087,13 @@
     {
       "confidence": {
         "engine": "tesseract",
-        "engine_version": "unknown",
+        "engine_version": "5.4.0.20240606",
         "kind": "measured",
         "method": null,
         "provenance": null,
         "sample_size": 7,
         "unit": "mean_word_confidence",
-        "value": 0.96484351,
+        "value": 0.9652253828571429,
         "warnings": []
       },
       "deskew": {
@@ -6174,7 +6138,7 @@
             "x0": 758.0,
             "x1": 851.0
           },
-          "confidence": 0.96952583,
+          "confidence": 0.96957481,
           "text": "Zona",
           "warnings": []
         },
@@ -6186,7 +6150,7 @@
             "x0": 693.0,
             "x1": 784.0
           },
-          "confidence": 0.96851097,
+          "confidence": 0.9688532999999999,
           "text": "poco",
           "warnings": []
         },
@@ -6198,7 +6162,7 @@
             "x0": 798.0,
             "x1": 927.0
           },
-          "confidence": 0.96946068,
+          "confidence": 0.96967133,
           "text": "común",
           "warnings": []
         },
@@ -6210,7 +6174,7 @@
             "x0": 755.0,
             "x1": 849.0
           },
-          "confidence": 0.96036163,
+          "confidence": 0.96275505,
           "text": "Zona",
           "warnings": []
         },
@@ -6222,7 +6186,7 @@
             "x0": 713.0,
             "x1": 893.0
           },
-          "confidence": 0.9574536100000001,
+          "confidence": 0.9607122800000001,
           "text": "ocasional",
           "warnings": []
         },
@@ -6234,7 +6198,7 @@
             "x0": 703.0,
             "x1": 776.0
           },
-          "confidence": 0.96853699,
+          "confidence": 0.9675286900000001,
           "text": "Zona",
           "warnings": []
         },
@@ -6246,7 +6210,7 @@
             "x0": 809.0,
             "x1": 914.0
           },
-          "confidence": 0.9600548600000001,
+          "confidence": 0.9574822199999999,
           "text": "usual",
           "warnings": []
         }

@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 from ingestion.schemas.artifacts import (
     FormsArtifact,
+    LlamaCloudMetadata,
     OcrArtifact,
     PageRecord,
     TablesArtifact,
@@ -23,6 +24,7 @@ class ReadResult(BaseModel):
     forms: Optional[FormsArtifact] = None
     ocr: Optional[OcrArtifact] = None
     llama_understanding: Optional[LlamaUnderstanding] = None
+    llama_cloud_metadata: Optional[LlamaCloudMetadata] = None
 
     @property
     def page_count(self) -> int:
