@@ -1,18 +1,18 @@
 # chatbot-sst
 
-Pipeline local para normalizar documentos SST, revisar evidencia y preparar
-indexacion/RAG con trazabilidad.
+Pipeline para normalizar documentos SST, revisar evidencia y preparar
+indexacion/RAG con trazabilidad verificable.
 
 ## Lectura rapida
 
-- Indice de documentacion: `docs/README.md`.
-- Ingesta y Schema 2.0: `docs/ingestion/README.md`.
-- Experimento Llama-first: `docs/llama_first/README.md`.
-- Decisiones de arquitectura: `docs/adr/`.
-- Operacion: `docs/runbooks/`.
+- Indice corto: `docs/README.md`.
+- Ingesta local y Schema 2.0: `docs/ingestion/README.md`.
+- Via Llama-first experimental: `docs/llama_first/README.md`.
+- Decisiones vigentes: `docs/adr/`.
+- Runbooks operativos: `docs/runbooks/`.
 
-`memory/` y `data/` no son parte de esta limpieza documental. `data/docs_raw`
-permanece como fuente local y `data/docs_normalized` como salida generada.
+`data/`, `memory/`, `.tmp/`, `.venv*` y `node_modules/` no son contexto
+documental normal. Abrirlos solo cuando una tarea lo pida.
 
 ## Requisitos
 
@@ -31,8 +31,8 @@ npm run setup
 El comando crea `.venv`, instala dependencias Python en modo editable y genera
 `secrets.env` desde `secrets.example.env` si no existe.
 
-En Windows de trabajo este repo suele usar `.venv_windows_trabajo` si existe;
-el script `npm run python -- ...` lo prefiere automaticamente antes de `.venv`.
+En Windows, `npm run python -- ...` prefiere `.venv_windows_trabajo` si existe
+y usa `.venv` como alternativa.
 
 ## Comandos frecuentes
 
@@ -60,26 +60,14 @@ La API se ejecuta con `npm run gui:api` y el frontend con
 `npm run gui:front`. El frontend local abre normalmente en
 `http://127.0.0.1:5173`.
 
-La GUI permite inventario, revision humana, subida de `.pdf`/`.md`, ejecucion
-local o Llama Cloud en staging, controles de Classify/Extract y validacion. Las
-decisiones humanas se guardan en
-`data/docs_normalized/_manifests/review_decisions.json`.
+La GUI cubre inventario, revision humana, subida de `.pdf`/`.md`, ejecucion
+local o Llama Cloud en staging, controles de Classify/Extract y validacion.
 
 ## Estado vigente
 
-Fase 1 local esta cerrada y promovida como Schema 2.0: 55 documentos, 9 PDF, 77
-paginas PDF, 41 `processed`, 14 `needs_review`, 0 `failed`. Las fases de
-chunking, indexacion y RAG deben indexar solo documentos aprobados o manejar
-`needs_review` explicitamente.
+Fase 1 local esta cerrada y promovida como Schema 2.0: 55 documentos, 9 PDF,
+77 paginas PDF, 41 `processed`, 14 `needs_review`, 0 `failed`.
 
-Llama-first esta en rama experimental. Parse es obligatorio en modo cloud;
-Classify y Extract son paradas configurables. No se deben subir documentos
-corporativos a Llama Cloud hasta tener autorizacion de datos, region,
-retencion/eliminacion y presupuesto de creditos.
-
-## Ideas no cerradas
-
-Para RAG evaluar: parent/child chunking con overlap, reranking, pgvector o
-Qdrant, metadatos para prefiltro, vector quantization y un FAQ/cache para
-preguntas frecuentes. Fine-tuning/LoRA no reemplaza citas exactas por pagina y
-debe tratarse como linea separada de investigacion.
+Las fases de chunking, indexacion y RAG deben indexar solo documentos
+aprobados o manejar `needs_review` explicitamente. Llama-first sigue detras de
+configuracion y autorizacion de datos.

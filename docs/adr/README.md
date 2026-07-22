@@ -1,6 +1,7 @@
-# ADR
+# ADR vigentes
 
-Decisiones vigentes:
+Mantener solo decisiones que afecten contratos, dependencias o rutas
+arquitectonicas actuales.
 
 - `ADR-001-llama-first-experiment-boundaries.md`: limites del experimento y
   separacion entre contrato local y proveedores cloud.
@@ -11,5 +12,5 @@ Decisiones vigentes:
 - `ADR-004-production-parser-routing.md`: routing por feature flags y adopcion
   selectiva.
 
-Los ADRs son referencia de arquitectura; el estado operativo corto vive en
-`docs/README.md`, `docs/ingestion/README.md` y `docs/llama_first/README.md`.
+El estado operativo corto vive en `docs/README.md`,
+`docs/ingestion/README.md` y `docs/llama_first/README.md`.

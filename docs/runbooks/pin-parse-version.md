@@ -10,7 +10,7 @@ Benchmark results are accepted and the experiment must stop using
 1. Read the effective Parse version returned in job metadata.
 2. Update `LLAMA_PARSE_VERSION` to the validated dated version.
 3. Re-run the smoke document and benchmark subset.
-4. Record result in `docs/llama_first/decision-log.md` and the relevant ADR.
+4. Record result in `docs/llama_first/README.md` and the relevant ADR.
 
 ## Recovery
 

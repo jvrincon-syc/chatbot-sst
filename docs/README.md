@@ -1,29 +1,31 @@
-# Documentacion vigente
+# Documentacion corta
 
-Este indice mantiene el contexto corto. Para una tarea nueva, lee solo esta
-pagina y el README del area afectada.
+Para evitar overflow, empieza por este indice y abre solo el README del area
+afectada. No cargues `data/`, `memory/`, `.tmp/`, `.venv*` ni
+`node_modules/` salvo solicitud explicita.
 
 ## Areas
 
-- `ingestion/README.md`: contrato vigente de ingesta local, comandos, gates y
-  reglas de integridad.
-- `llama_first/README.md`: estado del experimento Llama Cloud + LlamaIndex,
-  flags, bloqueos y verificacion.
-- `adr/`: decisiones de arquitectura que siguen vigentes.
-- `runbooks/`: respuestas operativas cortas para incidentes o tareas manuales.
+- `ingestion/README.md`: ingesta local, Schema 2.0, gates y consumo downstream.
+- `llama_first/README.md`: via experimental Llama Cloud/LlamaIndex, flags y
+  bloqueos.
+- `adr/`: decisiones de arquitectura vigentes.
+- `runbooks/`: acciones operativas breves.
+- `rules/`: politicas obligatorias; leerlas cuando el cambio toque calidad,
+  seguridad, ramas o revision.
 
 ## Fuentes de verdad
 
 - Codigo y scripts: `app/back/src`, `app/back/tests`, `scripts`, `package.json`.
 - Configuracion versionada: `pyproject.toml`, `requirements*.txt`,
   `constraints/llama-first.txt`, `secrets.example.env`.
-- Salidas generadas o sensibles: `data/` y `secrets.env`; no se deben usar como
-  contexto largo salvo que la tarea lo pida.
-- Planes historicos: `memory/`; quedan fuera del contexto normal.
+- AGENTS: `AGENTS.md`, `app/back/AGENTS_back.md`,
+  `app/front/AGENTS_front.md`.
+- Salidas generadas o sensibles: `data/` y `secrets.env`.
+- Planes historicos: `memory/`.
 
-## Documentos eliminados o absorbidos
+## Poda
 
-Los logs largos, planes de implementacion y auditorias historicas se compactaron
-en los README de area o en ADRs para evitar overflow. Si necesitas evidencia
-historica exacta, revisa el historial de git en vez de cargar multiples Markdown
-a la vez.
+Los planes temporales y reportes historicos se absorbieron en README de area o
+ADRs. Si necesitas evidencia historica exacta, usa el historial de git en vez de
+cargar multiples Markdown.

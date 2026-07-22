@@ -1,4 +1,4 @@
-# Ingesta local y Schema 2.0
+# Ingesta local
 
 Esta area documenta la Fase 1 local: `data/docs_raw` -> bundles Schema 2.0 en
 `data/docs_normalized`. No incluye PostgreSQL, embeddings, RAG, Redis ni
@@ -14,9 +14,11 @@ Fase 1 esta cerrada y promovida desde el 2026-07-20.
 - Estados: 41 `processed`, 14 `needs_review`, 0 `failed`.
 - Gates: validacion estructural y golden semantico aprobados sobre la salida
   oficial promovida.
-
-El reporte de cierre vigente es `phase1_closure_report.md`. Las auditorias y
-checklists historicos fueron absorbidos para reducir contexto.
+- Evidencia de cierre: `run_id=phase1_main_full_candidate_20260720_r1`,
+  `pipeline_version=2.0.0`,
+  `validation run_id=phase1_official_20260720_guardrail_gate`.
+- Pruebas de cierre: `pip check`, ingestion sin corpus `245 passed,
+  2 deselected`, golden PDF corpus `2 passed`.
 
 ## Comandos
 
@@ -43,7 +45,7 @@ Promover manualmente solo procede cuando el gate estructural y el golden pasan
 en la misma corrida. No escribas directamente sobre `data/docs_normalized` antes
 de aprobar el candidato.
 
-## Bundle canonico
+## Contrato
 
 Cada documento normalizado debe conservar:
 
@@ -57,7 +59,7 @@ Cada documento normalizado debe conservar:
 Los manifiestos de inventario, corrida, validacion, errores y revision viven en
 `_manifests/`.
 
-## Reglas de integridad
+## Reglas clave
 
 - `data/docs_raw` es inmutable.
 - Las rutas canonicas son relativas POSIX.
@@ -86,7 +88,7 @@ Los manifiestos de inventario, corrida, validacion, errores y revision viven en
 - Un warning material obliga `needs_review`.
 - No se insertan frases artificiales en Markdown para satisfacer el golden.
 
-## Consumo downstream
+## Downstream
 
 Chunking, indexacion y RAG deben filtrar o gestionar explicitamente
 `processing_status="needs_review"`. Esos documentos existen y estan trazados,
