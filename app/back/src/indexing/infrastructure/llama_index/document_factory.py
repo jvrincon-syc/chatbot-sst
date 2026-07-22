@@ -32,6 +32,9 @@ class NormalizedDocumentFactory:
         "embedding_model",
         "embedding_dimension",
         "vector_store",
+        "ingestion_origin",
+        "distance_metric",
+        "vector_table",
     ]
 
     def create_document(

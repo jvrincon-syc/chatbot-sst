@@ -17,6 +17,7 @@ from indexing.infrastructure.llama_index.pipeline_factory import (
     LlamaIndexingPort,
     NormalizedBundleArtifacts,
 )
+from indexing.domain.profiles import ResolvedIndexingProfile
 
 
 class StaticBundleLoader:
@@ -63,6 +64,59 @@ class StaticBundleLoader:
 class FailingVectorStore(InMemoryVectorStore):
     def upsert_nodes(self, nodes, embeddings) -> None:
         raise VectorStoreWriteError("vector failure")
+
+
+class RecordingVectorRepository:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str, int]] = []
+
+    def replace_document_vectors(
+        self,
+        *,
+        document_id: str,
+        profile: ResolvedIndexingProfile,
+        nodes,
+        embeddings,
+    ) -> int:
+        self.calls.append((document_id, profile.vector_table, len(nodes)))
+        assert all(node.metadata["ingestion_origin"] == profile.ingestion_origin for node in nodes)
+        return 0
+
+
+class RecordingNodeRepository:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, int]] = []
+
+    def replace_document_nodes(self, *, document_id: str, nodes) -> int:
+        self.calls.append((document_id, len(nodes)))
+        return 0
+
+
+class RecordingNormalizedDocumentRepository:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str, str]] = []
+
+    def replace_document(self, *, document, ingestion_origin, artifact_fingerprint, corpus_version) -> None:
+        self.calls.append((document.document_id, ingestion_origin, corpus_version))
+
+
+class FakeProfileOrchestrator:
+    def resolve(self, *, profile_id: str, ingestion_origin: str) -> ResolvedIndexingProfile:
+        assert profile_id == "llama-first-local-v1"
+        assert ingestion_origin == "local"
+        return ResolvedIndexingProfile(
+            profile_id=profile_id,
+            ingestion_origin="local",
+            chunking_version="structure-aware-v1",
+            embedding_provider="mock",
+            embedding_model="deterministic",
+            embedding_dimension=3,
+            distance_metric="cosine",
+            vector_table="idx_vec_local_mock_v1",
+            metadata_schema_version="2.0",
+            active=True,
+            config_hash="a" * 64,
+        )
 
 
 def _profile() -> IndexingProfile:
@@ -144,3 +198,26 @@ async def test_llama_indexing_port_rolls_back_docstore_when_vector_store_fails()
         await indexer.index(_document())
 
     assert docstore.nodes_for_ref_doc_id("doc_1") == []
+
+
+@pytest.mark.anyio
+async def test_llama_indexing_port_writes_profile_repositories_for_selected_lane() -> None:
+    node_repository = RecordingNodeRepository()
+    vector_repository = RecordingVectorRepository()
+    normalized_repository = RecordingNormalizedDocumentRepository()
+    indexer = LlamaIndexingPort(
+        bundle_loader=StaticBundleLoader(),
+        node_repository=node_repository,
+        vector_repository=vector_repository,
+        normalized_document_repository=normalized_repository,
+        profile_orchestrator=FakeProfileOrchestrator(),
+        storage_mode="postgres",
+    )
+
+    result = await indexer.index(_document())
+
+    assert result.indexed_parent_nodes == 1
+    assert result.indexed_child_nodes == 1
+    assert normalized_repository.calls == [("doc_1", "local", "phase1")]
+    assert node_repository.calls == [("doc_1", 2)]
+    assert vector_repository.calls == [("doc_1", "idx_vec_local_mock_v1", 1)]

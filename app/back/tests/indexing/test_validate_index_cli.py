@@ -55,3 +55,83 @@ def test_validate_index_state_passes_when_approved_artifacts_exist(tmp_path) -> 
 
     assert result["status"] == "passed"
     assert result["approved_documents"] == 1
+
+
+def test_validate_index_reports_mixed_provider_as_error() -> None:
+    report = validate_index_state(
+        documents=[{"document_id": "doc_1", "ingestion_origin": "local", "approved": True}],
+        profiles=[
+            {
+                "profile_id": "llama-bge-m3-v1",
+                "ingestion_origin": "llama_cloud",
+                "embedding_dimension": 1024,
+            }
+        ],
+        vectors=[
+            {
+                "node_id": "child_1",
+                "document_id": "doc_1",
+                "profile_id": "llama-bge-m3-v1",
+                "embedding_dimension": 1024,
+            }
+        ],
+        nodes=[{"node_id": "child_1", "document_id": "doc_1", "node_role": "child"}],
+    )
+
+    assert report.status == "failed"
+    assert report.mixed_provider_errors == 1
+
+
+def test_validate_index_reports_dimension_mismatch_and_orphan_vectors() -> None:
+    report = validate_index_state(
+        documents=[
+            {"document_id": "doc_1", "ingestion_origin": "llama_cloud", "approved": True}
+        ],
+        profiles=[
+            {
+                "profile_id": "llama-bge-m3-v1",
+                "ingestion_origin": "llama_cloud",
+                "embedding_dimension": 1024,
+            }
+        ],
+        vectors=[
+            {
+                "node_id": "missing_child",
+                "document_id": "doc_1",
+                "profile_id": "llama-bge-m3-v1",
+                "embedding_dimension": 384,
+            }
+        ],
+        nodes=[],
+    )
+
+    assert report.status == "failed"
+    assert report.dimension_errors == 1
+    assert report.orphan_vectors == 1
+
+
+def test_validate_index_reports_unapproved_document_vectors() -> None:
+    report = validate_index_state(
+        documents=[
+            {"document_id": "doc_1", "ingestion_origin": "llama_cloud", "approved": False}
+        ],
+        profiles=[
+            {
+                "profile_id": "llama-bge-m3-v1",
+                "ingestion_origin": "llama_cloud",
+                "embedding_dimension": 1024,
+            }
+        ],
+        vectors=[
+            {
+                "node_id": "child_1",
+                "document_id": "doc_1",
+                "profile_id": "llama-bge-m3-v1",
+                "embedding_dimension": 1024,
+            }
+        ],
+        nodes=[{"node_id": "child_1", "document_id": "doc_1", "node_role": "child"}],
+    )
+
+    assert report.status == "failed"
+    assert report.unapproved_document_errors == 1

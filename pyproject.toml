@@ -40,4 +40,5 @@ pythonpath = ["app/back/src"]
 testpaths = ["app/back/tests"]
 markers = [
   "corpus: slow checks against the real audited PDF corpus",
+  "postgres_live: live PostgreSQL/pgvector checks guarded by SST_POSTGRES_DSN",
 ]
