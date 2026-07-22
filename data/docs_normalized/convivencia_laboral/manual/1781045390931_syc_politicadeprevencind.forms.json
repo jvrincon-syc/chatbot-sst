@@ -6,7 +6,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "ocr_text",
+      "method": "llamaparse_form_heuristic",
       "status": "not_detected",
       "value": false,
       "warnings": []

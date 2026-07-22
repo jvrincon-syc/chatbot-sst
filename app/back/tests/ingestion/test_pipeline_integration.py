@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 import ingestion.pipeline as pipeline_module
+from ingestion.config.llama_settings import LlamaSettings
 from ingestion.domain.models.classification import (
     ClassificationCandidate,
     ClassificationResult,
@@ -837,6 +838,42 @@ def test_pipeline_normalizes_windows_only_source_paths(tmp_path: Path) -> None:
 
     assert summary["processed"] == 1
     assert (normalized / "nested" / "manual.metadata.json").exists()
+
+
+def test_pipeline_reports_llama_provider_failures_without_local_extractor_reason(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    normalized = tmp_path / "data" / "normalized"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "manual.pdf").write_bytes(b"%PDF-1.4")
+
+    def fail_cloud_reader(*_args, **_kwargs):
+        raise RuntimeError("provider status COMPLETED did not match internal contract")
+
+    monkeypatch.setattr(pipeline_module, "_read_document", fail_cloud_reader)
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=normalized,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="llama_failure",
+        llama_settings_override=LlamaSettings(
+            cloud_enabled=True,
+            api_key="test-key",
+            local_fallback_enabled=False,
+        ),
+    )
+
+    needs_review = json.loads(
+        (normalized / "_manifests" / "needs_review.json").read_text(encoding="utf-8")
+    )
+
+    assert summary["needs_review"] == 1
+    assert needs_review["items"][0]["reasons"] == ["llama_cloud_provider_error"]
+    assert "Llama Cloud" in needs_review["items"][0]["details"][0]
 
 
 def test_pipeline_configures_region_tesseract_from_environment(monkeypatch) -> None:

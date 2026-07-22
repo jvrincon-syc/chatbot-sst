@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -10,6 +11,9 @@ sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
 
 from ingestion.config.env import load_secrets_env  # noqa: E402
 from ingestion.pipeline import run_pipeline  # noqa: E402
+from core.logging.logger import get_logger  # noqa: E402
+
+console_logger = get_logger(__name__)
 
 
 def main() -> int:
@@ -32,6 +36,7 @@ def main() -> int:
         help="Minimum OCR confidence ratio required before marking a PDF for review.",
     )
     args = parser.parse_args()
+    run_id = args.run_id or "run_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
 
     summary = run_pipeline(
         docs_raw=args.docs_raw,
@@ -42,11 +47,20 @@ def main() -> int:
         force=args.force,
         corpus_version=args.corpus_version,
         pipeline_version=args.pipeline_version,
-        run_id=args.run_id,
+        run_id=run_id,
         ocr_review_threshold=args.ocr_review_threshold,
         golden_status=args.golden_status,
     )
-    print(summary)
+    console_logger.info(
+        "Ingestion pipeline finished",
+        extra={
+            "run_id": run_id,
+            "stage": "pipeline",
+            "event": "pipeline_finished",
+            "status": "finished",
+            "summary": summary,
+        },
+    )
     return 0
 
 

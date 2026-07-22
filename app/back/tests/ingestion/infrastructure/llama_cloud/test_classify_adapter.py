@@ -17,7 +17,7 @@ class FakeClassifyClient:
         self.calls.append(kwargs)
         return {
             "id": "classify_123",
-            "status": "completed",
+            "status": "COMPLETED",
             "label": "formulario",
             "confidence": 0.91,
             "reasoning": "El documento contiene campos de queja.",
@@ -106,6 +106,7 @@ async def test_classify_adapter_maps_cloud_result_to_domain_result(tmp_path) -> 
         "max_pages": 5,
     }
     assert result.provider_job.job_id == "classify_123"
+    assert result.provider_job.status == "completed"
     assert result.selected.label == "formulario"
     assert result.selected.confidence == 0.91
     assert result.selected.evidence[0].text == "Formato de queja"

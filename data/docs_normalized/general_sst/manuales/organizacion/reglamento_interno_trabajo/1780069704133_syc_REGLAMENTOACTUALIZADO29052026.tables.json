@@ -5,7 +5,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -14,7 +14,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -24,22 +24,16 @@
       "engine_version": null,
       "evidence": [
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "page_number": 3,
           "pattern": null,
           "region": null,
-          "source": "pdfplumber",
-          "text": null,
+          "source": "llamaparse",
+          "text": "html_table",
           "warnings": []
         }
       ],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "detected",
       "value": true,
       "warnings": []
@@ -48,7 +42,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -57,7 +51,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -66,7 +60,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -75,7 +69,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -84,7 +78,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -93,7 +87,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -102,7 +96,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -111,7 +105,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -120,7 +114,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -129,7 +123,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -138,7 +132,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -147,7 +141,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -156,7 +150,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -165,7 +159,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -174,7 +168,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -183,7 +177,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -192,7 +186,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -201,7 +195,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -210,7 +204,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -219,7 +213,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -228,7 +222,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -237,7 +231,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -246,7 +240,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -255,7 +249,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -265,22 +259,16 @@
       "engine_version": null,
       "evidence": [
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "page_number": 28,
           "pattern": null,
           "region": null,
-          "source": "pdfplumber",
-          "text": null,
+          "source": "llamaparse",
+          "text": "html_table",
           "warnings": []
         }
       ],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "detected",
       "value": true,
       "warnings": []
@@ -289,7 +277,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -298,7 +286,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -307,7 +295,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -316,7 +304,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -325,7 +313,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -334,7 +322,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -343,7 +331,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -352,7 +340,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "pdfplumber",
+      "method": "llamaparse_markdown_table",
       "status": "not_detected",
       "value": false,
       "warnings": []
@@ -362,23 +350,11 @@
   "table_count": 2,
   "tables": [
     {
-      "bbox": {
-        "bottom": 156.019995,
-        "coordinate_system": "pdf_points",
-        "top": 79.43999999999994,
-        "x0": 85.344,
-        "x1": 538.7799899999999
-      },
+      "bbox": null,
       "caption": null,
       "cells": [
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 0,
@@ -387,13 +363,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 0,
@@ -402,13 +372,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 2,
           "column_span": 1,
           "row_index": 0,
@@ -417,13 +381,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 1,
@@ -432,28 +390,16 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 1,
           "row_span": 1,
-          "text": "Líder e integrador de\nadministración",
+          "text": "Líder e integrador de administración",
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 2,
           "column_span": 1,
           "row_index": 1,
@@ -462,13 +408,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 2,
@@ -477,13 +417,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 2,
@@ -492,13 +426,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 156.019995,
-            "coordinate_system": "pdf_points",
-            "top": 79.43999999999994,
-            "x0": 85.344,
-            "x1": 538.7799899999999
-          },
+          "bbox": null,
           "column_index": 2,
           "column_span": 1,
           "row_index": 2,
@@ -507,12 +435,12 @@
           "warnings": []
         }
       ],
-      "extractor": "pdfplumber",
+      "extractor": "llamaparse_markdown_table",
       "headers": [
         "CARGO",
         "NOMBRES"
       ],
-      "markdown_representation": "|  | CARGO | NOMBRES |\n| --- | --- | --- |\n| ELABORADO POR | Líder e integrador de\nadministración | Joan Mauricio Arenas Clavijo |\n| APROBADO POR | Gerente General | Tomas Navas Corona |",
+      "markdown_representation": "|  | CARGO | NOMBRES |\n| ELABORADO POR | Líder e integrador de administración | Joan Mauricio Arenas Clavijo |\n| APROBADO POR | Gerente General | Tomas Navas Corona |",
       "page_number": 3,
       "quality": {
         "engine": null,
@@ -533,7 +461,7 @@
         ],
         [
           "ELABORADO POR",
-          "Líder e integrador de\nadministración",
+          "Líder e integrador de administración",
           "Joan Mauricio Arenas Clavijo"
         ],
         [
@@ -542,27 +470,15 @@
           "Tomas Navas Corona"
         ]
       ],
-      "table_id": "page_3_table_1",
+      "table_id": "pjb-pw75waonq7gg7ldawodt810mk4uq_p3_table_001",
       "warnings": []
     },
     {
-      "bbox": {
-        "bottom": 711.4560099999999,
-        "coordinate_system": "pdf_points",
-        "top": 661.18001,
-        "x0": 85.10400000000001,
-        "x1": 534.0999899999999
-      },
+      "bbox": null,
       "caption": null,
       "cells": [
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 0,
@@ -571,13 +487,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 0,
@@ -586,13 +496,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 1,
@@ -601,13 +505,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 1,
@@ -616,13 +514,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 2,
@@ -631,13 +523,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 2,
@@ -646,13 +532,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 0,
           "column_span": 1,
           "row_index": 3,
@@ -661,13 +541,7 @@
           "warnings": []
         },
         {
-          "bbox": {
-            "bottom": 711.4560099999999,
-            "coordinate_system": "pdf_points",
-            "top": 661.18001,
-            "x0": 85.10400000000001,
-            "x1": 534.0999899999999
-          },
+          "bbox": null,
           "column_index": 1,
           "column_span": 1,
           "row_index": 3,
@@ -676,12 +550,12 @@
           "warnings": []
         }
       ],
-      "extractor": "pdfplumber",
+      "extractor": "llamaparse_markdown_table",
       "headers": [
         "TIPO",
         "SANCIÓN"
       ],
-      "markdown_representation": "| TIPO | SANCIÓN |\n| --- | --- |\n| A | Llamado de atención escrito |\n| B | Suspensión del trabajador hasta 3 días laborales. |\n| C | Suspensión del trabajador hasta 8 días laborales. |",
+      "markdown_representation": "| TIPO | SANCIÓN |\n| A | Llamado de atención escrito |\n| B | Suspensión del trabajador hasta 3 días laborales. |\n| C | Suspensión del trabajador hasta 8 días laborales. |",
       "page_number": 28,
       "quality": {
         "engine": null,
@@ -712,7 +586,7 @@
           "Suspensión del trabajador hasta 8 días laborales."
         ]
       ],
-      "table_id": "page_28_table_1",
+      "table_id": "pjb-pw75waonq7gg7ldawodt810mk4uq_p28_table_001",
       "warnings": []
     }
   ],

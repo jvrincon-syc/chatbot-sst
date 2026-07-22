@@ -3,16 +3,16 @@
     "conflict_status": "none",
     "conflicts": [],
     "content_prediction": "formulario",
-    "document_type": "formulario",
+    "document_type": "otro",
     "document_type_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-4iz1abj5jwyl49txwwmh4kr6s1ku",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "route_prior": "manual",
@@ -23,19 +23,22 @@
       "Convivencia laboral:convivencia:title_control",
       "Formularios:formato:title_control",
       "Comité de Convivencia Laboral:comite de convivencia:content",
-      "Queja por presunto acoso laboral:interponer queja:title_control"
+      "Queja por presunto acoso laboral:interponer queja:title_control",
+      "llama_classify_document_type:otro",
+      "llama_classify_topic:otro",
+      "llama_schema_extract:document_control"
     ],
     "subtopic": "Queja por presunto acoso laboral",
-    "topic": "Comité de Convivencia Laboral",
+    "topic": "otro",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-id51jz0h58kr4msuf3enx1qi3sq5",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "warnings": []
@@ -50,32 +53,15 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "RE.RH-04   NIVEL DE   USO INTERNO",
-          "warnings": []
-        },
-        {
-          "bbox": {
-            "bottom": 106.75159999999994,
-            "coordinate_system": "pdf_points",
-            "top": 96.79160000000002,
-            "x0": 236.69,
-            "x1": 284.94404000000003
-          },
-          "page_number": 1,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "RE.RH-04",
+          "source": "llamaparse",
+          "text": "<td>RE.RH-04 SST</td>",
           "warnings": []
         }
       ],
       "status": "extracted",
       "value": "RE.RH-04 SST",
-      "value_raw": "RE.RH-04",
-      "warnings": [
-        "code_suffix_joined_from_split_header"
-      ]
+      "value_raw": "RE.RH-04 SST",
+      "warnings": []
     },
     "effective_date": {
       "evidence": [],
@@ -98,8 +84,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ",
+          "source": "llamaparse",
+          "text": "## FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ DE CONVIVENCIA.",
           "warnings": []
         }
       ],
@@ -115,17 +101,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CÓDIGO                                       Versión 0.3",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CÓDIGO                                       Versión 0.3",
+          "source": "llamaparse",
+          "text": "<td>Versión 0.3</td>",
           "warnings": []
         }
       ],
@@ -138,7 +115,7 @@
   },
   "document_id": "doc_864d906c5eae1183",
   "document_name": "1761580555950_syc_RE.RH-04SST23102025.pdf",
-  "extraction_method": "pdf_digital",
+  "extraction_method": "llamaparse",
   "feature_observations": {},
   "forms": {
     "engine": null,
@@ -171,27 +148,86 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\1761580555950_syc_RE.RH-04SST23102025.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\1761580555950_syc_RE.RH-04SST23102025.md",
   "legacy_path": null,
   "legacy_source_path": null,
-  "llama_cloud": null,
+  "llama_cloud": {
+    "job_metadata": {
+      "pdf-high-res-ocr": 2,
+      "pdf-image-convertTime": 0,
+      "pdf-image-ocr-count": 0,
+      "pdf-image-ocr-empty-count": 2,
+      "pdf-image-ocr-failed-count": 0,
+      "pdf-image-ocr-hadText-count": 4,
+      "pdf-image-ocr-pixels": 16236015,
+      "pdf-image-ocr-success-count": 6,
+      "pdf-inputTokens": 8977,
+      "pdf-llmTime": 2473,
+      "pdf-mdLength": 1914,
+      "pdf-multimodal-pdf2Image": 0,
+      "pdf-multimodal-time": 0,
+      "pdf-ocrTime": 0,
+      "pdf-outputTokens": 481,
+      "pdf-pages": 2,
+      "pdf-pdfToHTMLTime": 0,
+      "pdf-rawTextLength": 3207,
+      "pdf-real-pages": 2,
+      "pdf-time": 4297,
+      "state_transitions": {
+        "cancelled_at": null,
+        "completed_at": "2026-07-21T21:47:33.237323Z",
+        "failed_at": null,
+        "pending_at": "2026-07-21T21:47:22.899659Z",
+        "running_at": "2026-07-21T21:47:23.326676Z",
+        "throttled_at": "2026-07-21T21:47:23.112120Z"
+      }
+    },
+    "page_metadata": [
+      {
+        "confidence": 0.979,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 1,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.947,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 2,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      }
+    ],
+    "parse_configuration_hash": "sha256:cdd89a0e54ed90cc7d486b3e578ad9e2112e03b908de8eae63cd14f49d7fcb62",
+    "parse_job_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+    "parse_status": "completed",
+    "warnings": []
+  },
   "normalized_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
   "ocr_confidence": {
     "engine": null,
     "engine_version": null,
-    "kind": "unavailable",
-    "method": null,
+    "kind": "estimated",
+    "method": "page_ocr_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": null,
+    "value": 0.963,
     "warnings": []
   },
   "page_count": 2,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-22T11:46:04.035296-05:00",
-  "processing_status": "processed",
-  "review_reasons": [],
+  "processed_at": "2026-07-22T15:27:11.241605-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "ambiguous_classification"
+  ],
   "schema_version": "2.0",
   "source_hash": "6eb13cd6e4aeccd1322bd05e2c857bfbf34a2bec760bbd6d1762d220294964b3",
   "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
@@ -216,5 +252,8 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": []
+  "warnings": [
+    "llama_parse_job:pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+    "ambiguous_classification"
+  ]
 }

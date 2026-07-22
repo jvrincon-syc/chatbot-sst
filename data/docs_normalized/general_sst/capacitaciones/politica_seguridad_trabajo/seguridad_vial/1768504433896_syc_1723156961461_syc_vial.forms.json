@@ -6,7 +6,7 @@
       "engine": null,
       "engine_version": null,
       "evidence": [],
-      "method": "vector_geometry",
+      "method": "llamaparse_form_heuristic",
       "status": "not_detected",
       "value": false,
       "warnings": []

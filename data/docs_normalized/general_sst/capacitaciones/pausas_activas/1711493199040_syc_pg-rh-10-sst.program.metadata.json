@@ -3,16 +3,16 @@
     "conflict_status": "none",
     "conflicts": [],
     "content_prediction": "programa",
-    "document_type": "programa",
+    "document_type": "otro",
     "document_type_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-j4mjhc93s9zv2eael1zk5775xnce",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "route_prior": "capacitacion",
@@ -22,19 +22,22 @@
       "Pausas activas:pausas activas:title_control",
       "Pausas activas:pausas activas:content",
       "Pausas activas:pausas activas:route",
-      "Prevención de fatiga y desórdenes musculoesqueléticos:pausas activas:title_control"
+      "Prevención de fatiga y desórdenes musculoesqueléticos:pausas activas:title_control",
+      "llama_classify_document_type:otro",
+      "llama_classify_topic:otro",
+      "llama_schema_extract:document_control"
     ],
     "subtopic": "Prevención de fatiga y desórdenes musculoesqueléticos",
-    "topic": "Pausas activas",
+    "topic": "otro",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-qt77vevdgq6ip5h6929wt5erqohh",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "warnings": []
@@ -49,143 +52,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 3,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 4,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 5,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 6,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 7,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 8,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 9,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 10,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 11,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 12,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 13,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 14,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 15,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 16,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "source": "llamaparse",
+          "text": "<td>PG-RH-10-SST</td>",
           "warnings": []
         }
       ],
@@ -208,7 +76,7 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "hybrid",
+          "source": "llamaparse",
           "text": "Marzo 2024",
           "warnings": []
         }
@@ -225,160 +93,25 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "hybrid",
-          "text": "PROGRAMA  DE PAUSAS ACTIVAS",
+          "source": "llamaparse",
+          "text": "# PROGRAMA DE PAUSAS ACTIVAS",
           "warnings": []
         }
       ],
       "status": "extracted",
       "value": "PROGRAMA DE PAUSAS ACTIVAS",
-      "value_raw": "PROGRAMA  DE PAUSAS ACTIVAS",
+      "value_raw": "PROGRAMA DE PAUSAS ACTIVAS",
       "warnings": []
     },
     "version": {
       "evidence": [
         {
           "bbox": null,
-          "page_number": 1,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 3,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 4,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 5,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 6,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 7,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 8,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 9,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 10,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 11,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 12,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 13,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 14,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 15,
-          "pattern": null,
-          "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
           "page_number": 16,
           "pattern": null,
           "region": null,
-          "source": "hybrid",
-          "text": "CODIGO  PG-RH-10-SST NIVEL DE CLASIFICACIÓN USO INTERNO (NC2) Versión 0.0",
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0</td></tr>",
           "warnings": []
         }
       ],
@@ -391,13 +124,13 @@
   },
   "document_id": "doc_f2cf7868a801af0e",
   "document_name": "1711493199040_syc_pg-rh-10-sst.program.pdf",
-  "extraction_method": "hybrid",
+  "extraction_method": "llamaparse",
   "feature_observations": {},
   "forms": {
     "engine": null,
     "engine_version": null,
     "evidence": [],
-    "method": "vector_geometry",
+    "method": "llamaparse_form_heuristic",
     "status": "not_detected",
     "value": false,
     "warnings": []
@@ -412,27 +145,226 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\capacitaciones\\pausas_activas\\1711493199040_syc_pg-rh-10-sst.program.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\general_sst\\capacitaciones\\pausas_activas\\1711493199040_syc_pg-rh-10-sst.program.md",
   "legacy_path": null,
   "legacy_source_path": null,
-  "llama_cloud": null,
+  "llama_cloud": {
+    "job_metadata": {
+      "pdf-high-res-ocr": 16,
+      "pdf-image-convertTime": 0,
+      "pdf-image-ocr-count": 0,
+      "pdf-image-ocr-empty-count": 16,
+      "pdf-image-ocr-failed-count": 0,
+      "pdf-image-ocr-hadText-count": 92,
+      "pdf-image-ocr-pixels": 125853537,
+      "pdf-image-ocr-success-count": 108,
+      "pdf-inputTokens": 70578,
+      "pdf-llmTime": 4467,
+      "pdf-mdLength": 21824,
+      "pdf-multimodal-pdf2Image": 0,
+      "pdf-multimodal-time": 0,
+      "pdf-ocrTime": 0,
+      "pdf-outputTokens": 5149,
+      "pdf-pages": 16,
+      "pdf-pdfToHTMLTime": 0,
+      "pdf-rawTextLength": 25142,
+      "pdf-real-pages": 16,
+      "pdf-time": 7678,
+      "state_transitions": {
+        "cancelled_at": null,
+        "completed_at": "2026-07-21T21:49:18.652762Z",
+        "failed_at": null,
+        "pending_at": "2026-07-21T21:48:57.136476Z",
+        "running_at": "2026-07-21T21:48:57.509182Z",
+        "throttled_at": "2026-07-21T21:48:57.342368Z"
+      }
+    },
+    "page_metadata": [
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 1,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 2,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 3,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 4,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.97,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 5,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.995,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 6,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 7,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.925,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 8,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.9,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 9,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.946,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 10,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.956,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 11,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.883,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 12,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.525,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 13,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.99,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 14,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.714,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 15,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.993,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 16,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      }
+    ],
+    "parse_configuration_hash": "sha256:cdd89a0e54ed90cc7d486b3e578ad9e2112e03b908de8eae63cd14f49d7fcb62",
+    "parse_job_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+    "parse_status": "completed",
+    "warnings": []
+  },
   "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
   "ocr_confidence": {
-    "engine": "tesseract",
-    "engine_version": "5.4.0.20240606",
-    "kind": "measured",
-    "method": null,
+    "engine": null,
+    "engine_version": null,
+    "kind": "estimated",
+    "method": "page_ocr_confidence_average",
     "provenance": null,
-    "sample_size": 485,
-    "unit": "mean_word_confidence",
-    "value": 0.8693550611958762,
+    "sample_size": null,
+    "unit": null,
+    "value": 0.9248125,
     "warnings": []
   },
   "page_count": 16,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-22T11:46:29.028353-05:00",
-  "processing_status": "processed",
-  "review_reasons": [],
+  "processed_at": "2026-07-22T15:29:23.470833-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "ambiguous_classification"
+  ],
   "schema_version": "2.0",
   "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
   "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
@@ -457,5 +389,8 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": []
+  "warnings": [
+    "llama_parse_job:pjb-7y0nl29rghh6vu49sia8fjij11ld",
+    "ambiguous_classification"
+  ]
 }

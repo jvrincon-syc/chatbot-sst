@@ -9,6 +9,7 @@ from ingestion.domain.models.classification import ClassificationCandidate, Clas
 from ingestion.domain.models.provider import ProviderJobRef
 from ingestion.infrastructure.llama_cloud.classify_config import LlamaClassifyConfig
 from ingestion.infrastructure.llama_cloud.errors import ProviderMalformedResultError
+from ingestion.infrastructure.llama_cloud.status import coerce_provider_job_status
 from ingestion.schemas.common import Evidence
 
 
@@ -85,7 +86,7 @@ def map_classify_response_to_result(
         provider="llama_cloud",
         capability="classify",
         job_id=str(payload.get("id") or payload.get("job_id") or "unknown"),
-        status=str(payload.get("status") or "completed"),
+        status=coerce_provider_job_status(payload.get("status")),
         configuration_hash=configuration_hash,
         created_at=now,
         completed_at=now,

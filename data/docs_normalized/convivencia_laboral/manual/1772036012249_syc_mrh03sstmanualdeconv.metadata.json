@@ -3,16 +3,16 @@
     "conflict_status": "none",
     "conflicts": [],
     "content_prediction": "formulario",
-    "document_type": "manual",
+    "document_type": "otro",
     "document_type_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-de08pw7kmlzdcpljks6gle8oqrp1",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "route_prior": "manual",
@@ -23,19 +23,22 @@
       "manual:manual:route",
       "Convivencia laboral:convivencia laboral:title_control",
       "Convivencia laboral:convivencia laboral:content",
-      "Convivencia laboral:convivencia laboral:route"
+      "Convivencia laboral:convivencia laboral:route",
+      "llama_classify_document_type:otro",
+      "llama_classify_topic:otro",
+      "llama_schema_extract:document_control"
     ],
     "subtopic": null,
-    "topic": "Convivencia laboral",
+    "topic": "otro",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-50ef7tkcllcqpepu97ik761wna9p",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "warnings": []
@@ -50,107 +53,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 3,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 4,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 5,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 6,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 7,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 8,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 9,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 10,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 11,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 12,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "source": "llamaparse",
+          "text": "<tr><th>CODIGO</th><th>M.RH-03-SST</th><th>NIVEL DE CLASIFICACIÓN</th><th>USO INTERNO (NC2)</th><th>VERSION</th><th>0.2</th></tr>",
           "warnings": []
         }
       ],
@@ -180,8 +84,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "MANUAL DE CONVIVENCIA LABORAL",
+          "source": "llamaparse",
+          "text": "# MANUAL DE CONVIVENCIA LABORAL",
           "warnings": []
         }
       ],
@@ -194,74 +98,11 @@
       "evidence": [
         {
           "bbox": null,
-          "page_number": 1,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 3,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
           "page_number": 4,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 5,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 6,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 7,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 8,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | M.RH-03-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | VERSION | 0.2</td></tr>",
           "warnings": []
         },
         {
@@ -269,8 +110,8 @@
           "page_number": 9,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO M.RH-03-SST</td><td>NIVEL DE CLASIFICACIÓN USO INTERNO (NC2)</td><td>VERSION 0.2</td></tr>",
           "warnings": []
         },
         {
@@ -278,26 +119,8 @@
           "page_number": 10,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 11,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 12,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO M.RH-03-SST                     VERSION 0.2",
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | M.RH-03-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | VERSION | 0.2</td></tr>",
           "warnings": []
         }
       ],
@@ -310,13 +133,13 @@
   },
   "document_id": "doc_c392ec7bf8d98194",
   "document_name": "1772036012249_syc_mrh03sstmanualdeconv.pdf",
-  "extraction_method": "pdf_digital",
+  "extraction_method": "llamaparse",
   "feature_observations": {},
   "forms": {
     "engine": null,
     "engine_version": null,
     "evidence": [],
-    "method": "vector_geometry",
+    "method": "llamaparse_form_heuristic",
     "status": "not_detected",
     "value": false,
     "warnings": []
@@ -331,27 +154,186 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\convivencia_laboral\\manual\\1772036012249_syc_mrh03sstmanualdeconv.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\1772036012249_syc_mrh03sstmanualdeconv.md",
   "legacy_path": null,
   "legacy_source_path": null,
-  "llama_cloud": null,
+  "llama_cloud": {
+    "job_metadata": {
+      "pdf-high-res-ocr": 12,
+      "pdf-image-convertTime": 0,
+      "pdf-image-ocr-count": 0,
+      "pdf-image-ocr-empty-count": 12,
+      "pdf-image-ocr-failed-count": 0,
+      "pdf-image-ocr-hadText-count": 24,
+      "pdf-image-ocr-pixels": 96472041,
+      "pdf-image-ocr-success-count": 36,
+      "pdf-inputTokens": 53618,
+      "pdf-llmTime": 4165,
+      "pdf-mdLength": 21425,
+      "pdf-multimodal-pdf2Image": 0,
+      "pdf-multimodal-time": 0,
+      "pdf-ocrTime": 0,
+      "pdf-outputTokens": 5059,
+      "pdf-pages": 12,
+      "pdf-pdfToHTMLTime": 0,
+      "pdf-rawTextLength": 21577,
+      "pdf-real-pages": 12,
+      "pdf-time": 7216,
+      "state_transitions": {
+        "cancelled_at": null,
+        "completed_at": "2026-07-21T21:47:54.640396Z",
+        "failed_at": null,
+        "pending_at": "2026-07-21T21:47:36.367477Z",
+        "running_at": "2026-07-21T21:47:36.683985Z",
+        "throttled_at": "2026-07-21T21:47:36.537302Z"
+      }
+    },
+    "page_metadata": [
+      {
+        "confidence": 0.989,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 1,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.986,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 2,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.98,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 3,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.994,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 4,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.984,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 5,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.982,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 6,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.982,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 7,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.979,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 8,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.995,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 9,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 10,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.982,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 11,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.901,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 12,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      }
+    ],
+    "parse_configuration_hash": "sha256:cdd89a0e54ed90cc7d486b3e578ad9e2112e03b908de8eae63cd14f49d7fcb62",
+    "parse_job_id": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+    "parse_status": "completed",
+    "warnings": []
+  },
   "normalized_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
   "ocr_confidence": {
     "engine": null,
     "engine_version": null,
-    "kind": "unavailable",
-    "method": null,
+    "kind": "estimated",
+    "method": "page_ocr_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": null,
+    "value": 0.9794999999999999,
     "warnings": []
   },
   "page_count": 12,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-22T11:46:06.137163-05:00",
-  "processing_status": "processed",
-  "review_reasons": [],
+  "processed_at": "2026-07-22T15:27:38.899466-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "ambiguous_classification"
+  ],
   "schema_version": "2.0",
   "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
   "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
@@ -376,5 +358,8 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": []
+  "warnings": [
+    "llama_parse_job:pjb-rrjo97gns4p3be98tqymlfur9jvf",
+    "ambiguous_classification"
+  ]
 }

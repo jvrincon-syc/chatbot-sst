@@ -63,9 +63,12 @@ def _read_json(path: Path, default: Any) -> Any:
         return default
 
 
-def _latest_validation_report() -> dict[str, Any] | None:
+def _latest_validation_report(
+    *,
+    manifests_dir: Path = MANIFESTS_DIR,
+) -> dict[str, Any] | None:
     reports = sorted(
-        MANIFESTS_DIR.glob("validation_*.json"),
+        manifests_dir.glob("validation_*.json"),
         key=lambda path: path.stat().st_mtime,
         reverse=True,
     )
@@ -77,17 +80,25 @@ def _latest_validation_report() -> dict[str, Any] | None:
     return {"path": reports[0].relative_to(ROOT).as_posix(), **payload}
 
 
-def _review_decision_map() -> dict[str, ReviewDecision]:
+def _review_decision_map(
+    *,
+    review_decisions_path: Path = REVIEW_DECISIONS_PATH,
+) -> dict[str, ReviewDecision]:
     return {
         decision.document_id: decision
-        for decision in load_review_decisions(REVIEW_DECISIONS_PATH)
+        for decision in load_review_decisions(review_decisions_path)
     }
 
 
-def build_status_payload() -> dict[str, Any]:
-    inventory = _read_json(MANIFESTS_DIR / "inventory.json", {})
-    needs_review_manifest = _read_json(MANIFESTS_DIR / "needs_review.json", {})
-    errors_manifest = _read_json(MANIFESTS_DIR / "errors.json", {})
+def build_status_payload(
+    *,
+    normalized_root: Path = DOCS_NORMALIZED,
+    manifests_dir: Path = MANIFESTS_DIR,
+    review_decisions_path: Path = REVIEW_DECISIONS_PATH,
+) -> dict[str, Any]:
+    inventory = _read_json(manifests_dir / "inventory.json", {})
+    needs_review_manifest = _read_json(manifests_dir / "needs_review.json", {})
+    errors_manifest = _read_json(manifests_dir / "errors.json", {})
     records = inventory.get("records", []) if isinstance(inventory, dict) else []
     review_items = (
         needs_review_manifest.get("items", [])
@@ -97,7 +108,7 @@ def build_status_payload() -> dict[str, Any]:
     error_items = (
         errors_manifest.get("items", []) if isinstance(errors_manifest, dict) else []
     )
-    decisions = _review_decision_map()
+    decisions = _review_decision_map(review_decisions_path=review_decisions_path)
     review_by_id = {
         item.get("document_id"): item
         for item in review_items
@@ -110,29 +121,15 @@ def build_status_payload() -> dict[str, Any]:
             continue
         document_id = record.get("document_id", "")
         source_relpath = record.get("source_relpath", "")
-        review_item = review_by_id.get(document_id, {})
-        decision = decisions.get(document_id)
         documents.append(
-            {
-                "documentId": document_id,
-                "sourceRelpath": source_relpath,
-                "documentName": record.get("document_name", Path(source_relpath).name),
-                "detectedExtension": record.get("detected_extension"),
-                "mimeType": record.get("mime_type"),
-                "category": record.get("category_inferred"),
-                "fileSize": record.get("file_size", 0),
-                "processingStatus": record.get("processing_status", "pending"),
-                "ingestionDate": record.get("ingestion_date"),
-                "reviewReasons": review_item.get("reasons", []),
-                "reviewDetails": review_item.get("details", []),
-                "decision": asdict(decision) if decision else None,
-                **_ingestion_details_for_record(record),
-                **_document_ocr_confidence_for_record(record),
-            }
+            _document_payload_for_record(
+                record,
+                review_item=review_by_id.get(document_id, {}),
+                decision=decisions.get(document_id),
+                normalized_root=normalized_root,
+            )
         )
 
-    approved = sum(1 for decision in decisions.values() if decision.decision == "approved")
-    rejected = sum(1 for decision in decisions.values() if decision.decision == "rejected")
     pending_review = [
         document
         for document in documents
@@ -150,8 +147,12 @@ def build_status_payload() -> dict[str, Any]:
         "failed": sum(
             1 for document in documents if document["processingStatus"] == "failed"
         ),
-        "approved": approved,
-        "rejected": rejected,
+        "approved": sum(
+            1 for document in documents if document["reviewStatus"] == "approved"
+        ),
+        "rejected": sum(
+            1 for document in documents if document["reviewStatus"] == "rejected"
+        ),
         "runId": needs_review_manifest.get("run_id") if isinstance(needs_review_manifest, dict) else None,
         "generatedAt": inventory.get("generated_at") if isinstance(inventory, dict) else None,
         "schemaVersion": inventory.get("schema_version") if isinstance(inventory, dict) else None,
@@ -164,7 +165,7 @@ def build_status_payload() -> dict[str, Any]:
         "documents": documents,
         "needsReview": pending_review,
         "errors": error_items,
-        "validation": _latest_validation_report(),
+        "validation": _latest_validation_report(manifests_dir=manifests_dir),
         "manifests": {
             "inventory": "data/docs_normalized/_manifests/inventory.json",
             "needsReview": "data/docs_normalized/_manifests/needs_review.json",
@@ -173,6 +174,65 @@ def build_status_payload() -> dict[str, Any]:
             "guiSettings": "data/docs_normalized/_manifests/gui_settings.json",
         },
     }
+
+
+def _document_payload_for_record(
+    record: dict[str, Any],
+    *,
+    review_item: dict[str, Any],
+    decision: ReviewDecision | None,
+    normalized_root: Path = DOCS_NORMALIZED,
+) -> dict[str, Any]:
+    document_id = str(record.get("document_id", "") or "")
+    source_relpath = str(record.get("source_relpath", "") or "")
+    processing_status = str(record.get("processing_status", "pending") or "pending")
+    review_status = _review_status_for_document(
+        processing_status=processing_status,
+        decision=decision,
+    )
+    return {
+        "documentId": document_id,
+        "sourceRelpath": source_relpath,
+        "documentName": record.get("document_name", Path(source_relpath).name),
+        "detectedExtension": record.get("detected_extension"),
+        "mimeType": record.get("mime_type"),
+        "category": record.get("category_inferred"),
+        "fileSize": record.get("file_size", 0),
+        "processingStatus": processing_status,
+        "displayStatus": _display_status_for_document(
+            processing_status=processing_status,
+            review_status=review_status,
+        ),
+        "reviewStatus": review_status,
+        "ingestionDate": record.get("ingestion_date"),
+        "reviewReasons": review_item.get("reasons", []),
+        "reviewDetails": review_item.get("details", []),
+        "decision": asdict(decision) if decision else None,
+        **_ingestion_details_for_record(record, normalized_root=normalized_root),
+        **_document_ocr_confidence_for_record(record, normalized_root=normalized_root),
+    }
+
+
+def _review_status_for_document(
+    *,
+    processing_status: str,
+    decision: ReviewDecision | None,
+) -> str:
+    if processing_status != "needs_review":
+        return "not_required"
+    if decision is None:
+        return "pending"
+    return decision.decision
+
+
+def _display_status_for_document(
+    *,
+    processing_status: str,
+    review_status: str,
+) -> str:
+    if processing_status == "needs_review" and review_status in {"approved", "rejected"}:
+        return review_status
+    return processing_status
 
 
 def _llama_first_status_payload() -> dict[str, Any]:
@@ -358,6 +418,10 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                 "runId": run_id,
                 "summary": summary,
                 "stagingRoot": staging_root.relative_to(ROOT).as_posix(),
+                "statusPayload": build_status_payload(
+                    normalized_root=staging_root,
+                    manifests_dir=staging_root / "_manifests",
+                ),
             }
         )
 
@@ -684,17 +748,23 @@ def _ingestion_details_for_record(
         if isinstance(metadata, dict)
         else ""
     )
-    if method == "llamaparse":
+    llama_cloud_metadata = (
+        metadata.get("llama_cloud") if isinstance(metadata, dict) else None
+    )
+    has_llama_cloud_metadata = isinstance(llama_cloud_metadata, dict) and bool(
+        llama_cloud_metadata.get("parse_job_id")
+    )
+    if method == "llamaparse" or has_llama_cloud_metadata:
         return _ingestion_details(
             provider="llama_cloud",
-            provider_label="LlamaCloud",
-            method=method,
+            provider_label="Llama",
+            method=method or "llamaparse",
             method_label="LlamaParse",
         )
     if method == "hybrid_llamaparse":
         return _ingestion_details(
             provider="llama_cloud",
-            provider_label="LlamaCloud",
+            provider_label="Llama",
             method=method,
             method_label="LlamaParse + OCR local",
         )
@@ -785,6 +855,10 @@ def _llama_settings_for_pipeline_run(body: dict[str, Any]) -> LlamaSettings:
         return settings
     if provider_mode not in {"local", "llama_cloud"}:
         raise ValueError("providerMode must be 'local' or 'llama_cloud'")
+    if provider_mode == "llama_cloud" and settings.api_key is None:
+        raise ValueError(
+            "LLAMA_CLOUD_API_KEY is required when providerMode is 'llama_cloud'"
+        )
 
     data = settings.model_dump()
     data["api_key"] = settings.api_key.get_secret_value() if settings.api_key else None

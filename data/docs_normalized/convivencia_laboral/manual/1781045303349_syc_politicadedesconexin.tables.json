@@ -10,19 +10,19 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "ocr_text",
-          "text": null,
+          "source": "llamaparse",
+          "text": "html_table",
           "warnings": []
         }
       ],
-      "method": "ocr_text",
+      "method": "llamaparse_markdown_table",
       "status": "detected",
       "value": true,
       "warnings": []
     }
   ],
   "schema_version": "2.0",
-  "table_count": 3,
+  "table_count": 1,
   "tables": [
     {
       "bbox": null,
@@ -34,7 +34,7 @@
           "column_span": 1,
           "row_index": 0,
           "row_span": 1,
-          "text": "CODIGO PL.RH-035ST",
+          "text": "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
           "warnings": []
         },
         {
@@ -43,7 +43,7 @@
           "column_span": 1,
           "row_index": 0,
           "row_span": 1,
-          "text": "CLASIFICACIÓN",
+          "text": "",
           "warnings": []
         },
         {
@@ -52,128 +52,150 @@
           "column_span": 1,
           "row_index": 0,
           "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "POLÍTICA DE DESCONEXIÓN LABORAL",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "CODIGO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "PL.RH-03SST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "NIVEL DE CLASIFICACIÓN Y ETIQUETADO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
           "text": "USO INTERNO (NC2)",
           "warnings": []
-        }
-      ],
-      "extractor": "ocr_text",
-      "headers": [
-        "CODIGO PL.RH-035ST",
-        "CLASIFICACIÓN",
-        "USO INTERNO (NC2)"
-      ],
-      "markdown_representation": "| CODIGO PL.RH-035ST | CLASIFICACIÓN | USO INTERNO (NC2) |\n| --- | --- | --- |",
-      "page_number": 1,
-      "quality": {
-        "engine": null,
-        "engine_version": null,
-        "kind": "unavailable",
-        "method": null,
-        "provenance": null,
-        "sample_size": null,
-        "unit": null,
-        "value": null,
-        "warnings": []
-      },
-      "rows": [
-        [
-          "CODIGO PL.RH-035ST",
-          "CLASIFICACIÓN",
-          "USO INTERNO (NC2)"
-        ]
-      ],
-      "table_id": "page_1_table_1",
-      "warnings": []
-    },
-    {
-      "bbox": null,
-      "caption": null,
-      "cells": [
-        {
-          "bbox": null,
-          "column_index": 0,
-          "column_span": 1,
-          "row_index": 0,
-          "row_span": 1,
-          "text": "$SA",
-          "warnings": []
         },
         {
           "bbox": null,
-          "column_index": 1,
+          "column_index": 4,
           "column_span": 1,
-          "row_index": 0,
-          "row_span": 1,
-          "text": "NIVEL DE.",
-          "warnings": []
-        }
-      ],
-      "extractor": "ocr_text",
-      "headers": [
-        "$SA",
-        "NIVEL DE."
-      ],
-      "markdown_representation": "| $SA | NIVEL DE. |\n| --- | --- |",
-      "page_number": 1,
-      "quality": {
-        "engine": null,
-        "engine_version": null,
-        "kind": "unavailable",
-        "method": null,
-        "provenance": null,
-        "sample_size": null,
-        "unit": null,
-        "value": null,
-        "warnings": []
-      },
-      "rows": [
-        [
-          "$SA",
-          "NIVEL DE."
-        ]
-      ],
-      "table_id": "page_1_table_2",
-      "warnings": []
-    },
-    {
-      "bbox": null,
-      "caption": null,
-      "cells": [
-        {
-          "bbox": null,
-          "column_index": 0,
-          "column_span": 1,
-          "row_index": 0,
-          "row_span": 1,
-          "text": "¡O INTERNO (NC2)",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "column_index": 1,
-          "column_span": 1,
-          "row_index": 0,
+          "row_index": 2,
           "row_span": 1,
           "text": "Versión",
           "warnings": []
         },
         {
           "bbox": null,
-          "column_index": 2,
+          "column_index": 5,
           "column_span": 1,
-          "row_index": 0,
+          "row_index": 2,
           "row_span": 1,
           "text": "0.1",
           "warnings": []
         }
       ],
-      "extractor": "ocr_text",
+      "extractor": "llamaparse_markdown_table",
       "headers": [
-        "¡O INTERNO (NC2)",
-        "Versión",
-        "0.1"
+        "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO"
       ],
-      "markdown_representation": "| ¡O INTERNO (NC2) | Versión | 0.1 |\n| --- | --- | --- |",
+      "markdown_representation": "| PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO |  |  |  |  |  |\n| POLÍTICA DE DESCONEXIÓN LABORAL |  |  |  |  |  |\n| CODIGO | PL.RH-03SST | NIVEL DE CLASIFICACIÓN Y ETIQUETADO | USO INTERNO (NC2) | Versión | 0.1 |",
       "page_number": 1,
       "quality": {
         "engine": null,
@@ -188,12 +210,31 @@
       },
       "rows": [
         [
-          "¡O INTERNO (NC2)",
+          "PROCESOS ADMINISTRATIVOS / SEGURIDAD Y SALUD EN EL TRABAJO",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "POLÍTICA DE DESCONEXIÓN LABORAL",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "CODIGO",
+          "PL.RH-03SST",
+          "NIVEL DE CLASIFICACIÓN Y ETIQUETADO",
+          "USO INTERNO (NC2)",
           "Versión",
           "0.1"
         ]
       ],
-      "table_id": "page_1_table_3",
+      "table_id": "pjb-8868hmusisvc13oqbjhc2ugkj14z_p1_table_001",
       "warnings": []
     }
   ],

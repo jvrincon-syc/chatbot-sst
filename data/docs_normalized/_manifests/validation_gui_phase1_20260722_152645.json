@@ -74,16 +74,11 @@
       "check": "processed_with_review_reasons",
       "details": [],
       "status": "passed"
-    },
-    {
-      "check": "closure_required_artifacts",
-      "details": [],
-      "status": "passed"
     }
   ],
   "documents_checked": 55,
   "errors": 0,
-  "run_id": "gui_validation_20260722_114654",
+  "run_id": "gui_phase1_20260722_152645",
   "schema_version": "2.0",
   "status": "passed",
   "warnings": 0

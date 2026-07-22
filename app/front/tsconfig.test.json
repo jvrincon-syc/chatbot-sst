@@ -9,5 +9,10 @@
     "noEmit": false,
     "outDir": ".tmp-tests"
   },
-  "include": ["src/llamaRoutes.ts"]
+  "include": [
+    "src/llamaRoutes.ts",
+    "src/pipelineRequest.ts",
+    "src/documentReview.ts",
+    "src/ocrSettings.ts"
+  ]
 }

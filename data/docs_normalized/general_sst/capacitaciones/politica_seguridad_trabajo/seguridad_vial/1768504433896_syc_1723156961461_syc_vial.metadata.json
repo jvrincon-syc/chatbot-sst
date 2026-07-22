@@ -3,16 +3,16 @@
     "conflict_status": "none",
     "conflicts": [],
     "content_prediction": "programa",
-    "document_type": "matriz",
+    "document_type": "otro",
     "document_type_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-5hb0x3vsnh6peubcyny3mbnv9fzs",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "route_prior": "politica",
@@ -20,22 +20,24 @@
       "matriz:objetivos y metas:title_control",
       "informacion_general:objetivo:title_control",
       "matriz:matriz:content",
-      "Seguridad vial:seguridad vial:title_control",
       "Seguridad vial:seguridad vial:content",
       "Seguridad vial:seguridad vial:route",
-      "Objetivos, metas e indicadores:objetivos y metas:title_control"
+      "Objetivos, metas e indicadores:objetivos y metas:title_control",
+      "llama_classify_document_type:otro",
+      "llama_classify_topic:otro",
+      "llama_schema_extract:document_control"
     ],
     "subtopic": "Objetivos, metas e indicadores",
-    "topic": "Seguridad vial",
+    "topic": "otro",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-uxf6d0mpl72dmb3zcpyfackr1yke",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "warnings": []
@@ -71,14 +73,14 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "OBJETIVOS Y METAS",
+          "source": "llamaparse",
+          "text": "# OBJETIVOS Y METAS",
           "warnings": []
         }
       ],
       "status": "extracted",
-      "value": "OBJETIVOS Y METAS DE SEGURIDAD VIAL",
-      "value_raw": "OBJETIVOS Y METAS SEGURIDAD VIAL",
+      "value": "OBJETIVOS Y METAS",
+      "value_raw": "OBJETIVOS Y METAS",
       "warnings": []
     },
     "version": {
@@ -92,13 +94,13 @@
   },
   "document_id": "doc_3e55236f58440bf5",
   "document_name": "1768504433896_syc_1723156961461_syc_vial.pdf",
-  "extraction_method": "pdf_digital",
+  "extraction_method": "llamaparse",
   "feature_observations": {},
   "forms": {
     "engine": null,
     "engine_version": null,
     "evidence": [],
-    "method": "vector_geometry",
+    "method": "llamaparse_form_heuristic",
     "status": "not_detected",
     "value": false,
     "warnings": []
@@ -113,27 +115,76 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_114603\\general_sst\\capacitaciones\\politica_seguridad_trabajo\\seguridad_vial\\1768504433896_syc_1723156961461_syc_vial.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\general_sst\\capacitaciones\\politica_seguridad_trabajo\\seguridad_vial\\1768504433896_syc_1723156961461_syc_vial.md",
   "legacy_path": null,
   "legacy_source_path": null,
-  "llama_cloud": null,
+  "llama_cloud": {
+    "job_metadata": {
+      "pdf-high-res-ocr": 1,
+      "pdf-image-convertTime": 0,
+      "pdf-image-ocr-count": 0,
+      "pdf-image-ocr-empty-count": 1,
+      "pdf-image-ocr-failed-count": 0,
+      "pdf-image-ocr-hadText-count": 2,
+      "pdf-image-ocr-pixels": 8775624,
+      "pdf-image-ocr-success-count": 3,
+      "pdf-inputTokens": 4527,
+      "pdf-llmTime": 2961,
+      "pdf-mdLength": 1949,
+      "pdf-multimodal-pdf2Image": 0,
+      "pdf-multimodal-time": 0,
+      "pdf-ocrTime": 0,
+      "pdf-outputTokens": 414,
+      "pdf-pages": 1,
+      "pdf-pdfToHTMLTime": 0,
+      "pdf-rawTextLength": 2407,
+      "pdf-real-pages": 1,
+      "pdf-time": 4577,
+      "state_transitions": {
+        "cancelled_at": null,
+        "completed_at": "2026-07-21T21:49:43.854210Z",
+        "failed_at": null,
+        "pending_at": "2026-07-21T21:49:32.292666Z",
+        "running_at": "2026-07-21T21:49:32.697264Z",
+        "throttled_at": "2026-07-21T21:49:32.501785Z"
+      }
+    },
+    "page_metadata": [
+      {
+        "confidence": 0.979,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 1,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      }
+    ],
+    "parse_configuration_hash": "sha256:cdd89a0e54ed90cc7d486b3e578ad9e2112e03b908de8eae63cd14f49d7fcb62",
+    "parse_job_id": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+    "parse_status": "completed",
+    "warnings": []
+  },
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
   "ocr_confidence": {
     "engine": null,
     "engine_version": null,
-    "kind": "unavailable",
-    "method": null,
+    "kind": "estimated",
+    "method": "page_ocr_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": null,
+    "value": 0.979,
     "warnings": []
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-22T11:46:30.061473-05:00",
-  "processing_status": "processed",
-  "review_reasons": [],
+  "processed_at": "2026-07-22T15:30:11.272623-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "ambiguous_classification"
+  ],
   "schema_version": "2.0",
   "source_hash": "382dc4303085bebbf49dcfa095225cab8a7819bab2ba1402c4cfe5d6d361cae4",
   "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
@@ -158,5 +209,8 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": []
+  "warnings": [
+    "llama_parse_job:pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+    "ambiguous_classification"
+  ]
 }

@@ -5,8 +5,12 @@ from io import BytesIO
 
 import pytest
 
+import ingestion.gui.server as gui_server
+from ingestion.config.llama_settings import LlamaSettings
 from ingestion.gui.server import (
     ROOT,
+    ReviewDecision,
+    _document_payload_for_record,
     _document_ocr_confidence_for_record,
     _gui_settings_payload,
     _ingestion_details_for_record,
@@ -16,6 +20,7 @@ from ingestion.gui.server import (
     _save_gui_settings,
     _staging_target_from_body,
     _validation_target_from_body,
+    build_status_payload,
 )
 
 
@@ -76,6 +81,22 @@ def test_gui_pipeline_settings_accept_parser_only_route(
     assert settings.call_order == ("parse",)
 
 
+def test_gui_pipeline_settings_reject_cloud_when_api_key_is_missing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def settings_without_api_key(_path: object) -> LlamaSettings:
+        return LlamaSettings(cloud_enabled=False)
+
+    monkeypatch.setattr(
+        gui_server,
+        "load_runtime_llama_settings",
+        settings_without_api_key,
+    )
+
+    with pytest.raises(ValueError, match="LLAMA_CLOUD_API_KEY is required"):
+        _llama_settings_for_pipeline_run({"providerMode": "llama_cloud"})
+
+
 def test_validation_target_uses_recent_staging_root() -> None:
     target = _validation_target_from_body({"stagingRoot": ".tmp/gui_phase1_test"})
 
@@ -116,10 +137,28 @@ def test_ingestion_details_reads_provider_from_metadata(tmp_path) -> None:
 
     assert details == {
         "ingestionProvider": "llama_cloud",
-        "ingestionProviderLabel": "LlamaCloud",
+        "ingestionProviderLabel": "Llama",
         "ingestionMethod": "llamaparse",
         "ingestionMethodLabel": "LlamaParse",
     }
+
+
+def test_ingestion_details_reads_llama_provider_from_metadata_even_without_method(tmp_path) -> None:
+    metadata_path = tmp_path / "convivencia_laboral" / "manual.metadata.json"
+    metadata_path.parent.mkdir(parents=True)
+    metadata_path.write_text(
+        json.dumps({"llama_cloud": {"parse_job_id": "pjb_123"}}),
+        encoding="utf-8",
+    )
+
+    details = _ingestion_details_for_record(
+        {"source_relpath": "convivencia_laboral/manual.pdf"},
+        normalized_root=tmp_path,
+    )
+
+    assert details["ingestionProvider"] == "llama_cloud"
+    assert details["ingestionProviderLabel"] == "Llama"
+    assert details["ingestionMethodLabel"] == "LlamaParse"
 
 
 def test_ingestion_details_marks_missing_metadata_as_unregistered(tmp_path) -> None:
@@ -176,6 +215,131 @@ def test_status_confidence_reports_na_when_unavailable() -> None:
     assert confidence["ocrConfidenceKind"] == "unavailable"
     assert confidence["ocrConfidencePercent"] is None
     assert confidence["ocrConfidenceLabel"] == "N/A"
+
+
+def test_document_payload_marks_processed_review_decision_as_not_required(tmp_path) -> None:
+    document = _document_payload_for_record(
+        {
+            "document_id": "doc_123",
+            "source_relpath": "general_sst/manual.md",
+            "document_name": "manual.md",
+            "processing_status": "processed",
+        },
+        review_item={},
+        decision=None,
+        normalized_root=tmp_path,
+    )
+
+    assert document["processingStatus"] == "processed"
+    assert document["displayStatus"] == "processed"
+    assert document["reviewStatus"] == "not_required"
+    assert document["decision"] is None
+
+
+def test_document_payload_marks_reviewed_needs_review_as_decided(tmp_path) -> None:
+    decision = ReviewDecision(
+        document_id="doc_123",
+        source_relpath="general_sst/manual.pdf",
+        decision="approved",
+        reason="Revision humana completada.",
+        decided_at="2026-07-22T10:00:00-05:00",
+    )
+
+    document = _document_payload_for_record(
+        {
+            "document_id": "doc_123",
+            "source_relpath": "general_sst/manual.pdf",
+            "document_name": "manual.pdf",
+            "processing_status": "needs_review",
+        },
+        review_item={"reasons": ["low_ocr_confidence"]},
+        decision=decision,
+        normalized_root=tmp_path,
+    )
+
+    assert document["processingStatus"] == "needs_review"
+    assert document["displayStatus"] == "approved"
+    assert document["reviewStatus"] == "approved"
+
+
+def test_status_payload_counts_decisions_for_current_inventory(tmp_path) -> None:
+    normalized_root = tmp_path / "normalized"
+    manifests_dir = normalized_root / "_manifests"
+    manifests_dir.mkdir(parents=True)
+    (manifests_dir / "inventory.json").write_text(
+        json.dumps(
+            {
+                "records": [
+                    {
+                        "document_id": "doc_pending",
+                        "source_relpath": "general_sst/pending.pdf",
+                        "processing_status": "needs_review",
+                    },
+                    {
+                        "document_id": "doc_approved",
+                        "source_relpath": "general_sst/approved.pdf",
+                        "processing_status": "needs_review",
+                    },
+                    {
+                        "document_id": "doc_processed",
+                        "source_relpath": "general_sst/processed.pdf",
+                        "processing_status": "processed",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (manifests_dir / "needs_review.json").write_text(
+        json.dumps(
+            {
+                "items": [
+                    {"document_id": "doc_pending", "reasons": ["low_confidence"]},
+                    {"document_id": "doc_approved", "reasons": ["low_confidence"]},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (manifests_dir / "errors.json").write_text(
+        json.dumps({"items": []}),
+        encoding="utf-8",
+    )
+    review_decisions_path = manifests_dir / "review_decisions.json"
+    review_decisions_path.write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "document_id": "doc_approved",
+                        "source_relpath": "general_sst/approved.pdf",
+                        "decision": "approved",
+                        "reason": "Revision humana completada.",
+                        "decided_at": "2026-07-22T10:00:00-05:00",
+                    },
+                    {
+                        "document_id": "doc_outside_inventory",
+                        "source_relpath": "general_sst/outside.pdf",
+                        "decision": "rejected",
+                        "reason": "No pertenece al corpus vigente.",
+                        "decided_at": "2026-07-22T10:00:00-05:00",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    payload = build_status_payload(
+        normalized_root=normalized_root,
+        manifests_dir=manifests_dir,
+        review_decisions_path=review_decisions_path,
+    )
+
+    assert payload["summary"]["needsReview"] == 1
+    assert payload["summary"]["normalizedNeedsReview"] == 2
+    assert payload["summary"]["approved"] == 1
+    assert payload["summary"]["rejected"] == 0
 
 
 def test_gui_settings_persist_ocr_review_threshold(tmp_path) -> None:

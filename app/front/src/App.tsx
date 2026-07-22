@@ -29,10 +29,18 @@ import {
   routeForServiceSelection,
   routeFromStatus,
 } from "./llamaRoutes";
+import { matchesDocumentReviewQuery } from "./documentReview";
+import { validateOcrThresholdPercent } from "./ocrSettings";
+import { pipelineRequestForControls } from "./pipelineRequest";
 import type { LlamaRoute, LlamaStop } from "./llamaRoutes";
+import type { OcrThresholdValidation } from "./ocrSettings";
+import type { ProviderMode } from "./pipelineRequest";
 
 type DecisionKind = "approved" | "rejected";
-type ProviderMode = "local" | "llama_cloud";
+type ReviewStatus = "not_required" | "pending" | DecisionKind;
+type ProcessingStatus = "pending" | "processed" | "failed" | "needs_review";
+type DisplayStatus = ProcessingStatus | DecisionKind;
+type AppView = "operations" | "review" | "inventory";
 
 type LlamaControls = {
   providerMode: ProviderMode;
@@ -63,7 +71,9 @@ type DocumentRecord = {
   ocrConfidenceValue: number | null;
   ocrConfidencePercent: number | null;
   ocrConfidenceLabel: string;
-  processingStatus: "pending" | "processed" | "failed" | "needs_review";
+  processingStatus: ProcessingStatus;
+  displayStatus: DisplayStatus;
+  reviewStatus: ReviewStatus;
   ingestionDate: string | null;
   reviewReasons: string[];
   reviewDetails: string[];
@@ -129,17 +139,7 @@ type ActionResult = {
   sourceRelpath?: string;
   target?: string;
   error?: string;
-};
-
-type PipelineRequest = {
-  force: boolean;
-  providerMode: ProviderMode;
-  ocrReviewThresholdPercent: number;
-  llamaCloud?: {
-    classifyEnabled: boolean;
-    extractEnabled: boolean;
-    callOrder: LlamaRoute;
-  };
+  statusPayload?: StatusPayload;
 };
 
 const DEFAULT_APPROVE_REASON =
@@ -166,11 +166,19 @@ const LOCAL_INGESTION_STEPS = [
   },
 ];
 
-const statusLabels: Record<DocumentRecord["processingStatus"], string> = {
+const statusLabels: Record<DisplayStatus, string> = {
   pending: "Pendiente",
   processed: "Procesado",
   failed: "Fallido",
   needs_review: "Needs review",
+  approved: "Aprobado",
+  rejected: "Rechazado",
+};
+
+const viewTitles: Record<AppView, string> = {
+  operations: "Operacion de ingesta",
+  review: "Revision documental",
+  inventory: "Inventario documental",
 };
 
 function App() {
@@ -181,10 +189,12 @@ function App() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [ingestionFilter, setIngestionFilter] = useState("all");
+  const [activeView, setActiveView] = useState<AppView>("review");
+  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
   const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
   const [lastResult, setLastResult] = useState<ActionResult | null>(null);
   const [llamaControls, setLlamaControls] = useState<LlamaControls>(DEFAULT_LLAMA_CONTROLS);
-  const [ocrThresholdPercent, setOcrThresholdPercent] = useState(80);
+  const [ocrThresholdInput, setOcrThresholdInput] = useState("80");
   const [uploadForm, setUploadForm] = useState({
     category: "general_sst",
     folder: "manuales",
@@ -215,8 +225,13 @@ function App() {
       providerMode: status.llamaFirst.cloudEnabled ? "llama_cloud" : "local",
       route: routeFromStatus(status.llamaFirst),
     });
-    setOcrThresholdPercent(status.settings.ocrReviewThresholdPercent);
+    setOcrThresholdInput(String(status.settings.ocrReviewThresholdPercent));
   }, [status?.llamaFirst, status?.settings]);
+
+  const ocrThresholdValidation = useMemo(
+    () => validateOcrThresholdPercent(ocrThresholdInput),
+    [ocrThresholdInput],
+  );
 
   const documents = status?.documents ?? [];
   const pendingReview = status?.needsReview ?? [];
@@ -244,19 +259,13 @@ function App() {
   }, [documents]);
 
   const filteredDocuments = useMemo(() => {
-    const needle = query.trim().toLowerCase();
     return documents.filter((document) => {
-      const matchesQuery =
-        !needle ||
-        document.sourceRelpath.toLowerCase().includes(needle) ||
-        document.documentId.toLowerCase().includes(needle) ||
-        document.documentName.toLowerCase().includes(needle) ||
-        document.ingestionProviderLabel.toLowerCase().includes(needle) ||
-        document.ingestionMethodLabel.toLowerCase().includes(needle);
+      const matchesQuery = matchesDocumentReviewQuery(document, query);
       const matchesStatus =
         statusFilter === "all" ||
+        document.displayStatus === statusFilter ||
         document.processingStatus === statusFilter ||
-        document.decision?.decision === statusFilter;
+        document.reviewStatus === statusFilter;
       const matchesIngestion =
         ingestionFilter === "all" ||
         ingestionFilter === `provider:${document.ingestionProvider}` ||
@@ -315,16 +324,18 @@ function App() {
   };
 
   const runPipeline = async () => {
+    if (ocrThresholdValidation.status !== "valid") {
+      setNotice(ocrThresholdValidation.message);
+      return;
+    }
     setBusyAction("pipeline");
     try {
-      const body: PipelineRequest = {
+      const body = pipelineRequestForControls({
         force: false,
         providerMode: llamaControls.providerMode,
-        ocrReviewThresholdPercent: ocrThresholdPercent,
-      };
-      if (llamaControls.providerMode === "llama_cloud") {
-        body.llamaCloud = llamaCloudConfigFromRoute(llamaControls.route);
-      }
+        route: llamaControls.route,
+        ocrReviewThresholdPercent: ocrThresholdValidation.value,
+      });
       const response = await fetch("/api/pipeline/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -332,6 +343,9 @@ function App() {
       });
       const payload = await readJson<ActionResult>(response);
       setLastResult(payload);
+      if (payload.statusPayload) {
+        setStatus(payload.statusPayload);
+      }
       setNotice(`Ingesta staging finalizada: ${payload.runId}`);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "No se pudo ejecutar ingesta.");
@@ -341,18 +355,25 @@ function App() {
   };
 
   const saveSettings = async () => {
+    if (ocrThresholdValidation.status !== "valid") {
+      setNotice(ocrThresholdValidation.message);
+      return;
+    }
     setBusyAction("settings");
     try {
       const response = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ocrReviewThresholdPercent: ocrThresholdPercent }),
+        body: JSON.stringify({
+          ocrReviewThresholdPercent: ocrThresholdValidation.value,
+        }),
       });
       const payload = await readJson<{
         ok?: boolean;
         settings?: StatusPayload["settings"];
       }>(response);
-      const savedPercent = payload.settings?.ocrReviewThresholdPercent ?? ocrThresholdPercent;
+      const savedPercent =
+        payload.settings?.ocrReviewThresholdPercent ?? ocrThresholdValidation.value;
       setLastResult({ ok: payload.ok, summary: { ocrReviewThresholdPercent: savedPercent } });
       setNotice(`Umbral OCR guardado: ${savedPercent.toFixed(1)}%`);
       await loadStatus();
@@ -410,16 +431,45 @@ function App() {
     }
   };
 
+  const selectedDocument =
+    documents.find((document) => document.documentId === selectedDocumentId) ??
+    pendingReview[0] ??
+    filteredDocuments[0] ??
+    null;
+
   return (
     <div className="app-shell">
-      <Sidebar />
+      <Sidebar activeView={activeView} onViewChange={setActiveView} />
       <main className="workspace">
         <header className="topbar">
           <div>
-            <h1>Ingesta Fase 1</h1>
+            <h1>{viewTitles[activeView]}</h1>
             <p>Schema {status?.summary.schemaVersion ?? "2.0"} · {status?.summary.runId ?? "sin run"}</p>
           </div>
           <div className="topbar-actions">
+            <div className="view-switcher" aria-label="Cambiar vista">
+              <button
+                className={activeView === "operations" ? "active" : ""}
+                onClick={() => setActiveView("operations")}
+                type="button"
+              >
+                Operacion
+              </button>
+              <button
+                className={activeView === "review" ? "active" : ""}
+                onClick={() => setActiveView("review")}
+                type="button"
+              >
+                Revision
+              </button>
+              <button
+                className={activeView === "inventory" ? "active" : ""}
+                onClick={() => setActiveView("inventory")}
+                type="button"
+              >
+                Inventario
+              </button>
+            </div>
             <button className="ghost-button" onClick={loadStatus} disabled={loading}>
               <RefreshCw size={16} />
               Actualizar
@@ -430,65 +480,108 @@ function App() {
 
         {notice ? <div className="notice">{notice}</div> : null}
 
-        <section className="metric-grid" aria-label="Resumen">
-          <MetricCard label="Total" value={status?.summary.total ?? 0} icon={<FileText />} tone="neutral" />
-          <MetricCard label="Procesados" value={status?.summary.processed ?? 0} icon={<CheckCircle2 />} tone="success" />
-          <MetricCard label="Pending review" value={status?.summary.needsReview ?? 0} icon={<Clock3 />} tone="warning" />
-          <MetricCard label="Fallidos" value={status?.summary.failed ?? 0} icon={<AlertCircle />} tone="danger" />
-          <MetricCard label="Aprobados" value={status?.summary.approved ?? 0} icon={<Check />} tone="success" />
-          <MetricCard label="Rechazados" value={status?.summary.rejected ?? 0} icon={<X />} tone="danger" />
-        </section>
+        <DashboardSummary summary={status?.summary ?? null} />
 
-        <LlamaStatusPanel
-          status={status?.llamaFirst ?? null}
-          controls={llamaControls}
-          ocrThresholdPercent={ocrThresholdPercent}
-          settingsBusy={busyAction === "settings"}
-          onControlsChange={setLlamaControls}
-          onOcrThresholdChange={setOcrThresholdPercent}
-          onSaveSettings={saveSettings}
-        />
+        {activeView === "operations" ? (
+          <>
+            <LlamaStatusPanel
+              status={status?.llamaFirst ?? null}
+              controls={llamaControls}
+              ocrThresholdInput={ocrThresholdInput}
+              ocrThresholdValidation={ocrThresholdValidation}
+              settingsBusy={busyAction === "settings"}
+              onControlsChange={setLlamaControls}
+              onOcrThresholdChange={setOcrThresholdInput}
+              onSaveSettings={saveSettings}
+            />
 
-        <section className="primary-grid">
-          <UploadPanel
-            categories={categories}
-            form={uploadForm}
-            busy={busyAction === "upload"}
-            onChange={setUploadForm}
-            onSubmit={handleUpload}
-          />
-          <PendingReviewPanel
-            documents={pendingReview}
-            busyAction={busyAction}
-            notes={reviewNotes}
-            onNoteChange={(documentId, value) =>
-              setReviewNotes((current) => ({ ...current, [documentId]: value }))
-            }
-            onReview={submitReview}
-          />
-        </section>
+            <section className="primary-grid">
+              <UploadPanel
+                categories={categories}
+                form={uploadForm}
+                busy={busyAction === "upload"}
+                onChange={setUploadForm}
+                onSubmit={handleUpload}
+              />
+              <PipelinePanel
+                validation={status?.validation ?? null}
+                lastResult={lastResult}
+                busyAction={busyAction}
+                controls={llamaControls}
+                pipelineBlockedReason={
+                  ocrThresholdValidation.status === "valid"
+                    ? null
+                    : ocrThresholdValidation.message
+                }
+                onRunPipeline={runPipeline}
+                onValidate={runValidation}
+                onPromote={promoteStaging}
+              />
+            </section>
+          </>
+        ) : null}
 
-        <InventoryPanel
-          documents={filteredDocuments}
-          total={documents.length}
-          query={query}
-          statusFilter={statusFilter}
-          ingestionFilter={ingestionFilter}
-          ingestionMethodOptions={ingestionMethodOptions}
-          onQueryChange={setQuery}
-          onStatusFilterChange={setStatusFilter}
-          onIngestionFilterChange={setIngestionFilter}
-        />
+        {activeView === "review" ? (
+          <section className="review-workspace">
+            <PendingReviewPanel
+              documents={pendingReview}
+              busyAction={busyAction}
+              notes={reviewNotes}
+              selectedDocumentId={selectedDocument?.documentId ?? null}
+              onSelect={(document) => setSelectedDocumentId(document.documentId)}
+              onNoteChange={(documentId, value) =>
+                setReviewNotes((current) => ({ ...current, [documentId]: value }))
+              }
+              onReview={submitReview}
+            />
+            <DocumentReviewInspector
+              document={selectedDocument}
+              busyAction={busyAction}
+              note={selectedDocument ? reviewNotes[selectedDocument.documentId] ?? "" : ""}
+              onNoteChange={(value) => {
+                if (selectedDocument) {
+                  setReviewNotes((current) => ({
+                    ...current,
+                    [selectedDocument.documentId]: value,
+                  }));
+                }
+              }}
+              onReview={submitReview}
+            />
+          </section>
+        ) : null}
 
-        <PipelinePanel
-          validation={status?.validation ?? null}
-          lastResult={lastResult}
-          busyAction={busyAction}
-          controls={llamaControls}
-          onRunPipeline={runPipeline}
-          onValidate={runValidation}
-          onPromote={promoteStaging}
-        />
+        {activeView === "inventory" ? (
+          <section className="inventory-workspace">
+            <InventoryPanel
+              documents={filteredDocuments}
+              total={documents.length}
+              query={query}
+              statusFilter={statusFilter}
+              ingestionFilter={ingestionFilter}
+              ingestionMethodOptions={ingestionMethodOptions}
+              selectedDocumentId={selectedDocument?.documentId ?? null}
+              onSelect={(document) => setSelectedDocumentId(document.documentId)}
+              onQueryChange={setQuery}
+              onStatusFilterChange={setStatusFilter}
+              onIngestionFilterChange={setIngestionFilter}
+            />
+            <DocumentReviewInspector
+              document={selectedDocument}
+              busyAction={busyAction}
+              note={selectedDocument ? reviewNotes[selectedDocument.documentId] ?? "" : ""}
+              onNoteChange={(value) => {
+                if (selectedDocument) {
+                  setReviewNotes((current) => ({
+                    ...current,
+                    [selectedDocument.documentId]: value,
+                  }));
+                }
+              }}
+              onReview={submitReview}
+            />
+          </section>
+        ) : null}
       </main>
     </div>
   );
@@ -497,7 +590,8 @@ function App() {
 function LlamaStatusPanel({
   status,
   controls,
-  ocrThresholdPercent,
+  ocrThresholdInput,
+  ocrThresholdValidation,
   settingsBusy,
   onControlsChange,
   onOcrThresholdChange,
@@ -505,10 +599,11 @@ function LlamaStatusPanel({
 }: {
   status: StatusPayload["llamaFirst"] | null;
   controls: LlamaControls;
-  ocrThresholdPercent: number;
+  ocrThresholdInput: string;
+  ocrThresholdValidation: OcrThresholdValidation;
   settingsBusy: boolean;
   onControlsChange: (controls: LlamaControls) => void;
-  onOcrThresholdChange: (value: number) => void;
+  onOcrThresholdChange: (value: string) => void;
   onSaveSettings: () => void;
 }) {
   if (!status) return null;
@@ -534,7 +629,7 @@ function LlamaStatusPanel({
     <section className="panel llama-status" aria-label="Llama-first">
       <div className="panel-heading">
         <h2>Proveedor de ingesta PDF</h2>
-        <span>{cloudSelected ? `LlamaCloud seleccionado - ${status.configurationStatus}` : "Local seleccionado"}</span>
+        <span>{cloudSelected ? `Llama seleccionado - ${status.configurationStatus}` : "Local seleccionado"}</span>
       </div>
       <div className={cloudSelected ? "llama-layout cloud" : "llama-layout local"}>
         {cloudSelected ? (
@@ -565,7 +660,7 @@ function LlamaStatusPanel({
               title="Usar LlamaCloud con LlamaParse obligatorio"
             >
               <Cloud size={15} />
-              LlamaCloud
+              Llama
             </button>
           </div>
           {cloudSelected ? (
@@ -601,7 +696,9 @@ function LlamaStatusPanel({
                     }
                     key={option.value}
                     aria-pressed={option.value === controls.route}
+                    aria-label={`Seleccionar orden ${option.summary}`}
                     onClick={() => onControlsChange({ ...controls, route: option.value })}
+                    title={`Seleccionar orden ${option.summary}`}
                   >
                     <span>{option.label}</span>
                     <RouteSteps stops={option.stops} />
@@ -634,7 +731,14 @@ function LlamaStatusPanel({
             <span>Se enviara al iniciar staging</span>
             <strong>{cloudSelected ? selectedRouteLabel : "Local"}</strong>
           </div>
-          <div className="quality-settings" aria-label="Configuracion de confianza OCR">
+          <div
+            className={
+              ocrThresholdValidation.status === "valid"
+                ? "quality-settings"
+                : "quality-settings has-error"
+            }
+            aria-label="Configuracion de confianza OCR"
+          >
             <label>
               <span>
                 <SlidersHorizontal size={15} />
@@ -645,17 +749,36 @@ function LlamaStatusPanel({
                 min={0}
                 max={100}
                 step={0.5}
-                value={ocrThresholdPercent}
-                onChange={(event) =>
-                  onOcrThresholdChange(Number(event.currentTarget.value))
+                value={ocrThresholdInput}
+                aria-invalid={ocrThresholdValidation.status !== "valid"}
+                aria-describedby={
+                  ocrThresholdValidation.status === "valid"
+                    ? undefined
+                    : "ocr-threshold-error"
                 }
+                onChange={(event) => onOcrThresholdChange(event.currentTarget.value)}
               />
+              {ocrThresholdValidation.status !== "valid" ? (
+                <span
+                  className="field-alert"
+                  id="ocr-threshold-error"
+                  role="alert"
+                >
+                  <AlertCircle size={14} />
+                  {ocrThresholdValidation.message}
+                </span>
+              ) : null}
             </label>
             <button
               type="button"
               className="secondary-button"
               onClick={onSaveSettings}
-              disabled={settingsBusy || !Number.isFinite(ocrThresholdPercent)}
+              disabled={settingsBusy || ocrThresholdValidation.status !== "valid"}
+              title={
+                ocrThresholdValidation.status === "valid"
+                  ? "Guardar umbral OCR"
+                  : ocrThresholdValidation.message
+              }
             >
               {settingsBusy ? <Loader2 className="spin" size={16} /> : <Check size={16} />}
               Guardar
@@ -730,13 +853,17 @@ function StatusDatum({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Sidebar() {
+function Sidebar({
+  activeView,
+  onViewChange,
+}: {
+  activeView: AppView;
+  onViewChange: (view: AppView) => void;
+}) {
   const items = [
-    { label: "Ingesta Fase 1", icon: UploadCloud, active: true },
-    { label: "Inventario", icon: Database },
-    { label: "Pending review", icon: Clock3 },
-    { label: "Manifiestos", icon: FolderOpen },
-    { label: "Validaciones", icon: ShieldCheck },
+    { label: "Operacion", icon: UploadCloud, view: "operations" as const },
+    { label: "Revision", icon: Clock3, view: "review" as const },
+    { label: "Inventario", icon: Database, view: "inventory" as const },
   ];
   return (
     <aside className="sidebar">
@@ -746,7 +873,12 @@ function Sidebar() {
       </div>
       <nav>
         {items.map((item) => (
-          <button className={item.active ? "nav-item active" : "nav-item"} key={item.label}>
+          <button
+            className={activeView === item.view ? "nav-item active" : "nav-item"}
+            key={item.label}
+            onClick={() => onViewChange(item.view)}
+            type="button"
+          >
             <item.icon size={18} />
             {item.label}
           </button>
@@ -844,12 +976,16 @@ function PendingReviewPanel({
   documents,
   busyAction,
   notes,
+  selectedDocumentId,
+  onSelect,
   onNoteChange,
   onReview,
 }: {
   documents: DocumentRecord[];
   busyAction: string | null;
   notes: Record<string, string>;
+  selectedDocumentId: string | null;
+  onSelect: (document: DocumentRecord) => void;
   onNoteChange: (documentId: string, value: string) => void;
   onReview: (document: DocumentRecord, decision: DecisionKind) => void;
 }) {
@@ -870,13 +1006,23 @@ function PendingReviewPanel({
             </tr>
           </thead>
           <tbody>
-            {documents.slice(0, 6).map((document) => (
-              <tr key={document.documentId}>
+            {documents.map((document) => (
+              <tr
+                className={selectedDocumentId === document.documentId ? "selected-row" : ""}
+                key={document.documentId}
+              >
                 <td>
                   <div className="doc-cell">
                     <FileText size={15} />
                     <span>{document.documentName}</span>
                     <small>{document.sourceRelpath}</small>
+                    <button
+                      className="row-detail-button"
+                      onClick={() => onSelect(document)}
+                      type="button"
+                    >
+                      Ver detalle
+                    </button>
                   </div>
                 </td>
                 <td>{document.category}</td>
@@ -932,6 +1078,8 @@ function InventoryPanel({
   statusFilter,
   ingestionFilter,
   ingestionMethodOptions,
+  selectedDocumentId,
+  onSelect,
   onQueryChange,
   onStatusFilterChange,
   onIngestionFilterChange,
@@ -942,6 +1090,8 @@ function InventoryPanel({
   statusFilter: string;
   ingestionFilter: string;
   ingestionMethodOptions: { value: string; label: string }[];
+  selectedDocumentId: string | null;
+  onSelect: (document: DocumentRecord) => void;
   onQueryChange: (value: string) => void;
   onStatusFilterChange: (value: string) => void;
   onIngestionFilterChange: (value: string) => void;
@@ -988,7 +1138,7 @@ function InventoryPanel({
               <option value="all">Toda ingesta</option>
               <optgroup label="Proveedor">
                 <option value="provider:local">Local</option>
-                <option value="provider:llama_cloud">LlamaCloud</option>
+                <option value="provider:llama_cloud">Llama</option>
                 <option value="provider:unregistered">Sin ingesta</option>
               </optgroup>
               {ingestionMethodOptions.length > 0 ? (
@@ -1021,12 +1171,22 @@ function InventoryPanel({
           </thead>
           <tbody>
             {documents.map((document) => (
-              <tr key={document.documentId}>
+              <tr
+                className={selectedDocumentId === document.documentId ? "selected-row" : ""}
+                key={document.documentId}
+              >
                 <td>
                   <div className="doc-cell">
                     <FileText size={15} />
                     <span>{document.sourceRelpath}</span>
                     <small>{document.documentId}</small>
+                    <button
+                      className="row-detail-button"
+                      onClick={() => onSelect(document)}
+                      type="button"
+                    >
+                      Revisar evidencia
+                    </button>
                   </div>
                 </td>
                 <td>{document.detectedExtension?.replace(".", "").toUpperCase() ?? "N/D"}</td>
@@ -1039,18 +1199,170 @@ function InventoryPanel({
                 <td>{document.category}</td>
                 <td>{formatBytes(document.fileSize)}</td>
                 <td>
-                  <StatusChip status={document.processingStatus} />
+                  <StatusChip status={document.displayStatus} />
                 </td>
                 <td>
-                  <DecisionChip decision={document.decision?.decision ?? null} />
+                  <DecisionChip reviewStatus={document.reviewStatus} />
                 </td>
                 <td>{formatDate(document.ingestionDate)}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        {documents.length === 0 ? (
+          <div className="empty-cell">No hay documentos con los filtros actuales.</div>
+        ) : null}
       </div>
     </section>
+  );
+}
+
+function DocumentReviewInspector({
+  document,
+  busyAction,
+  note,
+  onNoteChange,
+  onReview,
+}: {
+  document: DocumentRecord | null;
+  busyAction: string | null;
+  note: string;
+  onNoteChange: (value: string) => void;
+  onReview: (document: DocumentRecord, decision: DecisionKind) => void;
+}) {
+  if (!document) {
+    return (
+      <aside className="panel document-inspector">
+        <div className="panel-heading">
+          <h2>Detalle de revision</h2>
+        </div>
+        <div className="inspector-empty">
+          <FileText size={28} />
+          <span>Selecciona un documento para revisar rutas, motivos y decisiones.</span>
+        </div>
+      </aside>
+    );
+  }
+
+  const canReview = document.processingStatus === "needs_review";
+  const approveBusy = busyAction === `approved:${document.documentId}`;
+  const rejectBusy = busyAction === `rejected:${document.documentId}`;
+
+  return (
+    <aside className="panel document-inspector">
+      <div className="panel-heading">
+        <h2>Detalle de revision</h2>
+        <DecisionChip reviewStatus={document.reviewStatus} />
+      </div>
+      <div className="inspector-body">
+        <div className="inspector-title">
+          <FileText size={18} />
+          <div>
+            <strong>{document.documentName}</strong>
+            <span>{document.sourceRelpath}</span>
+          </div>
+        </div>
+
+        <dl className="metadata-grid">
+          <div>
+            <dt>Document ID</dt>
+            <dd>{document.documentId}</dd>
+          </div>
+          <div>
+            <dt>Categoria</dt>
+            <dd>{document.category ?? "N/D"}</dd>
+          </div>
+          <div>
+            <dt>Tipo</dt>
+            <dd>{document.detectedExtension?.replace(".", "").toUpperCase() ?? "N/D"}</dd>
+          </div>
+          <div>
+            <dt>Tamano</dt>
+            <dd>{formatBytes(document.fileSize)}</dd>
+          </div>
+          <div>
+            <dt>Ingesta</dt>
+            <dd>{document.ingestionProviderLabel}</dd>
+          </div>
+          <div>
+            <dt>Metodo</dt>
+            <dd>{document.ingestionMethodLabel}</dd>
+          </div>
+          <div>
+            <dt>OCR</dt>
+            <dd>{document.ocrConfidenceLabel}</dd>
+          </div>
+          <div>
+            <dt>Fecha</dt>
+            <dd>{formatDate(document.ingestionDate)}</dd>
+          </div>
+        </dl>
+
+        <section className="inspector-section">
+          <h3>Motivos de mismatch o revision</h3>
+          <ReasonList reasons={document.reviewReasons} />
+        </section>
+
+        <section className="inspector-section">
+          <h3>Detalles auditables</h3>
+          {document.reviewDetails.length > 0 ? (
+            <ul className="detail-list">
+              {document.reviewDetails.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
+          ) : (
+            <span className="muted">Sin detalles adicionales.</span>
+          )}
+        </section>
+
+        {document.decision ? (
+          <section className="decision-summary">
+            <h3>Decision registrada</h3>
+            <p>{document.decision.reason}</p>
+            <small>{formatDate(document.decision.decided_at)}</small>
+          </section>
+        ) : null}
+
+        {canReview ? (
+          <section className="inspector-section">
+            <label className="inspector-note">
+              Motivo de decision
+              <textarea
+                aria-label={`Motivo para ${document.documentName}`}
+                onChange={(event) => onNoteChange(event.target.value)}
+                placeholder="Describe por que se aprueba o se rechaza"
+                value={note}
+              />
+            </label>
+            <div className="inspector-actions">
+              <button
+                className="approve-button"
+                disabled={approveBusy || rejectBusy}
+                onClick={() => onReview(document, "approved")}
+                type="button"
+              >
+                {approveBusy ? <Loader2 className="spin" size={15} /> : <Check size={15} />}
+                Aprobar
+              </button>
+              <button
+                className="reject-button"
+                disabled={approveBusy || rejectBusy}
+                onClick={() => onReview(document, "rejected")}
+                type="button"
+              >
+                {rejectBusy ? <Loader2 className="spin" size={15} /> : <X size={15} />}
+                Rechazar
+              </button>
+            </div>
+          </section>
+        ) : (
+          <section className="inspector-section">
+            <span className="muted">Este documento no requiere decision manual.</span>
+          </section>
+        )}
+      </div>
+    </aside>
   );
 }
 
@@ -1062,6 +1374,19 @@ function IngestionChip({ document }: { document: DocumentRecord }) {
       </span>
       <small>{document.ingestionMethodLabel}</small>
     </div>
+  );
+}
+
+function DashboardSummary({ summary }: { summary: StatusPayload["summary"] | null }) {
+  return (
+    <section className="metric-grid" aria-label="Resumen">
+      <MetricCard label="Total" value={summary?.total ?? 0} icon={<FileText />} tone="neutral" />
+      <MetricCard label="Procesados" value={summary?.processed ?? 0} icon={<CheckCircle2 />} tone="success" />
+      <MetricCard label="Pending review" value={summary?.needsReview ?? 0} icon={<Clock3 />} tone="warning" />
+      <MetricCard label="Fallidos" value={summary?.failed ?? 0} icon={<AlertCircle />} tone="danger" />
+      <MetricCard label="Aprobados" value={summary?.approved ?? 0} icon={<Check />} tone="success" />
+      <MetricCard label="Rechazados" value={summary?.rejected ?? 0} icon={<X />} tone="danger" />
+    </section>
   );
 }
 
@@ -1082,6 +1407,7 @@ function PipelinePanel({
   lastResult,
   busyAction,
   controls,
+  pipelineBlockedReason,
   onRunPipeline,
   onValidate,
   onPromote,
@@ -1090,6 +1416,7 @@ function PipelinePanel({
   lastResult: ActionResult | null;
   busyAction: string | null;
   controls: LlamaControls;
+  pipelineBlockedReason: string | null;
   onRunPipeline: () => void;
   onValidate: () => void;
   onPromote: () => void;
@@ -1098,7 +1425,7 @@ function PipelinePanel({
   const selectedRouteLabel =
     LLAMA_ROUTE_OPTIONS.find((option) => option.value === controls.route)?.summary ?? "Parse";
   const pipelineButtonLabel = cloudSelected
-    ? `Ejecutar LlamaCloud staging: ${selectedRouteLabel}`
+    ? `Enviar documentos a LlamaCloud: ${selectedRouteLabel}`
     : "Ejecutar ingesta local en staging";
   const validationButtonLabel = lastResult?.stagingRoot
     ? "Validar staging"
@@ -1113,11 +1440,18 @@ function PipelinePanel({
             <button
               className="primary-button"
               onClick={onRunPipeline}
-              disabled={busyAction === "pipeline"}
+              disabled={busyAction === "pipeline" || Boolean(pipelineBlockedReason)}
+              title={pipelineBlockedReason ?? pipelineButtonLabel}
             >
               {busyAction === "pipeline" ? <Loader2 className="spin" size={16} /> : <Play size={16} />}
               {pipelineButtonLabel}
             </button>
+            {pipelineBlockedReason ? (
+              <span className="pipeline-action-alert" role="alert">
+                <AlertCircle size={14} />
+                {pipelineBlockedReason}
+              </span>
+            ) : null}
             <button
               className="secondary-button"
               onClick={onValidate}
@@ -1164,17 +1498,20 @@ function ReasonList({ reasons }: { reasons: string[] }) {
   );
 }
 
-function StatusChip({ status }: { status: DocumentRecord["processingStatus"] }) {
+function StatusChip({ status }: { status: DisplayStatus }) {
   return <span className={`chip status-${status}`}>{statusLabels[status]}</span>;
 }
 
-function DecisionChip({ decision }: { decision: DecisionKind | null }) {
-  if (!decision) {
+function DecisionChip({ reviewStatus }: { reviewStatus: ReviewStatus }) {
+  if (reviewStatus === "not_required") {
+    return <span className="chip neutral">No aplica</span>;
+  }
+  if (reviewStatus === "pending") {
     return <span className="chip neutral">Pendiente</span>;
   }
   return (
-    <span className={`chip decision-${decision}`}>
-      {decision === "approved" ? "Aprobado" : "Rechazado"}
+    <span className={`chip decision-${reviewStatus}`}>
+      {reviewStatus === "approved" ? "Aprobado" : "Rechazado"}
     </span>
   );
 }

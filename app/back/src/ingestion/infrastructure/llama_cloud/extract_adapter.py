@@ -7,6 +7,7 @@ from ingestion.application.ports.extractor import ExtractionRequest
 from ingestion.domain.models.extraction import ExtractionField, ExtractionResult
 from ingestion.domain.models.provider import ProviderJobRef
 from ingestion.infrastructure.llama_cloud.extract_config import LlamaExtractConfig
+from ingestion.infrastructure.llama_cloud.status import coerce_provider_job_status
 from ingestion.schemas.common import Evidence
 
 
@@ -58,7 +59,7 @@ def map_extract_response_to_result(
             provider="llama_cloud",
             capability="extract",
             job_id=str(payload.get("id") or payload.get("job_id") or "unknown"),
-            status=str(payload.get("status") or "completed"),
+            status=coerce_provider_job_status(payload.get("status")),
             configuration_hash=configuration_hash,
             created_at=now,
             completed_at=now,

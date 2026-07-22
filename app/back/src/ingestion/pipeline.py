@@ -8,6 +8,7 @@ from typing import Dict, List, Optional
 
 from pydantic import ValidationError
 
+from core.logging.logger import get_logger
 from ingestion.classification.rules import classify_document
 from ingestion.document_control.extractor import extract_document_control
 from ingestion.inventory.scanner import scan_docs_raw
@@ -64,6 +65,7 @@ _MATERIAL_PAGE_WARNINGS = {
 }
 DEFAULT_OCR_REVIEW_THRESHOLD = 0.80
 _LLAMA_PARSE_METHODS = {"llamaparse", "hybrid_llamaparse"}
+console_logger = get_logger(__name__)
 
 
 def _now() -> str:
@@ -774,6 +776,29 @@ def _read_document(
     raise ValueError(f"Unsupported format: {record.detected_extension or 'unknown'}")
 
 
+def _is_cloud_pdf_failure(
+    record: InventoryRecord,
+    llama_settings_override: LlamaSettings | None,
+) -> bool:
+    if record.detected_extension != ".pdf":
+        return False
+    settings = llama_settings_override
+    if settings is None:
+        try:
+            settings = load_llama_settings()
+        except ValueError:
+            return False
+    return settings.cloud_enabled
+
+
+def _failure_recommendation(reason: str, exc: Exception) -> str:
+    if reason == "llama_cloud_provider_error":
+        return "Revisar error de proveedor Llama Cloud en el log antes de reintentar."
+    if isinstance(exc, OcrDependencyError):
+        return "Instalar/configurar OCRmyPDF y el idioma spa de Tesseract."
+    return "Configurar extractor PDF/OCR para este documento."
+
+
 def _run_document(
     record: InventoryRecord,
     *,
@@ -826,6 +851,17 @@ def run_pipeline(
     bundle_manifests = []
 
     for record in records:
+        console_logger.info(
+            "Processing document",
+            extra={
+                "run_id": run_id,
+                "document_id": record.document_id,
+                "source_path": record.source_relpath,
+                "stage": "inventory",
+                "event": "document_selected",
+                "status": "started",
+            },
+        )
         if not force and _can_skip_record(record, previous_records, docs_raw, output_root):
             previous = previous_records[record.source_relpath]
             record.processing_status = previous.processing_status
@@ -907,6 +943,8 @@ def run_pipeline(
         except Exception as exc:
             if isinstance(exc, OcrDependencyError):
                 reasons = exc.reasons
+            elif _is_cloud_pdf_failure(record, llama_settings_override):
+                reasons = ["llama_cloud_provider_error"]
             elif record.detected_extension == ".pdf":
                 reasons = ["pdf_extractor_unconfigured"]
             else:
@@ -922,9 +960,7 @@ def run_pipeline(
                     "source_relpath": record.source_relpath,
                     "reasons": reasons,
                     "stage": "ocr" if isinstance(exc, OcrDependencyError) else "reading",
-                    "recommended_action": "Instalar/configurar OCRmyPDF y el idioma spa de Tesseract."
-                    if isinstance(exc, OcrDependencyError)
-                    else "Configurar extractor PDF/OCR para este documento.",
+                    "recommended_action": _failure_recommendation(reason, exc),
                     "review_status": "pending",
                     "error": str(exc),
                 }
