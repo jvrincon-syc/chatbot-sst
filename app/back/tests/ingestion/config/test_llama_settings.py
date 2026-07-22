@@ -32,6 +32,7 @@ def test_llama_settings_loads_plan_defaults_when_env_is_absent(monkeypatch: pyte
     assert settings.extract_max_pages == 5
     assert settings.classify_enabled is True
     assert settings.extract_enabled is True
+    assert settings.call_order == ("classify", "parse", "extract")
     assert settings.local_fallback_enabled is True
 
 
@@ -57,6 +58,42 @@ def test_llama_settings_accepts_cloud_enabled_with_key_and_csv_values(monkeypatc
     assert settings.parse_ocr_languages == ("es", "en")
     assert settings.parse_expand == ("markdown", "items")
     assert settings.parse_max_concurrency == 4
+
+
+def test_llama_settings_accepts_configurable_call_order(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LLAMA_CALL_ORDER", "parse,classify,extract")
+
+    settings = load_llama_settings()
+
+    assert settings.call_order == ("parse", "classify", "extract")
+
+
+def test_llama_settings_rejects_extract_before_parse(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LLAMA_CALL_ORDER", "classify,extract,parse")
+
+    with pytest.raises(ValidationError, match="LlamaExtract must run after LlamaParse"):
+        load_llama_settings()
+
+
+def test_llama_settings_rejects_classify_after_extract_when_both_are_enabled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("LLAMA_CALL_ORDER", "parse,extract,classify")
+
+    with pytest.raises(ValidationError, match="LlamaClassify must run before LlamaExtract"):
+        load_llama_settings()
+
+
+def test_llama_settings_accepts_parse_only_when_optional_stops_are_disabled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("LLAMA_CLASSIFY_ENABLED", "false")
+    monkeypatch.setenv("LLAMA_EXTRACT_ENABLED", "false")
+    monkeypatch.setenv("LLAMA_CALL_ORDER", "parse")
+
+    settings = load_llama_settings()
+
+    assert settings.call_order == ("parse",)
 
 
 def test_llama_settings_redacts_secret_from_dump() -> None:

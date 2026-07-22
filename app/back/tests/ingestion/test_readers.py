@@ -5,13 +5,18 @@ from types import SimpleNamespace
 
 from ingestion.ocr.mock_engine import MockOcrEngine
 from ingestion.ocr.tesseract_engine import parse_tesseract_tsv
+from ingestion.domain.models.parsed_document import ParsedDocument, ParsedPage
+from ingestion.domain.models.provider import ProviderJobRef
+from ingestion.domain.models.llama_understanding import LlamaPipelineResult, LlamaUnderstanding
 from ingestion.readers.markdown_reader import MarkdownReader
 from ingestion.readers.base import ReadResult
 from ingestion.readers.hybrid_reader import HybridReader
+from ingestion.readers.llama_parse_reader import LlamaParseReader
 from ingestion.readers.pdf_digital_reader import PdfDigitalReader, PdfPage
 from ingestion.schemas.artifacts import FormsArtifact, PageRecord, TablesArtifact
 from ingestion.schemas.common import BBox, ConfidenceMetric, Observation, PageBlock
 from ingestion.readers.pdf_scanned_reader import PdfScannedReader
+from datetime import datetime, timezone
 
 
 class FakePdfExtractor:
@@ -20,6 +25,63 @@ class FakePdfExtractor:
             PdfPage(page_number=1, text="Titulo\n\nPrimer parrafo", tables=[]),
             PdfPage(page_number=2, text="Segundo parrafo", tables=[]),
         ]
+
+
+def _provider_job(capability: str, job_id: str) -> ProviderJobRef:
+    now = datetime.now(timezone.utc)
+    return ProviderJobRef(
+        provider="llama_cloud",
+        capability=capability,
+        job_id=job_id,
+        status="completed",
+        configuration_hash="sha256:config",
+        created_at=now,
+        completed_at=now,
+    )
+
+
+class FakeParseAdapter:
+    async def parse(self, request):
+        return ParsedDocument(
+            provider_job=_provider_job("parse", "pjb_reader"),
+            markdown_pages=[ParsedPage(page_number=1, markdown="# Formato")],
+        )
+
+
+class FakeLlamaOrchestrator:
+    def __init__(self) -> None:
+        self.calls: list[str] = []
+
+    async def run(self, *, document_id, source_path, source_hash, mime_type):
+        self.calls.append(document_id)
+        parsed = ParsedDocument(
+            provider_job=_provider_job("parse", "pjb_reader"),
+            markdown_pages=[ParsedPage(page_number=1, markdown="# Formato")],
+        )
+        return LlamaPipelineResult(
+            parsed=parsed,
+            understanding=LlamaUnderstanding(
+                parse_job_id="pjb_reader",
+                schema_extract="formulario_document_control",
+            ),
+        )
+
+
+def test_llama_parse_reader_runs_orchestrator_after_parse(tmp_path: Path) -> None:
+    source = tmp_path / "doc.pdf"
+    source.write_bytes(b"%PDF")
+    orchestrator = FakeLlamaOrchestrator()
+
+    result = LlamaParseReader(
+        adapter=FakeParseAdapter(),
+        configuration_hash="sha256:parse",
+        orchestrator=orchestrator,
+    ).read(source, document_id="doc_123", source_hash="sha256:source")
+
+    assert orchestrator.calls == ["doc_123"]
+    assert result.llama_understanding is not None
+    assert result.llama_understanding.parse_job_id == "pjb_reader"
+    assert "llama_parse_job:pjb_reader" in result.warnings
 
 
 def test_markdown_reader_preserves_title_list_and_table(tmp_path: Path) -> None:

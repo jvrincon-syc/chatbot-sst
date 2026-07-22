@@ -15,7 +15,16 @@ from ingestion.logging.jsonl import JsonlLogger
 from ingestion.manifests.bundle_writer import BundlePayload, write_bundle_atomic
 from ingestion.manifests.writer import dump_json, write_inventory
 from ingestion.fingerprint import processing_fingerprint
-from ingestion.config.llama_settings import load_llama_settings
+from ingestion.application.services.llama_orchestrator import LlamaOrchestrator
+from ingestion.config.llama_settings import LlamaSettings, load_llama_settings
+from ingestion.infrastructure.llama_cloud.classify_adapter import LlamaClassifyAdapter
+from ingestion.infrastructure.llama_cloud.classify_config import LlamaClassifyConfig
+from ingestion.infrastructure.llama_cloud.classify_rules import (
+    canonical_topic,
+    classification_labels,
+)
+from ingestion.infrastructure.llama_cloud.extract_adapter import LlamaExtractAdapter
+from ingestion.infrastructure.llama_cloud.extract_config import LlamaExtractConfig
 from ingestion.infrastructure.llama_cloud.parse_adapter import LlamaParseAdapter
 from ingestion.infrastructure.llama_cloud.parse_config import LlamaParseConfig
 from ingestion.paths import ArtifactPaths, canonical_relpath
@@ -29,13 +38,16 @@ from ingestion.readers.llama_parse_reader import LlamaParseReader
 from ingestion.readers.pdf_digital_reader import PdfDigitalReader
 from ingestion.readers.pdf_scanned_reader import PdfScannedReader
 from ingestion.schemas.artifacts import (
+    Classification,
+    DocumentControl,
     FormsArtifact,
     MetadataArtifact,
     OcrArtifact,
     PagesArtifact,
     TablesArtifact,
 )
-from ingestion.schemas.common import ConfidenceMetric, Evidence, Observation
+from ingestion.schemas.common import ConfidenceMetric, DocumentField, Evidence, Observation
+from ingestion.domain.models.llama_understanding import LlamaUnderstanding
 from ingestion.schemas.inventory import InventoryRecord
 from ingestion.schemas.manifests import ErrorManifest, ErrorItem, ReviewManifest, ReviewItem, RunDocument, RunManifest
 from ingestion.structure.handwriting import HandwritingDetector
@@ -156,8 +168,14 @@ def _build_metadata(
     pipeline_version: str,
     classification_review_threshold: float,
 ) -> MetadataArtifact:
-    document_control = extract_document_control(result.pages, record.document_name)
-    classification = classify_document(record.source_relpath, result.pages, document_control)
+    document_control = _reconcile_llama_document_control(
+        extract_document_control(result.pages, record.document_name),
+        result.llama_understanding,
+    )
+    classification = _reconcile_llama_classification(
+        classify_document(record.source_relpath, result.pages, document_control),
+        result.llama_understanding,
+    )
     ocr_confidence = (
         result.ocr.document_confidence if result.ocr is not None else ConfidenceMetric(kind="unavailable", value=None)
     )
@@ -208,6 +226,7 @@ def _build_metadata(
             if warning in _MATERIAL_PAGE_WARNINGS
         ]
         + document_control.warnings
+        + _llama_extract_review_reasons(result.llama_understanding)
         + (["classification_conflict"] if classification.conflicts else [])
         + _material_feature_review_reasons(
             record=record,
@@ -244,6 +263,131 @@ def _build_metadata(
         warnings=result.warnings,
         processed_at=_now(),
     )
+
+
+_LLAMA_SUPPORTED_DOCUMENT_TYPES = {
+    "manual",
+    "formulario",
+    "politica",
+    "reglamento",
+    "programa",
+    "matriz",
+    "procedimiento",
+    "anexo",
+    "instructivo",
+    "capacitacion",
+    "acta",
+    "norma",
+    "guia",
+    "informacion_general",
+    "otro",
+}
+_LLAMA_DOCUMENT_CONTROL_FIELDS = {
+    "title",
+    "code",
+    "version",
+    "publication_date",
+    "effective_date",
+}
+_LLAMA_EXTRACT_UNSUPPORTED_PREFIX = "llama_extract_unsupported_critical_field:"
+
+
+def _reconcile_llama_classification(
+    local: Classification,
+    understanding: LlamaUnderstanding | None,
+) -> Classification:
+    if understanding is None:
+        return local
+    updates = {}
+    warnings = list(local.warnings)
+    signals = list(local.signals)
+    conflicts = list(local.conflicts)
+
+    if understanding.document_type is not None:
+        label = understanding.document_type.selected.label
+        if label in _LLAMA_SUPPORTED_DOCUMENT_TYPES:
+            updates["document_type"] = label
+            updates["document_type_confidence"] = ConfidenceMetric(
+                kind="estimated",
+                value=understanding.document_type.selected.confidence,
+                method="llama_classify",
+                provenance=understanding.document_type.provider_job.job_id,
+            )
+            signals.append(f"llama_classify_document_type:{label}")
+            conflicts = [
+                conflict
+                for conflict in conflicts
+                if "type_route" not in conflict and "type_title_control" not in conflict
+            ]
+        else:
+            warnings.append(f"llama_classify_unknown_document_type:{label}")
+
+    if understanding.topic is not None:
+        label = understanding.topic.selected.label
+        topic = canonical_topic(label)
+        updates["topic"] = topic
+        updates["topic_confidence"] = ConfidenceMetric(
+            kind="estimated",
+            value=understanding.topic.selected.confidence,
+            method="llama_classify",
+            provenance=understanding.topic.provider_job.job_id,
+        )
+        signals.append(f"llama_classify_topic:{label}")
+        conflicts = [
+            conflict
+            for conflict in conflicts
+            if "topic_route" not in conflict and "topic_title_control" not in conflict
+        ]
+
+    if understanding.schema_extract:
+        signals.append(f"llama_schema_extract:{understanding.schema_extract}")
+    warnings.extend(understanding.warnings)
+    updates["signals"] = _unique(signals)
+    updates["warnings"] = _unique(warnings)
+    updates["conflicts"] = _unique(conflicts)
+    updates["conflict_status"] = "conflicting" if conflicts else "none"
+    return local.model_copy(update=updates)
+
+
+def _reconcile_llama_document_control(
+    local: DocumentControl,
+    understanding: LlamaUnderstanding | None,
+) -> DocumentControl:
+    if understanding is None or understanding.extraction is None:
+        return local
+    unsupported_fields = {
+        warning.removeprefix(_LLAMA_EXTRACT_UNSUPPORTED_PREFIX)
+        for warning in understanding.warnings
+        if warning.startswith(_LLAMA_EXTRACT_UNSUPPORTED_PREFIX)
+    }
+    updates = {}
+    for field in understanding.extraction.fields:
+        if field.name not in _LLAMA_DOCUMENT_CONTROL_FIELDS:
+            continue
+        if field.name in unsupported_fields:
+            continue
+        if field.value is None or not field.evidence:
+            continue
+        updates[field.name] = DocumentField(
+            value=field.value,
+            value_raw=field.value,
+            status="extracted",
+            evidence=field.evidence,
+            warnings=_unique([*field.warnings, "llama_extract_field"]),
+        )
+    if not updates:
+        return local
+    return local.model_copy(update=updates)
+
+
+def _llama_extract_review_reasons(understanding: LlamaUnderstanding | None) -> list[str]:
+    if understanding is None:
+        return []
+    return [
+        warning
+        for warning in understanding.warnings
+        if warning.startswith(_LLAMA_EXTRACT_UNSUPPORTED_PREFIX)
+    ]
 
 
 def _write_success_artifacts(
@@ -441,18 +585,72 @@ def _choose_pdf_reader(
     return llama_reader_factory()
 
 
-def _configured_llama_parse_reader() -> LlamaParseReader:
+def _configured_llama_parse_reader(settings=None) -> LlamaParseReader:
     from ingestion.infrastructure.llama_cloud.client_factory import (
         create_async_llama_cloud_client,
     )
 
-    settings = load_llama_settings()
-    config = LlamaParseConfig.from_settings(settings)
+    settings = settings or load_llama_settings()
+    parse_config = LlamaParseConfig.from_settings(settings)
     client = create_async_llama_cloud_client(settings)
-    return LlamaParseReader(
-        adapter=LlamaParseAdapter(client=client, config=config),
-        configuration_hash=config.configuration_hash(),
+    parse_adapter = LlamaParseAdapter(client=client, config=parse_config)
+    classify_config = LlamaClassifyConfig(
+        mode=settings.classify_mode,
+        language=settings.parse_ocr_languages[0] if settings.parse_ocr_languages else "es",
+        max_pages=settings.classify_max_pages,
     )
+    extract_config = LlamaExtractConfig(
+        schema_name="document_control",
+        critical_fields=(
+            "title",
+            "code",
+            "version",
+            "publication_date",
+            "effective_date",
+        ),
+        data_schema=_llama_extract_document_control_schema(),
+        tier=settings.extract_tier,
+        parse_tier=settings.extract_parse_tier,
+        version=settings.parse_version,
+        max_pages=settings.extract_max_pages,
+    )
+    orchestrator = LlamaOrchestrator(
+        parser=parse_adapter,
+        classifier=LlamaClassifyAdapter(client=client, config=classify_config),
+        extractor=LlamaExtractAdapter(client=client, config=extract_config),
+        classify_enabled=settings.classify_enabled,
+        extract_enabled=settings.extract_enabled,
+        call_order=settings.call_order,
+        classify_max_pages=settings.classify_max_pages,
+        parse_configuration_hash=parse_config.configuration_hash(),
+        classification_configuration_hash=classify_config.configuration_hash(
+            labels=tuple(classification_labels())
+        ),
+        extraction_configuration_hash=extract_config.configuration_hash(),
+    )
+    return LlamaParseReader(
+        adapter=parse_adapter,
+        configuration_hash=parse_config.configuration_hash(),
+        orchestrator=orchestrator,
+    )
+
+
+def _llama_extract_document_control_schema() -> dict[str, object]:
+    return {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string"},
+            "code": {"type": "string"},
+            "version": {"type": "string"},
+            "publication_date": {"type": "string"},
+            "effective_date": {"type": "string"},
+            "responsible": {"type": "string"},
+            "obligations": {"type": "array", "items": {"type": "string"}},
+            "table_summaries": {"type": "array", "items": {"type": "string"}},
+            "form_fields": {"type": "array", "items": {"type": "string"}},
+        },
+        "additionalProperties": False,
+    }
 
 
 def _configured_local_pdf_reader(ocr_engine=None):
@@ -472,6 +670,7 @@ def _read_document(
     pdf_reader_factory=None,
     ocr_engine=None,
     docs_raw: Optional[Path] = None,
+    llama_settings: LlamaSettings | None = None,
 ) -> ReadResult:
     source_path = _source_path_for_record(record, docs_raw)
     if record.detected_extension == ".md":
@@ -485,12 +684,16 @@ def _read_document(
                 else PdfDigitalReader(extractor=pdf_reader_or_extractor)
             )
         else:
-            settings = load_llama_settings()
+            settings = llama_settings or load_llama_settings()
             pdf_reader = _choose_pdf_reader(
                 llama_cloud_enabled=settings.cloud_enabled,
                 local_fallback_enabled=settings.local_fallback_enabled,
                 local_reader_factory=lambda: _configured_local_pdf_reader(ocr_engine),
-                llama_reader_factory=_configured_llama_parse_reader if settings.cloud_enabled else None,
+                llama_reader_factory=(
+                    lambda: _configured_llama_parse_reader(settings)
+                )
+                if settings.cloud_enabled
+                else None,
             )
         try:
             if isinstance(pdf_reader, LlamaParseReader):
@@ -511,7 +714,7 @@ def _read_document(
             fallback_engine = ocr_engine or _configured_tesseract_pdf_engine()
             return PdfScannedReader(ocr_engine=fallback_engine).read(source_path)
         except Exception as exc:
-            settings = load_llama_settings()
+            settings = llama_settings or load_llama_settings()
             if settings.cloud_enabled and settings.local_fallback_enabled:
                 result = _configured_local_pdf_reader(ocr_engine).read(source_path)
                 result.warnings.append(f"cloud_fallback_used:{type(exc).__name__}")
@@ -551,6 +754,7 @@ def run_pipeline(
     run_id: Optional[str] = None,
     classification_review_threshold: float = 0.60,
     golden_status: Optional[str] = None,
+    llama_settings_override: LlamaSettings | None = None,
 ) -> Dict[str, int]:
     run_id = run_id or "run_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
     output_root = staging_root or docs_normalized
@@ -601,7 +805,11 @@ def run_pipeline(
             source_path=record.source_relpath,
         )
         try:
-            result = _read_document(record, docs_raw=docs_raw)
+            result = _read_document(
+                record,
+                docs_raw=docs_raw,
+                llama_settings=llama_settings_override,
+            )
             metadata, bundle = _write_success_artifacts(
                 record=record,
                 result=result,

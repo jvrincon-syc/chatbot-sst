@@ -4,17 +4,38 @@ import asyncio
 from pathlib import Path
 
 from ingestion.application.ports.parser import ParseRequest
+from ingestion.application.services.llama_orchestrator import LlamaOrchestrator
 from ingestion.infrastructure.llama_cloud.mappers.read_result_mapper import parsed_document_to_read_result
 from ingestion.infrastructure.llama_cloud.parse_adapter import LlamaParseAdapter
 from ingestion.readers.base import ReadResult
 
 
 class LlamaParseReader:
-    def __init__(self, *, adapter: LlamaParseAdapter, configuration_hash: str) -> None:
+    def __init__(
+        self,
+        *,
+        adapter: LlamaParseAdapter,
+        configuration_hash: str,
+        orchestrator: LlamaOrchestrator | None = None,
+    ) -> None:
         self._adapter = adapter
         self._configuration_hash = configuration_hash
+        self._orchestrator = orchestrator
 
     def read(self, source_path: Path, *, document_id: str, source_hash: str) -> ReadResult:
+        if self._orchestrator is not None:
+            result = asyncio.run(
+                self._orchestrator.run(
+                    document_id=document_id,
+                    source_path=source_path,
+                    source_hash=source_hash,
+                    mime_type="application/pdf",
+                )
+            )
+            return parsed_document_to_read_result(
+                result.parsed,
+                result.understanding,
+            )
         parsed = asyncio.run(
             self._adapter.parse(
                 ParseRequest(

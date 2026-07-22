@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import hashlib
+import json
 from typing import Any
 
 
@@ -28,3 +30,8 @@ class LlamaExtractConfig:
             "cite_sources": self.cite_sources,
             "confidence_scores": self.confidence_scores,
         }
+
+    def configuration_hash(self) -> str:
+        payload = self.to_run_configuration() | {"schema_name": self.schema_name}
+        serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        return "sha256:" + hashlib.sha256(serialized.encode("utf-8")).hexdigest()

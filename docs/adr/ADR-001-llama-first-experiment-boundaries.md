@@ -19,17 +19,20 @@ El plan escrito contiene un typo de rama: `llamparse_experiment`. La rama real v
 - Introducir puertos por capacidad (`parse`, `classify`, `extract`) antes de SDKs.
 - Mantener dominio y aplicacion sin imports de `llama_cloud` ni LlamaIndex concreto.
 - Leer API keys solo desde entorno/secrets locales.
-- No ejecutar smoke live cloud hasta documentar autorizacion de datos, region, retencion/eliminacion y presupuesto.
+- No ejecutar smoke live cloud con documentos corporativos hasta documentar
+  autorizacion de datos, region, retencion/eliminacion y presupuesto.
 - Usar `latest` solo en exploracion; exigir version fechada antes de benchmark/promocion.
 
 ## Consecuencias
 
-- La primera fase agrega contratos y configuracion, pero no cambia el comportamiento oficial del pipeline.
+- El camino cloud queda detras de feature flags y adapters.
 - Los tests unitarios nuevos no consumen creditos ni requieren API key.
-- Los adapters cloud futuros deben mapear resultados externos a modelos internos con evidencia por documento/pagina.
+- Los adapters cloud mapean resultados externos a modelos internos con
+  evidencia por documento/pagina.
 
 ## Criterios de revision
 
-- Fase 2 no puede empezar si el smoke cloud sigue sin autorizacion.
+- El smoke con documentos corporativos sigue bloqueado sin autorizacion
+  explicita; se permite smoke sintetico no sensible.
 - No se aceptan campos criticos extraidos sin evidencia.
 - No se mezclan perfiles de embedding/vector store sin version y dimension declaradas.

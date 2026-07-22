@@ -83,3 +83,24 @@ def test_classify_config_rule_descriptions_satisfy_cloud_minimum_length() -> Non
     rules = config.to_run_configuration(labels=("manual", "otro"))["rules"]
 
     assert all(len(rule["description"]) >= 10 for rule in rules)
+
+
+@pytest.mark.anyio
+async def test_classify_adapter_prefers_parse_job_id_when_available(tmp_path) -> None:
+    source = tmp_path / "form.pdf"
+    source.write_bytes(b"%PDF")
+    client = FakeClient()
+    adapter = LlamaClassifyAdapter(client=client)
+
+    await adapter.classify(
+        ClassificationRequest(
+            document_id="doc_123",
+            source_path=source,
+            parse_job_id="pjb_123",
+            labels=("manual", "formulario"),
+            max_pages=3,
+            configuration_hash="sha256:config",
+        )
+    )
+
+    assert client.classify.calls[0]["file_input"] == "pjb_123"

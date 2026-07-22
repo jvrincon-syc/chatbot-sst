@@ -11,6 +11,7 @@ from ingestion.schemas.common import StrictModel
 ParseTier = Literal["fast", "cost_effective", "agentic", "agentic_plus"]
 ClassifyMode = Literal["FAST"]
 ExtractTier = Literal["cost_effective", "agentic", "agentic_plus"]
+LlamaCallStop = Literal["classify", "parse", "extract"]
 ParseExpand = Literal[
     "markdown",
     "markdown_full",
@@ -41,6 +42,7 @@ class LlamaSettings(StrictModel):
     extract_max_pages: int = Field(default=5, ge=1)
     classify_enabled: bool = True
     extract_enabled: bool = True
+    call_order: tuple[LlamaCallStop, ...] = ("classify", "parse", "extract")
     local_fallback_enabled: bool = True
 
     @field_validator("api_key", mode="before")
@@ -50,7 +52,7 @@ class LlamaSettings(StrictModel):
             return None
         return value
 
-    @field_validator("parse_ocr_languages", "parse_expand", mode="before")
+    @field_validator("parse_ocr_languages", "parse_expand", "call_order", mode="before")
     @classmethod
     def split_csv_values(cls, value: Any) -> Any:
         if isinstance(value, str):
@@ -61,6 +63,20 @@ class LlamaSettings(StrictModel):
     def require_api_key_when_cloud_is_enabled(self) -> "LlamaSettings":
         if self.cloud_enabled and self.api_key is None:
             raise ValueError("LLAMA_CLOUD_API_KEY is required when LLAMA_CLOUD_ENABLED=true")
+        if self.call_order.count("parse") != 1:
+            raise ValueError("LLAMA_CALL_ORDER must include exactly one parse stop")
+        if len(set(self.call_order)) != len(self.call_order):
+            raise ValueError("LLAMA_CALL_ORDER cannot repeat stops")
+        if "extract" in self.call_order and self.call_order.index("extract") < self.call_order.index("parse"):
+            raise ValueError("LlamaExtract must run after LlamaParse")
+        if (
+            self.classify_enabled
+            and self.extract_enabled
+            and "classify" in self.call_order
+            and "extract" in self.call_order
+            and self.call_order.index("classify") > self.call_order.index("extract")
+        ):
+            raise ValueError("LlamaClassify must run before LlamaExtract when both stops are enabled")
         return self
 
     def safe_model_dump(self) -> dict[str, Any]:
@@ -90,6 +106,7 @@ def load_llama_settings(environ: dict[str, str] | None = None) -> LlamaSettings:
         extract_max_pages=_env_int(env, "LLAMA_EXTRACT_MAX_PAGES", 5),
         classify_enabled=_env_bool(env, "LLAMA_CLASSIFY_ENABLED", True),
         extract_enabled=_env_bool(env, "LLAMA_EXTRACT_ENABLED", True),
+        call_order=env.get("LLAMA_CALL_ORDER", "classify,parse,extract"),
         local_fallback_enabled=_env_bool(env, "LLAMA_LOCAL_FALLBACK_ENABLED", True),
     )
 

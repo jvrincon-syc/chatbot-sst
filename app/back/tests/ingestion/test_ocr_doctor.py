@@ -1,5 +1,7 @@
 import subprocess
 
+import pytest
+
 from ingestion.ocr.doctor import check_ocr_environment
 
 
@@ -7,6 +9,13 @@ class FakeCompletedProcess:
     def __init__(self, stdout: str = "") -> None:
         self.stdout = stdout
         self.stderr = ""
+
+
+@pytest.fixture(autouse=True)
+def _clear_ocr_command_overrides(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("OCRMYPDF_CMD", raising=False)
+    monkeypatch.delenv("TESSERACT_CMD", raising=False)
+    monkeypatch.delenv("GHOSTSCRIPT_CMD", raising=False)
 
 
 def test_ocr_doctor_passes_when_ocrmypdf_tesseract_and_spanish_are_available() -> None:

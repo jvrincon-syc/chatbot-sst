@@ -12,6 +12,7 @@ from typing import Any
 from urllib.parse import unquote, urlparse
 
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
+from ingestion.config.llama_settings import LlamaSettings
 from ingestion.gui.review_store import (
     ReviewDecision,
     load_review_decisions,
@@ -177,6 +178,7 @@ def _llama_first_status_payload() -> dict[str, Any]:
         "extractMaxPages": settings.extract_max_pages,
         "classifyEnabled": settings.classify_enabled,
         "extractEnabled": settings.extract_enabled,
+        "callOrder": list(settings.call_order),
     }
 
 
@@ -297,6 +299,11 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         if only_sources is not None and not isinstance(only_sources, list):
             self._send_error(HTTPStatus.BAD_REQUEST, "onlySources must be a list")
             return
+        try:
+            llama_settings = _llama_settings_for_pipeline_run(body)
+        except ValueError as exc:
+            self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
+            return
         run_id = "gui_phase1_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
         staging_root = ROOT / ".tmp" / run_id
         try:
@@ -310,6 +317,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                 corpus_version="phase1-main",
                 pipeline_version="2.0.0",
                 run_id=run_id,
+                llama_settings_override=llama_settings,
             )
         except Exception as exc:
             self._send_error(HTTPStatus.INTERNAL_SERVER_ERROR, str(exc))
@@ -397,6 +405,41 @@ def _find_document(document_id: str) -> dict[str, Any] | None:
         if document["documentId"] == document_id:
             return document
     return None
+
+
+def _llama_settings_for_pipeline_run(body: dict[str, Any]) -> LlamaSettings:
+    provider_mode = body.get("providerMode")
+    try:
+        settings = load_runtime_llama_settings(ROOT / "secrets.env")
+    except ValueError:
+        if provider_mode != "local":
+            raise
+        settings = LlamaSettings(cloud_enabled=False)
+    if provider_mode is None:
+        return settings
+    if provider_mode not in {"local", "llama_cloud"}:
+        raise ValueError("providerMode must be 'local' or 'llama_cloud'")
+
+    data = settings.model_dump()
+    data["api_key"] = settings.api_key.get_secret_value() if settings.api_key else None
+    data["cloud_enabled"] = provider_mode == "llama_cloud"
+
+    llama_cloud = body.get("llamaCloud", {})
+    if llama_cloud is None:
+        llama_cloud = {}
+    if not isinstance(llama_cloud, dict):
+        raise ValueError("llamaCloud must be an object")
+    if "classifyEnabled" in llama_cloud:
+        data["classify_enabled"] = bool(llama_cloud["classifyEnabled"])
+    if "extractEnabled" in llama_cloud:
+        data["extract_enabled"] = bool(llama_cloud["extractEnabled"])
+    if "callOrder" in llama_cloud:
+        call_order = llama_cloud["callOrder"]
+        if isinstance(call_order, list):
+            data["call_order"] = tuple(str(stop) for stop in call_order)
+        else:
+            data["call_order"] = str(call_order)
+    return LlamaSettings(**data)
 
 
 def main() -> int:

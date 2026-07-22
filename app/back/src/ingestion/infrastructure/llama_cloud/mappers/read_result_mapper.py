@@ -4,6 +4,7 @@ import re
 from html.parser import HTMLParser
 
 from ingestion.domain.models.parsed_document import ParsedDocument
+from ingestion.domain.models.llama_understanding import LlamaUnderstanding
 from ingestion.normalization.text import normalize_text
 from ingestion.readers.base import ReadResult
 from ingestion.schemas.artifacts import (
@@ -18,7 +19,10 @@ from ingestion.schemas.artifacts import (
 from ingestion.schemas.common import ConfidenceMetric, Evidence, Observation
 
 
-def parsed_document_to_read_result(parsed: ParsedDocument) -> ReadResult:
+def parsed_document_to_read_result(
+    parsed: ParsedDocument,
+    understanding: LlamaUnderstanding | None = None,
+) -> ReadResult:
     pages = [
         PageRecord(
             page_number=page.page_number,
@@ -38,10 +42,15 @@ def parsed_document_to_read_result(parsed: ParsedDocument) -> ReadResult:
         extraction_method="llamaparse",
         markdown=markdown,
         pages=pages,
-        warnings=[f"llama_parse_job:{parsed.provider_job.job_id}", *parsed.warnings],
+        warnings=[
+            f"llama_parse_job:{parsed.provider_job.job_id}",
+            *(understanding.warnings if understanding is not None else []),
+            *parsed.warnings,
+        ],
         review_reasons=[],
         tables=_tables_from_markdown_pages(parsed.provider_job.job_id, parsed.markdown_pages),
         forms=_forms_from_markdown_pages(parsed.provider_job.job_id, parsed.markdown_pages),
+        llama_understanding=understanding,
     )
 
 

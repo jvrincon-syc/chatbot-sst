@@ -3,9 +3,11 @@ import {
   Check,
   CheckCircle2,
   Clock3,
+  Cloud,
   Database,
   FileText,
   FolderOpen,
+  HardDrive,
   ListFilter,
   Loader2,
   Play,
@@ -19,6 +21,14 @@ import {
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type DecisionKind = "approved" | "rejected";
+type ProviderMode = "local" | "llama_cloud";
+
+type LlamaControls = {
+  providerMode: ProviderMode;
+  classifyEnabled: boolean;
+  extractEnabled: boolean;
+  callOrder: string;
+};
 
 type ReviewDecision = {
   document_id: string;
@@ -71,6 +81,7 @@ type StatusPayload = {
     extractMaxPages?: number;
     classifyEnabled?: boolean;
     extractEnabled?: boolean;
+    callOrder?: string[];
     error?: string;
   };
   documents: DocumentRecord[];
@@ -101,6 +112,30 @@ const DEFAULT_APPROVE_REASON =
   "Revision humana completada; apto para consumo downstream.";
 const DEFAULT_REJECT_REASON =
   "No se aprueba para consumo downstream hasta corregir la extraccion.";
+const DEFAULT_LLAMA_CONTROLS: LlamaControls = {
+  providerMode: "local",
+  classifyEnabled: true,
+  extractEnabled: true,
+  callOrder: "classify,parse,extract",
+};
+
+const LLAMA_CALL_ORDER_OPTIONS = [
+  { value: "classify,parse,extract", label: "Classify > Parse > Extract" },
+  { value: "parse,classify,extract", label: "Parse > Classify > Extract" },
+];
+
+function effectiveLlamaCallOrder(controls: LlamaControls) {
+  if (controls.providerMode !== "llama_cloud") return "parse";
+  return controls.callOrder
+    .split(",")
+    .filter((stop) => {
+      if (stop === "parse") return true;
+      if (stop === "classify") return controls.classifyEnabled;
+      if (stop === "extract") return controls.extractEnabled;
+      return false;
+    })
+    .join(",");
+}
 
 const statusLabels: Record<DocumentRecord["processingStatus"], string> = {
   pending: "Pendiente",
@@ -118,6 +153,7 @@ function App() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
   const [lastResult, setLastResult] = useState<ActionResult | null>(null);
+  const [llamaControls, setLlamaControls] = useState<LlamaControls>(DEFAULT_LLAMA_CONTROLS);
   const [uploadForm, setUploadForm] = useState({
     category: "general_sst",
     folder: "manuales",
@@ -141,6 +177,22 @@ function App() {
   useEffect(() => {
     void loadStatus();
   }, []);
+
+  useEffect(() => {
+    if (!status?.llamaFirst) return;
+    const configuredOrder = (status.llamaFirst.callOrder ?? ["classify", "parse", "extract"]).join(",");
+    const selectableOrder = LLAMA_CALL_ORDER_OPTIONS.some(
+      (option) => option.value === configuredOrder,
+    )
+      ? configuredOrder
+      : DEFAULT_LLAMA_CONTROLS.callOrder;
+    setLlamaControls({
+      providerMode: status.llamaFirst.cloudEnabled ? "llama_cloud" : "local",
+      classifyEnabled: status.llamaFirst.classifyEnabled ?? true,
+      extractEnabled: status.llamaFirst.extractEnabled ?? true,
+      callOrder: selectableOrder,
+    });
+  }, [status?.llamaFirst]);
 
   const documents = status?.documents ?? [];
   const pendingReview = status?.needsReview ?? [];
@@ -222,7 +274,15 @@ function App() {
       const response = await fetch("/api/pipeline/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ force: false }),
+        body: JSON.stringify({
+          force: false,
+          providerMode: llamaControls.providerMode,
+          llamaCloud: {
+            classifyEnabled: llamaControls.classifyEnabled,
+            extractEnabled: llamaControls.extractEnabled,
+            callOrder: effectiveLlamaCallOrder(llamaControls),
+          },
+        }),
       });
       const payload = await readJson<ActionResult>(response);
       setLastResult(payload);
@@ -278,7 +338,11 @@ function App() {
           <MetricCard label="Rechazados" value={status?.summary.rejected ?? 0} icon={<X />} tone="danger" />
         </section>
 
-        <LlamaStatusPanel status={status?.llamaFirst ?? null} />
+        <LlamaStatusPanel
+          status={status?.llamaFirst ?? null}
+          controls={llamaControls}
+          onControlsChange={setLlamaControls}
+        />
 
         <section className="primary-grid">
           <UploadPanel
@@ -322,24 +386,93 @@ function App() {
 
 function LlamaStatusPanel({
   status,
+  controls,
+  onControlsChange,
 }: {
   status: StatusPayload["llamaFirst"] | null;
+  controls: LlamaControls;
+  onControlsChange: (controls: LlamaControls) => void;
 }) {
   if (!status) return null;
+  const cloudSelected = controls.providerMode === "llama_cloud";
   return (
     <section className="panel llama-status" aria-label="Llama-first">
       <div className="panel-heading">
         <h2>Llama-first</h2>
         <span>{status.configurationStatus}</span>
       </div>
-      <div className="llama-status-grid">
-        <StatusDatum label="Provider" value={status.provider} />
-        <StatusDatum label="Cloud" value={status.cloudEnabled ? "Activo" : "Inactivo"} />
-        <StatusDatum label="Tier" value={status.parseTier ?? "n/a"} />
-        <StatusDatum label="Version" value={status.parseVersion ?? "n/a"} />
-        <StatusDatum label="Classify" value={`${status.classifyMode ?? "FAST"} / ${status.classifyMaxPages ?? 5}p`} />
-        <StatusDatum label="Extract" value={`${status.extractTier ?? "cost_effective"} + ${status.extractParseTier ?? "fast"}`} />
-        <StatusDatum label="Creditos" value={String(status.parseMaxCreditsPerRun ?? 0)} />
+      <div className="llama-layout">
+        <div className="llama-status-grid">
+          <StatusDatum label="Provider" value={status.provider} />
+          <StatusDatum label="Cloud" value={status.cloudEnabled ? "Activo" : "Inactivo"} />
+          <StatusDatum label="Tier" value={status.parseTier ?? "n/a"} />
+          <StatusDatum label="Version" value={status.parseVersion ?? "n/a"} />
+          <StatusDatum label="Classify" value={`${status.classifyMode ?? "FAST"} / ${status.classifyMaxPages ?? 5}p`} />
+          <StatusDatum label="Extract" value={`${status.extractTier ?? "cost_effective"} + ${status.extractParseTier ?? "fast"}`} />
+          <StatusDatum label="Creditos" value={String(status.parseMaxCreditsPerRun ?? 0)} />
+        </div>
+        <div className="llama-controls">
+          <div className="segmented-control" aria-label="Proveedor de PDF">
+            <button
+              type="button"
+              className={controls.providerMode === "local" ? "active" : ""}
+              onClick={() => onControlsChange({ ...controls, providerMode: "local" })}
+              title="Usar OCR y librerias locales"
+            >
+              <HardDrive size={15} />
+              Local
+            </button>
+            <button
+              type="button"
+              className={cloudSelected ? "active" : ""}
+              onClick={() => onControlsChange({ ...controls, providerMode: "llama_cloud" })}
+              title="Usar LlamaCloud con LlamaParse obligatorio"
+            >
+              <Cloud size={15} />
+              LlamaCloud
+            </button>
+          </div>
+          <label className="toggle-row locked">
+            <input type="checkbox" checked={cloudSelected} disabled />
+            <span>LlamaParse</span>
+          </label>
+          <label className={!cloudSelected ? "toggle-row disabled" : "toggle-row"}>
+            <input
+              type="checkbox"
+              checked={controls.classifyEnabled && cloudSelected}
+              disabled={!cloudSelected}
+              onChange={(event) =>
+                onControlsChange({ ...controls, classifyEnabled: event.target.checked })
+              }
+            />
+            <span>LlamaClassify</span>
+          </label>
+          <label className={!cloudSelected ? "toggle-row disabled" : "toggle-row"}>
+            <input
+              type="checkbox"
+              checked={controls.extractEnabled && cloudSelected}
+              disabled={!cloudSelected}
+              onChange={(event) =>
+                onControlsChange({ ...controls, extractEnabled: event.target.checked })
+              }
+            />
+            <span>LlamaExtract</span>
+          </label>
+          <label className="order-field">
+            Orden
+            <select
+              value={controls.callOrder}
+              disabled={!cloudSelected}
+              onChange={(event) => onControlsChange({ ...controls, callOrder: event.target.value })}
+            >
+              {LLAMA_CALL_ORDER_OPTIONS.map((option) => (
+                <option value={option.value} key={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
     </section>
   );

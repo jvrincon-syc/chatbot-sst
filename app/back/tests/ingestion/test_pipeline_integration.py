@@ -1,20 +1,53 @@
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
 
 import ingestion.pipeline as pipeline_module
+from ingestion.domain.models.classification import (
+    ClassificationCandidate,
+    ClassificationResult,
+)
+from ingestion.domain.models.extraction import ExtractionField, ExtractionResult
+from ingestion.domain.models.llama_understanding import LlamaUnderstanding
+from ingestion.domain.models.provider import ProviderJobRef
 from ingestion.pipeline import _configured_tesseract_engine, run_pipeline
 from ingestion.promotion import PromotionError
 from ingestion.readers.base import ReadResult
 from ingestion.schemas.artifacts import FormsArtifact, PageRecord, TablesArtifact
-from ingestion.schemas.common import ConfidenceMetric, Observation
+from ingestion.schemas.common import ConfidenceMetric, Evidence, Observation
 
 
 @pytest.fixture(autouse=True)
 def _disable_llama_cloud_for_local_pipeline_tests(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("LLAMA_CLOUD_ENABLED", "false")
     monkeypatch.delenv("LLAMA_CLOUD_API_KEY", raising=False)
+
+
+def _llama_job(capability: str, job_id: str) -> ProviderJobRef:
+    now = datetime.now(timezone.utc)
+    return ProviderJobRef(
+        provider="llama_cloud",
+        capability=capability,
+        job_id=job_id,
+        status="completed",
+        configuration_hash="sha256:test",
+        created_at=now,
+        completed_at=now,
+    )
+
+
+def _llama_classification(capability: str, label: str, confidence: float = 0.96) -> ClassificationResult:
+    return ClassificationResult(
+        provider_job=_llama_job("classify", f"{capability}_job"),
+        selected=ClassificationCandidate(
+            label=label,
+            confidence=confidence,
+            evidence=[Evidence(page_number=1, text=label, source="llama_classify")],
+            reasoning_summary="Clasificacion basada en contenido del documento.",
+        ),
+    )
 
 
 def test_pipeline_processes_markdown_and_tracks_pdf_needing_review(tmp_path: Path) -> None:
@@ -414,6 +447,156 @@ def test_pipeline_processes_pdf_when_material_features_are_evaluated(
     assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
     assert metadata["processing_status"] == "processed"
     assert "pdf_semantic_review_required" not in metadata["review_reasons"]
+
+
+def test_pipeline_uses_llama_classify_without_penalizing_arbitrary_folder(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    source_dir = docs_raw / "convivencia_laboral" / "manual"
+    source_dir.mkdir(parents=True)
+    (source_dir / "registro.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    result = ReadResult(
+        extraction_method="llamaparse",
+        markdown="# Formulario de queja por convivencia laboral\n\nCodigo CV-F-01",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="Formulario de queja por convivencia laboral Codigo CV-F-01",
+                text_normalized="Formulario de queja por convivencia laboral Codigo CV-F-01",
+                extraction_method="llamaparse",
+                ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+            )
+        ],
+        tables=TablesArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            table_count=0,
+            tables=[],
+            page_observations=[Observation(status="not_detected", value=False, method="llamaparse_markdown_table")],
+        ),
+        forms=FormsArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            groups=[],
+            page_observations=[Observation(status="not_detected", value=False, method="llamaparse_form_heuristic")],
+        ),
+        llama_understanding=LlamaUnderstanding(
+            parse_job_id="pjb_classified",
+            document_type=_llama_classification("document_type", "formulario"),
+            topic=_llama_classification("topic", "convivencia_laboral"),
+            schema_extract="formulario_document_control",
+        ),
+    )
+    monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(status="not_detected", value=False, method="test"),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="llama_classify_metadata",
+        classification_review_threshold=0.0,
+    )
+
+    metadata = json.loads(
+        (candidate / "convivencia_laboral" / "manual" / "registro.metadata.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
+    assert metadata["classification"]["document_type"] == "formulario"
+    assert metadata["classification"]["topic"] == "Convivencia laboral"
+    assert metadata["classification"]["conflict_status"] == "none"
+    assert "classification_conflict" not in metadata["review_reasons"]
+    assert "llama_classify_document_type:formulario" in metadata["classification"]["signals"]
+    assert "llama_schema_extract:formulario_document_control" in metadata["classification"]["signals"]
+
+
+def test_pipeline_marks_unsupported_llama_extract_critical_fields_for_review(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    candidate = tmp_path / "data" / "candidate"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "politica.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    result = ReadResult(
+        extraction_method="llamaparse",
+        markdown="# Politica SST\n\nCodigo SST-PO-01",
+        pages=[
+            PageRecord(
+                page_number=1,
+                text_raw="Politica SST Codigo SST-PO-01",
+                text_normalized="Politica SST Codigo SST-PO-01",
+                extraction_method="llamaparse",
+                ocr_confidence=ConfidenceMetric(kind="unavailable", value=None),
+            )
+        ],
+        tables=TablesArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            table_count=0,
+            tables=[],
+            page_observations=[Observation(status="not_detected", value=False, method="llamaparse_markdown_table")],
+        ),
+        forms=FormsArtifact(
+            schema_version="2.0",
+            document_id="pending",
+            groups=[],
+            page_observations=[Observation(status="not_detected", value=False, method="llamaparse_form_heuristic")],
+        ),
+        llama_understanding=LlamaUnderstanding(
+            parse_job_id="pjb_extract",
+            document_type=_llama_classification("document_type", "politica"),
+            topic=_llama_classification("topic", "sg_sst"),
+            extraction=ExtractionResult(
+                provider_job=_llama_job("extract", "extract_unsupported"),
+                schema_name="politica_document_control",
+                fields=[
+                    ExtractionField(
+                        name="code",
+                        value="NO-SOPORTADO",
+                        critical=True,
+                        evidence=[Evidence(page_number=1, text="NO-SOPORTADO", source="llama_extract")],
+                    )
+                ],
+            ),
+            warnings=["llama_extract_unsupported_critical_field:code"],
+        ),
+    )
+    monkeypatch.setattr(pipeline_module, "_read_document", lambda *_args, **_kwargs: result)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(status="not_detected", value=False, method="test"),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=tmp_path / "data" / "live",
+        staging_root=candidate,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="llama_extract_review",
+        classification_review_threshold=0.0,
+    )
+
+    metadata = json.loads((candidate / "politica.metadata.json").read_text(encoding="utf-8"))
+    assert summary["needs_review"] == 1
+    assert metadata["processing_status"] == "needs_review"
+    assert "llama_extract_unsupported_critical_field:code" in metadata["review_reasons"]
+    assert "llama_extract_unsupported_critical_field:code" in metadata["warnings"]
 
 
 def test_pipeline_normalizes_windows_only_source_paths(tmp_path: Path) -> None:

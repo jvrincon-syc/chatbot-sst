@@ -12,7 +12,9 @@ from ingestion.schemas.common import StrictModel
 class ClassificationRequest(StrictModel):
     document_id: str = Field(min_length=1)
     source_path: Path
+    parse_job_id: str | None = None
     labels: tuple[str, ...]
+    label_descriptions: dict[str, list[str]] | None = None
     max_pages: int | None = Field(default=None, ge=1)
     configuration_hash: str = Field(min_length=1)
 

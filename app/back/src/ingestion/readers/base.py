@@ -10,6 +10,7 @@ from ingestion.schemas.artifacts import (
     PageRecord,
     TablesArtifact,
 )
+from ingestion.domain.models.llama_understanding import LlamaUnderstanding
 
 
 class ReadResult(BaseModel):
@@ -21,6 +22,7 @@ class ReadResult(BaseModel):
     tables: Optional[TablesArtifact] = None
     forms: Optional[FormsArtifact] = None
     ocr: Optional[OcrArtifact] = None
+    llama_understanding: Optional[LlamaUnderstanding] = None
 
     @property
     def page_count(self) -> int:

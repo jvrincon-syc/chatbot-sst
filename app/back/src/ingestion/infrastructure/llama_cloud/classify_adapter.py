@@ -23,8 +23,11 @@ class LlamaClassifyAdapter:
             max_pages=max_pages,
         )
         result = await self._client.classify.run(
-            file_input=str(request.source_path),
-            configuration=config.to_run_configuration(labels=request.labels),
+            file_input=request.parse_job_id or str(request.source_path),
+            configuration=config.to_run_configuration(
+                labels=request.labels,
+                descriptions=request.label_descriptions,
+            ),
         )
         return map_classify_response_to_result(
             result,
