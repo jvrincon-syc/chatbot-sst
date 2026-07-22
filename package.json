@@ -16,6 +16,7 @@
     "ingestion:inventory": "npm run python -- scripts/ingestion/run_inventory.py",
     "ingestion:run": "npm run python -- scripts/ingestion/run_pipeline.py",
     "ingestion:validate": "npm run python -- scripts/ingestion/validate_normalized.py",
+    "indexing:prepare-postgres": "npm run python -- scripts/indexing/prepare_postgres_indexing.py",
     "indexing:run": "npm run python -- scripts/indexing/run_indexing.py",
     "indexing:validate": "npm run python -- scripts/indexing/validate_index.py",
     "evaluation:llama-first": "npm run python -- scripts/evaluation/run_llama_first_benchmark.py",

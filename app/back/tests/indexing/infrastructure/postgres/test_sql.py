@@ -30,6 +30,23 @@ def test_pgvector_migration_does_not_create_one_mixed_vector_table() -> None:
     assert "profile vector tables are created through controlled migrations" in sql
 
 
+def test_seed_migration_creates_current_embedding_profile_tables() -> None:
+    sql = Path("migrations/20260722_seed_indexing_profiles.sql").read_text(
+        encoding="utf-8"
+    )
+
+    assert "'local-bge-m3-v1'" in sql
+    assert "'llama-bge-m3-v1'" in sql
+    assert "'local-voyage-4-v1'" in sql
+    assert "'llama-voyage-4-v1'" in sql
+    assert "'local-cohere-embed-v4-v1'" in sql
+    assert "'llama-cohere-embed-v4-v1'" in sql
+    assert "CREATE TABLE IF NOT EXISTS idx_vec_local_bge_m3_v1" in sql
+    assert "CREATE TABLE IF NOT EXISTS idx_vec_llama_bge_m3_v1" in sql
+    assert "embedding vector(1024) NOT NULL" in sql
+    assert "embedding vector(1536) NOT NULL" in sql
+
+
 def test_vector_table_sql_uses_dimension_and_cosine_ops() -> None:
     profile = _profile(distance_metric="cosine")
 

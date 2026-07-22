@@ -636,7 +636,10 @@ def _choose_pdf_reader(
     return llama_reader_factory()
 
 
-def _configured_llama_parse_reader(settings=None) -> LlamaParseReader:
+def _configured_llama_parse_reader(
+    settings=None,
+    event_logger: JsonlLogger | None = None,
+) -> LlamaParseReader:
     from ingestion.infrastructure.llama_cloud.client_factory import (
         create_async_llama_cloud_client,
     )
@@ -678,6 +681,7 @@ def _configured_llama_parse_reader(settings=None) -> LlamaParseReader:
             labels=tuple(classification_labels())
         ),
         extraction_configuration_hash=extract_config.configuration_hash(),
+        event_logger=event_logger,
     )
     return LlamaParseReader(
         adapter=parse_adapter,
@@ -723,6 +727,7 @@ def _read_document(
     ocr_engine=None,
     docs_raw: Optional[Path] = None,
     llama_settings: LlamaSettings | None = None,
+    event_logger: JsonlLogger | None = None,
 ) -> ReadResult:
     source_path = _source_path_for_record(record, docs_raw)
     if record.detected_extension == ".md":
@@ -742,7 +747,7 @@ def _read_document(
                 local_fallback_enabled=settings.local_fallback_enabled,
                 local_reader_factory=lambda: _configured_local_pdf_reader(ocr_engine),
                 llama_reader_factory=(
-                    lambda: _configured_llama_parse_reader(settings)
+                    lambda: _configured_llama_parse_reader(settings, event_logger)
                 )
                 if settings.cloud_enabled
                 else None,
@@ -896,6 +901,7 @@ def run_pipeline(
                 record,
                 docs_raw=docs_raw,
                 llama_settings=llama_settings_override,
+                event_logger=logger,
             )
             metadata, bundle = _write_success_artifacts(
                 record=record,

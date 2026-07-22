@@ -16,6 +16,9 @@ def test_package_json_declares_indexing_scripts() -> None:
     assert package["scripts"]["indexing:validate"] == (
         "npm run python -- scripts/indexing/validate_index.py"
     )
+    assert package["scripts"]["indexing:prepare-postgres"] == (
+        "npm run python -- scripts/indexing/prepare_postgres_indexing.py"
+    )
     assert package["scripts"]["test:indexing"] == (
         "npm run python -- -m pytest app/back/tests/indexing"
     )

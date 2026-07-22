@@ -82,6 +82,19 @@ class RecordingExtractor:
         )
 
 
+class FailingExtractor:
+    async def extract(self, _request):
+        raise RuntimeError("extract provider failed")
+
+
+class RecordingEventLogger:
+    def __init__(self) -> None:
+        self.events: list[dict] = []
+
+    def event(self, **kwargs) -> None:
+        self.events.append(kwargs)
+
+
 @pytest.mark.anyio
 async def test_llama_orchestrator_can_classify_before_parse_and_extract_after_parse(
     tmp_path: Path,
@@ -122,6 +135,58 @@ async def test_llama_orchestrator_can_classify_before_parse_and_extract_after_pa
 
 
 @pytest.mark.anyio
+async def test_llama_orchestrator_logs_entry_and_exit_for_each_cloud_phase(
+    tmp_path: Path,
+) -> None:
+    event_logger = RecordingEventLogger()
+
+    await LlamaOrchestrator(
+        parser=RecordingParser(),
+        classifier=RecordingClassifier(),
+        extractor=RecordingExtractor(),
+        classify_enabled=True,
+        extract_enabled=True,
+        call_order=("classify", "parse", "extract"),
+        classify_max_pages=5,
+        parse_configuration_hash="sha256:parse",
+        classification_configuration_hash="sha256:classify",
+        extraction_configuration_hash="sha256:extract",
+        event_logger=event_logger,
+    ).run(
+        document_id="doc_123",
+        source_path=tmp_path / "form.pdf",
+        source_hash="sha256:source",
+        mime_type="application/pdf",
+    )
+
+    assert [
+        (event["event"], event["status"], event["capability"], event.get("job_id"))
+        for event in event_logger.events
+    ] == [
+        ("llama_classify_start", "started", "classify", None),
+        ("llama_classify_finished", "completed", "classify", "classify_1,classify_2"),
+        ("llama_parse_start", "started", "parse", None),
+        ("llama_parse_finished", "completed", "parse", "pjb_123"),
+        ("llama_extract_start", "started", "extract", None),
+        ("llama_extract_finished", "completed", "extract", "extract_1"),
+    ]
+    assert {event["provider"] for event in event_logger.events} == {"llama_cloud"}
+    assert {event["stage"] for event in event_logger.events} == {"llama_cloud"}
+    assert {event["document_id"] for event in event_logger.events} == {"doc_123"}
+    assert {event["source_path"] for event in event_logger.events} == {
+        str(tmp_path / "form.pdf")
+    }
+    assert [event["level"] for event in event_logger.events] == [
+        "info",
+        "info",
+        "info",
+        "info",
+        "info",
+        "info",
+    ]
+
+
+@pytest.mark.anyio
 async def test_llama_orchestrator_can_parse_before_classify_to_reuse_parse_job_id(
     tmp_path: Path,
 ) -> None:
@@ -153,6 +218,7 @@ async def test_llama_orchestrator_can_parse_before_classify_to_reuse_parse_job_i
 async def test_llama_orchestrator_skips_optional_capabilities_when_disabled(tmp_path: Path) -> None:
     classifier = RecordingClassifier()
     extractor = RecordingExtractor()
+    event_logger = RecordingEventLogger()
 
     result = await LlamaOrchestrator(
         parser=RecordingParser(),
@@ -165,6 +231,7 @@ async def test_llama_orchestrator_skips_optional_capabilities_when_disabled(tmp_
         parse_configuration_hash="sha256:parse",
         classification_configuration_hash="sha256:classify",
         extraction_configuration_hash="sha256:extract",
+        event_logger=event_logger,
     ).run(
         document_id="doc_123",
         source_path=tmp_path / "manual.pdf",
@@ -176,6 +243,49 @@ async def test_llama_orchestrator_skips_optional_capabilities_when_disabled(tmp_
     assert extractor.calls == []
     assert result.understanding.schema_extract is None
     assert result.understanding.warnings == ["llama_classify_disabled", "llama_extract_disabled"]
+    assert [
+        (event["event"], event["status"], event["level"])
+        for event in event_logger.events
+        if event["status"] == "skipped"
+    ] == [
+        ("llama_classify_skipped", "skipped", "warning"),
+        ("llama_extract_skipped", "skipped", "warning"),
+    ]
+
+
+@pytest.mark.anyio
+async def test_llama_orchestrator_logs_provider_failures_as_error(
+    tmp_path: Path,
+) -> None:
+    event_logger = RecordingEventLogger()
+
+    with pytest.raises(RuntimeError, match="extract provider failed"):
+        await LlamaOrchestrator(
+            parser=RecordingParser(),
+            classifier=RecordingClassifier(),
+            extractor=FailingExtractor(),
+            classify_enabled=True,
+            extract_enabled=True,
+            call_order=("parse", "classify", "extract"),
+            classify_max_pages=5,
+            parse_configuration_hash="sha256:parse",
+            classification_configuration_hash="sha256:classify",
+            extraction_configuration_hash="sha256:extract",
+            event_logger=event_logger,
+        ).run(
+            document_id="doc_123",
+            source_path=tmp_path / "manual.pdf",
+            source_hash="sha256:source",
+            mime_type="application/pdf",
+        )
+
+    failed = event_logger.events[-1]
+    assert failed["event"] == "llama_extract_failed"
+    assert failed["status"] == "failed"
+    assert failed["level"] == "error"
+    assert failed["capability"] == "extract"
+    assert failed["warning_code"] == "llama_extract_failed"
+    assert isinstance(failed["exception"], RuntimeError)
 
 
 @pytest.mark.anyio

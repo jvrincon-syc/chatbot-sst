@@ -818,6 +818,146 @@ def test_pipeline_persists_llama_cloud_metadata_and_confidence(
     assert pages["pages"][0]["ocr_confidence"]["value"] == 0.91
 
 
+def test_pipeline_writes_llama_phase_events_to_details_log(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    normalized = tmp_path / "data" / "normalized"
+    docs_raw.mkdir(parents=True)
+    (docs_raw / "politica.pdf").write_bytes(b"%PDF-1.4 fake")
+
+    class FakeParsing:
+        async def parse(self, **_kwargs):
+            return {"id": "pjb_observable", "status": "COMPLETED"}
+
+        async def get(self, *_args, **_kwargs):
+            return {
+                "id": "pjb_observable",
+                "status": "COMPLETED",
+                "markdown": [
+                    {
+                        "page": 1,
+                        "markdown": "# Politica SST\n\nCodigo SST-PO-01",
+                    }
+                ],
+                "metadata": {"pages": [{"page_number": 1, "confidence": 0.91}]},
+                "job_metadata": {"credits": 1},
+            }
+
+    class FakeClassify:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        async def run(self, **_kwargs):
+            self.calls += 1
+            return {
+                "id": f"classify_observable_{self.calls}",
+                "status": "COMPLETED",
+                "label": "politica" if self.calls == 1 else "sg_sst",
+                "confidence": 0.96,
+                "evidence": [
+                    {
+                        "page_number": 1,
+                        "text": "Politica SST",
+                        "source": "llama_classify",
+                    }
+                ],
+            }
+
+    class FakeExtract:
+        async def run(self, **_kwargs):
+            return {
+                "id": "extract_observable",
+                "status": "COMPLETED",
+                "data": {"code": "SST-PO-01"},
+                "evidence": {
+                    "code": [
+                        {
+                            "page_number": 1,
+                            "text": "SST-PO-01",
+                            "source": "llama_extract",
+                        }
+                    ]
+                },
+            }
+
+    class FakeClient:
+        def __init__(self) -> None:
+            self.parsing = FakeParsing()
+            self.classify = FakeClassify()
+            self.extract = FakeExtract()
+
+        async def aclose(self) -> None:
+            return None
+
+    import ingestion.infrastructure.llama_cloud.client_factory as client_factory
+
+    monkeypatch.setattr(
+        client_factory,
+        "create_async_llama_cloud_client",
+        lambda _settings: FakeClient(),
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "_handwriting_observation",
+        lambda *_args, **_kwargs: Observation(
+            status="not_detected",
+            value=False,
+            method="test",
+        ),
+    )
+
+    summary = run_pipeline(
+        docs_raw=docs_raw,
+        docs_normalized=normalized,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="llama_phase_logs",
+        classification_review_threshold=0.0,
+        ocr_review_threshold=0.80,
+        llama_settings_override=LlamaSettings(
+            cloud_enabled=True,
+            api_key="test-key",
+            classify_enabled=True,
+            extract_enabled=True,
+            call_order=("parse", "classify", "extract"),
+            local_fallback_enabled=False,
+        ),
+    )
+
+    events = [
+        json.loads(line)
+        for line in (normalized / "_manifests" / "llama_phase_logs_details.log")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    llama_events = [
+        event for event in events if event.get("stage") == "llama_cloud"
+    ]
+    assert summary["needs_review"] == 0
+    assert [
+        (event["event"], event["status"], event["capability"], event.get("job_id"))
+        for event in llama_events
+    ] == [
+        ("llama_parse_start", "started", "parse", None),
+        ("llama_parse_finished", "completed", "parse", "pjb_observable"),
+        ("llama_classify_start", "started", "classify", None),
+        (
+            "llama_classify_finished",
+            "completed",
+            "classify",
+            "classify_observable_1,classify_observable_2",
+        ),
+        ("llama_extract_start", "started", "extract", None),
+        ("llama_extract_finished", "completed", "extract", "extract_observable"),
+    ]
+    assert {event["level"] for event in llama_events} == {"info"}
+    assert {event["provider"] for event in llama_events} == {"llama_cloud"}
+    assert llama_events[-1]["upstream_job_id"] == "pjb_observable"
+    assert llama_events[-1]["result_count"] == 1
+
+
 def test_pipeline_normalizes_windows_only_source_paths(tmp_path: Path) -> None:
     docs_raw = tmp_path / "data" / "docs_raw"
     normalized = tmp_path / "data" / "normalized"
