@@ -86,6 +86,7 @@ class LlamaIndexingPort:
         node_repository: NodeRepository | None = None,
         vector_repository: VectorRepository | None = None,
         profile_orchestrator: ProfileResolver | None = None,
+        embedding_factory: EmbeddingFactory | None = None,
         storage_mode: Literal["memory", "postgres"] = "memory",
         ingestion_origin: IngestionOrigin = "local",
         max_child_chars: int = 900,
@@ -98,6 +99,7 @@ class LlamaIndexingPort:
         self._node_repository = node_repository
         self._vector_repository = vector_repository
         self._profile_orchestrator = profile_orchestrator
+        self._embedding_factory = embedding_factory or EmbeddingFactory()
         self._storage_mode = storage_mode
         self._ingestion_origin = ingestion_origin
         self._document_factory = NormalizedDocumentFactory()
@@ -137,9 +139,9 @@ class LlamaIndexingPort:
         )
         parent_nodes = [node for node in nodes if node.metadata.get("node_role") == "parent"]
         child_nodes = [node for node in nodes if node.metadata.get("node_role") == "child"]
-        embeddings = EmbeddingFactory().create(document.profile).embed_texts(
+        embeddings = self._embedding_factory.create(document.profile).embed_documents(
             [node.text for node in child_nodes]
-        )
+        ).vectors
 
         if self._storage_mode == "postgres":
             self._write_repositories(

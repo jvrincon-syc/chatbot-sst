@@ -43,6 +43,36 @@ Parse es obligatorio en modo cloud y debe aparecer una vez en
 `LLAMA_CALL_ORDER`. Ordenes comunes: `classify,parse,extract`,
 `parse,classify,extract`, `classify,parse`, `parse,classify`, `parse`.
 
+### Embeddings
+
+La indexacion selecciona un perfil inmutable (`--profile`) y el runtime de
+embeddings se configura en el borde de infraestructura. Los consumidores usan
+el puerto comun `EmbeddingProvider` con `embed_documents` y `embed_queries`.
+
+Variables principales:
+
+```text
+EMBEDDING_PROVIDER=mock|bge|voyage
+EMBEDDING_MODEL
+EMBEDDING_DIMENSION
+EMBEDDING_DISTANCE_METRIC=cosine|l2|inner_product
+EMBEDDING_BATCH_SIZE
+EMBEDDING_DEVICE
+BGE_USE_FP16
+BGE_QUERY_MAX_LENGTH
+BGE_DOCUMENT_MAX_LENGTH
+HF_TOKEN
+HF_HUB_CACHE
+VOYAGE_API_KEY
+EMBEDDING_TIMEOUT_SECONDS
+EMBEDDING_RETRIES
+```
+
+`VOYAGE_API_KEY` solo es obligatorio cuando se activa el provider `voyage`.
+BGE-M3 usa `BAAI/bge-m3` via `FlagEmbedding` y carga el modelo de forma lazy
+por proceso/factory. Cambiar de provider, dimension o metrica requiere elegir
+otro perfil pgvector y reindexar el corpus correspondiente.
+
 ## Politica de costo
 
 - Parse auditable usa `tier=cost_effective` cuando se necesitan `markdown` e

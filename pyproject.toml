@@ -28,6 +28,10 @@ llama-indexing = [
   "llama-index-core==0.14.23",
   "llama-index-vector-stores-postgres==0.8.1",
 ]
+embeddings = [
+  "FlagEmbedding>=1.3,<2",
+  "voyageai>=0.3.7,<1",
+]
 
 [tool.setuptools]
 package-dir = {"" = "app/back/src"}

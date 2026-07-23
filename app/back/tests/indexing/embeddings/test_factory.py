@@ -8,6 +8,7 @@ from indexing.infrastructure.embeddings.factory import (
     EmbeddingProfileMismatchError,
     UnknownEmbeddingProviderError,
 )
+from indexing.infrastructure.embeddings.settings import EmbeddingSettings
 
 
 def _profile(
@@ -29,11 +30,15 @@ def _profile(
 def test_embedding_factory_creates_deterministic_provider_for_tests() -> None:
     provider = EmbeddingFactory().create(_profile())
 
-    vectors = provider.embed_texts(["abc", "abd"])
+    batch = provider.embed_documents(["abc", "abd"])
 
-    assert len(vectors) == 2
-    assert all(len(vector) == 3 for vector in vectors)
-    assert vectors[0] != vectors[1]
+    assert batch.provider == "mock"
+    assert batch.model == "deterministic"
+    assert batch.dimension == 3
+    assert len(batch.vectors) == 2
+    assert all(len(vector) == 3 for vector in batch.vectors)
+    assert batch.vectors[0] != batch.vectors[1]
+    assert provider.embed_texts(["abc"]) == provider.embed_documents(["abc"]).vectors
 
 
 def test_embedding_factory_rejects_vector_store_dimension_mismatch() -> None:
@@ -53,3 +58,12 @@ def test_embedding_factory_builds_named_provider_adapters_without_importing_sdks
         )
 
         assert provider.profile.embedding_provider == provider_name
+
+
+def test_embedding_factory_reuses_provider_instances_for_same_profile() -> None:
+    factory = EmbeddingFactory(settings=EmbeddingSettings(provider="mock"))
+
+    first = factory.create(_profile())
+    second = factory.create(_profile())
+
+    assert first is second
