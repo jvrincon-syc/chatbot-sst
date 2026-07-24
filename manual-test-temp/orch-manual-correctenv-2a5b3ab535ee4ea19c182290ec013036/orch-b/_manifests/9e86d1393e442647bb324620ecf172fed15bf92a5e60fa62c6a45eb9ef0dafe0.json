@@ -1,0 +1,10 @@
+{
+  "bundle_fingerprint": "chunk-bundle-b9530ffc7c93943b47af9dc512cd205fe9dbba31290bf70f51a0de3a1d1d7633",
+  "document_id": "doc_orch",
+  "normalized_relpath": "manual/doc.md",
+  "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
+  "profile_id": "local-structural-v1",
+  "reused": false,
+  "run_id": "9e86d1393e442647bb324620ecf172fed15bf92a5e60fa62c6a45eb9ef0dafe0",
+  "status": "passed"
+}

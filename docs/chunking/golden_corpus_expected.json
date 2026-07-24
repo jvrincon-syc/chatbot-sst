@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "document_id": "golden_manual_headings",
+      "expected": {
+        "parent_count": 3,
+        "child_count_min": 2,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false
+      }
+    },
+    {
+      "document_id": "golden_reglamento_articulos",
+      "expected": {
+        "parent_count": 4,
+        "child_count_min": 3,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false
+      }
+    },
+    {
+      "document_id": "golden_sin_headings",
+      "expected": {
+        "parent_count": 1,
+        "child_count_min": 1,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false
+      }
+    },
+    {
+      "document_id": "golden_mixto_ruido",
+      "expected": {
+        "parent_count": 3,
+        "child_count_min": 2,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false
+      }
+    },
+    {
+      "document_id": "golden_procedimiento_largo",
+      "expected": {
+        "parent_count": 2,
+        "child_count_min": 2,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false
+      }
+    },
+    {
+      "document_id": "golden_formulario",
+      "expected": {
+        "parent_count": 1,
+        "child_count_min": 1,
+        "tables_present": false,
+        "forms_present": true,
+        "ocr_present": false,
+        "any_parent_cross_page": false,
+        "required_zero_overlap_reasons": [
+          "table_or_form_boundary"
+        ]
+      }
+    },
+    {
+      "document_id": "golden_tabla_extensa",
+      "expected": {
+        "parent_count": 1,
+        "child_count_min": 1,
+        "tables_present": true,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false,
+        "required_zero_overlap_reasons": [
+          "table_or_form_boundary"
+        ]
+      }
+    },
+    {
+      "document_id": "golden_ocr_imperfecto",
+      "expected": {
+        "parent_count": 1,
+        "child_count_min": 1,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": true,
+        "any_parent_cross_page": false
+      }
+    },
+    {
+      "document_id": "golden_seccion_multiplagina",
+      "expected": {
+        "parent_count": 1,
+        "child_count_min": 1,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": true
+      }
+    },
+    {
+      "document_id": "golden_literal_critico",
+      "expected": {
+        "parent_count": 1,
+        "child_count_min": 1,
+        "tables_present": false,
+        "forms_present": false,
+        "ocr_present": false,
+        "any_parent_cross_page": false,
+        "literal_substrings": [
+          "PRO-SST-777",
+          "95%",
+          "2026-07-24"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+# Review package: fb09f5ed51e8c7bb70895aad8f9af843b1b4636c..WORKTREE
+
+## Files changed
+ .../test_parent_child_relationships.py             | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ docs/chunking/decision-log.md | new file
+
+## Diff
+diff --git a/app/back/tests/indexing/node_parsers/test_parent_child_relationships.py b/app/back/tests/indexing/node_parsers/test_parent_child_relationships.py
+index de11526..62bf56b 100644
+--- a/app/back/tests/indexing/node_parsers/test_parent_child_relationships.py
++++ b/app/back/tests/indexing/node_parsers/test_parent_child_relationships.py
+@@ -52,10 +52,37 @@ def test_structure_aware_parser_creates_deterministic_parent_child_nodes() -> No
+ def test_structure_aware_parser_sets_parent_relationship_on_every_child() -> None:
+     nodes = StructureAwareNodeParser(max_child_chars=32).parse(_document())
+     child_nodes = [node for node in nodes if node.metadata["node_role"] == "child"]
+ 
+     assert child_nodes
+     for node in child_nodes:
+         parent = node.relationships[NodeRelationship.PARENT]
+         assert parent.node_id == node.metadata["parent_node_id"]
+         assert node.metadata["page_number"] in {1, 2}
+         assert node.metadata["ref_doc_id"] == "doc_abc"
++
++
++def test_structure_aware_parser_creates_one_parent_per_catalog_page() -> None:
++    document = _document()
++    nodes = StructureAwareNodeParser(max_child_chars=32).parse(document)
++
++    parent_nodes = [node for node in nodes if node.metadata["node_role"] == "parent"]
++
++    assert len(parent_nodes) == len(document.metadata["page_catalog"])
++    for parent, page in zip(parent_nodes, document.metadata["page_catalog"]):
++        char_start = page["char_start"]
++        char_end = page["char_end"]
++        assert parent.metadata["page_number"] == page["page_number"]
++        assert parent.metadata["char_start"] == char_start
++        assert parent.metadata["char_end"] == char_end
++        assert parent.text == document.text[char_start:char_end].strip()
++        assert parent.metadata["parent_node_id"] is None
++
++
++def test_structure_aware_parser_does_not_overlap_consecutive_child_chunks() -> None:
++    nodes = StructureAwareNodeParser(max_child_chars=32).parse(_document())
++    child_nodes = [node for node in nodes if node.metadata["node_role"] == "child"]
++
++    assert all("overlap" not in node.metadata for node in child_nodes)
++    for previous, current in zip(child_nodes, child_nodes[1:]):
++        if previous.metadata["parent_node_id"] == current.metadata["parent_node_id"]:
++            assert current.metadata["char_start"] >= previous.metadata["char_end"]
+
+diff --git a/docs/chunking/decision-log.md b/docs/chunking/decision-log.md
+new file mode 100644
+--- /dev/null
++++ b/docs/chunking/decision-log.md
+@@
+# Decision Log: Local Chunking Refactor
+
+## 2026-07-23 - Task 0 baseline on `llamaparse_experiment`
+
+### Scope
+
+- Plan source: `memory/plan-chunking-local-ajustado.md`
+- Working branch: `llamaparse_experiment`
+- Workspace mode: direct edits on the current branch and workspace by user request
+
+### Confirmed current implementation
+
+- The active parser is [`app/back/src/indexing/infrastructure/llama_index/node_parsers/structure_aware.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/node_parsers/structure_aware.py).
+- The current algorithm iterates over `document.metadata["page_catalog"]`, creates one parent node per page, and then creates child nodes by splitting parent text with `max_child_chars`.
+- There is no explicit overlap policy or overlap metadata between consecutive child nodes in the active implementation.
+- [`app/back/src/indexing/infrastructure/llama_index/pipeline_factory.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/pipeline_factory.py) composes `NormalizedDocumentFactory -> StructureAwareNodeParser -> MetadataEnrichmentPipeline` inside `LlamaIndexingPort`.
+- [`app/back/src/indexing/infrastructure/llama_index/document_factory.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/document_factory.py) adapts normalized bundles into a LlamaIndex `Document` and builds the current `page_catalog`.
+- [`app/back/src/indexing/infrastructure/llama_index/node_parsers/element_adapter.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/node_parsers/element_adapter.py) is a facade over the same parser, so it must keep delegating to the transformed implementation instead of preserving a divergent algorithm.
+
+### Confirmed current consumers
+
+- Direct production consumers found with `rg`:
+  - `app/back/src/indexing/infrastructure/llama_index/pipeline_factory.py`
+  - `app/back/src/indexing/infrastructure/llama_index/node_parsers/element_adapter.py`
+- Direct test coverage found with `rg`:
+  - `app/back/tests/indexing/node_parsers/test_parent_child_relationships.py`
+  - `app/back/tests/indexing/infrastructure/test_ingestion_pipeline.py`
+  - `app/back/tests/indexing/infrastructure/test_document_factory.py`
+
+### HTTP composition status on this branch
+
+- No `FastAPI` app or `APIRouter` composition point exists today under `app/back/src`.
+- The only current HTTP server found in backend code is [`app/back/src/ingestion/gui/server.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/ingestion/gui/server.py), which uses `ThreadingHTTPServer` for the ingestion GUI.
+- Consequence: Task 7 cannot "plug into" an existing FastAPI composition point on this branch as written. We must first define the backend HTTP composition point without weakening the plan's requirement for thin API routes.
+
+### Tokenizer decision for the refactor
+
+- `tiktoken` is already available in the environment as version `0.13.0`.
+- Decision: use a canonical tokenizer backed by `tiktoken` and version it explicitly in the chunking module instead of introducing a new dependency or any Torch-backed requirement.
+- Rationale:
+  - already installed in this branch environment;
+  - deterministic and local;
+  - no additional cloud dependency;
+  - satisfies the plan restriction against adding Torch as a chunking requirement.
+
+### Baseline verification captured before refactor
+
+- Relevant indexing baseline executed successfully:
+  - `.\.venv_windows_trabajo\Scripts\python.exe -m pytest app/back/tests/indexing/node_parsers/test_parent_child_relationships.py app/back/tests/indexing/infrastructure/test_document_factory.py app/back/tests/indexing/infrastructure/test_ingestion_pipeline.py -q --basetemp .\pytest-basetemp-indexing-focus`
+  - Result: `10 passed` in the current workspace.
+- Broader suite caveats recorded before refactor:
+  - `app/back/tests/indexing -q` and `app/back/tests/ingestion -q` were initially blocked by `PermissionError` on `C:\Users\jvrincon\AppData\Local\Temp\pytest-of-jvrincon`.
+  - A rerun with workspace-local `--basetemp` improved visibility, but `pytest` cleanup and some tmp-path-dependent ingestion tests still surfaced environment-level permission failures.
+  - These environmental failures must not be attributed to the chunking refactor unless reproduced in focused chunking tests.
+
+### Branch-vs-plan differences recorded before implementation
+
+- The plan assumes a FastAPI composition point that does not yet exist on this branch.
+- The parser integration point is confirmed and singular in indexing, which supports the requested strategy of transforming existing chunking code rather than layering a second active pipeline on top of it.
+- The current node contracts are still page-oriented (`page_number`, `char_start`, `char_end`, `parent_node_id`), so the refactor must preserve compatibility while migrating the active algorithm toward semantic parent-child chunking.

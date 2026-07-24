@@ -1,64 +1,82 @@
 from __future__ import annotations
 
+from chunking.domain.enums import ZeroOverlapReason
+from chunking.domain.models import (
+    ChunkBundle,
+    ChunkingProfile,
+    ChildChunk,
+    ParentChunk,
+    SourceSpan,
+)
 import pytest
 
-from ingestion.schemas.artifacts import MetadataArtifact, PageRecord, PagesArtifact
 from indexing.domain.models import (
     IndexableDocument,
     IndexingProfile,
     NormalizedArtifactRefs,
 )
+from indexing.domain.profiles import ResolvedIndexingProfile
 from indexing.infrastructure.llama_index.docstore import InMemoryDocStore
+from indexing.infrastructure.llama_index.pipeline_factory import (
+    LoadedChunkBundle,
+    LlamaIndexingPort,
+)
 from indexing.infrastructure.llama_index.pgvector_store import (
     InMemoryVectorStore,
     VectorStoreWriteError,
 )
-from indexing.infrastructure.llama_index.pipeline_factory import (
-    LlamaIndexingPort,
-    NormalizedBundleArtifacts,
-)
-from indexing.domain.profiles import ResolvedIndexingProfile
 
 
 class StaticBundleLoader:
-    def load(self, document: IndexableDocument) -> NormalizedBundleArtifacts:
-        classification = type(
-            "ClassificationStub",
-            (),
-            {"document_type": "manual", "topic": "SST", "subtopic": None},
-        )()
-        metadata = MetadataArtifact.model_construct(
-            document_id=document.document_id,
-            document_name="Manual",
-            source_relpath=document.source_relpath,
-            normalized_relpath=document.artifacts.markdown,
-            classification=classification,
-            page_count=1,
-            extraction_method="llamaparse",
-            source_hash=document.source_hash,
+    def load(self, document: IndexableDocument) -> LoadedChunkBundle:
+        return LoadedChunkBundle(
+            bundle=_bundle(document.document_id),
             corpus_version="phase1",
-            pipeline_version="2.0.0",
-            processing_status=document.document_status,
-            review_reasons=[],
-            warnings=[],
+            normalized_relpath=document.artifacts.markdown,
         )
-        pages = PagesArtifact.model_construct(
-            document_id=document.document_id,
-            page_count=1,
-            pages=[
-                PageRecord.model_construct(
-                    page_number=1,
-                    text_normalized="Contenido SST",
-                    blocks=[],
-                )
-            ],
-        )
-        return NormalizedBundleArtifacts(
-            markdown="<!-- page: 1 -->\n\nContenido SST para indexar.",
-            metadata=metadata,
-            pages=pages,
-            processing_fingerprint="fingerprint-1",
-        )
+
+
+def _bundle(document_id: str) -> ChunkBundle:
+    profile = ChunkingProfile.local_structural_v1()
+    text = "Contenido SST para indexar."
+    parent = ParentChunk.create(
+        document_id=document_id,
+        profile_id=profile.profile_id,
+        ordinal=0,
+        text=text,
+        source_span=SourceSpan(
+            page_start=1,
+            page_end=1,
+            char_start=0,
+            char_end=len(text),
+        ),
+        block_ids=("block-1",),
+    )
+    child = ChildChunk.create(
+        document_id=document_id,
+        profile_id=profile.profile_id,
+        parent_id=parent.chunk_id,
+        ordinal=0,
+        text=text,
+        source_span=SourceSpan(
+            page_start=1,
+            page_end=1,
+            char_start=0,
+            char_end=len(text),
+        ),
+        token_start=0,
+        token_end=4,
+        token_count=4,
+        overlap_previous_tokens=0,
+        overlap_next_tokens=0,
+        zero_overlap_reasons=frozenset({ZeroOverlapReason.DOCUMENT_START}),
+    )
+    return ChunkBundle(
+        document_id=document_id,
+        profile=profile,
+        parents=(parent,),
+        children=(child,),
+    )
 
 
 class FailingVectorStore(InMemoryVectorStore):
@@ -79,7 +97,9 @@ class RecordingVectorRepository:
         embeddings,
     ) -> int:
         self.calls.append((document_id, profile.vector_table, len(nodes)))
-        assert all(node.metadata["ingestion_origin"] == profile.ingestion_origin for node in nodes)
+        assert all(
+            node.metadata["ingestion_origin"] == profile.ingestion_origin for node in nodes
+        )
         return 0
 
 
@@ -96,7 +116,14 @@ class RecordingNormalizedDocumentRepository:
     def __init__(self) -> None:
         self.calls: list[tuple[str, str, str]] = []
 
-    def replace_document(self, *, document, ingestion_origin, artifact_fingerprint, corpus_version) -> None:
+    def replace_document(
+        self,
+        *,
+        document,
+        ingestion_origin,
+        artifact_fingerprint,
+        corpus_version,
+    ) -> None:
         self.calls.append((document.document_id, ingestion_origin, corpus_version))
 
 

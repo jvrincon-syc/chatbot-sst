@@ -22,7 +22,7 @@ Fase 1 esta cerrada y promovida desde el 2026-07-20.
 
 ## Comandos
 
-Usa los scripts npm, que seleccionan `.venv_windows_trabajo` en Windows si esta
+Usa los scripts npm, que seleccionan `C:\\venvs\\chatbot-sst` en Windows si esta
 disponible y `.venv` en el resto de entornos.
 
 ```powershell

@@ -31,8 +31,15 @@ npm run setup
 El comando crea `.venv`, instala dependencias Python en modo editable y genera
 `secrets.env` desde `secrets.example.env` si no existe.
 
-En Windows, `npm run python -- ...` prefiere `.venv_windows_trabajo` si existe
+En Windows, `npm run python -- ...` prefiere `C:\\venvs\\chatbot-sst` si existe
 y usa `.venv` como alternativa.
+
+Para abrir una terminal ya activada en PowerShell:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+& 'C:\venvs\chatbot-sst\Scripts\Activate.ps1'
+```
 
 ## Comandos frecuentes
 

@@ -1,0 +1,12 @@
+{
+  "bundle_fingerprint": "chunk-bundle-d1a0238fda712ded356d8f1109d8ba0d5a83cdd8e76f10dc07807547b466b8fc",
+  "child_count": 1,
+  "corpus_version": "phase1-main",
+  "document_id": "doc_221c00facfd6a2e8",
+  "normalized_relpath": "copasst/funciones_copasst.md",
+  "parent_count": 1,
+  "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
+  "profile_id": "local-structural-v1",
+  "source_hash": "7827992a79e49878005f20fb3c03114fd5000478ba99714c7ec52d082c8393f0",
+  "source_relpath": "copasst/funciones_copasst.md"
+}

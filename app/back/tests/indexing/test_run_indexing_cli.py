@@ -1,51 +1,70 @@
 from __future__ import annotations
 
-from ingestion.schemas.artifacts import MetadataArtifact, PageRecord, PagesArtifact
+from chunking.domain.enums import ZeroOverlapReason
+from chunking.domain.models import (
+    ChunkBundle,
+    ChunkingProfile,
+    ChildChunk,
+    ParentChunk,
+    SourceSpan,
+)
 from indexing.domain.models import IndexableDocument
-from indexing.infrastructure.llama_index.pipeline_factory import NormalizedBundleArtifacts
-from scripts.indexing.run_indexing import run_indexing
+from indexing.infrastructure.llama_index.pipeline_factory import LoadedChunkBundle
 from scripts.indexing.run_indexing import finalize_postgres_connection
+from scripts.indexing.run_indexing import run_indexing
 
 
 class StaticBundleLoader:
-    def load(self, document: IndexableDocument) -> NormalizedBundleArtifacts:
-        classification = type(
-            "ClassificationStub",
-            (),
-            {"document_type": "manual", "topic": "SST", "subtopic": None},
-        )()
-        metadata = MetadataArtifact.model_construct(
-            document_id=document.document_id,
-            document_name="Manual SST",
-            source_relpath=document.source_relpath,
-            normalized_relpath=document.artifacts.markdown,
-            classification=classification,
-            page_count=1,
-            extraction_method="llamaparse",
-            source_hash=document.source_hash,
+    def load(self, document: IndexableDocument) -> LoadedChunkBundle:
+        return LoadedChunkBundle(
+            bundle=_bundle(document.document_id),
             corpus_version="phase1",
-            pipeline_version="2.0.0",
-            processing_status=document.document_status,
-            review_reasons=[],
-            warnings=[],
+            normalized_relpath=document.artifacts.markdown,
         )
-        pages = PagesArtifact.model_construct(
-            document_id=document.document_id,
-            page_count=1,
-            pages=[
-                PageRecord.model_construct(
-                    page_number=1,
-                    text_normalized="Contenido SST para indexar",
-                    blocks=[],
-                )
-            ],
-        )
-        return NormalizedBundleArtifacts(
-            markdown="<!-- page: 1 -->\n\nContenido SST para indexar.",
-            metadata=metadata,
-            pages=pages,
-            processing_fingerprint=document.source_hash,
-        )
+
+
+def _bundle(document_id: str) -> ChunkBundle:
+    profile = ChunkingProfile.local_structural_v1()
+    parent = ParentChunk.create(
+        document_id=document_id,
+        profile_id=profile.profile_id,
+        ordinal=0,
+        text="Contenido SST para indexar",
+        source_span=SourceSpan(
+            page_start=1,
+            page_end=1,
+            char_start=0,
+            char_end=28,
+        ),
+        block_ids=("block-1",),
+    )
+    child = ChildChunk.create(
+        document_id=document_id,
+        profile_id=profile.profile_id,
+        parent_id=parent.chunk_id,
+        ordinal=0,
+        text="Contenido SST para indexar",
+        source_span=SourceSpan(
+            page_start=1,
+            page_end=1,
+            char_start=0,
+            char_end=28,
+        ),
+        token_start=0,
+        token_end=4,
+        token_count=4,
+        overlap_previous_tokens=0,
+        overlap_next_tokens=0,
+        overlap_previous_span=None,
+        overlap_next_span=None,
+        zero_overlap_reasons=frozenset({ZeroOverlapReason.DOCUMENT_START}),
+    )
+    return ChunkBundle(
+        document_id=document_id,
+        profile=profile,
+        parents=(parent,),
+        children=(child,),
+    )
 
 
 def test_run_indexing_indexes_approved_documents_with_llamaindex(tmp_path) -> None:

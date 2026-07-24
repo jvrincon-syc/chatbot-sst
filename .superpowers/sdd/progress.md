@@ -1,0 +1,10 @@
+
+Task 0: complete (working tree changes, review clean on updated package)
+Task 1: complete (contracts and invariants approved after review)
+Task 2: complete (review findings closed; manual integration verification passed in workspace temp harness, symlink case skipped by environment)
+Task 3: complete (structural parser implemented, re-reviewed, and focused unit suite passing)
+Task 4: complete (semantic parent builder implemented and focused unit suite passing)
+Task 5: complete (child overlap implemented; canonical token spans and parent sizing re-verified locally after subagent review hit usage limit)
+Task 6: complete (active indexing parser delegates to LocalChunkingEngine; persistence/idempotence verified with focused tests plus manual harness for tmp_path-affected cases)
+Task 7: complete (FastAPI chunking API implemented with typed OpenAPI schemas, uniform error envelope, required idempotency key, and focused API suite passing)
+Task 8: complete (golden corpus validator, real corpus validation, API contract docs, and corpus-discovered list/merge regression fix verified in c:\venvs\chatbot-sst)

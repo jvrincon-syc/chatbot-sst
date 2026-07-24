@@ -1,3 +1,16 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv_windows_trabajo\\Scripts\\python.exe"
+  "python.defaultInterpreterPath": "C:\\venvs\\chatbot-sst\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+  "terminal.integrated.profiles.windows": {
+    "PowerShell (chatbot-sst)": {
+      "source": "PowerShell",
+      "args": [
+        "-NoLogo",
+        "-NoExit",
+        "-Command",
+        "Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned; & 'C:\\venvs\\chatbot-sst\\Scripts\\Activate.ps1'"
+      ]
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell (chatbot-sst)"
 }

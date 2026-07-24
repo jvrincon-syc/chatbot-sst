@@ -162,8 +162,9 @@ def run_indexing(
         indexer_kwargs["ingestion_origin"] = ingestion_origin
         connection = postgres_indexing.connection
     documents = [_indexable_document(record, profile) for record in approved]
+    chunks_root = normalized_root.parent / "chunks"
     indexer = LlamaIndexingPort(
-        bundle_loader=bundle_loader or FilesystemBundleLoader(normalized_root=normalized_root),
+        bundle_loader=bundle_loader or FilesystemBundleLoader(chunks_root=chunks_root),
         **indexer_kwargs,
     )
     succeeded = False

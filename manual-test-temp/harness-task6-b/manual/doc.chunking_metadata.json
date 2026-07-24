@@ -1,0 +1,12 @@
+{
+  "bundle_fingerprint": "chunk-bundle-25a748c3e26b0de78df6957fdc0a76f850eb2305fdba8fed6314c446b944057c",
+  "child_count": 1,
+  "corpus_version": "phase1",
+  "document_id": "doc_orch",
+  "normalized_relpath": "manual/doc.md",
+  "parent_count": 1,
+  "profile_fingerprint": "chunking-profile-4a6f2a1a7861e5ed698a0af23ba250564ed8b9b6d9ecb8847559d7e0e4108c77",
+  "profile_id": "local-structural-v1",
+  "source_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "source_relpath": "manual/doc.pdf"
+}
