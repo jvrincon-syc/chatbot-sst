@@ -1,0 +1,246 @@
+import type {
+  ChunkingChildrenPage,
+  ChunkingErrorEnvelope,
+  ChunkingParentsPage,
+  ChunkingProfile,
+  ChunkingRunDocument,
+  ChunkingRunDocumentsPage,
+  ChunkingRunRequest,
+  ChunkingRunSummary,
+  ChunkingValidation,
+} from "./chunkingTypes.js";
+
+async function readJson<T>(response: Response): Promise<T> {
+  const payload = (await response.json()) as T & ChunkingErrorEnvelope;
+  if (!response.ok) {
+    const message = payload.error?.message ?? `HTTP ${response.status}`;
+    throw new Error(message);
+  }
+  return payload;
+}
+
+function toProfile(payload: Record<string, unknown>): ChunkingProfile {
+  return {
+    profileId: String(payload.profile_id ?? ""),
+    childMinTokens: Number(payload.child_min_tokens ?? 0),
+    childTargetTokens: Number(payload.child_target_tokens ?? 0),
+    childMaxTokens: Number(payload.child_max_tokens ?? 0),
+    overlapRatio: Number(payload.overlap_ratio ?? 0),
+    overlapMinTokens: Number(payload.overlap_min_tokens ?? 0),
+    overlapMaxTokens: Number(payload.overlap_max_tokens ?? 0),
+  };
+}
+
+function toRunSummary(payload: Record<string, unknown>): ChunkingRunSummary {
+  return {
+    runId: String(payload.run_id ?? ""),
+    status: String(payload.status ?? ""),
+    profileId: String(payload.profile_id ?? ""),
+    requestedDocuments: Number(payload.requested_documents ?? 0),
+    completedDocuments: Number(payload.completed_documents ?? 0),
+    warnings: Array.isArray(payload.warnings) ? payload.warnings.map((item) => String(item)) : [],
+    links: {
+      self: String((payload.links as Record<string, unknown> | undefined)?.self ?? ""),
+      documents: String((payload.links as Record<string, unknown> | undefined)?.documents ?? ""),
+      validation: String((payload.links as Record<string, unknown> | undefined)?.validation ?? ""),
+    },
+  };
+}
+
+function toRunDocument(payload: Record<string, unknown>): ChunkingRunDocument {
+  return {
+    documentId: String(payload.document_id ?? ""),
+    status: String(payload.status ?? ""),
+    reused: Boolean(payload.reused),
+    runId: String(payload.run_id ?? ""),
+    normalizedRelpath: String(payload.normalized_relpath ?? ""),
+  };
+}
+
+function toRunDocumentsPage(payload: Record<string, unknown>): ChunkingRunDocumentsPage {
+  return {
+    items: Array.isArray(payload.items)
+      ? payload.items
+          .filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+          .map(toRunDocument)
+      : [],
+    page: Number(payload.page ?? 1),
+    pageSize: Number(payload.page_size ?? 25),
+    totalItems: Number(payload.total_items ?? 0),
+    totalPages: Number(payload.total_pages ?? 0),
+  };
+}
+
+function toPaginationChunk<T>(
+  payload: Record<string, unknown>,
+  mapper: (item: Record<string, unknown>) => T,
+): { items: T[]; page: number; pageSize: number; totalItems: number; totalPages: number } {
+  return {
+    items: Array.isArray(payload.items)
+      ? payload.items
+          .filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+          .map(mapper)
+      : [],
+    page: Number(payload.page ?? 1),
+    pageSize: Number(payload.page_size ?? 25),
+    totalItems: Number(payload.total_items ?? 0),
+    totalPages: Number(payload.total_pages ?? 0),
+  };
+}
+
+function toSourceSpan(payload: Record<string, unknown>) {
+  return {
+    pageStart: payload.page_start === null ? null : Number(payload.page_start ?? 0),
+    pageEnd: payload.page_end === null ? null : Number(payload.page_end ?? 0),
+    charStart: Number(payload.char_start ?? 0),
+    charEnd: Number(payload.char_end ?? 0),
+  };
+}
+
+function toParent(payload: Record<string, unknown>) {
+  return {
+    chunkId: String(payload.chunk_id ?? ""),
+    documentId: String(payload.document_id ?? ""),
+    profileId: String(payload.profile_id ?? ""),
+    ordinal: Number(payload.ordinal ?? 0),
+    text: String(payload.text ?? ""),
+    sourceSpan: toSourceSpan((payload.source_span as Record<string, unknown>) ?? {}),
+    blockIds: Array.isArray(payload.block_ids) ? payload.block_ids.map((item) => String(item)) : [],
+  };
+}
+
+function toChild(payload: Record<string, unknown>) {
+  const overlapPreviousSpan = payload.overlap_previous_span;
+  const overlapNextSpan = payload.overlap_next_span;
+  return {
+    chunkId: String(payload.chunk_id ?? ""),
+    documentId: String(payload.document_id ?? ""),
+    profileId: String(payload.profile_id ?? ""),
+    parentId: String(payload.parent_id ?? ""),
+    ordinal: Number(payload.ordinal ?? 0),
+    contextPrefix: String(payload.context_prefix ?? ""),
+    text: String(payload.text ?? ""),
+    sourceSpan: toSourceSpan((payload.source_span as Record<string, unknown>) ?? {}),
+    tokenStart: Number(payload.token_start ?? 0),
+    tokenEnd: Number(payload.token_end ?? 0),
+    tokenCount: Number(payload.token_count ?? 0),
+    overlapPreviousTokens: Number(payload.overlap_previous_tokens ?? 0),
+    overlapNextTokens: Number(payload.overlap_next_tokens ?? 0),
+    overlapPreviousSpan:
+      overlapPreviousSpan && typeof overlapPreviousSpan === "object"
+        ? {
+            tokenStart: Number((overlapPreviousSpan as Record<string, unknown>).token_start ?? 0),
+            tokenEnd: Number((overlapPreviousSpan as Record<string, unknown>).token_end ?? 0),
+          }
+        : null,
+    overlapNextSpan:
+      overlapNextSpan && typeof overlapNextSpan === "object"
+        ? {
+            tokenStart: Number((overlapNextSpan as Record<string, unknown>).token_start ?? 0),
+            tokenEnd: Number((overlapNextSpan as Record<string, unknown>).token_end ?? 0),
+          }
+        : null,
+    zeroOverlapReasons: Array.isArray(payload.zero_overlap_reasons)
+      ? payload.zero_overlap_reasons.map((item) => String(item))
+      : [],
+    warnings: Array.isArray(payload.warnings) ? payload.warnings.map((item) => String(item)) : [],
+  };
+}
+
+function toValidation(payload: Record<string, unknown>): ChunkingValidation {
+  return {
+    runId: String(payload.run_id ?? ""),
+    status: String(payload.status ?? ""),
+    documentsChecked: Number(payload.documents_checked ?? 0),
+    errors: Number(payload.errors ?? 0),
+    warnings: Number(payload.warnings ?? 0),
+    checks: Array.isArray(payload.checks)
+      ? payload.checks.filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+      : [],
+  };
+}
+
+export async function loadChunkingProfiles(): Promise<ChunkingProfile[]> {
+  const response = await fetch("/api/chunking/profiles");
+  const payload = await readJson<unknown[]>(response);
+  return payload
+    .filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+    .map(toProfile);
+}
+
+export async function createChunkingRun(options: {
+  request: ChunkingRunRequest;
+  idempotencyKey: string;
+}): Promise<ChunkingRunSummary> {
+  const response = await fetch("/api/chunking/runs", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Idempotency-Key": options.idempotencyKey,
+    },
+    body: JSON.stringify({
+      scope: options.request.scope,
+      document_ids: options.request.documentIds,
+      profile_id: options.request.profileId,
+      force: options.request.force,
+    }),
+  });
+  return toRunSummary((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
+}
+
+export async function loadChunkingRun(runId: string): Promise<ChunkingRunSummary> {
+  const response = await fetch(`/api/chunking/runs/${encodeURIComponent(runId)}`);
+  return toRunSummary((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
+}
+
+export async function loadChunkingRunDocuments(options: {
+  runId: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<ChunkingRunDocumentsPage> {
+  const params = new URLSearchParams();
+  if (options.page) params.set("page", String(options.page));
+  if (options.pageSize) params.set("page_size", String(options.pageSize));
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  const response = await fetch(
+    `/api/chunking/runs/${encodeURIComponent(options.runId)}/documents${suffix}`,
+  );
+  return toRunDocumentsPage((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
+}
+
+export async function loadChunkingValidation(runId: string): Promise<ChunkingValidation> {
+  const response = await fetch(`/api/chunking/runs/${encodeURIComponent(runId)}/validation`);
+  return toValidation((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
+}
+
+export async function loadChunkingParents(options: {
+  documentId: string;
+  runId?: string | null;
+  page?: number;
+  pageSize?: number;
+}): Promise<ChunkingParentsPage> {
+  const params = new URLSearchParams();
+  if (options.runId) params.set("run_id", options.runId);
+  if (options.page) params.set("page", String(options.page));
+  if (options.pageSize) params.set("page_size", String(options.pageSize));
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  const response = await fetch(
+    `/api/chunking/documents/${encodeURIComponent(options.documentId)}/parents${suffix}`,
+  );
+  return toPaginationChunk((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>, toParent);
+}
+
+export async function loadChunkingChildren(options: {
+  parentId: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<ChunkingChildrenPage> {
+  const params = new URLSearchParams();
+  if (options.page) params.set("page", String(options.page));
+  if (options.pageSize) params.set("page_size", String(options.pageSize));
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  const response = await fetch(
+    `/api/chunking/parents/${encodeURIComponent(options.parentId)}/children${suffix}`,
+  );
+  return toPaginationChunk((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>, toChild);
+}

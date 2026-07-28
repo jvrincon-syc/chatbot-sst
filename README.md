@@ -8,11 +8,27 @@ indexacion/RAG con trazabilidad verificable.
 - Indice corto: `docs/README.md`.
 - Ingesta local y Schema 2.0: `docs/ingestion/README.md`.
 - Via Llama-first experimental: `docs/llama_first/README.md`.
+- Chunking local y contrato HTTP: `docs/chunking/`.
 - Decisiones vigentes: `docs/adr/`.
 - Runbooks operativos: `docs/runbooks/`.
+- Reglas transversales: `docs/rules/`.
 
-`data/`, `memory/`, `.tmp/`, `.venv*` y `node_modules/` no son contexto
-documental normal. Abrirlos solo cuando una tarea lo pida.
+`data/`, `memory/`, `.tmp/`, `.venv*`, `node_modules/`, `manual-test-temp/`
+y `pytest-*` no son contexto documental normal. Abrirlos solo cuando una tarea
+lo pida.
+
+## Guia de uso
+
+Este repo separa el trabajo en tres capas:
+
+- Ingesta local: normaliza documentos y conserva trazabilidad por pagina.
+- Chunking e indexacion: consumen bundles ya aprobados y mantienen contratos
+  auditables.
+- Llama-first: experimento controlado con fallback y reglas de autorizacion.
+
+Si buscas el estado actual de una corrida, no confies en cifras escritas a mano
+en este README. Usa los comandos de inventario y validacion del area
+correspondiente.
 
 ## Requisitos
 
@@ -70,11 +86,13 @@ La API se ejecuta con `npm run gui:api` y el frontend con
 La GUI cubre inventario, revision humana, subida de `.pdf`/`.md`, ejecucion
 local o Llama Cloud en staging, controles de Classify/Extract y validacion.
 
-## Estado vigente
+## Estado del proyecto
 
-Fase 1 local esta cerrada y promovida como Schema 2.0: 55 documentos, 9 PDF,
-77 paginas PDF, 41 `processed`, 14 `needs_review`, 0 `failed`.
+La Fase 1 local ya opera como Schema 2.0. Los conteos exactos, run IDs y
+resumenes de validacion cambian con el corpus y deben consultarse en la salida
+de `npm run ingestion:inventory` y `npm run ingestion:validate`, no en texto
+fijo del README.
 
-Las fases de chunking, indexacion y RAG deben indexar solo documentos
-aprobados o manejar `needs_review` explicitamente. Llama-first sigue detras de
-configuracion y autorizacion de datos.
+Chunking, indexacion y RAG deben indexar solo documentos aprobados o manejar
+`needs_review` explicitamente. Llama-first sigue detras de configuracion y
+autorizacion de datos.

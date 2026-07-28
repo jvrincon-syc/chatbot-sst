@@ -3,8 +3,8 @@
 ## Canonical Profile
 
 `local-structural-v1` is the local structural chunking profile. It uses a
-canonical tokenizer selected in the [decision log](decision-log.md), though the
-tokenizer implementation is deliberately outside this contract task.
+canonical tokenizer selected by the chunking implementation; this policy only
+defines observable behavior and does not own the tokenizer internals.
 
 | Setting | Value |
 | --- | ---: |

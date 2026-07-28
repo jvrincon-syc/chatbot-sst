@@ -109,6 +109,22 @@ class PaginatedItemsSchema(StrictModel):
     total_pages: int = Field(ge=0)
 
 
+class PaginatedParentChunksSchema(StrictModel):
+    items: list[ParentChunkSchema]
+    page: int = Field(ge=1)
+    page_size: int = Field(ge=1, le=100)
+    total_items: int = Field(ge=0)
+    total_pages: int = Field(ge=0)
+
+
+class PaginatedChildChunksSchema(StrictModel):
+    items: list[ChildChunkSchema]
+    page: int = Field(ge=1)
+    page_size: int = Field(ge=1, le=100)
+    total_items: int = Field(ge=0)
+    total_pages: int = Field(ge=0)
+
+
 class ErrorBodySchema(StrictModel):
     code: str
     message: str

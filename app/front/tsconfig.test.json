@@ -13,6 +13,11 @@
     "src/llamaRoutes.ts",
     "src/pipelineRequest.ts",
     "src/documentReview.ts",
-    "src/ocrSettings.ts"
+    "src/ocrSettings.ts",
+    "src/features/dashboard/dashboardTypes.ts",
+    "src/features/dashboard/dashboardPersistence.ts",
+    "src/features/chunking/chunkingTypes.ts",
+    "src/features/chunking/chunkingState.ts",
+    "src/features/chunking/chunkingApi.ts"
   ]
 }

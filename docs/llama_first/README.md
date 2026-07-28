@@ -81,18 +81,21 @@ otro perfil pgvector y reindexar el corpus correspondiente.
 - Classify usa `FAST`.
 - Extract usa `cost_effective`, `parse_tier=fast` y limites de paginas.
 
-## Verificacion reciente
+## Verificacion
 
-- Backend: `npm run python -- -m pytest app/back/tests` -> 319 passed,
-  3 skipped.
-- Frontend build: passed.
-- Schemas: 10 exportados.
-- Ingesta validation: passed.
-- Indexacion: 55 candidatos, 41 aprobados, 41 parent nodes, 95 child nodes.
-- Evaluacion Llama-first: baseline listo con 2 documentos y 2 preguntas.
-- Smoke sintetico no sensible: Parse `pjb-g05y0jzu8law2xy820haloreyu5e`,
-  Classify `clj-gez9e4ucpa1pdcl3c6vv06fd9pes`, Extract
-  `ext-zzz5se6fsmx5d2qlqs6wcm7n9dfs`.
+La verificacion viva depende del corpus y del entorno, asi que este README no
+fija cifras de cobertura, IDs de jobs ni totales de documentos. Para confirmar
+el estado actual usa:
+
+```powershell
+npm run test:indexing
+npm run ingestion:validate
+npm run indexing:run -- --dry-run
+npm --prefix app/front run build
+```
+
+Si una verificacion requiere datos live o credenciales, debe quedar marcada en
+el runbook correspondiente antes de considerarla parte del estado vigente.
 
 ## Referencias
 

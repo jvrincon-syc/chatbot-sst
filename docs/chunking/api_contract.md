@@ -43,8 +43,8 @@ exista, se expone en `context_prefix`.
 | `GET /api/chunking/runs/{run_id}` | Estado, progreso, advertencias y enlaces de inspeccion. |
 | `GET /api/chunking/runs/{run_id}/documents` | Resultado por documento, paginado. |
 | `GET /api/chunking/runs/{run_id}/validation` | Resumen de la validacion de la corrida. |
-| `GET /api/chunking/documents/{document_id}/parents` | Parents del documento. |
-| `GET /api/chunking/parents/{parent_id}/children` | Children ordenados de un parent. |
+| `GET /api/chunking/documents/{document_id}/parents` | Parents del documento con paginacion. |
+| `GET /api/chunking/parents/{parent_id}/children` | Children ordenados de un parent con paginacion. |
 
 ### Crear corrida
 
@@ -98,6 +98,11 @@ por conteos. `GET /runs/{run_id}/documents` devuelve:
 `GET /runs/{run_id}/validation` informa `documents_checked`, `errors`,
 `warnings` y `checks`.
 
+`GET /documents/{document_id}/parents` y `GET /parents/{parent_id}/children`
+aceptan `page` y `page_size` con el mismo rango HTTP que el listado por corrida
+(`page_size` entre 1 y 100). Ambas respuestas devuelven `items`, `page`,
+`page_size`, `total_items` y `total_pages`.
+
 Cada parent expone `chunk_id`, `document_id`, `profile_id`, `ordinal`, `text`,
 `source_span` y `block_ids`. Cada child anade `parent_id`, `context_prefix`,
 rangos y conteos de tokens, spans de overlap anterior y siguiente,
@@ -118,14 +123,12 @@ consultar `GET /runs/{run_id}` en vez de esperar el resultado de `POST`.
 
 ## Paginacion y limites
 
-Solo el listado por corrida esta paginado: `page` tiene minimo `1`; `page_size`
-tiene valor por defecto `25`, minimo `1` y maximo `100`. La respuesta informa
-`total_items` y `total_pages`.
+`page` tiene minimo `1`; `page_size` tiene valor por defecto `25`, minimo `1`
+y maximo `100`. Las respuestas paginadas informan `total_items` y
+`total_pages`.
 
-Los endpoints de parents y children devuelven listas completas: actualmente no
-aceptan parametros de paginacion ni imponen un limite HTTP especifico de tamano
-de respuesta. El request tampoco declara un maximo de IDs por corrida. Estos no
-son limites garantizados por el contrato actual.
+El request tampoco declara un maximo de IDs por corrida. Ese no es un limite
+garantizado por el contrato actual.
 
 ## Envelope de error uniforme
 
@@ -163,12 +166,6 @@ controladas.
 
 ## Diferencias relevantes frente al plan y DoD
 
-- El DoD indica que los listados deben estar paginados. Solo
-  `/runs/{run_id}/documents` lo esta; parents y children no tienen paginacion ni
-  limite de respuesta.
-- El estado se escribe como manifest antes de procesar, pero las consultas e
-  indices de idempotencia viven en memoria. Tras reiniciar la aplicacion, el
-  manifest no se recarga para `GET /runs/{run_id}` ni para reutilizar claves.
 - La ruta `GET /documents/{document_id}/parents?run_id=...` valida que el
   `run_id` exista, pero no usa ese ID para seleccionar un resultado de esa
   corrida; lee el bundle asociado al documento.

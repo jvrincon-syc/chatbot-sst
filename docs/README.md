@@ -9,6 +9,7 @@ afectada. No cargues `data/`, `memory/`, `.tmp/`, `.venv*` ni
 - `ingestion/README.md`: ingesta local, Schema 2.0, gates y consumo downstream.
 - `llama_first/README.md`: via experimental Llama Cloud/LlamaIndex, flags y
   bloqueos.
+- `chunking/`: contrato del chunking local y su API HTTP.
 - `adr/`: decisiones de arquitectura vigentes.
 - `runbooks/`: acciones operativas breves.
 - `rules/`: politicas obligatorias; leerlas cuando el cambio toque calidad,
@@ -21,7 +22,8 @@ afectada. No cargues `data/`, `memory/`, `.tmp/`, `.venv*` ni
   `constraints/llama-first.txt`, `secrets.example.env`.
 - AGENTS: `AGENTS.md`, `app/back/AGENTS_back.md`,
   `app/front/AGENTS_front.md`.
-- Salidas generadas o sensibles: `data/` y `secrets.env`.
+- Salidas generadas o sensibles: `data/`, `secrets.env`, `manual-test-temp/`
+  y cualquier `pytest-*` temporal.
 - Planes historicos: `memory/`.
 
 ## Poda

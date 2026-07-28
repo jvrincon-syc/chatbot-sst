@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "test": "tsc -p tsconfig.test.json && node src/llamaRoutes.test.mjs && node src/pipelineRequest.test.mjs && node src/documentReview.test.mjs && node src/ocrSettings.test.mjs && node -e \"require('fs').rmSync('.tmp-tests', { recursive: true, force: true })\"",
+    "test": "tsc -p tsconfig.test.json && node src/llamaRoutes.test.mjs && node src/pipelineRequest.test.mjs && node src/documentReview.test.mjs && node src/ocrSettings.test.mjs && node src/dashboardPersistence.test.mjs && node src/features/chunking/chunkingState.test.mjs && node src/features/chunking/chunkingApi.test.mjs && node -e \"require('fs').rmSync('.tmp-tests', { recursive: true, force: true })\"",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1"
   },

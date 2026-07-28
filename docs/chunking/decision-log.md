@@ -10,12 +10,22 @@
 
 ### Confirmed current implementation
 
-- The active parser is [`app/back/src/indexing/infrastructure/llama_index/node_parsers/structure_aware.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/node_parsers/structure_aware.py).
-- The current algorithm iterates over `document.metadata["page_catalog"]`, creates one parent node per page, and then creates child nodes by splitting parent text with `max_child_chars`.
-- There is no explicit overlap policy or overlap metadata between consecutive child nodes in the active implementation.
-- [`app/back/src/indexing/infrastructure/llama_index/pipeline_factory.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/pipeline_factory.py) composes `NormalizedDocumentFactory -> StructureAwareNodeParser -> MetadataEnrichmentPipeline` inside `LlamaIndexingPort`.
-- [`app/back/src/indexing/infrastructure/llama_index/document_factory.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/document_factory.py) adapts normalized bundles into a LlamaIndex `Document` and builds the current `page_catalog`.
-- [`app/back/src/indexing/infrastructure/llama_index/node_parsers/element_adapter.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/indexing/infrastructure/llama_index/node_parsers/element_adapter.py) is a facade over the same parser, so it must keep delegating to the transformed implementation instead of preserving a divergent algorithm.
+- The active parser is
+  [`structure_aware.py`](../../app/back/src/indexing/infrastructure/llama_index/node_parsers/structure_aware.py).
+- The current algorithm iterates over `document.metadata["page_catalog"]`,
+  creates one parent node per page, and then creates child nodes by splitting
+  parent text with `max_child_chars`.
+- There is no explicit overlap policy or overlap metadata between consecutive
+  child nodes in the active implementation.
+- [`pipeline_factory.py`](../../app/back/src/indexing/infrastructure/llama_index/pipeline_factory.py)
+  composes `NormalizedDocumentFactory -> StructureAwareNodeParser ->
+  MetadataEnrichmentPipeline` inside `LlamaIndexingPort`.
+- [`document_factory.py`](../../app/back/src/indexing/infrastructure/llama_index/document_factory.py)
+  adapts normalized bundles into a LlamaIndex `Document` and builds the current
+  `page_catalog`.
+- [`element_adapter.py`](../../app/back/src/indexing/infrastructure/llama_index/node_parsers/element_adapter.py)
+  is a facade over the same parser, so it must keep delegating to the
+  transformed implementation instead of preserving a divergent algorithm.
 
 ### Confirmed current consumers
 
@@ -29,9 +39,14 @@
 
 ### HTTP composition status on this branch
 
-- No `FastAPI` app or `APIRouter` composition point exists today under `app/back/src`.
-- The only current HTTP server found in backend code is [`app/back/src/ingestion/gui/server.py`](/C:/Users/jvrincon/Documents/chatbot_sst/chatbot-sst/app/back/src/ingestion/gui/server.py), which uses `ThreadingHTTPServer` for the ingestion GUI.
-- Consequence: Task 7 cannot "plug into" an existing FastAPI composition point on this branch as written. We must first define the backend HTTP composition point without weakening the plan's requirement for thin API routes.
+- No `FastAPI` app or `APIRouter` composition point exists today under
+  `app/back/src`.
+- The only current HTTP server found in backend code is
+  [`server.py`](../../app/back/src/ingestion/gui/server.py), which uses
+  `ThreadingHTTPServer` for the ingestion GUI.
+- Consequence: Task 7 cannot "plug into" an existing FastAPI composition point
+  on this branch as written. We must first define the backend HTTP composition
+  point without weakening the plan's requirement for thin API routes.
 
 ### Tokenizer decision for the refactor
 
@@ -45,13 +60,16 @@
 
 ### Baseline verification captured before refactor
 
-- Relevant indexing baseline executed successfully en una corrida historica previa a fijar el workspace a `C:\venvs\chatbot-sst`:
-  - `.\.venv_windows_trabajo\Scripts\python.exe -m pytest app/back/tests/indexing/node_parsers/test_parent_child_relationships.py app/back/tests/indexing/infrastructure/test_document_factory.py app/back/tests/indexing/infrastructure/test_ingestion_pipeline.py -q --basetemp .\pytest-basetemp-indexing-focus`
-  - Result: `10 passed` in the current workspace.
+- The focused indexing baseline passed before the refactor using a
+  workspace-local pytest basetemp to avoid Windows temp permission issues.
 - Broader suite caveats recorded before refactor:
-  - `app/back/tests/indexing -q` and `app/back/tests/ingestion -q` were initially blocked by `PermissionError` on `C:\Users\jvrincon\AppData\Local\Temp\pytest-of-jvrincon`.
-  - A rerun with workspace-local `--basetemp` improved visibility, but `pytest` cleanup and some tmp-path-dependent ingestion tests still surfaced environment-level permission failures.
-  - These environmental failures must not be attributed to the chunking refactor unless reproduced in focused chunking tests.
+  - `app/back/tests/indexing -q` and `app/back/tests/ingestion -q` were
+    initially blocked by `PermissionError` on the user temp directory.
+  - A rerun with workspace-local `--basetemp` improved visibility, but pytest
+    cleanup and some tmp-path-dependent ingestion tests still surfaced
+    environment-level permission failures.
+  - These environmental failures must not be attributed to the chunking
+    refactor unless reproduced in focused chunking tests.
 
 ### Branch-vs-plan differences recorded before implementation
 
@@ -94,3 +112,12 @@
   - removing list-driven forced atomic fallback for oversized parents;
   - preventing the final undersized-tail merge when it would exceed the unique-token maximum.
 - A new regression test now covers long list parents to ensure all emitted children stay within `child_max_tokens`.
+
+## 2026-07-28 - Task 9 operational closure
+
+### Implemented decisions
+
+- `ChunkingRunService` now rehydrates persisted `*.api-run.json` manifests on startup, so previously queued or running chunking runs come back as `interrupted` instead of disappearing after a restart.
+- Persisted run manifests now carry the original `idempotency_key` and `payload_fingerprint`, which lets the service rebuild the idempotency index after a restart.
+- `GET /api/chunking/documents/{document_id}/parents` and `GET /api/chunking/parents/{parent_id}/children` now expose paginated responses with `page`, `page_size`, `total_items`, and `total_pages`.
+- Regression tests now cover restart hydration, idempotency conflict detection after reload, and paginated parent/child inspection.

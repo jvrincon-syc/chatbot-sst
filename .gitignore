@@ -163,6 +163,33 @@ venv.bak/
 # Local isolated workspaces
 .worktrees/
 .tmp/
+.superpowers/
+manual-test-temp/
+pytemp/
+.pytest-temp/
+.tmppytest-basetemp-gui-20260723/
+pytest-*/
+pytest_*/
+pytest-of-*/
+zzpytesttmp/
+zzpytesttmp2/
+tmptp46nzc_/
+node-compile-cache/
+logs/
+test-results/
+ocr/
+pdf_audit/
+gui_phase1_*/
+local_pdf_alt_*/
+schema2_candidate_*/
+task6_*/
+task8_*/
+
+# Local scratch space created by pytest and manual experiments
+pytest-fresh-integration-*/
+pytest-basetemp-*/
+pytest-cache-files-*/
+pytest_temp_probe/
 
 # Local planning/context notes
 memory/

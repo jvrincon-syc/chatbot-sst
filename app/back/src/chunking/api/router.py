@@ -6,15 +6,15 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 
 from chunking.api.dependencies import get_run_service
 from chunking.api.schemas import (
-    ChildChunkSchema,
     ChunkingProfileSchema,
     ChunkingRunAcceptedSchema,
+    PaginatedChildChunksSchema,
+    PaginatedParentChunksSchema,
     ChunkingRunStatusSchema,
     ChunkingValidationSchema,
     ChunkingRunRequestSchema,
     ErrorEnvelopeSchema,
     PaginatedItemsSchema,
-    ParentChunkSchema,
 )
 from chunking.application.run_service import (
     ChunkingDocumentNotFoundError,
@@ -154,14 +154,21 @@ def get_validation(run_id: str, service: ChunkingRunService = Depends(get_run_se
         ) from error
 
 
-@router.get("/documents/{document_id}/parents", response_model=list[ParentChunkSchema])
+@router.get("/documents/{document_id}/parents", response_model=PaginatedParentChunksSchema)
 def list_parents(
     document_id: str,
     run_id: str | None = Query(default=None),
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=25, ge=1, le=100),
     service: ChunkingRunService = Depends(get_run_service),
-) -> list[dict]:
+) -> dict:
     try:
-        return service.list_parents(document_id=document_id, run_id=run_id)
+        return service.list_parents(
+            document_id=document_id,
+            run_id=run_id,
+            page=page,
+            page_size=page_size,
+        )
     except ChunkingRunNotFoundError as error:
         raise _http_error(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -177,10 +184,15 @@ def list_parents(
         ) from error
 
 
-@router.get("/parents/{parent_id}/children", response_model=list[ChildChunkSchema])
-def list_children(parent_id: str, service: ChunkingRunService = Depends(get_run_service)) -> list[dict]:
+@router.get("/parents/{parent_id}/children", response_model=PaginatedChildChunksSchema)
+def list_children(
+    parent_id: str,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=25, ge=1, le=100),
+    service: ChunkingRunService = Depends(get_run_service),
+) -> dict:
     try:
-        return service.list_children(parent_id=parent_id)
+        return service.list_children(parent_id=parent_id, page=page, page_size=page_size)
     except ChunkingParentNotFoundError as error:
         raise _http_error(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -392,8 +392,65 @@ def test_get_parents_no_expone_ruta_absoluta() -> None:
     response = client.get("/api/chunking/documents/doc_api_1/parents")
 
     assert response.status_code == 200
-    assert response.json()
-    assert "C:\\" not in json.dumps(response.json())
+    payload = response.json()
+    assert payload["items"]
+    assert "C:\\" not in json.dumps(payload)
+    assert payload["page"] == 1
+    assert payload["page_size"] == 25
+
+
+def test_get_parents_aplica_paginacion() -> None:
+    docs_root, chunks_root = _sandbox("parent-pagination")
+    repeated_sentence = "Frase de control con evidencia y trazabilidad."
+    long_section = " ".join([repeated_sentence for _ in range(50)])
+    _write_document(
+        docs_root,
+        document_id="doc_api_parent",
+        source_relpath="manual/doc_parent.pdf",
+        document_name="Documento con dos secciones",
+        markdown_body=(
+            "# Primera seccion\n\n"
+            f"{long_section}\n\n"
+            "# Segunda seccion\n\n"
+            f"{long_section}\n"
+        ),
+    )
+    _write_inventory(
+        docs_root,
+        [
+            {
+                "document_id": "doc_api_parent",
+                "source_relpath": "manual/doc_parent.pdf",
+                "processing_status": "processed",
+                "source_hash": SOURCE_HASH,
+                "document_name": "Documento con dos secciones",
+            }
+        ],
+    )
+    client = TestClient(create_app(docs_normalized=docs_root, chunks_root=chunks_root))
+    created = client.post(
+        "/api/chunking/runs",
+        headers={"Idempotency-Key": "key-parent-pagination"},
+        json={
+            "scope": "documents",
+            "document_ids": ["doc_api_parent"],
+            "profile_id": "local-structural-v1",
+            "force": False,
+        },
+    ).json()
+    _wait_for_run_completion(client, created["run_id"])
+
+    response = client.get(
+        "/api/chunking/documents/doc_api_parent/parents?page=1&page_size=1",
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["page"] == 1
+    assert payload["page_size"] == 1
+    assert payload["total_items"] >= 2
+    assert payload["total_pages"] >= 2
+    assert len(payload["items"]) == 1
 
 
 def test_get_children_conserva_orden_y_overlap() -> None:
@@ -409,17 +466,23 @@ def test_get_children_conserva_orden_y_overlap() -> None:
         },
     ).json()
     _wait_for_run_completion(client, created["run_id"])
-    parents = client.get("/api/chunking/documents/doc_api_1/parents").json()
+    parents = client.get("/api/chunking/documents/doc_api_1/parents").json()["items"]
     parent_id = parents[0]["chunk_id"]
 
-    response = client.get(f"/api/chunking/parents/{parent_id}/children")
+    response = client.get(f"/api/chunking/parents/{parent_id}/children?page=1&page_size=1")
 
     assert response.status_code == 200
-    children = response.json()
-    assert len(children) > 1
-    assert [child["ordinal"] for child in children] == sorted(child["ordinal"] for child in children)
-    assert children[0]["overlap_previous_tokens"] == 0
-    assert children[1]["overlap_previous_tokens"] > 0
+    first_page = response.json()
+    assert first_page["page"] == 1
+    assert first_page["page_size"] == 1
+    assert first_page["total_pages"] > 1
+    assert first_page["items"][0]["overlap_previous_tokens"] == 0
+
+    second_page = client.get(
+        f"/api/chunking/parents/{parent_id}/children?page=2&page_size=1",
+    ).json()
+    assert second_page["items"][0]["ordinal"] > first_page["items"][0]["ordinal"]
+    assert second_page["items"][0]["overlap_previous_tokens"] > 0
 
 
 def test_openapi_publica_contrato_de_chunking() -> None:

@@ -53,6 +53,8 @@ class ChunkingRunRequest:
 class ChunkingRunState:
     run_id: str
     request: ChunkingRunRequest
+    idempotency_key: str
+    payload_fingerprint: str
     status: str
     requested_documents: int
     completed_documents: int = 0
@@ -84,6 +86,7 @@ class ChunkingRunService:
             max_workers=1,
             thread_name_prefix="chunking-runner",
         )
+        self._hydrate_persisted_runs()
 
     def list_profiles(self) -> list[dict[str, Any]]:
         profile = ChunkingProfile.local_structural_v1()
@@ -142,6 +145,8 @@ class ChunkingRunService:
                     profile_id=request.profile_id,
                     force=request.force,
                 ),
+                idempotency_key=idempotency_key,
+                payload_fingerprint=payload_fingerprint,
                 status="queued",
                 requested_documents=len(document_ids),
             )
@@ -174,6 +179,10 @@ class ChunkingRunService:
         state = self.get_run_state(run_id)
         if state.status not in {"queued", "interrupted"}:
             return
+        if state.status == "interrupted":
+            state.documents.clear()
+            state.completed_documents = 0
+            state.warnings.clear()
         state.status = "running"
         self._persist_run_manifest(state)
         logger.info(
@@ -273,20 +282,34 @@ class ChunkingRunService:
             raise ChunkingRunNotFoundError("chunking run validation does not exist")
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def list_parents(self, *, document_id: str, run_id: str | None = None) -> list[dict[str, Any]]:
+    def list_parents(
+        self,
+        *,
+        document_id: str,
+        run_id: str | None = None,
+        page: int = 1,
+        page_size: int = 25,
+    ) -> dict[str, Any]:
         record = self._inventory_by_document_id().get(document_id)
         if record is None:
             raise ChunkingDocumentNotFoundError("document id does not exist")
         normalized_relpath = ArtifactPaths.for_source(record["source_relpath"]).markdown
         if run_id is not None:
             self.get_run_state(run_id)
-        return self._chunk_repository.read_parents(normalized_relpath=normalized_relpath)
+        parents = self._chunk_repository.read_parents(normalized_relpath=normalized_relpath)
+        return self._paginate(items=parents, page=page, page_size=page_size)
 
-    def list_children(self, *, parent_id: str) -> list[dict[str, Any]]:
+    def list_children(
+        self,
+        *,
+        parent_id: str,
+        page: int = 1,
+        page_size: int = 25,
+    ) -> dict[str, Any]:
         children = self._chunk_repository.find_children_by_parent_id(parent_id=parent_id)
         if not children:
             raise ChunkingParentNotFoundError("parent chunk id does not exist")
-        return children
+        return self._paginate(items=children, page=page, page_size=page_size)
 
     def close(self) -> None:
         self._executor.shutdown(wait=True, cancel_futures=False)
@@ -358,6 +381,84 @@ class ChunkingRunService:
             ).encode("utf-8")
         ).hexdigest()
 
+    def _hydrate_persisted_runs(self) -> None:
+        manifest_root = self._manifest_root()
+        if not manifest_root.exists():
+            return
+        for path in sorted(manifest_root.glob("*.api-run.json")):
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                state = self._state_from_manifest(payload)
+            except Exception:
+                logger.warning(
+                    "chunking_run_manifest_skipped",
+                    extra={"manifest_path": str(path)},
+                    exc_info=True,
+                )
+                continue
+            self._runs[state.run_id] = state
+            self._idempotency_index[state.idempotency_key] = (
+                state.run_id,
+                state.payload_fingerprint,
+            )
+
+    def _state_from_manifest(self, payload: dict[str, Any]) -> ChunkingRunState:
+        request_payload = payload.get("request")
+        if not isinstance(request_payload, dict):
+            raise ValueError("chunking run manifest request is missing")
+        request = ChunkingRunRequest(
+            scope=str(request_payload["scope"]),
+            document_ids=tuple(str(item) for item in request_payload.get("document_ids", [])),
+            profile_id=str(request_payload["profile_id"]),
+            force=bool(request_payload["force"]),
+        )
+        status = str(payload.get("status") or "interrupted")
+        if status in {"queued", "running"}:
+            status = "interrupted"
+        idempotency_key = str(payload.get("idempotency_key") or "")
+        payload_fingerprint = str(payload.get("payload_fingerprint") or "")
+        if not payload_fingerprint:
+            payload_fingerprint = self._payload_fingerprint(
+                scope=request.scope,
+                document_ids=request.document_ids,
+                profile_id=request.profile_id,
+                force=request.force,
+            )
+        if not idempotency_key:
+            idempotency_key = payload_fingerprint
+        documents = payload.get("documents", [])
+        warnings = [str(item) for item in payload.get("warnings", [])]
+        return ChunkingRunState(
+            run_id=str(payload["run_id"]),
+            request=request,
+            idempotency_key=idempotency_key,
+            payload_fingerprint=payload_fingerprint,
+            status=status,
+            requested_documents=int(payload.get("requested_documents") or len(request.document_ids)),
+            completed_documents=int(payload.get("completed_documents") or len(documents)),
+            documents=[dict(document) for document in documents if isinstance(document, dict)],
+            warnings=warnings,
+        )
+
+    def _paginate(
+        self,
+        *,
+        items: list[dict[str, Any]],
+        page: int,
+        page_size: int,
+    ) -> dict[str, Any]:
+        start = (page - 1) * page_size
+        end = start + page_size
+        total_items = len(items)
+        total_pages = (total_items + page_size - 1) // page_size if total_items else 0
+        return {
+            "items": items[start:end],
+            "page": page,
+            "page_size": page_size,
+            "total_items": total_items,
+            "total_pages": total_pages,
+        }
+
     def _persist_run_manifest(self, state: ChunkingRunState) -> None:
         self._manifest_root().mkdir(parents=True, exist_ok=True)
         path = self._manifest_root() / f"{state.run_id}.api-run.json"
@@ -367,6 +468,8 @@ class ChunkingRunService:
                     "run_id": state.run_id,
                     "status": state.status,
                     "request": asdict(state.request),
+                    "idempotency_key": state.idempotency_key,
+                    "payload_fingerprint": state.payload_fingerprint,
                     "requested_documents": state.requested_documents,
                     "completed_documents": state.completed_documents,
                     "documents": state.documents,

@@ -6,19 +6,19 @@ frontend salvo la GUI de control de ingesta.
 
 ## Estado vigente
 
-Fase 1 esta cerrada y promovida desde el 2026-07-20.
+Fase 1 local ya opera como Schema 2.0 y el contrato estable es este:
 
-- Fuentes: 55 documentos en `data/docs_raw` (46 Markdown, 9 PDF).
-- Salida: 55 bundles Schema 2.0 en `data/docs_normalized`.
-- PDF auditados: 9 documentos, 77 paginas materializadas.
-- Estados: 41 `processed`, 14 `needs_review`, 0 `failed`.
-- Gates: validacion estructural y golden semantico aprobados sobre la salida
-  oficial promovida.
-- Evidencia de cierre: `run_id=phase1_main_full_candidate_20260720_r1`,
-  `pipeline_version=2.0.0`,
-  `validation run_id=phase1_official_20260720_guardrail_gate`.
-- Pruebas de cierre: `pip check`, ingestion sin corpus `245 passed,
-  2 deselected`, golden PDF corpus `2 passed`.
+- `data/docs_raw` sigue siendo inmutable.
+- `data/docs_normalized` contiene los bundles promovidos.
+- La clasificacion prioriza el contenido visible, los codigos documentales y
+  las tablas de control por encima de la carpeta de origen.
+- Los contenedores genericos no deben provocar conflictos si la evidencia
+  interna es fuerte.
+- Los documentos `needs_review` siguen trazados pero no se indexan como
+  aprobados sin una decision explicita.
+- Los conteos concretos cambian con el corpus; consulta
+  `npm run ingestion:inventory` y `npm run ingestion:validate` para el estado
+  actual en vez de copiar cifras historicas aqui.
 
 ## Comandos
 

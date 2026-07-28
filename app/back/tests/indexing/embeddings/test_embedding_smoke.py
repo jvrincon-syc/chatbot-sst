@@ -12,7 +12,8 @@ def _bundle() -> NormalizedDocumentBundle:
         "<!-- page: 1 -->\n\n"
         "Alcance\n\n"
         "Este procedimiento define el control local de incidentes SST.\n\n"
-        "Se conserva trazabilidad de cada evidencia."
+        "Se conserva trazabilidad de cada evidencia.\n\n"
+        "Para cada incidente generar un informe"
     )
     return NormalizedDocumentBundle(
         document_id="doc_simple_chunk",
