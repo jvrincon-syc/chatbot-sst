@@ -10,11 +10,30 @@ import type {
   ChunkingValidation,
 } from "./chunkingTypes.js";
 
+type ChunkingHttpError = Error & {
+  status: number;
+  code: string | null;
+  runId: string | null;
+  details: Record<string, unknown>;
+};
+
+function toChunkingHttpError(response: Response, payload: ChunkingErrorEnvelope): ChunkingHttpError {
+  const error = new Error(payload.error?.message ?? `HTTP ${response.status}`) as ChunkingHttpError;
+  error.status = response.status;
+  error.code = payload.error?.code ?? null;
+  error.runId = payload.error?.run_id ?? null;
+  error.details = payload.error?.details ?? {};
+  return error;
+}
+
+function isChunkingHttpError(error: unknown): error is ChunkingHttpError {
+  return error instanceof Error && typeof (error as ChunkingHttpError).status === "number";
+}
+
 async function readJson<T>(response: Response): Promise<T> {
   const payload = (await response.json()) as T & ChunkingErrorEnvelope;
   if (!response.ok) {
-    const message = payload.error?.message ?? `HTTP ${response.status}`;
-    throw new Error(message);
+    throw toChunkingHttpError(response, payload);
   }
   return payload;
 }
@@ -211,6 +230,17 @@ export async function loadChunkingRunDocuments(options: {
 export async function loadChunkingValidation(runId: string): Promise<ChunkingValidation> {
   const response = await fetch(`/api/chunking/runs/${encodeURIComponent(runId)}/validation`);
   return toValidation((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
+}
+
+export async function loadChunkingValidationOptional(runId: string): Promise<ChunkingValidation | null> {
+  try {
+    return await loadChunkingValidation(runId);
+  } catch (error) {
+    if (isChunkingHttpError(error) && error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
 }
 
 export async function loadChunkingParents(options: {

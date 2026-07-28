@@ -17,11 +17,15 @@ function test(name, assertion) {
 
 const status = {
   llamaFirst: {
-    cloudEnabled: true,
-    callOrder: ["parse", "classify", "extract"],
+    cloudEnabled: false,
+    callOrder: ["parse"],
   },
   settings: {
     ocrReviewThresholdPercent: 91,
+    llamaControls: {
+      providerMode: "llama_cloud",
+      route: "classify,parse,extract",
+    },
   },
 };
 
@@ -33,11 +37,11 @@ test("uses status defaults when no stored dashboard preferences exist", () => {
 
   assert.equal(preferences.activeView, "review");
   assert.equal(preferences.llamaControls.providerMode, "llama_cloud");
-  assert.equal(preferences.llamaControls.route, "parse,classify,extract");
+  assert.equal(preferences.llamaControls.route, "classify,parse,extract");
   assert.equal(preferences.ocrThresholdInput, "91");
 });
 
-test("keeps stored dashboard preferences instead of resetting them from status", () => {
+test("keeps stored ui preferences while status drives operational settings", () => {
   const stored = createStatusDrivenDashboardPreferences(null);
   stored.activeView = "inventory";
   stored.llamaControls.providerMode = "local";
@@ -51,7 +55,11 @@ test("keeps stored dashboard preferences instead of resetting them from status",
     status,
   });
 
-  assert.deepEqual(preferences, stored);
+  assert.equal(preferences.activeView, "inventory");
+  assert.deepEqual(preferences.selectedDocumentIds, stored.selectedDocumentIds);
+  assert.equal(preferences.llamaControls.providerMode, "llama_cloud");
+  assert.equal(preferences.llamaControls.route, "classify,parse,extract");
+  assert.equal(preferences.ocrThresholdInput, "91");
 });
 
 test("preserves chunking as a stored dashboard view", () => {

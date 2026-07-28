@@ -305,6 +305,19 @@ def test_status_payload_counts_decisions_for_current_inventory(tmp_path) -> None
         json.dumps({"items": []}),
         encoding="utf-8",
     )
+    (manifests_dir / "gui_settings.json").write_text(
+        json.dumps(
+            {
+                "ocr_review_threshold": 0.88,
+                "llama_controls": {
+                    "providerMode": "llama_cloud",
+                    "route": "classify,parse,extract",
+                },
+                "updated_at": "2026-07-22T10:00:00-05:00",
+            }
+        ),
+        encoding="utf-8",
+    )
     review_decisions_path = manifests_dir / "review_decisions.json"
     review_decisions_path.write_text(
         json.dumps(
@@ -334,31 +347,53 @@ def test_status_payload_counts_decisions_for_current_inventory(tmp_path) -> None
         normalized_root=normalized_root,
         manifests_dir=manifests_dir,
         review_decisions_path=review_decisions_path,
+        settings_path=manifests_dir / "gui_settings.json",
     )
 
     assert payload["summary"]["needsReview"] == 1
     assert payload["summary"]["normalizedNeedsReview"] == 2
     assert payload["summary"]["approved"] == 1
     assert payload["summary"]["rejected"] == 0
+    assert payload["settings"]["ocrReviewThresholdPercent"] == 88.0
+    assert payload["settings"]["llamaControls"] == {
+        "providerMode": "llama_cloud",
+        "route": "classify,parse,extract",
+    }
 
 
 def test_gui_settings_persist_ocr_review_threshold(tmp_path) -> None:
     settings_path = tmp_path / "gui_settings.json"
 
     saved = _save_gui_settings(
-        {"ocrReviewThresholdPercent": 83},
+        {
+            "ocrReviewThresholdPercent": 83,
+            "providerMode": "llama_cloud",
+            "route": "parse,classify",
+        },
         settings_path=settings_path,
     )
     loaded = _gui_settings_payload(settings_path=settings_path)
 
     assert saved["ocrReviewThreshold"] == 0.83
+    assert saved["llamaControls"] == {
+        "providerMode": "llama_cloud",
+        "route": "parse,classify",
+    }
     assert loaded["ocrReviewThresholdPercent"] == 83.0
+    assert loaded["llamaControls"] == {
+        "providerMode": "llama_cloud",
+        "route": "parse,classify",
+    }
 
 
 def test_pipeline_run_options_use_saved_ocr_threshold(tmp_path) -> None:
     settings_path = tmp_path / "gui_settings.json"
     _save_gui_settings(
-        {"ocrReviewThresholdPercent": 77},
+        {
+            "ocrReviewThresholdPercent": 77,
+            "providerMode": "local",
+            "route": "classify,parse,extract",
+        },
         settings_path=settings_path,
     )
 

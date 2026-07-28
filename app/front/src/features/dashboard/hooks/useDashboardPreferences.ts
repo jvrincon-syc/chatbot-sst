@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  createStatusDrivenDashboardPreferences,
-  deriveLlamaControls,
   readDashboardPreferences,
+  resolveDashboardPreferences,
   writeDashboardPreferences,
 } from "../dashboardPersistence.js";
 import type {
@@ -13,23 +12,24 @@ import type {
 } from "../dashboardTypes.js";
 
 export function useDashboardPreferences(status: StatusPayload | null) {
-  const [storedPreferences] = useState<DashboardPreferences | null>(() => readDashboardPreferences());
   const [preferences, setPreferences] = useState<DashboardPreferences>(() =>
-    storedPreferences ?? createStatusDrivenDashboardPreferences(null),
+    resolveDashboardPreferences({
+      stored: readDashboardPreferences(),
+      status: null,
+    }),
   );
-  const hydratedFromStatusRef = useRef(Boolean(storedPreferences));
 
   useEffect(() => {
-    if (!status || hydratedFromStatusRef.current) {
+    if (!status) {
       return;
     }
 
-    hydratedFromStatusRef.current = true;
-    setPreferences((current) => ({
-      ...current,
-      llamaControls: deriveLlamaControls(status.llamaFirst),
-      ocrThresholdInput: String(status.settings.ocrReviewThresholdPercent),
-    }));
+    setPreferences((current) =>
+      resolveDashboardPreferences({
+        stored: current,
+        status,
+      }),
+    );
   }, [status]);
 
   useEffect(() => {

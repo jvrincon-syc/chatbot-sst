@@ -48,6 +48,15 @@ export function chunkingRunStatusTone(status: string): "neutral" | "success" | "
   return "neutral";
 }
 
+export function chunkingRunIsTerminalStatus(status: string): boolean {
+  return (
+    status === "completed" ||
+    status === "completed_with_warnings" ||
+    status === "failed" ||
+    status === "interrupted"
+  );
+}
+
 export function chunkingScopeLabel(scope: string): string {
   return scope === "corpus" ? "Corpus" : "Documentos";
 }

@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
+import logging
+import os
 from collections.abc import Sequence
+from pathlib import Path
 from pydantic import Field
 
+from ingestion.gui.review_store import load_review_decisions
 from ingestion.paths import ArtifactPaths
 from ingestion.schemas.common import StrictModel
+from indexing.application.eligibility import IndexingEligibilityService
 
 
 class IndexValidationReport(StrictModel):
@@ -24,6 +28,9 @@ class IndexValidationReport(StrictModel):
     errors: list[str] = Field(default_factory=list)
 
 
+logger = logging.getLogger(__name__)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate Llama-first index state.")
     parser.add_argument("--docs-normalized", default="data/docs_normalized")
@@ -32,10 +39,22 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    _configure_logging()
     args = parse_args()
+    logger.info(
+        "index validation started: docs_normalized=%s profile=%s",
+        args.docs_normalized,
+        args.profile,
+    )
     result = validate_index_state(
         normalized_root=Path(args.docs_normalized),
         profile=args.profile,
+    )
+    logger.info(
+        "index validation finished: status=%s profile=%s approved_documents=%s",
+        result["status"],
+        result.get("profile") or result.get("profile_id"),
+        result.get("approved_documents"),
     )
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0 if result["status"] == "passed" else 1
@@ -70,10 +89,15 @@ def validate_index_state(
 
     inventory = json.loads(manifest_path.read_text(encoding="utf-8"))
     records = inventory.get("records", inventory if isinstance(inventory, list) else [])
+    review_decisions = _review_decision_map(normalized_root)
+    eligibility_service = IndexingEligibilityService()
     errors: list[str] = []
     approved_documents = 0
     for record in records:
-        if record.get("processing_status") != "processed":
+        document_id = str(record.get("document_id") or "")
+        decision = review_decisions.get(document_id)
+        eligibility = eligibility_service.evaluate(record=record, decision=decision)
+        if not eligibility.eligible:
             continue
         approved_documents += 1
         paths = ArtifactPaths.for_source(record["source_relpath"])
@@ -93,6 +117,14 @@ def validate_index_state(
         "checks": ["inventory_manifest_present", "approved_artifacts_present"],
         "approved_documents": approved_documents,
         "errors": errors,
+    }
+
+
+def _review_decision_map(normalized_root: Path) -> dict[str, object]:
+    review_decisions_path = normalized_root / "_manifests" / "review_decisions.json"
+    return {
+        decision.document_id: decision
+        for decision in load_review_decisions(review_decisions_path)
     }
 
 
@@ -165,6 +197,15 @@ def _validate_rows(
         dimension_errors=dimension_errors,
         unapproved_document_errors=unapproved_document_errors,
         errors=errors,
+    )
+
+
+def _configure_logging() -> None:
+    """Configure console logging for the validation CLI."""
+
+    logging.basicConfig(
+        level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
     )
 
 

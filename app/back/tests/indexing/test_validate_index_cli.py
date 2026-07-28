@@ -14,8 +14,10 @@ def test_validate_index_state_fails_when_approved_artifact_is_missing(tmp_path) 
             {
                 "records": [
                     {
+                        "document_id": "doc_missing",
                         "source_relpath": "manual/doc.pdf",
                         "processing_status": "processed",
+                        "source_hash": "a" * 64,
                     }
                 ]
             }
@@ -38,8 +40,10 @@ def test_validate_index_state_passes_when_approved_artifacts_exist(tmp_path) -> 
             {
                 "records": [
                     {
+                        "document_id": "doc_ok",
                         "source_relpath": "manual/doc.pdf",
                         "processing_status": "processed",
+                        "source_hash": "a" * 64,
                     }
                 ]
             }
@@ -55,6 +59,59 @@ def test_validate_index_state_passes_when_approved_artifacts_exist(tmp_path) -> 
 
     assert result["status"] == "passed"
     assert result["approved_documents"] == 1
+
+
+def test_validate_index_state_includes_human_approved_needs_review_documents(tmp_path) -> None:
+    root = tmp_path / "docs_normalized"
+    manifests = root / "_manifests"
+    manifests.mkdir(parents=True)
+    (manifests / "inventory.json").write_text(
+        json.dumps(
+            {
+                "records": [
+                    {
+                        "document_id": "doc_processed",
+                        "source_relpath": "manual/processed.pdf",
+                        "processing_status": "processed",
+                        "source_hash": "a" * 64,
+                    },
+                    {
+                        "document_id": "doc_reviewed",
+                        "source_relpath": "manual/reviewed.pdf",
+                        "processing_status": "needs_review",
+                        "source_hash": "b" * 64,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (manifests / "review_decisions.json").write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "document_id": "doc_reviewed",
+                        "source_relpath": "manual/reviewed.pdf",
+                        "decision": "approved",
+                        "reason": "Revision humana completada.",
+                        "decided_at": "2026-07-28T10:00:00-05:00",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    for source in ("manual/processed", "manual/reviewed"):
+        for suffix in (".md", ".metadata.json", ".pages.json", ".tables.json", ".forms.json"):
+            target = root / f"{source}{suffix}"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text("{}", encoding="utf-8")
+
+    result = validate_index_state(normalized_root=root, profile="test")
+
+    assert result["status"] == "passed"
+    assert result["approved_documents"] == 2
 
 
 def test_validate_index_reports_mixed_provider_as_error() -> None:

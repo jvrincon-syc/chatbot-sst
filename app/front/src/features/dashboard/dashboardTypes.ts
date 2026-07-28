@@ -83,6 +83,7 @@ export type StatusPayload = {
   settings: {
     ocrReviewThreshold: number;
     ocrReviewThresholdPercent: number;
+    llamaControls?: LlamaControls;
   };
   documents: DocumentRecord[];
   needsReview: DocumentRecord[];

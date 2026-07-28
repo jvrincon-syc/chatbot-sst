@@ -71,20 +71,25 @@ export async function runDashboardPipeline(options: {
 
 export async function saveDashboardSettings(options: {
   ocrReviewThresholdPercent: number;
+  llamaControls: LlamaControls;
 }): Promise<{
   ok?: boolean;
   settings?: StatusPayload["settings"];
+  status?: StatusPayload;
 }> {
   const response = await fetch("/api/settings", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       ocrReviewThresholdPercent: options.ocrReviewThresholdPercent,
+      providerMode: options.llamaControls.providerMode,
+      route: options.llamaControls.route,
     }),
   });
   return readJson<{
     ok?: boolean;
     settings?: StatusPayload["settings"];
+    status?: StatusPayload;
   }>(response);
 }
 

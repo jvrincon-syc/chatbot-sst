@@ -21,15 +21,15 @@ import {
   loadChunkingProfiles,
   loadChunkingRun,
   loadChunkingRunDocuments,
-  loadChunkingValidation,
+  loadChunkingValidationOptional,
 } from "./chunkingApi.js";
 import {
   chunkingPaginationLabel,
   chunkingProfileSummary,
   chunkingRunProgressPercent,
+  chunkingRunIsTerminalStatus,
   chunkingRunStatusLabel,
   chunkingRunStatusTone,
-  chunkingScopeLabel,
   createChunkingIdempotencyKey,
   parseChunkingDocumentIds,
 } from "./chunkingState.js";
@@ -66,7 +66,7 @@ export function ChunkingWorkspace() {
   const [notice, setNotice] = useState<ChunkingNoticeState>(null);
 
   const [form, setForm] = useState<ChunkingFormState>(() => ({
-    scope: "documents",
+    scope: "corpus",
     documentIdsInput: "",
     profileId: DEFAULT_PROFILE_ID,
     force: false,
@@ -120,6 +120,10 @@ export function ChunkingWorkspace() {
         : 0,
     [runSummary],
   );
+
+  const validationValue =
+    validation?.status ??
+    (runSummary && !chunkingRunIsTerminalStatus(runSummary.status) ? "pendiente" : "sin reporte");
 
   useEffect(() => {
     let cancelled = false;
@@ -193,15 +197,13 @@ export function ChunkingWorkspace() {
     setDocumentsError(null);
     setValidationError(null);
     try {
-      const [run, docs, validationReport] = await Promise.all([
+      const [run, docs] = await Promise.all([
         loadChunkingRun(runId),
         loadChunkingRunDocuments({ runId, page }),
-        loadChunkingValidation(runId),
       ]);
       setRunSummary(run);
       setDocumentsPage(docs);
       setDocumentsPageNumber(docs.page);
-      setValidation(validationReport);
       if (docs.items.length > 0) {
         const nextDocumentId =
           docs.items.find((item) => item.documentId === selectedDocumentId)?.documentId ??
@@ -213,6 +215,23 @@ export function ChunkingWorkspace() {
         setParentsPage(null);
         setSelectedParentId(null);
         setChildrenPage(null);
+      }
+      try {
+        const validationReport = await loadChunkingValidationOptional(runId);
+        setValidation(validationReport);
+        if (validationReport) {
+          setValidationError(null);
+        } else if (chunkingRunIsTerminalStatus(run.status)) {
+          setValidationError("No se encontro un reporte de validacion para esta corrida.");
+        } else {
+          setValidationError(null);
+        }
+      } catch (validationLoadError) {
+        const message =
+          validationLoadError instanceof Error
+            ? validationLoadError.message
+            : "No se pudo cargar la validacion.";
+        setValidationError(message);
       }
       setNotice({
         tone: "success",
@@ -417,7 +436,7 @@ export function ChunkingWorkspace() {
         <ChunkingMetricCard label="Corrida activa" value={runSummary?.runId ?? "sin corrida"} tone="neutral" icon={<Blocks size={18} />} />
         <ChunkingMetricCard label="Estado" value={runSummary ? chunkingRunStatusLabel(runSummary.status) : "sin estado"} tone={chunkingRunStatusTone(runSummary?.status ?? "queued")} icon={<CheckCircle2 size={18} />} />
         <ChunkingMetricCard label="Progreso" value={`${runProgress}%`} tone={runProgress === 100 ? "success" : "warning"} icon={<Settings2 size={18} />} />
-        <ChunkingMetricCard label="Validation" value={validation ? validation.status : "sin reporte"} tone={validation?.status === "passed" ? "success" : "warning"} icon={<TriangleAlert size={18} />} />
+        <ChunkingMetricCard label="Validation" value={validationValue} tone={validation?.status === "passed" ? "success" : validationValue === "pendiente" ? "neutral" : "warning"} icon={<TriangleAlert size={18} />} />
       </section>
 
       <section className="chunking-grid">
@@ -793,7 +812,11 @@ function ChunkingRunPanel({
           </dl>
         ) : (
           <div className="chunking-empty compact">
-            <span>Sin validacion disponible.</span>
+            <span>
+              {run && !chunkingRunIsTerminalStatus(run.status)
+                ? "La validacion se publicara cuando la corrida termine."
+                : "Sin validacion disponible."}
+            </span>
           </div>
         )}
       </div>

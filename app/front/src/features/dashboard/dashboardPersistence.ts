@@ -1,4 +1,4 @@
-import { routeFromStatus, isLlamaRoute } from "../../llamaRoutes.js";
+import { isLlamaRoute, routeFromStatus } from "../../llamaRoutes.js";
 import {
   DEFAULT_LLAMA_CONTROLS,
   createDefaultDashboardPreferences,
@@ -14,12 +14,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function isProviderMode(value: unknown): value is "local" | "llama_cloud" {
+function isProviderMode(value: unknown): value is DashboardPreferences["llamaControls"]["providerMode"] {
   return value === "local" || value === "llama_cloud";
 }
 
 function isStringOrNull(value: unknown): value is string | null {
   return value === null || typeof value === "string";
+}
+
+function isLlamaControls(value: unknown): value is DashboardPreferences["llamaControls"] {
+  return (
+    isRecord(value) &&
+    isProviderMode(value.providerMode) &&
+    typeof value.route === "string" &&
+    isLlamaRoute(value.route)
+  );
 }
 
 export function deriveLlamaControls(
@@ -38,9 +47,13 @@ export function deriveLlamaControls(
 export function createStatusDrivenDashboardPreferences(
   status: Pick<StatusPayload, "llamaFirst" | "settings"> | null,
 ): DashboardPreferences {
+  const llamaControls =
+    isLlamaControls(status?.settings.llamaControls)
+      ? status.settings.llamaControls
+      : deriveLlamaControls(status?.llamaFirst ?? null);
   return {
     ...createDefaultDashboardPreferences(),
-    llamaControls: deriveLlamaControls(status?.llamaFirst ?? null),
+    llamaControls,
     ocrThresholdInput: status ? String(status.settings.ocrReviewThresholdPercent) : "80",
   };
 }
@@ -49,7 +62,16 @@ export function resolveDashboardPreferences(options: {
   stored: DashboardPreferences | null;
   status: Pick<StatusPayload, "llamaFirst" | "settings"> | null;
 }): DashboardPreferences {
-  return options.stored ?? createStatusDrivenDashboardPreferences(options.status);
+  const statusDriven = createStatusDrivenDashboardPreferences(options.status);
+  if (!options.stored) {
+    return statusDriven;
+  }
+
+  return {
+    ...statusDriven,
+    activeView: options.stored.activeView,
+    selectedDocumentIds: options.stored.selectedDocumentIds,
+  };
 }
 
 export function readDashboardPreferences(): DashboardPreferences | null {
@@ -70,9 +92,6 @@ export function readDashboardPreferences(): DashboardPreferences | null {
 
     const activeView = parsed.activeView;
     const selectedDocumentIds = parsed.selectedDocumentIds;
-    const llamaControls = parsed.llamaControls;
-    const ocrThresholdInput = parsed.ocrThresholdInput;
-
     if (
       activeView !== "operations" &&
       activeView !== "review" &&
@@ -84,15 +103,6 @@ export function readDashboardPreferences(): DashboardPreferences | null {
     if (!isRecord(selectedDocumentIds)) {
       return null;
     }
-    if (!isRecord(llamaControls) || !isProviderMode(llamaControls.providerMode)) {
-      return null;
-    }
-    if (typeof llamaControls.route !== "string" || !isLlamaRoute(llamaControls.route)) {
-      return null;
-    }
-    if (typeof ocrThresholdInput !== "string") {
-      return null;
-    }
 
     const review = selectedDocumentIds.review;
     const inventory = selectedDocumentIds.inventory;
@@ -102,16 +112,12 @@ export function readDashboardPreferences(): DashboardPreferences | null {
     }
 
     return {
+      ...createDefaultDashboardPreferences(),
       activeView,
       selectedDocumentIds: {
         review,
         inventory,
       },
-      llamaControls: {
-        providerMode: llamaControls.providerMode,
-        route: llamaControls.route,
-      },
-      ocrThresholdInput,
     };
   } catch {
     return null;
@@ -124,7 +130,13 @@ export function writeDashboardPreferences(value: DashboardPreferences): void {
   }
 
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        activeView: value.activeView,
+        selectedDocumentIds: value.selectedDocumentIds,
+      }),
+    );
   } catch {
     // Silently ignore storage quota or privacy mode failures.
   }

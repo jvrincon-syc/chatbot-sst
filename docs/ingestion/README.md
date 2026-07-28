@@ -14,8 +14,9 @@ Fase 1 local ya opera como Schema 2.0 y el contrato estable es este:
   las tablas de control por encima de la carpeta de origen.
 - Los contenedores genericos no deben provocar conflictos si la evidencia
   interna es fuerte.
-- Los documentos `needs_review` siguen trazados pero no se indexan como
-  aprobados sin una decision explicita.
+- Los documentos `needs_review` siguen trazados, pero una decision humana
+  `approved` en `_manifests/review_decisions.json` los vuelve elegibles para
+  indexacion downstream.
 - Los conteos concretos cambian con el corpus; consulta
   `npm run ingestion:inventory` y `npm run ingestion:validate` para el estado
   actual en vez de copiar cifras historicas aqui.

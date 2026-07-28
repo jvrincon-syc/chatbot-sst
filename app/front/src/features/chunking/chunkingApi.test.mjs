@@ -6,6 +6,7 @@ import {
   loadChunkingParents,
   loadChunkingProfiles,
   loadChunkingRunDocuments,
+  loadChunkingValidationOptional,
 } from "../../../.tmp-tests/features/chunking/chunkingApi.js";
 
 async function test(name, assertion) {
@@ -165,4 +166,23 @@ await test("loads paginated run documents, parents and children", async () => {
   assert.equal(documents.items[0].normalizedRelpath, "docs/doc_1.md");
   assert.equal(parents.items[0].chunkId, "parent_1");
   assert.equal(children.items[0].parentId, "parent_1");
+});
+
+await test("returns null for chunking validation while the run is not ready", async () => {
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 404,
+    json: async () => ({
+      error: {
+        code: "CHUNKING_RUN_NOT_FOUND",
+        message: "chunking run validation does not exist",
+        run_id: "run_pending",
+        details: {},
+      },
+    }),
+  });
+
+  const validation = await loadChunkingValidationOptional("run_pending");
+
+  assert.equal(validation, null);
 });

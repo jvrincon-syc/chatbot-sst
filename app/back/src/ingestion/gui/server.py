@@ -15,6 +15,7 @@ from urllib.parse import unquote, urlparse
 
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
 from ingestion.config.llama_settings import LlamaSettings
+from ingestion.gui.chunking_adapter import ChunkingApiBridge
 from ingestion.gui.review_store import (
     ReviewDecision,
     load_review_decisions,
@@ -31,10 +32,20 @@ from ingestion.validation.normalized import validate_normalized_tree
 ROOT = Path(__file__).resolve().parents[5]
 DOCS_RAW = ROOT / "data" / "docs_raw"
 DOCS_NORMALIZED = ROOT / "data" / "docs_normalized"
+CHUNKING_ROOT = ROOT / "data" / "chunks"
 MANIFESTS_DIR = DOCS_NORMALIZED / "_manifests"
 REVIEW_DECISIONS_PATH = MANIFESTS_DIR / "review_decisions.json"
 GUI_SETTINGS_PATH = MANIFESTS_DIR / "gui_settings.json"
 ALLOWED_UPLOAD_SUFFIXES = {".pdf", ".md", ".markdown"}
+DEFAULT_LLAMA_ROUTE = "classify,parse,extract"
+ALLOWED_LLAMA_ROUTES = {
+    "parse",
+    "parse,classify,extract",
+    "classify,parse,extract",
+    "parse,classify",
+    "classify,parse",
+    "parse,extract",
+}
 
 
 @dataclass
@@ -95,10 +106,12 @@ def build_status_payload(
     normalized_root: Path = DOCS_NORMALIZED,
     manifests_dir: Path = MANIFESTS_DIR,
     review_decisions_path: Path = REVIEW_DECISIONS_PATH,
+    settings_path: Path = GUI_SETTINGS_PATH,
 ) -> dict[str, Any]:
     inventory = _read_json(manifests_dir / "inventory.json", {})
     needs_review_manifest = _read_json(manifests_dir / "needs_review.json", {})
     errors_manifest = _read_json(manifests_dir / "errors.json", {})
+    llama_first_status = _llama_first_status_payload()
     records = inventory.get("records", []) if isinstance(inventory, dict) else []
     review_items = (
         needs_review_manifest.get("items", [])
@@ -160,8 +173,11 @@ def build_status_payload(
 
     return {
         "summary": summary,
-        "llamaFirst": _llama_first_status_payload(),
-        "settings": _gui_settings_payload(),
+        "llamaFirst": llama_first_status,
+        "settings": _gui_settings_payload(
+            settings_path=settings_path,
+            llama_first_status=llama_first_status,
+        ),
         "documents": documents,
         "needsReview": pending_review,
         "errors": error_items,
@@ -274,6 +290,9 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         if path == "/api/status":
             self._send_json(build_status_payload())
             return
+        if path.startswith("/api/chunking"):
+            self._handle_chunking_get()
+            return
         self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
 
     def do_POST(self) -> None:
@@ -297,7 +316,65 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         if path == "/api/promote":
             self._handle_promote()
             return
+        if path.startswith("/api/chunking"):
+            self._handle_chunking_post()
+            return
         self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
+
+    def _handle_chunking_get(self) -> None:
+        bridge = self._chunking_api()
+        if bridge is None:
+            self._send_json(
+                {
+                    "error": {
+                        "code": "CHUNKING_SERVICE_UNAVAILABLE",
+                        "message": "chunking service is not configured",
+                        "run_id": None,
+                        "details": {},
+                    }
+                },
+                status=HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
+            return
+        status_code, payload = bridge.handle_get(self.path)
+        self._send_json(payload, status=HTTPStatus(status_code))
+
+    def _handle_chunking_post(self) -> None:
+        bridge = self._chunking_api()
+        if bridge is None:
+            self._send_json(
+                {
+                    "error": {
+                        "code": "CHUNKING_SERVICE_UNAVAILABLE",
+                        "message": "chunking service is not configured",
+                        "run_id": None,
+                        "details": {},
+                    }
+                },
+                status=HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
+            return
+        try:
+            body = self._read_json_body(required=False)
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_json(
+                {
+                    "error": {
+                        "code": "CHUNKING_INVALID_REQUEST",
+                        "message": str(exc),
+                        "run_id": None,
+                        "details": {},
+                    }
+                },
+                status=HTTPStatus.BAD_REQUEST,
+            )
+            return
+        status_code, payload = bridge.handle_post(
+            self.path,
+            body,
+            {key: value for key, value in self.headers.items()},
+        )
+        self._send_json(payload, status=HTTPStatus(status_code))
 
     def _handle_upload(self) -> None:
         content_type = self.headers.get("Content-Type", "")
@@ -543,6 +620,9 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
 
+    def _chunking_api(self) -> ChunkingApiBridge | None:
+        return getattr(self.server, "chunking_api", None)
+
     def log_message(self, format: str, *args: Any) -> None:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{timestamp}] {self.address_string()} {format % args}")
@@ -599,17 +679,28 @@ def _find_document(document_id: str) -> dict[str, Any] | None:
 def _gui_settings_payload(
     *,
     settings_path: Path = GUI_SETTINGS_PATH,
-) -> dict[str, float]:
+    llama_first_status: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     payload = _read_json(settings_path, {})
     threshold = DEFAULT_OCR_REVIEW_THRESHOLD
+    llama_controls = _llama_controls_from_status(llama_first_status)
     if isinstance(payload, dict):
         raw_threshold = payload.get("ocr_review_threshold")
         if isinstance(raw_threshold, (int, float)) and not isinstance(raw_threshold, bool):
             threshold = float(raw_threshold)
+        raw_llama_controls = payload.get("llama_controls")
+        if isinstance(raw_llama_controls, dict):
+            provider_mode = raw_llama_controls.get("providerMode")
+            if provider_mode in {"local", "llama_cloud"}:
+                llama_controls["providerMode"] = provider_mode
+            route = raw_llama_controls.get("route")
+            if isinstance(route, str) and _is_supported_llama_route(route):
+                llama_controls["route"] = route
     threshold = _validate_threshold_ratio(threshold)
     return {
         "ocrReviewThreshold": threshold,
         "ocrReviewThresholdPercent": round(threshold * 100, 1),
+        "llamaControls": llama_controls,
     }
 
 
@@ -617,12 +708,22 @@ def _save_gui_settings(
     body: dict[str, Any],
     *,
     settings_path: Path = GUI_SETTINGS_PATH,
-) -> dict[str, float]:
+) -> dict[str, Any]:
     if not isinstance(body, dict):
         raise ValueError("settings body must be an object")
     threshold = _threshold_ratio_from_body(body)
+    provider_mode = body.get("providerMode")
+    route = body.get("route")
+    if provider_mode not in {"local", "llama_cloud"}:
+        raise ValueError("providerMode must be 'local' or 'llama_cloud'")
+    if not isinstance(route, str) or not _is_supported_llama_route(route):
+        raise ValueError("route must be a supported Llama route")
     payload = {
         "ocr_review_threshold": threshold,
+        "llama_controls": {
+            "providerMode": provider_mode,
+            "route": route,
+        },
         "updated_at": _now(),
     }
     write_text_atomic(
@@ -658,6 +759,36 @@ def _threshold_ratio_from_body(body: dict[str, Any]) -> float:
             raise ValueError("ocrReviewThreshold must be numeric")
         return _validate_threshold_ratio(float(raw))
     raise ValueError("ocrReviewThresholdPercent is required")
+
+
+def _llama_controls_from_status(
+    status: dict[str, Any] | None,
+) -> dict[str, str]:
+    if not isinstance(status, dict):
+        return {"providerMode": "local", "route": DEFAULT_LLAMA_ROUTE}
+    provider_mode = "llama_cloud" if status.get("cloudEnabled") is True else "local"
+    configured_stops = status.get("callOrder")
+    if isinstance(configured_stops, list) and configured_stops:
+        stops = [str(stop) for stop in configured_stops]
+    else:
+        stops = DEFAULT_LLAMA_ROUTE.split(",")
+    active_stops: list[str] = []
+    for stop in stops:
+        if stop not in {"parse", "classify", "extract"}:
+            continue
+        if stop == "classify" and status.get("classifyEnabled") is False:
+            continue
+        if stop == "extract" and status.get("extractEnabled") is False:
+            continue
+        active_stops.append(stop)
+    route = ",".join(active_stops)
+    if not _is_supported_llama_route(route):
+        route = DEFAULT_LLAMA_ROUTE
+    return {"providerMode": provider_mode, "route": route}
+
+
+def _is_supported_llama_route(route: str) -> bool:
+    return route in ALLOWED_LLAMA_ROUTES
 
 
 def _validate_threshold_ratio(value: float) -> float:
@@ -887,9 +1018,14 @@ def main() -> int:
     load_secrets_env(ROOT / "secrets.env")
     host = "127.0.0.1"
     port = 8765
+    chunking_api = ChunkingApiBridge(docs_normalized=DOCS_NORMALIZED, chunks_root=CHUNKING_ROOT)
     server = ThreadingHTTPServer((host, port), Phase1GuiHandler)
+    server.chunking_api = chunking_api
     print(f"Phase 1 GUI API listening on http://{host}:{port}")
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    finally:
+        chunking_api.close()
     return 0
 
 

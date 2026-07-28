@@ -5,6 +5,7 @@ import {
   chunkingRunProgressPercent,
   chunkingRunStatusLabel,
   chunkingRunStatusTone,
+  chunkingRunIsTerminalStatus,
   parseChunkingDocumentIds,
 } from "../../../.tmp-tests/features/chunking/chunkingState.js";
 
@@ -42,6 +43,8 @@ test("calculates chunking progress percentage", () => {
 test("maps chunking status labels and tones", () => {
   assert.equal(chunkingRunStatusLabel("completed_with_warnings"), "Completada con alertas");
   assert.equal(chunkingRunStatusTone("failed"), "danger");
+  assert.equal(chunkingRunIsTerminalStatus("running"), false);
+  assert.equal(chunkingRunIsTerminalStatus("completed"), true);
 });
 
 test("formats chunking pagination labels", () => {

@@ -231,6 +231,7 @@ export function DashboardApp() {
     try {
       const payload = await saveDashboardSettings({
         ocrReviewThresholdPercent: ocrThresholdValidation.value,
+        llamaControls: preferences.llamaControls,
       });
       const savedPercent =
         payload.settings?.ocrReviewThresholdPercent ?? ocrThresholdValidation.value;
@@ -240,9 +241,13 @@ export function DashboardApp() {
       });
       setNotice({
         tone: "success",
-        message: `Umbral OCR guardado: ${savedPercent.toFixed(1)}%`,
+        message: "Ajustes guardados.",
       });
-      await loadStatus();
+      if (payload.status) {
+        setStatus(payload.status);
+      } else {
+        await loadStatus();
+      }
     } catch (error) {
       setNotice({
         tone: "danger",

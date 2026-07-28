@@ -306,7 +306,7 @@ export function LlamaStatusPanel({
               disabled={settingsBusy || ocrThresholdValidation.status !== "valid"}
               title={
                 ocrThresholdValidation.status === "valid"
-                  ? "Guardar umbral OCR"
+                  ? "Guardar ajustes del proveedor y del OCR"
                   : ocrThresholdValidation.message
               }
             >

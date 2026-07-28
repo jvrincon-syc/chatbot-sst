@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
+import os
 import re
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -16,6 +18,8 @@ REQUIRED_BASE_TABLES = (
     "indexing_nodes",
 )
 
+logger = logging.getLogger(__name__)
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -28,11 +32,18 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    _configure_logging()
     args = parse_args()
+    logger.info(
+        "postgres prepare started: migrations_dir=%s env_file=%s",
+        args.migrations_dir,
+        args.env_file,
+    )
     try:
         env = load_env_file(Path(args.env_file))
         dsn = build_dsn_from_env(env)
         if not dsn:
+            logger.warning("postgres prepare blocked: dsn_missing")
             print(
                 json.dumps(
                     {
@@ -47,9 +58,17 @@ def main() -> int:
             dsn=dsn,
             migrations=migration_files(Path(args.migrations_dir)),
         )
+        logger.info(
+            "postgres prepare finished: status=%s base_tables_present=%s active_profiles=%s vector_tables_ready=%s",
+            summary["status"],
+            summary["base_tables_present"],
+            summary["active_profiles"],
+            summary["vector_tables_ready"],
+        )
         print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
         return 0 if summary["status"] == "prepared" else 1
     except Exception as error:
+        logger.error("postgres prepare failed: %s", type(error).__name__)
         payload = {"status": "failed", "error_type": type(error).__name__}
         if args.debug:
             payload["error"] = _redact(str(error))
@@ -86,20 +105,20 @@ def build_dsn_from_env(env: Mapping[str, str]) -> str | None:
     explicit = env.get("SST_POSTGRES_DSN")
     if explicit:
         return explicit
-    database_url = env.get("DATABASE_URL")
-    if database_url:
-        return database_url
     host = env.get("POSTGRES_HOST")
     database = env.get("POSTGRES_DB")
     user = env.get("POSTGRES_USER")
-    if not host or not database or not user:
-        return None
-    port = env.get("POSTGRES_PORT") or "5432"
-    password = env.get("POSTGRES_PASSWORD") or ""
-    auth = quote_plus(user)
-    if password:
-        auth = f"{auth}:{quote_plus(password)}"
-    return f"postgresql://{auth}@{host}:{port}/{quote_plus(database)}"
+    if host and database and user:
+        port = env.get("POSTGRES_PORT") or "5432"
+        password = env.get("POSTGRES_PASSWORD") or ""
+        auth = quote_plus(user)
+        if password:
+            auth = f"{auth}:{quote_plus(password)}"
+        return f"postgresql://{auth}@{host}:{port}/{quote_plus(database)}"
+    database_url = env.get("DATABASE_URL")
+    if database_url:
+        return database_url
+    return None
 
 
 def migration_files(migrations_dir: Path) -> list[Path]:
@@ -112,8 +131,9 @@ def prepare_database(*, dsn: str, migrations: Sequence[Path]) -> dict[str, objec
     """Apply migrations and verify PostgreSQL is ready for indexing writes."""
 
     import psycopg2
+    from psycopg2.extensions import parse_dsn
 
-    connection = psycopg2.connect(dsn)
+    connection = psycopg2.connect(**parse_dsn(dsn))
     try:
         with connection:
             with connection.cursor() as cursor:
@@ -171,6 +191,15 @@ def _strip_inline_comment(value: str) -> str:
 
 def _redact(value: str) -> str:
     return re.sub(r"(postgres(?:ql)?://[^:\s]+:)[^@\s]+@", r"\1<redacted>@", value)
+
+
+def _configure_logging() -> None:
+    """Configure console logging for the PostgreSQL preparation CLI."""
+
+    logging.basicConfig(
+        level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    )
 
 
 if __name__ == "__main__":

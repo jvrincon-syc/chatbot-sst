@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from chunking.application.local_chunking_engine import LocalChunkingEngine
 from chunking.domain.models import ChunkingProfile, NormalizedDocumentBundle, PageTrace
 from indexing.domain.models import IndexingProfile
@@ -47,6 +49,9 @@ def _profile() -> IndexingProfile:
 
 
 def test_embedding_smoke_chunks_simple_text_and_uses_local_hf_model() -> None:
+    pytest.importorskip("FlagEmbedding")
+    pytest.importorskip("torch")
+
     chunk_result = LocalChunkingEngine().chunk(
         document=_bundle(),
         profile=ChunkingProfile.local_structural_v1(),
