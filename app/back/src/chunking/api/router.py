@@ -69,6 +69,7 @@ def list_profiles(service: ChunkingRunService = Depends(get_run_service)) -> lis
 def create_run(
     payload: ChunkingRunRequestSchema,
     idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1)],
+    request_id: Annotated[str | None, Header(alias="X-Request-Id")] = None,
     service: ChunkingRunService = Depends(get_run_service),
 ) -> dict:
     try:
@@ -78,6 +79,7 @@ def create_run(
                 document_ids=tuple(payload.document_ids),
                 profile_id=payload.profile_id,
                 force=payload.force,
+                request_id=request_id,
             ),
             idempotency_key=idempotency_key,
         )

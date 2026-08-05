@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 import pytest
 
 from indexing.application.ports import IndexingPort
@@ -69,7 +71,10 @@ async def test_index_document_use_case_sends_approved_bundle_to_indexing_port() 
 
 
 @pytest.mark.anyio
-async def test_index_document_use_case_rejects_needs_review_by_default() -> None:
+async def test_index_document_use_case_rejects_needs_review_by_default(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    caplog.set_level(logging.INFO)
     indexer = RecordingIndexer()
     use_case = IndexDocumentUseCase(indexer=indexer)
 
@@ -77,6 +82,10 @@ async def test_index_document_use_case_rejects_needs_review_by_default() -> None
         await use_case.index(_document(status="needs_review"))
 
     assert indexer.documents == []
+    event_names = {
+        record.event for record in caplog.records if hasattr(record, "event")
+    }
+    assert "indexing_document_rejected" in event_names
 
 
 @pytest.mark.anyio

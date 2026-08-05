@@ -9,6 +9,8 @@ indexacion/RAG con trazabilidad verificable.
 - Ingesta local y Schema 2.0: `docs/ingestion/README.md`.
 - Via Llama-first experimental: `docs/llama_first/README.md`.
 - Chunking local y contrato HTTP: `docs/chunking/`.
+- Observabilidad del backend: `docs/observability/current-contracts.md`
+  y `docs/runbooks/backend-observability.md`.
 - Decisiones vigentes: `docs/adr/`.
 - Runbooks operativos: `docs/runbooks/`.
 - Reglas transversales: `docs/rules/`.
@@ -83,8 +85,17 @@ La API se ejecuta con `npm run gui:api` y el frontend con
 `npm run gui:front`. El frontend local abre normalmente en
 `http://127.0.0.1:5173`.
 
+`npm run gui:api` es el entrypoint real del backend. No existe un alias `api`
+separado en `package.json`.
+
+Durante esa sesion, los eventos de arranque, requests, errores y apagado salen
+en JSON estructurado por la terminal.
+
 La GUI cubre inventario, revision humana, subida de `.pdf`/`.md`, ejecucion
 local o Llama Cloud en staging, controles de Classify/Extract y validacion.
+
+Para seguir una corrida o una request, consulta el runbook:
+`docs/runbooks/backend-observability.md`.
 
 ## Estado del proyecto
 

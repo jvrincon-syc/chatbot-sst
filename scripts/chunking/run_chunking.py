@@ -3,7 +3,11 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
 
 from chunking.application.chunking_orchestrator import ChunkingOrchestrator
 from chunking.application.local_chunking_engine import LocalChunkingEngine
@@ -13,6 +17,7 @@ from chunking.infrastructure.filesystem_chunk_repository import (
 )
 from chunking.infrastructure.filesystem_run_repository import FilesystemRunRepository
 from chunking.infrastructure.schema2_source import Schema2NormalizedDocumentSource
+from core.logging.logger import configure_structured_logging  # noqa: E402
 
 
 logger = logging.getLogger(__name__)
@@ -28,11 +33,19 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(levelname)s %(name)s %(message)s",
-    )
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
     args = parse_args()
+    logger.info(
+        "chunking_command_started",
+        extra={
+            "stage": "chunking",
+            "event": "chunking_command_started",
+            "status": "started",
+            "docs_normalized": args.docs_normalized,
+            "chunks_root": args.chunks_root,
+            "profile": args.profile,
+        },
+    )
     docs_root = Path(args.docs_normalized)
     chunks_root = Path(args.chunks_root)
     profile = _profile(args.profile)
@@ -67,6 +80,18 @@ def main() -> int:
                 "child_count": result.validation.child_count,
             }
         )
+    logger.info(
+        "chunking_command_completed",
+        extra={
+            "stage": "chunking",
+            "event": "chunking_command_completed",
+            "status": "completed",
+            "document_count": len(results),
+            "docs_normalized": args.docs_normalized,
+            "chunks_root": args.chunks_root,
+            "profile": args.profile,
+        },
+    )
     print(json.dumps({"documents": results}, ensure_ascii=False, sort_keys=True))
     return 0
 

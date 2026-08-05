@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import logging
 import shutil
+import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from email import policy
@@ -12,7 +14,11 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any, BinaryIO
 from urllib.parse import unquote, urlparse
+from time import perf_counter
+from uuid import uuid4
 
+from core.logging.logger import configure_structured_logging
+from core.logging.observability import measure_duration_ms
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
 from ingestion.config.llama_settings import LlamaSettings
 from ingestion.gui.chunking_adapter import ChunkingApiBridge
@@ -47,6 +53,8 @@ ALLOWED_LLAMA_ROUTES = {
     "parse,extract",
 }
 
+server_logger = logging.getLogger(__name__)
+
 
 @dataclass
 class UploadedFormFile:
@@ -63,6 +71,33 @@ class ValidationTarget:
 
 def _now() -> str:
     return datetime.now(timezone.utc).astimezone().isoformat()
+
+
+def _redact_client_address(client_address: tuple[str, int] | None) -> str | None:
+    if not client_address:
+        return None
+    return "***redacted***"
+
+
+def _request_route_for_log(path: str) -> str:
+    route = urlparse(path).path
+    segments = [segment for segment in route.split("/") if segment]
+    if len(segments) >= 3 and segments[0] == "api" and segments[1] == "review":
+        return "/api/review/{document_id}"
+    if len(segments) >= 3 and segments[0] == "api" and segments[1] == "chunking":
+        if len(segments) == 4 and segments[2] == "runs":
+            return "/api/chunking/runs/{run_id}"
+        if len(segments) == 5 and segments[2] == "runs" and segments[4] in {"documents", "validation"}:
+            return f"/api/chunking/runs/{{run_id}}/{segments[4]}"
+        if len(segments) == 5 and segments[2] == "documents" and segments[4] == "parents":
+            return "/api/chunking/documents/{document_id}/parents"
+        if len(segments) == 5 and segments[2] == "parents" and segments[4] == "children":
+            return "/api/chunking/parents/{parent_id}/children"
+    return route
+
+
+def _is_health_check_route(route: str) -> bool:
+    return route == "/api/status"
 
 
 def _read_json(path: Path, default: Any) -> Any:
@@ -282,44 +317,153 @@ def _llama_first_status_payload() -> dict[str, Any]:
 class Phase1GuiHandler(BaseHTTPRequestHandler):
     server_version = "Phase1GuiApi/0.1"
 
+    def _begin_http_request(self, method: str) -> None:
+        self._request_id = f"req_{uuid4().hex}"
+        self._request_method = method
+        self._request_route = _request_route_for_log(self.path)
+        self._request_started_at = perf_counter()
+        self._response_status_code: HTTPStatus | None = None
+        self._log_http_event(
+            event="http_request_started",
+            status="started",
+            level=logging.DEBUG if _is_health_check_route(self._request_route) else logging.INFO,
+            message="HTTP request started",
+        )
+
+    def _log_http_event(
+        self,
+        *,
+        event: str,
+        status: str,
+        level: int,
+        message: str,
+        duration_ms: int | None = None,
+        exception: BaseException | None = None,
+    ) -> None:
+        exc_info = (
+            (type(exception), exception, exception.__traceback__)
+            if exception is not None
+            else None
+        )
+        extra: dict[str, object] = {
+            "request_id": getattr(self, "_request_id", None),
+            "method": getattr(self, "_request_method", None),
+            "route": getattr(self, "_request_route", _request_route_for_log(self.path)),
+            "client_address_redacted": _redact_client_address(self.client_address),
+            "stage": "http",
+            "event": event,
+            "status": status,
+            "status_code": int(self._response_status_code) if getattr(self, "_response_status_code", None) is not None else None,
+        }
+        if duration_ms is not None:
+            extra["duration_ms"] = duration_ms
+        server_logger.log(level, message, extra=extra, exc_info=exc_info)
+
+    def _finalize_http_request(self) -> None:
+        duration_ms = measure_duration_ms(self._request_started_at)
+        status_code = int(self._response_status_code or HTTPStatus.OK)
+        if 400 <= status_code < 500:
+            self._log_http_event(
+                event="http_request_rejected",
+                status="rejected",
+                level=logging.WARNING,
+                message="HTTP request rejected",
+                duration_ms=duration_ms,
+            )
+            return
+        if status_code >= 500:
+            self._log_http_event(
+                event="http_request_failed",
+                status="failed",
+                level=logging.ERROR,
+                message="HTTP request failed",
+                duration_ms=duration_ms,
+            )
+            return
+        self._log_http_event(
+            event="http_request_completed",
+            status="completed",
+            level=logging.DEBUG if _is_health_check_route(getattr(self, "_request_route", "")) else logging.INFO,
+            message="HTTP request completed",
+            duration_ms=duration_ms,
+        )
+
     def do_OPTIONS(self) -> None:
-        self._send_no_content()
+        self._begin_http_request("OPTIONS")
+        try:
+            self._send_no_content()
+        except Exception as exc:
+            self._response_status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+            self._log_http_event(
+                event="http_request_failed",
+                status="failed",
+                level=logging.ERROR,
+                message="HTTP request failed",
+                duration_ms=measure_duration_ms(self._request_started_at),
+                exception=exc,
+            )
+            raise
+        else:
+            self._finalize_http_request()
 
     def do_GET(self) -> None:
+        self._begin_http_request("GET")
         path = urlparse(self.path).path
-        if path == "/api/status":
-            self._send_json(build_status_payload())
-            return
-        if path.startswith("/api/chunking"):
-            self._handle_chunking_get()
-            return
-        self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
+        try:
+            if path == "/api/status":
+                self._send_json(build_status_payload())
+            elif path.startswith("/api/chunking"):
+                self._handle_chunking_get()
+            else:
+                self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
+        except Exception as exc:
+            self._response_status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+            self._log_http_event(
+                event="http_request_failed",
+                status="failed",
+                level=logging.ERROR,
+                message="HTTP request failed",
+                duration_ms=measure_duration_ms(self._request_started_at),
+                exception=exc,
+            )
+            raise
+        else:
+            self._finalize_http_request()
 
     def do_POST(self) -> None:
+        self._begin_http_request("POST")
         path = urlparse(self.path).path
-        if path == "/api/upload":
-            self._handle_upload()
-            return
-        if path.startswith("/api/review/"):
-            document_id = unquote(path.removeprefix("/api/review/"))
-            self._handle_review(document_id)
-            return
-        if path == "/api/pipeline/run":
-            self._handle_pipeline_run()
-            return
-        if path == "/api/settings":
-            self._handle_settings()
-            return
-        if path == "/api/validate":
-            self._handle_validate()
-            return
-        if path == "/api/promote":
-            self._handle_promote()
-            return
-        if path.startswith("/api/chunking"):
-            self._handle_chunking_post()
-            return
-        self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
+        try:
+            if path == "/api/upload":
+                self._handle_upload()
+            elif path.startswith("/api/review/"):
+                document_id = unquote(path.removeprefix("/api/review/"))
+                self._handle_review(document_id)
+            elif path == "/api/pipeline/run":
+                self._handle_pipeline_run()
+            elif path == "/api/settings":
+                self._handle_settings()
+            elif path == "/api/validate":
+                self._handle_validate()
+            elif path == "/api/promote":
+                self._handle_promote()
+            elif path.startswith("/api/chunking"):
+                self._handle_chunking_post()
+            else:
+                self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
+        except Exception as exc:
+            self._response_status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+            self._log_http_event(
+                event="http_request_failed",
+                status="failed",
+                level=logging.ERROR,
+                message="HTTP request failed",
+                duration_ms=measure_duration_ms(self._request_started_at),
+                exception=exc,
+            )
+            raise
+        else:
+            self._finalize_http_request()
 
     def _handle_chunking_get(self) -> None:
         bridge = self._chunking_api()
@@ -373,6 +517,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             self.path,
             body,
             {key: value for key, value in self.headers.items()},
+            request_id=getattr(self, "_request_id", None),
         )
         self._send_json(payload, status=HTTPStatus(status_code))
 
@@ -452,6 +597,19 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
             return
         save_review_decision(REVIEW_DECISIONS_PATH, decision)
+        server_logger.info(
+            "Review decision recorded",
+            extra={
+                "request_id": getattr(self, "_request_id", None),
+                "stage": "review",
+                "event": "review_decision_recorded",
+                "status": decision.decision,
+                "document_id": decision.document_id,
+                "source_relpath": decision.source_relpath,
+                "decision": decision.decision,
+                "reason": decision.reason,
+            },
+        )
         self._send_json({"ok": True, "decision": asdict(decision), "status": build_status_payload()})
 
     def _handle_pipeline_run(self) -> None:
@@ -485,6 +643,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                 run_id=run_id,
                 ocr_review_threshold=pipeline_options["ocr_review_threshold"],
                 llama_settings_override=llama_settings,
+                request_id=getattr(self, "_request_id", None),
             )
         except Exception as exc:
             self._send_error(HTTPStatus.INTERNAL_SERVER_ERROR, str(exc))
@@ -587,6 +746,15 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         except (json.JSONDecodeError, ValueError) as exc:
             self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
             return
+        server_logger.info(
+            "GUI settings updated",
+            extra={
+                "request_id": getattr(self, "_request_id", None),
+                "stage": "settings",
+                "event": "gui_settings_updated",
+                "status": "completed",
+            },
+        )
         self._send_json({"ok": True, "settings": settings, "status": build_status_payload()})
 
     def _read_json_body(self, *, required: bool = True) -> dict[str, Any]:
@@ -600,6 +768,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
 
     def _send_json(self, payload: Any, *, status: HTTPStatus = HTTPStatus.OK) -> None:
         encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        self._response_status_code = status
         self.send_response(status)
         self._send_common_headers()
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -608,6 +777,7 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         self.wfile.write(encoded)
 
     def _send_no_content(self) -> None:
+        self._response_status_code = HTTPStatus.NO_CONTENT
         self.send_response(HTTPStatus.NO_CONTENT)
         self._send_common_headers()
         self.end_headers()
@@ -624,8 +794,21 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         return getattr(self.server, "chunking_api", None)
 
     def log_message(self, format: str, *args: Any) -> None:
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{timestamp}] {self.address_string()} {format % args}")
+        route = getattr(self, "_request_route", _request_route_for_log(self.path))
+        level = logging.DEBUG if _is_health_check_route(route) else logging.INFO
+        server_logger.log(
+            level,
+            "HTTP access log",
+            extra={
+                "request_id": getattr(self, "_request_id", None),
+                "route": route,
+                "status_code": int(self._response_status_code) if getattr(self, "_response_status_code", None) is not None else None,
+                "stage": "http_access",
+                "event": "http_access_log",
+                "status": "info",
+                "client_address_redacted": _redact_client_address(self.client_address),
+            },
+        )
 
 
 def _parse_multipart_form(
@@ -1015,17 +1198,70 @@ def _llama_settings_for_pipeline_run(body: dict[str, Any]) -> LlamaSettings:
 
 
 def main() -> int:
+    configure_structured_logging(stream=sys.stdout)
+    server_logger.info(
+        "Backend process started",
+        extra={
+            "stage": "backend",
+            "event": "backend_process_started",
+            "status": "started",
+            "host": "127.0.0.1",
+            "port": 8765,
+        },
+    )
     load_secrets_env(ROOT / "secrets.env")
+    server_logger.info(
+        "Backend configuration loaded",
+        extra={
+            "stage": "backend",
+            "event": "backend_configuration_loaded",
+            "status": "completed",
+            "host": "127.0.0.1",
+            "port": 8765,
+            "docs_raw": DOCS_RAW.relative_to(ROOT).as_posix(),
+            "docs_normalized": DOCS_NORMALIZED.relative_to(ROOT).as_posix(),
+        },
+    )
     host = "127.0.0.1"
     port = 8765
     chunking_api = ChunkingApiBridge(docs_normalized=DOCS_NORMALIZED, chunks_root=CHUNKING_ROOT)
     server = ThreadingHTTPServer((host, port), Phase1GuiHandler)
     server.chunking_api = chunking_api
-    print(f"Phase 1 GUI API listening on http://{host}:{port}")
+    server_logger.info(
+        "Backend ready",
+        extra={
+            "stage": "backend",
+            "event": "backend_ready",
+            "status": "completed",
+            "host": host,
+            "port": port,
+        },
+    )
     try:
         server.serve_forever()
     finally:
+        server_logger.info(
+            "Backend shutdown started",
+            extra={
+                "stage": "backend",
+                "event": "backend_shutdown_started",
+                "status": "started",
+                "host": host,
+                "port": port,
+            },
+        )
         chunking_api.close()
+        server.server_close()
+        server_logger.info(
+            "Backend shutdown completed",
+            extra={
+                "stage": "backend",
+                "event": "backend_shutdown_completed",
+                "status": "completed",
+                "host": host,
+                "port": port,
+            },
+        )
     return 0
 
 

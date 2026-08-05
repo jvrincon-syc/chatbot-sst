@@ -143,7 +143,14 @@ class ChunkingApiBridge:
                 message=str(error),
             )
 
-    def handle_post(self, path: str, body: Any, headers: dict[str, str]) -> tuple[int, Any]:
+    def handle_post(
+        self,
+        path: str,
+        body: Any,
+        headers: dict[str, str],
+        *,
+        request_id: str | None = None,
+    ) -> tuple[int, Any]:
         parsed = urlparse(path)
         route = parsed.path.removeprefix("/api/chunking")
         segments = [segment for segment in route.split("/") if segment]
@@ -192,6 +199,7 @@ class ChunkingApiBridge:
                     document_ids=tuple(str(item) for item in document_ids_raw),
                     profile_id=profile_id,
                     force=force,
+                    request_id=request_id,
                 ),
                 idempotency_key=idempotency_key,
             )
@@ -218,7 +226,10 @@ class ChunkingApiBridge:
                 message=str(error),
             )
         except Exception as error:  # pragma: no cover - defensive guard
-            logger.exception("chunking_gui_bridge_failed", extra={"path": path})
+            logger.exception(
+                "chunking_gui_bridge_failed",
+                extra={"route": "/api/chunking", "request_id": request_id},
+            )
             return int(HTTPStatus.INTERNAL_SERVER_ERROR), _chunking_error_payload(
                 code="CHUNKING_INTERNAL_ERROR",
                 message=str(error),

@@ -2,13 +2,15 @@ from __future__ import annotations
 
 import json
 import os
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
+from time import perf_counter
 
 from pydantic import ValidationError
 
-from core.logging.logger import get_logger
+from core.logging.observability import measure_duration_ms
 from ingestion.classification.rules import classify_document
 from ingestion.document_control.extractor import extract_document_control
 from ingestion.inventory.scanner import scan_docs_raw
@@ -65,7 +67,7 @@ _MATERIAL_PAGE_WARNINGS = {
 }
 DEFAULT_OCR_REVIEW_THRESHOLD = 0.80
 _LLAMA_PARSE_METHODS = {"llamaparse", "hybrid_llamaparse"}
-console_logger = get_logger(__name__)
+console_logger = logging.getLogger(__name__)
 
 
 def _now() -> str:
@@ -729,6 +731,7 @@ def _read_document(
     llama_settings: LlamaSettings | None = None,
     event_logger: JsonlLogger | None = None,
 ) -> ReadResult:
+    started_at = perf_counter()
     source_path = _source_path_for_record(record, docs_raw)
     if record.detected_extension == ".md":
         return MarkdownReader().read(source_path)
@@ -776,6 +779,27 @@ def _read_document(
                 result = _configured_local_pdf_reader(ocr_engine).read(source_path)
                 result.warnings.append(f"cloud_fallback_used:{type(exc).__name__}")
                 result.review_reasons.append("cloud_fallback_used")
+                if event_logger is not None:
+                    event_logger.event(
+                        stage="reading",
+                        event="document_fallback_activated",
+                        status="warning",
+                        message="Cloud fallback activated",
+                        document_id=record.document_id,
+                        source_path=record.source_relpath,
+                        provider="llama_cloud",
+                        capability="parse",
+                        warning_code="cloud_fallback_used",
+                        duration_ms=measure_duration_ms(started_at),
+                        context={
+                            "primary_provider": "llama_cloud",
+                            "effective_provider": "local",
+                            "fallback_reason": type(exc).__name__,
+                        },
+                        attributes={
+                            "fallback_strategy": "local_fallback",
+                        },
+                    )
                 return result
             raise
     raise ValueError(f"Unsupported format: {record.detected_extension or 'unknown'}")
@@ -821,7 +845,7 @@ def _run_document(
     )
 
 
-def run_pipeline(
+def _run_pipeline_legacy(
     *,
     docs_raw: Path,
     docs_normalized: Path,
@@ -836,57 +860,118 @@ def run_pipeline(
     ocr_review_threshold: float = DEFAULT_OCR_REVIEW_THRESHOLD,
     golden_status: Optional[str] = None,
     llama_settings_override: LlamaSettings | None = None,
+    request_id: str | None = None,
 ) -> Dict[str, int]:
-    run_id = run_id or "run_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
+    raise RuntimeError("legacy pipeline helper removed")
     output_root = staging_root or docs_normalized
     manifests_dir = output_root / "_manifests"
-    logger = JsonlLogger(manifests_dir / f"{run_id}_details.log", run_id)
-    previous_records = _load_previous_inventory(manifests_dir / "inventory.json")
-    records = scan_docs_raw(docs_raw, corpus_version=corpus_version, pipeline_version=pipeline_version)
-    if only_sources is not None:
-        selected = {
-            canonical_relpath(str(source).replace("\\", "/"))
-            for source in only_sources
-        }
-        records = [record for record in records if record.source_relpath in selected]
+    event_logger = JsonlLogger(
+        manifests_dir / f"{run_id}_details.log",
+        run_id,
+        request_id=request_id,
+    )
+    started_at = perf_counter()
     summary = {"processed": 0, "failed": 0, "needs_review": 0, "skipped": 0}
     errors: List[dict] = []
     needs_review: List[dict] = []
     run_documents: List[dict] = []
     bundle_manifests = []
 
-    for record in records:
-        console_logger.info(
-            "Processing document",
-            extra={
-                "run_id": run_id,
-                "document_id": record.document_id,
-                "source_path": record.source_relpath,
-                "stage": "inventory",
-                "event": "document_selected",
-                "status": "started",
-            },
+    def _emit_pipeline_event(
+        *,
+        level: int,
+        stage: str,
+        event: str,
+        status: str,
+        message: str,
+        document_id: str | None = None,
+        source_path: str | None = None,
+        warning_code: str | None = None,
+        duration_ms: int | None = None,
+        metrics: dict[str, int | float] | None = None,
+        attributes: dict[str, object] | None = None,
+        exception: BaseException | None = None,
+    ) -> None:
+        context: dict[str, object] = {"run_id": run_id}
+        if request_id is not None:
+            context["request_id"] = request_id
+        if document_id is not None:
+            context["document_id"] = document_id
+        payload_extra: dict[str, object] = {
+            "run_id": run_id,
+            "stage": stage,
+            "event": event,
+            "status": status,
+            "event_message": message,
+            "context": context,
+            "metrics": metrics or {},
+            "attributes": attributes or {},
+        }
+        if request_id is not None:
+            payload_extra["request_id"] = request_id
+        if document_id is not None:
+            payload_extra["document_id"] = document_id
+        if source_path is not None:
+            payload_extra["source_path"] = source_path
+        if warning_code is not None:
+            payload_extra["warning_code"] = warning_code
+        if duration_ms is not None:
+            payload_extra["duration_ms"] = duration_ms
+        console_logger.log(level, message, extra=payload_extra, exc_info=exception)
+        event_logger.event(
+            stage=stage,
+            event=event,
+            status=status,
+            message=message,
+            request_id=request_id,
+            document_id=document_id,
+            source_path=source_path,
+            warning_code=warning_code,
+            duration_ms=duration_ms,
+            context=context,
+            metrics=metrics,
+            attributes=attributes,
+            exception=exception,
         )
-        if not force and _can_skip_record(record, previous_records, docs_raw, output_root):
-            previous = previous_records[record.source_relpath]
-            record.processing_status = previous.processing_status
-            summary["skipped"] += 1
-            run_documents.append(
-                _run_document(
-                    record,
-                    document_status=record.processing_status,
-                    disposition="reused",
-                )
-            )
-            logger.event(
-                stage="inventory",
-                event="document_skipped",
-                status="skipped",
-                message="Source hash unchanged; existing normalized artifacts reused.",
-                document_id=record.document_id,
-                source_path=record.source_relpath,
-            )
-            continue
+
+    _emit_pipeline_event(
+        level=logging.INFO,
+        stage="pipeline",
+        event="pipeline_run_started",
+        status="started",
+        message="Pipeline run started",
+        metrics={
+            "classification_review_threshold": classification_review_threshold,
+            "ocr_review_threshold": ocr_review_threshold,
+        },
+        attributes={
+            "corpus_version": corpus_version,
+            "pipeline_version": pipeline_version,
+            "promote": promote,
+        },
+    )
+
+    if True:
+        previous_records = _load_previous_inventory(manifests_dir / "inventory.json")
+        records = scan_docs_raw(
+            docs_raw,
+            corpus_version=corpus_version,
+            pipeline_version=pipeline_version,
+        )
+        if only_sources is not None:
+            selected = {
+                canonical_relpath(str(source).replace("\\", "/"))
+                for source in only_sources
+            }
+            records = [record for record in records if record.source_relpath in selected]
+        _emit_pipeline_event(
+            level=logging.INFO,
+            stage="inventory",
+            event="pipeline_inventory_completed",
+            status="completed",
+            message="Inventory scan completed",
+            metrics={"document_count": len(records)},
+        )
 
         logger.event(
             stage="reading",
@@ -989,7 +1074,6 @@ def run_pipeline(
                 warning_code=reason,
                 exception=exc,
             )
-
     write_inventory(manifests_dir / "inventory.json", records)
     dump_json(
         manifests_dir / f"{run_id}.json",
@@ -1056,3 +1140,467 @@ def run_pipeline(
             },
         )
     return summary
+
+
+def run_pipeline(
+    *,
+    docs_raw: Path,
+    docs_normalized: Path,
+    staging_root: Optional[Path] = None,
+    promote: bool = False,
+    only_sources: Optional[List[str]] = None,
+    force: bool = False,
+    corpus_version: str = "1",
+    pipeline_version: str = "1.0.0",
+    run_id: Optional[str] = None,
+    classification_review_threshold: float = 0.60,
+    ocr_review_threshold: float = DEFAULT_OCR_REVIEW_THRESHOLD,
+    golden_status: Optional[str] = None,
+    llama_settings_override: LlamaSettings | None = None,
+    request_id: str | None = None,
+) -> Dict[str, int]:
+    run_id = run_id or "run_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
+    output_root = staging_root or docs_normalized
+    manifests_dir = output_root / "_manifests"
+    event_logger = JsonlLogger(
+        manifests_dir / f"{run_id}_details.log",
+        run_id,
+        request_id=request_id,
+    )
+    started_at = perf_counter()
+    summary = {"processed": 0, "failed": 0, "needs_review": 0, "skipped": 0}
+    errors: List[dict] = []
+    needs_review: List[dict] = []
+    run_documents: List[dict] = []
+    bundle_manifests: list[object] = []
+
+    def _emit_pipeline_event(
+        *,
+        level: int,
+        stage: str,
+        event: str,
+        status: str,
+        message: str,
+        document_id: str | None = None,
+        source_path: str | None = None,
+        warning_code: str | None = None,
+        duration_ms: int | None = None,
+        metrics: dict[str, int | float] | None = None,
+        attributes: dict[str, object] | None = None,
+        exception: BaseException | None = None,
+    ) -> None:
+        context: dict[str, object] = {"run_id": run_id}
+        if request_id is not None:
+            context["request_id"] = request_id
+        if document_id is not None:
+            context["document_id"] = document_id
+        exc_info = (
+            (type(exception), exception, exception.__traceback__)
+            if exception is not None
+            else None
+        )
+        payload_extra: dict[str, object] = {
+            "run_id": run_id,
+            "stage": stage,
+            "event": event,
+            "status": status,
+            "event_message": message,
+            "context": context,
+            "metrics": metrics or {},
+            "attributes": attributes or {},
+        }
+        if request_id is not None:
+            payload_extra["request_id"] = request_id
+        if document_id is not None:
+            payload_extra["document_id"] = document_id
+        if source_path is not None:
+            payload_extra["source_path"] = source_path
+        if warning_code is not None:
+            payload_extra["warning_code"] = warning_code
+        if duration_ms is not None:
+            payload_extra["duration_ms"] = duration_ms
+        console_logger.log(level, message, extra=payload_extra, exc_info=exc_info)
+        event_logger.event(
+            stage=stage,
+            event=event,
+            status=status,
+            message=message,
+            request_id=request_id,
+            document_id=document_id,
+            source_path=source_path,
+            warning_code=warning_code,
+            duration_ms=duration_ms,
+            context=context,
+            metrics=metrics,
+            attributes=attributes,
+            exception=exception,
+        )
+
+    _emit_pipeline_event(
+        level=logging.INFO,
+        stage="pipeline",
+        event="pipeline_run_started",
+        status="started",
+        message="Pipeline run started",
+        metrics={
+            "classification_review_threshold": classification_review_threshold,
+            "ocr_review_threshold": ocr_review_threshold,
+        },
+        attributes={
+            "corpus_version": corpus_version,
+            "pipeline_version": pipeline_version,
+            "promote": promote,
+        },
+    )
+
+    try:
+        previous_records = _load_previous_inventory(manifests_dir / "inventory.json")
+        records = scan_docs_raw(
+            docs_raw,
+            corpus_version=corpus_version,
+            pipeline_version=pipeline_version,
+        )
+        if only_sources is not None:
+            selected = {
+                canonical_relpath(str(source).replace("\\", "/"))
+                for source in only_sources
+            }
+            records = [record for record in records if record.source_relpath in selected]
+
+        _emit_pipeline_event(
+            level=logging.INFO,
+            stage="inventory",
+            event="pipeline_inventory_completed",
+            status="completed",
+            message="Inventory scan completed",
+            metrics={"document_count": len(records)},
+        )
+
+        for record in records:
+            document_started_at = perf_counter()
+            _emit_pipeline_event(
+                level=logging.INFO,
+                stage="inventory",
+                event="document_selected",
+                status="started",
+                message="Processing document",
+                document_id=record.document_id,
+                source_path=record.source_relpath,
+            )
+            if not force and _can_skip_record(record, previous_records, docs_raw, output_root):
+                previous = previous_records[record.source_relpath]
+                record.processing_status = previous.processing_status
+                summary["skipped"] += 1
+                run_documents.append(
+                    _run_document(
+                        record,
+                        document_status=record.processing_status,
+                        disposition="reused",
+                    )
+                )
+                _emit_pipeline_event(
+                    level=logging.INFO,
+                    stage="inventory",
+                    event="document_skipped",
+                    status="skipped",
+                    message="Source hash unchanged; existing normalized artifacts reused.",
+                    document_id=record.document_id,
+                    source_path=record.source_relpath,
+                )
+                continue
+
+            _emit_pipeline_event(
+                level=logging.INFO,
+                stage="reading",
+                event="document_start",
+                status="started",
+                message="Processing document",
+                document_id=record.document_id,
+                source_path=record.source_relpath,
+            )
+            try:
+                result = _read_document(
+                    record,
+                    docs_raw=docs_raw,
+                    llama_settings=llama_settings_override,
+                    event_logger=event_logger,
+                )
+                metadata, bundle = _write_success_artifacts(
+                    record=record,
+                    result=result,
+                    docs_raw=docs_raw,
+                    docs_normalized=output_root,
+                    corpus_version=corpus_version,
+                    pipeline_version=pipeline_version,
+                    classification_review_threshold=classification_review_threshold,
+                    ocr_review_threshold=ocr_review_threshold,
+                )
+                bundle_manifests.append(bundle)
+                record.processing_status = metadata.processing_status
+                record.ocr_confidence = metadata.ocr_confidence
+                document_duration_ms = measure_duration_ms(document_started_at)
+                _emit_pipeline_event(
+                    level=logging.INFO,
+                    stage="normalization",
+                    event="document_normalization_completed",
+                    status="completed",
+                    message="Document normalization completed",
+                    document_id=record.document_id,
+                    source_path=record.source_relpath,
+                    duration_ms=document_duration_ms,
+                    metrics={
+                        "page_count": result.page_count,
+                        "warning_count": len(result.warnings),
+                    },
+                    attributes={"processing_status": metadata.processing_status},
+                )
+                _emit_pipeline_event(
+                    level=logging.INFO,
+                    stage="validation",
+                    event="document_validation_completed",
+                    status="warning" if metadata.processing_status == "needs_review" else "completed",
+                    message="Document validation completed",
+                    document_id=record.document_id,
+                    source_path=record.source_relpath,
+                    duration_ms=document_duration_ms,
+                    metrics={
+                        "page_count": result.page_count,
+                        "warning_count": len(result.warnings),
+                        "review_reason_count": len(result.review_reasons),
+                    },
+                    attributes={
+                        "processing_status": metadata.processing_status,
+                        "review_reason_count": len(result.review_reasons),
+                    },
+                )
+                if metadata.processing_status == "needs_review":
+                    summary["needs_review"] += 1
+                    needs_review.append(
+                        {
+                            "document_id": record.document_id,
+                            "source_relpath": record.source_relpath,
+                            "reasons": result.review_reasons,
+                            "stage": "reading",
+                            "recommended_action": "Revisar advertencias de extracción antes de indexar.",
+                            "review_status": "pending",
+                        }
+                    )
+                    _emit_pipeline_event(
+                        level=logging.WARNING,
+                        stage="review",
+                        event="document_review_required",
+                        status="warning",
+                        message="Document requires human review",
+                        document_id=record.document_id,
+                        source_path=record.source_relpath,
+                        duration_ms=document_duration_ms,
+                        metrics={
+                            "warning_count": len(result.warnings),
+                            "review_reason_count": len(result.review_reasons),
+                        },
+                        attributes={
+                            "processing_status": metadata.processing_status,
+                            "review_status": "pending",
+                        },
+                    )
+                else:
+                    summary["processed"] += 1
+                run_documents.append(
+                    _run_document(
+                        record,
+                        document_status=record.processing_status,
+                        disposition=record.processing_status,
+                        warnings=result.warnings,
+                    )
+                )
+                _emit_pipeline_event(
+                    level=logging.INFO,
+                    stage="output_generation",
+                    event="document_finished",
+                    status=record.processing_status,
+                    message="Document processed",
+                    document_id=record.document_id,
+                    source_path=record.source_relpath,
+                    duration_ms=document_duration_ms,
+                )
+            except Exception as exc:
+                if isinstance(exc, OcrDependencyError):
+                    reasons = exc.reasons
+                elif _is_cloud_pdf_failure(record, llama_settings_override):
+                    reasons = ["llama_cloud_provider_error"]
+                elif record.detected_extension == ".pdf":
+                    reasons = ["pdf_extractor_unconfigured"]
+                else:
+                    reasons = ["processing_error"]
+                reason = reasons[0]
+                status = "needs_review" if record.detected_extension == ".pdf" else "failed"
+                record.processing_status = status
+                summary[status] += 1
+                target = needs_review if status == "needs_review" else errors
+                target.append(
+                    {
+                        "document_id": record.document_id,
+                        "source_relpath": record.source_relpath,
+                        "reasons": reasons,
+                        "stage": "ocr" if isinstance(exc, OcrDependencyError) else "reading",
+                        "recommended_action": _failure_recommendation(reason, exc),
+                        "review_status": "pending",
+                        "error": str(exc),
+                    }
+                )
+                run_documents.append(
+                    _run_document(
+                        record,
+                        document_status=status,
+                        disposition=status,
+                        warnings=reasons,
+                    )
+                )
+                _emit_pipeline_event(
+                    level=logging.ERROR if status == "failed" else logging.WARNING,
+                    stage="reading",
+                    event="document_failed",
+                    status=status,
+                    message=str(exc),
+                    document_id=record.document_id,
+                    source_path=record.source_relpath,
+                    warning_code=reason,
+                    duration_ms=measure_duration_ms(document_started_at),
+                    exception=exc,
+                )
+
+        write_inventory(manifests_dir / "inventory.json", records)
+        dump_json(
+            manifests_dir / f"{run_id}.json",
+            RunManifest(
+                schema_version="2.0",
+                run_id=run_id,
+                timestamp=_now(),
+                fingerprints={},
+                summary=summary,
+                documents=run_documents,
+                bundles=bundle_manifests,
+            ),
+        )
+        dump_json(
+            manifests_dir / "needs_review.json",
+            ReviewManifest(
+                schema_version="2.0",
+                run_id=run_id,
+                generated_at=_now(),
+                items=[
+                    ReviewItem(
+                        schema_version="2.0",
+                        document_id=item["document_id"],
+                        source_relpath=item["source_relpath"],
+                        reasons=item["reasons"],
+                        details=[item.get("recommended_action", "")],
+                    )
+                    for item in needs_review
+                ],
+            ),
+        )
+        dump_json(
+            manifests_dir / "errors.json",
+            ErrorManifest(
+                schema_version="2.0",
+                run_id=run_id,
+                generated_at=_now(),
+                items=[
+                    ErrorItem(
+                        schema_version="2.0",
+                        document_id=item.get("document_id"),
+                        source_relpath=item.get("source_relpath"),
+                        stage=item["stage"],
+                        error_type=item["reasons"][0],
+                        message=item.get("error", item["reasons"][0]),
+                        retryable=False,
+                    )
+                    for item in errors
+                ],
+            ),
+        )
+        validation = validate_normalized_tree(output_root, raw_root=docs_raw, run_id=run_id)
+        dump_json(manifests_dir / f"validation_{run_id}.json", validation)
+        _emit_pipeline_event(
+            level=logging.INFO,
+            stage="validation",
+            event="pipeline_validation_completed",
+            status="completed",
+            message="Pipeline validation completed",
+            metrics={
+                "document_count": len(records),
+                "processed_count": summary["processed"],
+                "needs_review_count": summary["needs_review"],
+                "skipped_count": summary["skipped"],
+                "failed_count": summary["failed"],
+            },
+            attributes={"validation_status": validation.status},
+        )
+        if promote:
+            if validation.status != "passed":
+                raise PromotionError("promotion requires structural validation to pass")
+            _emit_pipeline_event(
+                level=logging.INFO,
+                stage="promotion",
+                event="document_promotion_started",
+                status="started",
+                message="Promotion started",
+                metrics={"document_count": len(records)},
+                attributes={"validation_status": validation.status},
+            )
+            promote_candidate(
+                output_root,
+                docs_normalized,
+                {
+                    "structural_status": validation.status,
+                    "golden_status": golden_status,
+                    "run_id": run_id,
+                },
+            )
+            _emit_pipeline_event(
+                level=logging.INFO,
+                stage="promotion",
+                event="document_promotion_completed",
+                status="completed",
+                message="Promotion completed",
+                metrics={"document_count": len(records)},
+                attributes={"validation_status": validation.status},
+            )
+        _emit_pipeline_event(
+            level=logging.INFO,
+            stage="pipeline",
+            event="pipeline_run_completed",
+            status="completed",
+            message="Pipeline run completed",
+            duration_ms=measure_duration_ms(started_at),
+            metrics={
+                "document_count": len(records),
+                "processed_count": summary["processed"],
+                "needs_review_count": summary["needs_review"],
+                "skipped_count": summary["skipped"],
+                "failed_count": summary["failed"],
+            },
+            attributes={
+                "validation_status": validation.status,
+                "promoted": promote and validation.status == "passed",
+            },
+        )
+        return summary
+    except Exception as exc:
+        _emit_pipeline_event(
+            level=logging.ERROR,
+            stage="pipeline",
+            event="pipeline_run_failed",
+            status="failed",
+            message=str(exc),
+            duration_ms=measure_duration_ms(started_at),
+            metrics={
+                "processed_count": summary["processed"],
+                "needs_review_count": summary["needs_review"],
+                "skipped_count": summary["skipped"],
+                "failed_count": summary["failed"],
+            },
+            exception=exc,
+        )
+        raise

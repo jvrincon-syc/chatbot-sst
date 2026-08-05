@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import logging
 import unicodedata
+from time import perf_counter
 from pathlib import Path
 from typing import Literal, Protocol
 
 from core.logging.logger import get_logger
+from core.logging.observability import measure_duration_ms
 from ingestion.application.ports.classifier import DocumentClassifierPort
 from ingestion.application.ports.classifier import ClassificationRequest
 from ingestion.application.ports.extractor import ExtractionRequest
@@ -44,6 +46,7 @@ class LlamaPhaseEventLogger(Protocol):
         result_count: int | None = None,
         warning_count: int | None = None,
         warning_code: str | None = None,
+        duration_ms: int | None = None,
         exception: BaseException | None = None,
     ) -> None:
         """Record a structured provider phase event."""
@@ -111,6 +114,7 @@ class LlamaOrchestrator:
             if stop == "classify":
                 if self._classify_enabled and self._classifier is not None:
                     upstream_job_id = parsed.provider_job.job_id if parsed else None
+                    phase_started_at = perf_counter()
                     self._log_phase_event(
                         level="info",
                         capability="classify",
@@ -140,6 +144,7 @@ class LlamaOrchestrator:
                             upstream_job_id=upstream_job_id,
                             configuration_hash=self._classification_configuration_hash,
                             warning_code="llama_classify_failed",
+                            duration_ms=measure_duration_ms(phase_started_at),
                             exception=exc,
                         )
                         raise
@@ -155,11 +160,13 @@ class LlamaOrchestrator:
                         upstream_job_id=upstream_job_id,
                         configuration_hash=self._classification_configuration_hash,
                         result_count=2,
+                        duration_ms=measure_duration_ms(phase_started_at),
                     )
                     schema_extract = extraction_schema_for_document_type(
                         document_type.selected.label
                     )
                 else:
+                    phase_started_at = perf_counter()
                     warnings.append("llama_classify_disabled")
                     self._log_phase_event(
                         level="warning",
@@ -171,8 +178,10 @@ class LlamaOrchestrator:
                         source_path=source_path,
                         configuration_hash=self._classification_configuration_hash,
                         warning_code="llama_classify_disabled",
+                        duration_ms=measure_duration_ms(phase_started_at),
                     )
             elif stop == "parse":
+                phase_started_at = perf_counter()
                 self._log_phase_event(
                     level="info",
                     capability="parse",
@@ -204,6 +213,7 @@ class LlamaOrchestrator:
                         source_path=source_path,
                         configuration_hash=self._parse_configuration_hash,
                         warning_code="llama_parse_failed",
+                        duration_ms=measure_duration_ms(phase_started_at),
                         exception=exc,
                     )
                     raise
@@ -218,12 +228,14 @@ class LlamaOrchestrator:
                     job_id=parsed.provider_job.job_id,
                     configuration_hash=self._parse_configuration_hash,
                     result_count=len(parsed.markdown_pages),
+                    duration_ms=measure_duration_ms(phase_started_at),
                 )
             elif stop == "extract":
                 if parsed is None:
                     raise ValueError("LlamaExtract requires parse to run first")
                 if self._extract_enabled and self._extractor is not None:
                     schema_name = schema_extract or "document_control"
+                    phase_started_at = perf_counter()
                     self._log_phase_event(
                         level="info",
                         capability="extract",
@@ -256,6 +268,7 @@ class LlamaOrchestrator:
                             upstream_job_id=parsed.provider_job.job_id,
                             configuration_hash=self._extraction_configuration_hash,
                             warning_code="llama_extract_failed",
+                            duration_ms=measure_duration_ms(phase_started_at),
                             exception=exc,
                         )
                         raise
@@ -275,8 +288,10 @@ class LlamaOrchestrator:
                         configuration_hash=self._extraction_configuration_hash,
                         result_count=len(extraction.fields),
                         warning_count=len(warnings),
+                        duration_ms=measure_duration_ms(phase_started_at),
                     )
                 else:
+                    phase_started_at = perf_counter()
                     warnings.append("llama_extract_disabled")
                     self._log_phase_event(
                         level="warning",
@@ -289,6 +304,7 @@ class LlamaOrchestrator:
                         upstream_job_id=parsed.provider_job.job_id,
                         configuration_hash=self._extraction_configuration_hash,
                         warning_code="llama_extract_disabled",
+                        duration_ms=measure_duration_ms(phase_started_at),
                     )
 
         if parsed is None:
@@ -320,6 +336,7 @@ class LlamaOrchestrator:
         result_count: int | None = None,
         warning_count: int | None = None,
         warning_code: str | None = None,
+        duration_ms: int | None = None,
         exception: BaseException | None = None,
     ) -> None:
         log_extra = {
@@ -336,6 +353,7 @@ class LlamaOrchestrator:
             "result_count": result_count,
             "warning_count": warning_count,
             "warning_code": warning_code,
+            "duration_ms": duration_ms,
         }
         phase_logger.log(
             _python_log_level(level),
@@ -365,6 +383,7 @@ class LlamaOrchestrator:
             result_count=result_count,
             warning_count=warning_count,
             warning_code=warning_code,
+            duration_ms=duration_ms,
             exception=exception,
         )
 

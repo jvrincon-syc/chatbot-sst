@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import logging
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -11,12 +13,12 @@ sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
 
 from ingestion.config.env import load_secrets_env  # noqa: E402
 from ingestion.pipeline import run_pipeline  # noqa: E402
-from core.logging.logger import get_logger  # noqa: E402
-
-console_logger = get_logger(__name__)
+from core.logging.logger import configure_structured_logging  # noqa: E402
 
 
 def main() -> int:
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
+    logger = logging.getLogger(__name__)
     load_secrets_env(ROOT / "secrets.env")
     parser = argparse.ArgumentParser(description="Run ingestion normalization pipeline.")
     parser.add_argument("--docs-raw", type=Path, default=ROOT / "data" / "docs_raw")
@@ -50,16 +52,30 @@ def main() -> int:
         run_id=run_id,
         ocr_review_threshold=args.ocr_review_threshold,
         golden_status=args.golden_status,
+        request_id=f"cli_{run_id}",
     )
-    console_logger.info(
-        "Ingestion pipeline finished",
+    logger.info(
+        "ingestion_pipeline_finished",
         extra={
             "run_id": run_id,
             "stage": "pipeline",
             "event": "pipeline_finished",
-            "status": "finished",
+            "status": "completed",
             "summary": summary,
         },
+    )
+    print(
+        json.dumps(
+            {
+                "status": "completed",
+                "run_id": run_id,
+                "summary": summary,
+                "docs_raw": str(args.docs_raw),
+                "docs_normalized": str(args.docs_normalized),
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
     )
     return 0
 

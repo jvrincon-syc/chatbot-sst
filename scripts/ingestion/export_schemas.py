@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from ingestion.schemas.artifacts import (  # noqa: E402
     PagesArtifact,
     TablesArtifact,
 )
+from core.logging.logger import configure_structured_logging  # noqa: E402
 from ingestion.schemas.manifests import (  # noqa: E402
     BundleManifest,
     ErrorManifest,
@@ -40,6 +42,8 @@ SCHEMAS = {
 
 
 def main() -> int:
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
+    logger = logging.getLogger(__name__)
     output_dir = ROOT / "app" / "back" / "src" / "ingestion" / "schemas" / "json"
     output_dir.mkdir(parents=True, exist_ok=True)
     for filename, model in SCHEMAS.items():
@@ -55,7 +59,27 @@ def main() -> int:
             )
             + "\n",
         )
-    print(f"Exported {len(SCHEMAS)} schemas -> {output_dir}")
+    logger.info(
+        "schemas_exported",
+        extra={
+            "stage": "schemas",
+            "event": "schemas_exported",
+            "status": "completed",
+            "schema_count": len(SCHEMAS),
+            "output_dir": str(output_dir),
+        },
+    )
+    print(
+        json.dumps(
+            {
+                "status": "completed",
+                "schema_count": len(SCHEMAS),
+                "output_dir": str(output_dir),
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0
 
 

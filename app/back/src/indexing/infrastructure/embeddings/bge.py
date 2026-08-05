@@ -64,6 +64,10 @@ class BgeEmbeddingProvider:
     def batch_size(self) -> int:
         return self._settings.batch_size
 
+    @property
+    def retries(self) -> int:
+        return 0
+
     def embed_documents(self, texts: list[str]) -> EmbeddingBatch:
         return self._embed(
             texts,

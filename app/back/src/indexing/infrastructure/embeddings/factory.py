@@ -58,6 +58,10 @@ class DeterministicEmbeddingProvider:
     def batch_size(self) -> int:
         return self.settings.batch_size
 
+    @property
+    def retries(self) -> int:
+        return 0
+
     def embed_documents(self, texts: list[str]) -> EmbeddingBatch:
         batch_texts = validate_texts(texts)
         vectors = [

@@ -4,10 +4,15 @@ import argparse
 import json
 import logging
 import os
+import sys
 from collections.abc import Sequence
 from pathlib import Path
 from pydantic import Field
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
+
+from core.logging.logger import configure_structured_logging  # noqa: E402
 from ingestion.gui.review_store import load_review_decisions
 from ingestion.paths import ArtifactPaths
 from ingestion.schemas.common import StrictModel
@@ -39,7 +44,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
-    _configure_logging()
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
     args = parse_args()
     logger.info(
         "index validation started: docs_normalized=%s profile=%s",
@@ -201,12 +206,8 @@ def _validate_rows(
 
 
 def _configure_logging() -> None:
-    """Configure console logging for the validation CLI."""
-
-    logging.basicConfig(
-        level=os.environ.get("LOG_LEVEL", "INFO").upper(),
-        format="%(asctime)s %(levelname)s %(name)s %(message)s",
-    )
+    """Backward-compatible no-op for older imports."""
+    return None
 
 
 if __name__ == "__main__":

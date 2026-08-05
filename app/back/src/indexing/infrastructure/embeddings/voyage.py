@@ -66,6 +66,10 @@ class VoyageEmbeddingProvider:
     def batch_size(self) -> int:
         return self._settings.batch_size
 
+    @property
+    def retries(self) -> int:
+        return self._settings.retries
+
     def embed_documents(self, texts: list[str]) -> EmbeddingBatch:
         return self._embed(texts, input_type="document")
 
@@ -80,16 +84,16 @@ class VoyageEmbeddingProvider:
         client = self._get_client()
         vectors: list[list[float]] = []
         for chunk in _chunks(batch_texts, self._settings.batch_size):
-            response = _with_retries(
-                lambda chunk=chunk: client.embed(
+            try:
+                response = client.embed(
                     chunk,
                     model=self.profile.embedding_model,
                     input_type=input_type,
                     output_dimension=self.profile.embedding_dimension,
                     truncation=True,
-                ),
-                retries=self._settings.retries,
-            )
+                )
+            except Exception as error:
+                raise _translate_voyage_error(error) from error
             chunk_vectors = getattr(response, "embeddings", None)
             if chunk_vectors is None:
                 raise EmbeddingProviderResponseError(
@@ -142,30 +146,6 @@ def _translate_voyage_error(error: Exception) -> Exception:
     if "timeout" in error_name or "timed out" in message:
         return EmbeddingProviderTimeoutError("voyage embedding request timed out")
     return EmbeddingProviderResponseError("voyage embedding request failed")
-
-
-def _with_retries(call: Callable[[], object], *, retries: int) -> object:
-    attempts = retries + 1
-    for attempt in range(attempts):
-        cause: Exception
-        try:
-            return call()
-        except TimeoutError as error:
-            cause = error
-            translated = EmbeddingProviderTimeoutError(
-                "voyage embedding request timed out"
-            )
-        except Exception as error:
-            cause = error
-            translated = _translate_voyage_error(error)
-        if not isinstance(
-            translated,
-            (EmbeddingProviderTimeoutError, EmbeddingProviderRateLimitError),
-        ):
-            raise translated from cause
-        if attempt == attempts - 1:
-            raise translated from cause
-    raise EmbeddingProviderResponseError("voyage embedding request failed")
 
 
 def _chunks(texts: list[str], batch_size: int) -> list[list[str]]:

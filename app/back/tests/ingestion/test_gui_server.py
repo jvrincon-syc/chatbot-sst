@@ -16,6 +16,8 @@ from ingestion.gui.server import (
     _ingestion_details_for_record,
     _llama_settings_for_pipeline_run,
     _parse_multipart_form,
+    _redact_client_address,
+    _request_route_for_log,
     _pipeline_run_options_from_body,
     _save_gui_settings,
     _staging_target_from_body,
@@ -95,6 +97,35 @@ def test_gui_pipeline_settings_reject_cloud_when_api_key_is_missing(
 
     with pytest.raises(ValueError, match="LLAMA_CLOUD_API_KEY is required"):
         _llama_settings_for_pipeline_run({"providerMode": "llama_cloud"})
+
+
+def test_gui_http_logging_redacts_sensitive_route_segments() -> None:
+    assert _request_route_for_log("/api/review/doc_123") == "/api/review/{document_id}"
+    assert (
+        _request_route_for_log("/api/chunking/runs/run_123")
+        == "/api/chunking/runs/{run_id}"
+    )
+    assert (
+        _request_route_for_log("/api/chunking/runs/run_123/documents")
+        == "/api/chunking/runs/{run_id}/documents"
+    )
+    assert (
+        _request_route_for_log("/api/chunking/runs/run_123/validation")
+        == "/api/chunking/runs/{run_id}/validation"
+    )
+    assert (
+        _request_route_for_log("/api/chunking/documents/doc_123/parents")
+        == "/api/chunking/documents/{document_id}/parents"
+    )
+    assert (
+        _request_route_for_log("/api/chunking/parents/parent_123/children")
+        == "/api/chunking/parents/{parent_id}/children"
+    )
+
+
+def test_gui_http_logging_redacts_client_address() -> None:
+    assert _redact_client_address(("127.0.0.1", 1234)) == "***redacted***"
+    assert _redact_client_address(None) is None
 
 
 def test_validation_target_uses_recent_staging_root() -> None:

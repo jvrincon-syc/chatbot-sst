@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+from time import perf_counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal, Protocol
@@ -19,11 +20,24 @@ from chunking.domain.models import (
     ParentChunk,
     SourceSpan,
 )
+from core.logging.observability import (
+    EventContext,
+    EventStatus,
+    ObservabilityDomain,
+    ObservabilityEvent,
+    emit_observability_event,
+    measure_duration_ms,
+)
 from indexing.application.repositories import (
     NodeRepository,
     NormalizedDocumentRepository,
     ProfileResolver,
     VectorRepository,
+)
+from indexing.application.embedding_provider import EmbeddingError
+from indexing.application.embedding_provider import (
+    EmbeddingProviderRateLimitError,
+    EmbeddingProviderTimeoutError,
 )
 from indexing.domain.models import IndexableDocument, IndexingResult
 from indexing.domain.profiles import IngestionOrigin, ResolvedIndexingProfile
@@ -78,6 +92,41 @@ class LoadedChunkBundle:
     bundle: ChunkBundle
     corpus_version: str
     normalized_relpath: str
+
+
+def _emit_indexing_event(
+    *,
+    event: str,
+    status: EventStatus,
+    message: str,
+    document_id: str | None = None,
+    profile_id: str | None = None,
+    provider: str | None = None,
+    capability: str | None = None,
+    configuration_hash: str | None = None,
+    metrics: dict[str, int | float] | None = None,
+    attributes: dict[str, object] | None = None,
+    exception: BaseException | None = None,
+) -> None:
+    emit_observability_event(
+        logger=logger,
+        event=ObservabilityEvent(
+            event=event,
+            domain=ObservabilityDomain.INDEXING,
+            status=status,
+            message=message,
+            context=EventContext(
+                document_id=document_id,
+                profile_id=profile_id,
+                provider=provider,
+                capability=capability,
+                configuration_hash=configuration_hash,
+            ),
+            metrics=metrics or {},
+            attributes=attributes or {},
+        ),
+        exception=exception,
+    )
 
 
 class BundleLoader(Protocol):
@@ -256,77 +305,382 @@ class LlamaIndexingPort:
         self._parser = StructureAwareNodeParser()
 
     async def index(self, document: IndexableDocument) -> IndexingResult:
-        loaded = self._bundle_loader.load(document)
-        cache_key = IngestionCacheKey(
+        started_at = perf_counter()
+        retry_count = 0
+        _emit_indexing_event(
+            event="indexing_document_started",
+            status=EventStatus.STARTED,
+            message="Indexing document started",
             document_id=document.document_id,
-            source_hash=document.source_hash,
             profile_id=document.profile.profile_id,
-            processing_fingerprint=loaded.bundle.fingerprint,
+            provider=document.profile.embedding_provider,
+            capability="index",
+            attributes={
+                "source_relpath": str(document.source_relpath),
+                "storage_mode": self._storage_mode,
+                "ingestion_origin": self._ingestion_origin,
+            },
         )
-        if self._cache.has(cache_key):
-            return IndexingResult(
+        try:
+            loaded = self._bundle_loader.load(document)
+            _emit_indexing_event(
+                event="indexing_bundle_validated",
+                status=EventStatus.COMPLETED,
+                message="Chunk bundle validated",
                 document_id=document.document_id,
-                profile=document.profile,
-                indexed_parent_nodes=0,
-                indexed_child_nodes=0,
-                deleted_stale_nodes=0,
-                warnings=["index_cache_hit"],
+                profile_id=document.profile.profile_id,
+                provider=document.profile.embedding_provider,
+                capability="index",
+                metrics={
+                    "parent_count": len(loaded.bundle.parents),
+                    "child_count": len(loaded.bundle.children),
+                },
+                attributes={
+                    "corpus_version": loaded.corpus_version,
+                    "normalized_relpath": loaded.normalized_relpath,
+                    "bundle_fingerprint": loaded.bundle.fingerprint,
+                },
+            )
+            cache_key = IngestionCacheKey(
+                document_id=document.document_id,
+                source_hash=document.source_hash,
+                profile_id=document.profile.profile_id,
+                processing_fingerprint=loaded.bundle.fingerprint,
+            )
+            if self._cache.has(cache_key):
+                _emit_indexing_event(
+                    event="indexing_document_completed",
+                    status=EventStatus.REUSED,
+                    message="Indexing cache hit",
+                    document_id=document.document_id,
+                    profile_id=document.profile.profile_id,
+                    provider=document.profile.embedding_provider,
+                    capability="index",
+                    metrics={
+                        "duration_ms": measure_duration_ms(started_at),
+                        "retry_count": retry_count,
+                    },
+                    attributes={"cache_hit": True},
+                )
+                return IndexingResult(
+                    document_id=document.document_id,
+                    profile=document.profile,
+                    indexed_parent_nodes=0,
+                    indexed_child_nodes=0,
+                    deleted_stale_nodes=0,
+                    warnings=["index_cache_hit"],
+                )
+
+            try:
+                resolved_profile = self._resolve_profile(document)
+            except Exception:
+                _emit_indexing_event(
+                    event="indexing_profile_rejected",
+                    status=EventStatus.REJECTED,
+                    message="Indexing profile rejected",
+                    document_id=document.document_id,
+                    profile_id=document.profile.profile_id,
+                    provider=document.profile.embedding_provider,
+                    capability="index",
+                    attributes={"storage_mode": self._storage_mode},
+                )
+                raise
+
+            _emit_indexing_event(
+                event="indexing_profile_resolved",
+                status=EventStatus.COMPLETED,
+                message="Indexing profile resolved",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=resolved_profile.embedding_provider,
+                capability="index",
+                configuration_hash=resolved_profile.config_hash,
+                attributes={
+                    "distance_metric": resolved_profile.distance_metric,
+                    "vector_table": resolved_profile.vector_table,
+                    "metadata_schema_version": resolved_profile.metadata_schema_version,
+                },
             )
 
-        resolved_profile = self._resolve_profile(document)
-        llama_document = self._build_document(document=document, loaded=loaded)
-        nodes = self._metadata_pipeline.apply(self._parser.parse(llama_document))
-        nodes = _with_profile_metadata(nodes=nodes, profile=resolved_profile)
-        parent_nodes = [
-            node for node in nodes if node.metadata.get("node_role") == "parent"
-        ]
-        child_nodes = [
-            node for node in nodes if node.metadata.get("node_role") == "child"
-        ]
-        embeddings = self._embedding_factory.create(document.profile).embed_documents(
-            [node.text for node in child_nodes]
-        ).vectors
-
-        if self._storage_mode == "postgres":
-            self._write_repositories(
-                document=document,
-                loaded=loaded,
-                nodes=nodes,
-                child_nodes=child_nodes,
-                embeddings=embeddings,
-                profile=resolved_profile,
+            llama_document = self._build_document(document=document, loaded=loaded)
+            nodes = self._metadata_pipeline.apply(self._parser.parse(llama_document))
+            nodes = _with_profile_metadata(nodes=nodes, profile=resolved_profile)
+            parent_nodes = [
+                node for node in nodes if node.metadata.get("node_role") == "parent"
+            ]
+            child_nodes = [
+                node for node in nodes if node.metadata.get("node_role") == "child"
+            ]
+            _emit_indexing_event(
+                event="indexing_nodes_built",
+                status=EventStatus.COMPLETED,
+                message="Indexing nodes built",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=resolved_profile.embedding_provider,
+                capability="index",
+                metrics={
+                    "parent_node_count": len(parent_nodes),
+                    "child_node_count": len(child_nodes),
+                },
             )
+
+            embedding_provider = self._embedding_factory.create(document.profile)
+            _emit_indexing_event(
+                event="embedding_provider_selected",
+                status=EventStatus.COMPLETED,
+                message="Embedding provider selected",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=embedding_provider.provider_name,
+                capability="embed",
+                attributes={
+                    "embedding_model": embedding_provider.model_name,
+                    "embedding_dimension": embedding_provider.dimension,
+                    "distance_metric": str(embedding_provider.distance_metric),
+                },
+            )
+            retry_limit = max(0, int(getattr(embedding_provider, "retries", 0) or 0))
+            batch_started_at = perf_counter()
+            _emit_indexing_event(
+                event="embedding_batch_started",
+                status=EventStatus.STARTED,
+                message="Embedding batch started",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=embedding_provider.provider_name,
+                capability="embed",
+                metrics={"batch_size": len(child_nodes)},
+            )
+            while True:
+                attempt_started_at = perf_counter()
+                try:
+                    embeddings = embedding_provider.embed_documents(
+                        [node.text for node in child_nodes]
+                    ).vectors
+                    break
+                except EmbeddingError as exc:
+                    retryable = isinstance(
+                        exc,
+                        (
+                            EmbeddingProviderTimeoutError,
+                            EmbeddingProviderRateLimitError,
+                        ),
+                    )
+                    if retryable and retry_count < retry_limit:
+                        retry_count += 1
+                        _emit_indexing_event(
+                            event="embedding_batch_retrying",
+                            status=EventStatus.WARNING,
+                            message="Embedding batch retrying",
+                            document_id=document.document_id,
+                            profile_id=resolved_profile.profile_id,
+                            provider=embedding_provider.provider_name,
+                            capability="embed",
+                            metrics={
+                                "batch_size": len(child_nodes),
+                                "retry_count": retry_count,
+                                "provider_latency_ms": measure_duration_ms(
+                                    attempt_started_at
+                                ),
+                            },
+                            attributes={
+                                "embedding_model": embedding_provider.model_name,
+                                "embedding_dimension": embedding_provider.dimension,
+                                "error_type": type(exc).__name__,
+                            },
+                            exception=exc,
+                        )
+                        continue
+                    _emit_indexing_event(
+                        event="embedding_batch_failed",
+                        status=EventStatus.FAILED,
+                        message="Embedding batch failed",
+                        document_id=document.document_id,
+                        profile_id=resolved_profile.profile_id,
+                        provider=embedding_provider.provider_name,
+                        capability="embed",
+                        metrics={
+                            "batch_size": len(child_nodes),
+                            "retry_count": retry_count,
+                            "provider_latency_ms": measure_duration_ms(
+                                batch_started_at
+                            ),
+                        },
+                        attributes={
+                            "embedding_model": embedding_provider.model_name,
+                            "embedding_dimension": embedding_provider.dimension,
+                            "error_type": type(exc).__name__,
+                        },
+                        exception=exc,
+                    )
+                    raise
+            _emit_indexing_event(
+                event="embedding_batch_completed",
+                status=EventStatus.COMPLETED,
+                message="Embedding batch completed",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=embedding_provider.provider_name,
+                capability="embed",
+                metrics={
+                    "batch_size": len(child_nodes),
+                    "embedding_count": len(embeddings),
+                    "duration_ms": measure_duration_ms(batch_started_at),
+                    "retry_count": retry_count,
+                    "provider_latency_ms": measure_duration_ms(batch_started_at),
+                },
+            )
+
+            if self._storage_mode == "postgres":
+                _emit_indexing_event(
+                    event="indexing_persistence_started",
+                    status=EventStatus.STARTED,
+                    message="Indexing persistence started",
+                    document_id=document.document_id,
+                    profile_id=resolved_profile.profile_id,
+                    provider=resolved_profile.embedding_provider,
+                    capability="index",
+                    attributes={
+                        "storage_mode": self._storage_mode,
+                        "vector_table": resolved_profile.vector_table,
+                    },
+                )
+                try:
+                    self._write_repositories(
+                        document=document,
+                        loaded=loaded,
+                        nodes=nodes,
+                        child_nodes=child_nodes,
+                        embeddings=embeddings,
+                        profile=resolved_profile,
+                    )
+                    self._cache.record(cache_key)
+                except Exception:
+                    _emit_indexing_event(
+                        event="indexing_persistence_rolled_back",
+                        status=EventStatus.FAILED,
+                        message="Indexing persistence rolled back",
+                        document_id=document.document_id,
+                        profile_id=resolved_profile.profile_id,
+                        provider=resolved_profile.embedding_provider,
+                        capability="index",
+                        attributes={
+                            "storage_mode": self._storage_mode,
+                            "vector_table": resolved_profile.vector_table,
+                        },
+                    )
+                    raise
+                _emit_indexing_event(
+                    event="indexing_document_completed",
+                    status=EventStatus.COMPLETED,
+                    message="Indexing document completed",
+                    document_id=document.document_id,
+                    profile_id=resolved_profile.profile_id,
+                    provider=resolved_profile.embedding_provider,
+                    capability="index",
+                    metrics={
+                        "duration_ms": measure_duration_ms(started_at),
+                        "parent_node_count": len(parent_nodes),
+                        "child_node_count": len(child_nodes),
+                        "retry_count": retry_count,
+                    },
+                    attributes={"storage_mode": self._storage_mode},
+                )
+                return IndexingResult(
+                    document_id=document.document_id,
+                    profile=document.profile,
+                    indexed_parent_nodes=len(parent_nodes),
+                    indexed_child_nodes=len(child_nodes),
+                    deleted_stale_nodes=0,
+                    warnings=[],
+                )
+
+            doc_snapshot = self._docstore.snapshot()
+            vector_snapshot = self._vector_store.snapshot()
+            _emit_indexing_event(
+                event="indexing_persistence_started",
+                status=EventStatus.STARTED,
+                message="Indexing persistence started",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=resolved_profile.embedding_provider,
+                capability="index",
+                attributes={"storage_mode": self._storage_mode},
+            )
+            try:
+                deleted = self._docstore.delete_by_ref_doc_id(document.document_id)
+                self._vector_store.delete_by_ref_doc_id(document.document_id)
+                self._docstore.upsert_nodes(nodes)
+                self._vector_store.upsert_nodes(child_nodes, embeddings)
+            except Exception:
+                self._docstore.restore(doc_snapshot)
+                self._vector_store.restore(vector_snapshot)
+                _emit_indexing_event(
+                    event="indexing_persistence_rolled_back",
+                    status=EventStatus.FAILED,
+                    message="Indexing persistence rolled back",
+                    document_id=document.document_id,
+                    profile_id=resolved_profile.profile_id,
+                    provider=resolved_profile.embedding_provider,
+                    capability="index",
+                    attributes={"storage_mode": self._storage_mode},
+                )
+                raise
+
             self._cache.record(cache_key)
+            _emit_indexing_event(
+                event="indexing_persistence_committed",
+                status=EventStatus.COMPLETED,
+                message="Indexing persistence committed",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=resolved_profile.embedding_provider,
+                capability="index",
+                attributes={"storage_mode": self._storage_mode},
+            )
+            _emit_indexing_event(
+                event="indexing_document_completed",
+                status=EventStatus.COMPLETED,
+                message="Indexing document completed",
+                document_id=document.document_id,
+                profile_id=resolved_profile.profile_id,
+                provider=resolved_profile.embedding_provider,
+                capability="index",
+                metrics={
+                    "duration_ms": measure_duration_ms(started_at),
+                    "parent_node_count": len(parent_nodes),
+                    "child_node_count": len(child_nodes),
+                    "deleted_stale_nodes": deleted,
+                    "retry_count": retry_count,
+                },
+                attributes={"storage_mode": self._storage_mode},
+            )
             return IndexingResult(
                 document_id=document.document_id,
                 profile=document.profile,
                 indexed_parent_nodes=len(parent_nodes),
                 indexed_child_nodes=len(child_nodes),
-                deleted_stale_nodes=0,
+                deleted_stale_nodes=deleted,
                 warnings=[],
             )
-
-        doc_snapshot = self._docstore.snapshot()
-        vector_snapshot = self._vector_store.snapshot()
-        try:
-            deleted = self._docstore.delete_by_ref_doc_id(document.document_id)
-            self._vector_store.delete_by_ref_doc_id(document.document_id)
-            self._docstore.upsert_nodes(nodes)
-            self._vector_store.upsert_nodes(child_nodes, embeddings)
-        except Exception:
-            self._docstore.restore(doc_snapshot)
-            self._vector_store.restore(vector_snapshot)
+        except Exception as exc:
+            _emit_indexing_event(
+                event="indexing_document_failed",
+                status=EventStatus.FAILED,
+                message="Indexing document failed",
+                document_id=document.document_id,
+                profile_id=document.profile.profile_id,
+                provider=document.profile.embedding_provider,
+                capability="index",
+                metrics={
+                    "duration_ms": measure_duration_ms(started_at),
+                    "retry_count": retry_count,
+                },
+                attributes={"storage_mode": self._storage_mode},
+                exception=exc,
+            )
             raise
-
-        self._cache.record(cache_key)
-        return IndexingResult(
-            document_id=document.document_id,
-            profile=document.profile,
-            indexed_parent_nodes=len(parent_nodes),
-            indexed_child_nodes=len(child_nodes),
-            deleted_stale_nodes=deleted,
-            warnings=[],
-        )
 
     def _build_document(
         self,

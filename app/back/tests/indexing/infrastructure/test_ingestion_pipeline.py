@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from chunking.domain.enums import ZeroOverlapReason
 from chunking.domain.models import (
     ChunkBundle,
@@ -15,7 +17,10 @@ from indexing.domain.models import (
     IndexingProfile,
     NormalizedArtifactRefs,
 )
-from indexing.domain.profiles import ResolvedIndexingProfile
+from indexing.domain.profiles import DistanceMetric, ResolvedIndexingProfile
+from indexing.application.embedding_provider import EmbeddingProviderTimeoutError
+from indexing.application.embedding_provider import EmbeddingCapabilities
+from indexing.infrastructure.embeddings.base import embedding_batch
 from indexing.infrastructure.llama_index.docstore import InMemoryDocStore
 from indexing.infrastructure.llama_index.pipeline_factory import (
     LoadedChunkBundle,
@@ -146,6 +151,71 @@ class FakeProfileOrchestrator:
         )
 
 
+class FailingEmbeddingProvider:
+    def __init__(self, profile: IndexingProfile) -> None:
+        self.profile = profile
+
+    @property
+    def provider_name(self) -> str:
+        return self.profile.embedding_provider
+
+    @property
+    def model_name(self) -> str:
+        return self.profile.embedding_model
+
+    @property
+    def dimension(self) -> int:
+        return self.profile.embedding_dimension
+
+    @property
+    def distance_metric(self) -> DistanceMetric:
+        return "cosine"
+
+    @property
+    def normalized(self) -> bool:
+        return False
+
+    @property
+    def capabilities(self) -> EmbeddingCapabilities:
+        return EmbeddingCapabilities()
+
+    @property
+    def batch_size(self) -> int:
+        return 1
+
+    def embed_documents(self, texts):
+        raise EmbeddingProviderTimeoutError("embedding provider timed out")
+
+    def embed_queries(self, texts):
+        return self.embed_documents(texts)
+
+    def embed_texts(self, texts):
+        return self.embed_documents(texts)
+
+
+class RetryingEmbeddingProvider(FailingEmbeddingProvider):
+    def __init__(self, profile: IndexingProfile) -> None:
+        super().__init__(profile)
+        self._attempts = 0
+
+    @property
+    def retries(self) -> int:
+        return 1
+
+    def embed_documents(self, texts):
+        self._attempts += 1
+        if self._attempts == 1:
+            raise EmbeddingProviderTimeoutError("embedding provider timed out")
+        return embedding_batch(
+            vectors=[[0.1, 0.2, 0.3] for _ in texts],
+            expected_count=len(texts),
+            profile=self.profile,
+            distance_metric=self.distance_metric,
+            normalized=self.normalized,
+            capabilities=self.capabilities,
+        )
+
+
 def _profile() -> IndexingProfile:
     return IndexingProfile(
         profile_id="llama-first-local-v1",
@@ -194,6 +264,103 @@ async def test_llama_indexing_port_indexes_parents_and_child_vectors() -> None:
 
 
 @pytest.mark.anyio
+async def test_llama_indexing_port_emits_observability_events_for_success(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    caplog.set_level(logging.INFO)
+    indexer = LlamaIndexingPort(
+        bundle_loader=StaticBundleLoader(),
+        docstore=InMemoryDocStore(),
+        vector_store=InMemoryVectorStore(),
+    )
+
+    result = await indexer.index(_document())
+
+    event_names = {
+        record.event for record in caplog.records if hasattr(record, "event")
+    }
+
+    assert result.indexed_parent_nodes == 1
+    assert "indexing_document_started" in event_names
+    assert "indexing_bundle_validated" in event_names
+    assert "indexing_profile_resolved" in event_names
+    assert "embedding_provider_selected" in event_names
+    assert "embedding_batch_started" in event_names
+    assert "embedding_batch_completed" in event_names
+    assert "indexing_nodes_built" in event_names
+    assert "indexing_persistence_started" in event_names
+    assert "indexing_document_completed" in event_names
+
+
+@pytest.mark.anyio
+async def test_llama_indexing_port_emits_embedding_batch_failed_when_provider_errors(
+    caplog: pytest.LogCaptureFixture,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    caplog.set_level(logging.INFO)
+    indexer = LlamaIndexingPort(
+        bundle_loader=StaticBundleLoader(),
+        docstore=InMemoryDocStore(),
+        vector_store=InMemoryVectorStore(),
+    )
+    monkeypatch.setattr(
+        indexer._embedding_factory,
+        "create",
+        lambda profile: FailingEmbeddingProvider(profile),
+    )
+
+    with pytest.raises(EmbeddingProviderTimeoutError):
+        await indexer.index(_document())
+
+    event_names = {
+        record.event for record in caplog.records if hasattr(record, "event")
+    }
+
+    assert "embedding_batch_failed" in event_names
+    assert "indexing_document_failed" in event_names
+
+
+@pytest.mark.anyio
+async def test_llama_indexing_port_retries_retryable_embedding_errors(
+    caplog: pytest.LogCaptureFixture,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    caplog.set_level(logging.INFO)
+    indexer = LlamaIndexingPort(
+        bundle_loader=StaticBundleLoader(),
+        docstore=InMemoryDocStore(),
+        vector_store=InMemoryVectorStore(),
+    )
+    monkeypatch.setattr(
+        indexer._embedding_factory,
+        "create",
+        lambda profile: RetryingEmbeddingProvider(profile),
+    )
+
+    result = await indexer.index(_document())
+
+    event_names = {
+        record.event for record in caplog.records if hasattr(record, "event")
+    }
+    retry_events = [
+        record
+        for record in caplog.records
+        if getattr(record, "event", None) == "embedding_batch_retrying"
+    ]
+    completed_events = [
+        record
+        for record in caplog.records
+        if getattr(record, "event", None) == "embedding_batch_completed"
+    ]
+
+    assert result.indexed_parent_nodes == 1
+    assert "embedding_batch_retrying" in event_names
+    assert retry_events[0].metrics["retry_count"] == 1
+    assert retry_events[0].metrics["provider_latency_ms"] >= 0
+    assert completed_events[0].metrics["retry_count"] == 1
+
+
+@pytest.mark.anyio
 async def test_llama_indexing_port_replaces_nodes_for_reindexed_document() -> None:
     docstore = InMemoryDocStore()
     vector_store = InMemoryVectorStore()
@@ -212,7 +379,10 @@ async def test_llama_indexing_port_replaces_nodes_for_reindexed_document() -> No
 
 
 @pytest.mark.anyio
-async def test_llama_indexing_port_rolls_back_docstore_when_vector_store_fails() -> None:
+async def test_llama_indexing_port_rolls_back_docstore_when_vector_store_fails(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    caplog.set_level(logging.INFO)
     docstore = InMemoryDocStore()
     docstore.upsert_nodes([])
     indexer = LlamaIndexingPort(
@@ -225,6 +395,11 @@ async def test_llama_indexing_port_rolls_back_docstore_when_vector_store_fails()
         await indexer.index(_document())
 
     assert docstore.nodes_for_ref_doc_id("doc_1") == []
+    event_names = {
+        record.event for record in caplog.records if hasattr(record, "event")
+    }
+    assert "indexing_persistence_rolled_back" in event_names
+    assert "indexing_document_failed" in event_names
 
 
 @pytest.mark.anyio

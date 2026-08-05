@@ -6,6 +6,9 @@ import sys
 from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
+from typing import TextIO
+
+from core.logging.observability import sanitize_observability_payload
 
 _LOG_DIR = Path("logs")
 _RESERVED_LOG_RECORD_ATTRS = frozenset(logging.makeLogRecord({}).__dict__) | {
@@ -44,10 +47,16 @@ def _json_default(value: object) -> str:
 
 
 def _extra_fields(record: logging.LogRecord) -> dict[str, object]:
+    sanitized = sanitize_observability_payload(
+        {
+            key: value
+            for key, value in record.__dict__.items()
+            if key not in _RESERVED_LOG_RECORD_ATTRS and not key.startswith("_")
+        }
+    )
     return {
         key: value
-        for key, value in record.__dict__.items()
-        if key not in _RESERVED_LOG_RECORD_ATTRS and not key.startswith("_")
+        for key, value in sanitized.items()
     }
 
 
@@ -60,24 +69,49 @@ def get_logger(module_name: str) -> logging.Logger:
     return _get_logger(module_name)
 
 
+def configure_structured_logging(
+    *,
+    stream: TextIO = sys.stdout,
+    include_file_handler: bool = True,
+    log_path: Path | None = None,
+) -> logging.Logger:
+    """Configure the root logger for structured backend output."""
+
+    return _configure_logger(
+        logging.getLogger(),
+        stream=stream,
+        include_file_handler=include_file_handler,
+        log_path=log_path,
+    )
+
+
 def _get_logger(name: str) -> logging.Logger:
-    logger = logging.getLogger(name)
+    return _configure_logger(logging.getLogger(name), stream=sys.stdout)
+
+
+def _configure_logger(
+    logger: logging.Logger,
+    *,
+    stream: TextIO,
+    include_file_handler: bool = True,
+    log_path: Path | None = None,
+) -> logging.Logger:
     logger.setLevel(logging.DEBUG)
     logger.propagate = False
 
     formatter = StructuredJsonFormatter()
 
     if not _has_named_handler(logger, _CONSOLE_HANDLER_NAME):
-        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler = logging.StreamHandler(stream)
         console_handler.set_name(_CONSOLE_HANDLER_NAME)
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
         logger.addHandler(console_handler)
 
-    if not _has_named_handler(logger, _FILE_HANDLER_NAME):
+    if include_file_handler and not _has_named_handler(logger, _FILE_HANDLER_NAME):
         _LOG_DIR.mkdir(exist_ok=True)
         file_handler = RotatingFileHandler(
-            _LOG_DIR / "app.log",
+            log_path or (_LOG_DIR / "app.log"),
             maxBytes=5_000_000,
             backupCount=3,
             encoding="utf-8",

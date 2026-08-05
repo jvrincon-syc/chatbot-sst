@@ -5,8 +5,12 @@ from dataclasses import dataclass
 from hashlib import sha256
 import json
 import logging
+import sys
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
 
 from chunking.api.app import create_app
 from chunking.application.chunking_orchestrator import ChunkingOrchestrator
@@ -17,6 +21,7 @@ from chunking.infrastructure.filesystem_chunk_repository import (
 )
 from chunking.infrastructure.filesystem_run_repository import FilesystemRunRepository
 from chunking.infrastructure.schema2_source import Schema2NormalizedDocumentSource
+from core.logging.logger import configure_structured_logging  # noqa: E402
 from ingestion.paths import ArtifactPaths
 
 
@@ -333,8 +338,19 @@ def _materialized_text(details: dict[str, Any]) -> str:
 
 
 def main() -> int:
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
     args = parse_args()
+    logger.info(
+        "chunking_validation_started",
+        extra={
+            "stage": "chunking",
+            "event": "chunking_validation_started",
+            "status": "started",
+            "docs_normalized": args.docs_normalized,
+            "chunks_root": args.chunks_root,
+            "profile": args.profile,
+        },
+    )
     result = validate_chunk_outputs(
         docs_normalized=Path(args.docs_normalized),
         chunks_root=Path(args.chunks_root),
@@ -343,6 +359,18 @@ def main() -> int:
         expected_json=Path(args.expected_json) if args.expected_json else None,
         openapi_output=Path(args.openapi_output) if args.openapi_output else None,
         compare_rerun=not args.skip_rerun_compare,
+    )
+    logger.info(
+        "chunking_validation_completed",
+        extra={
+            "stage": "chunking",
+            "event": "chunking_validation_completed",
+            "status": "completed",
+            "docs_normalized": args.docs_normalized,
+            "chunks_root": args.chunks_root,
+            "profile": args.profile,
+            "document_count": result["documents_checked"],
+        },
     )
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0

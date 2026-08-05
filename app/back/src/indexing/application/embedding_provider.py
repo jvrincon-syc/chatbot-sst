@@ -96,6 +96,10 @@ class EmbeddingProvider(Protocol):
     def batch_size(self) -> int:
         """Return the configured embedding batch size."""
 
+    @property
+    def retries(self) -> int:
+        """Return the configured retry budget for retryable provider errors."""
+
     def embed_documents(self, texts: list[str]) -> EmbeddingBatch:
         """Return document embeddings for indexing."""
 

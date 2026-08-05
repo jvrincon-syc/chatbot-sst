@@ -2,8 +2,17 @@ from __future__ import annotations
 
 import importlib
 import importlib.metadata
+import json
+import logging
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Callable
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
+
+from core.logging.logger import configure_structured_logging  # noqa: E402
 
 
 REQUIRED_DISTRIBUTIONS = {
@@ -77,8 +86,32 @@ def _pydantic_version(versions: dict[str, str | None]) -> dict[str, str]:
 
 
 def main() -> int:
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
+    logger = logging.getLogger(__name__)
     result = check_installed_packages()
-    print(result)
+    logger.info(
+        "llama_dependencies_checked",
+        extra={
+            "stage": "dependencies",
+            "event": "llama_dependencies_checked",
+            "status": "completed" if result.ok else "warning",
+            "ok": result.ok,
+            "missing": result.missing,
+            "unexpected": result.unexpected,
+        },
+    )
+    print(
+        json.dumps(
+            {
+                "ok": result.ok,
+                "missing": result.missing,
+                "unexpected": result.unexpected,
+                "versions": result.versions,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
     return 0 if result.ok else 1
 
 

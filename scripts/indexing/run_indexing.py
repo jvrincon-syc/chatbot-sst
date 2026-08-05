@@ -5,11 +5,25 @@ import asyncio
 import json
 import logging
 import os
+import sys
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
+from time import perf_counter
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
+
+from core.logging.logger import configure_structured_logging  # noqa: E402
+from core.logging.observability import (  # noqa: E402
+    EventContext,
+    EventStatus,
+    ObservabilityDomain,
+    ObservabilityEvent,
+    emit_observability_event,
+    measure_duration_ms,
+)
 from ingestion.paths import ArtifactPaths, stable_document_id
 from ingestion.gui.review_store import load_review_decisions
 from indexing.application.eligibility import IndexingEligibilityService
@@ -59,6 +73,41 @@ class PostgresConnection(Protocol):
         """Close the connection."""
 
 
+def _emit_indexing_event(
+    *,
+    event: str,
+    status: EventStatus,
+    message: str,
+    document_id: str | None = None,
+    profile_id: str | None = None,
+    provider: str | None = None,
+    capability: str | None = None,
+    configuration_hash: str | None = None,
+    metrics: dict[str, int | float] | None = None,
+    attributes: dict[str, object] | None = None,
+    exception: BaseException | None = None,
+) -> None:
+    emit_observability_event(
+        logger=logger,
+        event=ObservabilityEvent(
+            event=event,
+            domain=ObservabilityDomain.INDEXING,
+            status=status,
+            message=message,
+            context=EventContext(
+                document_id=document_id,
+                profile_id=profile_id,
+                provider=provider,
+                capability=capability,
+                configuration_hash=configuration_hash,
+            ),
+            metrics=metrics or {},
+            attributes=attributes or {},
+        ),
+        exception=exception,
+    )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run Llama-first indexing.")
     parser.add_argument("--docs-normalized", default="data/docs_normalized")
@@ -77,7 +126,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
-    _configure_logging()
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
     args = parse_args()
     logger.info(
         "indexing command started: profile=%s store=%s dry_run=%s ingestion_origin=%s",
@@ -136,6 +185,17 @@ def run_indexing(
             "profile": profile_id,
             "store": store,
         }
+        _emit_indexing_event(
+            event="indexing_profile_rejected",
+            status=EventStatus.BLOCKED,
+            message="Indexing blocked: PostgreSQL confirmation missing",
+            profile_id=profile_id,
+            capability="index",
+            attributes={
+                "store": store,
+                "reason": summary["reason"],
+            },
+        )
         logger.warning(
             "indexing blocked: reason=%s profile=%s store=%s",
             summary["reason"],
@@ -150,6 +210,17 @@ def run_indexing(
             "profile": profile_id,
             "store": store,
         }
+        _emit_indexing_event(
+            event="indexing_profile_rejected",
+            status=EventStatus.BLOCKED,
+            message="Indexing blocked: PostgreSQL DSN missing",
+            profile_id=profile_id,
+            capability="index",
+            attributes={
+                "store": store,
+                "reason": summary["reason"],
+            },
+        )
         logger.warning(
             "indexing blocked: reason=%s profile=%s store=%s",
             summary["reason"],
@@ -167,6 +238,18 @@ def run_indexing(
             "profile": profile_id,
             "store": store,
         }
+        _emit_indexing_event(
+            event="indexing_profile_rejected",
+            status=EventStatus.BLOCKED,
+            message="Indexing blocked: inventory manifest missing",
+            profile_id=profile_id,
+            capability="index",
+            attributes={
+                "store": store,
+                "reason": summary["reason"],
+                "path": str(manifest_path),
+            },
+        )
         logger.warning(
             "indexing blocked: reason=%s path=%s profile=%s store=%s",
             summary["reason"],
@@ -193,6 +276,21 @@ def run_indexing(
         eligibility = eligibility_service.evaluate(record=record, decision=decision)
         if eligibility.eligible:
             approved.append(record)
+            continue
+
+        _emit_indexing_event(
+            event="indexing_document_rejected",
+            status=EventStatus.REJECTED,
+            message="Document rejected for indexing",
+            document_id=document_id,
+            profile_id=profile_id,
+            capability="index",
+            attributes={
+                "source_relpath": eligibility.source_relpath,
+                "reason": eligibility.reason,
+                "ingestion_origin": eligibility.ingestion_origin,
+            },
+        )
 
     if dry_run:
         summary = {
@@ -229,6 +327,20 @@ def run_indexing(
             ingestion_origin=ingestion_origin,
         )
         if blocked is not None:
+            _emit_indexing_event(
+                event="indexing_profile_rejected",
+                status=EventStatus.BLOCKED,
+                message="Indexing blocked: profile incompatible with live PostgreSQL lane",
+                profile_id=profile_id,
+                provider=blocked["embedding_provider"],
+                capability="index",
+                attributes={
+                    "store": store,
+                    "reason": blocked["reason"],
+                    "embedding_model": blocked["embedding_model"],
+                    "vector_table": blocked["vector_table"],
+                },
+            )
             logger.warning(
                 "indexing blocked: reason=%s profile=%s store=%s provider=%s",
                 blocked["reason"],
@@ -236,13 +348,46 @@ def run_indexing(
                 store,
                 blocked["embedding_provider"],
             )
-            finalize_postgres_connection(postgres_indexing.connection, succeeded=False)
+            finalize_postgres_connection(
+                postgres_indexing.connection,
+                succeeded=False,
+                profile_id=postgres_indexing.profile.profile_id,
+                vector_table=postgres_indexing.profile.vector_table,
+            )
             return blocked
         profile = _indexing_profile_from_resolved(postgres_indexing.profile)
+        _emit_indexing_event(
+            event="indexing_profile_resolved",
+            status=EventStatus.COMPLETED,
+            message="Indexing profile resolved",
+            profile_id=profile.profile_id,
+            provider=profile.embedding_provider,
+            capability="index",
+            configuration_hash=postgres_indexing.profile.config_hash,
+            attributes={
+                "store": store,
+                "vector_table": profile.vector_store,
+                "ingestion_origin": ingestion_origin,
+            },
+        )
         indexer_kwargs = postgres_indexing.indexer_kwargs
         indexer_kwargs["storage_mode"] = "postgres"
         indexer_kwargs["ingestion_origin"] = ingestion_origin
         connection = postgres_indexing.connection
+    else:
+        _emit_indexing_event(
+            event="indexing_profile_resolved",
+            status=EventStatus.COMPLETED,
+            message="Indexing profile resolved",
+            profile_id=profile.profile_id,
+            provider=profile.embedding_provider,
+            capability="index",
+            attributes={
+                "store": store,
+                "vector_store": profile.vector_store,
+                "ingestion_origin": ingestion_origin,
+            },
+        )
     documents = [_indexable_document(record, profile) for record in approved]
     chunks_root = normalized_root.parent / "chunks"
     indexer = LlamaIndexingPort(
@@ -255,7 +400,12 @@ def run_indexing(
         succeeded = True
     finally:
         if connection is not None:
-            finalize_postgres_connection(connection, succeeded=succeeded)
+            finalize_postgres_connection(
+                connection,
+                succeeded=succeeded,
+                profile_id=profile.profile_id,
+                vector_table=profile.vector_store,
+            )
     summary = {
         "status": "indexed",
         "profile": profile_id,
@@ -329,13 +479,37 @@ def finalize_postgres_connection(
     connection: PostgresConnection,
     *,
     succeeded: bool,
+    profile_id: str | None = None,
+    vector_table: str | None = None,
 ) -> None:
     """Finalize a PostgreSQL transaction and close the connection."""
 
     if succeeded:
         connection.commit()
+        _emit_indexing_event(
+            event="indexing_persistence_committed",
+            status=EventStatus.COMPLETED,
+            message="PostgreSQL indexing transaction committed",
+            profile_id=profile_id,
+            capability="index",
+            attributes={
+                "store": "postgres",
+                "vector_table": vector_table,
+            },
+        )
     else:
         connection.rollback()
+        _emit_indexing_event(
+            event="indexing_persistence_rolled_back",
+            status=EventStatus.FAILED,
+            message="PostgreSQL indexing transaction rolled back",
+            profile_id=profile_id,
+            capability="index",
+            attributes={
+                "store": "postgres",
+                "vector_table": vector_table,
+            },
+        )
     connection.close()
 
 
@@ -420,15 +594,6 @@ async def _index_documents(*, indexer: LlamaIndexingPort, documents: list[Indexa
     for document in documents:
         results.append(await use_case.index(document))
     return results
-
-
-def _configure_logging() -> None:
-    """Configure console logging for the indexing CLI."""
-
-    logging.basicConfig(
-        level=os.environ.get("LOG_LEVEL", "INFO").upper(),
-        format="%(asctime)s %(levelname)s %(name)s %(message)s",
-    )
 
 
 if __name__ == "__main__":

@@ -5,9 +5,15 @@ import json
 import logging
 import os
 import re
+import sys
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from urllib.parse import quote_plus
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
+
+from core.logging.logger import configure_structured_logging  # noqa: E402
 
 
 REQUIRED_BASE_TABLES = (
@@ -32,7 +38,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
-    _configure_logging()
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
     args = parse_args()
     logger.info(
         "postgres prepare started: migrations_dir=%s env_file=%s",
@@ -194,12 +200,8 @@ def _redact(value: str) -> str:
 
 
 def _configure_logging() -> None:
-    """Configure console logging for the PostgreSQL preparation CLI."""
-
-    logging.basicConfig(
-        level=os.environ.get("LOG_LEVEL", "INFO").upper(),
-        format="%(asctime)s %(levelname)s %(name)s %(message)s",
-    )
+    """Backward-compatible no-op for older imports."""
+    return None
 
 
 if __name__ == "__main__":

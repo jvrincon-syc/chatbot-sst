@@ -3,12 +3,18 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import logging
 import os
 import time
+import sys
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
+
 from ingestion.config.llama_settings import load_llama_settings
+from core.logging.logger import configure_structured_logging  # noqa: E402
 from ingestion.infrastructure.llama_cloud.classify_config import LlamaClassifyConfig
 from ingestion.infrastructure.llama_cloud.classify_rules import classification_labels
 from ingestion.infrastructure.llama_cloud.extract_config import LlamaExtractConfig
@@ -16,6 +22,8 @@ from ingestion.infrastructure.llama_cloud.parse_config import LlamaParseConfig
 
 
 def main() -> int:
+    configure_structured_logging(stream=sys.stderr, include_file_handler=False)
+    logger = logging.getLogger(__name__)
     parser = argparse.ArgumentParser(description="Guarded Llama Cloud smoke test.")
     parser.add_argument("--document-id", default="synthetic-llama-smoke")
     parser.add_argument("--source", type=Path)
@@ -42,7 +50,17 @@ def main() -> int:
         }
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
-        print(f"blocked: wrote {args.output}")
+        logger.warning(
+            "llama_smoke_blocked",
+            extra={
+                "stage": "evaluation",
+                "event": "llama_smoke_blocked",
+                "status": "blocked",
+                "document_id": args.document_id,
+                "output": str(args.output),
+            },
+        )
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
         return 2
 
     try:
@@ -51,14 +69,34 @@ def main() -> int:
         result = _blocked_result(args.document_id, f"settings_error:{exc}")
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
-        print(f"blocked: wrote {args.output}")
+        logger.warning(
+            "llama_smoke_blocked",
+            extra={
+                "stage": "evaluation",
+                "event": "llama_smoke_blocked",
+                "status": "blocked",
+                "document_id": args.document_id,
+                "output": str(args.output),
+            },
+        )
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
         return 2
 
     if not settings.cloud_enabled:
         result = _blocked_result(args.document_id, "LLAMA_CLOUD_ENABLED is false")
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
-        print(f"blocked: wrote {args.output}")
+        logger.warning(
+            "llama_smoke_blocked",
+            extra={
+                "stage": "evaluation",
+                "event": "llama_smoke_blocked",
+                "status": "blocked",
+                "document_id": args.document_id,
+                "output": str(args.output),
+            },
+        )
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
         return 2
 
     from llama_cloud import AsyncLlamaCloud
@@ -71,6 +109,16 @@ def main() -> int:
             output=args.output,
             document_id=args.document_id,
         )
+    )
+    logger.info(
+        "llama_smoke_completed",
+        extra={
+            "stage": "evaluation",
+            "event": "llama_smoke_completed",
+            "status": result["status"],
+            "document_id": args.document_id,
+            "output": str(args.output),
+        },
     )
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0 if result["status"] == "completed" else 1

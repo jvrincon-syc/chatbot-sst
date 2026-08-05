@@ -47,6 +47,7 @@ class ChunkingRunRequest:
     document_ids: tuple[str, ...]
     profile_id: str
     force: bool
+    request_id: str | None = None
 
 
 @dataclass
@@ -126,6 +127,7 @@ class ChunkingRunService:
                         "idempotency_key": idempotency_key,
                         "profile_id": request.profile_id,
                         "scope": request.scope,
+                        "request_id": request.request_id,
                     },
                 )
                 raise ChunkingIdempotencyConflictError(
@@ -134,7 +136,11 @@ class ChunkingRunService:
             if run_id in self._runs:
                 logger.info(
                     "chunking_run_reused",
-                    extra={"run_id": run_id, "idempotency_key": idempotency_key},
+                    extra={
+                        "run_id": run_id,
+                        "idempotency_key": idempotency_key,
+                        "request_id": request.request_id,
+                    },
                 )
                 return self._runs[run_id]
             state = ChunkingRunState(
@@ -144,6 +150,7 @@ class ChunkingRunService:
                     document_ids=document_ids,
                     profile_id=request.profile_id,
                     force=request.force,
+                    request_id=request.request_id,
                 ),
                 idempotency_key=idempotency_key,
                 payload_fingerprint=payload_fingerprint,
@@ -160,6 +167,7 @@ class ChunkingRunService:
                     "profile_id": request.profile_id,
                     "requested_documents": len(document_ids),
                     "scope": request.scope,
+                    "request_id": request.request_id,
                 },
             )
             return state
@@ -169,10 +177,17 @@ class ChunkingRunService:
         if state.status not in {"queued", "interrupted"}:
             logger.info(
                 "chunking_run_submit_skipped",
-                extra={"run_id": run_id, "status": state.status},
+                extra={
+                    "run_id": run_id,
+                    "status": state.status,
+                    "request_id": state.request.request_id,
+                },
             )
             return
-        logger.info("chunking_run_submitted", extra={"run_id": run_id})
+        logger.info(
+            "chunking_run_submitted",
+            extra={"run_id": run_id, "request_id": state.request.request_id},
+        )
         self._executor.submit(self._execute_run_guarded, run_id)
 
     def execute_run(self, run_id: str) -> None:
@@ -191,6 +206,7 @@ class ChunkingRunService:
                 "run_id": run_id,
                 "requested_documents": state.requested_documents,
                 "profile_id": state.request.profile_id,
+                "request_id": state.request.request_id,
             },
         )
         profile = ChunkingProfile.local_structural_v1()
@@ -217,6 +233,7 @@ class ChunkingRunService:
                     "reused": result.reused,
                     "completed_documents": state.completed_documents,
                     "requested_documents": state.requested_documents,
+                    "request_id": state.request.request_id,
                 },
             )
         state.status = "completed" if not state.warnings else "completed_with_warnings"
@@ -229,6 +246,7 @@ class ChunkingRunService:
                 "status": state.status,
                 "completed_documents": state.completed_documents,
                 "warnings": len(state.warnings),
+                "request_id": state.request.request_id,
             },
         )
 
@@ -332,6 +350,7 @@ class ChunkingRunService:
                     "run_id": run_id,
                     "completed_documents": state.completed_documents,
                     "requested_documents": state.requested_documents,
+                    "request_id": state.request.request_id,
                 },
             )
 
@@ -411,6 +430,7 @@ class ChunkingRunService:
             document_ids=tuple(str(item) for item in request_payload.get("document_ids", [])),
             profile_id=str(request_payload["profile_id"]),
             force=bool(request_payload["force"]),
+            request_id=request_payload.get("request_id"),
         )
         status = str(payload.get("status") or "interrupted")
         if status in {"queued", "running"}:
