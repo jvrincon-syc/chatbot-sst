@@ -18,10 +18,17 @@ from core.logging.logger import configure_structured_logging  # noqa: E402
 
 REQUIRED_BASE_TABLES = (
     "indexing_profiles",
+    "indexing_targets",
+    "chunk_bundles",
+    "embedding_runs",
+    "embedding_bundles",
+    "embedding_bundle_chunks",
     "indexing_normalized_documents",
     "indexing_runs",
     "indexing_run_documents",
     "indexing_nodes",
+    "readiness_checks",
+    "retrieval_profiles",
 )
 
 logger = logging.getLogger(__name__)
@@ -172,11 +179,26 @@ def _verification_summary(*, cursor: object, migrations: Sequence[Path]) -> dict
         """
     )
     vector_tables_ready = int(cursor.fetchone()[0])
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+          FROM indexing_profiles AS profile
+          JOIN indexing_targets AS target
+            ON target.indexing_target_id = profile.default_indexing_target_id
+         WHERE profile.active = true
+           AND target.active = true
+           AND target.postgres_schema = 'public'
+           AND target.vector_table = profile.vector_table
+           AND to_regclass(target.vector_table) IS NOT NULL
+        """
+    )
+    active_targets_ready = int(cursor.fetchone()[0])
     status = (
         "prepared"
         if base_tables_present == len(REQUIRED_BASE_TABLES)
         and active_profiles > 0
         and vector_tables_ready == active_profiles
+        and active_targets_ready == active_profiles
         else "failed"
     )
     return {
@@ -186,6 +208,7 @@ def _verification_summary(*, cursor: object, migrations: Sequence[Path]) -> dict
         "required_base_tables": len(REQUIRED_BASE_TABLES),
         "active_profiles": active_profiles,
         "vector_tables_ready": vector_tables_ready,
+        "active_targets_ready": active_targets_ready,
     }
 
 

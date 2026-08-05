@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from collections.abc import Sequence
 
 from llama_index.core.schema import BaseNode
@@ -50,6 +51,20 @@ class InMemoryVectorRepository:
         )
 
 
+@dataclass(frozen=True)
+class AppendOnlyVectorRecord:
+    """One inactive vector row ready to be activated after validation."""
+
+    node_id: str
+    document_id: str
+    embedding: list[float]
+    metadata: dict[str, object]
+    embedding_bundle_id: str
+    corpus_version: str
+    configuration_fingerprint: str
+    vector_checksum: str
+
+
 class PostgresVectorRepository:
     """PostgreSQL adapter for profile-specific vector tables."""
 
@@ -90,6 +105,160 @@ class PostgresVectorRepository:
                     ),
                 )
         return int(deleted)
+
+    def append_bundle_vectors(
+        self,
+        *,
+        profile: ResolvedIndexingProfile,
+        indexing_target_id: str,
+        records: Sequence[AppendOnlyVectorRecord],
+    ) -> int:
+        """Insert inactive vector rows for one embedding bundle."""
+
+        if not records:
+            return 0
+        for record in records:
+            if len(record.embedding) != profile.embedding_dimension:
+                raise VectorStoreWriteError(
+                    "embedding dimension does not match selected profile"
+                )
+
+        table = profile.vector_table
+        with self._connection.cursor() as cursor:
+            for record in records:
+                cursor.execute(
+                    f"""
+                    INSERT INTO {table} (
+                        node_id, document_id, embedding, metadata,
+                        embedding_bundle_id, embedding_profile_id,
+                        indexing_target_id, corpus_version, is_active,
+                        configuration_fingerprint, vector_checksum
+                    )
+                    VALUES (%s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (embedding_bundle_id, node_id) DO UPDATE SET
+                        document_id = EXCLUDED.document_id,
+                        embedding = EXCLUDED.embedding,
+                        metadata = EXCLUDED.metadata,
+                        embedding_profile_id = EXCLUDED.embedding_profile_id,
+                        indexing_target_id = EXCLUDED.indexing_target_id,
+                        corpus_version = EXCLUDED.corpus_version,
+                        is_active = false,
+                        superseded_at = NULL,
+                        configuration_fingerprint = EXCLUDED.configuration_fingerprint,
+                        vector_checksum = EXCLUDED.vector_checksum,
+                        updated_at = now()
+                    """,
+                    (
+                        record.node_id,
+                        record.document_id,
+                        record.embedding,
+                        json.dumps(record.metadata, sort_keys=True),
+                        record.embedding_bundle_id,
+                        profile.profile_id,
+                        indexing_target_id,
+                        record.corpus_version,
+                        False,
+                        record.configuration_fingerprint,
+                        record.vector_checksum,
+                    ),
+                )
+        return len(records)
+
+    def activate_bundle(
+        self,
+        *,
+        profile: ResolvedIndexingProfile,
+        indexing_target_id: str,
+        corpus_version: str,
+        embedding_bundle_id: str,
+    ) -> None:
+        """Activate one bundle and supersede prior active rows for the same lane."""
+
+        table = profile.vector_table
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                UPDATE {table}
+                   SET is_active = false,
+                       superseded_at = now()
+                 WHERE embedding_profile_id = %s
+                   AND indexing_target_id = %s
+                   AND corpus_version = %s
+                   AND embedding_bundle_id <> %s
+                   AND is_active = true
+                """,
+                (
+                    profile.profile_id,
+                    indexing_target_id,
+                    corpus_version,
+                    embedding_bundle_id,
+                ),
+            )
+            cursor.execute(
+                f"""
+                UPDATE {table}
+                   SET is_active = true,
+                       superseded_at = NULL
+                 WHERE embedding_profile_id = %s
+                   AND indexing_target_id = %s
+                   AND corpus_version = %s
+                   AND embedding_bundle_id = %s
+                """,
+                (
+                    profile.profile_id,
+                    indexing_target_id,
+                    corpus_version,
+                    embedding_bundle_id,
+                ),
+            )
+
+    def rollback_to_bundle(
+        self,
+        *,
+        profile: ResolvedIndexingProfile,
+        indexing_target_id: str,
+        corpus_version: str,
+        current_embedding_bundle_id: str,
+        previous_embedding_bundle_id: str,
+    ) -> None:
+        """Deactivate the current bundle and reactivate a previous validated bundle."""
+
+        table = profile.vector_table
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                UPDATE {table}
+                   SET is_active = false,
+                       superseded_at = now()
+                 WHERE embedding_profile_id = %s
+                   AND indexing_target_id = %s
+                   AND corpus_version = %s
+                   AND embedding_bundle_id = %s
+                """,
+                (
+                    profile.profile_id,
+                    indexing_target_id,
+                    corpus_version,
+                    current_embedding_bundle_id,
+                ),
+            )
+            cursor.execute(
+                f"""
+                UPDATE {table}
+                   SET is_active = true,
+                       superseded_at = NULL
+                 WHERE embedding_profile_id = %s
+                   AND indexing_target_id = %s
+                   AND corpus_version = %s
+                   AND embedding_bundle_id = %s
+                """,
+                (
+                    profile.profile_id,
+                    indexing_target_id,
+                    corpus_version,
+                    previous_embedding_bundle_id,
+                ),
+            )
 
 
 def _validate_embeddings(
