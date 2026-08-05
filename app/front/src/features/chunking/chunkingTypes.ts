@@ -49,6 +49,23 @@ export type ChunkingRunDocumentsPage = {
   totalPages: number;
 };
 
+export type ChunkingStoredDocument = {
+  documentId: string;
+  normalizedRelpath: string;
+  sourceRelpath: string;
+  profileId: string;
+  parentCount: number;
+  childCount: number;
+};
+
+export type ChunkingStoredDocumentsPage = {
+  items: ChunkingStoredDocument[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+};
+
 export type ChunkingSourceSpan = {
   pageStart: number | null;
   pageEnd: number | null;

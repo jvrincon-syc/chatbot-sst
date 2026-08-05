@@ -90,6 +90,14 @@ class ChunkingApiBridge:
             if route == "/profiles":
                 return int(HTTPStatus.OK), self._service.list_profiles()
 
+            if route == "/documents":
+                page = _query_int(query, "page", 1, minimum=1)
+                page_size = _query_int(query, "page_size", 25, minimum=1, maximum=100)
+                return int(HTTPStatus.OK), self._service.list_stored_documents(
+                    page=page,
+                    page_size=page_size,
+                )
+
             if len(segments) == 2 and segments[0] == "runs":
                 return int(HTTPStatus.OK), self._service.get_run_payload(segments[1])
 

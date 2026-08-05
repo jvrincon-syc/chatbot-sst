@@ -4,7 +4,7 @@
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md",
   "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
   "profile_id": "local-structural-v1",
-  "reused": false,
+  "reused": true,
   "run_id": "8ac62878fb51662b176a24b26947455143cb584e00d2120afa29bda77541162a",
   "status": "passed"
 }

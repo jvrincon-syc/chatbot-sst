@@ -85,6 +85,8 @@ def _request_route_for_log(path: str) -> str:
     if len(segments) >= 3 and segments[0] == "api" and segments[1] == "review":
         return "/api/review/{document_id}"
     if len(segments) >= 3 and segments[0] == "api" and segments[1] == "chunking":
+        if len(segments) == 3 and segments[2] == "documents":
+            return "/api/chunking/documents"
         if len(segments) == 4 and segments[2] == "runs":
             return "/api/chunking/runs/{run_id}"
         if len(segments) == 5 and segments[2] == "runs" and segments[4] in {"documents", "validation"}:

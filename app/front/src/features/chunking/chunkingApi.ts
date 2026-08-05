@@ -7,6 +7,8 @@ import type {
   ChunkingRunDocumentsPage,
   ChunkingRunRequest,
   ChunkingRunSummary,
+  ChunkingStoredDocument,
+  ChunkingStoredDocumentsPage,
   ChunkingValidation,
 } from "./chunkingTypes.js";
 
@@ -76,12 +78,37 @@ function toRunDocument(payload: Record<string, unknown>): ChunkingRunDocument {
   };
 }
 
+function toStoredDocument(payload: Record<string, unknown>): ChunkingStoredDocument {
+  return {
+    documentId: String(payload.document_id ?? ""),
+    normalizedRelpath: String(payload.normalized_relpath ?? ""),
+    sourceRelpath: String(payload.source_relpath ?? ""),
+    profileId: String(payload.profile_id ?? ""),
+    parentCount: Number(payload.parent_count ?? 0),
+    childCount: Number(payload.child_count ?? 0),
+  };
+}
+
 function toRunDocumentsPage(payload: Record<string, unknown>): ChunkingRunDocumentsPage {
   return {
     items: Array.isArray(payload.items)
       ? payload.items
           .filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
           .map(toRunDocument)
+      : [],
+    page: Number(payload.page ?? 1),
+    pageSize: Number(payload.page_size ?? 25),
+    totalItems: Number(payload.total_items ?? 0),
+    totalPages: Number(payload.total_pages ?? 0),
+  };
+}
+
+function toStoredDocumentsPage(payload: Record<string, unknown>): ChunkingStoredDocumentsPage {
+  return {
+    items: Array.isArray(payload.items)
+      ? payload.items
+          .filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+          .map(toStoredDocument)
       : [],
     page: Number(payload.page ?? 1),
     pageSize: Number(payload.page_size ?? 25),
@@ -225,6 +252,18 @@ export async function loadChunkingRunDocuments(options: {
     `/api/chunking/runs/${encodeURIComponent(options.runId)}/documents${suffix}`,
   );
   return toRunDocumentsPage((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
+}
+
+export async function loadChunkingStoredDocuments(options?: {
+  page?: number;
+  pageSize?: number;
+}): Promise<ChunkingStoredDocumentsPage> {
+  const params = new URLSearchParams();
+  if (options?.page) params.set("page", String(options.page));
+  if (options?.pageSize) params.set("page_size", String(options.pageSize));
+  const suffix = params.toString() ? `?${params.toString()}` : "";
+  const response = await fetch(`/api/chunking/documents${suffix}`);
+  return toStoredDocumentsPage((await readJson<Record<string, unknown>>(response)) as Record<string, unknown>);
 }
 
 export async function loadChunkingValidation(runId: string): Promise<ChunkingValidation> {

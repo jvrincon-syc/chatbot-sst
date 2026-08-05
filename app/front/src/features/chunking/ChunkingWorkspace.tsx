@@ -21,6 +21,7 @@ import {
   loadChunkingProfiles,
   loadChunkingRun,
   loadChunkingRunDocuments,
+  loadChunkingStoredDocuments,
   loadChunkingValidationOptional,
 } from "./chunkingApi.js";
 import {
@@ -41,6 +42,7 @@ import type {
   ChunkingProfile,
   ChunkingRunDocumentsPage,
   ChunkingRunSummary,
+  ChunkingStoredDocumentsPage,
   ChunkingValidation,
 } from "./chunkingTypes.js";
 
@@ -76,6 +78,10 @@ export function ChunkingWorkspace() {
   const [documentsLoading, setDocumentsLoading] = useState(false);
   const [documentsError, setDocumentsError] = useState<string | null>(null);
   const [documentsPageNumber, setDocumentsPageNumber] = useState(1);
+  const [storedDocumentsPage, setStoredDocumentsPage] = useState<ChunkingStoredDocumentsPage | null>(null);
+  const [storedDocumentsLoading, setStoredDocumentsLoading] = useState(false);
+  const [storedDocumentsError, setStoredDocumentsError] = useState<string | null>(null);
+  const [storedDocumentsPageNumber, setStoredDocumentsPageNumber] = useState(1);
 
   const [validation, setValidation] = useState<ChunkingValidation | null>(null);
   const [validationLoading, setValidationLoading] = useState(false);
@@ -123,6 +129,8 @@ export function ChunkingWorkspace() {
     validation?.status ??
     (runSummary && !chunkingRunIsTerminalStatus(runSummary.status) ? "pendiente" : "sin reporte");
 
+  const isRunMode = runSummary !== null;
+
   useEffect(() => {
     let cancelled = false;
     async function loadProfiles() {
@@ -155,16 +163,24 @@ export function ChunkingWorkspace() {
   }, []);
 
   useEffect(() => {
+    void loadStoredSnapshot(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const activeDocumentIds = isRunMode
+      ? (documentsPage?.items ?? []).map((item) => item.documentId)
+      : (storedDocumentsPage?.items ?? []).map((item) => item.documentId);
     if (!selectedDocumentId) {
       return;
     }
-    if (!documentsPage?.items.some((item) => item.documentId === selectedDocumentId)) {
+    if (!activeDocumentIds.includes(selectedDocumentId)) {
       setSelectedDocumentId(null);
       setParentsPage(null);
       setSelectedParentId(null);
       setChildrenPage(null);
     }
-  }, [documentsPage, selectedDocumentId]);
+  }, [documentsPage, isRunMode, selectedDocumentId, storedDocumentsPage]);
 
   useEffect(() => {
     if (!parentsPage) {
@@ -245,6 +261,35 @@ export function ChunkingWorkspace() {
       setRunLoading(false);
       setDocumentsLoading(false);
       setValidationLoading(false);
+    }
+  };
+
+  const loadStoredSnapshot = async (page = storedDocumentsPageNumber) => {
+    setStoredDocumentsLoading(true);
+    setStoredDocumentsError(null);
+    try {
+      const docs = await loadChunkingStoredDocuments({ page });
+      setStoredDocumentsPage(docs);
+      setStoredDocumentsPageNumber(docs.page);
+      if (docs.items.length > 0) {
+        const nextDocumentId =
+          docs.items.find((item) => item.documentId === selectedDocumentId)?.documentId ??
+          docs.items[0].documentId;
+        setSelectedDocumentId(nextDocumentId);
+        await loadParentsForDocument(nextDocumentId, 1, undefined);
+      } else {
+        setSelectedDocumentId(null);
+        setParentsPage(null);
+        setSelectedParentId(null);
+        setChildrenPage(null);
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "No se pudieron cargar los documentos ya chunkeados.";
+      setStoredDocumentsError(message);
+      setNotice({ tone: "warning", message });
+    } finally {
+      setStoredDocumentsLoading(false);
     }
   };
 
@@ -343,7 +388,7 @@ export function ChunkingWorkspace() {
 
   const handleRefresh = async () => {
     if (!runSummary?.runId) {
-      setNotice({ tone: "warning", message: "Primero crea o selecciona una corrida." });
+      await loadStoredSnapshot(storedDocumentsPageNumber);
       return;
     }
     await loadRunSnapshot(runSummary.runId, documentsPageNumber);
@@ -351,6 +396,8 @@ export function ChunkingWorkspace() {
 
   const handleDocumentPageChange = async (page: number) => {
     if (!runSummary?.runId) {
+      setStoredDocumentsPageNumber(page);
+      await loadStoredSnapshot(page);
       return;
     }
     setDocumentsPageNumber(page);
@@ -378,11 +425,8 @@ export function ChunkingWorkspace() {
   };
 
   const handleSelectDocument = async (documentId: string) => {
-    if (!runSummary?.runId) {
-      return;
-    }
     setSelectedDocumentId(documentId);
-    await loadParentsForDocument(documentId, 1, runSummary.runId);
+    await loadParentsForDocument(documentId, 1, runSummary?.runId);
   };
 
   const handleParentsPageChange = async (page: number) => {
@@ -399,8 +443,31 @@ export function ChunkingWorkspace() {
     await loadChildrenForParent(selectedParentId, page);
   };
 
-  const selectedDocument = documentsPage?.items.find((item) => item.documentId === selectedDocumentId) ?? null;
   const selectedParent = parentsPage?.items.find((item) => item.chunkId === selectedParentId) ?? null;
+  const documentPanelPage = isRunMode ? documentsPage : storedDocumentsPage;
+  const documentPanelLoading = isRunMode ? documentsLoading : storedDocumentsLoading;
+  const documentPanelError = isRunMode ? documentsError : storedDocumentsError;
+  const documentPanelTitle = isRunMode ? "Documentos de la corrida" : "Chunks persistidos";
+  const documentPanelSubtitle = documentPanelPage
+    ? chunkingPaginationLabel(documentPanelPage.page, documentPanelPage.totalPages, documentPanelPage.totalItems)
+    : isRunMode
+      ? "Sin documentos cargados"
+      : "Sin documentos chunkeados";
+  const documentRows = isRunMode
+    ? (documentsPage?.items ?? []).map((document) => ({
+        documentId: document.documentId,
+        normalizedRelpath: document.normalizedRelpath,
+        primaryValue: document.status,
+        secondaryValue: document.reused ? "Si" : "No",
+      }))
+    : (storedDocumentsPage?.items ?? []).map((document) => ({
+        documentId: document.documentId,
+        normalizedRelpath: document.normalizedRelpath,
+        primaryValue: document.profileId,
+        secondaryValue: `${document.parentCount} / ${document.childCount}`,
+      }));
+  const documentPrimaryHeader = isRunMode ? "Estado" : "Perfil";
+  const documentSecondaryHeader = isRunMode ? "Reutilizado" : "Parents / Children";
 
   return (
     <section className="chunking-workspace">
@@ -446,10 +513,21 @@ export function ChunkingWorkspace() {
           onRefresh={handleRefresh}
         />
         <ChunkingDocumentsPanel
-          documentsPage={documentsPage}
-          loading={documentsLoading}
-          error={documentsError}
+          title={documentPanelTitle}
+          subtitle={documentPanelSubtitle}
+          rows={documentRows}
+          page={documentPanelPage?.page ?? 1}
+          totalPages={documentPanelPage?.totalPages ?? 0}
+          loading={documentPanelLoading}
+          error={documentPanelError}
           selectedDocumentId={selectedDocumentId}
+          primaryHeader={documentPrimaryHeader}
+          secondaryHeader={documentSecondaryHeader}
+          emptyMessage={
+            isRunMode
+              ? "No hay documentos para mostrar."
+              : "No se encontraron documentos con chunks persistidos."
+          }
           onSelectDocument={handleSelectDocument}
           onPageChange={handleDocumentPageChange}
         />
@@ -457,7 +535,7 @@ export function ChunkingWorkspace() {
 
       <section className="chunking-inspector-grid">
         <ChunkingParentsPanel
-          document={selectedDocument}
+          documentId={selectedDocumentId}
           parentsPage={parentsPage}
           loading={parentsLoading}
           error={parentsError}
@@ -770,7 +848,7 @@ function ChunkingRunPanel({
         ) : (
           <div className="chunking-empty">
             <Search size={20} />
-            <span>La pantalla espera una corrida local para mostrar estado y documentos.</span>
+            <span>Sin corrida activa. Puedes inspeccionar abajo los chunks ya persistidos.</span>
           </div>
         )}
       </div>
@@ -821,53 +899,70 @@ function ChunkingRunPanel({
 }
 
 function ChunkingDocumentsPanel({
-  documentsPage,
+  title,
+  subtitle,
+  rows,
+  page,
+  totalPages,
   loading,
   error,
   selectedDocumentId,
+  primaryHeader,
+  secondaryHeader,
+  emptyMessage,
   onSelectDocument,
   onPageChange,
 }: {
-  documentsPage: ChunkingRunDocumentsPage | null;
+  title: string;
+  subtitle: string;
+  rows: Array<{
+    documentId: string;
+    normalizedRelpath: string;
+    primaryValue: string;
+    secondaryValue: string;
+  }>;
+  page: number;
+  totalPages: number;
   loading: boolean;
   error: string | null;
   selectedDocumentId: string | null;
+  primaryHeader: string;
+  secondaryHeader: string;
+  emptyMessage: string;
   onSelectDocument: (documentId: string) => void;
   onPageChange: (page: number) => void;
 }) {
-  const page = documentsPage?.page ?? 1;
-  const totalPages = documentsPage?.totalPages ?? 0;
   return (
     <section className="panel chunking-panel">
       <div className="panel-heading">
         <div>
-          <h2>Documentos de la corrida</h2>
-          <span>{documentsPage ? chunkingPaginationLabel(page, totalPages, documentsPage.totalItems) : "Sin documentos cargados"}</span>
+          <h2>{title}</h2>
+          <span>{subtitle}</span>
         </div>
       </div>
       {loading ? (
         <div className="chunking-empty">
           <Loader2 className="spin" size={20} />
-          <span>Cargando documentos de la corrida...</span>
+          <span>Cargando documentos...</span>
         </div>
       ) : error ? (
         <div className="chunking-empty">
           <TriangleAlert size={20} />
           <span>{error}</span>
         </div>
-      ) : documentsPage && documentsPage.items.length > 0 ? (
+      ) : rows.length > 0 ? (
         <>
           <div className="table-wrap">
             <table className="chunking-table">
               <thead>
                 <tr>
                   <th>Documento</th>
-                  <th>Estado</th>
-                  <th>Reutilizado</th>
+                  <th>{primaryHeader}</th>
+                  <th>{secondaryHeader}</th>
                 </tr>
               </thead>
               <tbody>
-                {documentsPage.items.map((document) => (
+                {rows.map((document) => (
                   <tr
                     key={document.documentId}
                     className={selectedDocumentId === document.documentId ? "selected-row" : ""}
@@ -881,8 +976,8 @@ function ChunkingDocumentsPanel({
                         </button>
                       </div>
                     </td>
-                    <td>{document.status}</td>
-                    <td>{document.reused ? "Si" : "No"}</td>
+                    <td>{document.primaryValue}</td>
+                    <td>{document.secondaryValue}</td>
                   </tr>
                 ))}
               </tbody>
@@ -893,7 +988,7 @@ function ChunkingDocumentsPanel({
       ) : (
         <div className="chunking-empty">
           <SplitSquareHorizontal size={20} />
-          <span>No hay documentos para mostrar.</span>
+          <span>{emptyMessage}</span>
         </div>
       )}
     </section>
@@ -901,7 +996,7 @@ function ChunkingDocumentsPanel({
 }
 
 function ChunkingParentsPanel({
-  document,
+  documentId,
   parentsPage,
   loading,
   error,
@@ -909,7 +1004,7 @@ function ChunkingParentsPanel({
   onSelectParent,
   onPageChange,
 }: {
-  document: ChunkingRunDocumentsPage["items"][number] | null;
+  documentId: string | null;
   parentsPage: ChunkingParentsPage | null;
   loading: boolean;
   error: string | null;
@@ -924,7 +1019,7 @@ function ChunkingParentsPanel({
       <div className="panel-heading">
         <div>
           <h2>Parents</h2>
-          <span>{document ? document.documentId : "Selecciona un documento para inspeccionar."}</span>
+          <span>{documentId ?? "Selecciona un documento para inspeccionar."}</span>
         </div>
       </div>
       {loading ? (

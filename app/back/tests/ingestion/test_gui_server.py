@@ -105,6 +105,7 @@ def test_gui_http_logging_redacts_sensitive_route_segments() -> None:
         _request_route_for_log("/api/chunking/runs/run_123")
         == "/api/chunking/runs/{run_id}"
     )
+    assert _request_route_for_log("/api/chunking/documents") == "/api/chunking/documents"
     assert (
         _request_route_for_log("/api/chunking/runs/run_123/documents")
         == "/api/chunking/runs/{run_id}/documents"

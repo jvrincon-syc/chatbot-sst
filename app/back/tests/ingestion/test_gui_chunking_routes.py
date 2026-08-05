@@ -205,6 +205,11 @@ def test_gui_chunking_bridge_serves_profiles_and_run_inspection(tmp_path: Path) 
         assert documents["total_items"] == 1
         assert documents["items"][0]["document_id"] == "doc_gui_1"
 
+        status, stored = api.handle_get("/api/chunking/documents?page=1&page_size=5")
+        assert status == 200
+        assert stored["total_items"] == 1
+        assert stored["items"][0]["document_id"] == "doc_gui_1"
+
         status, parents = api.handle_get(f"/api/chunking/documents/doc_gui_1/parents?run_id={run_id}")
         assert status == 200
         assert parents["items"]

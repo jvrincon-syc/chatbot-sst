@@ -58,6 +58,15 @@ class ChunkingRunDocumentSchema(StrictModel):
     normalized_relpath: str
 
 
+class ChunkingStoredDocumentSchema(StrictModel):
+    document_id: str
+    normalized_relpath: str
+    source_relpath: str
+    profile_id: str
+    parent_count: int = Field(ge=0)
+    child_count: int = Field(ge=0)
+
+
 class ChunkingRunStatusSchema(ChunkingRunAcceptedSchema):
     pass
 
@@ -103,6 +112,14 @@ class ChildChunkSchema(StrictModel):
 
 class PaginatedItemsSchema(StrictModel):
     items: list[ChunkingRunDocumentSchema]
+    page: int = Field(ge=1)
+    page_size: int = Field(ge=1, le=100)
+    total_items: int = Field(ge=0)
+    total_pages: int = Field(ge=0)
+
+
+class PaginatedStoredDocumentsSchema(StrictModel):
+    items: list[ChunkingStoredDocumentSchema]
     page: int = Field(ge=1)
     page_size: int = Field(ge=1, le=100)
     total_items: int = Field(ge=0)

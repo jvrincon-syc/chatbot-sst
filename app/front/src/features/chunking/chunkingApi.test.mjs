@@ -6,6 +6,7 @@ import {
   loadChunkingParents,
   loadChunkingProfiles,
   loadChunkingRunDocuments,
+  loadChunkingStoredDocuments,
   loadChunkingValidationOptional,
 } from "../../../.tmp-tests/features/chunking/chunkingApi.js";
 
@@ -166,6 +167,34 @@ await test("loads paginated run documents, parents and children", async () => {
   assert.equal(documents.items[0].normalizedRelpath, "docs/doc_1.md");
   assert.equal(parents.items[0].chunkId, "parent_1");
   assert.equal(children.items[0].parentId, "parent_1");
+});
+
+await test("loads persisted chunked documents when there is no active run", async () => {
+  globalThis.fetch = async (input) => {
+    assert.equal(input, "/api/chunking/documents?page=1");
+    return jsonResponse({
+      items: [
+        {
+          document_id: "doc_1",
+          normalized_relpath: "docs/doc_1.md",
+          source_relpath: "manual/doc_1.pdf",
+          profile_id: "local-structural-v1",
+          parent_count: 2,
+          child_count: 5,
+        },
+      ],
+      page: 1,
+      page_size: 25,
+      total_items: 1,
+      total_pages: 1,
+    });
+  };
+
+  const documents = await loadChunkingStoredDocuments({ page: 1 });
+
+  assert.equal(documents.items[0].documentId, "doc_1");
+  assert.equal(documents.items[0].profileId, "local-structural-v1");
+  assert.equal(documents.items[0].childCount, 5);
 });
 
 await test("returns null for chunking validation while the run is not ready", async () => {

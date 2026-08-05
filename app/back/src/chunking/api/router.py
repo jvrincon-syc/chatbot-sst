@@ -8,6 +8,7 @@ from chunking.api.dependencies import get_run_service
 from chunking.api.schemas import (
     ChunkingProfileSchema,
     ChunkingRunAcceptedSchema,
+    PaginatedStoredDocumentsSchema,
     PaginatedChildChunksSchema,
     PaginatedParentChunksSchema,
     ChunkingRunStatusSchema,
@@ -141,6 +142,15 @@ def list_run_documents(
             message=str(error),
             run_id=run_id,
         ) from error
+
+
+@router.get("/documents", response_model=PaginatedStoredDocumentsSchema)
+def list_stored_documents(
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=25, ge=1, le=100),
+    service: ChunkingRunService = Depends(get_run_service),
+) -> dict:
+    return service.list_stored_documents(page=page, page_size=page_size)
 
 
 @router.get("/runs/{run_id}/validation", response_model=ChunkingValidationSchema)

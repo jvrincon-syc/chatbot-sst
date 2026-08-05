@@ -375,6 +375,33 @@ def test_get_documents_aplica_paginacion() -> None:
     assert len(payload["items"]) == 1
 
 
+def test_get_documentos_persistidos_lista_chunks_existentes() -> None:
+    client = _client("stored-documents")
+    created = client.post(
+        "/api/chunking/runs",
+        headers={"Idempotency-Key": "key-stored-documents"},
+        json={
+            "scope": "documents",
+            "document_ids": ["doc_api_1"],
+            "profile_id": "local-structural-v1",
+            "force": False,
+        },
+    ).json()
+    _wait_for_run_completion(client, created["run_id"])
+
+    response = client.get("/api/chunking/documents?page=1&page_size=10")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["page"] == 1
+    assert payload["page_size"] == 10
+    assert payload["total_items"] == 1
+    assert payload["items"][0]["document_id"] == "doc_api_1"
+    assert payload["items"][0]["profile_id"] == "local-structural-v1"
+    assert payload["items"][0]["parent_count"] >= 1
+    assert payload["items"][0]["child_count"] >= 1
+
+
 def test_get_parents_no_expone_ruta_absoluta() -> None:
     client = _client("parents")
     created = client.post(
@@ -495,6 +522,7 @@ def test_openapi_publica_contrato_de_chunking() -> None:
     assert "/api/chunking/profiles" in payload["paths"]
     assert "/api/chunking/runs" in payload["paths"]
     assert "/api/chunking/runs/{run_id}" in payload["paths"]
+    assert "/api/chunking/documents" in payload["paths"]
     assert "/api/chunking/documents/{document_id}/parents" in payload["paths"]
     assert "ChunkingRunStatusSchema" in payload["components"]["schemas"]
     assert "ParentChunkSchema" in payload["components"]["schemas"]

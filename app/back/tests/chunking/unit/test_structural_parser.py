@@ -278,6 +278,82 @@ def test_conserva_heading_legitimo_repetido_fuera_del_borde_de_pagina() -> None:
     assert all(block.kind is StructuralBlockKind.HEADING for block in heading_blocks)
 
 
+def test_filtra_entradas_de_indice_como_ruido_estructural() -> None:
+    markdown = (
+        "<!-- page: 1 -->\n"
+        "# REGLAMENTO COMITE DE CONVIVENCIA LABORAL\n\n"
+        "**INDICE**\n\n"
+        "1. CAPITULO PRIMERO: OBJETIVO DEL COMITE DE CONVIVENCIA LABORAL. 2\n"
+        "2.1 Miembros del Comite de Convivencia Laboral. 2\n"
+        "2.1.1 Designacion. 2\n\n"
+        "<!-- page: 2 -->\n"
+        "# 1. CAPITULO PRIMERO\n\n"
+        "Objetivo del comite.\n"
+    )
+    parser = StructuralParser()
+
+    blocks = parser.parse(
+        _bundle(
+            markdown,
+            page_traces=(
+                _trace(page_number=1, char_start=0, char_end=186, text="Contenido de indice."),
+                _trace(page_number=2, char_start=186, char_end=len(markdown), text="Contenido real."),
+            ),
+        )
+    )
+
+    assert [block.kind for block in blocks] == [
+        StructuralBlockKind.HEADING,
+        StructuralBlockKind.HEADING,
+        StructuralBlockKind.PARAGRAPH,
+    ]
+    assert [block.text for block in blocks] == [
+        "REGLAMENTO COMITE DE CONVIVENCIA LABORAL",
+        "1. CAPITULO PRIMERO",
+        "Objetivo del comite.",
+    ]
+
+
+def test_filtra_tablas_repetidas_de_encabezado_de_pagina() -> None:
+    markdown = (
+        "<!-- page: 1 -->\n"
+        "<table>\n"
+        "<tr><th>CODIGO</th><th>RG-RH-01</th><th>VERSION</th><th>1.0</th></tr>\n"
+        "</table>\n\n"
+        "# 1. CAPITULO PRIMERO\n\n"
+        "Contenido de la primera pagina.\n\n"
+        "<!-- page: 2 -->\n"
+        "<table>\n"
+        "<tr><th>CODIGO</th><th>RG-RH-01</th><th>VERSION</th><th>1.0</th></tr>\n"
+        "</table>\n\n"
+        "Contenido de la segunda pagina.\n"
+    )
+    parser = StructuralParser()
+
+    blocks = parser.parse(
+        _bundle(
+            markdown,
+            page_traces=(
+                _trace(page_number=1, char_start=0, char_end=175, text="Contenido pagina 1."),
+                _trace(page_number=2, char_start=175, char_end=len(markdown), text="Contenido pagina 2."),
+            ),
+            sidecars=ValidatedSidecars(
+                tables_present=True,
+                table_markdown=(
+                    "<table><tr><th>CODIGO</th><th>RG-RH-01</th><th>VERSION</th><th>1.0</th></tr></table>",
+                ),
+            ),
+        )
+    )
+
+    assert [block.kind for block in blocks] == [
+        StructuralBlockKind.HEADING,
+        StructuralBlockKind.PARAGRAPH,
+        StructuralBlockKind.PARAGRAPH,
+    ]
+    assert all(block.kind is not StructuralBlockKind.TABLE for block in blocks)
+
+
 def test_falla_cerrado_cuando_una_region_no_tiene_page_trace() -> None:
     markdown = "<!-- page: 1 -->\nContenido sin trazabilidad.\n"
     parser = StructuralParser()

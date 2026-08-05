@@ -294,6 +294,15 @@ class ChunkingRunService:
             "total_pages": total_pages,
         }
 
+    def list_stored_documents(
+        self,
+        *,
+        page: int,
+        page_size: int,
+    ) -> dict[str, Any]:
+        items = self._chunk_repository.list_stored_documents()
+        return self._paginate(items=items, page=page, page_size=page_size)
+
     def get_validation(self, run_id: str) -> dict[str, Any]:
         path = self._validation_path(run_id)
         if not path.exists():

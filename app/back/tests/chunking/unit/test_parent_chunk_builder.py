@@ -171,3 +171,23 @@ def test_cubre_todo_contenido_elegible() -> None:
     covered = {block_id for parent in parents for block_id in parent.block_ids}
 
     assert covered == {block.block_id for block in blocks}
+
+
+def test_fusiona_heading_sin_cuerpo_con_siguiente_seccion() -> None:
+    blocks = (
+        _block(0, StructuralBlockKind.HEADING, "ÍNDICE", heading_path=("ÍNDICE",)),
+        _block(1, StructuralBlockKind.HEADING, "1. CAPÍTULO PRIMERO", heading_path=("1. CAPÍTULO PRIMERO",)),
+        _block(2, StructuralBlockKind.PARAGRAPH, "Contenido real de la primera sección.", char_start=20, heading_path=("1. CAPÍTULO PRIMERO",)),
+        _block(3, StructuralBlockKind.HEADING, "2. CAPÍTULO SEGUNDO", heading_path=("2. CAPÍTULO SEGUNDO",)),
+        _block(4, StructuralBlockKind.PARAGRAPH, "Contenido real de la segunda sección.", char_start=60, heading_path=("2. CAPÍTULO SEGUNDO",)),
+    )
+
+    parents = ParentChunkBuilder().build(
+        document_id="doc-parent",
+        profile=_profile(),
+        blocks=blocks,
+    )
+
+    assert len(parents) == 2
+    assert parents[0].block_ids == (blocks[0].block_id, blocks[1].block_id, blocks[2].block_id)
+    assert parents[1].block_ids == (blocks[3].block_id, blocks[4].block_id)

@@ -61,7 +61,29 @@ class ParentChunkBuilder:
             current.append(block)
         if current:
             sections.append(current)
-        return tuple(tuple(section) for section in sections)
+        return self._merge_heading_only_sections(tuple(tuple(section) for section in sections))
+
+    def _merge_heading_only_sections(
+        self,
+        sections: tuple[tuple[StructuralBlock, ...], ...],
+    ) -> tuple[tuple[StructuralBlock, ...], ...]:
+        merged_sections: list[tuple[StructuralBlock, ...]] = []
+        heading_only_buffer: list[StructuralBlock] = []
+        for section in sections:
+            if self._is_heading_only_section(section):
+                heading_only_buffer.extend(section)
+                continue
+            if heading_only_buffer:
+                merged_sections.append(tuple(heading_only_buffer + list(section)))
+                heading_only_buffer.clear()
+                continue
+            merged_sections.append(section)
+        if heading_only_buffer:
+            merged_sections.append(tuple(heading_only_buffer))
+        return tuple(merged_sections)
+
+    def _is_heading_only_section(self, section: tuple[StructuralBlock, ...]) -> bool:
+        return len(section) == 1 and section[0].kind is StructuralBlockKind.HEADING
 
     def _parents_for_section(
         self,

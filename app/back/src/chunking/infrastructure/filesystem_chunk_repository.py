@@ -117,6 +117,28 @@ class FilesystemChunkBundleRepository(ChunkBundleRepositoryPort):
                 return matches
         return []
 
+    def list_stored_documents(self) -> list[dict[str, Any]]:
+        items: list[dict[str, Any]] = []
+        for metadata_path in sorted(self.output_root.rglob("*.chunking_metadata.json")):
+            payload = json.loads(metadata_path.read_text(encoding="utf-8"))
+            items.append(
+                {
+                    "document_id": str(payload.get("document_id") or ""),
+                    "normalized_relpath": str(payload.get("normalized_relpath") or ""),
+                    "source_relpath": str(payload.get("source_relpath") or ""),
+                    "profile_id": str(payload.get("profile_id") or ""),
+                    "parent_count": int(payload.get("parent_count") or 0),
+                    "child_count": int(payload.get("child_count") or 0),
+                }
+            )
+        items.sort(
+            key=lambda item: (
+                item["normalized_relpath"],
+                item["document_id"],
+            )
+        )
+        return items
+
     def _artifact_base(self, normalized_relpath: str) -> Path:
         relative = Path(normalized_relpath)
         stem = relative.with_suffix("")
