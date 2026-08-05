@@ -17,3 +17,9 @@ def preserve_order_reranker(candidates: list[RetrievedCandidate]) -> list[Retrie
         )
         for candidate in candidates
     ]
+
+
+"""Esto se debe ajustar para que primero pase por un faq (banco de preguntas y respuestas) usando 
+fuzzy si hay una coincidencia con un porcentaje de similitud considerablemente
+alto se manda la respuesta ya ocnfigurada, si no se encuentra pasar a un reranker 
+de los documentos"""
