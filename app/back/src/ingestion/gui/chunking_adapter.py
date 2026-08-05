@@ -60,6 +60,14 @@ def _query_int(
     return value
 
 
+def _header_value(headers: dict[str, str], name: str) -> str:
+    expected = name.casefold()
+    for key, value in headers.items():
+        if key.casefold() == expected:
+            return value
+    return ""
+
+
 class ChunkingApiBridge:
     """Expose the chunking HTTP contract through the existing GUI server."""
 
@@ -161,7 +169,7 @@ class ChunkingApiBridge:
                 message="endpoint not found",
             )
 
-        idempotency_key = headers.get("Idempotency-Key", "").strip()
+        idempotency_key = _header_value(headers, "Idempotency-Key").strip()
         if not idempotency_key:
             return int(HTTPStatus.UNPROCESSABLE_ENTITY), _chunking_error_payload(
                 code="CHUNKING_INVALID_REQUEST",

@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import re
+
 from chunking.application.child_chunk_builder import ChildChunkBuilder
 from chunking.application.parent_chunk_builder import ParentChunkBuilder
+from chunking.application.ports import TokenCounterPort
 from chunking.domain.enums import StructuralBlockKind, ZeroOverlapReason
-from chunking.domain.models import ChunkingProfile, SourceSpan, StructuralBlock
+from chunking.domain.models import ChunkInvariantError, ChunkingProfile, ParentChunk, SourceSpan, StructuralBlock
 from chunking.infrastructure.canonical_tokenizer import CanonicalTokenizer
 
 
@@ -46,6 +49,34 @@ def _profile() -> ChunkingProfile:
 
 def _tokenizer() -> CanonicalTokenizer:
     return CanonicalTokenizer()
+
+
+class _SeparatorSensitiveTokenizer(TokenCounterPort):
+    def __init__(
+        self,
+        *,
+        sentence_counts: dict[str, int],
+        combined_counts: dict[str, int],
+    ) -> None:
+        self._sentence_counts = sentence_counts
+        self._combined_counts = combined_counts
+
+    def count_tokens(self, text: str) -> int:
+        normalized = text.strip()
+        if not normalized:
+            return 0
+        if normalized in self._combined_counts:
+            return self._combined_counts[normalized]
+        if normalized in self._sentence_counts:
+            return self._sentence_counts[normalized]
+        parts = [
+            part.strip()
+            for part in re.split(r"(?<=[.!?])\s+|\n{2,}", normalized)
+            if part.strip()
+        ]
+        if not parts:
+            return 0
+        return sum(self._sentence_counts[part] for part in parts)
 
 
 def _sentence_with_token_target(target: int, *, index: int) -> str:
@@ -371,3 +402,72 @@ def test_no_solapa_parent_con_unico_child() -> None:
     assert len(children) == 1
     assert children[0].overlap_previous_tokens == 0
     assert children[0].overlap_next_tokens == 0
+
+
+def test_mide_overlap_con_texto_combinado_real_antes_de_emitir_child() -> None:
+    sentences = [
+        "Frase alfa.",
+        "Frase beta.",
+        "Frase gamma.",
+        "Frase delta.",
+        "Frase epsilon.",
+        "Frase zeta.",
+        "Frase eta.",
+        "Frase theta.",
+        "Frase iota.",
+        "Frase kappa.",
+        "Frase lambda.",
+    ]
+    parent_text = " ".join(sentences)
+    tokenizer = _SeparatorSensitiveTokenizer(
+        sentence_counts={
+            "Frase alfa.": 50,
+            "Frase beta.": 50,
+            "Frase gamma.": 50,
+            "Frase delta.": 50,
+            "Frase epsilon.": 50,
+            "Frase zeta.": 30,
+            "Frase eta.": 21,
+            "Frase theta.": 21,
+            "Frase iota.": 50,
+            "Frase kappa.": 50,
+            "Frase lambda.": 50,
+        },
+        combined_counts={
+            "Frase eta. Frase theta.": 61,
+        },
+    )
+    blocks = (
+        _block(0, StructuralBlockKind.HEADING, "Procedimiento", heading_path=("Procedimiento",)),
+        _block(
+            1,
+            StructuralBlockKind.PARAGRAPH,
+            parent_text,
+            heading_path=("Procedimiento",),
+            char_start=20,
+        ),
+    )
+    parent = ParentChunk.create(
+        document_id="doc-child",
+        profile_id=_profile().profile_id,
+        ordinal=0,
+        text=parent_text,
+        source_span=_span(char_start=20, char_end=20 + len(parent_text)),
+        block_ids=(blocks[1].block_id,),
+    )
+
+    children = ChildChunkBuilder(tokenizer=tokenizer).build(
+        parent=parent,
+        blocks=blocks,
+        profile=_profile(),
+    )
+
+    assert len(children) > 1
+    assert all(
+        child.overlap_previous_tokens == 0 or 30 <= child.overlap_previous_tokens <= 60
+        for child in children
+    )
+    assert all(
+        child.overlap_next_tokens == 0 or 30 <= child.overlap_next_tokens <= 60
+        for child in children
+    )

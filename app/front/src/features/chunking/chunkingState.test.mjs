@@ -6,6 +6,7 @@ import {
   chunkingRunStatusLabel,
   chunkingRunStatusTone,
   chunkingRunIsTerminalStatus,
+  mergeChunkingFormState,
   parseChunkingDocumentIds,
 } from "../../../.tmp-tests/features/chunking/chunkingState.js";
 
@@ -50,4 +51,44 @@ test("maps chunking status labels and tones", () => {
 test("formats chunking pagination labels", () => {
   assert.equal(chunkingPaginationLabel(2, 5, 20), "Pagina 2 de 5 · 20 items");
   assert.equal(chunkingPaginationLabel(1, 0, 0), "Sin resultados");
+});
+
+test("regenerates the idempotency key when the chunking payload changes", () => {
+  const next = mergeChunkingFormState(
+    {
+      scope: "corpus",
+      documentIdsInput: "",
+      profileId: "local-structural-v1",
+      force: false,
+      idempotencyKey: "chunking-old-key",
+    },
+    {
+      scope: "documents",
+      documentIdsInput: "doc_1",
+    },
+  );
+
+  assert.equal(next.scope, "documents");
+  assert.equal(next.documentIdsInput, "doc_1");
+  assert.equal(next.profileId, "local-structural-v1");
+  assert.equal(next.force, false);
+  assert.notEqual(next.idempotencyKey, "chunking-old-key");
+  assert.equal(next.idempotencyKey.startsWith("chunking-"), true);
+});
+
+test("preserves a manually edited idempotency key when the payload stays the same", () => {
+  const next = mergeChunkingFormState(
+    {
+      scope: "documents",
+      documentIdsInput: "doc_1",
+      profileId: "local-structural-v1",
+      force: false,
+      idempotencyKey: "chunking-old-key",
+    },
+    {
+      idempotencyKey: "chunking-new-key",
+    },
+  );
+
+  assert.equal(next.idempotencyKey, "chunking-new-key");
 });

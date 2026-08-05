@@ -1,0 +1,12 @@
+{
+  "bundle_fingerprint": "chunk-bundle-78cdf602f5c18197fec0eaa3c6fab206cf1ebab805284fe23ba1406243950a0b",
+  "child_count": 2,
+  "corpus_version": "phase1-main",
+  "document_id": "doc_86b6f64f1c869610",
+  "normalized_relpath": "general_sst/manuales/planificacion/planificacion_info.md",
+  "parent_count": 1,
+  "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
+  "profile_id": "local-structural-v1",
+  "source_hash": "58eb1a0085f9a42b59d8b7dd5a60a2dee1acd024ae584849e923e499da5dd81e",
+  "source_relpath": "general_sst/manuales/planificacion/planificacion_info.md"
+}

@@ -172,6 +172,7 @@ class ChildChunkBuilder:
         for index in range(len(unique_chunks) - 1):
             overlap_units_by_pair.append(
                 self._select_overlap_units(
+                    parent_text=parent.text,
                     units=unique_chunks[index],
                     nominal_target=overlap_target,
                     profile=profile,
@@ -300,21 +301,23 @@ class ChildChunkBuilder:
     def _select_overlap_units(
         self,
         *,
+        parent_text: str,
         units: tuple[SentenceUnit, ...],
         nominal_target: int,
         profile: ChunkingProfile,
     ) -> tuple[SentenceUnit, ...]:
         selected: list[SentenceUnit] = []
-        token_total = 0
         best: tuple[SentenceUnit, ...] = ()
         best_distance = profile.child_max_tokens
         for unit in reversed(units):
-            if token_total + unit.token_count > profile.overlap_max_tokens and selected:
-                break
-            if token_total + unit.token_count > profile.overlap_max_tokens and not selected:
-                break
             selected.insert(0, unit)
-            token_total += unit.token_count
+            token_total = self._overlap_token_count(
+                parent_text=parent_text,
+                units=tuple(selected),
+            )
+            if token_total > profile.overlap_max_tokens:
+                selected.pop(0)
+                break
             if profile.overlap_min_tokens <= token_total <= profile.overlap_max_tokens:
                 distance = abs(token_total - nominal_target)
                 if distance < best_distance:

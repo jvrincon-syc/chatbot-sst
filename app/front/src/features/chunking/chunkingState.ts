@@ -22,6 +22,30 @@ export function createChunkingIdempotencyKey(): string {
   return `chunking-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+export type ChunkingFormState = {
+  scope: "documents" | "corpus";
+  documentIdsInput: string;
+  profileId: string;
+  force: boolean;
+  idempotencyKey: string;
+};
+
+export function mergeChunkingFormState(
+  current: ChunkingFormState,
+  next: Partial<ChunkingFormState>,
+): ChunkingFormState {
+  const merged = { ...current, ...next };
+  const payloadChanged =
+    current.scope !== merged.scope ||
+    current.documentIdsInput !== merged.documentIdsInput ||
+    current.profileId !== merged.profileId ||
+    current.force !== merged.force;
+  if (payloadChanged) {
+    merged.idempotencyKey = createChunkingIdempotencyKey();
+  }
+  return merged;
+}
+
 export function chunkingRunProgressPercent(run: Pick<ChunkingRunSummary, "requestedDocuments" | "completedDocuments">): number {
   if (run.requestedDocuments <= 0) {
     return 0;

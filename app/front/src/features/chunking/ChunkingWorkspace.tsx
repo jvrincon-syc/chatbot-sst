@@ -25,6 +25,7 @@ import {
 } from "./chunkingApi.js";
 import {
   chunkingPaginationLabel,
+  mergeChunkingFormState,
   chunkingProfileSummary,
   chunkingRunProgressPercent,
   chunkingRunIsTerminalStatus,
@@ -32,6 +33,7 @@ import {
   chunkingRunStatusTone,
   createChunkingIdempotencyKey,
   parseChunkingDocumentIds,
+  type ChunkingFormState,
 } from "./chunkingState.js";
 import type {
   ChunkingChildrenPage,
@@ -48,14 +50,6 @@ type ChunkingNoticeState =
       message: string;
     }
   | null;
-
-type ChunkingFormState = {
-  scope: "documents" | "corpus";
-  documentIdsInput: string;
-  profileId: string;
-  force: boolean;
-  idempotencyKey: string;
-};
 
 const DEFAULT_PROFILE_ID = "local-structural-v1";
 
@@ -100,6 +94,10 @@ export function ChunkingWorkspace() {
   const [childrenError, setChildrenError] = useState<string | null>(null);
   const [childrenPageNumber, setChildrenPageNumber] = useState(1);
 
+  const updateForm = (next: Partial<ChunkingFormState>) => {
+    setForm((current) => mergeChunkingFormState(current, next));
+  };
+
   const selectedProfile = useMemo(
     () => profiles.find((profile) => profile.profileId === form.profileId) ?? profiles[0] ?? null,
     [form.profileId, profiles],
@@ -139,7 +137,7 @@ export function ChunkingWorkspace() {
             if (current.profileId && payload.some((profile) => profile.profileId === current.profileId)) {
               return current;
             }
-            return { ...current, profileId: payload[0].profileId };
+            return mergeChunkingFormState(current, { profileId: payload[0].profileId });
           });
         }
       } catch (error) {
@@ -417,11 +415,9 @@ export function ChunkingWorkspace() {
           parsedDocumentIds={parsedDocumentIds}
           selectedProfile={selectedProfile}
           busy={launchBusy}
-          onChange={setForm}
+          onChange={updateForm}
           onLaunch={handleLaunchRun}
-          onRegenerateKey={() =>
-            setForm((current) => ({ ...current, idempotencyKey: createChunkingIdempotencyKey() }))
-          }
+          onRegenerateKey={() => updateForm({ idempotencyKey: createChunkingIdempotencyKey() })}
         />
         <ChunkingProfilePanel
           profile={selectedProfile}
@@ -503,7 +499,7 @@ function ChunkingLaunchPanel({
   parsedDocumentIds: string[];
   selectedProfile: ChunkingProfile | null;
   busy: boolean;
-  onChange: (value: ChunkingFormState) => void;
+  onChange: (value: Partial<ChunkingFormState>) => void;
   onLaunch: () => void;
   onRegenerateKey: () => void;
 }) {
@@ -522,14 +518,14 @@ function ChunkingLaunchPanel({
           <button
             type="button"
             className={form.scope === "documents" ? "chunking-toggle active" : "chunking-toggle"}
-            onClick={() => onChange({ ...form, scope: "documents" })}
+            onClick={() => onChange({ scope: "documents" })}
           >
             Documentos
           </button>
           <button
             type="button"
             className={form.scope === "corpus" ? "chunking-toggle active" : "chunking-toggle"}
-            onClick={() => onChange({ ...form, scope: "corpus" })}
+            onClick={() => onChange({ scope: "corpus" })}
           >
             Corpus
           </button>
@@ -539,7 +535,7 @@ function ChunkingLaunchPanel({
           <select
             value={form.profileId}
             disabled={profilesLoading || profiles.length === 0}
-            onChange={(event) => onChange({ ...form, profileId: event.target.value })}
+            onChange={(event) => onChange({ profileId: event.target.value })}
           >
             {profiles.length === 0 ? <option value={DEFAULT_PROFILE_ID}>{DEFAULT_PROFILE_ID}</option> : null}
             {profiles.map((profile) => (
@@ -556,7 +552,7 @@ function ChunkingLaunchPanel({
             value={form.documentIdsInput}
             disabled={form.scope === "corpus"}
             placeholder="doc_001\ndoc_002"
-            onChange={(event) => onChange({ ...form, documentIdsInput: event.target.value })}
+            onChange={(event) => onChange({ documentIdsInput: event.target.value })}
           />
           <span className="chunking-field-note">
             {form.scope === "corpus"
@@ -569,7 +565,7 @@ function ChunkingLaunchPanel({
             <input
               type="checkbox"
               checked={form.force}
-              onChange={(event) => onChange({ ...form, force: event.target.checked })}
+              onChange={(event) => onChange({ force: event.target.checked })}
             />
             Forzar reprocesado
           </label>
@@ -578,7 +574,7 @@ function ChunkingLaunchPanel({
               Idempotency-Key
               <input
                 value={form.idempotencyKey}
-                onChange={(event) => onChange({ ...form, idempotencyKey: event.target.value })}
+                onChange={(event) => onChange({ idempotencyKey: event.target.value })}
               />
             </label>
             <button className="secondary-button" type="button" onClick={onRegenerateKey}>

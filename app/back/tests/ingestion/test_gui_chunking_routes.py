@@ -223,3 +223,45 @@ def test_gui_chunking_bridge_rejects_unknown_route(tmp_path: Path) -> None:
         assert payload["error"]["code"] == "CHUNKING_ROUTE_NOT_FOUND"
     finally:
         api.close()
+
+
+def test_gui_chunking_bridge_accepts_lowercase_idempotency_header(tmp_path: Path) -> None:
+    docs_root, chunks_root = _sandbox(tmp_path, "lowercase-idempotency")
+    long_body = " ".join(["Frase de seguridad con evidencia y contexto." for _ in range(120)])
+    _write_document(
+        docs_root,
+        document_id="doc_gui_lower",
+        source_relpath="manual/doc-lower.pdf",
+        document_name="Documento GUI Lower",
+        markdown_body=long_body,
+    )
+    _write_inventory(
+        docs_root,
+        [
+            {
+                "document_id": "doc_gui_lower",
+                "source_relpath": "manual/doc-lower.pdf",
+                "processing_status": "processed",
+                "source_hash": SOURCE_HASH,
+                "document_name": "Documento GUI Lower",
+            }
+        ],
+    )
+
+    api = ChunkingApiBridge(docs_normalized=docs_root, chunks_root=chunks_root)
+    try:
+        status, created = api.handle_post(
+            "/api/chunking/runs",
+            {
+                "scope": "documents",
+                "document_ids": ["doc_gui_lower"],
+                "profile_id": "local-structural-v1",
+                "force": False,
+            },
+            {"idempotency-key": "gui-chunking-key-lower"},
+        )
+
+        assert status == 202
+        assert created["run_id"]
+    finally:
+        api.close()
