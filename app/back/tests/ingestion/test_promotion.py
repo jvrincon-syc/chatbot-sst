@@ -3,7 +3,7 @@ import pytest
 from ingestion.promotion import PromotionError, promote_candidate
 
 
-def test_promotion_rejects_failed_gates_and_leaves_live_unchanged(tmp_path) -> None:
+def test_promotion_rejects_failed_structural_gate_and_leaves_live_unchanged(tmp_path) -> None:
     candidate = tmp_path / "candidate"
     live = tmp_path / "live"
     candidate.mkdir()
@@ -12,10 +12,24 @@ def test_promotion_rejects_failed_gates_and_leaves_live_unchanged(tmp_path) -> N
     (live / "old.txt").write_text("old", encoding="utf-8")
 
     with pytest.raises(PromotionError):
-        promote_candidate(candidate, live, {"structural_status": "passed", "golden_status": "failed"})
+        promote_candidate(candidate, live, {"structural_status": "failed", "golden_status": "passed"})
 
     assert (live / "old.txt").read_text(encoding="utf-8") == "old"
     assert not (live / "new.txt").exists()
+
+
+def test_promotion_ignores_golden_status_when_structural_gate_passed(tmp_path) -> None:
+    candidate = tmp_path / "candidate"
+    live = tmp_path / "live"
+    candidate.mkdir()
+    live.mkdir()
+    (candidate / "new.txt").write_text("new", encoding="utf-8")
+    (live / "old.txt").write_text("old", encoding="utf-8")
+
+    promote_candidate(candidate, live, {"structural_status": "passed", "golden_status": "failed"})
+
+    assert (live / "new.txt").read_text(encoding="utf-8") == "new"
+    assert not (live / "old.txt").exists()
 
 
 def test_promotion_swaps_candidate_and_removes_stale_live_files(tmp_path) -> None:

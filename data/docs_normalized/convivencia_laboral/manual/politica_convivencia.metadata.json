@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "procedimiento:procedimiento:content",
-      "Comite de Convivencia Laboral:comite de convivencia:content"
+      "Comité de Convivencia Laboral:comite de convivencia:content"
     ],
     "subtopic": null,
-    "topic": "Comite de Convivencia Laboral",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -98,9 +98,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/politica_convivencia.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\politica_convivencia.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/politica_convivencia.md",
   "ocr_confidence": {
     "engine": null,
@@ -115,11 +116,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:59.037164-05:00",
+  "processed_at": "2026-07-22T15:28:34.804697-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "71b9e144f2bf91145e383ac48044e43396df0d00540580e6e117ffa6e6311f1b",
+  "source_hash": "3e88975739dec651c4db30c8491dbb2cae65701338082f94f5f36f7620b315fe",
   "source_relpath": "convivencia_laboral/manual/politica_convivencia.md",
   "tables": {
     "engine": null,

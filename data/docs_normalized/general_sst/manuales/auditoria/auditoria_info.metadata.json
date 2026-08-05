@@ -111,9 +111,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/auditoria/auditoria_info.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\general_sst\\manuales\\auditoria\\auditoria_info.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/auditoria/auditoria_info.md",
   "ocr_confidence": {
     "engine": null,
@@ -128,11 +129,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.277833-05:00",
+  "processed_at": "2026-07-22T15:30:11.596891-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "14b59b3176468b7267e18bc71b9ea288320aece4482f44675b790946243ab5d9",
+  "source_hash": "d42ac2f12893c7674a444cce221b285ffab3a446e221cc024010087323e18933",
   "source_relpath": "general_sst/manuales/auditoria/auditoria_info.md",
   "tables": {
     "engine": null,

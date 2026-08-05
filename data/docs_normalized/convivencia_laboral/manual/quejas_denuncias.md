@@ -1,7 +1,7 @@
 ---
 document_id: doc_78c719156efb1dfd
 document_type: formulario
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/manual/quejas_denuncias.md
 extraction_method: markdown
 page_count: 1

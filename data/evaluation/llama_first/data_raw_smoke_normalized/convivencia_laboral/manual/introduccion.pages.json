@@ -1,0 +1,30 @@
+{
+  "document_id": "doc_99e74963bf956ead",
+  "page_count": 1,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "markdown",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "Es importante que existan unas normas de convivencia claras que permitan regular las relaciones que se dan al interior de la empresa, evitando con ello que se afecte el ambiente laboral. No esta demas informar que las normas que se encuentran contenidas en este manual son de obligatorio cumplimiento para todo el personal, ademas el no estar sujeto a ellos, se constituye como una violacion al manual que nos podria llevar, a prevenir riesgos de una mal sana convivencia y a exponernos a conductas de acoso laboral.\n\nNota: Descargar dato adjunto manual de convivencia.",
+      "text_raw": "Es importante que existan unas normas de convivencia claras que permitan regular las relaciones que se dan al interior de la empresa, evitando con ello que se afecte el ambiente laboral. No esta demas informar que las normas que se encuentran contenidas en este manual son de obligatorio cumplimiento para todo el personal, ademas el no estar sujeto a ellos, se constituye como una violacion al manual que nos podria llevar, a prevenir riesgos de una mal sana convivencia y a exponernos a conductas de acoso laboral.\n\nNota: Descargar dato adjunto manual de convivencia. ",
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ],
+  "schema_version": "2.0"
+}

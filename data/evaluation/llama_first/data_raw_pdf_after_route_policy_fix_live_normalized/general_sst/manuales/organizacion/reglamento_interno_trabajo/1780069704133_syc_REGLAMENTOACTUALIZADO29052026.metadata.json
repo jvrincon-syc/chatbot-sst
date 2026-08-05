@@ -1,0 +1,173 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "reglamento",
+    "signals": [
+      "reglamento:reglamento:title_control",
+      "reglamento:reglamento:content",
+      "reglamento:reglamento:filename",
+      "reglamento:reglamento:route",
+      "Reglamento interno de trabajo:reglamento interno:title_control",
+      "Reglamento interno de trabajo:reglamento interno:content",
+      "Reglamento interno de trabajo:reglamento interno:route"
+    ],
+    "subtopic": null,
+    "topic": "Reglamento interno de trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-route-policy-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "**Enero, 2025**",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "2025-01",
+      "value_raw": "Enero, 2025",
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# REGLAMENTO INTERNO DE TRABAJO",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "REGLAMENTO INTERNO DE TRABAJO",
+      "value_raw": "REGLAMENTO INTERNO DE TRABAJO",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_31b00a8b31847796",
+  "document_name": "1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "llamaparse_form_heuristic",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_route_policy_fix_live_normalized\\general_sst\\manuales\\organizacion\\reglamento_interno_trabajo\\1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 36,
+  "pipeline_version": "2.0.4",
+  "processed_at": "2026-07-21T17:48:12.730651-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
+  "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": [
+    "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq"
+  ]
+}

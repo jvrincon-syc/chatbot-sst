@@ -1,0 +1,12 @@
+{
+  "bundle_fingerprint": "chunk-bundle-894fec59c92b3bc26549b5d1a6a92d1d9c716d7d90eb6132d8f56dba7aa252dd",
+  "child_count": 2,
+  "corpus_version": "phase1-main",
+  "document_id": "doc_1edf1a3d50d85305",
+  "normalized_relpath": "general_sst/manuales/mejora/mejora_info.md",
+  "parent_count": 1,
+  "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
+  "profile_id": "local-structural-v1",
+  "source_hash": "3246e1e2f53b6e6bad0659c78ac097ee4cce57b8c8951985c257de683fc48d01",
+  "source_relpath": "general_sst/manuales/mejora/mejora_info.md"
+}

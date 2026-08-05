@@ -1,0 +1,607 @@
+{
+  "summary": {
+    "documents": 9,
+    "expected_pages": 77,
+    "new_pages": 77,
+    "prev_pages": 77,
+    "gold_pages": 77,
+    "new_md_chars": 186189,
+    "prev_md_chars": 186365,
+    "gold_md_chars": 182111,
+    "new_statuses": {
+      "needs_review": 6,
+      "processed": 3
+    },
+    "prev_statuses": {
+      "needs_review": 9
+    },
+    "new_reason_counts": {
+      "classification_conflict": 6,
+      "conflicting_code": 1
+    },
+    "prev_reason_counts": {
+      "conflicting_title": 5,
+      "pdf_semantic_review_required": 9,
+      "tables_not_evaluated": 9,
+      "forms_not_evaluated": 9,
+      "conflicting_code": 1,
+      "classification_conflict": 3
+    },
+    "gold_reason_counts": {
+      "classification_conflict": 6,
+      "pdf_semantic_review_required": 9
+    },
+    "new_title_conflicts": 0,
+    "prev_title_conflicts": 5,
+    "new_tables_detected": 9,
+    "prev_tables_detected": 0,
+    "new_forms_evaluated": 9,
+    "prev_forms_evaluated": 0,
+    "new_type_matches_expected": 9,
+    "prev_type_matches_expected": 6,
+    "new_topic_matches_expected": 5,
+    "prev_topic_matches_expected": 2,
+    "new_job_count": 9
+  },
+  "documents": [
+    {
+      "rel": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "expected_pages": 2,
+      "expected_type": "formulario",
+      "expected_topic": "Comité de Convivencia Laboral",
+      "expected_tables": "detected",
+      "expected_forms": "detected",
+      "new": {
+        "job": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 2,
+        "md_chars": 2297,
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 3,
+        "form_groups": 1
+      },
+      "prev": {
+        "job": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_title",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 2,
+        "md_chars": 2324,
+        "type": "formulario",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "conflicting",
+        "code_status": "extracted",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 2,
+        "md_chars": 3064,
+        "type": "formulario",
+        "topic": "Comite de Convivencia Laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "detected",
+        "table_count": 6,
+        "form_groups": 1
+      }
+    },
+    {
+      "rel": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "expected_pages": 12,
+      "expected_type": "manual",
+      "expected_topic": "Convivencia laboral",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+        "status": "processed",
+        "reasons": [],
+        "pages": 12,
+        "md_chars": 21857,
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 12,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_title",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 12,
+        "md_chars": 21898,
+        "type": "formulario",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "conflicting",
+        "code_status": "extracted",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required"
+        ],
+        "pages": 12,
+        "md_chars": 19770,
+        "type": "manual",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 12,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "expected_pages": 1,
+      "expected_type": "politica",
+      "expected_topic": "Convivencia laboral",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-8868hmusisvc13oqbjhc2ugkj14z",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_code",
+          "classification_conflict"
+        ],
+        "pages": 1,
+        "md_chars": 2478,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "conflicting",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-8868hmusisvc13oqbjhc2ugkj14z",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_code",
+          "classification_conflict",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 1,
+        "md_chars": 2481,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "conflicting",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 1,
+        "md_chars": 3016,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 3,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "expected_pages": 1,
+      "expected_type": "politica",
+      "expected_topic": "Convivencia laboral",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 1,
+        "md_chars": 2436,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 1,
+        "md_chars": 2439,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 1,
+        "md_chars": 3400,
+        "type": "politica",
+        "topic": "Convivencia laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 3,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "expected_pages": 6,
+      "expected_type": "reglamento",
+      "expected_topic": "Comité de Convivencia Laboral",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 6,
+        "md_chars": 17726,
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_title",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 6,
+        "md_chars": 17753,
+        "type": "formulario",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "conflicting",
+        "code_status": "extracted",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 6,
+        "md_chars": 16364,
+        "type": "reglamento",
+        "topic": "Comite de Convivencia Laboral",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 6,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "expected_pages": 16,
+      "expected_type": "programa",
+      "expected_topic": "Pausas activas",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 16,
+        "md_chars": 22391,
+        "type": "programa",
+        "topic": "Pausas activas",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 17,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_title",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 16,
+        "md_chars": 22433,
+        "type": "programa",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "conflicting",
+        "code_status": "extracted",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 16,
+        "md_chars": 18793,
+        "type": "programa",
+        "topic": "Pausas activas",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 17,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "expected_pages": 1,
+      "expected_type": "matriz",
+      "expected_topic": "Seguridad vial",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict"
+        ],
+        "pages": 1,
+        "md_chars": 2297,
+        "type": "matriz",
+        "topic": "Capacitaciones",
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 1,
+        "md_chars": 2300,
+        "type": "matriz",
+        "topic": "Capacitaciones",
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "classification_conflict",
+          "pdf_semantic_review_required"
+        ],
+        "pages": 1,
+        "md_chars": 2094,
+        "type": "matriz",
+        "topic": "Seguridad vial",
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 1,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "expected_pages": 36,
+      "expected_type": "reglamento",
+      "expected_topic": "Reglamento interno de trabajo",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+        "status": "processed",
+        "reasons": [],
+        "pages": 36,
+        "md_chars": 110079,
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 2,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+        "status": "needs_review",
+        "reasons": [
+          "conflicting_title",
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 36,
+        "md_chars": 110106,
+        "type": "formulario",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "conflicting",
+        "code_status": "not_found",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required"
+        ],
+        "pages": 36,
+        "md_chars": 110287,
+        "type": "reglamento",
+        "topic": "Reglamento interno de trabajo",
+        "title_status": "extracted",
+        "code_status": "not_found",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 2,
+        "form_groups": 0
+      }
+    },
+    {
+      "rel": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "expected_pages": 2,
+      "expected_type": "politica",
+      "expected_topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
+      "expected_tables": "detected",
+      "expected_forms": "not_detected",
+      "new": {
+        "job": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+        "status": "processed",
+        "reasons": [],
+        "pages": 2,
+        "md_chars": 4628,
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 4,
+        "form_groups": 0
+      },
+      "prev": {
+        "job": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required",
+          "tables_not_evaluated",
+          "forms_not_evaluated"
+        ],
+        "pages": 2,
+        "md_chars": 4631,
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "not_evaluated",
+        "forms_status": "not_evaluated",
+        "table_count": 0,
+        "form_groups": 0
+      },
+      "gold": {
+        "job": null,
+        "status": "needs_review",
+        "reasons": [
+          "pdf_semantic_review_required"
+        ],
+        "pages": 2,
+        "md_chars": 5323,
+        "type": "politica",
+        "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+        "title_status": "extracted",
+        "code_status": "extracted",
+        "tables_status": "detected",
+        "forms_status": "not_detected",
+        "table_count": 15,
+        "form_groups": 0
+      }
+    }
+  ]
+}

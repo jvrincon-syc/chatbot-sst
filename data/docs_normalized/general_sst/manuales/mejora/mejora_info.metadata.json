@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "programa:programa:content",
-      "Sistema de Gestion de Seguridad y Salud en el Trabajo:sg-sst:content"
+      "Sistema de Gestión de Seguridad y Salud en el Trabajo:sg-sst:content"
     ],
     "subtopic": null,
-    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -108,9 +108,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/mejora/mejora_info.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\general_sst\\manuales\\mejora\\mejora_info.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/mejora/mejora_info.md",
   "ocr_confidence": {
     "engine": null,
@@ -125,11 +126,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.322475-05:00",
+  "processed_at": "2026-07-22T15:30:11.700284-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "fba80ea6dc00e739995c9627ea73135414e227d32ef785813f596801d4f6f799",
+  "source_hash": "3246e1e2f53b6e6bad0659c78ac097ee4cce57b8c8951985c257de683fc48d01",
   "source_relpath": "general_sst/manuales/mejora/mejora_info.md",
   "tables": {
     "engine": null,

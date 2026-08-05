@@ -7,11 +7,12 @@ name = "chatbot-sst"
 version = "0.1.0"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+  "fastapi>=0.139,<0.140",
   "numpy>=1.26,<2.3",
   "opencv-python-headless>=4.9,<5",
   "pdfplumber>=0.11,<0.12",
   "Pillow>=10,<12",
-  "pydantic>=2.0,<2.11",
+  "pydantic>=2.11.5,<3",
   "pypdf>=4,<6",
   "pypdfium2>=4.30,<5",
   "pytesseract>=0.3,<0.4",
@@ -20,6 +21,17 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0,<9",
+]
+llama-cloud = [
+  "llama-cloud==2.12.0",
+]
+llama-indexing = [
+  "llama-index-core==0.14.23",
+  "llama-index-vector-stores-postgres==0.8.1",
+]
+embeddings = [
+  "FlagEmbedding>=1.3,<2",
+  "voyageai>=0.3.7,<1",
 ]
 
 [tool.setuptools]
@@ -33,4 +45,5 @@ pythonpath = ["app/back/src"]
 testpaths = ["app/back/tests"]
 markers = [
   "corpus: slow checks against the real audited PDF corpus",
+  "postgres_live: live PostgreSQL/pgvector checks guarded by SST_POSTGRES_DSN",
 ]

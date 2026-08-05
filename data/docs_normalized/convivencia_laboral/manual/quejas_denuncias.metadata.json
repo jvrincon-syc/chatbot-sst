@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "formulario:formato:content",
-      "Comite de Convivencia Laboral:comite de convivencia:content"
+      "Comité de Convivencia Laboral:comite de convivencia:content"
     ],
     "subtopic": null,
-    "topic": "Comite de Convivencia Laboral",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -98,9 +98,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/quejas_denuncias.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\quejas_denuncias.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/quejas_denuncias.md",
   "ocr_confidence": {
     "engine": null,
@@ -115,11 +116,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:59.091137-05:00",
+  "processed_at": "2026-07-22T15:28:34.952850-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "2e3362eb0e5b75bcda7044b81da0bbe3c610438a0367c66ff20955d01148e2c2",
+  "source_hash": "6ff7b0556c6b73ccfb19df440c6f9799cf3f5c9c2dedd32e494aee949a283b76",
   "source_relpath": "convivencia_laboral/manual/quejas_denuncias.md",
   "tables": {
     "engine": null,

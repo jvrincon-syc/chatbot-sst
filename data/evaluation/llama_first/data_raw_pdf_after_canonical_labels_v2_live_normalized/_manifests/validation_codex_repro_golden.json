@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "check": "metadata_schema",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "unique_document_ids",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "markdown_has_metadata",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "orphan_files",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "auxiliary_schema",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "auxiliary_document_ids",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "page_count_consistency",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "page_ordering_contiguity",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "front_matter_parity",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_schema",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_metadata_bijection",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_source_hashes",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "inventory_final_statuses",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "status_manifests",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "processed_with_review_reasons",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "closure_required_artifacts",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "golden_bijection",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "golden_metadata",
+      "details": [
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf: extraction_method expected 'pdf_digital', got 'llamaparse'",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf: processing_status expected 'needs_review', got 'processed'",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf: extraction_method expected 'pdf_digital', got 'llamaparse'",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf: processing_status expected 'needs_review', got 'processed'",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf: version expected '0.1', got None",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf: extraction_method expected 'ocr', got 'llamaparse'",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf: processing_status expected 'needs_review', got 'processed'",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf: extraction_method expected 'ocr', got 'llamaparse'",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf: processing_status expected 'needs_review', got 'processed'",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf: extraction_method expected 'pdf_digital', got 'llamaparse'",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf: processing_status expected 'needs_review', got 'processed'",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf: extraction_method expected 'hybrid', got 'llamaparse'",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf: processing_status expected 'needs_review', got 'processed'",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf: title expected 'Objetivos y metas de seguridad vial', got 'OBJETIVOS Y METAS'",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf: extraction_method expected 'pdf_digital', got 'llamaparse'",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf: processing_status expected 'needs_review', got 'processed'",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf: extraction_method expected 'pdf_digital', got 'llamaparse'",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf: processing_status expected 'needs_review', got 'processed'",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf: version expected '0.6', got None",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf: extraction_method expected 'ocr', got 'llamaparse'",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf: processing_status expected 'needs_review', got 'processed'"
+      ],
+      "status": "failed"
+    },
+    {
+      "check": "golden_pages",
+      "details": [],
+      "status": "passed"
+    },
+    {
+      "check": "golden_content",
+      "details": [
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf: pages 1-2 missing required content 'QUEJAS: Si va a presentar una queja'",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf: pages 1-2 missing required content 'MODALIDADES DE ACOSO LABORAL'",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf: pages 13-15 missing required content 'Siéntese de modo'",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf: pages 1 missing required content 'Implementar. y desarrollar el Sistema de Gestión'"
+      ],
+      "status": "failed"
+    },
+    {
+      "check": "golden_page_total",
+      "details": [],
+      "status": "passed"
+    }
+  ],
+  "documents_checked": 9,
+  "errors": 0,
+  "run_id": "codex_repro_golden",
+  "schema_version": "2.0",
+  "status": "passed",
+  "warnings": 2
+}

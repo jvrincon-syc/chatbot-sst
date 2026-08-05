@@ -1,0 +1,209 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "procedimiento",
+    "document_type": "politica",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "politica:politica:title_control",
+      "politica:politica:content",
+      "politica:politica:filename",
+      "Convivencia laboral:acoso laboral:title_control",
+      "Convivencia laboral:convivencia laboral:content",
+      "Convivencia laboral:convivencia laboral:route",
+      "Prevención del acoso laboral, sexual, violencia basada en género y discriminación:prevencion de acoso:title_control"
+    ],
+    "subtopic": "Prevención del acoso laboral, sexual, violencia basada en género y discriminación",
+    "topic": "Convivencia laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-canonical-labels-v2",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | PL.RH-01SST | NIVEL DE CLASIFICACIÓN Y ETIQUETADO | USO INTERNO (NC2) | Versión | 0.2</td></tr>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PL.RH-01SST",
+      "value_raw": "PL.RH-01SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "En constancia de lo anterior, se firma el 6 de diciembre de 2025.",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "2025-12-06",
+      "value_raw": "6 de diciembre de 2025",
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# POLITICA DE PREVENCIÓN DE ACOSO LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "POLITICA DE PREVENCIÓN DE ACOSO LABORAL",
+      "value_raw": "POLITICA DE PREVENCIÓN DE ACOSO LABORAL",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | PL.RH-01SST | NIVEL DE CLASIFICACIÓN Y ETIQUETADO | USO INTERNO (NC2) | Versión | 0.2</td></tr>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.2",
+      "value_raw": "0.2",
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_d57d21ff836e1ec0",
+  "document_name": "1781045390931_syc_politicadeprevencind.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "llamaparse_form_heuristic",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": {
+          "bottom": 1401.0,
+          "coordinate_system": "pixels",
+          "top": 1159.0,
+          "x0": 118.0,
+          "x1": 610.0
+        },
+        "page_number": 1,
+        "pattern": null,
+        "region": null,
+        "source": "opencv_signature_stroke",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "opencv_signature_stroke",
+    "status": "detected",
+    "value": true,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_canonical_labels_v2_live_normalized\\convivencia_laboral\\manual\\1781045390931_syc_politicadeprevencind.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.6",
+  "processed_at": "2026-07-21T18:00:02.043416-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "6128e86ca0345d091c445f3976806868d6aece7acae8042ec6968e867891f852",
+  "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": [
+    "llama_parse_job:pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx"
+  ]
+}

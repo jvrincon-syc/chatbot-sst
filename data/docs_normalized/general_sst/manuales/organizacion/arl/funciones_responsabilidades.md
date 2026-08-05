@@ -1,7 +1,7 @@
 ---
 document_id: doc_b87ef9d031af518e
 document_type: programa
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: general_sst/manuales/organizacion/arl/funciones_responsabilidades.md
 extraction_method: markdown
 page_count: 1

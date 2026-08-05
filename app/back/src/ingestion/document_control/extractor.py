@@ -22,6 +22,11 @@ _CODE_PATTERNS = (
         re.I,
     ),
 )
+_HTML_TABLE_CODE_PATTERN = re.compile(
+    r"<t[dh][^>]*>\s*c[o\u00f3]digo\s*</t[dh]>\s*"
+    r"<t[dh][^>]*>\s*([^<]+?)\s*</t[dh]>",
+    re.I,
+)
 _VERSION_PATTERN = re.compile(
     r"\b(?:versi[o\u00f3]n|version)\b\s*[:#| -]?\s*"
     r"([\[(]?\s*v?[0-9oO][A-Za-z0-9]{0,2}(?:[.,]\d{1,3}){0,3})\b",
@@ -174,7 +179,7 @@ def _title_candidates(
             raw = match.group(1).strip()
             candidates.append((_normalize_title(raw), raw, evidence))
     if candidates:
-        return candidates
+        return _select_title_candidates(candidates)
     page_one = [
         (index, line, evidence)
         for index, (line, evidence, _source) in enumerate(records)
@@ -200,6 +205,55 @@ def _title_candidates(
                 line = f"{line} {next_line}"
         return [(normalized, line, evidence)]
     return []
+
+
+def _select_title_candidates(
+    candidates: list[tuple[str, str, Evidence]],
+) -> list[tuple[str, str, Evidence]]:
+    scored = [
+        (_title_candidate_score(raw, evidence), index, candidate)
+        for index, candidate in enumerate(candidates)
+        for _normalized, raw, evidence in (candidate,)
+    ]
+    strong = [
+        item
+        for item in scored
+        if item[0] >= 100
+    ]
+    if strong:
+        _score, _index, candidate = min(
+            strong,
+            key=lambda item: (
+                item[2][2].page_number or 9999,
+                item[1],
+            ),
+        )
+        return [candidate]
+    page_one = [
+        item
+        for item in scored
+        if item[2][2].page_number == 1 and item[0] > 0
+    ]
+    if page_one:
+        _score, _index, candidate = max(
+            page_one,
+            key=lambda item: (item[0], -item[1]),
+        )
+        return [candidate]
+    return candidates
+
+
+def _title_candidate_score(raw: str, evidence: Evidence) -> int:
+    del evidence
+    normalized = _normalize_whitespace(raw)
+    folded = normalized.casefold()
+    if folded in {"tabla de contenido", "contenido"}:
+        return 0
+    if re.match(r"^(?:cap[ií]tulo|chapter)\b", folded, re.I):
+        return 0
+    if normalized.upper() in {"SYC"}:
+        return 0
+    return _plain_title_score(normalized)
 
 
 def _looks_like_plain_title(line: str) -> bool:
@@ -308,6 +362,14 @@ def _publication_date_candidates(
 
 
 def _code_field(records: list[tuple[str, Evidence, Any]]) -> DocumentField:
+    table_labeled = _find_candidates(records, (_HTML_TABLE_CODE_PATTERN,), _normalize_code)
+    primary_table_labeled = [
+        candidate
+        for candidate in table_labeled
+        if candidate[2].page_number == 1
+    ]
+    if primary_table_labeled:
+        return _field_from_candidates(primary_table_labeled)
     labeled = _find_candidates(records, (_CODE_PATTERNS[0],), _normalize_code)
     primary_labeled = [
         candidate

@@ -180,7 +180,7 @@ class PageBlock(StrictModel):
     block_id: str = Field(min_length=1)
     text: str
     bbox: Optional[BBox] = None
-    extraction_method: Literal["markdown", "pdf_digital", "ocr", "hybrid"]
+    extraction_method: Literal["markdown", "pdf_digital", "ocr", "hybrid", "llamaparse", "hybrid_llamaparse"]
     role: Optional[str] = None
     region: Optional[str] = None
     warnings: list[str] = Field(default_factory=list)

@@ -1,176 +1,109 @@
 # chatbot-sst
 
-## Instalación rápida
+Pipeline para normalizar documentos SST, revisar evidencia y preparar
+indexacion/RAG con trazabilidad verificable.
 
-Requisitos previos:
-- Python 3.12.x
-- Node.js 18 o superior
-- npm
+## Lectura rapida
 
-Pasos para instalar y configurar el proyecto en cualquier máquina:
+- Indice corto: `docs/README.md`.
+- Ingesta local y Schema 2.0: `docs/ingestion/README.md`.
+- Via Llama-first experimental: `docs/llama_first/README.md`.
+- Chunking local y contrato HTTP: `docs/chunking/`.
+- Observabilidad del backend: `docs/observability/current-contracts.md`
+  y `docs/runbooks/backend-observability.md`.
+- Decisiones vigentes: `docs/adr/`.
+- Runbooks operativos: `docs/runbooks/`.
+- Reglas transversales: `docs/rules/`.
 
-1. Clona el repositorio y entra a la carpeta del proyecto.
-2. Ejecuta:
-   - macOS / Linux: `npm run setup`
-   - Windows PowerShell: `npm run setup`
-3. El comando crea un entorno virtual en `.venv`, instala las dependencias Python necesarias en modo editable y genera `secrets.env` a partir de `secrets.example.env`.
-4. Activa el entorno virtual:
-   - macOS / Linux: `source .venv/bin/activate`
-   - Windows PowerShell: `.venv\Scripts\Activate.ps1`
-   - Windows CMD: `.venv\Scripts\activate.bat`
-5. Si necesitas instalar dependencias adicionales de OCR en macOS, puedes ejecutar:
-   - `npm run setup:ocr:mac`
+`data/`, `memory/`, `.tmp/`, `.venv*`, `node_modules/`, `manual-test-temp/`
+y `pytest-*` no son contexto documental normal. Abrirlos solo cuando una tarea
+lo pida.
 
-## Entornos virtuales de Python
+## Guia de uso
 
-Este repositorio se trabaja con dos entornos virtuales locales distintos. No deben
-copiarse ni reutilizarse entre sistemas operativos, porque sus ejecutables y
-paquetes compilados dependen de la plataforma donde fueron creados.
+Este repo separa el trabajo en tres capas:
 
-| Entorno | Uso | Sistema | Python | Activación |
-| --- | --- | --- | --- | --- |
-| `.venv` | Máquina personal | macOS | 3.12.10 (Homebrew) | `source .venv/bin/activate` |
-| `.venv_windows_trabajo` | Equipo de trabajo | Windows | 3.12.10 (instalador oficial de Python) | `.venv_windows_trabajo\Scripts\Activate.ps1` |
+- Ingesta local: normaliza documentos y conserva trazabilidad por pagina.
+- Chunking e indexacion: consumen bundles ya aprobados y mantienen contratos
+  auditables.
+- Llama-first: experimento controlado con fallback y reglas de autorizacion.
 
-Los dos entornos tienen `include-system-site-packages = false`: están aislados de
-los paquetes instalados globalmente. Aunque actualmente usan la misma versión de
-Python, sus rutas y binarios son diferentes:
+Si buscas el estado actual de una corrida, no confies en cifras escritas a mano
+en este README. Usa los comandos de inventario y validacion del area
+correspondiente.
 
-- macOS usa `/usr/local/opt/python@3.12/bin/python3.12`.
-- Windows usa
-  `C:\Users\jvrincon\AppData\Local\Programs\Python\Python312\python.exe`.
+## Requisitos
 
-El proyecto admite Python `>=3.12,<3.13`, según `pyproject.toml`,
-`.python-version` y `package.json`. Se recomienda mantener Python 3.12.10 en las
-dos máquinas para reducir diferencias durante el desarrollo y las pruebas.
+- Python `>=3.12,<3.13`.
+- Node.js 18 o superior.
+- npm.
+- OCR local cuando se procese PDF escaneado: OCRmyPDF, Tesseract con `spa`,
+  Ghostscript y PDFium.
 
-### Paquetes del proyecto
-
-Los mismos rangos de dependencias aplican a ambos entornos:
-
-| Paquete | Rango admitido | Instalado en `.venv_windows_trabajo` |
-| --- | --- | --- |
-| `numpy` | `>=1.26,<2.3` | 2.2.6 |
-| `opencv-python-headless` | `>=4.9,<5` | 4.13.0.92 |
-| `pdfplumber` | `>=0.11,<0.12` | 0.11.9 |
-| `Pillow` | `>=10,<12` | 11.3.0 |
-| `pydantic` | `>=2.0,<2.11` | 2.10.6 |
-| `pypdf` | `>=4,<6` | 5.9.0 |
-| `pypdfium2` | `>=4.30,<5` | 4.30.0 |
-| `pytesseract` | `>=0.3,<0.4` | 0.3.13 |
-| `pytest` (desarrollo) | `>=8.0,<9` | 8.4.2 |
-
-La columna de Windows refleja las versiones instaladas actualmente, no un
-archivo de bloqueo. En la copia de `.venv` disponible en Windows no están los
-metadatos de paquetes del entorno macOS; para consultar sus versiones exactas
-hay que ejecutar en la Mac:
-
-```bash
-source .venv/bin/activate
-python --version
-python -m pip list
-```
-
-Para comprobar el entorno Windows:
+## Instalacion
 
 ```powershell
-.\.venv_windows_trabajo\Scripts\Activate.ps1
-python --version
-python -m pip list
+npm run setup
 ```
 
-### Diferencias operativas
+El comando crea `.venv`, instala dependencias Python en modo editable y genera
+`secrets.env` desde `secrets.example.env` si no existe.
 
-- Las dependencias Python declaradas son las mismas; lo que cambia es el binario
-  de Python y cualquier rueda nativa instalada para macOS o Windows.
-- En macOS, las herramientas OCR del sistema se instalan con
-  `npm run setup:ocr:mac`, que usa Homebrew para instalar `ocrmypdf`,
-  `tesseract` y `tesseract-lang`.
-- En Windows, `ocrmypdf` 16.13.0 está instalado en
-  `.venv_windows_trabajo`; Tesseract y otras dependencias externas deben estar
-  disponibles en Windows y en `PATH` cuando el pipeline las necesite.
-- `npm run setup` y los comandos `npm run python -- ...` usan siempre `.venv`.
-  En el equipo de trabajo, si se desea conservar
-  `.venv_windows_trabajo`, se debe activarlo y ejecutar directamente
-  `python -m pytest ...` o `python scripts/...`. Ejecutar `npm run setup`
-  crea o reemplaza `.venv`, no `.venv_windows_trabajo`.
-- Los entornos virtuales son artefactos locales. Las fuentes de verdad de las
-  dependencias son `pyproject.toml`, `requirements.txt` y
-  `requirements-dev.txt`.
+En Windows, `npm run python -- ...` prefiere `C:\\venvs\\chatbot-sst` si existe
+y usa `.venv` como alternativa.
 
-Comandos útiles:
-- `npm run doctor:ocr`
-- `npm run test:ingestion`
-- `npm run ingestion:inventory`
-- `npm run ingestion:run`
-- `npm run ingestion:validate`
-- `npm run schemas:export`
+Para abrir una terminal ya activada en PowerShell:
 
-## GUI de ingesta Fase 1
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+& 'C:\venvs\chatbot-sst\Scripts\Activate.ps1'
+```
 
-La GUI permite consultar inventario, revisar documentos `needs_review`,
-registrar aprobacion/rechazo humano, subir nuevos `.pdf` o `.md` a
-`data/docs_raw`, ejecutar ingesta en staging y validar la salida oficial.
+## Comandos frecuentes
 
-Instala dependencias del frontend:
+```powershell
+npm run doctor:ocr
+npm run test:ingestion
+npm run ingestion:inventory
+npm run ingestion:run
+npm run ingestion:validate
+npm run schemas:export
+npm run test:indexing
+npm run indexing:run -- --dry-run
+npm run indexing:validate
+npm run evaluation:llama-first
+```
 
-```bash
+## GUI de ingesta
+
+```powershell
 npm install --prefix app/front
+npm run gui:dev
 ```
 
-Ejecuta API y frontend en terminales separadas:
+La API se ejecuta con `npm run gui:api` y el frontend con
+`npm run gui:front`. El frontend local abre normalmente en
+`http://127.0.0.1:5173`.
 
-```bash
-npm run gui:api
-npm run gui:front
-```
+`npm run gui:api` es el entrypoint real del backend. No existe un alias `api`
+separado en `package.json`.
 
-Abre `http://127.0.0.1:5173`.
+Durante esa sesion, los eventos de arranque, requests, errores y apagado salen
+en JSON estructurado por la terminal.
 
-Si estas usando el entorno local de Fase 1 documentado en los reportes de
-cierre, el API tambien puede levantarse directamente con:
+La GUI cubre inventario, revision humana, subida de `.pdf`/`.md`, ejecucion
+local o Llama Cloud en staging, controles de Classify/Extract y validacion.
 
-```bash
-.venv312/bin/python -m ingestion.gui.server
-```
+Para seguir una corrida o una request, consulta el runbook:
+`docs/runbooks/backend-observability.md`.
 
-La accion de revision no modifica bundles ni metadata normalizada; guarda
-decisiones humanas en
-`data/docs_normalized/_manifests/review_decisions.json`.
+## Estado del proyecto
 
-RAG: si uso rag tengo que usar embedings y usar una bd vectorizada
+La Fase 1 local ya opera como Schema 2.0. Los conteos exactos, run IDs y
+resumenes de validacion cambian con el corpus y deben consultarse en la salida
+de `npm run ingestion:inventory` y `npm run ingestion:validate`, no en texto
+fijo del README.
 
-
-
-Parameter-Efficient Fine-Tuning (PEFT / LoRA) seria como el prefix fine tuning(?) de pronto si congelo los pesos de abajo y dejo los de arriba descongelados puedo entrenar un poco mas algún llm local como qwen o llama para que el modelo quede "especializado" con los pdfs y documentos que tengo , la desventaja es que no me podrá citar exactamente la pagina o documento del cual lo saca
-
-
-Revisar GRAPH RAG  como posible alternativa, revisar si se pueden hacer conexiones entre informacion
-
-
-RAG con re RANKING 
-
-Arquitectura por agentes: por ej dos agentes que 
-Paso de Localización: El modelo busca y extrae textualmente (copiar y pegar) los párrafos relevantes de los PDFs.Paso de Verificación:
-
-Un segundo modelo compara la respuesta final generada contra los párrafos extraídos textualmente para verificar que no se haya inventado ningún dato.
-
-CONSIDERAR: Crear un FAQ donde se haga un prefiltrafo con fuzzy para no tener que hacer toda la consulta completa, de pronto usar REDIS para cachear preguntas frecuentes que no esten en FAQ y agregarlas.
-
-CONSIDERACION 2: CREAR UNA CAPA DE NORMALIZACION PAARA AJUSTAR AL CONTEXTO 
-
-CONSIDERACION 3: USAR PARENT AND CHILD CON OVERLAP PARA EL CHUNKING
-
-CONSIDERACION 4: verificar que ocr usar como rapidOCR o depronto tesseract.
-
-CONSIDERACION 5: para embedding considerar BAAI/BGE-M3,Voyage-4,
-Cohere Embed v4.0
-
-CONSIDERACION 6: usar QDRANT o pgvector en posgrest
-
-CONSIDERACION 7: CUANTIZAR VECTORES
-
-CONSIDERACION 8: METADATOS PARA LOS CHUNKS PARA PREFILTRADO; CLASIFICA TEXTOS
-
-
-REVISAR SI ALGUNA PLANTILLA DE MASTRA ME SIRVE (https://mastra.ai/templates/chat-with-pdf) (https://mastra.ai/templates/docs-chatbot)
+Chunking, indexacion y RAG deben indexar solo documentos aprobados o manejar
+`needs_review` explicitamente. Llama-first sigue detras de configuracion y
+autorizacion de datos.

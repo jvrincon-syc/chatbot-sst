@@ -1,7 +1,7 @@
 ---
 document_id: doc_04c42c6f64c9d79e
 document_type: programa
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/reglamento_comite/conformacion_comite.md
 extraction_method: markdown
 page_count: 1

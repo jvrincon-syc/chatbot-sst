@@ -18,10 +18,10 @@
     "route_prior": "reglamento",
     "signals": [
       "formulario:formato:content",
-      "Comite de Convivencia Laboral:comite de convivencia:content"
+      "Comité de Convivencia Laboral:comite de convivencia:content"
     ],
     "subtopic": null,
-    "topic": "Comite de Convivencia Laboral",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -108,9 +108,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/reglamento_comite/funciones_comite.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\reglamento_comite\\funciones_comite.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/reglamento_comite/funciones_comite.md",
   "ocr_confidence": {
     "engine": null,
@@ -125,11 +126,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.764074-05:00",
+  "processed_at": "2026-07-22T15:29:02.579414-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "11a2db72e9cc57b6ce3118b7e1b64ae4ce3078bbc7de4efeb7260cece79c3acf",
+  "source_hash": "2ec1884c633e79813ed39e00091109b391149b22eba220abc47fc85f20b0a96d",
   "source_relpath": "convivencia_laboral/reglamento_comite/funciones_comite.md",
   "tables": {
     "engine": null,

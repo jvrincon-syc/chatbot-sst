@@ -101,9 +101,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/principios_convivencia.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\principios_convivencia.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/principios_convivencia.md",
   "ocr_confidence": {
     "engine": null,
@@ -118,11 +119,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:59.072134-05:00",
+  "processed_at": "2026-07-22T15:28:34.904726-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "f4f45904972bae09bfd9943fcbdbc37d0ac770eb3bfcc6e22532ef2d2147a5b8",
+  "source_hash": "e9f6a5c5e896fa7c6a82feaecfa796f25c56f40cfc6a739fbbe97b329bceef1a",
   "source_relpath": "convivencia_laboral/manual/principios_convivencia.md",
   "tables": {
     "engine": null,

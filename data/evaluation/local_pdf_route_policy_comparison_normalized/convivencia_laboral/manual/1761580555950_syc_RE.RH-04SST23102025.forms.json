@@ -1,0 +1,6261 @@
+{
+  "document_id": "doc_864d906c5eae1183",
+  "groups": [
+    {
+      "bbox": {
+        "bottom": 721.176,
+        "coordinate_system": "pdf_points",
+        "top": 48.84000000000003,
+        "x0": 31.92,
+        "x1": 579.21998
+      },
+      "controls": [
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_2",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_3",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 43.32,
+            "x1": 156.02
+          },
+          "control_id": "control_4",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_5",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 156.5,
+            "x1": 568.77
+          },
+          "control_id": "control_6",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_7",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_8",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.27999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 49.319999999999936,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_9",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.27999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 49.319999999999936,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_10",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.27999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 49.319999999999936,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_11",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_15",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_16",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 156.5,
+            "x1": 568.77
+          },
+          "control_id": "control_17",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_18",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 71.75600000000009,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_19",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 71.75600000000009,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_20",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 71.75600000000009,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_21",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_24",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_25",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 156.5,
+            "x1": 224.804
+          },
+          "control_id": "control_26",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 224.81,
+            "x1": 225.29
+          },
+          "control_id": "control_27",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 225.29,
+            "x1": 293.57
+          },
+          "control_id": "control_28",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 293.57,
+            "x1": 294.05001
+          },
+          "control_id": "control_29",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 294.05,
+            "x1": 389.954
+          },
+          "control_id": "control_30",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 389.95,
+            "x1": 390.43001
+          },
+          "control_id": "control_31",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 390.43,
+            "x1": 482.134
+          },
+          "control_id": "control_32",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 482.14,
+            "x1": 482.61998
+          },
+          "control_id": "control_33",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 482.62,
+            "x1": 538.9
+          },
+          "control_id": "control_34",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 538.9,
+            "x1": 539.3799799999999
+          },
+          "control_id": "control_35",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 539.38,
+            "x1": 568.78
+          },
+          "control_id": "control_36",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_37",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_38",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_39",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 224.81,
+            "x1": 225.29
+          },
+          "control_id": "control_40",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 293.57,
+            "x1": 294.05001
+          },
+          "control_id": "control_41",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 389.95,
+            "x1": 390.43001
+          },
+          "control_id": "control_42",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 482.14,
+            "x1": 482.61998
+          },
+          "control_id": "control_43",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 538.9,
+            "x1": 539.3799799999999
+          },
+          "control_id": "control_44",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_45",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_55",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "control_id": "control_56",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 43.32,
+            "x1": 156.02
+          },
+          "control_id": "control_57",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "control_id": "control_58",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 156.5,
+            "x1": 224.804
+          },
+          "control_id": "control_59",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 224.81,
+            "x1": 225.29
+          },
+          "control_id": "control_60",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 225.29,
+            "x1": 293.57
+          },
+          "control_id": "control_61",
+          "control_type": "blank_area",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 293.57,
+            "x1": 294.05001
+          },
+          "control_id": "control_62",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 294.05,
+            "x1": 389.954
+          },
+          "control_id": "control_63",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 389.95,
+            "x1": 390.43001
+          },
+          "control_id": "control_64",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 390.43,
+            "x1": 482.134
+          },
+          "control_id": "control_65",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 482.14,
+            "x1": 482.61998
+          },
+          "control_id": "control_66",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 482.62,
+            "x1": 538.9
+          },
+          "control_id": "control_67",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 538.9,
+            "x1": 539.3799799999999
+          },
+          "control_id": "control_68",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 539.38,
+            "x1": 568.78
+          },
+          "control_id": "control_69",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_70",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "control_id": "control_71",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_74",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_75",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_76",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_77",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_78",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 158.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 146.17999999999995,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_79",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 158.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 146.17999999999995,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_80",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 159.38,
+            "coordinate_system": "pdf_points",
+            "top": 158.89999999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_82",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 159.38,
+            "coordinate_system": "pdf_points",
+            "top": 158.89999999999998,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_83",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 159.38,
+            "coordinate_system": "pdf_points",
+            "top": 158.89999999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_84",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 170.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 159.38,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_85",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 170.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 159.38,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_86",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 171.38,
+            "coordinate_system": "pdf_points",
+            "top": 170.89999999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_88",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 171.38,
+            "coordinate_system": "pdf_points",
+            "top": 170.89999999999998,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_89",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 171.38,
+            "coordinate_system": "pdf_points",
+            "top": 170.89999999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_90",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 171.38,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_91",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 171.38,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_92",
+          "control_type": "checkbox",
+          "label_id": "documento_de_identidad",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.58000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 184.10000000000002,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_94",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.58000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 184.10000000000002,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_95",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.58000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 184.10000000000002,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_96",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.41999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 184.57999999999993,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_97",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.41999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 184.57999999999993,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_98",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 197.41998999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_100",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 197.41998999999998,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_101",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 197.41998999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_102",
+          "control_type": "checkbox",
+          "label_id": "correo_electr_nico",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 210.62,
+            "coordinate_system": "pdf_points",
+            "top": 197.89999999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_103",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 210.62,
+            "coordinate_system": "pdf_points",
+            "top": 197.89999999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_104",
+          "control_type": "checkbox",
+          "label_id": "correo_electr_nico",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 210.62,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_106",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 210.62,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_107",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 210.62,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_108",
+          "control_type": "checkbox",
+          "label_id": "correo_electr_nico",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 222.62,
+            "coordinate_system": "pdf_points",
+            "top": 211.10000000000002,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "control_id": "control_109",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 211.106,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_110",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 211.106,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_111",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 211.106,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_112",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 234.14,
+            "coordinate_system": "pdf_points",
+            "top": 222.62,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "control_id": "control_114",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 245.65999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 234.14,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "control_id": "control_116",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 245.66600000000005,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "control_id": "control_118",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 258.16999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 257.21001,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_120",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 258.16999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 257.21001,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_121",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 258.16999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 257.21001,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_122",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 258.1700000000001,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_123",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 258.1700000000001,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_124",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 258.1700000000001,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_125",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 260.21000000000004,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "control_id": "control_126",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 272.69000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 271.7300100000001,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_129",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 272.69000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 271.7300100000001,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_130",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 272.69000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 271.7300100000001,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_131",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 272.69000000000005,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_132",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 272.69000000000005,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_133",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_137",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_138",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 36.12,
+            "x1": 562.54
+          },
+          "control_id": "control_139",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_140",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_141",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.13,
+            "coordinate_system": "pdf_points",
+            "top": 307.61,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_142",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.13,
+            "coordinate_system": "pdf_points",
+            "top": 307.61,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_143",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_145",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_146",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_147",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_148",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_149",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.21,
+            "coordinate_system": "pdf_points",
+            "top": 319.60999999999996,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_150",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.21,
+            "coordinate_system": "pdf_points",
+            "top": 319.60999999999996,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_151",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.21,
+            "coordinate_system": "pdf_points",
+            "top": 319.60999999999996,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_152",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_159",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_160",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_161",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_162",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_163",
+          "control_type": "checkbox",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 423.65,
+            "coordinate_system": "pdf_points",
+            "top": 377.69,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_164",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 423.65,
+            "coordinate_system": "pdf_points",
+            "top": 377.69,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_165",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 423.65,
+            "coordinate_system": "pdf_points",
+            "top": 377.69,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_166",
+          "control_type": "blank_area",
+          "label_id": "nombre",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_172",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_173",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_174",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_175",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_176",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.23,
+            "coordinate_system": "pdf_points",
+            "top": 424.12600000000003,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_177",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.23,
+            "coordinate_system": "pdf_points",
+            "top": 424.12600000000003,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_178",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.23,
+            "coordinate_system": "pdf_points",
+            "top": 424.12600000000003,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_179",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_185",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_186",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_187",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_188",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_189",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.15,
+            "coordinate_system": "pdf_points",
+            "top": 470.71,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_190",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.15,
+            "coordinate_system": "pdf_points",
+            "top": 470.71,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_191",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.15,
+            "coordinate_system": "pdf_points",
+            "top": 470.71,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_192",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_197",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_198",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_199",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_200",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_201",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 574.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.63,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_202",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 574.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.63,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_203",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 574.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.63,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_204",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_212",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_213",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_214",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_215",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_216",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.74,
+            "coordinate_system": "pdf_points",
+            "top": 575.116,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_217",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.74,
+            "coordinate_system": "pdf_points",
+            "top": 575.116,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_218",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.74,
+            "coordinate_system": "pdf_points",
+            "top": 575.116,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_219",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_226",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_227",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "control_id": "control_228",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "control_id": "control_229",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "control_id": "control_230",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_231",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "control_id": "control_232",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 633.216,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_234",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 633.216,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_235",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_236",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_237",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 36.12,
+            "x1": 575.02
+          },
+          "control_id": "control_238",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_239",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_240",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_241",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 36.12,
+            "x1": 575.02
+          },
+          "control_id": "control_242",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 670.66,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 41.28,
+            "x1": 569.86
+          },
+          "control_id": "control_243",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_244",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 670.66,
+            "x0": 41.28,
+            "x1": 569.86
+          },
+          "control_id": "control_246",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_248",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 36.12,
+            "x1": 226.37
+          },
+          "control_id": "control_249",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 226.37,
+            "x1": 226.85001
+          },
+          "control_id": "control_250",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 226.85,
+            "x1": 395.23
+          },
+          "control_id": "control_251",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 395.23,
+            "x1": 395.71001
+          },
+          "control_id": "control_252",
+          "control_type": "checkbox",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 395.71,
+            "x1": 575.01
+          },
+          "control_id": "control_253",
+          "control_type": "blank_area",
+          "label_id": "cargo",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_254",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_255",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 226.37,
+            "x1": 226.85001
+          },
+          "control_id": "control_256",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 395.23,
+            "x1": 395.71001
+          },
+          "control_id": "control_257",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_258",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_262",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "control_id": "control_263",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 36.12,
+            "x1": 226.37
+          },
+          "control_id": "control_264",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 226.37,
+            "x1": 226.85001
+          },
+          "control_id": "control_265",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 226.85,
+            "x1": 395.23
+          },
+          "control_id": "control_266",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 395.23,
+            "x1": 395.71001
+          },
+          "control_id": "control_267",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 395.71,
+            "x1": 575.01
+          },
+          "control_id": "control_268",
+          "control_type": "blank_area",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_269",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "control_id": "control_270",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_271",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "control_id": "control_272",
+          "control_type": "checkbox",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "control_id": "control_273",
+          "control_type": "blank_area",
+          "label_id": "nombre_del_presunto_acosador",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_274",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "control_id": "control_275",
+          "control_type": "checkbox",
+          "label_id": "proyecto",
+          "selected": null,
+          "value": null,
+          "warnings": []
+        }
+      ],
+      "group_id": "complaint",
+      "labels": [
+        {
+          "bbox": {
+            "bottom": 158.83159999999998,
+            "coordinate_system": "pdf_points",
+            "top": 148.87160000000006,
+            "x0": 35.64,
+            "x1": 414.07888
+          },
+          "label_id": "nombre",
+          "text": "NOMBRE:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 170.83159999999998,
+            "coordinate_system": "pdf_points",
+            "top": 160.87160000000006,
+            "x0": 35.64,
+            "x1": 181.22888
+          },
+          "label_id": "documento_de_identidad",
+          "text": "DOCUMENTO DE IDENTIDAD:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.03160000000003,
+            "coordinate_system": "pdf_points",
+            "top": 174.0716000000001,
+            "x0": 35.64,
+            "x1": 97.83287999999999
+          },
+          "label_id": "proyecto",
+          "text": "PROYECTO:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.35159999999996,
+            "coordinate_system": "pdf_points",
+            "top": 187.39160000000004,
+            "x0": 35.64,
+            "x1": 78.99288
+          },
+          "label_id": "cargo",
+          "text": "CARGO:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 210.5516,
+            "coordinate_system": "pdf_points",
+            "top": 200.59160000000008,
+            "x0": 35.64,
+            "x1": 161.18887999999998
+          },
+          "label_id": "correo_electr_nico",
+          "text": "CORREO ELECTRÓNICO:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 694.1076,
+            "coordinate_system": "pdf_points",
+            "top": 684.1476,
+            "x0": 41.28,
+            "x1": 195.26888
+          },
+          "label_id": "nombre_del_presunto_acosador",
+          "text": "Nombre del presunto acosador:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 694.1076,
+            "coordinate_system": "pdf_points",
+            "top": 684.1476,
+            "x0": 231.89,
+            "x1": 266.93888000000004
+          },
+          "label_id": "cargo",
+          "text": "Cargo:",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 694.1076,
+            "coordinate_system": "pdf_points",
+            "top": 684.1476,
+            "x0": 400.87,
+            "x1": 449.71888
+          },
+          "label_id": "proyecto",
+          "text": "Proyecto:",
+          "warnings": []
+        }
+      ],
+      "page_number": 1,
+      "title": "FORMATO PARA INTERPONER QUEJA POR PRESUNTO ACOSO ANTE EL COMITÉ",
+      "warnings": []
+    }
+  ],
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 43.32,
+            "x1": 156.02
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 156.5,
+            "x1": 568.77
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 49.32000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 48.84000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.27999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 49.319999999999936,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.27999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 49.319999999999936,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.27999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 49.319999999999936,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 156.5,
+            "x1": 568.77
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 71.75999999999999,
+            "coordinate_system": "pdf_points",
+            "top": 71.27999999999997,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 71.75600000000009,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 71.75600000000009,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 94.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 71.75600000000009,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 156.5,
+            "x1": 224.804
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 224.81,
+            "x1": 225.29
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 225.29,
+            "x1": 293.57
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 293.57,
+            "x1": 294.05001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 294.05,
+            "x1": 389.954
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 389.95,
+            "x1": 390.43001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 390.43,
+            "x1": 482.134
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 482.14,
+            "x1": 482.61998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 482.62,
+            "x1": 538.9
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 538.9,
+            "x1": 539.3799799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 539.38,
+            "x1": 568.78
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 95.29999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 94.81999999999994,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 224.81,
+            "x1": 225.29
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 293.57,
+            "x1": 294.05001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 389.95,
+            "x1": 390.43001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 482.14,
+            "x1": 482.61998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 538.9,
+            "x1": 539.3799799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.34000000000003,
+            "coordinate_system": "pdf_points",
+            "top": 95.30000000000007,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 42.84,
+            "x1": 43.32
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 43.32,
+            "x1": 156.02
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 156.02,
+            "x1": 156.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 156.5,
+            "x1": 224.804
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 224.81,
+            "x1": 225.29
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 225.29,
+            "x1": 293.57
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 293.57,
+            "x1": 294.05001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 294.05,
+            "x1": 389.954
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 389.95,
+            "x1": 390.43001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 390.43,
+            "x1": 482.134
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 482.14,
+            "x1": 482.61998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 482.62,
+            "x1": 538.9
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 538.9,
+            "x1": 539.3799799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 539.38,
+            "x1": 568.78
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 118.82000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 118.34000000000003,
+            "x0": 568.78,
+            "x1": 569.2599799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 146.17999999999995,
+            "coordinate_system": "pdf_points",
+            "top": 145.69998999999996,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 158.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 146.17999999999995,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 158.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 146.17999999999995,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 159.38,
+            "coordinate_system": "pdf_points",
+            "top": 158.89999999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 159.38,
+            "coordinate_system": "pdf_points",
+            "top": 158.89999999999998,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 159.38,
+            "coordinate_system": "pdf_points",
+            "top": 158.89999999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 170.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 159.38,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 170.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 159.38,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 171.38,
+            "coordinate_system": "pdf_points",
+            "top": 170.89999999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 171.38,
+            "coordinate_system": "pdf_points",
+            "top": 170.89999999999998,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 171.38,
+            "coordinate_system": "pdf_points",
+            "top": 170.89999999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 171.38,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 171.38,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.58000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 184.10000000000002,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.58000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 184.10000000000002,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 184.58000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 184.10000000000002,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.41999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 184.57999999999993,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.41999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 184.57999999999993,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 197.41998999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 197.41998999999998,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 197.89999999999998,
+            "coordinate_system": "pdf_points",
+            "top": 197.41998999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 210.62,
+            "coordinate_system": "pdf_points",
+            "top": 197.89999999999998,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 210.62,
+            "coordinate_system": "pdf_points",
+            "top": 197.89999999999998,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 210.62,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 210.62,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 211.10000000000002,
+            "coordinate_system": "pdf_points",
+            "top": 210.62,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 222.62,
+            "coordinate_system": "pdf_points",
+            "top": 211.10000000000002,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 211.106,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 211.106,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 211.106,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 234.14,
+            "coordinate_system": "pdf_points",
+            "top": 222.62,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 245.65999999999997,
+            "coordinate_system": "pdf_points",
+            "top": 234.14,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 257.21000000000004,
+            "coordinate_system": "pdf_points",
+            "top": 245.66600000000005,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 258.16999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 257.21001,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 258.16999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 257.21001,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 258.16999999999996,
+            "coordinate_system": "pdf_points",
+            "top": 257.21001,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 258.1700000000001,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 258.1700000000001,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 258.1700000000001,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 271.73,
+            "coordinate_system": "pdf_points",
+            "top": 260.21000000000004,
+            "x0": 35.64,
+            "x1": 575.5
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 272.69000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 271.7300100000001,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 272.69000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 271.7300100000001,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 272.69000000000005,
+            "coordinate_system": "pdf_points",
+            "top": 271.7300100000001,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 272.69000000000005,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 272.69000000000005,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 36.12,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 307.61,
+            "coordinate_system": "pdf_points",
+            "top": 307.12999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.13,
+            "coordinate_system": "pdf_points",
+            "top": 307.61,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.13,
+            "coordinate_system": "pdf_points",
+            "top": 307.61,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 319.61,
+            "coordinate_system": "pdf_points",
+            "top": 319.12999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.21,
+            "coordinate_system": "pdf_points",
+            "top": 319.60999999999996,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.21,
+            "coordinate_system": "pdf_points",
+            "top": 319.60999999999996,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.21,
+            "coordinate_system": "pdf_points",
+            "top": 319.60999999999996,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 377.69,
+            "coordinate_system": "pdf_points",
+            "top": 377.21002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 423.65,
+            "coordinate_system": "pdf_points",
+            "top": 377.69,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 423.65,
+            "coordinate_system": "pdf_points",
+            "top": 377.69,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 423.65,
+            "coordinate_system": "pdf_points",
+            "top": 377.69,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 424.13,
+            "coordinate_system": "pdf_points",
+            "top": 423.65002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.23,
+            "coordinate_system": "pdf_points",
+            "top": 424.12600000000003,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.23,
+            "coordinate_system": "pdf_points",
+            "top": 424.12600000000003,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.23,
+            "coordinate_system": "pdf_points",
+            "top": 424.12600000000003,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 470.71,
+            "coordinate_system": "pdf_points",
+            "top": 470.22999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.15,
+            "coordinate_system": "pdf_points",
+            "top": 470.71,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.15,
+            "coordinate_system": "pdf_points",
+            "top": 470.71,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.15,
+            "coordinate_system": "pdf_points",
+            "top": 470.71,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 505.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.14999,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 574.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.63,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 574.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.63,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 574.63,
+            "coordinate_system": "pdf_points",
+            "top": 505.63,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 575.11,
+            "coordinate_system": "pdf_points",
+            "top": 574.6300200000001,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.74,
+            "coordinate_system": "pdf_points",
+            "top": 575.116,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.74,
+            "coordinate_system": "pdf_points",
+            "top": 575.116,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 632.74,
+            "coordinate_system": "pdf_points",
+            "top": 575.116,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 36.12,
+            "x1": 528.5799999999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 528.58,
+            "x1": 529.0600400000001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 529.06,
+            "x1": 562.54
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 633.22,
+            "coordinate_system": "pdf_points",
+            "top": 632.74002,
+            "x0": 562.54,
+            "x1": 563.0199799999999
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 633.216,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 633.216,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 36.12,
+            "x1": 575.02
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 659.14,
+            "coordinate_system": "pdf_points",
+            "top": 658.66002,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 36.12,
+            "x1": 575.02
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 670.66,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 41.28,
+            "x1": 569.86
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 659.14,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.1800000000001,
+            "coordinate_system": "pdf_points",
+            "top": 670.66,
+            "x0": 41.28,
+            "x1": 569.86
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 36.12,
+            "x1": 226.37
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 226.37,
+            "x1": 226.85001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 226.85,
+            "x1": 395.23
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 395.23,
+            "x1": 395.71001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 395.71,
+            "x1": 575.01
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 682.66,
+            "coordinate_system": "pdf_points",
+            "top": 682.18002,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 226.37,
+            "x1": 226.85001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 395.23,
+            "x1": 395.71001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.216,
+            "coordinate_system": "pdf_points",
+            "top": 682.656,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 35.64,
+            "x1": 36.12
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 36.12,
+            "x1": 226.37
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 226.37,
+            "x1": 226.85001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 226.85,
+            "x1": 395.23
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 395.23,
+            "x1": 395.71001
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 395.71,
+            "x1": 575.01
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 720.696,
+            "coordinate_system": "pdf_points",
+            "top": 720.21602,
+            "x0": 575.02,
+            "x1": 575.50004
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 31.92,
+            "x1": 32.4
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 32.4,
+            "x1": 578.74
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 721.176,
+            "coordinate_system": "pdf_points",
+            "top": 720.69596,
+            "x0": 578.74,
+            "x1": 579.21998
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "vector_geometry",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "vector_geometry",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    },
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "vector_geometry",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

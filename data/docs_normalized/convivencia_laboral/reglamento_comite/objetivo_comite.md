@@ -1,7 +1,7 @@
 ---
 document_id: doc_5d2b57616d019b89
 document_type: reglamento
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/reglamento_comite/objetivo_comite.md
 extraction_method: markdown
 page_count: 1

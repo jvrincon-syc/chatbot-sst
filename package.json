@@ -16,11 +16,17 @@
     "ingestion:inventory": "npm run python -- scripts/ingestion/run_inventory.py",
     "ingestion:run": "npm run python -- scripts/ingestion/run_pipeline.py",
     "ingestion:validate": "npm run python -- scripts/ingestion/validate_normalized.py",
+    "indexing:prepare-postgres": "npm run python -- scripts/indexing/prepare_postgres_indexing.py",
+    "indexing:run": "npm run python -- scripts/indexing/run_indexing.py",
+    "indexing:validate": "npm run python -- scripts/indexing/validate_index.py",
+    "evaluation:llama-first": "npm run python -- scripts/evaluation/run_llama_first_benchmark.py",
+    "test:indexing": "npm run python -- -m pytest app/back/tests/indexing",
     "schemas:export": "npm run python -- scripts/ingestion/export_schemas.py",
     "gui:api": "npm run python -- -m ingestion.gui.server",
     "gui:front": "npm --prefix app/front run dev",
     "gui:dev": "node -e \"const { spawn } = require('child_process'); const api = spawn('npm', ['run', 'gui:api'], { stdio: 'inherit' }); const front = spawn('npm', ['run', 'gui:front'], { stdio: 'inherit' }); const stop = () => { api.kill('SIGTERM'); front.kill('SIGTERM'); }; process.on('SIGINT', stop); process.on('SIGTERM', stop);\"",
-    "python": "node -e \"const { spawnSync } = require('child_process'); const path = require('path'); const venvPython = process.platform === 'win32' ? path.join('.venv', 'Scripts', 'python.exe') : path.join('.venv', 'bin', 'python'); const args = process.argv.slice(2); const result = spawnSync(venvPython, args, { stdio: 'inherit' }); if (result.status !== 0) process.exit(result.status || 1);\""
+    "python": "node -e \"const { spawnSync } = require('child_process'); const path = require('path'); const candidates = process.platform === 'win32' ? ['C:\\\\venvs\\\\chatbot-sst\\\\Scripts\\\\python.exe', path.join('.venv', 'Scripts', 'python.exe')] : [path.join('.venv', 'bin', 'python')]; const venvPython = candidates.find((candidate) => require('fs').existsSync(candidate)) || candidates[candidates.length - 1]; const args = process.argv.slice(1); const result = spawnSync(venvPython, args, { stdio: 'inherit' }); if (result.status !== 0) process.exit(result.status || 1);\" --",
+    "activate:venv": "powershell -NoExit -NoProfile -Command \"Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned; & 'C:\\venvs\\chatbot-sst\\Scripts\\Activate.ps1'\""
   },
   "engines": {
     "node": ">=18",

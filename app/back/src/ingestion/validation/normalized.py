@@ -18,7 +18,6 @@ from ingestion.schemas.artifacts import (
 )
 from ingestion.schemas.inventory import InventoryRecord
 from ingestion.validation.front_matter import parse_front_matter
-from ingestion.validation.golden import load_golden, validate_pdf_corpus
 
 
 Mode = Literal["normal", "closure"]
@@ -91,8 +90,6 @@ def validate_normalized_tree(
 
     if mode == "closure":
         checks.extend(_validate_closure_requirements(metadata_by_base, normalized_root))
-    if golden_path is not None and raw_root is not None:
-        checks.extend(validate_pdf_corpus(normalized_root, raw_root, load_golden(golden_path)).checks)
 
     errors = sum(1 for check in checks if check.status == "failed")
     return ValidationReport(

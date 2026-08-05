@@ -4,6 +4,7 @@ from typing import Literal, Optional
 
 from pydantic import Field
 
+from ingestion.schemas.common import ConfidenceMetric
 from ingestion.schemas.common import RelativePosixPath, StrictModel
 
 
@@ -23,6 +24,7 @@ class InventoryRecord(StrictModel):
     category_inferred: str
     document_version: Optional[str] = None
     page_count: Optional[int] = Field(default=None, ge=0)
+    ocr_confidence: Optional[ConfidenceMetric] = None
     processing_status: Literal[
         "pending", "processed", "failed", "needs_review"
     ] = "pending"

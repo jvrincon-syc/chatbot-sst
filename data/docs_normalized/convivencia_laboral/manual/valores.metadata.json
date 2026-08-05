@@ -98,9 +98,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/valores.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\valores.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/valores.md",
   "ocr_confidence": {
     "engine": null,
@@ -115,11 +116,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:59.108651-05:00",
+  "processed_at": "2026-07-22T15:28:35.024738-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "edd8adf9d2c257be48d977ccdac03c43cbbd8e76d5fc16861d9df6bd5472bf59",
+  "source_hash": "c419b89925bf8f8d3436b221fb1ad43b365008b4d57f0865e35ea3434a633fdc",
   "source_relpath": "convivencia_laboral/manual/valores.md",
   "tables": {
     "engine": null,

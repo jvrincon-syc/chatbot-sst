@@ -1,0 +1,680 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "formulario",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": "reglamento",
+    "signals": [
+      "formulario:formato:content",
+      "Sistema de Gestion de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+    ],
+    "subtopic": null,
+    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-pages-shape-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "**Enero, 2025**",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "2025-01",
+      "value_raw": "Enero, 2025",
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# REGLAMENTO INTERNO DE TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 2,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# Tabla de contenido",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# CAPÍTULO I",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## CAPÍTULO II",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 4,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## CONDICIONES DE ADMISIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# CAPÍTULO III",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 5,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## PRACTICAS LABORALES CONTRATO ESPECIAL DE TRABAJO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO VII",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 9,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### HORAS EXTRAS Y TRABAJOS NOCTURNOS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO VIII",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 10,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### DÍAS DE DESCANSO LEGALMENTE OBLIGATORIO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# CAPÍTULO IX",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 12,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## VACACIONES REMUNERADAS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 13,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO X",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 13,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### PERMISOS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 14,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 18,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 22,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 23,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 25,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 30,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 31,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 33,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 34,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# SYC",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPITULO XIII",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### PRESCRIPCIONES DE ORDEN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XIV",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### ORDEN JERARQUICO",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XV",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 17,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### LABORES PROHIBIDAS PARA MUJERES Y MENORES DE 18 AÑOS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 19,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XVI",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 19,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### OBLIGACIONES ESPECIALES PARA LA EMPRESA Y LOS TRABAJADORES",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 22,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## Sistemas y Computadores S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 23,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XVIII",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 23,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### ESCALA DE FALTAS Y SANCIONES DISCIPLINARIAS PROCEDIMIENTOS PARA COMPROBACION DE FALTAS Y FORMAS DE APLICACION DE LAS SANCIONES DISCIPLINARÍAS.",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 29,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XIX",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 29,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### RECLAMOS: PERSONAS ANTE QUIENES DEBE PRESENTARSE Y SU TRAMITACION",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 29,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XX",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 29,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### PROTECCIÓN EN CASOS DE DESPIDOS COLECTIVOS",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 29,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### CAPÍTULO XXI",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 29,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "### EL ACOSO LABORAL Y SEXUAL",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# CAPÍTULO XXIV",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## MEDIDAS FRENTE AL ACOSO SEXUAL (LEY 2365 DE 2024)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# CAPÍTULO XXV",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## PRINCIPIO DE ESTABILIDAD LABORAL REFORZADA",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# CAPÍTULO XXVI",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## VIGENCIA Y PUBLICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "page_number": 36,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "## DISPOSICIONES FINALES",
+          "warnings": []
+        }
+      ],
+      "status": "conflicting",
+      "value": [
+        "REGLAMENTO INTERNO DE TRABAJO",
+        "Tabla de contenido",
+        "CAPÍTULO I",
+        "CAPÍTULO II",
+        "CONDICIONES DE ADMISIÓN",
+        "CAPÍTULO III",
+        "PRACTICAS LABORALES CONTRATO ESPECIAL DE TRABAJO",
+        "CAPÍTULO VII",
+        "HORAS EXTRAS Y TRABAJOS NOCTURNOS",
+        "CAPÍTULO VIII",
+        "DÍAS DE DESCANSO LEGALMENTE OBLIGATORIO",
+        "CAPÍTULO IX",
+        "VACACIONES REMUNERADAS",
+        "CAPÍTULO X",
+        "PERMISOS",
+        "SYC",
+        "CAPITULO XIII",
+        "PRESCRIPCIONES DE ORDEN",
+        "CAPÍTULO XIV",
+        "ORDEN JERARQUICO",
+        "CAPÍTULO XV",
+        "LABORES PROHIBIDAS PARA MUJERES Y MENORES DE 18 AÑOS",
+        "CAPÍTULO XVI",
+        "OBLIGACIONES ESPECIALES PARA LA EMPRESA Y LOS TRABAJADORES",
+        "Sistemas y Computadores S.A.",
+        "CAPÍTULO XVIII",
+        "ESCALA DE FALTAS Y SANCIONES DISCIPLINARIAS PROCEDIMIENTOS PARA COMPROBACION DE FALTAS Y FORMAS DE APLICACION DE LAS SANCIONES DISCIPLINARÍAS.",
+        "CAPÍTULO XIX",
+        "RECLAMOS: PERSONAS ANTE QUIENES DEBE PRESENTARSE Y SU TRAMITACION",
+        "CAPÍTULO XX",
+        "PROTECCIÓN EN CASOS DE DESPIDOS COLECTIVOS",
+        "CAPÍTULO XXI",
+        "EL ACOSO LABORAL Y SEXUAL",
+        "CAPÍTULO XXIV",
+        "MEDIDAS FRENTE AL ACOSO SEXUAL (LEY 2365 DE 2024)",
+        "CAPÍTULO XXV",
+        "PRINCIPIO DE ESTABILIDAD LABORAL REFORZADA",
+        "CAPÍTULO XXVI",
+        "VIGENCIA Y PUBLICACIÓN",
+        "DISPOSICIONES FINALES"
+      ],
+      "value_raw": [
+        "REGLAMENTO INTERNO DE TRABAJO",
+        "Tabla de contenido",
+        "CAPÍTULO I",
+        "CAPÍTULO II",
+        "CONDICIONES DE ADMISIÓN",
+        "CAPÍTULO III",
+        "PRACTICAS LABORALES CONTRATO ESPECIAL DE TRABAJO",
+        "CAPÍTULO VII",
+        "HORAS EXTRAS Y TRABAJOS NOCTURNOS",
+        "CAPÍTULO VIII",
+        "DÍAS DE DESCANSO LEGALMENTE OBLIGATORIO",
+        "CAPÍTULO IX",
+        "VACACIONES REMUNERADAS",
+        "CAPÍTULO X",
+        "PERMISOS",
+        "SYC",
+        "CAPITULO XIII",
+        "PRESCRIPCIONES DE ORDEN",
+        "CAPÍTULO XIV",
+        "ORDEN JERARQUICO",
+        "CAPÍTULO XV",
+        "LABORES PROHIBIDAS PARA MUJERES Y MENORES DE 18 AÑOS",
+        "CAPÍTULO XVI",
+        "OBLIGACIONES ESPECIALES PARA LA EMPRESA Y LOS TRABAJADORES",
+        "Sistemas y Computadores S.A.",
+        "CAPÍTULO XVIII",
+        "ESCALA DE FALTAS Y SANCIONES DISCIPLINARIAS PROCEDIMIENTOS PARA COMPROBACION DE FALTAS Y FORMAS DE APLICACION DE LAS SANCIONES DISCIPLINARÍAS.",
+        "CAPÍTULO XIX",
+        "RECLAMOS: PERSONAS ANTE QUIENES DEBE PRESENTARSE Y SU TRAMITACION",
+        "CAPÍTULO XX",
+        "PROTECCIÓN EN CASOS DE DESPIDOS COLECTIVOS",
+        "CAPÍTULO XXI",
+        "EL ACOSO LABORAL Y SEXUAL",
+        "CAPÍTULO XXIV",
+        "MEDIDAS FRENTE AL ACOSO SEXUAL (LEY 2365 DE 2024)",
+        "CAPÍTULO XXV",
+        "PRINCIPIO DE ESTABILIDAD LABORAL REFORZADA",
+        "CAPÍTULO XXVI",
+        "VIGENCIA Y PUBLICACIÓN",
+        "DISPOSICIONES FINALES"
+      ],
+      "warnings": [
+        "multiple_visible_candidates"
+      ]
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": [
+      "conflicting_title"
+    ]
+  },
+  "document_id": "doc_31b00a8b31847796",
+  "document_name": "1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_pages_shape_fix_normalized\\general_sst\\manuales\\organizacion\\reglamento_interno_trabajo\\1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 36,
+  "pipeline_version": "2.0.2",
+  "processed_at": "2026-07-21T17:04:47.992608-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "conflicting_title",
+    "pdf_semantic_review_required",
+    "tables_not_evaluated",
+    "forms_not_evaluated"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
+  "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq",
+    "conflicting_title"
+  ]
+}

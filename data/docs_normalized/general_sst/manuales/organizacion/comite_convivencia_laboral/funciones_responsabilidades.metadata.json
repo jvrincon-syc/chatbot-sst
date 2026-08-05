@@ -18,10 +18,10 @@
     "route_prior": "manual",
     "signals": [
       "informacion_general:funciones:filename",
-      "Comite de Convivencia Laboral:comite de convivencia:content"
+      "Comité de Convivencia Laboral:comite de convivencia:content"
     ],
     "subtopic": null,
-    "topic": "Comite de Convivencia Laboral",
+    "topic": "Comité de Convivencia Laboral",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -98,9 +98,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\general_sst\\manuales\\organizacion\\comite_convivencia_laboral\\funciones_responsabilidades.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
   "ocr_confidence": {
     "engine": null,
@@ -115,11 +116,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:24.387741-05:00",
+  "processed_at": "2026-07-22T15:30:11.918092-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "c35c22d737df091924e0fa8660a46c1d34b5dff4b803c511c89c69ff766a71f0",
+  "source_hash": "938d33066916231b3ec0acc769e60d249e910c2fff8c981fdb9e74e64068dd8c",
   "source_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
   "tables": {
     "engine": null,

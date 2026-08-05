@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-07-21",
+  "authorization_status": "pending",
+  "documents": [
+    {
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "expected_type": "politica",
+      "features": ["pdf", "document_control"],
+      "cloud_allowed": false
+    },
+    {
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "expected_type": "reglamento",
+      "features": ["pdf", "multi_page", "document_control"],
+      "cloud_allowed": false
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "expected_type": "formulario",
+      "features": ["pdf", "form", "complaint"],
+      "cloud_allowed": false
+    },
+    {
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "expected_type": "programa",
+      "features": ["pdf", "tables"],
+      "cloud_allowed": false
+    },
+    {
+      "source_relpath": "copasst/miembros_copasst_2025_2027.md",
+      "expected_type": "informacion_general",
+      "features": ["markdown", "list"],
+      "cloud_allowed": false
+    },
+    {
+      "source_relpath": "general_sst/manuales/introduccion.md",
+      "expected_type": "manual",
+      "features": ["markdown"],
+      "cloud_allowed": false
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "bundles": [
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2231,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+          "schema_version": "2.0",
+          "sha256": "57d1a44c0da293f84a7ee51d5d0c38753ec20ced1f0af85da0e4eb09dff29cba"
+        },
+        {
+          "byte_size": 3844,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "40fc775a4ad7eb903e5f429d47611cab700d14026131084441e0cd9ff298b865"
+        },
+        {
+          "byte_size": 4503,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.pages.json",
+          "schema_version": "2.0",
+          "sha256": "3488c444932abf8caf9115afe93af808b6149cebd6e4211eedc0f68acab876b6"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "1c8ea23d341340a94d3fdba41e901264144cb28fbcfc417738dbecb471146d7c"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.tables.json",
+          "schema_version": "2.0",
+          "sha256": "3c31e34017c55674066abcc88f89d89730c91c837831560f4afed54a47e67a77"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.forms.json",
+          "schema_version": "2.0",
+          "sha256": "5649b6d98541f2b3faaf7da2f92d9596b815adb81807c2af76ae3325e31a7f6a"
+        }
+      ],
+      "document_id": "doc_53b1d7b44cf260c0",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas",
+      "processing_fingerprint": "de96c86c0a0a22d4211a3980ab5eecb8d58157023d9e5347901ee71e15ebb16b",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "3e9e7ff75bba38f5099b02b3dde8b5bb721327dc6ec0517631e4a9bbd4075577",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 321,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+          "schema_version": "2.0",
+          "sha256": "1f44772d4c911a90a02411af291200de1b7d032161e34bd71f5a9f9c937c8f09"
+        },
+        {
+          "byte_size": 3819,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "fb6665ada9634618591db4b84be183206f09a6c79f861f78b75b8fb15314a20a"
+        },
+        {
+          "byte_size": 105,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pages.json",
+          "schema_version": "2.0",
+          "sha256": "06bf30e12e52e1303c037bf7746bda79dedda36a2de11564f13d5203776b6d45"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "4fd3867ee6ed0cec246627a8a0cf683d3dbfc3834c30ea4b1328ba2399f84940"
+        },
+        {
+          "byte_size": 191,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.tables.json",
+          "schema_version": "2.0",
+          "sha256": "6d40e768a7a511717e3c1ea23abe11c77a22d7e92234dd02dc9da2040f2078b5"
+        },
+        {
+          "byte_size": 170,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.forms.json",
+          "schema_version": "2.0",
+          "sha256": "06dd98880dc61e2442f6fa9e94818b9c5aff0ac783db8205223ea194ab24de17"
+        }
+      ],
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial",
+      "processing_fingerprint": "de96c86c0a0a22d4211a3980ab5eecb8d58157023d9e5347901ee71e15ebb16b",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "382dc4303085bebbf49dcfa095225cab8a7819bab2ba1402c4cfe5d6d361cae4",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 337,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+          "schema_version": "2.0",
+          "sha256": "d36ab80d629405f01da518a434ceb9f4211cc4749ad167d12279e99e3698735a"
+        },
+        {
+          "byte_size": 3843,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "3960d6b9531142774dc513366c57b427076999c37aeee2fa644af2a46c57446c"
+        },
+        {
+          "byte_size": 105,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pages.json",
+          "schema_version": "2.0",
+          "sha256": "abd40a4c1abbdae302917e568182e958c2c05d87b38f13dfad5d18a70f202f4f"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "757e8380f86d855eb4591a90ca04ca28973e925806a64b7f229928f33dc4cd5d"
+        },
+        {
+          "byte_size": 191,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.tables.json",
+          "schema_version": "2.0",
+          "sha256": "2766b26bd9300266ce9c2f402679558555633937781e398c32d646ad61dfa465"
+        },
+        {
+          "byte_size": 170,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.forms.json",
+          "schema_version": "2.0",
+          "sha256": "5807857715b29bf539d6cbced17473deedbf3da71d3b55d01fa6c7c3d2a3a906"
+        }
+      ],
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026",
+      "processing_fingerprint": "de96c86c0a0a22d4211a3980ab5eecb8d58157023d9e5347901ee71e15ebb16b",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.metadata.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pages.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.ocr.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.tables.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf"
+    }
+  ],
+  "documents": [
+    {
+      "disposition": "processed",
+      "document_id": "doc_53b1d7b44cf260c0",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+        "route_only_low_confidence",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq",
+        "route_only_low_confidence"
+      ]
+    }
+  ],
+  "fingerprints": {},
+  "run_id": "llama_data_raw_retry_after_longpath_fix",
+  "schema_version": "2.0",
+  "summary": {
+    "failed": 0,
+    "needs_review": 2,
+    "processed": 1,
+    "skipped": 0
+  },
+  "timestamp": "2026-07-21T16:54:03.078034-05:00"
+}

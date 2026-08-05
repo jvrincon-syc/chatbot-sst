@@ -111,9 +111,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/copasst/miembros_copasst_2025_2027.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\copasst\\miembros_copasst_2025_2027.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "copasst/miembros_copasst_2025_2027.md",
   "ocr_confidence": {
     "engine": null,
@@ -128,11 +129,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.902570-05:00",
+  "processed_at": "2026-07-22T15:29:02.968453-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "06c4ec2a0d01bb3d1f14c1ea22f85bb6f37c909474f3c52d170ac93fdb202a72",
+  "source_hash": "fc71de81035060914c1c2c32013c1791cb66d3a3d5cd14e3ead8d61c6166a370",
   "source_relpath": "copasst/miembros_copasst_2025_2027.md",
   "tables": {
     "engine": null,

@@ -1,20 +1,18 @@
 {
   "classification": {
-    "conflict_status": "conflicting",
-    "conflicts": [
-      "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
-    ],
+    "conflict_status": "none",
+    "conflicts": [],
     "content_prediction": "formulario",
-    "document_type": "reglamento",
+    "document_type": "otro",
     "document_type_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-mabepocjgruvmk8lntj633etvlv9",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "route_prior": "reglamento",
@@ -22,22 +20,25 @@
       "reglamento:reglamento:title_control",
       "reglamento:reglamento:content",
       "reglamento:reglamento:route",
-      "Comite de Convivencia Laboral:comite de convivencia:title_control",
+      "Comité de Convivencia Laboral:comite de convivencia:title_control",
       "Convivencia laboral:convivencia laboral:title_control",
-      "Comite de Convivencia Laboral:comite de convivencia:content",
-      "Funcionamiento del comite:reglamento del comite:title_control"
+      "Comité de Convivencia Laboral:comite de convivencia:content",
+      "Funcionamiento del comité:reglamento del comite:title_control",
+      "llama_classify_document_type:otro",
+      "llama_classify_topic:otro",
+      "llama_schema_extract:document_control"
     ],
-    "subtopic": "Funcionamiento del comite",
-    "topic": "Comite de Convivencia Laboral",
+    "subtopic": "Funcionamiento del comité",
+    "topic": "otro",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-8n0zaewk42cf5vbmuq1jize7nwtw",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "warnings": []
@@ -52,53 +53,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 3,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 4,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 5,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 6,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
+          "source": "llamaparse",
+          "text": "<tr><th>Sistemas y Computadores S.A.</th><th>CODIGO</th><th>RG.RH-01SST</th><th>NIVEL DE CLASIFICACIÓN</th><th>USO INTERNO (NC2)</th><th>VERSION</th><th>0.0</th></tr></table>",
           "warnings": []
         }
       ],
@@ -128,8 +84,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "source": "llamaparse",
+          "text": "# REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
           "warnings": []
         }
       ],
@@ -142,56 +98,11 @@
       "evidence": [
         {
           "bbox": null,
-          "page_number": 1,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 2,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 3,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 4,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
-          "page_number": 5,
-          "pattern": null,
-          "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
-          "warnings": []
-        },
-        {
-          "bbox": null,
           "page_number": 6,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "CODIGO RG.RH-01SST                        VERSION  0.0",
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | RG.RH-01SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | VERSION | 0.0</td></tr>",
           "warnings": []
         }
       ],
@@ -204,13 +115,13 @@
   },
   "document_id": "doc_d4fca71ff51cb27b",
   "document_name": "1761609513260_syc_RG.RH-01-SST23102025.pdf",
-  "extraction_method": "pdf_digital",
+  "extraction_method": "llamaparse",
   "feature_observations": {},
   "forms": {
     "engine": null,
     "engine_version": null,
     "evidence": [],
-    "method": "vector_geometry",
+    "method": "llamaparse_form_heuristic",
     "status": "not_detected",
     "value": false,
     "warnings": []
@@ -225,28 +136,125 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\reglamento_comite\\1761609513260_syc_RG.RH-01-SST23102025.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": {
+    "job_metadata": {
+      "pdf-high-res-ocr": 6,
+      "pdf-image-convertTime": 0,
+      "pdf-image-ocr-count": 0,
+      "pdf-image-ocr-empty-count": 6,
+      "pdf-image-ocr-failed-count": 0,
+      "pdf-image-ocr-hadText-count": 12,
+      "pdf-image-ocr-pixels": 48201365,
+      "pdf-image-ocr-success-count": 18,
+      "pdf-inputTokens": 28485,
+      "pdf-llmTime": 4354,
+      "pdf-mdLength": 17375,
+      "pdf-multimodal-pdf2Image": 0,
+      "pdf-multimodal-time": 0,
+      "pdf-ocrTime": 0,
+      "pdf-outputTokens": 4246,
+      "pdf-pages": 6,
+      "pdf-pdfToHTMLTime": 0,
+      "pdf-rawTextLength": 18463,
+      "pdf-real-pages": 6,
+      "pdf-time": 6709,
+      "state_transitions": {
+        "cancelled_at": null,
+        "completed_at": "2026-07-21T21:48:51.118670Z",
+        "failed_at": null,
+        "pending_at": "2026-07-21T21:48:37.824161Z",
+        "running_at": "2026-07-21T21:48:38.138478Z",
+        "throttled_at": "2026-07-21T21:48:37.996298Z"
+      }
+    },
+    "page_metadata": [
+      {
+        "confidence": 0.976,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 1,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.99,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 2,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.986,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 3,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.987,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 4,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.988,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 5,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.997,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 6,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      }
+    ],
+    "parse_configuration_hash": "sha256:cdd89a0e54ed90cc7d486b3e578ad9e2112e03b908de8eae63cd14f49d7fcb62",
+    "parse_job_id": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+    "parse_status": "completed",
+    "warnings": []
+  },
   "normalized_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
   "ocr_confidence": {
     "engine": null,
     "engine_version": null,
-    "kind": "unavailable",
-    "method": null,
+    "kind": "estimated",
+    "method": "page_ocr_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": null,
+    "value": 0.9873333333333333,
     "warnings": []
   },
   "page_count": 6,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.655877-05:00",
+  "processed_at": "2026-07-22T15:29:02.398752-05:00",
   "processing_status": "needs_review",
   "review_reasons": [
-    "classification_conflict",
-    "pdf_semantic_review_required"
+    "ambiguous_classification"
   ],
   "schema_version": "2.0",
   "source_hash": "cf261e96874a2ae1f8f88428229c76221dd346d10403ca95b5714ea56026c1dc",
@@ -273,6 +281,7 @@
     ]
   },
   "warnings": [
-    "topic_title_control=Comite de Convivencia Laboral;topic_route=Convivencia laboral"
+    "llama_parse_job:pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+    "ambiguous_classification"
   ]
 }

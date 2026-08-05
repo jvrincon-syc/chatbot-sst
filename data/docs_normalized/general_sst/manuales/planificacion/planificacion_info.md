@@ -1,7 +1,7 @@
 ---
 document_id: doc_86b6f64f1c869610
 document_type: programa
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: general_sst/manuales/planificacion/planificacion_info.md
 extraction_method: markdown
 page_count: 1

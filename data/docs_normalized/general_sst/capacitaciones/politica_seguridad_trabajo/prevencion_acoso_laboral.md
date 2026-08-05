@@ -1,7 +1,7 @@
 ---
 document_id: doc_1ff1756177bf1b1f
 document_type: procedimiento
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md
 extraction_method: markdown
 page_count: 1

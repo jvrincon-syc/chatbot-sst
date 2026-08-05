@@ -1,0 +1,601 @@
+{
+  "bundles": [
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2319,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+          "schema_version": "2.0",
+          "sha256": "adb615c7e2eff04358d6598de031a9b2addb9b6ad12e8298a95d1fa3bc1f6982"
+        },
+        {
+          "byte_size": 5328,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "5e3b8822ee7ed03c95332ff9afa28835daad91587e80b8e7f48cefcc46443f22"
+        },
+        {
+          "byte_size": 5069,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pages.json",
+          "schema_version": "2.0",
+          "sha256": "9862d29e7729ddbea62dd44640f71d01d0e8a35e9dda31bad264925dc69eae43"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "e7661f7da1b50fbd4f6f6d0bc76ccd446be673cd4d050bd411c44cf56afeb9e5"
+        },
+        {
+          "byte_size": 11005,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.tables.json",
+          "schema_version": "2.0",
+          "sha256": "b65b205e7ea979daf51ead268c7df19db537e49611922c49621ad45483036090"
+        },
+        {
+          "byte_size": 1608,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d37d36fd9084d4089a5eb4d307bae3664958b81374a2f452485af975aa172db0"
+        }
+      ],
+      "document_id": "doc_864d906c5eae1183",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.metadata.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pages.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.ocr.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.tables.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "6eb13cd6e4aeccd1322bd05e2c857bfbf34a2bec760bbd6d1762d220294964b3",
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 22130,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+          "schema_version": "2.0",
+          "sha256": "32a6f1bac686c8fceb54befda2f650dc3378a613af4c7364a35c06cb4c3010b4"
+        },
+        {
+          "byte_size": 5614,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "dd830df7b37402eb5947bf87df8c5767bf591365c605932791e687e05d7ef50e"
+        },
+        {
+          "byte_size": 50085,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pages.json",
+          "schema_version": "2.0",
+          "sha256": "0fe3db3ad6cde9b804ababe779b88ec357fd36062f5249280ec1177f2b9f8932"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "4e5369ce65576753891f37326ece76e8a0da058c18b5a4e218f3450d18cc913b"
+        },
+        {
+          "byte_size": 46620,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.tables.json",
+          "schema_version": "2.0",
+          "sha256": "13183e01d3bd8054aa63be22ef088040a25eb6350a8bd8bd3ad2ee8676c339a4"
+        },
+        {
+          "byte_size": 2618,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.forms.json",
+          "schema_version": "2.0",
+          "sha256": "42c447bfff0b9aff981069f71f096d96b101685d88c230edbed8eb75b5de3a8e"
+        }
+      ],
+      "document_id": "doc_c392ec7bf8d98194",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.metadata.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pages.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.ocr.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.tables.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2511,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+          "schema_version": "2.0",
+          "sha256": "293dee06fcea5e835ea68f900bd893e470b667681c2cab71e89f8c8a4a0f87c1"
+        },
+        {
+          "byte_size": 5117,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "0a946be13361b37ce0611342aa23a77b0c0896617ab967182ceacc7899e8e709"
+        },
+        {
+          "byte_size": 5052,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pages.json",
+          "schema_version": "2.0",
+          "sha256": "9bccf0a64cc8ad2370c1a7b91a4bdaf33e85fbc8ddf026f665e1195eaed0ee5c"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "53f0266b5bf63ec1dd079624c323dd9f1e9d5e4f67e2d802d35abc391125a59e"
+        },
+        {
+          "byte_size": 5733,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.tables.json",
+          "schema_version": "2.0",
+          "sha256": "c81ecee719cf9acbc2db276a41fb94e2b8d2b2abbff16f73935a55869d887446"
+        },
+        {
+          "byte_size": 341,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.forms.json",
+          "schema_version": "2.0",
+          "sha256": "49f1767578db0290266efe696083dd81bf04180c9b5774d76c1d57767cbf84df"
+        }
+      ],
+      "document_id": "doc_caf88d615e56edd4",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.metadata.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pages.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.ocr.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.tables.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2468,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.md",
+          "schema_version": "2.0",
+          "sha256": "1ce77e19d2dd3102ad4af7766881465289bc2519d2d003e5ac4ec4d1129fd14b"
+        },
+        {
+          "byte_size": 5864,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "f46b50ef5bdf0f31a53ba76e78123705ddf5a69d2e7143974ce7df38bee250ca"
+        },
+        {
+          "byte_size": 4958,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pages.json",
+          "schema_version": "2.0",
+          "sha256": "624aee26e4d3fb759548a4974865144b221e0b71dfb0bd2f3325ede8ceb4f212"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "77339ccc293e3ff662e4dab87a8ef89dabf07580b84554435776422e66b24628"
+        },
+        {
+          "byte_size": 2544,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.tables.json",
+          "schema_version": "2.0",
+          "sha256": "ec12bd7664aac27dcf56929dbef5d7b33573504d4a0eec4a4cc1c32fe66e1dda"
+        },
+        {
+          "byte_size": 341,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.forms.json",
+          "schema_version": "2.0",
+          "sha256": "253eb0689014dd7d98ce1e58dc58b11cd7afb4cfef0838449f5e9c4df5522842"
+        }
+      ],
+      "document_id": "doc_d57d21ff836e1ec0",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.md",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.metadata.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pages.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.ocr.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.tables.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "6128e86ca0345d091c445f3976806868d6aece7acae8042ec6968e867891f852",
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 18048,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+          "schema_version": "2.0",
+          "sha256": "734d73bbcc2dff1820771768262d980e3941810bd2c351bd81ffc1957bbdef6b"
+        },
+        {
+          "byte_size": 5246,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "80af3b4bcf841610ab932ffabeb67316589ab0b3e975c3460c20ae8fa05852fe"
+        },
+        {
+          "byte_size": 38811,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pages.json",
+          "schema_version": "2.0",
+          "sha256": "5a181274684b0e39be2862a1e3f3f7e40d9b6fb7f6b8b8bd6d62d9dab5115e4c"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "7e71172b0cf6632b28f43c941eb5b43295e2a2cbe9d0651878687ff49b5e4d67"
+        },
+        {
+          "byte_size": 31251,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.tables.json",
+          "schema_version": "2.0",
+          "sha256": "f8b62801da395fb5a44eeb39c0ba282c158fe2bfe85d95ae0d583d51ad7f5d27"
+        },
+        {
+          "byte_size": 1376,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d1a8cc0b639ed826a1edff5f3e94931c2e309c1bb59e2d6a1caa60cc920075a2"
+        }
+      ],
+      "document_id": "doc_d4fca71ff51cb27b",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.metadata.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pages.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.ocr.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.tables.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "cf261e96874a2ae1f8f88428229c76221dd346d10403ca95b5714ea56026c1dc",
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 22641,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+          "schema_version": "2.0",
+          "sha256": "90bf0064675822e60e4ded0ff1fecf424fdb8007866a3e1564bf37cfd30786ca"
+        },
+        {
+          "byte_size": 5223,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "261bea9c6da1bc9a39380924ec019b1f514268cc568c4bb0b8a8960b6a4fd956"
+        },
+        {
+          "byte_size": 52319,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pages.json",
+          "schema_version": "2.0",
+          "sha256": "d9cf3ba9655cf5a88437bee12c26490e13eac4fe21bdb085cf68c2c846ad23ad"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "d6dadb32c6d844a9f6ec963087a8b80296830e9cd05fd026643116e035e58bef"
+        },
+        {
+          "byte_size": 66536,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.tables.json",
+          "schema_version": "2.0",
+          "sha256": "070241768bbf9b75988e3f8821b1410113520d756cb50b742de8a706f1bfb0bd"
+        },
+        {
+          "byte_size": 3446,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.forms.json",
+          "schema_version": "2.0",
+          "sha256": "dd92a3701cec70314f6cebb0f18dbdf8102a6656316a8f1b287ef30e04897978"
+        }
+      ],
+      "document_id": "doc_f2cf7868a801af0e",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.metadata.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pages.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.ocr.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.tables.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2324,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+          "schema_version": "2.0",
+          "sha256": "7a7eef9d079438b3eeb237821cb7d25045e99d84b03ff8d3d1b68eb51dd12c8d"
+        },
+        {
+          "byte_size": 4430,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "9012d9f802346db4a2b868d9974c63d93c84969f59c429f9ce5ecae19a15e2cc"
+        },
+        {
+          "byte_size": 4586,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pages.json",
+          "schema_version": "2.0",
+          "sha256": "719bb341b142b5a3c12f5088d5445c74dbe4b6fb778279ef9498d2480eedc24c"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "4fd3867ee6ed0cec246627a8a0cf683d3dbfc3834c30ea4b1328ba2399f84940"
+        },
+        {
+          "byte_size": 7364,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.tables.json",
+          "schema_version": "2.0",
+          "sha256": "90186d770db5d0f225a806209907e75646f6d86f79a5f56053882a3506df746e"
+        },
+        {
+          "byte_size": 341,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.forms.json",
+          "schema_version": "2.0",
+          "sha256": "f6c60523cb8a2baa5208ea37ca854866b4cae5260c69f4435b8b2767708059be"
+        }
+      ],
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "382dc4303085bebbf49dcfa095225cab8a7819bab2ba1402c4cfe5d6d361cae4",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 111791,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+          "schema_version": "2.0",
+          "sha256": "29c0f126894d856e43adc9cd7bf928f8b86cc9785f4cf059a6adf8f4069e572c"
+        },
+        {
+          "byte_size": 4776,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "6d5668896b6bfef9d05a6946d44bf2166e1f646b06af13f683aedb87d9aab504"
+        },
+        {
+          "byte_size": 241829,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pages.json",
+          "schema_version": "2.0",
+          "sha256": "28be48ce34b6b3da6b6da42c924ba34c1400621023d9f7ce3c8dd854dc50c0c6"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "757e8380f86d855eb4591a90ca04ca28973e925806a64b7f229928f33dc4cd5d"
+        },
+        {
+          "byte_size": 13994,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.tables.json",
+          "schema_version": "2.0",
+          "sha256": "5cee685a6fe548aefc67ad13cf6df9864e3ed964c268cbf19cf160dfe3a76c59"
+        },
+        {
+          "byte_size": 7586,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.forms.json",
+          "schema_version": "2.0",
+          "sha256": "2d7840921a103ecc92bd2c032a509f498f73161c91ec67cc2f6072fa8522e2c7"
+        }
+      ],
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.metadata.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pages.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.ocr.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.tables.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 4684,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.md",
+          "schema_version": "2.0",
+          "sha256": "ba78e9d60eb4fbab065e6dc0125eceb79031a9173297053378f710f7a7a51e97"
+        },
+        {
+          "byte_size": 5675,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "87f5a1dde16dde77da5db43ca78ff106d50abae4384221993a93f83297a85f43"
+        },
+        {
+          "byte_size": 9845,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pages.json",
+          "schema_version": "2.0",
+          "sha256": "3a968258c4712d1f8b452008f205fa0bd0ef406f5d62e10033e1e8adc0bd2bb7"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "290ba8d61036d31c84682aa00ecefac7ddfe2791fe826cfbff58367ccddeef8f"
+        },
+        {
+          "byte_size": 22677,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.tables.json",
+          "schema_version": "2.0",
+          "sha256": "2cbc45c41bd08204a949d8d0c395d892e0e1eef9bf6f1bea3046b6b877fb60aa"
+        },
+        {
+          "byte_size": 548,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.forms.json",
+          "schema_version": "2.0",
+          "sha256": "db6887bc4b5edfd2a71d47a0f2db36d3e80417ff8592b5fcfee7e1f5682fbc1d"
+        }
+      ],
+      "document_id": "doc_f38f9f98d854feed",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady",
+      "processing_fingerprint": "b8f92f64ff8b48ba872b932563613f72a44625bc2610b412fc087e3c8ca1a6a1",
+      "required_artifacts": [
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.md",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.metadata.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pages.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.ocr.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.tables.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "db44b2fc58995eec9a5d8038c9caa3cb2a571c11f58055794eab3cece6449694",
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf"
+    }
+  ],
+  "documents": [
+    {
+      "disposition": "processed",
+      "document_id": "doc_864d906c5eae1183",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-9mi9ejiku0vdq87ksvdsvq6cec7r"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_c392ec7bf8d98194",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-rrjo97gns4p3be98tqymlfur9jvf"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_caf88d615e56edd4",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-8868hmusisvc13oqbjhc2ugkj14z"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_d57d21ff836e1ec0",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_d4fca71ff51cb27b",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-9x09oi2uvv05nm64qo8llh9hvg89"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_f2cf7868a801af0e",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-7y0nl29rghh6vu49sia8fjij11ld"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-hgmd38fzg6nan35yrykwbagsj2cy"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_f38f9f98d854feed",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-7u7qysy2rczcmpo9y92alfv49o4i"
+      ]
+    }
+  ],
+  "fingerprints": {},
+  "run_id": "llama_pdf_after_route_policy_fix_live",
+  "schema_version": "2.0",
+  "summary": {
+    "failed": 0,
+    "needs_review": 0,
+    "processed": 9,
+    "skipped": 0
+  },
+  "timestamp": "2026-07-21T17:48:17.141333-05:00"
+}

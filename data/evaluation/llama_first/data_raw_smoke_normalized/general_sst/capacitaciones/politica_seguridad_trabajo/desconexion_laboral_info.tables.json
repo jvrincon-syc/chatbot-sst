@@ -1,0 +1,20 @@
+{
+  "document_id": "doc_18e1e8a89146e6fc",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": null,
+      "status": "not_evaluated",
+      "value": null,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 0,
+  "tables": [],
+  "warnings": [
+    "table_detection_not_evaluated"
+  ]
+}

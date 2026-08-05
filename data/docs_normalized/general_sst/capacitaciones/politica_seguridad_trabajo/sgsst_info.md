@@ -1,7 +1,7 @@
 ---
 document_id: doc_798b9dac49774271
 document_type: programa
-topic: Sistema de Gestion de Seguridad y Salud en el Trabajo
+topic: Sistema de Gestión de Seguridad y Salud en el Trabajo
 source_relpath: general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md
 extraction_method: markdown
 page_count: 1

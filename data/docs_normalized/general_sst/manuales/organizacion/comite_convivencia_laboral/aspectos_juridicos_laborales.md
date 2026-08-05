@@ -1,7 +1,7 @@
 ---
 document_id: doc_dec6dc6770fea917
 document_type: reglamento
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.md
 extraction_method: markdown
 page_count: 1

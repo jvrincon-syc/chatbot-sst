@@ -1,0 +1,1 @@
+"""Provider usage persistence adapters."""

@@ -1,0 +1,373 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+import logging
+import re
+
+from chunking.application.ports import TokenCounterPort
+from chunking.domain.enums import StructuralBlockKind, ZeroOverlapReason
+from chunking.domain.models import (
+    ChildChunk,
+    ChunkingProfile,
+    OverlapSpan,
+    ParentChunk,
+    SourceSpan,
+    StructuralBlock,
+)
+from chunking.infrastructure.canonical_tokenizer import CanonicalTokenizer
+
+
+logger = logging.getLogger(__name__)
+_TABLE_WARNING = "TABLE_CHILD_EXCEEDS_MAX_TOKENS"
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+|\n{2,}")
+
+
+@dataclass(frozen=True)
+class SentenceUnit:
+    """Sentence-like text unit with stable token and character ranges."""
+
+    text: str
+    relative_char_start: int
+    relative_char_end: int
+    char_start: int
+    char_end: int
+    token_start: int
+    token_end: int
+    token_count: int
+
+
+class ChildChunkBuilder:
+    """Builds retrieval children with bounded semantic overlap."""
+
+    def __init__(self, tokenizer: TokenCounterPort | None = None) -> None:
+        self._tokenizer = tokenizer or CanonicalTokenizer()
+
+    def build(
+        self,
+        *,
+        parent: ParentChunk,
+        blocks: tuple[StructuralBlock, ...],
+        profile: ChunkingProfile,
+    ) -> tuple[ChildChunk, ...]:
+        if self._is_table_parent(blocks):
+            return self._build_table_children(parent=parent, profile=profile, blocks=blocks)
+        if self._is_atomic_parent(parent=parent, blocks=blocks, profile=profile):
+            return (self._build_atomic_child(parent=parent, profile=profile, blocks=blocks),)
+        return self._build_continuous_children(parent=parent, profile=profile)
+
+    def _build_table_children(
+        self,
+        *,
+        parent: ParentChunk,
+        profile: ChunkingProfile,
+        blocks: tuple[StructuralBlock, ...],
+    ) -> tuple[ChildChunk, ...]:
+        table_block = next(
+            block for block in blocks if block.kind is StructuralBlockKind.TABLE
+        )
+        lines = [line for line in table_block.text.splitlines() if line.strip()]
+        header_lines = tuple(lines[:2]) if len(lines) >= 2 and lines[0].strip().startswith("|") else tuple(lines[:1])
+        data_lines = lines[2:] if len(header_lines) == 2 else lines[1:]
+        header_text = "\n".join(header_lines)
+        header_tokens = self._tokenizer.count_tokens(header_text) if header_text else 0
+        groups: list[list[str]] = []
+        current: list[str] = []
+        current_tokens = 0
+        for line in data_lines:
+            line_tokens = self._tokenizer.count_tokens(line)
+            projected = current_tokens + line_tokens + header_tokens
+            if current and projected > profile.child_max_tokens:
+                groups.append(current)
+                current = [line]
+                current_tokens = line_tokens
+                continue
+            current.append(line)
+            current_tokens += line_tokens
+        if current:
+            groups.append(current)
+        if not groups:
+            groups = [data_lines or list(lines)]
+
+        children: list[ChildChunk] = []
+        char_cursor = table_block.source_span.char_start
+        token_cursor = 0
+        for ordinal, group in enumerate(groups):
+            text = "\n".join(group)
+            context_prefix = "" if ordinal == 0 else header_text
+            full_text = self._full_text(context_prefix=context_prefix, text=text)
+            token_count = self._tokenizer.count_tokens(full_text)
+            warnings = ()
+            if token_count > profile.child_max_tokens:
+                warnings = (_TABLE_WARNING,)
+            char_end = char_cursor + len(text)
+            zero_overlap_reasons = frozenset(
+                {
+                    ZeroOverlapReason.DOCUMENT_START,
+                    ZeroOverlapReason.SECTION_BOUNDARY,
+                    ZeroOverlapReason.TABLE_OR_FORM_BOUNDARY,
+                }
+            )
+            children.append(
+                ChildChunk.create(
+                    document_id=parent.document_id,
+                    profile_id=profile.profile_id,
+                    parent_id=parent.chunk_id,
+                    ordinal=ordinal,
+                    text=text,
+                    source_span=SourceSpan(
+                        page_start=table_block.source_span.page_start,
+                        page_end=table_block.source_span.page_end,
+                        char_start=char_cursor,
+                        char_end=char_end,
+                    ),
+                    token_start=token_cursor,
+                    token_end=token_cursor + self._tokenizer.count_tokens(text),
+                    token_count=token_count,
+                    overlap_previous_tokens=0,
+                    overlap_next_tokens=0,
+                    context_prefix=context_prefix,
+                    zero_overlap_reasons=zero_overlap_reasons,
+                    warnings=warnings,
+                )
+            )
+            char_cursor = char_end + 1
+            token_cursor += self._tokenizer.count_tokens(text)
+        return tuple(children)
+
+    def _build_atomic_child(
+        self,
+        *,
+        parent: ParentChunk,
+        profile: ChunkingProfile,
+        blocks: tuple[StructuralBlock, ...],
+    ) -> ChildChunk:
+        reasons = {ZeroOverlapReason.DOCUMENT_START, ZeroOverlapReason.SECTION_BOUNDARY}
+        if any(block.kind in {StructuralBlockKind.TABLE, StructuralBlockKind.FORM} for block in blocks):
+            reasons.add(ZeroOverlapReason.TABLE_OR_FORM_BOUNDARY)
+        return ChildChunk.create(
+            document_id=parent.document_id,
+            profile_id=profile.profile_id,
+            parent_id=parent.chunk_id,
+            ordinal=0,
+            text=parent.text,
+            source_span=parent.source_span,
+            token_start=0,
+            token_end=self._tokenizer.count_tokens(parent.text),
+            token_count=self._tokenizer.count_tokens(parent.text),
+            overlap_previous_tokens=0,
+            overlap_next_tokens=0,
+            zero_overlap_reasons=frozenset(reasons),
+        )
+
+    def _build_continuous_children(
+        self,
+        *,
+        parent: ParentChunk,
+        profile: ChunkingProfile,
+    ) -> tuple[ChildChunk, ...]:
+        units = self._sentence_units(parent)
+        unique_chunks = self._partition_units(units=units, profile=profile)
+        overlap_target = profile.overlap_tokens_for_target()
+        overlap_units_by_pair: list[tuple[SentenceUnit, ...]] = []
+        for index in range(len(unique_chunks) - 1):
+            overlap_units_by_pair.append(
+                self._select_overlap_units(
+                    parent_text=parent.text,
+                    units=unique_chunks[index],
+                    nominal_target=overlap_target,
+                    profile=profile,
+                )
+            )
+
+        children: list[ChildChunk] = []
+        for ordinal, unique_units in enumerate(unique_chunks):
+            previous_overlap_units = overlap_units_by_pair[ordinal - 1] if ordinal > 0 else ()
+            next_overlap_units = overlap_units_by_pair[ordinal] if ordinal < len(overlap_units_by_pair) else ()
+            emitted_units = (*previous_overlap_units, *unique_units)
+            child_relative_start = emitted_units[0].relative_char_start
+            child_relative_end = emitted_units[-1].relative_char_end
+            text = parent.text[child_relative_start:child_relative_end].strip()
+            token_start = self._tokenizer.count_tokens(parent.text[:child_relative_start])
+            token_end = self._tokenizer.count_tokens(parent.text[:child_relative_end])
+            token_count = self._tokenizer.count_tokens(text)
+            previous_overlap_tokens = self._overlap_token_count(
+                parent_text=parent.text,
+                units=previous_overlap_units,
+            )
+            next_overlap_tokens = self._overlap_token_count(
+                parent_text=parent.text,
+                units=next_overlap_units,
+            )
+            zero_overlap_reasons = set()
+            if previous_overlap_tokens == 0:
+                zero_overlap_reasons.add(ZeroOverlapReason.DOCUMENT_START)
+            if next_overlap_tokens == 0:
+                zero_overlap_reasons.add(ZeroOverlapReason.SECTION_BOUNDARY)
+            children.append(
+                ChildChunk.create(
+                    document_id=parent.document_id,
+                    profile_id=profile.profile_id,
+                    parent_id=parent.chunk_id,
+                    ordinal=ordinal,
+                    text=text,
+                    source_span=SourceSpan(
+                        page_start=parent.source_span.page_start,
+                        page_end=parent.source_span.page_end,
+                        char_start=min(unit.char_start for unit in emitted_units),
+                        char_end=max(unit.char_end for unit in emitted_units),
+                    ),
+                    token_start=token_start,
+                    token_end=token_end,
+                    token_count=token_count,
+                    overlap_previous_tokens=previous_overlap_tokens,
+                    overlap_next_tokens=next_overlap_tokens,
+                    overlap_previous_span=(
+                        OverlapSpan(token_start=0, token_end=previous_overlap_tokens)
+                        if previous_overlap_tokens > 0
+                        else None
+                    ),
+                    overlap_next_span=(
+                        OverlapSpan(
+                            token_start=token_count - next_overlap_tokens,
+                            token_end=token_count,
+                        )
+                        if next_overlap_tokens > 0
+                        else None
+                    ),
+                    zero_overlap_reasons=frozenset(zero_overlap_reasons),
+                )
+            )
+        logger.info(
+            "Built child chunks",
+            extra={
+                "document_id": parent.document_id,
+                "parent_id": parent.chunk_id,
+                "child_count": len(children),
+            },
+        )
+        return tuple(children)
+
+    def _overlap_token_count(
+        self,
+        *,
+        parent_text: str,
+        units: tuple[SentenceUnit, ...],
+    ) -> int:
+        if not units:
+            return 0
+        start = units[0].relative_char_start
+        end = units[-1].relative_char_end
+        return self._tokenizer.count_tokens(parent_text[start:end].strip())
+
+    def _partition_units(
+        self,
+        *,
+        units: tuple[SentenceUnit, ...],
+        profile: ChunkingProfile,
+    ) -> tuple[tuple[SentenceUnit, ...], ...]:
+        unique_target = profile.child_target_tokens - profile.overlap_tokens_for_target()
+        unique_minimum = max(1, profile.child_min_tokens - profile.overlap_max_tokens)
+        unique_maximum = profile.child_max_tokens - profile.overlap_max_tokens
+        chunks: list[list[SentenceUnit]] = []
+        current: list[SentenceUnit] = []
+        current_tokens = 0
+        for unit in units:
+            projected = current_tokens + unit.token_count
+            should_close = (
+                current
+                and current_tokens >= unique_minimum
+                and (current_tokens >= unique_target or projected > unique_maximum)
+            )
+            if should_close:
+                chunks.append(current)
+                current = [unit]
+                current_tokens = unit.token_count
+                continue
+            current.append(unit)
+            current_tokens = projected
+        if current:
+            chunks.append(current)
+        if len(chunks) > 1:
+            last_tokens = sum(unit.token_count for unit in chunks[-1])
+            penultimate_tokens = sum(unit.token_count for unit in chunks[-2])
+            if (
+                last_tokens < unique_minimum
+                and penultimate_tokens + last_tokens <= unique_maximum
+            ):
+                chunks[-2].extend(chunks[-1])
+                chunks.pop()
+        return tuple(tuple(chunk) for chunk in chunks)
+
+    def _select_overlap_units(
+        self,
+        *,
+        parent_text: str,
+        units: tuple[SentenceUnit, ...],
+        nominal_target: int,
+        profile: ChunkingProfile,
+    ) -> tuple[SentenceUnit, ...]:
+        selected: list[SentenceUnit] = []
+        best: tuple[SentenceUnit, ...] = ()
+        best_distance = profile.child_max_tokens
+        for unit in reversed(units):
+            selected.insert(0, unit)
+            token_total = self._overlap_token_count(
+                parent_text=parent_text,
+                units=tuple(selected),
+            )
+            if token_total > profile.overlap_max_tokens:
+                selected.pop(0)
+                break
+            if profile.overlap_min_tokens <= token_total <= profile.overlap_max_tokens:
+                distance = abs(token_total - nominal_target)
+                if distance < best_distance:
+                    best = tuple(selected)
+                    best_distance = distance
+        return best
+
+    def _sentence_units(self, parent: ParentChunk) -> tuple[SentenceUnit, ...]:
+        parts = [part.strip() for part in _SENTENCE_SPLIT_RE.split(parent.text) if part.strip()]
+        units: list[SentenceUnit] = []
+        search_start = 0
+        for part in parts:
+            location = parent.text.find(part, search_start)
+            if location < 0:
+                location = search_start
+            relative_char_start = location
+            relative_char_end = relative_char_start + len(part)
+            char_start = parent.source_span.char_start + relative_char_start
+            char_end = parent.source_span.char_start + relative_char_end
+            units.append(
+                SentenceUnit(
+                    text=part,
+                    relative_char_start=relative_char_start,
+                    relative_char_end=relative_char_end,
+                    char_start=char_start,
+                    char_end=char_end,
+                    token_start=self._tokenizer.count_tokens(parent.text[:relative_char_start]),
+                    token_end=self._tokenizer.count_tokens(parent.text[:relative_char_end]),
+                    token_count=self._tokenizer.count_tokens(part),
+                )
+            )
+            search_start = relative_char_end
+        return tuple(units)
+
+    def _is_atomic_parent(
+        self,
+        *,
+        parent: ParentChunk,
+        blocks: tuple[StructuralBlock, ...],
+        profile: ChunkingProfile,
+    ) -> bool:
+        token_count = self._tokenizer.count_tokens(parent.text)
+        if token_count <= profile.child_max_tokens:
+            return True
+        return len(blocks) == 1 and blocks[0].kind is StructuralBlockKind.FORM
+
+    def _is_table_parent(self, blocks: tuple[StructuralBlock, ...]) -> bool:
+        return any(block.kind is StructuralBlockKind.TABLE for block in blocks)
+
+    def _full_text(self, *, context_prefix: str, text: str) -> str:
+        if not context_prefix:
+            return text
+        return f"{context_prefix}\n{text}"

@@ -1,0 +1,72 @@
+{
+  "document_confidence": {
+    "engine": "tesseract",
+    "engine_version": "5.4.0.20240606",
+    "kind": "estimated",
+    "method": "page_confidence_average",
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": 0.9280808765798045,
+    "warnings": [
+      "ocr_confidence_not_word_measured"
+    ]
+  },
+  "document_id": "doc_d57d21ff836e1ec0",
+  "engine": "tesseract",
+  "engine_version": "5.4.0.20240606",
+  "language": "spa",
+  "pages": [
+    {
+      "confidence": {
+        "engine": "tesseract",
+        "engine_version": "5.4.0.20240606",
+        "kind": "estimated",
+        "method": "engine_page_confidence",
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": 0.9280808765798045,
+        "warnings": [
+          "ocr_confidence_not_word_measured"
+        ]
+      },
+      "deskew": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "handwriting": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "status": "not_evaluated",
+        "value": null,
+        "warnings": []
+      },
+      "low_confidence_word_count": null,
+      "page_number": 1,
+      "rotation": {
+        "engine": null,
+        "engine_version": null,
+        "evidence": [],
+        "method": null,
+        "provenance": null,
+        "status": "unavailable",
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "warnings": [],
+      "word_count": 507,
+      "words": []
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

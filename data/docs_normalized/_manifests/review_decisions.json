@@ -1,0 +1,83 @@
+{
+  "generated_at": "2026-07-22T15:39:35.366261-05:00",
+  "items": [
+    {
+      "decided_at": "2026-07-22T15:37:01.318974-05:00",
+      "decision": "approved",
+      "document_id": "doc_864d906c5eae1183",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:02.071606-05:00",
+      "decision": "approved",
+      "document_id": "doc_c392ec7bf8d98194",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:02.691892-05:00",
+      "decision": "approved",
+      "document_id": "doc_caf88d615e56edd4",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:39:35.366261-05:00",
+      "decision": "approved",
+      "document_id": "doc_d57d21ff836e1ec0",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:03.896645-05:00",
+      "decision": "approved",
+      "document_id": "doc_d4fca71ff51cb27b",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:04.487618-05:00",
+      "decision": "approved",
+      "document_id": "doc_f2cf7868a801af0e",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:05.462408-05:00",
+      "decision": "approved",
+      "document_id": "doc_7d2eb40310345805",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:12.135783-05:00",
+      "decision": "approved",
+      "document_id": "doc_3e55236f58440bf5",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:12.853136-05:00",
+      "decision": "approved",
+      "document_id": "doc_33db5a236b33527d",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:13.559348-05:00",
+      "decision": "approved",
+      "document_id": "doc_31b00a8b31847796",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf"
+    },
+    {
+      "decided_at": "2026-07-22T15:37:14.236582-05:00",
+      "decision": "approved",
+      "document_id": "doc_f38f9f98d854feed",
+      "reason": "Revision humana completada; apto para consumo downstream.",
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf"
+    }
+  ],
+  "schema_version": "2.0"
+}

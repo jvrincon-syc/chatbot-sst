@@ -1,7 +1,7 @@
 ---
 document_id: doc_6035540fc4c4a90a
 document_type: procedimiento
-topic: Comite de Convivencia Laboral
+topic: Comité de Convivencia Laboral
 source_relpath: convivencia_laboral/manual/politica_convivencia.md
 extraction_method: markdown
 page_count: 1

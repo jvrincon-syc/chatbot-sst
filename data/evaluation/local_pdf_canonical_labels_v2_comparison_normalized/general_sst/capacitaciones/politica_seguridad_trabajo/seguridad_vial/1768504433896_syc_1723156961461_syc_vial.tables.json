@@ -1,0 +1,654 @@
+{
+  "document_id": "doc_3e55236f58440bf5",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "pdfplumber",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "pdfplumber",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 1,
+  "tables": [
+    {
+      "bbox": {
+        "bottom": 521.70998,
+        "coordinate_system": "pdf_points",
+        "top": 211.64000000000001,
+        "x0": 76.61066666666666,
+        "x1": 550.03224
+      },
+      "caption": null,
+      "cells": [
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "OBJETIVOS",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "METAS",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 7,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "INDICADORES",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 8,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "Planear, organizar y ejecutar\nacciones necesarias para\ncontrola en forma oportuna y\nsegura el normal desarrollo de\nlas actividades cotidianas de\nlos conductores.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "95% del plan de trabajo\nanual ejecutado para el\ndiseño, implementación y\nmantenimiento del PESV.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "/# de metas alcanzadas o\nlogradas en el PESV x trimestre\n/ # total de metas definidas\nPESV x trimestre ) *100",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 7,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 8,
+          "column_span": 1,
+          "row_index": 1,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "Contribuir a generar\nconciencia, hábitos,\ncomportamientos y conductas\nseguras en la vía en todos los\ntrabajadores como actores de\nla vía, a través de mecanismos\nde campañas y/o\nsensibilizaciones.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "90% del programa de\nformación y capacitación en\nseguridad vial ejecutado.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "(# de capacitaciones en\nseguridad vial ejecutadas por\ntrimestre /# Total de\ncapacitaciones en seguridad\nvial programadas por trimestre)\n*100",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 7,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 8,
+          "column_span": 1,
+          "row_index": 2,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "Realizar seguimiento periódico\na cada uno de los vehículos y\nconductores que labores en\nSistemas y computadores S.A.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 3,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "100% de los vehículos\npropios inspeccionados\nmensualmente y con hoja\nde vida y registro de\ntrazabilidad de\nmantenimiento.",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 4,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 5,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 6,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "(# de vehiculos inspeccionados\ndiariamente / # total de\nvehiculos que trabajan\ndiariamente) * 100",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 7,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        },
+        {
+          "bbox": {
+            "bottom": 521.70998,
+            "coordinate_system": "pdf_points",
+            "top": 211.64000000000001,
+            "x0": 76.61066666666666,
+            "x1": 550.03224
+          },
+          "column_index": 8,
+          "column_span": 1,
+          "row_index": 3,
+          "row_span": 1,
+          "text": "",
+          "warnings": []
+        }
+      ],
+      "extractor": "pdfplumber",
+      "headers": [
+        "OBJETIVOS",
+        "METAS",
+        "INDICADORES"
+      ],
+      "markdown_representation": "|  | OBJETIVOS |  |  | METAS |  |  | INDICADORES |  |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| Planear, organizar y ejecutar\nacciones necesarias para\ncontrola en forma oportuna y\nsegura el normal desarrollo de\nlas actividades cotidianas de\nlos conductores. |  |  | 95% del plan de trabajo\nanual ejecutado para el\ndiseño, implementación y\nmantenimiento del PESV. |  |  | /# de metas alcanzadas o\nlogradas en el PESV x trimestre\n/ # total de metas definidas\nPESV x trimestre ) *100 |  |  |\n| Contribuir a generar\nconciencia, hábitos,\ncomportamientos y conductas\nseguras en la vía en todos los\ntrabajadores como actores de\nla vía, a través de mecanismos\nde campañas y/o\nsensibilizaciones. |  |  | 90% del programa de\nformación y capacitación en\nseguridad vial ejecutado. |  |  | (# de capacitaciones en\nseguridad vial ejecutadas por\ntrimestre /# Total de\ncapacitaciones en seguridad\nvial programadas por trimestre)\n*100 |  |  |\n| Realizar seguimiento periódico\na cada uno de los vehículos y\nconductores que labores en\nSistemas y computadores S.A. |  |  | 100% de los vehículos\npropios inspeccionados\nmensualmente y con hoja\nde vida y registro de\ntrazabilidad de\nmantenimiento. |  |  | (# de vehiculos inspeccionados\ndiariamente / # total de\nvehiculos que trabajan\ndiariamente) * 100 |  |  |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "",
+          "OBJETIVOS",
+          "",
+          "",
+          "METAS",
+          "",
+          "",
+          "INDICADORES",
+          ""
+        ],
+        [
+          "Planear, organizar y ejecutar\nacciones necesarias para\ncontrola en forma oportuna y\nsegura el normal desarrollo de\nlas actividades cotidianas de\nlos conductores.",
+          "",
+          "",
+          "95% del plan de trabajo\nanual ejecutado para el\ndiseño, implementación y\nmantenimiento del PESV.",
+          "",
+          "",
+          "/# de metas alcanzadas o\nlogradas en el PESV x trimestre\n/ # total de metas definidas\nPESV x trimestre ) *100",
+          "",
+          ""
+        ],
+        [
+          "Contribuir a generar\nconciencia, hábitos,\ncomportamientos y conductas\nseguras en la vía en todos los\ntrabajadores como actores de\nla vía, a través de mecanismos\nde campañas y/o\nsensibilizaciones.",
+          "",
+          "",
+          "90% del programa de\nformación y capacitación en\nseguridad vial ejecutado.",
+          "",
+          "",
+          "(# de capacitaciones en\nseguridad vial ejecutadas por\ntrimestre /# Total de\ncapacitaciones en seguridad\nvial programadas por trimestre)\n*100",
+          "",
+          ""
+        ],
+        [
+          "Realizar seguimiento periódico\na cada uno de los vehículos y\nconductores que labores en\nSistemas y computadores S.A.",
+          "",
+          "",
+          "100% de los vehículos\npropios inspeccionados\nmensualmente y con hoja\nde vida y registro de\ntrazabilidad de\nmantenimiento.",
+          "",
+          "",
+          "(# de vehiculos inspeccionados\ndiariamente / # total de\nvehiculos que trabajan\ndiariamente) * 100",
+          "",
+          ""
+        ]
+      ],
+      "table_id": "page_1_table_1",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

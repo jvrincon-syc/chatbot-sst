@@ -19,10 +19,10 @@
     "signals": [
       "informacion_general:miembros:content",
       "informacion_general:funciones:filename",
-      "Sistema de Gestion de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+      "Sistema de Gestión de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
     ],
     "subtopic": null,
-    "topic": "Sistema de Gestion de Seguridad y Salud en el Trabajo",
+    "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
@@ -99,9 +99,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/copasst/funciones_presidente_copasst.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\copasst\\funciones_presidente_copasst.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "copasst/funciones_presidente_copasst.md",
   "ocr_confidence": {
     "engine": null,
@@ -116,11 +117,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:00.866449-05:00",
+  "processed_at": "2026-07-22T15:29:02.865506-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "4b0ac62cedc369a0e7a1b9f3e6256135e20cd04ff296dd95fd1849fcb0e83246",
+  "source_hash": "4eefa41c01a9d0cbc600d23d84db43d14b4b51f83c0649b487838cfb8ffa414c",
   "source_relpath": "copasst/funciones_presidente_copasst.md",
   "tables": {
     "engine": null,

@@ -100,9 +100,10 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/convivencia_laboral/manual/introduccion.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\convivencia_laboral\\manual\\introduccion.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": null,
   "normalized_relpath": "convivencia_laboral/manual/introduccion.md",
   "ocr_confidence": {
     "engine": null,
@@ -117,11 +118,11 @@
   },
   "page_count": 1,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:45:58.941253-05:00",
+  "processed_at": "2026-07-22T15:28:34.564425-05:00",
   "processing_status": "processed",
   "review_reasons": [],
   "schema_version": "2.0",
-  "source_hash": "c9a589a4007de8cc409f128c9f7c42e6a9549893acf2f37dd94e2787f10564d8",
+  "source_hash": "1ab22b451465ec05647626a67c579fa9c2be0db6b37845262ce5e07c99640df4",
   "source_relpath": "convivencia_laboral/manual/introduccion.md",
   "tables": {
     "engine": null,

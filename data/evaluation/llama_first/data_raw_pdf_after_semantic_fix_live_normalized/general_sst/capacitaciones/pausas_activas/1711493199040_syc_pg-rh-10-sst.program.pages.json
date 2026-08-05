@@ -1,0 +1,343 @@
+{
+  "document_id": "doc_f2cf7868a801af0e",
+  "page_count": 16,
+  "pages": [
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 1,
+      "removed_spans": [],
+      "text_normalized": "SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n# PROGRAMA DE PAUSAS ACTIVAS\n\nElaborado por:\nYESNEI ASTRID JULIO ARENIZ\nEspecialista en Seguridad y Salud en el trabajo\n\nSISTEMAS Y COMPUTADORES S.A.\nMarzo 2024",
+      "text_raw": "SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n# PROGRAMA DE PAUSAS ACTIVAS\n\nElaborado por:\nYESNEI ASTRID JULIO ARENIZ\nEspecialista en Seguridad y Salud en el trabajo\n\nSISTEMAS Y COMPUTADORES S.A.\nMarzo 2024",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 2,
+      "removed_spans": [],
+      "text_normalized": "SYC Sistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n# Contenido\nINTRODUCCIÓN 3\n1. DESCRIPCIÓN DEL PROBLEMA 4\n2. OBJETIVO GENERAL 5\n3. OBJETIVOS ESPECIFICOS 5\n4. MARCO CONCEPTUAL 6\n4.1 PAUSAS ACTIVAS 6\n4.2 BENEFICIOS 6\nAUMENTAN 6\nDISMINUYEN 6\n4.3 ACTIVIDADES 6\n5. METODOLOGIA 7\n6. ESTRATEGIAS 7\n7. RUTINAS DE TRABAJO 8\n8. ANEXOS 13",
+      "text_raw": "SYC Sistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n# Contenido\nINTRODUCCIÓN   3\n1. DESCRIPCIÓN DEL PROBLEMA   4\n2. OBJETIVO GENERAL   5\n3. OBJETIVOS ESPECIFICOS   5\n4. MARCO CONCEPTUAL   6\n4.1 PAUSAS ACTIVAS   6\n4.2 BENEFICIOS   6\nAUMENTAN   6\nDISMINUYEN   6\n4.3 ACTIVIDADES   6\n5. METODOLOGIA   7\n6. ESTRATEGIAS   7\n7. RUTINAS DE TRABAJO   8\n8. ANEXOS   13",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 3,
+      "removed_spans": [],
+      "text_normalized": "SYC Sistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n# INTRODUCCIÓN\n\nEl presente programa de pausas activas tiene como objetivo principal promover la salud y el bienestar de los empleados de la empresa SISTEMAS Y COMPUTADORES S.A. a través de la implementación de pausas activas durante la jornada laboral. Estas pausas, que consisten en breves interrupciones en la actividad laboral, están diseñadas para realizar ejercicios físicos y mentales que contribuyan a reducir el estrés, prevenir lesiones musculoesqueléticas y mejorar la concentración y productividad de nuestros colaboradores.\n\nAdemás, el programa busca crear conciencia entre los trabajadores sobre la importancia de adoptar hábitos saludables tanto dentro de la jornada laboral como en su vida personal. Promovemos activamente prácticas preventivas con el fin de evitar la adquisición de enfermedades profesionales, reducir el ausentismo y prevenir incapacidades laborales. Nuestro propósito es generar espacios que mejoren los ambientes de trabajo, fomentando así una cultura organizacional que favorezca el manejo del estrés, la comunicación efectiva y el trabajo en equipo.\n\nCon la implementación de este programa, aspiramos a contribuir significativamente al bienestar integral de nuestros empleados, elevando los niveles de producción y promoviendo un entorno laboral saludable y productivo.",
+      "text_raw": "SYC Sistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n# INTRODUCCIÓN\n\nEl presente programa de pausas activas tiene como objetivo principal promover la salud y el bienestar de los empleados de la empresa SISTEMAS Y COMPUTADORES S.A. a través de la implementación de pausas activas durante la jornada laboral. Estas pausas, que consisten en breves interrupciones en la actividad laboral, están diseñadas para realizar ejercicios físicos y mentales que contribuyan a reducir el estrés, prevenir lesiones musculoesqueléticas y mejorar la concentración y productividad de nuestros colaboradores.\n\nAdemás, el programa busca crear conciencia entre los trabajadores sobre la importancia de adoptar hábitos saludables tanto dentro de la jornada laboral como en su vida personal. Promovemos activamente prácticas preventivas con el fin de evitar la adquisición de enfermedades profesionales, reducir el ausentismo y prevenir incapacidades laborales. Nuestro propósito es generar espacios que mejoren los ambientes de trabajo, fomentando así una cultura organizacional que favorezca el manejo del estrés, la comunicación efectiva y el trabajo en equipo.\n\nCon la implementación de este programa, aspiramos a contribuir significativamente al bienestar integral de nuestros empleados, elevando los niveles de producción y promoviendo un entorno laboral saludable y productivo.",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 4,
+      "removed_spans": [],
+      "text_normalized": "SYC Sistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n# 1. DESCRIPCIÓN DEL PROBLEMA\n\nLa descripción del problema se centra en los efectos adversos del sedentarismo y la exposición prolongada a actividades laborales estáticas en la salud de los trabajadores. Estos problemas incluyen dolores musculares, fatiga, estrés y disminución del rendimiento laboral. Ante esta situación, se hace evidente la necesidad de implementar estrategias que promuevan la actividad física y el bienestar durante la jornada laboral.\n\nCon el objetivo de prevenir la aparición de afecciones laborales, SISTEMAS Y COMPUTADORES S.A. cuenta con un espacio dedicado a sus colaboradores mediante la implementación del programa de pausas activas en cada una de las áreas de la empresa. Esta iniciativa aprovecha los recursos proporcionados por entidades como la ARL POSITIVA, la Caja de Compensación y la EPS, entre otros, con el fin de mejorar la salud y el bienestar de los trabajadores.",
+      "text_raw": "SYC Sistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n# 1. DESCRIPCIÓN DEL PROBLEMA\n\nLa descripción del problema se centra en los efectos adversos del sedentarismo y la exposición prolongada a actividades laborales estáticas en la salud de los trabajadores. Estos problemas incluyen dolores musculares, fatiga, estrés y disminución del rendimiento laboral. Ante esta situación, se hace evidente la necesidad de implementar estrategias que promuevan la actividad física y el bienestar durante la jornada laboral.\n\nCon el objetivo de prevenir la aparición de afecciones laborales, SISTEMAS Y COMPUTADORES S.A. cuenta con un espacio dedicado a sus colaboradores mediante la implementación del programa de pausas activas en cada una de las áreas de la empresa. Esta iniciativa aprovecha los recursos proporcionados por entidades como la ARL POSITIVA, la Caja de Compensación y la EPS, entre otros, con el fin de mejorar la salud y el bienestar de los trabajadores.",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 5,
+      "removed_spans": [],
+      "text_normalized": "<table>\n<tr><th></th><th>GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th></tr>\n<tr><th></th><th>PROGRAMA DE PAUSAS ACTIVAS</th><th></th><th></th><th></th><th></th></tr>\n<tr><th>CODIGO</th><td>PG-RH-10-SST</td><th>NIVEL DE CLASIFICACIÓN</th><td>USO INTERNO (NC2)</td><th>Versión</th><td>0.0</td></tr>\n</table>\n\n## 2. OBJETIVO GENERAL\n\nEstablecer un programa de pausas activas en la empresa SISTEMAS Y COMPUTADORES S.A con el fin de mejorar la salud y el bienestar de los empleados, reducir el ausentismo laboral y aumentar la productividad.\n\n## 3. OBJETIVOS ESPECIFICOS\n\n1- Sensibilizar a los trabajadores sobre la importancia de realizar pausas activas durante la jornada laboral.\n2- Promover la participación activa de los trabajadores en actividades relacionadas con las pausas activas adaptadas a las necesidades y características.\n3- Estimular la participación activa de los empleados en las sesiones de pausas activas, proporcionando herramientas y técnicas para adquirir nuevos hábitos saludables y reducir los niveles de estrés laboral.",
+      "text_raw": "<table>\n<tr><th></th><th>GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th><th></th><th></th><th></th><th></th></tr>\n<tr><th></th><th>PROGRAMA DE PAUSAS ACTIVAS</th><th></th><th></th><th></th><th></th></tr>\n<tr><th>CODIGO</th><td>PG-RH-10-SST</td><th>NIVEL DE CLASIFICACIÓN</th><td>USO INTERNO (NC2)</td><th>Versión</th><td>0.0</td></tr>\n</table>\n\n## 2. OBJETIVO GENERAL\n\nEstablecer un programa de pausas activas en la empresa SISTEMAS Y COMPUTADORES S.A con el fin de mejorar la salud y el bienestar de los empleados, reducir el ausentismo laboral y aumentar la productividad.\n\n## 3. OBJETIVOS ESPECIFICOS\n\n1- Sensibilizar a los trabajadores sobre la importancia de realizar pausas activas durante la jornada laboral.\n2- Promover la participación activa de los trabajadores en actividades relacionadas con las pausas activas adaptadas a las necesidades y características.\n3- Estimular la participación activa de los empleados en las sesiones de pausas activas, proporcionando herramientas y técnicas para adquirir nuevos hábitos saludables y reducir los niveles de estrés laboral.",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 6,
+      "removed_spans": [],
+      "text_normalized": "SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n# 4. MARCO CONCEPTUAL\n\n## 4.1 PAUSAS ACTIVAS\n\nLas pausas activas consisten en una serie de ejercicios físicos y mentales realizados de manera consciente y programada durante la jornada laboral. Estas pueden incluir estiramientos musculares, ejercicios de relajación, respiración profunda, ejercicios de movilidad articular, entre otros.\n\n## 4.2 BENEFICIOS\n\n<table>\n<tr><th>AUMENTAN</th><th>DISMINUYEN</th></tr>\n<tr><td>Mejora la salud física y mental de los trabajadores.</td><td>Menor riesgo de accidentes laborales.</td></tr>\n<tr><td>Incremento de la concentración y la productividad.</td><td>Reducción del estrés y la fatiga laboral.</td></tr>\n<tr><td>Prevención de lesiones musculoesqueléticas.</td><td>Disminución del ausentismo laboral.</td></tr>\n<tr><td>Fomento de trabajo en equipo y la comunicación.</td><td>Los factores generadores de trastornos músculo-esqueléticos de origen laboral que repercuten principalmente en cuello y extremidades superiores.</td></tr>\n<tr><td>Mejora del clima laboral y la satisfacción de los trabajadores.</td><td>Las ausencias al trabajo.</td></tr>\n<tr><td>Aumento de la motivación y el compromiso de los trabajadores.</td><td>Menor incidencia de enfermedades relacionadas con el sedentarismo.</td></tr>\n</table>\n\n## 4.3 ACTIVIDADES\n\n* Movilidad articular\n* Estiramiento\n* Actividades lúdicas\n* Actividades de habilidad mental\n* Sensibilización y capacitación sobre pausas activas\n* Diseño y planificación de rutinas de pausas activas\n* Implementación de las pausas activas en la jornada laboral\n* Monitoreo y evaluación del programa",
+      "text_raw": "SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n# 4. MARCO CONCEPTUAL\n\n## 4.1 PAUSAS ACTIVAS\n\nLas pausas activas consisten en una serie de ejercicios físicos y mentales realizados de manera consciente y programada durante la jornada laboral. Estas pueden incluir estiramientos musculares, ejercicios de relajación, respiración profunda, ejercicios de movilidad articular, entre otros.\n\n## 4.2 BENEFICIOS\n\n<table>\n<tr><th>AUMENTAN</th><th>DISMINUYEN</th></tr>\n<tr><td>Mejora la salud física y mental de los trabajadores.</td><td>Menor riesgo de accidentes laborales.</td></tr>\n<tr><td>Incremento de la concentración y la productividad.</td><td>Reducción del estrés y la fatiga laboral.</td></tr>\n<tr><td>Prevención de lesiones musculoesqueléticas.</td><td>Disminución del ausentismo laboral.</td></tr>\n<tr><td>Fomento de trabajo en equipo y la comunicación.</td><td>Los factores generadores de trastornos músculo-esqueléticos de origen laboral que repercuten principalmente en cuello y extremidades superiores.</td></tr>\n<tr><td>Mejora del clima laboral y la satisfacción de los trabajadores.</td><td>Las ausencias al trabajo.</td></tr>\n<tr><td>Aumento de la motivación y el compromiso de los trabajadores.</td><td>Menor incidencia de enfermedades relacionadas con el sedentarismo.</td></tr>\n</table>\n\n## 4.3 ACTIVIDADES\n\n* Movilidad articular\n* Estiramiento\n* Actividades lúdicas\n* Actividades de habilidad mental\n* Sensibilización y capacitación sobre pausas activas\n* Diseño y planificación de rutinas de pausas activas\n* Implementación de las pausas activas en la jornada laboral\n* Monitoreo y evaluación del programa",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 7,
+      "removed_spans": [],
+      "text_normalized": "# SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n## 5. METODOLOGIA\n\nEl programa se llevará a cabo mediante la realización de sesiones periódicas de pausas activas, las cuales serán coordinadas por el líder a cargo. El cual de acuerdo a la operación establecerán horarios y espacios específicos para la realización de estas sesiones, y se proporcionará el material necesario para su desarrollo.\n\nSera participativa donde deberán 2 veces al día realizarlas (una en la mañana y otra en la tarde) de 7 a 10 minutos cada uno.\n\n## 6. ESTRATEGIAS\n\n* Promoción y difusión del programa mediante, correos electrónicos y reuniones informativas, Instagram, Edocs y/o cualquier medio de comunicación.\n\n* Involucramiento de líderes en la implementación y seguimiento del programa.\n\n* Proporcionar retroalimentación al personal que no cumpla con la realización de las pausas activas, siguiendo un proceso escalonado. El primer llamado será realizado por el líder designado para el área correspondiente, el segundo será llevado a cabo por el equipo de seguridad y salud en el trabajo, y en caso de persistir la falta de participación, se emitirá una notificación de acto inseguro como medida disciplinaria\n\n## 7. RESPONSABILIDADES\n\n- Coordinar la implementación del programa de pausas activas en sus respectivas áreas.\n- Establecer horarios y espacios específicos para la realización de las sesiones de pausas activas.\n- Proporcionar el material necesario para el desarrollo de las sesiones de pausas activas.\n- Promover la participación activa de los empleados en las actividades de pausas activas.\n- Supervisar y monitorear el cumplimiento de las pausas activas por parte de los trabajadores.\n- Proporcionar retroalimentación al personal que no cumpla con la realización de las pausas activas, siguiendo un proceso escalonado.",
+      "text_raw": "# SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n## 5. METODOLOGIA\n\nEl programa se llevará a cabo mediante la realización de sesiones periódicas de pausas activas, las cuales serán coordinadas por el líder a cargo. El cual de acuerdo a la operación establecerán horarios y espacios específicos para la realización de estas sesiones, y se proporcionará el material necesario para su desarrollo.\n\nSera participativa donde deberán 2 veces al día realizarlas (una en la mañana y otra en la tarde) de 7 a 10 minutos cada uno.\n\n## 6. ESTRATEGIAS\n\n* Promoción y difusión del programa mediante, correos electrónicos y reuniones informativas, Instagram, Edocs y/o cualquier medio de comunicación.\n\n* Involucramiento de líderes en la implementación y seguimiento del programa.\n\n* Proporcionar retroalimentación al personal que no cumpla con la realización de las pausas activas, siguiendo un proceso escalonado. El primer llamado será realizado por el líder designado para el área correspondiente, el segundo será llevado a cabo por el equipo de seguridad y salud en el trabajo, y en caso de persistir la falta de participación, se emitirá una notificación de acto inseguro como medida disciplinaria\n\n## 7. RESPONSABILIDADES\n\n- Coordinar la implementación del programa de pausas activas en sus respectivas áreas.\n- Establecer horarios y espacios específicos para la realización de las sesiones de pausas activas.\n- Proporcionar el material necesario para el desarrollo de las sesiones de pausas activas.\n- Promover la participación activa de los empleados en las actividades de pausas activas.\n- Supervisar y monitorear el cumplimiento de las pausas activas por parte de los trabajadores.\n- Proporcionar retroalimentación al personal que no cumpla con la realización de las pausas activas, siguiendo un proceso escalonado.",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 8,
+      "removed_spans": [],
+      "text_normalized": "# GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO\n## PROGRAMA DE PAUSAS ACTIVAS\n<table>\n<tr>\n<td>**CODIGO**</td>\n<td>PG-RH-10-SST</td>\n<td>**NIVEL DE CLASIFICACIÓN**</td>\n<td>USO INTERNO (NC2)</td>\n<td>**Versión**</td>\n<td>0.0</td>\n</tr>\n</table>\n* Colaborar con el equipo de seguridad y salud en el trabajo para garantizar el éxito del programa de pausas activas en el área.\n* Mantener una comunicación efectiva con los empleados sobre la importancia y los beneficios de las pausas activas.\n* Participar activamente en la planificación y evaluación del programa de pausas activas, proponiendo mejoras y ajustes según sea necesario.\n* Servir como modelo a seguir al participar en las sesiones de pausas activas y demostrar su compromiso con la salud y el bienestar de los empleados.\n\n**8. RUTINAS DE TRABAJO**\n\nSe establecerá una rutina de trabajo que incluya momentos específicos para la realización de pausas activas a lo largo del día laboral. Estas pausas se integrarán de manera armónica con las actividades laborales, de manera que no interfieran significativamente con la productividad, dependerá de cada operación.\n\n**Opción 1**\n\n**MOVIMIENTO ARTICULAR**\n\nEl movimiento articular se refiere al desplazamiento de una articulación a través de su rango de movimiento completo, con el fin de mantener la flexibilidad y prevenir la rigidez muscular y articular.\n\nLos movimientos que podemos realizar son flexión, extensión, abducción y aducción cada movimiento se puede repetir 8 veces.\n\n<table>\n<tr><th colspan=\"6\">EJERCICIOS DE MOVILIDAD ARTICULAR</th></tr>\n<tr><th>EJERCICIO</th><th>EXLICACIÓN GRÁFICA</th><th>EJERCICIO</th><th>EXPLICACIÓN GRÁFICA</th><th>EJERCICIO</th><th>EXPLICACIÓN GRÁFICA</th></tr>\n<tr><td>Mueva lentamente la cabeza arriba y abajo. Repitálo 10 veces</td><td>Mueva lentamente la cabeza arriba y abajo</td><td>Mueva los hombros adelante y atrás. Reptálo 10 veces</td><td>Mueva los hombros adelante y atrás</td><td>Mueva los brazos de manera circular. Repita 10 veces por brazo</td><td>Mueva los brazos de manera circular</td></tr>\n<tr><td>Doble y estire el codo. Repita 10 veces por brazo</td><td>Doble y estire el codo</td><td>Suba y baje la muñeca. Repita 10 veces por mano</td><td>Suba y baje la muñeca</td><td>Incline el tronco a un lado y al otro, pasando una mano sobre la cabeza. 10 veces por lado</td><td>Incline el tronco a un lado y al otro</td></tr>\n<tr><td>Sostenido de una silla, lleve la pierna adelante y atrás. Repita 10 veces por pierna</td><td>Sostenido de una silla, lleve la pierna adelante y atrás</td><td>Doblar un poco las rodillas y regresar a la posición inicial. Repita 10 veces</td><td>Doblar un poco las rodillas</td><td>Sostenido de una silla, mueva el tobillo de manera circular. Repita 10 veces por tobillo</td><td>Sostenido de una silla, mueva el tobillo de manera circular</td></tr>\n</table>",
+      "text_raw": "# GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO\n## PROGRAMA DE PAUSAS ACTIVAS\n<table>\n    <tr>\n        <td>**CODIGO**</td>\n        <td>PG-RH-10-SST</td>\n        <td>**NIVEL DE CLASIFICACIÓN**</td>\n        <td>USO INTERNO (NC2)</td>\n        <td>**Versión**</td>\n        <td>0.0</td>\n    </tr>\n</table>\n* Colaborar con el equipo de seguridad y salud en el trabajo para garantizar el éxito del programa de pausas activas en el área.\n* Mantener una comunicación efectiva con los empleados sobre la importancia y los beneficios de las pausas activas.\n* Participar activamente en la planificación y evaluación del programa de pausas activas, proponiendo mejoras y ajustes según sea necesario.\n* Servir como modelo a seguir al participar en las sesiones de pausas activas y demostrar su compromiso con la salud y el bienestar de los empleados.\n\n**8. RUTINAS DE TRABAJO**\n\nSe establecerá una rutina de trabajo que incluya momentos específicos para la realización de pausas activas a lo largo del día laboral. Estas pausas se integrarán de manera armónica con las actividades laborales, de manera que no interfieran significativamente con la productividad, dependerá de cada operación.\n\n**Opción 1**\n\n**MOVIMIENTO ARTICULAR**\n\nEl movimiento articular se refiere al desplazamiento de una articulación a través de su rango de movimiento completo, con el fin de mantener la flexibilidad y prevenir la rigidez muscular y articular.\n\nLos movimientos que podemos realizar son flexión, extensión, abducción y aducción cada movimiento se puede repetir 8 veces.\n\n<table>\n<tr><th colspan=\"6\">EJERCICIOS DE MOVILIDAD ARTICULAR</th></tr>\n<tr><th>EJERCICIO</th><th>EXLICACIÓN GRÁFICA</th><th>EJERCICIO</th><th>EXPLICACIÓN GRÁFICA</th><th>EJERCICIO</th><th>EXPLICACIÓN GRÁFICA</th></tr>\n<tr><td>Mueva lentamente la cabeza arriba y abajo. Repitálo 10 veces</td><td>Mueva lentamente la cabeza arriba y abajo</td><td>Mueva los hombros adelante y atrás. Reptálo 10 veces</td><td>Mueva los hombros adelante y atrás</td><td>Mueva los brazos de manera circular. Repita 10 veces por brazo</td><td>Mueva los brazos de manera circular</td></tr>\n<tr><td>Doble y estire el codo. Repita 10 veces por brazo</td><td>Doble y estire el codo</td><td>Suba y baje la muñeca. Repita 10 veces por mano</td><td>Suba y baje la muñeca</td><td>Incline el tronco a un lado y al otro, pasando una mano sobre la cabeza. 10 veces por lado</td><td>Incline el tronco a un lado y al otro</td></tr>\n<tr><td>Sostenido de una silla, lleve la pierna adelante y atrás. Repita 10 veces por pierna</td><td>Sostenido de una silla, lleve la pierna adelante y atrás</td><td>Doblar un poco las rodillas y regresar a la posición inicial. Repita 10 veces</td><td>Doblar un poco las rodillas</td><td>Sostenido de una silla, mueva el tobillo de manera circular. Repita 10 veces por tobillo</td><td>Sostenido de una silla, mueva el tobillo de manera circular</td></tr>\n</table>",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 9,
+      "removed_spans": [],
+      "text_normalized": "# SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n- Movimiento de cabeza y cuello\n\nIlustraciones de movimientos de cabeza y cuello\n\n- Movimiento de hombros\n\nIlustraciones de movimientos de hombros\n\n- Movimiento de muñecas y dedos\n\nIlustraciones de movimientos de muñecas y dedos\n\na) Flexión b) Extensión\nc) Desy. Cubital d) Desy. Radial\n\n- Movimiento de cadera\n\nIlustraciones de movimientos de cadera",
+      "text_raw": "# SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n- Movimiento de cabeza y cuello\n\nIlustraciones de movimientos de cabeza y cuello\n\n- Movimiento de hombros\n\nIlustraciones de movimientos de hombros\n\n- Movimiento de muñecas y dedos\n\nIlustraciones de movimientos de muñecas y dedos\n\na) Flexión b) Extensión\nc) Desy. Cubital d) Desy. Radial\n\n- Movimiento de cadera\n\nIlustraciones de movimientos de cadera",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 10,
+      "removed_spans": [],
+      "text_normalized": "SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n- Movimiento y fortalecimiento de rodilla\n\nIlustración de una persona realizando ejercicios de rodilla\n\n- Movimiento de pies\n\nIlustración de una persona realizando ejercicios de pies\n\n**OPCIÓN 2**\n\n**ESTIRAMIENTOS**\n\nEl estiramiento se centra en el trabajo muscular de tensión y distensión, ya que cuando un músculo se relaja, su antagonista se contrae. Cada una de estas posturas se mantiene durante 15 segundos. Si la persona siente la necesidad de repetir una postura, puede hacerlo sin inconvenientes.\n\nCuadrícula de ejercicios de estiramiento numerados del 1 al 16\n\n> Esta es una rutina básica tanto para personas que trabajan de pie (con manejo de cargas) o sentadas (ya sea en oficina o trabajo repetitivo). Cada uno de los ejercicios se sostiene por espacio de 10 a 15 segundos.",
+      "text_raw": "SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n- Movimiento y fortalecimiento de rodilla\n\nIlustración de una persona realizando ejercicios de rodilla\n\n- Movimiento de pies\n\nIlustración de una persona realizando ejercicios de pies\n\n**OPCIÓN 2**\n\n**ESTIRAMIENTOS**\n\nEl estiramiento se centra en el trabajo muscular de tensión y distensión, ya que cuando un músculo se relaja, su antagonista se contrae. Cada una de estas posturas se mantiene durante 15 segundos. Si la persona siente la necesidad de repetir una postura, puede hacerlo sin inconvenientes.\n\nCuadrícula de ejercicios de estiramiento numerados del 1 al 16\n\n> Esta es una rutina básica tanto para personas que trabajan de pie (con manejo de cargas) o sentadas (ya sea en oficina o trabajo repetitivo). Cada uno de los ejercicios se sostiene por espacio de 10 a 15 segundos.",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 11,
+      "removed_spans": [],
+      "text_normalized": "# OPCIÓN 3\n\nRutina básica de ejercicios de pausas activas numerados del 1 al 12\n\nEsta es una rutina básica tanto para personas que trabajan de pie (con manejo de cargas) o sentadas (ya sea en oficina o trabajo repetitivo). Cada uno de los ejercicios se sostiene por espacio de 10 a 15 segundos.\n\n# OPCIÓN 4\n\nLas personas que pasan largos períodos frente a una computadora o cuyas responsabilidades requieren mantener la atención durante periodos prolongados (1 hora de trabajo por 1 minuto de pausa activa), se recomienda realizar pausas de descanso visual. Durante estas pausas, es aconsejable realizar movimientos como los que se muestran en la figura a continuación, que incluyen cambiar la mirada a diferentes distancias (lejos y cerca) y ajustar el contraste con la intensidad de la luz.\n\n- Ejercicios para los ojos\n\nDiagrama de ejercicios oculares numerados del 1 al 8",
+      "text_raw": "# OPCIÓN 3\n\nRutina básica de ejercicios de pausas activas numerados del 1 al 12\n\nEsta es una rutina básica tanto para personas que trabajan de pie (con manejo de cargas) o sentadas (ya sea en oficina o trabajo repetitivo). Cada uno de los ejercicios se sostiene por espacio de 10 a 15 segundos.\n\n# OPCIÓN 4\n\nLas personas que pasan largos períodos frente a una computadora o cuyas responsabilidades requieren mantener la atención durante periodos prolongados (1 hora de trabajo por 1 minuto de pausa activa), se recomienda realizar pausas de descanso visual. Durante estas pausas, es aconsejable realizar movimientos como los que se muestran en la figura a continuación, que incluyen cambiar la mirada a diferentes distancias (lejos y cerca) y ajustar el contraste con la intensidad de la luz.\n\n- Ejercicios para los ojos\n\nDiagrama de ejercicios oculares numerados del 1 al 8",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 12,
+      "removed_spans": [],
+      "text_normalized": "# SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n- **Masaje para el dolor de cabeza**\n\nTodos los pasos realizarlos con una respiración lenta y profunda.\n\nPersona masajeando sus sienes\n\nPaso 1: Con las yemas de los dedos y en forma circular masajear el área donde terminan las cejas, durante 30 segundos.\n\nPersona masajeando su frente\n\nPaso 2: Con toda la mano hacer un desplazamiento desde el centro de la frente hacia las orejas. Repetirlo 10 veces.\n\nPersona masajeando el inicio de sus cejas\n\nPaso 3: Con el dedo pulgar o índice hacer presión desde donde empieza hasta donde termina las cejas. Repetirlo 8 veces.\n\nPersona recibiendo un masaje en el cuero cabelludo\n\nCon las yemas de los dedos hacer en toda la cabeza un masaje como si nos hiciéramos un shampoo. Hacerlo durante 30 segundos.",
+      "text_raw": "# SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n- **Masaje para el dolor de cabeza**\n\nTodos los pasos realizarlos con una respiración lenta y profunda.\n\nPersona masajeando sus sienes\n\nPaso 1: Con las yemas de los dedos y en forma circular masajear el área donde terminan las cejas, durante 30 segundos.\n\nPersona masajeando su frente\n\nPaso 2: Con toda la mano hacer un desplazamiento desde el centro de la frente hacia las orejas. Repetirlo 10 veces.\n\nPersona masajeando el inicio de sus cejas\n\nPaso 3: Con el dedo pulgar o índice hacer presión desde donde empieza hasta donde termina las cejas. Repetirlo 8 veces.\n\nPersona recibiendo un masaje en el cuero cabelludo\n\nCon las yemas de los dedos hacer en toda la cabeza un masaje como si nos hiciéramos un shampoo. Hacerlo durante 30 segundos.",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 13,
+      "removed_spans": [],
+      "text_normalized": "SYC Sistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n# 9. ANEXOS\n\nPosturas adecuadas frente al computador\n\nIlustración de posturas correctas e incorrectas al usar el teclado\n\nIlustración de la distancia correcta entre el usuario y el monitor\n\n45 a 70 cm",
+      "text_raw": "SYC Sistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n# 9. ANEXOS\n\nPosturas adecuadas frente al computador\n\nIlustración de posturas correctas e incorrectas al usar el teclado\n\nIlustración de la distancia correcta entre el usuario y el monitor\n\n45 a 70 cm",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 14,
+      "removed_spans": [],
+      "text_normalized": "SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\n**De pie** ajuste el asiento a la altura de la rodilla.\n\n**Siéntese** de modo que sólo entre un puño entre la silla y la parte inferior de las piernas.\n\n* Altura ajustable del respaldo\n* Superficie antideslizante\n* **Ajuste** el respaldo para que soporte la curva inferior de la espalda.\n* Ajuste de la inclinación del respaldo\n* Giro 360 grados\n* Altura ajustable del asiento\n* Al menos 5 soportes con ruedas\n\nLas piernas deben tener un espacio adecuado debajo del teclado. Allí no se deben de almacenar herramientas.\n\nLa superficie de trabajo debe ofrecer un espacio suficiente para todas las herramientas, las que sean usadas con poca frecuencia deberían de estar ubicadas en otros lugares.\n\nLa altura del teclado debe ajustarse a la altura de los codos con los brazos colgando.\n\n**Si se utiliza temporalmente una mesa de trabajo que no puede ser ajustada:**\n\nAjuste la altura de la silla hasta que los codos queden al nivel del teclado.\n\nSi los pies quedan sin tocar el piso y la presión sobre la parte inferior de las piernas es demasiada se debe utilizar un reposapiés (una guía telefónica puede ser de gran ayuda!).",
+      "text_raw": "SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\n**De pie** ajuste el asiento a la altura de la rodilla.\n\n**Siéntese** de modo que sólo entre un puño entre la silla y la parte inferior de las piernas.\n\n* Altura ajustable del respaldo\n* Superficie antideslizante\n* **Ajuste** el respaldo para que soporte la curva inferior de la espalda.\n* Ajuste de la inclinación del respaldo\n* Giro 360 grados\n* Altura ajustable del asiento\n* Al menos 5 soportes con ruedas\n\nLas piernas deben tener un espacio adecuado debajo del teclado. Allí no se deben de almacenar herramientas.\n\nLa superficie de trabajo debe ofrecer un espacio suficiente para todas las herramientas, las que sean usadas con poca frecuencia deberían de estar ubicadas en otros lugares.\n\nLa altura del teclado debe ajustarse a la altura de los codos con los brazos colgando.\n\n**Si se utiliza temporalmente una mesa de trabajo que no puede ser ajustada:**\n\nAjuste la altura de la silla hasta que los codos queden al nivel del teclado.\n\nSi los pies quedan sin tocar el piso y la presión sobre la parte inferior de las piernas es demasiada se debe utilizar un reposapiés (una guía telefónica puede ser de gran ayuda!).",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 15,
+      "removed_spans": [],
+      "text_normalized": "SYC\nSistemas y Computadores Ltda.\n\n<table>\n<thead>\n<tr>\n<th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n</tr>\n<tr>\n<td>CODIGO</td>\n<td>PG-RH-10-SST</td>\n<td>NIVEL DE CLASIFICACIÓN</td>\n<td>USO INTERNO (NC2)</td>\n<td>Versión</td>\n<td>0.0</td>\n</tr>\n</tbody>\n</table>\n\nIllustration showing correct and incorrect mouse usage posture\n\nZona\npoco común\nZona\nocasional\n\nZona usual\n\nMal! Bien!",
+      "text_raw": "SYC\nSistemas y Computadores Ltda.\n\n\n<table>\n  <thead>\n    <tr>\n      <th colspan=\"6\">GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td colspan=\"6\">PROGRAMA DE PAUSAS ACTIVAS</td>\n    </tr>\n    <tr>\n      <td>CODIGO</td>\n      <td>PG-RH-10-SST</td>\n      <td>NIVEL DE CLASIFICACIÓN</td>\n      <td>USO INTERNO (NC2)</td>\n      <td>Versión</td>\n      <td>0.0</td>\n    </tr>\n  </tbody>\n</table>\n\n\nIllustration showing correct and incorrect mouse usage posture\n\nZona\npoco común\nZona\nocasional\n\nZona usual\n\nMal! Bien!",
+      "warnings": []
+    },
+    {
+      "blocks": [],
+      "extraction_method": "llamaparse",
+      "normalization_actions": [],
+      "ocr_confidence": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "page_number": 16,
+      "removed_spans": [],
+      "text_normalized": "<table>\n<tr><th>SYC GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th></tr>\n<tr><th>PROGRAMA DE PAUSAS ACTIVAS</th></tr>\n<tr><td>CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0</td></tr>\n</table>\n\n# 10. BIBLIOGRAFIA\n\nMinisterio de Trabajo de Colombia. Guía Técnica para la Promoción de la Actividad Física en el Ámbito Laboral.\n\nInstituto Colombiano de Normas Técnicas y Certificación (ICONTEC). Norma Técnica Colombiana NTC 5613: Actividad física en el lugar de trabajo.\n\nServicio Nacional de Aprendizaje (SENA) de Colombia. Guía para la Implementación de Pausas Activas en el Trabajo.\n\nOrganización Mundial de la Salud (OMS). Recomendaciones Mundiales sobre Actividad Física para la Salud.\n\nAmerican College of Sports Medicine (ACSM). Guidelines for Exercise Testing and Prescription.\n\nGuías de práctica clínica sobre prevención de enfermedades laborales y promoción de la salud en el trabajo, emitidas por entidades de salud reconocidas.\n\nMinisterio de Trabajo de Colombia. (2015). Guía Técnica para la Promoción de la Actividad Física en el Ámbito Laboral. Recuperado de https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/ENT/abece-actividad-fisica-entorno-laboral.pdf.\n\nInstituto Colombiano de Normas Técnicas y Certificación (ICONTEC). (2008). Norma Técnica Colombiana NTC 5613: Actividad física en el lugar de trabajo.\n\nServicio Nacional de Aprendizaje (SENA) de Colombia. (2017). Guía para la Implementación de Pausas Activas en el Trabajo. Recuperado de https://repositorio.sena.edu.co/handle/11404/7179?show=full.\n\nOrganización Mundial de la Salud (OMS). (2012). Recomendaciones Mundiales sobre Actividad Física para la Salud. Recuperado de https://www.paho.org/es/noticias/9-5-2012-recomendaciones-mundiales-sobre-actividad-fisica-para-salud#:~:text=se%20recomienda%20que%3A-,1.,de%20actividades%20moderadas%20y%20vigorosas.\n\nAmerican College of Sports Medicine (ACSM). (Año). Guidelines for Exercise Testing and Prescription.",
+      "text_raw": "<table>\n<tr><th>SYC GESTIÒN DE RECURSOS HUMANOS / SEGURIDAD Y SALUD EN EL TRABAJO</th></tr>\n<tr><th>PROGRAMA DE PAUSAS ACTIVAS</th></tr>\n<tr><td>CODIGO | PG-RH-10-SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | Versión | 0.0</td></tr>\n</table>\n\n# 10. BIBLIOGRAFIA\n\nMinisterio de Trabajo de Colombia. Guía Técnica para la Promoción de la Actividad Física en el Ámbito Laboral.\n\nInstituto Colombiano de Normas Técnicas y Certificación (ICONTEC). Norma Técnica Colombiana NTC 5613: Actividad física en el lugar de trabajo.\n\nServicio Nacional de Aprendizaje (SENA) de Colombia. Guía para la Implementación de Pausas Activas en el Trabajo.\n\nOrganización Mundial de la Salud (OMS). Recomendaciones Mundiales sobre Actividad Física para la Salud.\n\nAmerican College of Sports Medicine (ACSM). Guidelines for Exercise Testing and Prescription.\n\nGuías de práctica clínica sobre prevención de enfermedades laborales y promoción de la salud en el trabajo, emitidas por entidades de salud reconocidas.\n\nMinisterio de Trabajo de Colombia. (2015). Guía Técnica para la Promoción de la Actividad Física en el Ámbito Laboral. Recuperado de https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/ENT/abece-actividad-fisica-entorno-laboral.pdf.\n\nInstituto Colombiano de Normas Técnicas y Certificación (ICONTEC). (2008). Norma Técnica Colombiana NTC 5613: Actividad física en el lugar de trabajo.\n\nServicio Nacional de Aprendizaje (SENA) de Colombia. (2017). Guía para la Implementación de Pausas Activas en el Trabajo. Recuperado de https://repositorio.sena.edu.co/handle/11404/7179?show=full.\n\nOrganización Mundial de la Salud (OMS). (2012). Recomendaciones Mundiales sobre Actividad Física para la Salud. Recuperado de https://www.paho.org/es/noticias/9-5-2012-recomendaciones-mundiales-sobre-actividad-fisica-para-salud#:~:text=se%20recomienda%20que%3A-,1.,de%20actividades%20moderadas%20y%20vigorosas.\n\nAmerican College of Sports Medicine (ACSM). (Año). Guidelines for Exercise Testing and Prescription.",
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0"
+}

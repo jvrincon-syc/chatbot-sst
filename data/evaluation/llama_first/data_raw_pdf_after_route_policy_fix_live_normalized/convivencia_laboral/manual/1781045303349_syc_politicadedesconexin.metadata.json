@@ -1,0 +1,189 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "politica",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "politica:politica:title_control",
+      "politica:politica:content",
+      "politica:politica:filename",
+      "Convivencia laboral:desconexion laboral:title_control",
+      "Convivencia laboral:convivencia laboral:content",
+      "Convivencia laboral:convivencia laboral:route",
+      "Desconexion laboral:desconexion laboral:title_control"
+    ],
+    "subtopic": "Desconexion laboral",
+    "topic": "Convivencia laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-route-policy-fix",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO</td><td>PL.RH-03SST</td><td>NIVEL DE CLASIFICACIÓN Y ETIQUETADO</td><td>USO INTERNO (NC2)</td><td>Versión</td><td>0.1</td></tr>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PL.RH-03SST",
+      "value_raw": "PL.RH-03SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# POLÍTICA DE DESCONEXIÓN LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "POLÍTICA DE DESCONEXIÓN LABORAL",
+      "value_raw": "POLÍTICA DE DESCONEXIÓN LABORAL",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_caf88d615e56edd4",
+  "document_name": "1781045303349_syc_politicadedesconexin.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "llamaparse_form_heuristic",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": {
+          "bottom": 1441.0,
+          "coordinate_system": "pixels",
+          "top": 1234.0,
+          "x0": 139.0,
+          "x1": 633.0
+        },
+        "page_number": 1,
+        "pattern": null,
+        "region": null,
+        "source": "opencv_signature_stroke",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "opencv_signature_stroke",
+    "status": "detected",
+    "value": true,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_route_policy_fix_live_normalized\\convivencia_laboral\\manual\\1781045303349_syc_politicadedesconexin.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.4",
+  "processed_at": "2026-07-21T17:47:46.120373-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
+  "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": [
+    "llama_parse_job:pjb-8868hmusisvc13oqbjhc2ugkj14z"
+  ]
+}

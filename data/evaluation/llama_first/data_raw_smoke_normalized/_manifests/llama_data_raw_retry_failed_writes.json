@@ -1,0 +1,45 @@
+{
+  "bundles": [],
+  "documents": [
+    {
+      "disposition": "failed",
+      "document_id": "doc_53b1d7b44cf260c0",
+      "document_status": "failed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+      "warnings": [
+        "processing_error"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "warnings": [
+        "pdf_extractor_unconfigured"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "warnings": [
+        "pdf_extractor_unconfigured"
+      ]
+    }
+  ],
+  "fingerprints": {},
+  "run_id": "llama_data_raw_retry_failed_writes",
+  "schema_version": "2.0",
+  "summary": {
+    "failed": 1,
+    "needs_review": 2,
+    "processed": 0,
+    "skipped": 0
+  },
+  "timestamp": "2026-07-21T16:52:08.991312-05:00"
+}

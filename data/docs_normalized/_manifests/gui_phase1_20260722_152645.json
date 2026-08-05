@@ -1,0 +1,3604 @@
+{
+  "bundles": [
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2268,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+          "schema_version": "2.0",
+          "sha256": "b5fef5b0d596a0924e85227fe6251214c2a8cebb0c2f54fd6d2f08654937bc6e"
+        },
+        {
+          "byte_size": 7371,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "58fe9e643b9d6e3f4c734689501747b16b3b5f7d0135bd152cb12b5002e41d92"
+        },
+        {
+          "byte_size": 5317,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b60ce56ea95e98ffd2e09327d29f3048ca0b632091a9f236d00e106476591b67"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "e7661f7da1b50fbd4f6f6d0bc76ccd446be673cd4d050bd411c44cf56afeb9e5"
+        },
+        {
+          "byte_size": 11005,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.tables.json",
+          "schema_version": "2.0",
+          "sha256": "b65b205e7ea979daf51ead268c7df19db537e49611922c49621ad45483036090"
+        },
+        {
+          "byte_size": 1608,
+          "relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d37d36fd9084d4089a5eb4d307bae3664958b81374a2f452485af975aa172db0"
+        }
+      ],
+      "document_id": "doc_864d906c5eae1183",
+      "document_status": "needs_review",
+      "normalized_base": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.metadata.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pages.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.ocr.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.tables.json",
+        "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "6eb13cd6e4aeccd1322bd05e2c857bfbf34a2bec760bbd6d1762d220294964b3",
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 22093,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+          "schema_version": "2.0",
+          "sha256": "4751ba158b495d05df88890a4fd02da1d74a3891f02227040333cf31a0b9d2b0"
+        },
+        {
+          "byte_size": 10562,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "9c00aace5860ecbfe6dc9bae9d597a835f5881478e467d631dc54703ead6f421"
+        },
+        {
+          "byte_size": 51570,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pages.json",
+          "schema_version": "2.0",
+          "sha256": "54bf343a7a0d968e8d0ec311d3aaa37db2e9bb1cc139a8c9bbfb64bd3179d964"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "4e5369ce65576753891f37326ece76e8a0da058c18b5a4e218f3450d18cc913b"
+        },
+        {
+          "byte_size": 46620,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.tables.json",
+          "schema_version": "2.0",
+          "sha256": "13183e01d3bd8054aa63be22ef088040a25eb6350a8bd8bd3ad2ee8676c339a4"
+        },
+        {
+          "byte_size": 2618,
+          "relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.forms.json",
+          "schema_version": "2.0",
+          "sha256": "42c447bfff0b9aff981069f71f096d96b101685d88c230edbed8eb75b5de3a8e"
+        }
+      ],
+      "document_id": "doc_c392ec7bf8d98194",
+      "document_status": "needs_review",
+      "normalized_base": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.metadata.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pages.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.ocr.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.tables.json",
+        "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "7200fd8e73118fbe3c97b01d306339a2371208f7118ac0f7f73a35aacd68a800",
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2472,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+          "schema_version": "2.0",
+          "sha256": "31cf9700b4bcb151df682ba5c47b75e02eafcc6be6306020f45ad059cbe262e7"
+        },
+        {
+          "byte_size": 6887,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "26809144b160c90320604f6f3e97c73e371eab6de05e04632a731fc71f9d2771"
+        },
+        {
+          "byte_size": 5176,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pages.json",
+          "schema_version": "2.0",
+          "sha256": "67306cd0854d06e2001bd6934aac758625b152c2e85de2aee562bc9754763979"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "53f0266b5bf63ec1dd079624c323dd9f1e9d5e4f67e2d802d35abc391125a59e"
+        },
+        {
+          "byte_size": 5733,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.tables.json",
+          "schema_version": "2.0",
+          "sha256": "c81ecee719cf9acbc2db276a41fb94e2b8d2b2abbff16f73935a55869d887446"
+        },
+        {
+          "byte_size": 341,
+          "relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.forms.json",
+          "schema_version": "2.0",
+          "sha256": "49f1767578db0290266efe696083dd81bf04180c9b5774d76c1d57767cbf84df"
+        }
+      ],
+      "document_id": "doc_caf88d615e56edd4",
+      "document_status": "needs_review",
+      "normalized_base": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.metadata.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pages.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.ocr.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.tables.json",
+        "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2429,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.md",
+          "schema_version": "2.0",
+          "sha256": "50e07cf06e68db5b132afa664e91e39375e6e58b60bef6bd2581d1f9b1345acc"
+        },
+        {
+          "byte_size": 7638,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "73be12541e89827a73b79f19c02168b01667fe778dc86d3fc106acf2edadeab3"
+        },
+        {
+          "byte_size": 5082,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pages.json",
+          "schema_version": "2.0",
+          "sha256": "8d5305671cc20a383d48e722b703ea062e1e0a40852261fdc2d82a755da23f1b"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "77339ccc293e3ff662e4dab87a8ef89dabf07580b84554435776422e66b24628"
+        },
+        {
+          "byte_size": 2544,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.tables.json",
+          "schema_version": "2.0",
+          "sha256": "ec12bd7664aac27dcf56929dbef5d7b33573504d4a0eec4a4cc1c32fe66e1dda"
+        },
+        {
+          "byte_size": 341,
+          "relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.forms.json",
+          "schema_version": "2.0",
+          "sha256": "253eb0689014dd7d98ce1e58dc58b11cd7afb4cfef0838449f5e9c4df5522842"
+        }
+      ],
+      "document_id": "doc_d57d21ff836e1ec0",
+      "document_status": "needs_review",
+      "normalized_base": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.md",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.metadata.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pages.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.ocr.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.tables.json",
+        "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "6128e86ca0345d091c445f3976806868d6aece7acae8042ec6968e867891f852",
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1120,
+          "relpath": "convivencia_laboral/manual/deberes_convivencia.md",
+          "schema_version": "2.0",
+          "sha256": "eac3ef88f8695c167448bd9185e92fb4c8b9d49f0480457bf51ee57eac3beab2"
+        },
+        {
+          "byte_size": 3479,
+          "relpath": "convivencia_laboral/manual/deberes_convivencia.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "7f132cb81a92d3cae098eeef92e86980f27c4c0ee97500dccbe3acbc317c483f"
+        },
+        {
+          "byte_size": 2445,
+          "relpath": "convivencia_laboral/manual/deberes_convivencia.pages.json",
+          "schema_version": "2.0",
+          "sha256": "02c65bb4425e72f89bf1a4cb803302556313d8f4fc9b27b47809019084cbe7b4"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/deberes_convivencia.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "096d768e2bbc853ed946d0d11c9ceb882383bfbd37662f699e4ba6bd0b641882"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/deberes_convivencia.tables.json",
+          "schema_version": "2.0",
+          "sha256": "733b58f067842b5658129d6b4ea99aa6a8a62f4b2692b0bbcb43b8895c5c1089"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/deberes_convivencia.forms.json",
+          "schema_version": "2.0",
+          "sha256": "bc1db4b60eac7b5eab457e6f657e651e14ca68881e84655d5f6fd1debe313ab2"
+        }
+      ],
+      "document_id": "doc_7a0f56a63a930105",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/deberes_convivencia",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/deberes_convivencia.md",
+        "convivencia_laboral/manual/deberes_convivencia.metadata.json",
+        "convivencia_laboral/manual/deberes_convivencia.pages.json",
+        "convivencia_laboral/manual/deberes_convivencia.ocr.json",
+        "convivencia_laboral/manual/deberes_convivencia.tables.json",
+        "convivencia_laboral/manual/deberes_convivencia.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "a249a478f339f08dc764b6eea3e29759f4d6eb3d943aba02c70ba2ef72c6e071",
+      "source_relpath": "convivencia_laboral/manual/deberes_convivencia.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 980,
+          "relpath": "convivencia_laboral/manual/derechos_convivencia.md",
+          "schema_version": "2.0",
+          "sha256": "29c888db7534f057f4652fd5fec41bb0bf882b5afb1f0d72926efca9f845bc29"
+        },
+        {
+          "byte_size": 3441,
+          "relpath": "convivencia_laboral/manual/derechos_convivencia.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "4bc7845607362be5372be791808e83bebe3f3619cfd59173719793d9e82d74ef"
+        },
+        {
+          "byte_size": 2119,
+          "relpath": "convivencia_laboral/manual/derechos_convivencia.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b7392612628943c92970063d9ea0f771678ca0623f88fdfd571082d1c575cbaf"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/derechos_convivencia.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "45b9e629e7069b3f8b9502c72c3daec7a78b7d4a0ac231cc452f31d6d9dccaa9"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/derechos_convivencia.tables.json",
+          "schema_version": "2.0",
+          "sha256": "112fd7f0813bf14e6a8bd568b0763a7d6a682e6c59d8ca54aa938b88377358f3"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/derechos_convivencia.forms.json",
+          "schema_version": "2.0",
+          "sha256": "42ab9bd18d12f9d7ce1726352aa7f834712fa18d6418047bf1c4924aa6dde401"
+        }
+      ],
+      "document_id": "doc_5773d940742c0a47",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/derechos_convivencia",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/derechos_convivencia.md",
+        "convivencia_laboral/manual/derechos_convivencia.metadata.json",
+        "convivencia_laboral/manual/derechos_convivencia.pages.json",
+        "convivencia_laboral/manual/derechos_convivencia.ocr.json",
+        "convivencia_laboral/manual/derechos_convivencia.tables.json",
+        "convivencia_laboral/manual/derechos_convivencia.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "c7117a411b3a4c20505c68c8db188b50b610fe9b173ec4d11a183543bd225902",
+      "source_relpath": "convivencia_laboral/manual/derechos_convivencia.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 890,
+          "relpath": "convivencia_laboral/manual/funciones_comite-.md",
+          "schema_version": "2.0",
+          "sha256": "c7c09ab2321d9991cba2b3ed45e1569f73837b26315fb020e3524e5ebcffe575"
+        },
+        {
+          "byte_size": 3449,
+          "relpath": "convivencia_laboral/manual/funciones_comite-.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "0e7d48b13e7996f45161ad7eafea06f07bf704066522480726d83d5d340680dc"
+        },
+        {
+          "byte_size": 1907,
+          "relpath": "convivencia_laboral/manual/funciones_comite-.pages.json",
+          "schema_version": "2.0",
+          "sha256": "81ab9359425f145d984d10f0644d28aee2b573d06be4d92297196b65e3a379ac"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/funciones_comite-.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "3332275056ed0971b6a46f12ae7de67436c892c0ad082bb612fb3782c5014cc3"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/funciones_comite-.tables.json",
+          "schema_version": "2.0",
+          "sha256": "e4e1f92086e731ac6dc932d851558d16800ad9572fc8d5f5fcb62e410c8e7373"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/funciones_comite-.forms.json",
+          "schema_version": "2.0",
+          "sha256": "5fed8cb80137bd6413e6ee9ab4cb9d04692741e9fb00ac67e9c833f2fde93200"
+        }
+      ],
+      "document_id": "doc_0b8a9be32b2222f6",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/funciones_comite-",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/funciones_comite-.md",
+        "convivencia_laboral/manual/funciones_comite-.metadata.json",
+        "convivencia_laboral/manual/funciones_comite-.pages.json",
+        "convivencia_laboral/manual/funciones_comite-.ocr.json",
+        "convivencia_laboral/manual/funciones_comite-.tables.json",
+        "convivencia_laboral/manual/funciones_comite-.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "5347469365674a5b836bf1ec993403d275b690cac8239ce8f94dd62045aee2e3",
+      "source_relpath": "convivencia_laboral/manual/funciones_comite-.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 815,
+          "relpath": "convivencia_laboral/manual/introduccion.md",
+          "schema_version": "2.0",
+          "sha256": "083dccbc15a4d693ac1b4cc1d7a8ff08810992aae493cf432b2b350966d16370"
+        },
+        {
+          "byte_size": 3432,
+          "relpath": "convivencia_laboral/manual/introduccion.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "6068ca4f92d169b0d525c8e563a378f24f7e0711b600b2aa5536af22508c53b4"
+        },
+        {
+          "byte_size": 1782,
+          "relpath": "convivencia_laboral/manual/introduccion.pages.json",
+          "schema_version": "2.0",
+          "sha256": "1b20b826be758afcf9fcd4e530fb816ab29092c12cd9e1512a4ec125fbaed1ac"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/introduccion.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "b32a1e8c1d7374a011172824607a379be91185957e9a436190fcb1963f539aed"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/introduccion.tables.json",
+          "schema_version": "2.0",
+          "sha256": "ed6b6f7f67b5cf69ca235f76af2439c6c1075b3d33e62e06ea56e13833728072"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/introduccion.forms.json",
+          "schema_version": "2.0",
+          "sha256": "78a237d29d7bafe2d96d802f15e6c11032cdc403e5a0a005b4f60d8f39b78cea"
+        }
+      ],
+      "document_id": "doc_99e74963bf956ead",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/introduccion",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/introduccion.md",
+        "convivencia_laboral/manual/introduccion.metadata.json",
+        "convivencia_laboral/manual/introduccion.pages.json",
+        "convivencia_laboral/manual/introduccion.ocr.json",
+        "convivencia_laboral/manual/introduccion.tables.json",
+        "convivencia_laboral/manual/introduccion.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "1ab22b451465ec05647626a67c579fa9c2be0db6b37845262ce5e07c99640df4",
+      "source_relpath": "convivencia_laboral/manual/introduccion.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1720,
+          "relpath": "convivencia_laboral/manual/marco_legal.md",
+          "schema_version": "2.0",
+          "sha256": "7a1aa200768486d04ceb1ba3ee9d0d42c8c57d1d148a348eee01f0723feadd3f"
+        },
+        {
+          "byte_size": 3392,
+          "relpath": "convivencia_laboral/manual/marco_legal.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "accc9fc3671d2794cb6c4c5f6f4f99f9e5515c3c0fb1d066b247daf79a933b9f"
+        },
+        {
+          "byte_size": 3655,
+          "relpath": "convivencia_laboral/manual/marco_legal.pages.json",
+          "schema_version": "2.0",
+          "sha256": "28085d068c328b7a19f130d1aaa6d63d23fbbfccd47d342fe70e7345a1295a61"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/marco_legal.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "d5c0065481b7917411c28e1191888717b6f7a031f6f4ee6d4725acb7da5fa16b"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/marco_legal.tables.json",
+          "schema_version": "2.0",
+          "sha256": "71241545e97f833e4d419473ecd51ddcfc97675f6deaef8eeaa32ba5a7ddb137"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/marco_legal.forms.json",
+          "schema_version": "2.0",
+          "sha256": "03d0015def6d8a4e2489dbe463a188c622758f39c3e14c92d9add8fbd2b94355"
+        }
+      ],
+      "document_id": "doc_65a09a83e5685e3a",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/marco_legal",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/marco_legal.md",
+        "convivencia_laboral/manual/marco_legal.metadata.json",
+        "convivencia_laboral/manual/marco_legal.pages.json",
+        "convivencia_laboral/manual/marco_legal.ocr.json",
+        "convivencia_laboral/manual/marco_legal.tables.json",
+        "convivencia_laboral/manual/marco_legal.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "fed925314dbb8b7a7fe67c0b03b2f33211a2ef96be5249991cef540b6d239d73",
+      "source_relpath": "convivencia_laboral/manual/marco_legal.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 7101,
+          "relpath": "convivencia_laboral/manual/normas_convivencia.md",
+          "schema_version": "2.0",
+          "sha256": "d50f58af266bbdf78b07621db00e6af5c097d444d3bdefb85a8a18d3e4c5b12d"
+        },
+        {
+          "byte_size": 3485,
+          "relpath": "convivencia_laboral/manual/normas_convivencia.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "397c3eb221b9f1c509ee9ff0932f6bc703fc1d522d43e151181e07062a670b1d"
+        },
+        {
+          "byte_size": 14721,
+          "relpath": "convivencia_laboral/manual/normas_convivencia.pages.json",
+          "schema_version": "2.0",
+          "sha256": "d6ece70dcb15913fc408331e248057731c9119415c017a834321acb6d6d2055f"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/normas_convivencia.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "77bda8e345d4d63a09009f94fac6ca15657b7243b7c9d56075af49d6a1dbc986"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/normas_convivencia.tables.json",
+          "schema_version": "2.0",
+          "sha256": "daec0f312ca8b642714205ebd90c8c44905698100c4b853e491a9d9dbd1133b7"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/normas_convivencia.forms.json",
+          "schema_version": "2.0",
+          "sha256": "7ea62f757798747fa649cdc47db5914771f3f63a62f8703dfc42f8ebac806290"
+        }
+      ],
+      "document_id": "doc_e91e2fb644a2717c",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/normas_convivencia",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/normas_convivencia.md",
+        "convivencia_laboral/manual/normas_convivencia.metadata.json",
+        "convivencia_laboral/manual/normas_convivencia.pages.json",
+        "convivencia_laboral/manual/normas_convivencia.ocr.json",
+        "convivencia_laboral/manual/normas_convivencia.tables.json",
+        "convivencia_laboral/manual/normas_convivencia.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "3008eef6656b3cce45a7083dece5f9383c500382dac3fddb3576e10c026a982e",
+      "source_relpath": "convivencia_laboral/manual/normas_convivencia.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 568,
+          "relpath": "convivencia_laboral/manual/objetivo_general_comite.md",
+          "schema_version": "2.0",
+          "sha256": "8759be7276879488a99bb8bbe3e767c088e2c79138279090a206f9db61e67b86"
+        },
+        {
+          "byte_size": 3476,
+          "relpath": "convivencia_laboral/manual/objetivo_general_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "433e94ff70660bafdb3aa140db2a8f8486b8050cc3f7e2647c2560fee3921363"
+        },
+        {
+          "byte_size": 1261,
+          "relpath": "convivencia_laboral/manual/objetivo_general_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "2928ec3bcf284357a12bd68c2c5fe0a6b87988478bc38504a74f5aee0939eeb4"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/objetivo_general_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "75bb461a529fcee0c44aac427ae1afc0e6508a0dc834f993ff48868e3bc63988"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/objetivo_general_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "5bb962c245367073682c3028dc1039bdff41f11300da19030c64c73db4f966d3"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/objetivo_general_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "c73b903dcfc99968b74b0cd6f56ba49f10680942870c412dec06be898c034604"
+        }
+      ],
+      "document_id": "doc_1d62a305753cb42e",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/objetivo_general_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/objetivo_general_comite.md",
+        "convivencia_laboral/manual/objetivo_general_comite.metadata.json",
+        "convivencia_laboral/manual/objetivo_general_comite.pages.json",
+        "convivencia_laboral/manual/objetivo_general_comite.ocr.json",
+        "convivencia_laboral/manual/objetivo_general_comite.tables.json",
+        "convivencia_laboral/manual/objetivo_general_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "b73c22a1ff20b9fa14acdb68b6b26d286ba3628d6ea73b7e4625a30df8d84a0b",
+      "source_relpath": "convivencia_laboral/manual/objetivo_general_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 651,
+          "relpath": "convivencia_laboral/manual/objetivos_especificos_comite.md",
+          "schema_version": "2.0",
+          "sha256": "048d743e7e384d53b45ee8b52a424a019792ca53dd5c4bc806da72603c667a76"
+        },
+        {
+          "byte_size": 3496,
+          "relpath": "convivencia_laboral/manual/objetivos_especificos_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "dbfadb10ab33d2ea5848484bfb0159bb4ffc656da079687cb2bec8e9146d07eb"
+        },
+        {
+          "byte_size": 1453,
+          "relpath": "convivencia_laboral/manual/objetivos_especificos_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "c20e73469a9f7b17d4b945993e333240c517ac47efd7eecfa1399a48ddea6761"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/objetivos_especificos_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "29f8de708fd68971fb77b20643917b4e9a7ca538c03e9cfff415c6338969bb29"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/objetivos_especificos_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "c9c7f3ca057e8efe07f294f4b3b796efeb8915f40e460a47fdcf8153572d55eb"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/objetivos_especificos_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "e9b9d65b4cbfdb21131708eeb4d4c38566b861e83cf036a726e611d692472cc0"
+        }
+      ],
+      "document_id": "doc_ff1fcf5ee88afc3b",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/objetivos_especificos_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/objetivos_especificos_comite.md",
+        "convivencia_laboral/manual/objetivos_especificos_comite.metadata.json",
+        "convivencia_laboral/manual/objetivos_especificos_comite.pages.json",
+        "convivencia_laboral/manual/objetivos_especificos_comite.ocr.json",
+        "convivencia_laboral/manual/objetivos_especificos_comite.tables.json",
+        "convivencia_laboral/manual/objetivos_especificos_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "471ad164c813cc3ce375bce2c51460df121ceb39a469a2bcb8c433c6a569bb6a",
+      "source_relpath": "convivencia_laboral/manual/objetivos_especificos_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1971,
+          "relpath": "convivencia_laboral/manual/politica_convivencia.md",
+          "schema_version": "2.0",
+          "sha256": "4b176d82525da336dbbb6d76372541e819405ce6addc23b4efdbd628dca719ab"
+        },
+        {
+          "byte_size": 3440,
+          "relpath": "convivencia_laboral/manual/politica_convivencia.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "bf288c56eda258a6592f7fb503ea2fca76c85f635785ca4683571489ea508538"
+        },
+        {
+          "byte_size": 4053,
+          "relpath": "convivencia_laboral/manual/politica_convivencia.pages.json",
+          "schema_version": "2.0",
+          "sha256": "cd7941f46c44e19bfc2c72f93fdf99fdebb84a75ca4b91960fe682684cb0e0d8"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/politica_convivencia.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "6c49b4ec39fefa3b5645f696cd1ea0e6ffb1171b07940b15f86b32063bceaadd"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/politica_convivencia.tables.json",
+          "schema_version": "2.0",
+          "sha256": "ec3f75f22520d30e2f690362a0476b93d400acc897ab29f83f8e862d4039d014"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/politica_convivencia.forms.json",
+          "schema_version": "2.0",
+          "sha256": "f5d02186077286107561c5c816e2f4ed45ec478393a81fbdaafbd2af4b6fbaf5"
+        }
+      ],
+      "document_id": "doc_6035540fc4c4a90a",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/politica_convivencia",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/politica_convivencia.md",
+        "convivencia_laboral/manual/politica_convivencia.metadata.json",
+        "convivencia_laboral/manual/politica_convivencia.pages.json",
+        "convivencia_laboral/manual/politica_convivencia.ocr.json",
+        "convivencia_laboral/manual/politica_convivencia.tables.json",
+        "convivencia_laboral/manual/politica_convivencia.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "3e88975739dec651c4db30c8491dbb2cae65701338082f94f5f36f7620b315fe",
+      "source_relpath": "convivencia_laboral/manual/politica_convivencia.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1878,
+          "relpath": "convivencia_laboral/manual/politica_desconexion.md",
+          "schema_version": "2.0",
+          "sha256": "8ee7c3595745564c2598972877e9684a2b757b519b95ff4f1389103936edc83b"
+        },
+        {
+          "byte_size": 3972,
+          "relpath": "convivencia_laboral/manual/politica_desconexion.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "f9883a88525271d3137fd7e159025a108a41545656c1a379d642c9caa98b0fd3"
+        },
+        {
+          "byte_size": 3887,
+          "relpath": "convivencia_laboral/manual/politica_desconexion.pages.json",
+          "schema_version": "2.0",
+          "sha256": "50cd924eb7342c262458429f87e981f3715140bfd0df216dcf67042311dc89ad"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/politica_desconexion.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "fb39de20fdec4646879a36f25dda47df7870110e646bd62d435655dd55df71a0"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/politica_desconexion.tables.json",
+          "schema_version": "2.0",
+          "sha256": "41042355f46df40645f81885093a84a16ba6d37ab2df0ba752572e9964fdfac4"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/politica_desconexion.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d87c6e2376810bea3aa1c75398e499f1c9c10343e9dc455be2631d8503c4a6d1"
+        }
+      ],
+      "document_id": "doc_a72c9be0df1f92fa",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/politica_desconexion",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/politica_desconexion.md",
+        "convivencia_laboral/manual/politica_desconexion.metadata.json",
+        "convivencia_laboral/manual/politica_desconexion.pages.json",
+        "convivencia_laboral/manual/politica_desconexion.ocr.json",
+        "convivencia_laboral/manual/politica_desconexion.tables.json",
+        "convivencia_laboral/manual/politica_desconexion.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "7e8dc93e799644ca379b987318649f0eab698ac017bc99b5508ac303b22b310b",
+      "source_relpath": "convivencia_laboral/manual/politica_desconexion.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 875,
+          "relpath": "convivencia_laboral/manual/principios_convivencia.md",
+          "schema_version": "2.0",
+          "sha256": "b4faabc8523b7922017c6c69f8a54426d2a9fcd090d7b7917ae4bac77fe5f190"
+        },
+        {
+          "byte_size": 3522,
+          "relpath": "convivencia_laboral/manual/principios_convivencia.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "eba0990d7cb95a5f9b76a1d8678b2cea4f11453f00df1ccd17e37271f1f6fa35"
+        },
+        {
+          "byte_size": 1901,
+          "relpath": "convivencia_laboral/manual/principios_convivencia.pages.json",
+          "schema_version": "2.0",
+          "sha256": "eec044fb1fd2ea39f0ecbd44bd0b76aa80b3858f2eef98edf1d660ac9b3aaf75"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/principios_convivencia.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "a4bc464ea505cc6fd2a742bac72284669d9a7bbe3db3ec919213763c68953987"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/principios_convivencia.tables.json",
+          "schema_version": "2.0",
+          "sha256": "9acfe4f3ebef8d6f34203fc690b92bf88d35b5b4b78b661e05baeb900f146018"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/principios_convivencia.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d247a5ed26b189a97e932833317632cbdfa1a851d67b6689cd1c7fc460aa7d2b"
+        }
+      ],
+      "document_id": "doc_f3bdcdea0cf60ee0",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/principios_convivencia",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/principios_convivencia.md",
+        "convivencia_laboral/manual/principios_convivencia.metadata.json",
+        "convivencia_laboral/manual/principios_convivencia.pages.json",
+        "convivencia_laboral/manual/principios_convivencia.ocr.json",
+        "convivencia_laboral/manual/principios_convivencia.tables.json",
+        "convivencia_laboral/manual/principios_convivencia.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "e9f6a5c5e896fa7c6a82feaecfa796f25c56f40cfc6a739fbbe97b329bceef1a",
+      "source_relpath": "convivencia_laboral/manual/principios_convivencia.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2747,
+          "relpath": "convivencia_laboral/manual/quejas_denuncias.md",
+          "schema_version": "2.0",
+          "sha256": "813ec2c41d197d65bdccafc3c10b46cda7cafacec898752c48ddc87b34da3b66"
+        },
+        {
+          "byte_size": 3409,
+          "relpath": "convivencia_laboral/manual/quejas_denuncias.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "0142ddf83ce30731005ed1a846d24b75875382506e5a14f9c8519f32bdc34ba3"
+        },
+        {
+          "byte_size": 5671,
+          "relpath": "convivencia_laboral/manual/quejas_denuncias.pages.json",
+          "schema_version": "2.0",
+          "sha256": "741cb2de73d9f4c5b63ec0f1e5a581f07733be7d07e06bab5d8a36727bf24cfd"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/quejas_denuncias.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "d879fcc7f0cdabe984e64f6ffdc09c0060a7abcaf66dcd729e0f6bd0c31e93ea"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/quejas_denuncias.tables.json",
+          "schema_version": "2.0",
+          "sha256": "9bc44470af062629a767b269beb2d540475bd1416495c7ef5e1e190e2ec68225"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/quejas_denuncias.forms.json",
+          "schema_version": "2.0",
+          "sha256": "571c9fde707a0315048bf7f4645eeaff46f38e34feddf85189c9a03aaf208c60"
+        }
+      ],
+      "document_id": "doc_78c719156efb1dfd",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/quejas_denuncias",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/quejas_denuncias.md",
+        "convivencia_laboral/manual/quejas_denuncias.metadata.json",
+        "convivencia_laboral/manual/quejas_denuncias.pages.json",
+        "convivencia_laboral/manual/quejas_denuncias.ocr.json",
+        "convivencia_laboral/manual/quejas_denuncias.tables.json",
+        "convivencia_laboral/manual/quejas_denuncias.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "6ff7b0556c6b73ccfb19df440c6f9799cf3f5c9c2dedd32e494aee949a283b76",
+      "source_relpath": "convivencia_laboral/manual/quejas_denuncias.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1092,
+          "relpath": "convivencia_laboral/manual/valores.md",
+          "schema_version": "2.0",
+          "sha256": "cf811bc9afb2611a9132daa73ded1ea8fa96ee5cf9a5dbefe5995dad4d458a35"
+        },
+        {
+          "byte_size": 3321,
+          "relpath": "convivencia_laboral/manual/valores.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "1d0edeb3c61671a5a3ac463e7e012d4a69207a284259fb4a28f9bb299391c39c"
+        },
+        {
+          "byte_size": 2404,
+          "relpath": "convivencia_laboral/manual/valores.pages.json",
+          "schema_version": "2.0",
+          "sha256": "58000838419fbb254f9da9ede3adfbf47c92f858158bc21573ce5e41ab615577"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/manual/valores.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "27b5f2bf7b61a613c4c42d94ccbe05a3a921e6bb358a89ef8d1e675e4c7ecc6a"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/manual/valores.tables.json",
+          "schema_version": "2.0",
+          "sha256": "331d8c4ca11aa9eb64df5bd1584eca69310b667b40c676871902dc94c19dbbc8"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/manual/valores.forms.json",
+          "schema_version": "2.0",
+          "sha256": "8e20b59fc3e22483f98877553591de07aaf159d2472e7d25b8167ce5686d1e11"
+        }
+      ],
+      "document_id": "doc_133e0d5e86f00f91",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/manual/valores",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/manual/valores.md",
+        "convivencia_laboral/manual/valores.metadata.json",
+        "convivencia_laboral/manual/valores.pages.json",
+        "convivencia_laboral/manual/valores.ocr.json",
+        "convivencia_laboral/manual/valores.tables.json",
+        "convivencia_laboral/manual/valores.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "c419b89925bf8f8d3436b221fb1ad43b365008b4d57f0865e35ea3434a633fdc",
+      "source_relpath": "convivencia_laboral/manual/valores.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 17997,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+          "schema_version": "2.0",
+          "sha256": "9b58f5c67c5e09255734dd0759ab3a3a82e6c8485b0c2988dd0a698a7a9f4826"
+        },
+        {
+          "byte_size": 8457,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "d05969e1dbc95bc2e2a600184106e6536d6eae23fee29e06090adc627cf0b5e6"
+        },
+        {
+          "byte_size": 39554,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pages.json",
+          "schema_version": "2.0",
+          "sha256": "ad523f61aee3671f1a3aeee9576bbf862e84046a599df0b1534712d8c962d1e1"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "7e71172b0cf6632b28f43c941eb5b43295e2a2cbe9d0651878687ff49b5e4d67"
+        },
+        {
+          "byte_size": 31251,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.tables.json",
+          "schema_version": "2.0",
+          "sha256": "f8b62801da395fb5a44eeb39c0ba282c158fe2bfe85d95ae0d583d51ad7f5d27"
+        },
+        {
+          "byte_size": 1376,
+          "relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d1a8cc0b639ed826a1edff5f3e94931c2e309c1bb59e2d6a1caa60cc920075a2"
+        }
+      ],
+      "document_id": "doc_d4fca71ff51cb27b",
+      "document_status": "needs_review",
+      "normalized_base": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.metadata.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pages.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.ocr.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.tables.json",
+        "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "cf261e96874a2ae1f8f88428229c76221dd346d10403ca95b5714ea56026c1dc",
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 5232,
+          "relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.md",
+          "schema_version": "2.0",
+          "sha256": "e05f6a57339c386a278c1768be3ce6b8591161fb2b75583c5af9b7571041cadb"
+        },
+        {
+          "byte_size": 3762,
+          "relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "ab178e4480188ff396a7f32ab47f46b1ddfab94b20a7e02a537c2ce2bcdb5ec5"
+        },
+        {
+          "byte_size": 10855,
+          "relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "7df731de2b6cd71f3c7a1adb9e51bb2cb240e2c9b20bcee2c60b4b2e050e0cb3"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "012ce8025d87ad4e24c44ece17430e3788636185687c84a842eedb68d6a5a781"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "a5462d752ba302cd68229f4816e629a21eef079c5af2f5dc585345acbdcea0b3"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "1057141d253bd1d9f5dc5926f57e1e489c04f98b53fffc09effaf6f1dbeec4fd"
+        }
+      ],
+      "document_id": "doc_04c42c6f64c9d79e",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/conformacion_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/conformacion_comite.md",
+        "convivencia_laboral/reglamento_comite/conformacion_comite.metadata.json",
+        "convivencia_laboral/reglamento_comite/conformacion_comite.pages.json",
+        "convivencia_laboral/reglamento_comite/conformacion_comite.ocr.json",
+        "convivencia_laboral/reglamento_comite/conformacion_comite.tables.json",
+        "convivencia_laboral/reglamento_comite/conformacion_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "f8ff3691500e55cee572d2c1636ea63979ca1e4f67b4e6229ef39d3f2389618e",
+      "source_relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 3091,
+          "relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.md",
+          "schema_version": "2.0",
+          "sha256": "0677e4a3bf4746898ed7b06c76b67a6878b90255e25a7d160ffce539bd895eea"
+        },
+        {
+          "byte_size": 3468,
+          "relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "33b4c946f5ea0c50431b8fc013e75211229eac2294f1abe1378f4986d136afcf"
+        },
+        {
+          "byte_size": 6390,
+          "relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "f0223760375e2d54391d6f1d637a1036d4d141bfad6f847ccb5cf679e03f4336"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "9a03fee98278ed551935bb6cff9b46a6502dd585edac8ca61353d0f3d94d3d45"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "a7fe6b5bd0630195a07a2268f09cdd3199bd2200b28b452c52fce10d34a32085"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "f8d2d8ef083d927ddc16195c52f1244b17d2b33cb4a95c8dea1ad41bd6a3b3ea"
+        }
+      ],
+      "document_id": "doc_27d458b700f2924d",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/funcionamiento_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/funcionamiento_comite.md",
+        "convivencia_laboral/reglamento_comite/funcionamiento_comite.metadata.json",
+        "convivencia_laboral/reglamento_comite/funcionamiento_comite.pages.json",
+        "convivencia_laboral/reglamento_comite/funcionamiento_comite.ocr.json",
+        "convivencia_laboral/reglamento_comite/funcionamiento_comite.tables.json",
+        "convivencia_laboral/reglamento_comite/funcionamiento_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "f6f0b8b4dd71ab8f35d333ec6aeb77c91e6f5fb6de226b15c88e11314cb67b87",
+      "source_relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 4034,
+          "relpath": "convivencia_laboral/reglamento_comite/funciones_comite.md",
+          "schema_version": "2.0",
+          "sha256": "4e70c15899919ce3620db68c36ff3b397e0bd6e30ce0f31248869315a4e17c91"
+        },
+        {
+          "byte_size": 3960,
+          "relpath": "convivencia_laboral/reglamento_comite/funciones_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "2e7785555845636d42595f81cc38a39a9c2d1b9b8742cbda35e42a29546aef6b"
+        },
+        {
+          "byte_size": 8274,
+          "relpath": "convivencia_laboral/reglamento_comite/funciones_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b2eb3d36c6aca8df3e00205ddc425f6e66765034d5c311f55aaaf352b3eafe9c"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/funciones_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "af186e0d173cff3384936a50d7cf7cc986cdab904a5c69c887737f6278844259"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/reglamento_comite/funciones_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "19dcba0cdfab579d123cdf4c5c8e0fcb2a0716e39852466ba51251ef8e47b14e"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/reglamento_comite/funciones_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "e873e6240e693cada25022e12c6955c06ce0a39c52eebcd6e2fb59b361b30afc"
+        }
+      ],
+      "document_id": "doc_cfca5f1723e21e1c",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/funciones_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/funciones_comite.md",
+        "convivencia_laboral/reglamento_comite/funciones_comite.metadata.json",
+        "convivencia_laboral/reglamento_comite/funciones_comite.pages.json",
+        "convivencia_laboral/reglamento_comite/funciones_comite.ocr.json",
+        "convivencia_laboral/reglamento_comite/funciones_comite.tables.json",
+        "convivencia_laboral/reglamento_comite/funciones_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "2ec1884c633e79813ed39e00091109b391149b22eba220abc47fc85f20b0a96d",
+      "source_relpath": "convivencia_laboral/reglamento_comite/funciones_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2115,
+          "relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md",
+          "schema_version": "2.0",
+          "sha256": "f5610a52e25233dbf0e1c34bd261ffd69a8b2ba3422789c8a652265e76f01d6e"
+        },
+        {
+          "byte_size": 3469,
+          "relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "7c8c02b195d7475df5c873e8fa73e66b3488582cb7a5691b09f6f54e8dcdba55"
+        },
+        {
+          "byte_size": 4355,
+          "relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "401e32cc655362838ad7c85eeccd0c5fbdecef55da6f156d7df0420fb61e65da"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "2dbf0e2b97d83fbaa32af3e9ed86605ad39f1cce79e661d27a1e87b839dce6b0"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "b686d9d9404476fb7277fbaaa5dd3c64b869b006469aed437eda8dc80e5de432"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "33040409ebb25cea474ac9dbcec79598f0bc5f66c95d74cd5abcc62cdb80621b"
+        }
+      ],
+      "document_id": "doc_842df95c94a7e50d",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md",
+        "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.metadata.json",
+        "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.pages.json",
+        "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.ocr.json",
+        "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.tables.json",
+        "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "5e9e6db957dc72f930ce4bfdd49f0dd5d26cc6d000e8794c12c82cc226ad4e84",
+      "source_relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 874,
+          "relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.md",
+          "schema_version": "2.0",
+          "sha256": "4eb961e90553625863311a0ee60eabe8ad0297f9b0bbf02388f2e9f228019010"
+        },
+        {
+          "byte_size": 3482,
+          "relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "09d5de4ff068c5f2d5cb48608a32443bfe85acb648e0262079acecc6495832d9"
+        },
+        {
+          "byte_size": 1837,
+          "relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "395fead85957e3ca469f841feba46a8268c6ac6a5a6ca4bbfbf7cd039b5ca385"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "62f54bc6a6722ab51bb7be3699881f5d9aac7decfdccbb31d6b9914261a5c7e1"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "dbd0190caa07e33b9b8d47307ef51caae6de6ac8922bf2f891cf46d7d12f179b"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "b4a046fa88262107e550b75bfd9eba40c32aa1fa95b8271bcacf2bb64293d1df"
+        }
+      ],
+      "document_id": "doc_5d2b57616d019b89",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/objetivo_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/objetivo_comite.md",
+        "convivencia_laboral/reglamento_comite/objetivo_comite.metadata.json",
+        "convivencia_laboral/reglamento_comite/objetivo_comite.pages.json",
+        "convivencia_laboral/reglamento_comite/objetivo_comite.ocr.json",
+        "convivencia_laboral/reglamento_comite/objetivo_comite.tables.json",
+        "convivencia_laboral/reglamento_comite/objetivo_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "1ffa6db695ae01c0162820ae2b1f99999a9f8bfde661cba029425df4610648ec",
+      "source_relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 790,
+          "relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+          "schema_version": "2.0",
+          "sha256": "9c7ee63aeb4db5295985822b1e3000b8eea8dc2c891dd2d824d9a52dae5055fd"
+        },
+        {
+          "byte_size": 3837,
+          "relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "556152e257504ccb2a07e85a9bc69225d4f24a0b7e1d906d581508886a637e94"
+        },
+        {
+          "byte_size": 1667,
+          "relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.pages.json",
+          "schema_version": "2.0",
+          "sha256": "deef46ae35ce5d13bd6914955e1ab63adeb2fd30ea0d66a34b810e80de553357"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "72d7b0d58a4d4af9d91a23852ece2b3c9869908b94d4e72c55e567bfff66c0b2"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.tables.json",
+          "schema_version": "2.0",
+          "sha256": "1906113ceb225f12769bdac2c3b76e6b6ca6241c3722354b313628d097cfb97f"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.forms.json",
+          "schema_version": "2.0",
+          "sha256": "4229a270a042215ed1392a5fa7d399935c72d1ef6b49b95eaf6c6c65fd474a3c"
+        }
+      ],
+      "document_id": "doc_d5f04608cf512575",
+      "document_status": "processed",
+      "normalized_base": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+        "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.metadata.json",
+        "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.pages.json",
+        "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.ocr.json",
+        "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.tables.json",
+        "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "3f6404b399d3dabea2da24d1bbd995d90adb0af3a79c276b51619b15733d2e0b",
+      "source_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 325,
+          "relpath": "copasst/comunicacion.md",
+          "schema_version": "2.0",
+          "sha256": "e939dc255721d044040b06a4b06b329184455771d39876d5c2b205c1ad37edfc"
+        },
+        {
+          "byte_size": 3318,
+          "relpath": "copasst/comunicacion.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "dee334509c29046426b136ced904aac6237fcb6f29320139748742ea57cbcacd"
+        },
+        {
+          "byte_size": 840,
+          "relpath": "copasst/comunicacion.pages.json",
+          "schema_version": "2.0",
+          "sha256": "d734accf894c56553fbece3c833d5dd46fc57ef95deabd3597cecda7aaab77c9"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "copasst/comunicacion.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "e855ec45e0be18cb9aa95312dc27d59e4fccc8028531f45a4c18f404dcbe4f45"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "copasst/comunicacion.tables.json",
+          "schema_version": "2.0",
+          "sha256": "35a6416d59a916e6b0ed03645c5e774b223e6efca7964736c8df13ceb8030af8"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "copasst/comunicacion.forms.json",
+          "schema_version": "2.0",
+          "sha256": "ca1410f571ec3fd59662b821eb71143f27e0fd1f774d52984918517523f641c7"
+        }
+      ],
+      "document_id": "doc_2fd43b5d3bcb833b",
+      "document_status": "processed",
+      "normalized_base": "copasst/comunicacion",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "copasst/comunicacion.md",
+        "copasst/comunicacion.metadata.json",
+        "copasst/comunicacion.pages.json",
+        "copasst/comunicacion.ocr.json",
+        "copasst/comunicacion.tables.json",
+        "copasst/comunicacion.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "b295121b99d66fdaaaa76ea8b7938e74f8d4aae4d0dcfe0dab51e25b5aa576cb",
+      "source_relpath": "copasst/comunicacion.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1666,
+          "relpath": "copasst/funciones_copasst.md",
+          "schema_version": "2.0",
+          "sha256": "4b5bdf11aac11bab28c69eae72d08d97b298c17c1c608f3ebb21dfbdacf5d148"
+        },
+        {
+          "byte_size": 3404,
+          "relpath": "copasst/funciones_copasst.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "3052148642b7489805e9479516312c89ffb61fc6fd33ec2e9a7f8a12192aa651"
+        },
+        {
+          "byte_size": 3467,
+          "relpath": "copasst/funciones_copasst.pages.json",
+          "schema_version": "2.0",
+          "sha256": "59711adb43c72712e00c5e748e3d53fd9ebb61f6e2d56dfcadc51e1e5c0918fd"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "copasst/funciones_copasst.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "9c878218037b4e00e25f75041d37c413576145db2e5f6e545ff9d6164d139530"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "copasst/funciones_copasst.tables.json",
+          "schema_version": "2.0",
+          "sha256": "fee003a83e6957788e28fdadf61a1638b0a403368d4f68eb5fbd55135150f3f8"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "copasst/funciones_copasst.forms.json",
+          "schema_version": "2.0",
+          "sha256": "fa86294378b985230bac7cfaa2ab86a596d363792220b48332c26450153e8a2e"
+        }
+      ],
+      "document_id": "doc_221c00facfd6a2e8",
+      "document_status": "processed",
+      "normalized_base": "copasst/funciones_copasst",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "copasst/funciones_copasst.md",
+        "copasst/funciones_copasst.metadata.json",
+        "copasst/funciones_copasst.pages.json",
+        "copasst/funciones_copasst.ocr.json",
+        "copasst/funciones_copasst.tables.json",
+        "copasst/funciones_copasst.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "7827992a79e49878005f20fb3c03114fd5000478ba99714c7ec52d082c8393f0",
+      "source_relpath": "copasst/funciones_copasst.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 947,
+          "relpath": "copasst/funciones_presidente_copasst.md",
+          "schema_version": "2.0",
+          "sha256": "49eeef1c1188d372cceca11b9d0b0bd35a2f76cf2185b59ab58d0e294abf91ac"
+        },
+        {
+          "byte_size": 3529,
+          "relpath": "copasst/funciones_presidente_copasst.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "bce46fe755a332197dcf2d0d9e4b66ced7d708be276ad97aa1c47b92e4600c84"
+        },
+        {
+          "byte_size": 1967,
+          "relpath": "copasst/funciones_presidente_copasst.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b6261694bd9028401ac960b865b8f39566c9fd253e275ab9bf9e2579e72300f0"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "copasst/funciones_presidente_copasst.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "c882bef4a216e5131b5168f1bc6c3599d2a39583501874cca98054530d713f45"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "copasst/funciones_presidente_copasst.tables.json",
+          "schema_version": "2.0",
+          "sha256": "eec243cb0b6360090cfe5d6a1b58dd671ad18d229c9396fda96fd4c0928ab763"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "copasst/funciones_presidente_copasst.forms.json",
+          "schema_version": "2.0",
+          "sha256": "3747b6317ef8b1465401592f8ffa010139fee58d5b3a6e02ffc8d8d42a95e450"
+        }
+      ],
+      "document_id": "doc_eb34bb480d443513",
+      "document_status": "processed",
+      "normalized_base": "copasst/funciones_presidente_copasst",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "copasst/funciones_presidente_copasst.md",
+        "copasst/funciones_presidente_copasst.metadata.json",
+        "copasst/funciones_presidente_copasst.pages.json",
+        "copasst/funciones_presidente_copasst.ocr.json",
+        "copasst/funciones_presidente_copasst.tables.json",
+        "copasst/funciones_presidente_copasst.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "4eefa41c01a9d0cbc600d23d84db43d14b4b51f83c0649b487838cfb8ffa414c",
+      "source_relpath": "copasst/funciones_presidente_copasst.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1289,
+          "relpath": "copasst/funciones_secretario_copasst.md",
+          "schema_version": "2.0",
+          "sha256": "9af8a3855bdc6b2c6395d2f5b1b9f6b8b180ddec84c7001e6ab3ba1e8bef8e17"
+        },
+        {
+          "byte_size": 3379,
+          "relpath": "copasst/funciones_secretario_copasst.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "677b51ffaae1d5e0424588c71a1e7a5d9c0e15c6643fe223f9dc5aec0d4b5680"
+        },
+        {
+          "byte_size": 2783,
+          "relpath": "copasst/funciones_secretario_copasst.pages.json",
+          "schema_version": "2.0",
+          "sha256": "ada18743a8f1ed0076a12a115d68eba3f5002bbaf9fffb7868595cdc3960a7ab"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "copasst/funciones_secretario_copasst.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "6a7b2fcd068de7e033c25967ebc5c02a9809202b8f0e1c05c2316604dfd44eb1"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "copasst/funciones_secretario_copasst.tables.json",
+          "schema_version": "2.0",
+          "sha256": "26cff745f93947c9462f743737ed904932cb4e3aa331d85331988489596b48d6"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "copasst/funciones_secretario_copasst.forms.json",
+          "schema_version": "2.0",
+          "sha256": "4491ddf8bddabfb33948c941e0e79b01cdad51d0fe3831217d7d98012b745234"
+        }
+      ],
+      "document_id": "doc_761c9402c48e05c7",
+      "document_status": "processed",
+      "normalized_base": "copasst/funciones_secretario_copasst",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "copasst/funciones_secretario_copasst.md",
+        "copasst/funciones_secretario_copasst.metadata.json",
+        "copasst/funciones_secretario_copasst.pages.json",
+        "copasst/funciones_secretario_copasst.ocr.json",
+        "copasst/funciones_secretario_copasst.tables.json",
+        "copasst/funciones_secretario_copasst.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "52e50ae067965c3b88a8b7bd8778658ca860acd34d4c48c9de4b77398ec3b875",
+      "source_relpath": "copasst/funciones_secretario_copasst.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1658,
+          "relpath": "copasst/miembros_copasst_2025_2027.md",
+          "schema_version": "2.0",
+          "sha256": "2973c69668033badf02e8e7193ed9d40107f1df69c1039e11d3e4a5b63898cdd"
+        },
+        {
+          "byte_size": 3776,
+          "relpath": "copasst/miembros_copasst_2025_2027.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "145649779837ecae50987983d4ea08425a11a64e5337aa9366b47c74b1bbffd5"
+        },
+        {
+          "byte_size": 3543,
+          "relpath": "copasst/miembros_copasst_2025_2027.pages.json",
+          "schema_version": "2.0",
+          "sha256": "435daa93b4b249ab35362462cbb89be707b2f74df212ae432fe545d7db66eb04"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "copasst/miembros_copasst_2025_2027.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "f75ce007a1b5538ba2dc8c6ff728a1b08674017b9baeef92066a1edf2dd20688"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "copasst/miembros_copasst_2025_2027.tables.json",
+          "schema_version": "2.0",
+          "sha256": "ebc66ad315a1b649a6db206b10603b2e8b1de2ffbb5946c92d61d8804c47dad4"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "copasst/miembros_copasst_2025_2027.forms.json",
+          "schema_version": "2.0",
+          "sha256": "30470741536608bc6bcf0c8395845a7b670a05ae0f88266ba0206f2739314308"
+        }
+      ],
+      "document_id": "doc_5e403a88299d2dc3",
+      "document_status": "processed",
+      "normalized_base": "copasst/miembros_copasst_2025_2027",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "copasst/miembros_copasst_2025_2027.md",
+        "copasst/miembros_copasst_2025_2027.metadata.json",
+        "copasst/miembros_copasst_2025_2027.pages.json",
+        "copasst/miembros_copasst_2025_2027.ocr.json",
+        "copasst/miembros_copasst_2025_2027.tables.json",
+        "copasst/miembros_copasst_2025_2027.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "fc71de81035060914c1c2c32013c1791cb66d3a3d5cd14e3ead8d61c6166a370",
+      "source_relpath": "copasst/miembros_copasst_2025_2027.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 22607,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+          "schema_version": "2.0",
+          "sha256": "82e1db37e6f71df7bedb011931c10e99e84fae05606f8b7ddcdad88c6241c6f1"
+        },
+        {
+          "byte_size": 11314,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "9fd69ed051e2eda8b28b0b83b7a3002c35f1afbb31c68d5ac959a37c603e9dfe"
+        },
+        {
+          "byte_size": 54289,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pages.json",
+          "schema_version": "2.0",
+          "sha256": "3e36d20c2ede8c39f237dfab4ae58bd7473ddc4324677303146271cf958e0e2f"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "d6dadb32c6d844a9f6ec963087a8b80296830e9cd05fd026643116e035e58bef"
+        },
+        {
+          "byte_size": 66536,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.tables.json",
+          "schema_version": "2.0",
+          "sha256": "070241768bbf9b75988e3f8821b1410113520d756cb50b742de8a706f1bfb0bd"
+        },
+        {
+          "byte_size": 3446,
+          "relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.forms.json",
+          "schema_version": "2.0",
+          "sha256": "dd92a3701cec70314f6cebb0f18dbdf8102a6656316a8f1b287ef30e04897978"
+        }
+      ],
+      "document_id": "doc_f2cf7868a801af0e",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.metadata.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pages.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.ocr.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.tables.json",
+        "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "5126d57198ff6dbc3c1968283ca262bdad98563df842ffa013417adf2b50e131",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2483,
+          "relpath": "general_sst/capacitaciones/pausas_activas/info.md",
+          "schema_version": "2.0",
+          "sha256": "174ba98f334fc8db5c44d991edb14905d7f7cb4e742130c6b018e73e12aca814"
+        },
+        {
+          "byte_size": 3559,
+          "relpath": "general_sst/capacitaciones/pausas_activas/info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "161190c297df5e6c33e9576bc9a5a1827a571f8210f71b5db9d4a56a7ac7b603"
+        },
+        {
+          "byte_size": 5113,
+          "relpath": "general_sst/capacitaciones/pausas_activas/info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b97428118395681b5c34d176e5d76d608b7e009cac108ff29871f8535153d15c"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/pausas_activas/info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "2c8b2a1667acb0cf067197df924f2eb315009cd0fb2df65086371f540aa18e34"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/pausas_activas/info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "367cfa36a32407d77be999280e60d864f5163fb404d39d4773c329cb6b4da6f7"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/pausas_activas/info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "f57d4b69beb184eae9a8f181f09b63ed0616ab8d9a34afca5b9774f4f6568434"
+        }
+      ],
+      "document_id": "doc_7d2eb40310345805",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/capacitaciones/pausas_activas/info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/pausas_activas/info.md",
+        "general_sst/capacitaciones/pausas_activas/info.metadata.json",
+        "general_sst/capacitaciones/pausas_activas/info.pages.json",
+        "general_sst/capacitaciones/pausas_activas/info.ocr.json",
+        "general_sst/capacitaciones/pausas_activas/info.tables.json",
+        "general_sst/capacitaciones/pausas_activas/info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "f418dd10d03cb4c896f4656dd0ea18d81171bac1cb6e8db463d66ad8c13b0268",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2061,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md",
+          "schema_version": "2.0",
+          "sha256": "97bbe0bc3fe7cf9972d6edffff380c06dfd54a491398889b434d9091f973252c"
+        },
+        {
+          "byte_size": 4363,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "764976055f655c310a101bea2f6485e558838b3dc0c5a25d8f7118c4e02d07e0"
+        },
+        {
+          "byte_size": 4225,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b8d3e61d370e72cba2e6f05d80e305796c37b95a98d168c81a1841c1600e4273"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "9344c0dac329e96250c8a57fb17fe4ef6d5242950bb2b373b952f0d41ee3de84"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "98c1f989fd32cd36e0fd699c0076f442055d5860ff8a22446942f141be5c8928"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "f93fb3d565d57afac342c8c7ac12c3f919621d15080f2a55d968e46aadef6dce"
+        }
+      ],
+      "document_id": "doc_18e1e8a89146e6fc",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "73847bb73be8deb711b2c79b6ee3af54999f49224b334b0b4089146b757f353e",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2132,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md",
+          "schema_version": "2.0",
+          "sha256": "81681d7964c9beb4ed3a16f4632266677be053caf150aec1dd13e4e90785f900"
+        },
+        {
+          "byte_size": 4135,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "a4c9c8ad79b70c121a6529f4abcd8903f92638b6cfc5a87db35ad7519224fa30"
+        },
+        {
+          "byte_size": 4326,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.pages.json",
+          "schema_version": "2.0",
+          "sha256": "dd7680722cde0280aed91b3f2a635e6af2ae4a01df393be8101f798b73d2588e"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "c352666066b4097a7cd268211f12d7f9c5f12c985bdb5f66c3000d9c033bf0ab"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.tables.json",
+          "schema_version": "2.0",
+          "sha256": "da7f8db8fe71c516b589aaf6f28d38cc3d6bd5d07328bf843a911657ac90d21d"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.forms.json",
+          "schema_version": "2.0",
+          "sha256": "04462dad674d9b3c2a52bc193d5484947b86d397cb9a46278ebb1d7bdaf48b8f"
+        }
+      ],
+      "document_id": "doc_1ff1756177bf1b1f",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "408fb9bf44b88d0654b448c2d194d3ec4b71b949d8c33305b4d382b581c47e44",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2226,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+          "schema_version": "2.0",
+          "sha256": "e42905039c2682b822867b25b7630929d4275b6a9e2ebda8d2010797d8da900f"
+        },
+        {
+          "byte_size": 3896,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "89e35f08fb4950e1e3f90a9e80fa81128c093821db2c0dc487512cb51a12b943"
+        },
+        {
+          "byte_size": 4503,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.pages.json",
+          "schema_version": "2.0",
+          "sha256": "3488c444932abf8caf9115afe93af808b6149cebd6e4211eedc0f68acab876b6"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "1c8ea23d341340a94d3fdba41e901264144cb28fbcfc417738dbecb471146d7c"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.tables.json",
+          "schema_version": "2.0",
+          "sha256": "3c31e34017c55674066abcc88f89d89730c91c837831560f4afed54a47e67a77"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.forms.json",
+          "schema_version": "2.0",
+          "sha256": "5649b6d98541f2b3faaf7da2f92d9596b815adb81807c2af76ae3325e31a7f6a"
+        }
+      ],
+      "document_id": "doc_53b1d7b44cf260c0",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "3e9e7ff75bba38f5099b02b3dde8b5bb721327dc6ec0517631e4a9bbd4075577",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2199,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md",
+          "schema_version": "2.0",
+          "sha256": "e2fad6a01597333c167c31157fad9c0d99924d5a06dfec0910bf7c3c99d96cc7"
+        },
+        {
+          "byte_size": 4135,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "4ff64ce6564d8c4d6ba3311fa365be05f1df03de834c5d6451c4f2b03ff4129e"
+        },
+        {
+          "byte_size": 4514,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "8b396f4f285099fd000ea079dd786bb215fbc91a939a410cacabee8b6f68882a"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "e1297849cac9cba54b8b2621de977036faeaf96ce4fab03c12f2d1278b05112e"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "0a4a5f448bb6ecc35e58399ebeeb1f3a3405a1ec34f9da9e632f6b3096e2cc9b"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d70436b824e2d916fb87602f310d7783f55f1bde9cdd0233dfa6955b4edc2053"
+        }
+      ],
+      "document_id": "doc_4d54425dfa884153",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "d680fd49fe1e61b51a11f5d30dda7f1a463ccaa34c3025214c96216411040a34",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2725,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md",
+          "schema_version": "2.0",
+          "sha256": "d3f61a42abce8fc9d828c3a70d8abe66b9a0fbb91e9789e59e066af1532bedd5"
+        },
+        {
+          "byte_size": 3600,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "31d4e6c8d2ced0bbe0b2500686f19a46849bde5fd8d7bfd5d1cfc26c7a0e1bdc"
+        },
+        {
+          "byte_size": 5533,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.pages.json",
+          "schema_version": "2.0",
+          "sha256": "ad8f6a77a2f360ed95d9c5d50f3d96d3118d7e236af205ab7cff285ef54a8ceb"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "65a26b26932033e3496ff0048766171445a6a76b4fba23f3c79149582e33f3c3"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.tables.json",
+          "schema_version": "2.0",
+          "sha256": "82178d7808e6560a5a10099f732477346d1f62238d29c3fd0da4122487bcecfa"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.forms.json",
+          "schema_version": "2.0",
+          "sha256": "fab989d5ebcd7c31194e1d321c78cbbba74ab66ea271b196f06a486477a894df"
+        }
+      ],
+      "document_id": "doc_af426c4c9052023e",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "75e5634cd7cc93e2c923e80dcb6888dc38d71790b1faaaf466ac06450f3d0f42",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2292,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+          "schema_version": "2.0",
+          "sha256": "2c8ca13972e4d10deb6f00609eaaed48d00bad4856abc379a3283df4a826c34a"
+        },
+        {
+          "byte_size": 6202,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "9ce4ab3b1f6ab5c8276ef7c15f20af2d32cf27f4ab4778d4e9b1f85d2926416d"
+        },
+        {
+          "byte_size": 4710,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pages.json",
+          "schema_version": "2.0",
+          "sha256": "357097e65c608b258bb2babe67f6fd1b63f2ffc806d0a87f329015d77814ac4a"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "4fd3867ee6ed0cec246627a8a0cf683d3dbfc3834c30ea4b1328ba2399f84940"
+        },
+        {
+          "byte_size": 7364,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.tables.json",
+          "schema_version": "2.0",
+          "sha256": "90186d770db5d0f225a806209907e75646f6d86f79a5f56053882a3506df746e"
+        },
+        {
+          "byte_size": 341,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.forms.json",
+          "schema_version": "2.0",
+          "sha256": "f6c60523cb8a2baa5208ea37ca854866b4cae5260c69f4435b8b2767708059be"
+        }
+      ],
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "382dc4303085bebbf49dcfa095225cab8a7819bab2ba1402c4cfe5d6d361cae4",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1145,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+          "schema_version": "2.0",
+          "sha256": "10ae58846558afbf73d1084980822f7d41684f8ec16df7f8a1e67b5e2d7060aa"
+        },
+        {
+          "byte_size": 3524,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "743fba8b92baa9b03e729b2d2050728c25a100ad3d4210d2b3f729838b92d0e4"
+        },
+        {
+          "byte_size": 2385,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.pages.json",
+          "schema_version": "2.0",
+          "sha256": "2f2f4c4dc9654f4074db748004fe9f58f6ed3d83c926df2781d1e3ff712e2d69"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "1ed4d6d921f3aec12d939a417cee5edfaa37cf53c8d7c8bd9c46c00ac6428fde"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.tables.json",
+          "schema_version": "2.0",
+          "sha256": "8b9509cdd3cdd8fb29503e632812d22958862e4ac7f4b412a9693c2f7dfd89ae"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.forms.json",
+          "schema_version": "2.0",
+          "sha256": "a9082c7a5a04512691f74c0d71dd4f5add1bb04eee127b2ac1aca95a75d7dc54"
+        }
+      ],
+      "document_id": "doc_d15d9f2596c32bed",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "7097e30644cd81783cb42d5ce3d5012bedac23e556f00cc5f9241681bb6a0c44",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2156,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
+          "schema_version": "2.0",
+          "sha256": "fe10ff09d7111ef524e54ad14c8d1322f0f5787fd7a4812a606e3acdb3233c06"
+        },
+        {
+          "byte_size": 4010,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "d514d971ce7f358fd8a8d0fe529b883ced98316c67572db9a8a9f2a4815b16da"
+        },
+        {
+          "byte_size": 4435,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "e54a428e86c7e2ea054230b83537d2ed91f5e0fdd55170b1e18b555e36e0f363"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "d0b385dd4f1660849ff6574f2c928aa8a02db225979ef1fa65d089b208549c4a"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "fc83323d3ca6484b06775fd97c5522527e4a59ba552b3dd43fe93c3fc91c0bed"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d39160f967c788de279ecbe2ce137d015ac85f2cc9a17c9408af5b7d4a77aa60"
+        }
+      ],
+      "document_id": "doc_4c525cef1e737235",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "802ae5d6fe0d38e96dfff730a4ae050e9e533144a04cbada0b0592907a3f6a70",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2609,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md",
+          "schema_version": "2.0",
+          "sha256": "ff3b3c16b45b926da59b085e7cf229f659453b0b8234d6e685f575caca042911"
+        },
+        {
+          "byte_size": 4227,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "b77aaf8f9f88033c117088d4d5c3d68a967115f42596c0b7ce54b5c0d2a77622"
+        },
+        {
+          "byte_size": 5290,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "9441de2910871a6a20346d671a64f048b2f58f72dcf89d6d873fb058b74f3757"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "2e7e1c988e44df544a6872e14ef60f2392c3f3503a149c18342d770d008e5fe0"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "37aa1c5e241841cf82de58edca9ac05beaa786eecfadc744017eb3e244b76120"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "425c1e82d6d4f3f5a47613d2d602807f918200d5d8ef4d5a3f52c435d8260728"
+        }
+      ],
+      "document_id": "doc_798b9dac49774271",
+      "document_status": "processed",
+      "normalized_base": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.metadata.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.pages.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.ocr.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.tables.json",
+        "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "42ad58972f43510304e9f5e23235680ce9343b429085ed546bc4c9c74252b2d1",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 3322,
+          "relpath": "general_sst/manuales/aplicacion/aplicacion_info.md",
+          "schema_version": "2.0",
+          "sha256": "205aaf3ab737beba06304e812e8439deb112246c20c54cdb3161bcbc30ce7073"
+        },
+        {
+          "byte_size": 3735,
+          "relpath": "general_sst/manuales/aplicacion/aplicacion_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "e2d176344d37de60af2c1f3a8c2c56f943ea690a9b6530f357a0059de5c7ddf7"
+        },
+        {
+          "byte_size": 6757,
+          "relpath": "general_sst/manuales/aplicacion/aplicacion_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "a9e4736e307d95cfc0ba25888dd2cc9720218de62e5e5bcf26ed443318ed81c4"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/aplicacion/aplicacion_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "feebbedabca62478e3b45be951f28f572c5b79b0e4100c8438f9c3d8192cb6a4"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/aplicacion/aplicacion_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "7e7217ec7fbee0a58a9c3940c6b976a86a72866dcd484744ffdcc2f6a5a43581"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/aplicacion/aplicacion_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "b772b84c1dbe7f2c2c32caa8d5dd6f96b47abea7bf16778364fdc0afbc56819f"
+        }
+      ],
+      "document_id": "doc_362801fe7bc968cb",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/aplicacion/aplicacion_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/aplicacion/aplicacion_info.md",
+        "general_sst/manuales/aplicacion/aplicacion_info.metadata.json",
+        "general_sst/manuales/aplicacion/aplicacion_info.pages.json",
+        "general_sst/manuales/aplicacion/aplicacion_info.ocr.json",
+        "general_sst/manuales/aplicacion/aplicacion_info.tables.json",
+        "general_sst/manuales/aplicacion/aplicacion_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "28a21599064b983d2a0781ca3a06de6fc04a44cb58fb7079f919c15a198eae40",
+      "source_relpath": "general_sst/manuales/aplicacion/aplicacion_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1949,
+          "relpath": "general_sst/manuales/auditoria/auditoria_info.md",
+          "schema_version": "2.0",
+          "sha256": "5ba3b4302c1389ca1e9caa09bd383dbfa34fd6e00915be1fcb764ed549407a3d"
+        },
+        {
+          "byte_size": 3749,
+          "relpath": "general_sst/manuales/auditoria/auditoria_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "01d02f8f98ed7c5bff64de02ed34a3cd0510ea89e11327ecae3bd5a8a9b68d4b"
+        },
+        {
+          "byte_size": 4075,
+          "relpath": "general_sst/manuales/auditoria/auditoria_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "4fd5e7b3328353b5030ec78064416f7ef873feab7b2e4aab24defc6b456077c0"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/auditoria/auditoria_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "5c51a43c95ae11037e2587bdbb0bee40a34fdb93cb2090ac2aef3392e6a2b261"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/auditoria/auditoria_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "5519070d6c7f180350f03d6735a055eedebfd95e96e85d152f044ee301243bce"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/auditoria/auditoria_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "a497fc6a692538bcc419c3c7e736867012e9228cf643c1fa4b2be02cdc378380"
+        }
+      ],
+      "document_id": "doc_d9b80cd19e111195",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/auditoria/auditoria_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/auditoria/auditoria_info.md",
+        "general_sst/manuales/auditoria/auditoria_info.metadata.json",
+        "general_sst/manuales/auditoria/auditoria_info.pages.json",
+        "general_sst/manuales/auditoria/auditoria_info.ocr.json",
+        "general_sst/manuales/auditoria/auditoria_info.tables.json",
+        "general_sst/manuales/auditoria/auditoria_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "d42ac2f12893c7674a444cce221b285ffab3a446e221cc024010087323e18933",
+      "source_relpath": "general_sst/manuales/auditoria/auditoria_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1654,
+          "relpath": "general_sst/manuales/introduccion.md",
+          "schema_version": "2.0",
+          "sha256": "1b3ca7a28d10f745330a400305ef758539ceac0f08006fae79356e92f12e7083"
+        },
+        {
+          "byte_size": 3428,
+          "relpath": "general_sst/manuales/introduccion.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "f113f4fe8acafe0a6637821bef64705b4695db85ad63d820cd3dfd3634da755d"
+        },
+        {
+          "byte_size": 3424,
+          "relpath": "general_sst/manuales/introduccion.pages.json",
+          "schema_version": "2.0",
+          "sha256": "955b356006be304d7bd231c8d9fc174206d22489c0110f9ca5e1898d548be11d"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/introduccion.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "049c046d866c26119a3742773201cb41287ff21020fee833f304f38d92e263fe"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/introduccion.tables.json",
+          "schema_version": "2.0",
+          "sha256": "64b16c1cade3229300558dccecfc0754d6c9556bea8612c1fb9d098ca0f8f484"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/introduccion.forms.json",
+          "schema_version": "2.0",
+          "sha256": "c4a15887bec629e541fce67a824b46f05a966b2cb4a10ecc8c12a85be2d65068"
+        }
+      ],
+      "document_id": "doc_89b7978304549ddd",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/introduccion",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/introduccion.md",
+        "general_sst/manuales/introduccion.metadata.json",
+        "general_sst/manuales/introduccion.pages.json",
+        "general_sst/manuales/introduccion.ocr.json",
+        "general_sst/manuales/introduccion.tables.json",
+        "general_sst/manuales/introduccion.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "0f0300224d0960ab4ab2e36f3ca26854bd747e96f0bacf0e0e0ff9da2d3fa48e",
+      "source_relpath": "general_sst/manuales/introduccion.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2237,
+          "relpath": "general_sst/manuales/mejora/mejora_info.md",
+          "schema_version": "2.0",
+          "sha256": "207293fb044e5774e2ebb32594dfe781fe1ac967e6871397bae20cdc78f698c0"
+        },
+        {
+          "byte_size": 3730,
+          "relpath": "general_sst/manuales/mejora/mejora_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "fb8ce646e314c7952046b995d50744fd822775e7bd61c63b5d94a743de57a1aa"
+        },
+        {
+          "byte_size": 4591,
+          "relpath": "general_sst/manuales/mejora/mejora_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "e9ff3b540677a0ab0a9e0c2716b5b7123c1313a51c272204b776ea8ed8accec4"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/mejora/mejora_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "091400e269fc1bb35211b6053babd2f1440bd92e5f74ddf8aa441608828acdc2"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/mejora/mejora_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "cd73328578299273e1a0f481fe6e5784055c285091df865d289712c00a39ee9d"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/mejora/mejora_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "a7b3d05edd7b21f3fad96700d74a664344d3eb8f89c14312e7bb33fb6d04861b"
+        }
+      ],
+      "document_id": "doc_1edf1a3d50d85305",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/mejora/mejora_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/mejora/mejora_info.md",
+        "general_sst/manuales/mejora/mejora_info.metadata.json",
+        "general_sst/manuales/mejora/mejora_info.pages.json",
+        "general_sst/manuales/mejora/mejora_info.ocr.json",
+        "general_sst/manuales/mejora/mejora_info.tables.json",
+        "general_sst/manuales/mejora/mejora_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "3246e1e2f53b6e6bad0659c78ac097ee4cce57b8c8951985c257de683fc48d01",
+      "source_relpath": "general_sst/manuales/mejora/mejora_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 869,
+          "relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.md",
+          "schema_version": "2.0",
+          "sha256": "1c43e66fe7872800ef358b3f243a725617aa396187feddd2a307cc27c630201d"
+        },
+        {
+          "byte_size": 3541,
+          "relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "e4634f4477f4be7095c4146b26145eae9480b4535a5fa21a1cf7a27d607efd3c"
+        },
+        {
+          "byte_size": 1763,
+          "relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.pages.json",
+          "schema_version": "2.0",
+          "sha256": "02e64b128a40267f5d463f910453060132f176fe332646103af4db149b139174"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "4b976f36c60342e5ce538e6faaa82de9b671021f762f207f242f5ab90a9a7903"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.tables.json",
+          "schema_version": "2.0",
+          "sha256": "97404a1c191cd4579b8d41986718d8cc4dd900c234f0a6f27496cb71eb84acb3"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.forms.json",
+          "schema_version": "2.0",
+          "sha256": "c80ac4d0477a07a7e0bdcb4fd4c315492ee8ca4fb632f5bad81d96735ba4c23d"
+        }
+      ],
+      "document_id": "doc_b87ef9d031af518e",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/organizacion/arl/funciones_responsabilidades",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/arl/funciones_responsabilidades.md",
+        "general_sst/manuales/organizacion/arl/funciones_responsabilidades.metadata.json",
+        "general_sst/manuales/organizacion/arl/funciones_responsabilidades.pages.json",
+        "general_sst/manuales/organizacion/arl/funciones_responsabilidades.ocr.json",
+        "general_sst/manuales/organizacion/arl/funciones_responsabilidades.tables.json",
+        "general_sst/manuales/organizacion/arl/funciones_responsabilidades.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "94f9ef4cdfb1ba4938fbb7d5d02e1c361170cd0c7708f3ff3ddf906a18e2b8eb",
+      "source_relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 727,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.md",
+          "schema_version": "2.0",
+          "sha256": "81e2a0a75f3d6871ec2383a47b097184156e8f096c3eb4a13b7a872542148d0c"
+        },
+        {
+          "byte_size": 3564,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "325ca9c9a9cfa0622d35b547a16008983d050ddb82b3bb2d4fc2bbe6d5df19af"
+        },
+        {
+          "byte_size": 1471,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.pages.json",
+          "schema_version": "2.0",
+          "sha256": "c5caa000d2c4b0c1c3ce392b6cdb8789a637a735facb86a009cda709067df64e"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "b636534edb582ffe036096aed6eef231e9b9639c166a4c30fd8c0eee233946ac"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.tables.json",
+          "schema_version": "2.0",
+          "sha256": "3facdc178e7729e8168dadad85305c898aacf6cef5de37ca23d5650b23ae392e"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.forms.json",
+          "schema_version": "2.0",
+          "sha256": "d648a209eab06338a8c636e2783b4e7b2a6a7eee75d0af112bc7b747e1b5dcf3"
+        }
+      ],
+      "document_id": "doc_dec6dc6770fea917",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.md",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.metadata.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.pages.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.ocr.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.tables.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "4e2a18b91cbc8bd47f1f680213905e1376428df34c55c7fc2dd6126c6b72cccf",
+      "source_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2099,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
+          "schema_version": "2.0",
+          "sha256": "6e7c2e48777f38ec697f98e96322f6a87af42e8a0f4c4f765f5f03929fee956f"
+        },
+        {
+          "byte_size": 3570,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "11064a4a294cebebf6c8119ffe6470b49fedb895cb15b85162adb7b62ad19276"
+        },
+        {
+          "byte_size": 4219,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.pages.json",
+          "schema_version": "2.0",
+          "sha256": "004beb5e28085a0b6074d200726221529fa7f299afb4e5d7351eef0cc2b02562"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "ea3cb5c2f0b7c0c358054dc0ea49fed5c8d4fe55184c25bd4dc8a1390356f02b"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.tables.json",
+          "schema_version": "2.0",
+          "sha256": "1f4fd73a5c3f4c7a529d5313c849098d4c8c58bb796f78d76034d89fb3d7c31d"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.forms.json",
+          "schema_version": "2.0",
+          "sha256": "6cf2e45485cfc579dec0985be26eb03aa41dce2e5fb755f2e7995fc484a70e45"
+        }
+      ],
+      "document_id": "doc_4815e73a2a6125e3",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.metadata.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.pages.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.ocr.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.tables.json",
+        "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "938d33066916231b3ec0acc769e60d249e910c2fff8c981fdb9e74e64068dd8c",
+      "source_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 658,
+          "relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+          "schema_version": "2.0",
+          "sha256": "fca2313098b8fac2e23b5fda6863eb26ae65ec59abead97dccb16fbabcf46c85"
+        },
+        {
+          "byte_size": 3684,
+          "relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "6f2fcd83971409dad6f58dfaca1ac3d455942764356d31194c48c8555ac1a5f6"
+        },
+        {
+          "byte_size": 1337,
+          "relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.pages.json",
+          "schema_version": "2.0",
+          "sha256": "f6189b4ac131281dda02648e901bbc875c0f47877acfd5e24b61d26e4f8596d4"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "fd5f0481b2de332b5af9350a9d31c3e7025a38903b3addb43c588afc0c60cafa"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.tables.json",
+          "schema_version": "2.0",
+          "sha256": "c541be1a0b02e4eed05d60ebbf28c4f997d9947ec1f947e405d2b254c1aebb0f"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.forms.json",
+          "schema_version": "2.0",
+          "sha256": "278b669aa954c25a128e75ae76b4dc92507ef076d4230c078860924e9d20184d"
+        }
+      ],
+      "document_id": "doc_33db5a236b33527d",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+        "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.metadata.json",
+        "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.pages.json",
+        "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.ocr.json",
+        "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.tables.json",
+        "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "8f7a42bf80ea17f28b6e5aee604de18e79b0da72edf57dcf17a561239e1bc742",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2498,
+          "relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md",
+          "schema_version": "2.0",
+          "sha256": "e87a2cdabb0263aa6e25aa31e75ca2cdb806b9bced8a6bd6151733593a6bafd3"
+        },
+        {
+          "byte_size": 3553,
+          "relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "33ca1a80db4f6665d698370785f24f4b6f3546ffa4ac4104e112bdc581879490"
+        },
+        {
+          "byte_size": 5035,
+          "relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.pages.json",
+          "schema_version": "2.0",
+          "sha256": "00b5b3ed158b6400d620423c1de2ff0f1ec7942c03331ad3604c2f3bcc3df9c4"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "f5a1b56ffb5173eb7259665979dc12554760d8149ec58d070baa9e2b1f22f709"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.tables.json",
+          "schema_version": "2.0",
+          "sha256": "3d7c16461a42a517e6e4c9d96abcc89f03a15c62b08d6e696f7b71611901b3ce"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.forms.json",
+          "schema_version": "2.0",
+          "sha256": "e7c3eb89f3f2c6901a9ddfb687b9de6079ea557fbf559e39bb278d7b25448dcd"
+        }
+      ],
+      "document_id": "doc_312e0abf441fcf34",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md",
+        "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.metadata.json",
+        "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.pages.json",
+        "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.ocr.json",
+        "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.tables.json",
+        "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "817ebf467b75a3d949f34d1c1d1c7751309cab58b65dc102860070e0fcd366e7",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 1244,
+          "relpath": "general_sst/manuales/organizacion/organizacion.md",
+          "schema_version": "2.0",
+          "sha256": "1c814d34452cf158c8f2895d0a2906fc4e4275ae33ff0e366e108765b6cbc656"
+        },
+        {
+          "byte_size": 3825,
+          "relpath": "general_sst/manuales/organizacion/organizacion.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "368fadffdab1e30bab579da56acece45e4f8de617ac692ed3338d7d75594e7c8"
+        },
+        {
+          "byte_size": 2623,
+          "relpath": "general_sst/manuales/organizacion/organizacion.pages.json",
+          "schema_version": "2.0",
+          "sha256": "c2a983d6b2f0fc6da920444d6f1ebc67516ebad4bf8d59ea23cd488fc6f8108f"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/organizacion.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "53bf9fbd88a93569e1b81681debf917c44f2e7aab5bf1a552ffb5c95388d2b6f"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/organizacion/organizacion.tables.json",
+          "schema_version": "2.0",
+          "sha256": "9b48d27c4b0ee765eb9b013d316c9d186b6324302e83d96a237a3aed85f4ca18"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/organizacion/organizacion.forms.json",
+          "schema_version": "2.0",
+          "sha256": "b3ba4c467c1acf55eb017aebbe22f594df15ae138201554ac161a39542b3ddba"
+        }
+      ],
+      "document_id": "doc_81325f8c3222110c",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/organizacion/organizacion",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/organizacion.md",
+        "general_sst/manuales/organizacion/organizacion.metadata.json",
+        "general_sst/manuales/organizacion/organizacion.pages.json",
+        "general_sst/manuales/organizacion/organizacion.ocr.json",
+        "general_sst/manuales/organizacion/organizacion.tables.json",
+        "general_sst/manuales/organizacion/organizacion.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "d80d4f15e95ae97ca53186a02a5da4ba1816d051c63e423d46f6d66c7c49722d",
+      "source_relpath": "general_sst/manuales/organizacion/organizacion.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 111740,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+          "schema_version": "2.0",
+          "sha256": "4d99949bbcc19940482805e08fd6a67b38c891ea208fabca5493b07be91a7e80"
+        },
+        {
+          "byte_size": 16595,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "875ef62130fc48903eebfdc6310f3981011123da12ddd03ff215205db3675aa1"
+        },
+        {
+          "byte_size": 246256,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pages.json",
+          "schema_version": "2.0",
+          "sha256": "285dcb1339538811f284e1f33d1c16e6277d0a08a06be933343e9e9bc611e2a7"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "757e8380f86d855eb4591a90ca04ca28973e925806a64b7f229928f33dc4cd5d"
+        },
+        {
+          "byte_size": 13994,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.tables.json",
+          "schema_version": "2.0",
+          "sha256": "5cee685a6fe548aefc67ad13cf6df9864e3ed964c268cbf19cf160dfe3a76c59"
+        },
+        {
+          "byte_size": 7586,
+          "relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.forms.json",
+          "schema_version": "2.0",
+          "sha256": "2d7840921a103ecc92bd2c032a509f498f73161c91ec67cc2f6072fa8522e2c7"
+        }
+      ],
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.metadata.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pages.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.ocr.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.tables.json",
+        "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2960,
+          "relpath": "general_sst/manuales/planificacion/planificacion_info.md",
+          "schema_version": "2.0",
+          "sha256": "2e25b267f78aaee4cd8734db48dc2c902152742e1c232f980117457a96325591"
+        },
+        {
+          "byte_size": 3881,
+          "relpath": "general_sst/manuales/planificacion/planificacion_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "7eaa9ed4ee9d3faa4d4523f405ae3e324ac802f063b19b9176d8b560cca2dbd6"
+        },
+        {
+          "byte_size": 6038,
+          "relpath": "general_sst/manuales/planificacion/planificacion_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "b768adcccb0c4f2874c7aaf056419bc05653f2928855be3e745c321dea7f3979"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/planificacion/planificacion_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "9da2052208536e0c178ae7c4defad1a16fae75f635f1debee24d1dae0ac24e3c"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/planificacion/planificacion_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "406a24dc1edc7d377467b1de46205fd52e21baba8eb64333c09e566b352647ff"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/planificacion/planificacion_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "240fe7f648e8a5fc61775a5bd73a990bbbb606daf821e1d68a97bfab79fd055e"
+        }
+      ],
+      "document_id": "doc_86b6f64f1c869610",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/planificacion/planificacion_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/planificacion/planificacion_info.md",
+        "general_sst/manuales/planificacion/planificacion_info.metadata.json",
+        "general_sst/manuales/planificacion/planificacion_info.pages.json",
+        "general_sst/manuales/planificacion/planificacion_info.ocr.json",
+        "general_sst/manuales/planificacion/planificacion_info.tables.json",
+        "general_sst/manuales/planificacion/planificacion_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "58eb1a0085f9a42b59d8b7dd5a60a2dee1acd024ae584849e923e499da5dd81e",
+      "source_relpath": "general_sst/manuales/planificacion/planificacion_info.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 4611,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.md",
+          "schema_version": "2.0",
+          "sha256": "892cf46f7c8ac384f8180ca50a9b75f26632c12ca52e36061d9e765f9be73f8d"
+        },
+        {
+          "byte_size": 7702,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "a202d1b04617ea6eefd8ee60db116a58762928ae1e08a73cdc798958b5cdfb8e"
+        },
+        {
+          "byte_size": 10093,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pages.json",
+          "schema_version": "2.0",
+          "sha256": "fcfaf525a6f9343e852d01a5f4a782b6cf28ecd9d3e9c259d6c91b0faa864014"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "290ba8d61036d31c84682aa00ecefac7ddfe2791fe826cfbff58367ccddeef8f"
+        },
+        {
+          "byte_size": 22677,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.tables.json",
+          "schema_version": "2.0",
+          "sha256": "2cbc45c41bd08204a949d8d0c395d892e0e1eef9bf6f1bea3046b6b877fb60aa"
+        },
+        {
+          "byte_size": 548,
+          "relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.forms.json",
+          "schema_version": "2.0",
+          "sha256": "db6887bc4b5edfd2a71d47a0f2db36d3e80417ff8592b5fcfee7e1f5682fbc1d"
+        }
+      ],
+      "document_id": "doc_f38f9f98d854feed",
+      "document_status": "needs_review",
+      "normalized_base": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.md",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.metadata.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pages.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.ocr.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.tables.json",
+        "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "db44b2fc58995eec9a5d8038c9caa3cb2a571c11f58055794eab3cece6449694",
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2532,
+          "relpath": "general_sst/manuales/politica/politica.md",
+          "schema_version": "2.0",
+          "sha256": "b7bae2ffe62301f1ee5dbc32a65a22b6329fa69061e0f3a56e328f5a43d8560e"
+        },
+        {
+          "byte_size": 4214,
+          "relpath": "general_sst/manuales/politica/politica.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "d88597d5f06993f89d20bf5e3eb658fb8c8f74fcf1e67fe822ad641cb70826f0"
+        },
+        {
+          "byte_size": 5239,
+          "relpath": "general_sst/manuales/politica/politica.pages.json",
+          "schema_version": "2.0",
+          "sha256": "29e1b1229cbd747dbd657290745c8ae9c90017f86230db5234e869039d84bb1e"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/politica/politica.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "44e8d74690a4fd16fe3b68657c616ff426834480aa4ac8f29a4d11a63381ed36"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/politica/politica.tables.json",
+          "schema_version": "2.0",
+          "sha256": "b6aa218be8cf21a553a7d01eb76eacbba49a80f40c5334c7a20860154e7df092"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/politica/politica.forms.json",
+          "schema_version": "2.0",
+          "sha256": "425591ae120495c1a8003eedddb5a3c44d2926f1bf58d4acd7f25b6b40506f15"
+        }
+      ],
+      "document_id": "doc_9b35bf058b1a3a38",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/politica/politica",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/politica/politica.md",
+        "general_sst/manuales/politica/politica.metadata.json",
+        "general_sst/manuales/politica/politica.pages.json",
+        "general_sst/manuales/politica/politica.ocr.json",
+        "general_sst/manuales/politica/politica.tables.json",
+        "general_sst/manuales/politica/politica.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "603a3cb0bebd5a9ed9bb4f5cf391006d497542fb67ffba58c582c3190e6e00d9",
+      "source_relpath": "general_sst/manuales/politica/politica.md"
+    },
+    {
+      "artifact_hashes": [
+        {
+          "byte_size": 2571,
+          "relpath": "general_sst/manuales/verificacion/verificacion_info.md",
+          "schema_version": "2.0",
+          "sha256": "4bba2260514b5106d6033f57c2baf36258feccec9f7e8173dddf80d7cc666bf0"
+        },
+        {
+          "byte_size": 3815,
+          "relpath": "general_sst/manuales/verificacion/verificacion_info.metadata.json",
+          "schema_version": "2.0",
+          "sha256": "f9cb50defaef8d095d54ad168c4cf58778599531399aeb5f5ce84f7529d0bc41"
+        },
+        {
+          "byte_size": 5233,
+          "relpath": "general_sst/manuales/verificacion/verificacion_info.pages.json",
+          "schema_version": "2.0",
+          "sha256": "c578a5a6a5e8e8c9d920c6e78780b9ad3419a03c594b270dd15a832c2612c113"
+        },
+        {
+          "byte_size": 427,
+          "relpath": "general_sst/manuales/verificacion/verificacion_info.ocr.json",
+          "schema_version": "2.0",
+          "sha256": "b87e5a062a48083305d46ec70ac391c160659a016160f575814f49cd6105170f"
+        },
+        {
+          "byte_size": 377,
+          "relpath": "general_sst/manuales/verificacion/verificacion_info.tables.json",
+          "schema_version": "2.0",
+          "sha256": "3f399d5f7f6bfdce2ae4b4cf284a8be46a4e929b46edee93d81872a51adadf9c"
+        },
+        {
+          "byte_size": 356,
+          "relpath": "general_sst/manuales/verificacion/verificacion_info.forms.json",
+          "schema_version": "2.0",
+          "sha256": "12de706859cff314ac6ff989c702a52b46bb286ecf4262032ef952b1c805eb4d"
+        }
+      ],
+      "document_id": "doc_56429da7ea5244e1",
+      "document_status": "processed",
+      "normalized_base": "general_sst/manuales/verificacion/verificacion_info",
+      "processing_fingerprint": "54ee8d1bb687c1844303ff9d5bc1df379b8958f935f2d88d5de1f1831e99bbd8",
+      "required_artifacts": [
+        "general_sst/manuales/verificacion/verificacion_info.md",
+        "general_sst/manuales/verificacion/verificacion_info.metadata.json",
+        "general_sst/manuales/verificacion/verificacion_info.pages.json",
+        "general_sst/manuales/verificacion/verificacion_info.ocr.json",
+        "general_sst/manuales/verificacion/verificacion_info.tables.json",
+        "general_sst/manuales/verificacion/verificacion_info.forms.json"
+      ],
+      "schema_version": "2.0",
+      "source_hash": "753d8814893bfa1e2ad7233920bf1748205cffd143995ad7e06c353cecb65be3",
+      "source_relpath": "general_sst/manuales/verificacion/verificacion_info.md"
+    }
+  ],
+  "documents": [
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_864d906c5eae1183",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_c392ec7bf8d98194",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-rrjo97gns4p3be98tqymlfur9jvf",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_caf88d615e56edd4",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-8868hmusisvc13oqbjhc2ugkj14z",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_d57d21ff836e1ec0",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_7a0f56a63a930105",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/deberes_convivencia.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_5773d940742c0a47",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/derechos_convivencia.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_0b8a9be32b2222f6",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/funciones_comite-.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_99e74963bf956ead",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/introduccion.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_65a09a83e5685e3a",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/marco_legal.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_e91e2fb644a2717c",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/normas_convivencia.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_1d62a305753cb42e",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/objetivo_general_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_ff1fcf5ee88afc3b",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/objetivos_especificos_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_6035540fc4c4a90a",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/politica_convivencia.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_a72c9be0df1f92fa",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/politica_desconexion.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_f3bdcdea0cf60ee0",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/principios_convivencia.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_78c719156efb1dfd",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/quejas_denuncias.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_133e0d5e86f00f91",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/manual/valores.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_d4fca71ff51cb27b",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_04c42c6f64c9d79e",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_27d458b700f2924d",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_cfca5f1723e21e1c",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/funciones_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_842df95c94a7e50d",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_5d2b57616d019b89",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_d5f04608cf512575",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_2fd43b5d3bcb833b",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "copasst/comunicacion.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_221c00facfd6a2e8",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "copasst/funciones_copasst.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_eb34bb480d443513",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "copasst/funciones_presidente_copasst.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_761c9402c48e05c7",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "copasst/funciones_secretario_copasst.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_5e403a88299d2dc3",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "copasst/miembros_copasst_2025_2027.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_f2cf7868a801af0e",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-7y0nl29rghh6vu49sia8fjij11ld",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_7d2eb40310345805",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md",
+      "warnings": [
+        "missing_title",
+        "route_only_low_confidence",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_18e1e8a89146e6fc",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_1ff1756177bf1b1f",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_53b1d7b44cf260c0",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_4d54425dfa884153",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_af426c4c9052023e",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_3e55236f58440bf5",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_d15d9f2596c32bed",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_4c525cef1e737235",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_798b9dac49774271",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_362801fe7bc968cb",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/aplicacion/aplicacion_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_d9b80cd19e111195",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/auditoria/auditoria_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_89b7978304549ddd",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/introduccion.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_1edf1a3d50d85305",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/mejora/mejora_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_b87ef9d031af518e",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_dec6dc6770fea917",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_4815e73a2a6125e3",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_33db5a236b33527d",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+      "warnings": [
+        "missing_title",
+        "route_only_low_confidence",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_312e0abf441fcf34",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_81325f8c3222110c",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/organizacion.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_31b00a8b31847796",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_86b6f64f1c869610",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/planificacion/planificacion_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "needs_review",
+      "document_id": "doc_f38f9f98d854feed",
+      "document_status": "needs_review",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "warnings": [
+        "llama_parse_job:pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+        "ambiguous_classification"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_9b35bf058b1a3a38",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/politica/politica.md",
+      "warnings": [
+        "missing_title"
+      ]
+    },
+    {
+      "disposition": "processed",
+      "document_id": "doc_56429da7ea5244e1",
+      "document_status": "processed",
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/verificacion/verificacion_info.md",
+      "warnings": [
+        "missing_title"
+      ]
+    }
+  ],
+  "fingerprints": {},
+  "run_id": "gui_phase1_20260722_152645",
+  "schema_version": "2.0",
+  "summary": {
+    "failed": 0,
+    "needs_review": 11,
+    "processed": 44,
+    "skipped": 0
+  },
+  "timestamp": "2026-07-22T15:31:44.438564-05:00"
+}

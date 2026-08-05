@@ -1,0 +1,22 @@
+{
+  "document_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "document_id": "doc_86b6f64f1c869610",
+  "engine": null,
+  "engine_version": null,
+  "language": null,
+  "pages": [],
+  "schema_version": "2.0",
+  "warnings": [
+    "ocr_not_evaluated"
+  ]
+}

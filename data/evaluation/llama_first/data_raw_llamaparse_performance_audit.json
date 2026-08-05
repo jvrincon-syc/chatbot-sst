@@ -1,0 +1,121 @@
+{
+  "documents": [
+    {
+      "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf",
+      "job_id": "pjb-9mi9ejiku0vdq87ksvdsvq6cec7r",
+      "pdf_pages": 2,
+      "real_pages": 2,
+      "raw_text_length": 3207,
+      "md_length": 1914,
+      "input_tokens": 8977,
+      "output_tokens": 481,
+      "time_seconds": 4297,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 2473
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.pdf",
+      "job_id": "pjb-rrjo97gns4p3be98tqymlfur9jvf",
+      "pdf_pages": 12,
+      "real_pages": 12,
+      "raw_text_length": 21577,
+      "md_length": 21425,
+      "input_tokens": 53618,
+      "output_tokens": 5059,
+      "time_seconds": 7216,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 4165
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+      "job_id": "pjb-8868hmusisvc13oqbjhc2ugkj14z",
+      "pdf_pages": 1,
+      "real_pages": 1,
+      "raw_text_length": 2068,
+      "md_length": 2169,
+      "input_tokens": 4510,
+      "output_tokens": 481,
+      "time_seconds": 5235,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 3932
+    },
+    {
+      "source_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.pdf",
+      "job_id": "pjb-trg6kkk3cvmhvgtqdqv2ra52m5yx",
+      "pdf_pages": 1,
+      "real_pages": 1,
+      "raw_text_length": 3169,
+      "md_length": 2127,
+      "input_tokens": 4566,
+      "output_tokens": 499,
+      "time_seconds": 5299,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 3425
+    },
+    {
+      "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+      "job_id": "pjb-9x09oi2uvv05nm64qo8llh9hvg89",
+      "pdf_pages": 6,
+      "real_pages": 6,
+      "raw_text_length": 18463,
+      "md_length": 17375,
+      "input_tokens": 28485,
+      "output_tokens": 4246,
+      "time_seconds": 6709,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 4354
+    },
+    {
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.pdf",
+      "job_id": "pjb-7y0nl29rghh6vu49sia8fjij11ld",
+      "pdf_pages": 16,
+      "real_pages": 16,
+      "raw_text_length": 25142,
+      "md_length": 21824,
+      "input_tokens": 70578,
+      "output_tokens": 5149,
+      "time_seconds": 7678,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 4467
+    },
+    {
+      "source_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.pdf",
+      "job_id": "pjb-hgmd38fzg6nan35yrykwbagsj2cy",
+      "pdf_pages": 1,
+      "real_pages": 1,
+      "raw_text_length": 2407,
+      "md_length": 1949,
+      "input_tokens": 4527,
+      "output_tokens": 414,
+      "time_seconds": 4577,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 2961
+    },
+    {
+      "source_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
+      "job_id": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+      "pdf_pages": 36,
+      "real_pages": 36,
+      "raw_text_length": 118406,
+      "md_length": 109230,
+      "input_tokens": 173531,
+      "output_tokens": 27332,
+      "time_seconds": 19015,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 14511
+    },
+    {
+      "source_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.pdf",
+      "job_id": "pjb-7u7qysy2rczcmpo9y92alfv49o4i",
+      "pdf_pages": 2,
+      "real_pages": 2,
+      "raw_text_length": 4235,
+      "md_length": 4275,
+      "input_tokens": 9062,
+      "output_tokens": 1057,
+      "time_seconds": 6435,
+      "ocr_time_seconds": 0,
+      "llm_time_seconds": 3854
+    }
+  ]
+}

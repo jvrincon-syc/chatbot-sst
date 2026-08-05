@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -22,7 +22,7 @@ from ingestion.schemas.common import (
 
 
 SchemaVersion = Literal["2.0"]
-ExtractionMethod = Literal["markdown", "pdf_digital", "ocr", "hybrid"]
+ExtractionMethod = Literal["markdown", "pdf_digital", "ocr", "hybrid", "llamaparse", "hybrid_llamaparse"]
 ProcessingStatus = Literal["pending", "processed", "failed", "needs_review"]
 DocumentType = Literal[
     "manual",
@@ -180,6 +180,15 @@ class FormsArtifact(StrictModel):
     warnings: list[str] = Field(default_factory=list)
 
 
+class LlamaCloudMetadata(StrictModel):
+    parse_job_id: str = Field(min_length=1)
+    parse_status: Literal["pending", "running", "completed", "failed", "cancelled"]
+    parse_configuration_hash: str = Field(min_length=1)
+    page_metadata: list[dict[str, Any]] = Field(default_factory=list)
+    job_metadata: dict[str, Any] = Field(default_factory=dict)
+    warnings: list[str] = Field(default_factory=list)
+
+
 class ChangeHistoryEntry(StrictModel):
     version: Optional[str] = None
     date: Optional[str] = None
@@ -231,6 +240,7 @@ class MetadataArtifact(StrictModel):
     tables: Observation
     forms: Observation
     feature_observations: dict[str, Observation] = Field(default_factory=dict)
+    llama_cloud: Optional[LlamaCloudMetadata] = None
     source_hash: str
     corpus_version: str
     pipeline_version: str

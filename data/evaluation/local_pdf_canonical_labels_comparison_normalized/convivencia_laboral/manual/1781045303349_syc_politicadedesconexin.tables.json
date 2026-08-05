@@ -1,0 +1,201 @@
+{
+  "document_id": "doc_caf88d615e56edd4",
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr_text",
+          "text": null,
+          "warnings": []
+        }
+      ],
+      "method": "ocr_text",
+      "status": "detected",
+      "value": true,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "table_count": 3,
+  "tables": [
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CODIGO PL.RH-035ST",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "CLASIFICACIÓN",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "USO INTERNO (NC2)",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "CODIGO PL.RH-035ST",
+        "CLASIFICACIÓN",
+        "USO INTERNO (NC2)"
+      ],
+      "markdown_representation": "| CODIGO PL.RH-035ST | CLASIFICACIÓN | USO INTERNO (NC2) |\n| --- | --- | --- |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "CODIGO PL.RH-035ST",
+          "CLASIFICACIÓN",
+          "USO INTERNO (NC2)"
+        ]
+      ],
+      "table_id": "page_1_table_1",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "$SA",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "NIVEL DE.",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "$SA",
+        "NIVEL DE."
+      ],
+      "markdown_representation": "| $SA | NIVEL DE. |\n| --- | --- |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "$SA",
+          "NIVEL DE."
+        ]
+      ],
+      "table_id": "page_1_table_2",
+      "warnings": []
+    },
+    {
+      "bbox": null,
+      "caption": null,
+      "cells": [
+        {
+          "bbox": null,
+          "column_index": 0,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "¡O INTERNO (NC2)",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 1,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "Versión",
+          "warnings": []
+        },
+        {
+          "bbox": null,
+          "column_index": 2,
+          "column_span": 1,
+          "row_index": 0,
+          "row_span": 1,
+          "text": "0.1",
+          "warnings": []
+        }
+      ],
+      "extractor": "ocr_text",
+      "headers": [
+        "¡O INTERNO (NC2)",
+        "Versión",
+        "0.1"
+      ],
+      "markdown_representation": "| ¡O INTERNO (NC2) | Versión | 0.1 |\n| --- | --- | --- |",
+      "page_number": 1,
+      "quality": {
+        "engine": null,
+        "engine_version": null,
+        "kind": "unavailable",
+        "method": null,
+        "provenance": null,
+        "sample_size": null,
+        "unit": null,
+        "value": null,
+        "warnings": []
+      },
+      "rows": [
+        [
+          "¡O INTERNO (NC2)",
+          "Versión",
+          "0.1"
+        ]
+      ],
+      "table_id": "page_1_table_3",
+      "warnings": []
+    }
+  ],
+  "warnings": []
+}

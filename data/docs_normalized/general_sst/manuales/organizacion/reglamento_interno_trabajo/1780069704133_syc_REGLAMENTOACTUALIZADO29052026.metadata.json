@@ -3,16 +3,16 @@
     "conflict_status": "none",
     "conflicts": [],
     "content_prediction": "formulario",
-    "document_type": "reglamento",
+    "document_type": "otro",
     "document_type_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-c6a3v9c55tdi8qw7occvp6lit1uk",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "route_prior": "reglamento",
@@ -23,19 +23,22 @@
       "reglamento:reglamento:route",
       "Reglamento interno de trabajo:reglamento interno:title_control",
       "Reglamento interno de trabajo:reglamento interno:content",
-      "Reglamento interno de trabajo:reglamento interno:route"
+      "Reglamento interno de trabajo:reglamento interno:route",
+      "llama_classify_document_type:otro",
+      "llama_classify_topic:otro",
+      "llama_schema_extract:document_control"
     ],
     "subtopic": null,
-    "topic": "Reglamento interno de trabajo",
+    "topic": "otro",
     "topic_confidence": {
       "engine": null,
       "engine_version": null,
       "kind": "estimated",
-      "method": "evidence_precedence",
-      "provenance": null,
+      "method": "llama_classify",
+      "provenance": "clj-djeepcliabx23n0sda90crik2khm",
       "sample_size": null,
       "unit": null,
-      "value": 0.95,
+      "value": 0.0,
       "warnings": []
     },
     "warnings": []
@@ -64,8 +67,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "Enero, 2025",
+          "source": "llamaparse",
+          "text": "**Enero, 2025**",
           "warnings": []
         }
       ],
@@ -81,8 +84,8 @@
           "page_number": 1,
           "pattern": null,
           "region": null,
-          "source": "pdf_digital",
-          "text": "REGLAMENTO INTERNO DE TRABAJO",
+          "source": "llamaparse",
+          "text": "# REGLAMENTO INTERNO DE TRABAJO",
           "warnings": []
         }
       ],
@@ -102,13 +105,13 @@
   },
   "document_id": "doc_31b00a8b31847796",
   "document_name": "1780069704133_syc_REGLAMENTOACTUALIZADO29052026.pdf",
-  "extraction_method": "pdf_digital",
+  "extraction_method": "llamaparse",
   "feature_observations": {},
   "forms": {
     "engine": null,
     "engine_version": null,
     "evidence": [],
-    "method": "vector_geometry",
+    "method": "llamaparse_form_heuristic",
     "status": "not_detected",
     "value": false,
     "warnings": []
@@ -123,27 +126,425 @@
     "warnings": []
   },
   "language": "es",
-  "legacy_normalized_path": ".tmp/phase1_main_full_candidate_20260720_r1/general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\.tmp\\gui_phase1_20260722_152645\\general_sst\\manuales\\organizacion\\reglamento_interno_trabajo\\1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
   "legacy_path": null,
   "legacy_source_path": null,
+  "llama_cloud": {
+    "job_metadata": {
+      "pdf-high-res-ocr": 36,
+      "pdf-image-convertTime": 0,
+      "pdf-image-ocr-count": 0,
+      "pdf-image-ocr-empty-count": 36,
+      "pdf-image-ocr-failed-count": 0,
+      "pdf-image-ocr-hadText-count": 63,
+      "pdf-image-ocr-pixels": 288471778,
+      "pdf-image-ocr-success-count": 99,
+      "pdf-inputTokens": 173531,
+      "pdf-llmTime": 14511,
+      "pdf-mdLength": 109230,
+      "pdf-multimodal-pdf2Image": 0,
+      "pdf-multimodal-time": 0,
+      "pdf-ocrTime": 0,
+      "pdf-outputTokens": 27332,
+      "pdf-pages": 36,
+      "pdf-pdfToHTMLTime": 0,
+      "pdf-rawTextLength": 118406,
+      "pdf-real-pages": 36,
+      "pdf-time": 19015,
+      "state_transitions": {
+        "cancelled_at": null,
+        "completed_at": "2026-07-21T21:50:26.885124Z",
+        "failed_at": null,
+        "pending_at": "2026-07-21T21:49:51.380932Z",
+        "running_at": "2026-07-21T21:49:51.883061Z",
+        "throttled_at": "2026-07-21T21:49:51.625064Z"
+      }
+    },
+    "page_metadata": [
+      {
+        "confidence": 0.94,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 1,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.899,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 2,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.621,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 3,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.997,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 4,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.998,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 5,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 6,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.991,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 7,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 8,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.993,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 9,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 10,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 11,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 12,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.998,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 13,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.996,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 14,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 15,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 16,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.998,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 17,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 18,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.998,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 19,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.998,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 20,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 21,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 22,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.998,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 23,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.98,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 24,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 25,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.8,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 26,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.99,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 27,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.988,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 28,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 29,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 30,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 31,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 32,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.996,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 33,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.984,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 34,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 1.0,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 35,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      },
+      {
+        "confidence": 0.997,
+        "cost_optimized": false,
+        "original_orientation_angle": 0,
+        "page_number": 36,
+        "printed_page_number": null,
+        "slide_section_name": null,
+        "speaker_notes": null,
+        "triggered_auto_mode": false
+      }
+    ],
+    "parse_configuration_hash": "sha256:cdd89a0e54ed90cc7d486b3e578ad9e2112e03b908de8eae63cd14f49d7fcb62",
+    "parse_job_id": "pjb-pw75waonq7gg7ldawodt810mk4uq",
+    "parse_status": "completed",
+    "warnings": []
+  },
   "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
   "ocr_confidence": {
     "engine": null,
     "engine_version": null,
-    "kind": "unavailable",
-    "method": null,
+    "kind": "estimated",
+    "method": "page_ocr_confidence_average",
     "provenance": null,
     "sample_size": null,
     "unit": null,
-    "value": null,
+    "value": 0.9766666666666666,
     "warnings": []
   },
   "page_count": 36,
   "pipeline_version": "2.0.0",
-  "processed_at": "2026-07-19T22:46:33.457156-05:00",
+  "processed_at": "2026-07-22T15:31:20.446883-05:00",
   "processing_status": "needs_review",
   "review_reasons": [
-    "pdf_semantic_review_required"
+    "ambiguous_classification"
   ],
   "schema_version": "2.0",
   "source_hash": "f11ec302b5a893e3900447f1d14635840e561755da9be4db9b17252f4571fee1",
@@ -169,5 +570,8 @@
       "table_evidence_available_in_tables_artifact"
     ]
   },
-  "warnings": []
+  "warnings": [
+    "llama_parse_job:pjb-pw75waonq7gg7ldawodt810mk4uq",
+    "ambiguous_classification"
+  ]
 }

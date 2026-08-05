@@ -22,12 +22,12 @@ class OcrEngine(Protocol):
 
 
 class MissingOcrEngine:
-    engine = "ocrmypdf"
+    engine = "tesseract"
     engine_version = "unavailable"
     language = "spa"
 
     def extract_pages(self, source_path: Path) -> List[Dict]:
-        raise RuntimeError("No OCR engine configured. Install OCRmyPDF/Tesseract or inject an engine.")
+        raise RuntimeError("No OCR engine configured. Install Tesseract/PDFium or inject an engine.")
 
 
 class PdfScannedReader:

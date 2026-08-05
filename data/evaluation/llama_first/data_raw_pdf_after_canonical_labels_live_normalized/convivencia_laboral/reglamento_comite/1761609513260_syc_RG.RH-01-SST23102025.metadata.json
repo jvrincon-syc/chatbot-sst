@@ -1,0 +1,183 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "reglamento",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "reglamento",
+    "signals": [
+      "reglamento:reglamento:title_control",
+      "reglamento:reglamento:content",
+      "reglamento:reglamento:route",
+      "Comité de Convivencia Laboral:comite de convivencia:title_control",
+      "Convivencia laboral:convivencia laboral:title_control",
+      "Comité de Convivencia Laboral:comite de convivencia:content",
+      "Funcionamiento del comité:reglamento del comite:title_control"
+    ],
+    "subtopic": "Funcionamiento del comité",
+    "topic": "Comité de Convivencia Laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "llama-live-pdf-canonical-labels",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><th>Sistemas y Computadores S.A.</th><th>CODIGO</th><th>RG.RH-01SST</th><th>NIVEL DE CLASIFICACIÓN</th><th>USO INTERNO (NC2)</th><th>VERSION</th><th>0.0</th></tr></table>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "RG.RH-01SST",
+      "value_raw": "RG.RH-01SST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "# REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "REGLAMENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+      "value_raw": "REGLAMENTO COMITÉ DE CONVIVENCIA LABORAL",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 6,
+          "pattern": null,
+          "region": null,
+          "source": "llamaparse",
+          "text": "<tr><td>CODIGO | RG.RH-01SST | NIVEL DE CLASIFICACIÓN | USO INTERNO (NC2) | VERSION | 0.0</td></tr>",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.0",
+      "value_raw": "0.0",
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_d4fca71ff51cb27b",
+  "document_name": "1761609513260_syc_RG.RH-01-SST23102025.pdf",
+  "extraction_method": "llamaparse",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "llamaparse_form_heuristic",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "opencv_signature_stroke",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "data\\evaluation\\llama_first\\data_raw_pdf_after_canonical_labels_live_normalized\\convivencia_laboral\\reglamento_comite\\1761609513260_syc_RG.RH-01-SST23102025.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "normalized_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 6,
+  "pipeline_version": "2.0.5",
+  "processed_at": "2026-07-21T17:54:57.024299-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "cf261e96874a2ae1f8f88428229c76221dd346d10403ca95b5714ea56026c1dc",
+  "source_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": [
+    "llama_parse_job:pjb-9x09oi2uvv05nm64qo8llh9hvg89"
+  ]
+}
