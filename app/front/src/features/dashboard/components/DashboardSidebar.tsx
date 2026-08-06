@@ -1,5 +1,21 @@
-import { Clock3, Database, FileText, SplitSquareHorizontal, UploadCloud } from "lucide-react";
+import {
+  Boxes,
+  Clock3,
+  Database,
+  FileText,
+  SplitSquareHorizontal,
+  UploadCloud,
+} from "lucide-react";
+import { DASHBOARD_VIEWS } from "../dashboardNavigation.js";
 import type { AppView } from "../dashboardTypes.js";
+
+const SIDEBAR_ICONS: Record<AppView, typeof UploadCloud> = {
+  operations: UploadCloud,
+  review: Clock3,
+  inventory: Database,
+  chunking: SplitSquareHorizontal,
+  "embedding-indexing": Boxes,
+};
 
 export function DashboardSidebar({
   activeView,
@@ -8,13 +24,6 @@ export function DashboardSidebar({
   activeView: AppView;
   onViewChange: (view: AppView) => void;
 }) {
-  const items = [
-    { label: "Operacion", icon: UploadCloud, view: "operations" as const },
-    { label: "Revision", icon: Clock3, view: "review" as const },
-    { label: "Inventario", icon: Database, view: "inventory" as const },
-    { label: "Chunking", icon: SplitSquareHorizontal, view: "chunking" as const },
-  ];
-
   return (
     <aside className="sidebar">
       <div className="brand">
@@ -22,17 +31,20 @@ export function DashboardSidebar({
         <span>SST Pipeline</span>
       </div>
       <nav>
-        {items.map((item) => (
-          <button
-            className={activeView === item.view ? "nav-item active" : "nav-item"}
-            key={item.label}
-            onClick={() => onViewChange(item.view)}
-            type="button"
-          >
-            <item.icon size={18} />
-            {item.label}
-          </button>
-        ))}
+        {DASHBOARD_VIEWS.map((item) => {
+          const Icon = SIDEBAR_ICONS[item.view];
+          return (
+            <button
+              className={activeView === item.view ? "nav-item active" : "nav-item"}
+              key={item.view}
+              onClick={() => onViewChange(item.view)}
+              type="button"
+            >
+              <Icon size={18} />
+              {item.sidebarLabel}
+            </button>
+          );
+        })}
       </nav>
     </aside>
   );

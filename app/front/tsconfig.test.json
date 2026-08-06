@@ -15,6 +15,7 @@
     "src/documentReview.ts",
     "src/ocrSettings.ts",
     "src/features/dashboard/dashboardTypes.ts",
+    "src/features/dashboard/dashboardNavigation.ts",
     "src/features/dashboard/dashboardPersistence.ts",
     "src/features/chunking/chunkingTypes.ts",
     "src/features/chunking/chunkingState.ts",

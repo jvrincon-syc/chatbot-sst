@@ -3,12 +3,14 @@ import {
   DEFAULT_LLAMA_CONTROLS,
   createDefaultDashboardPreferences,
 } from "./dashboardTypes.js";
+import { isDashboardView } from "./dashboardNavigation.js";
 import type {
   DashboardPreferences,
   StatusPayload,
 } from "./dashboardTypes.js";
 
-const STORAGE_KEY = "chatbot-sst.dashboard.preferences.v1";
+const LEGACY_STORAGE_KEY = "chatbot-sst.dashboard.preferences.v1";
+const STORAGE_KEY = "chatbot-sst.dashboard.preferences.v2";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -20,6 +22,17 @@ function isProviderMode(value: unknown): value is DashboardPreferences["llamaCon
 
 function isStringOrNull(value: unknown): value is string | null {
   return value === null || typeof value === "string";
+}
+
+function isEmbeddingIndexingStage(
+  value: unknown,
+): value is DashboardPreferences["embeddingIndexing"]["activeStage"] {
+  return (
+    value === "embedding" ||
+    value === "indexing" ||
+    value === "activation" ||
+    value === "retrieval"
+  );
 }
 
 function isLlamaControls(value: unknown): value is DashboardPreferences["llamaControls"] {
@@ -71,7 +84,59 @@ export function resolveDashboardPreferences(options: {
     ...statusDriven,
     activeView: options.stored.activeView,
     selectedDocumentIds: options.stored.selectedDocumentIds,
+    embeddingIndexing: options.stored.embeddingIndexing,
   };
+}
+
+function parseStoredDashboardPreferences(raw: string): DashboardPreferences | null {
+  const parsed: unknown = JSON.parse(raw);
+  if (!isRecord(parsed)) {
+    return null;
+  }
+
+  const activeView = parsed.activeView;
+  const selectedDocumentIds = parsed.selectedDocumentIds;
+  if (!isDashboardView(activeView) || !isRecord(selectedDocumentIds)) {
+    return null;
+  }
+
+  const review = selectedDocumentIds.review;
+  const inventory = selectedDocumentIds.inventory;
+  if (!isStringOrNull(review) || !isStringOrNull(inventory)) {
+    return null;
+  }
+
+  const defaults = createDefaultDashboardPreferences();
+  const embeddingIndexing = isRecord(parsed.embeddingIndexing)
+    ? parsed.embeddingIndexing
+    : null;
+  const activeStage = isEmbeddingIndexingStage(embeddingIndexing?.activeStage)
+    ? embeddingIndexing.activeStage
+    : defaults.embeddingIndexing.activeStage;
+
+  return {
+    ...defaults,
+    activeView,
+    selectedDocumentIds: {
+      review,
+      inventory,
+    },
+    embeddingIndexing: {
+      activeStage,
+    },
+  };
+}
+
+function persistDashboardPreferences(value: DashboardPreferences): void {
+  window.localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      activeView: value.activeView,
+      selectedDocumentIds: value.selectedDocumentIds,
+      embeddingIndexing: value.embeddingIndexing,
+    }),
+  );
+  window.localStorage.removeItem(LEGACY_STORAGE_KEY);
 }
 
 export function readDashboardPreferences(): DashboardPreferences | null {
@@ -81,44 +146,25 @@ export function readDashboardPreferences(): DashboardPreferences | null {
 
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
+    if (raw) {
+      const stored = parseStoredDashboardPreferences(raw);
+      if (stored) {
+        return stored;
+      }
+    }
+
+    const legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (!legacyRaw) {
       return null;
     }
 
-    const parsed: unknown = JSON.parse(raw);
-    if (!isRecord(parsed)) {
+    const migrated = parseStoredDashboardPreferences(legacyRaw);
+    if (!migrated) {
       return null;
     }
 
-    const activeView = parsed.activeView;
-    const selectedDocumentIds = parsed.selectedDocumentIds;
-    if (
-      activeView !== "operations" &&
-      activeView !== "review" &&
-      activeView !== "inventory" &&
-      activeView !== "chunking"
-    ) {
-      return null;
-    }
-    if (!isRecord(selectedDocumentIds)) {
-      return null;
-    }
-
-    const review = selectedDocumentIds.review;
-    const inventory = selectedDocumentIds.inventory;
-
-    if (!isStringOrNull(review) || !isStringOrNull(inventory)) {
-      return null;
-    }
-
-    return {
-      ...createDefaultDashboardPreferences(),
-      activeView,
-      selectedDocumentIds: {
-        review,
-        inventory,
-      },
-    };
+    persistDashboardPreferences(migrated);
+    return migrated;
   } catch {
     return null;
   }
@@ -130,13 +176,7 @@ export function writeDashboardPreferences(value: DashboardPreferences): void {
   }
 
   try {
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        activeView: value.activeView,
-        selectedDocumentIds: value.selectedDocumentIds,
-      }),
-    );
+    persistDashboardPreferences(value);
   } catch {
     // Silently ignore storage quota or privacy mode failures.
   }

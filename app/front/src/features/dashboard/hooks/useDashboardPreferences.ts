@@ -7,8 +7,10 @@ import {
 import type {
   AppView,
   DashboardPreferences,
+  EmbeddingIndexingStage,
   LlamaControls,
   StatusPayload,
+  DocumentSelectionView,
 } from "../dashboardTypes.js";
 
 export function useDashboardPreferences(status: StatusPayload | null) {
@@ -48,12 +50,21 @@ export function useDashboardPreferences(status: StatusPayload | null) {
     setPreferences((current) => ({ ...current, ocrThresholdInput }));
   };
 
-  const setSelectedDocumentId = (view: Exclude<AppView, "operations">, documentId: string | null) => {
+  const setSelectedDocumentId = (view: DocumentSelectionView, documentId: string | null) => {
     setPreferences((current) => ({
       ...current,
       selectedDocumentIds: {
         ...current.selectedDocumentIds,
         [view]: documentId,
+      },
+    }));
+  };
+
+  const setEmbeddingIndexingActiveStage = (activeStage: EmbeddingIndexingStage) => {
+    setPreferences((current) => ({
+      ...current,
+      embeddingIndexing: {
+        activeStage,
       },
     }));
   };
@@ -64,5 +75,6 @@ export function useDashboardPreferences(status: StatusPayload | null) {
     setLlamaControls,
     setOcrThresholdInput,
     setSelectedDocumentId,
+    setEmbeddingIndexingActiveStage,
   };
 }

@@ -5,7 +5,12 @@ export type DecisionKind = "approved" | "rejected";
 export type ReviewStatus = "not_required" | "pending" | DecisionKind;
 export type ProcessingStatus = "pending" | "processed" | "failed" | "needs_review";
 export type DisplayStatus = ProcessingStatus | DecisionKind;
-export type AppView = "operations" | "review" | "inventory" | "chunking";
+export type AppView =
+  | "operations"
+  | "review"
+  | "inventory"
+  | "chunking"
+  | "embedding-indexing";
 
 export type LlamaControls = {
   providerMode: ProviderMode;
@@ -15,6 +20,18 @@ export type LlamaControls = {
 export type DocumentSelectionState = {
   review: string | null;
   inventory: string | null;
+};
+
+export type DocumentSelectionView = keyof DocumentSelectionState;
+
+export type EmbeddingIndexingStage =
+  | "embedding"
+  | "indexing"
+  | "activation"
+  | "retrieval";
+
+export type EmbeddingIndexingState = {
+  activeStage: EmbeddingIndexingStage;
 };
 
 export type ReviewDecision = {
@@ -122,6 +139,7 @@ export type DashboardUploadForm = {
 export type DashboardPreferences = {
   activeView: AppView;
   selectedDocumentIds: DocumentSelectionState;
+  embeddingIndexing: EmbeddingIndexingState;
   llamaControls: LlamaControls;
   ocrThresholdInput: string;
 };
@@ -165,6 +183,7 @@ export const viewTitles: Record<AppView, string> = {
   review: "Revision documental",
   inventory: "Inventario documental",
   chunking: "Chunking local",
+  "embedding-indexing": "Embedding e Indexing",
 };
 
 export function createDefaultDashboardPreferences(): DashboardPreferences {
@@ -173,6 +192,9 @@ export function createDefaultDashboardPreferences(): DashboardPreferences {
     selectedDocumentIds: {
       review: null,
       inventory: null,
+    },
+    embeddingIndexing: {
+      activeStage: "embedding",
     },
     llamaControls: DEFAULT_LLAMA_CONTROLS,
     ocrThresholdInput: "80",

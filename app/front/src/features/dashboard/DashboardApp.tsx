@@ -3,6 +3,7 @@ import { RefreshCw } from "lucide-react";
 import { validateOcrThresholdPercent } from "../../ocrSettings.js";
 import { matchesDocumentReviewQuery } from "../../documentReview.js";
 import { ChunkingWorkspace } from "../chunking/ChunkingWorkspace.js";
+import { EmbeddingIndexingShell } from "./components/EmbeddingIndexingShell.js";
 import {
   DashboardNotice,
   DashboardSummary,
@@ -21,6 +22,7 @@ import {
   uploadDashboardDocument,
   validateDashboardBundle,
 } from "./dashboardApi.js";
+import { DASHBOARD_VIEWS } from "./dashboardNavigation.js";
 import { useDashboardPreferences } from "./hooks/useDashboardPreferences.js";
 import {
   DEFAULT_APPROVE_REASON,
@@ -59,12 +61,15 @@ export function DashboardApp() {
   const {
     preferences,
     setActiveView,
+    setEmbeddingIndexingActiveStage,
     setLlamaControls,
     setOcrThresholdInput,
     setSelectedDocumentId,
   } = useDashboardPreferences(status);
 
   const isChunkingView = preferences.activeView === "chunking";
+  const isStandaloneWorkspaceView =
+    preferences.activeView === "chunking" || preferences.activeView === "embedding-indexing";
 
   const loadStatus = async () => {
     setLoading(true);
@@ -330,34 +335,17 @@ export function DashboardApp() {
           </div>
           <div className="topbar-actions">
             <div className="view-switcher" aria-label="Cambiar vista">
-              <button
-                className={preferences.activeView === "operations" ? "active" : ""}
-                onClick={() => setActiveView("operations")}
-                type="button"
-              >
-                Operacion
-              </button>
-              <button
-                className={preferences.activeView === "review" ? "active" : ""}
-                onClick={() => setActiveView("review")}
-                type="button"
-              >
-                Revision
-              </button>
-              <button
-                className={preferences.activeView === "inventory" ? "active" : ""}
-                onClick={() => setActiveView("inventory")}
-                type="button"
-              >
-                Inventario
-              </button>
-              <button
-                className={preferences.activeView === "chunking" ? "active" : ""}
-                onClick={() => setActiveView("chunking")}
-                type="button"
-              >
-                Chunking
-              </button>
+              {DASHBOARD_VIEWS.map((item) => (
+                <button
+                  className={preferences.activeView === item.view ? "active" : ""}
+                  onClick={() => setActiveView(item.view)}
+                  type="button"
+                  key={item.view}
+                  title={item.title}
+                >
+                  {item.switcherLabel}
+                </button>
+              ))}
             </div>
             <button className="ghost-button" onClick={loadStatus} disabled={loading}>
               <RefreshCw size={16} />
@@ -369,7 +357,7 @@ export function DashboardApp() {
 
         {notice ? <DashboardNotice tone={notice.tone} message={notice.message} /> : null}
 
-        {!isChunkingView ? <DashboardSummary summary={status?.summary ?? null} /> : null}
+        {!isStandaloneWorkspaceView ? <DashboardSummary summary={status?.summary ?? null} /> : null}
 
         {preferences.activeView === "operations" ? (
           <>
@@ -443,6 +431,13 @@ export function DashboardApp() {
         ) : null}
 
         {preferences.activeView === "chunking" ? <ChunkingWorkspace /> : null}
+
+        {preferences.activeView === "embedding-indexing" ? (
+          <EmbeddingIndexingShell
+            activeStage={preferences.embeddingIndexing.activeStage}
+            onStageChange={setEmbeddingIndexingActiveStage}
+          />
+        ) : null}
       </main>
     </div>
   );
