@@ -3,7 +3,7 @@ import { RefreshCw } from "lucide-react";
 import { validateOcrThresholdPercent } from "../../ocrSettings.js";
 import { matchesDocumentReviewQuery } from "../../documentReview.js";
 import { ChunkingWorkspace } from "../chunking/ChunkingWorkspace.js";
-import { EmbeddingIndexingShell } from "./components/EmbeddingIndexingShell.js";
+import { EmbeddingIndexingWorkspace } from "../embeddingIndexing/EmbeddingIndexingWorkspace.js";
 import {
   DashboardNotice,
   DashboardSummary,
@@ -433,7 +433,7 @@ export function DashboardApp() {
         {preferences.activeView === "chunking" ? <ChunkingWorkspace /> : null}
 
         {preferences.activeView === "embedding-indexing" ? (
-          <EmbeddingIndexingShell
+          <EmbeddingIndexingWorkspace
             activeStage={preferences.embeddingIndexing.activeStage}
             onStageChange={setEmbeddingIndexingActiveStage}
           />

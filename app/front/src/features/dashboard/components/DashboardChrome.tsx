@@ -1,7 +1,6 @@
 import {
   AlertCircle,
   ArrowRight,
-  Boxes,
   Check,
   CheckCircle2,
   Cloud,
@@ -14,7 +13,6 @@ import {
   RefreshCw,
   ShieldCheck,
   SlidersHorizontal,
-  SplitSquareHorizontal,
   UploadCloud,
   Clock3,
   XCircle,
@@ -28,10 +26,8 @@ import {
   type LlamaStop,
 } from "../../../llamaRoutes.js";
 import type { OcrThresholdValidation } from "../../../ocrSettings";
-import { DASHBOARD_VIEWS } from "../dashboardNavigation.js";
 import type {
   ActionResult,
-  AppView,
   DashboardUploadForm,
   LlamaControls,
   StatusPayload,
@@ -39,53 +35,6 @@ import type {
 import { LOCAL_INGESTION_STEPS } from "../dashboardTypes.js";
 
 type NoticeTone = "info" | "success" | "warning" | "danger";
-
-const CHROME_SIDEBAR_ICONS: Record<AppView, typeof UploadCloud> = {
-  operations: UploadCloud,
-  review: Clock3,
-  inventory: Database,
-  chunking: SplitSquareHorizontal,
-  "embedding-indexing": Boxes,
-};
-
-export function DashboardSidebar({
-  activeView,
-  onViewChange,
-}: {
-  activeView: AppView;
-  onViewChange: (view: AppView) => void;
-}) {
-  const items = [
-    { label: "Operación", icon: UploadCloud, view: "operations" as const },
-    { label: "Revisión", icon: Clock3, view: "review" as const },
-    { label: "Inventario", icon: Database, view: "inventory" as const },
-  ];
-
-  return (
-    <aside className="sidebar">
-      <div className="brand">
-        <FileText size={24} />
-        <span>SST Pipeline</span>
-      </div>
-      <nav>
-        {DASHBOARD_VIEWS.map((item) => {
-          const Icon = CHROME_SIDEBAR_ICONS[item.view];
-          return (
-            <button
-              className={activeView === item.view ? "nav-item active" : "nav-item"}
-              key={item.view}
-              onClick={() => onViewChange(item.view)}
-              type="button"
-            >
-              <Icon size={18} />
-              {item.sidebarLabel}
-            </button>
-          );
-        })}
-      </nav>
-    </aside>
-  );
-}
 
 export function DashboardNotice({
   tone,

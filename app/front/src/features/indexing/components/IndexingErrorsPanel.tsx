@@ -1,0 +1,62 @@
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import type { IndexingRunError } from "../indexingTypes.js";
+import type { PaginatedResponse } from "../../embeddingIndexing/shared/apiTypes.js";
+
+type IndexingErrorsPanelProps = {
+  errorsPage: PaginatedResponse<IndexingRunError> | null;
+  loading: boolean;
+  error: string | null;
+};
+
+// Lists per-document indexing errors. It exposes internal_error_id for backend
+// log correlation; it never renders stack traces or raw provider payloads.
+export function IndexingErrorsPanel({ errorsPage, loading, error }: IndexingErrorsPanelProps) {
+  const items = errorsPage?.items ?? [];
+
+  return (
+    <section className="panel chunking-panel" aria-label="Errores del run de indexing">
+      <div className="panel-heading">
+        <div>
+          <h2>Errores de indexing</h2>
+          <span>Codigo de error e identificador interno para correlacionar con logs.</span>
+        </div>
+        <span className="chunking-meta">
+          {loading ? "Cargando..." : `${errorsPage?.totalItems ?? 0} errores`}
+        </span>
+      </div>
+
+      <div className="chunking-panel-body">
+        {error ? (
+          <div className="notice notice-danger" role="alert">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        ) : null}
+
+        {!loading && !error && items.length === 0 ? (
+          <div className="chunking-profile-note" role="status">
+            <CheckCircle2 size={16} aria-hidden="true" />
+            <span>Sin errores registrados para este run.</span>
+          </div>
+        ) : null}
+
+        {items.length > 0 ? (
+          <ul className="chunking-list" aria-label="Detalle de errores por documento">
+            {items.map((item) => (
+              <li key={`${item.documentId}-${item.internalErrorId ?? "na"}`} className="chunking-profile-state">
+                <span>{item.documentId}</span>
+                <strong>{item.errorCode ?? "ERROR_DESCONOCIDO"}</strong>
+                <span className="chunking-status-row">
+                  <span className="chunking-status-chip danger">{item.status}</span>
+                  {item.internalErrorId ? (
+                    <span className="chunking-meta">error id: {item.internalErrorId}</span>
+                  ) : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    </section>
+  );
+}
