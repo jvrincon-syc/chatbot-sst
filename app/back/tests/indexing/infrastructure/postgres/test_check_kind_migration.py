@@ -22,6 +22,7 @@ NEW_KIND = "embedding_profile_verification"
 def _connection():
     if not os.environ.get("SST_POSTGRES_DSN"):
         pytest.skip("SST_POSTGRES_DSN is required for live PostgreSQL checks")
+        print("falta la variable")
     psycopg2 = pytest.importorskip("psycopg2")
     return psycopg2.connect(os.environ["SST_POSTGRES_DSN"])
 
@@ -31,7 +32,7 @@ def test_la_migracion_existe_y_solo_amplia_el_catalogo() -> None:
     executable = "\n".join(
         line for line in raw.splitlines() if not line.lstrip().startswith("--")
     )
-
+    print("fallo migrcion ")
     assert "readiness_checks_check_kind_check" in executable
     assert NEW_KIND in executable
     # One DROP CONSTRAINT, one ADD CONSTRAINT, one scoped UPDATE. Nothing else.

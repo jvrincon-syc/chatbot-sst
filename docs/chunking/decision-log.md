@@ -121,3 +121,40 @@
 - Persisted run manifests now carry the original `idempotency_key` and `payload_fingerprint`, which lets the service rebuild the idempotency index after a restart.
 - `GET /api/chunking/documents/{document_id}/parents` and `GET /api/chunking/parents/{parent_id}/children` now expose paginated responses with `page`, `page_size`, `total_items`, and `total_pages`.
 - Regression tests now cover restart hydration, idempotency conflict detection after reload, and paginated parent/child inspection.
+
+## 2026-08-06 - Golden `parent_count` realignment for body-less root headings
+
+### Problem
+
+`test_chunking_corpus_golden.py::test_validate_chunks_recorre_golden_y_exporta_openapi`
+failed with `parent_count mismatch for golden_manual_headings`. The golden
+`docs/chunking/golden_corpus_expected.json` expected one more parent than the
+chunker produces for three cases: `golden_manual_headings` (3→2),
+`golden_reglamento_articulos` (4→3) and `golden_mixto_ruido` (3→2).
+
+### Root cause (documented before touching the golden)
+
+All three failing cases share the same shape: a root `# Title` heading with no
+body of its own, immediately followed by sibling `##` sections.
+`ParentChunkBuilder._merge_heading_only_sections`
+(`app/back/src/chunking/application/parent_chunk_builder.py`) deliberately folds
+a body-less heading section into the following section, so it never becomes its
+own parent. A document with a body-less root `# Title` plus N `##` siblings
+therefore yields N parents, not N+1.
+
+This behavior is intentional and pinned by the unit contract
+`test_parent_chunk_builder.py::test_fusiona_heading_sin_cuerpo_con_siguiente_seccion`
+(7/7 unit tests green), whose scenario (`ÍNDICE` H1 without body → `1. CAPÍTULO`
+H2) is identical to `# Manual SST` → `## Objetivo`. The remaining seven golden
+cases already matched the chunker exactly.
+
+### Decision
+
+The chunker has **no regression**; it matches its unit contract. The **golden
+fixture was stale** for the three body-less-root-heading cases — it encoded the
+pre-merge assumption "root title = its own parent". The golden expectations
+(and the paired `child_count_min` for `golden_reglamento_articulos`) were
+corrected to the merge semantics; the chunker and its merge rule were left
+unchanged. Bumped the golden `schema_version` to `1.1` and added an inline
+`_contract` note plus per-case `_note` fields so the semantics travel with the
+fixture. This is a documented contract correction, not a green-forcing edit.

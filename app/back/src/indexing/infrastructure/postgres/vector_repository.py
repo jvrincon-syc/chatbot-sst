@@ -91,7 +91,7 @@ class PostgresVectorRepository:
                     f"""
                     INSERT INTO {table} (node_id, document_id, embedding, metadata)
                     VALUES (%s, %s, %s, %s::jsonb)
-                    ON CONFLICT (node_id) DO UPDATE SET
+                    ON CONFLICT (node_id) WHERE embedding_bundle_id IS NULL DO UPDATE SET
                         document_id = EXCLUDED.document_id,
                         embedding = EXCLUDED.embedding,
                         metadata = EXCLUDED.metadata,

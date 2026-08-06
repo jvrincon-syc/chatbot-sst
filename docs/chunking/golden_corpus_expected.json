@@ -1,10 +1,12 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
+  "_contract": "parent_count follows local-structural-v1. A body-less heading section (a heading immediately followed by another heading) is merged into the following section by ParentChunkBuilder._merge_heading_only_sections; it never becomes its own parent. This is the behavior fixed by the unit contract test_fusiona_heading_sin_cuerpo_con_siguiente_seccion. Therefore a document with a root '# Title' (no body) plus N sibling '##' sections yields N parents, not N+1. See docs/chunking/decision-log.md 2026-08-06.",
   "cases": [
     {
       "document_id": "golden_manual_headings",
+      "_note": "Root '# Manual SST' has no body and is merged into '## Objetivo'. Two '##' sections -> 2 parents.",
       "expected": {
-        "parent_count": 3,
+        "parent_count": 2,
         "child_count_min": 2,
         "tables_present": false,
         "forms_present": false,
@@ -14,8 +16,9 @@
     },
     {
       "document_id": "golden_reglamento_articulos",
+      "_note": "Root '# Reglamento' (no body) merges into '## Articulo 1'. Three '##' sections -> 3 parents.",
       "expected": {
-        "parent_count": 4,
+        "parent_count": 3,
         "child_count_min": 3,
         "tables_present": false,
         "forms_present": false,
@@ -36,8 +39,9 @@
     },
     {
       "document_id": "golden_mixto_ruido",
+      "_note": "Root '# Procedimiento mixto' (no body) merges into '## Preparacion'. Two '##' sections -> 2 parents; the internal 'NOTA INTERNA SST' line is not a heading.",
       "expected": {
-        "parent_count": 3,
+        "parent_count": 2,
         "child_count_min": 2,
         "tables_present": false,
         "forms_present": false,

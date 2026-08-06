@@ -33,6 +33,9 @@ from indexing.application.embedding_provider import (
     EmbeddingProvider,
     EmbeddingProviderAuthenticationError,
     EmbeddingProviderConfigurationError,
+    EmbeddingProviderRateLimitError,
+    EmbeddingProviderResponseError,
+    EmbeddingProviderTimeoutError,
 )
 from indexing.domain.models import IndexingProfile
 from indexing.infrastructure.embeddings.bge import (
@@ -103,7 +106,12 @@ def operational_settings(
 
 @dataclass
 class ProviderEngineAdapter:
-    """Adapt an existing indexing embedding provider to the engine port."""
+    """Adapt an existing indexing embedding provider to the engine port.
+
+    Every provider call is funnelled through :func:`translate_engine_error` so a
+    raw SDK/provider exception (which can echo URLs, response bodies, Hugging
+    Face cache paths or credentials) never crosses the application boundary.
+    """
 
     profile: EmbeddingProfile
     provider: EmbeddingProvider
@@ -148,12 +156,18 @@ class ProviderEngineAdapter:
     def embed_documents(self, texts: Sequence[str]) -> list[list[float]]:
         """Return one document vector per input text."""
 
-        return self.provider.embed_documents(list(texts)).vectors
+        try:
+            return self.provider.embed_documents(list(texts)).vectors
+        except EmbeddingError as error:
+            raise translate_engine_error(error) from error
 
     def embed_queries(self, texts: Sequence[str]) -> list[list[float]]:
         """Return one query vector per input text."""
 
-        return self.provider.embed_queries(list(texts)).vectors
+        try:
+            return self.provider.embed_queries(list(texts)).vectors
+        except EmbeddingError as error:
+            raise translate_engine_error(error) from error
 
 
 def _bge_revision(provider: EmbeddingProvider) -> str:
@@ -361,13 +375,41 @@ class DefaultEmbeddingEngineRegistry:
         )
 
 
+#: Sanitized reason kinds, so callers can distinguish failure families without
+#: ever seeing the provider's raw message. Every family still surfaces as
+#: ``EMBEDDING_ENGINE_UNAVAILABLE`` at the HTTP boundary.
+_ENGINE_ERROR_REASONS: tuple[tuple[type[EmbeddingError], str], ...] = (
+    # Order matters: authentication is a subclass of configuration, so it must
+    # be matched first.
+    (EmbeddingProviderAuthenticationError, "authentication_failed"),
+    (EmbeddingProviderConfigurationError, "missing_dependency_or_configuration"),
+    (EmbeddingProviderUnavailableError, "runtime_unavailable"),
+    (EmbeddingProviderTimeoutError, "temporary_failure"),
+    (EmbeddingProviderRateLimitError, "temporary_failure"),
+    (EmbeddingProviderResponseError, "provider_response_error"),
+)
+
+
+def _engine_error_reason(error: EmbeddingError) -> str:
+    for error_type, reason in _ENGINE_ERROR_REASONS:
+        if isinstance(error, error_type):
+            return reason
+    return "runtime_error"
+
+
 def translate_engine_error(error: EmbeddingError) -> EmbeddingEngineUnavailable:
     """Translate a provider runtime failure into a sanitized domain error.
 
-    Provider messages can echo credentials or raw payloads, so only the error
-    class name crosses the boundary.
+    Provider messages can echo credentials, URLs, response bodies or local
+    Hugging Face cache paths, so nothing but a stable reason kind and the error
+    class name crosses the boundary. The originating class is preserved as the
+    exception cause for internal correlation, never in the public message.
     """
 
-    return EmbeddingEngineUnavailable(
-        f"embedding runtime failed with {type(error).__name__}"
+    reason = _engine_error_reason(error)
+    domain_error = EmbeddingEngineUnavailable(
+        f"embedding runtime failed ({reason})"
     )
+    domain_error.reason = reason  # type: ignore[attr-defined]
+    domain_error.origin_error_type = type(error).__name__  # type: ignore[attr-defined]
+    return domain_error

@@ -8,7 +8,10 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import TextIO
 
-from core.logging.observability import sanitize_observability_payload
+from core.logging.observability import (
+    sanitize_exception,
+    sanitize_observability_payload,
+)
 
 _LOG_DIR = Path("logs")
 _RESERVED_LOG_RECORD_ATTRS = frozenset(logging.makeLogRecord({}).__dict__) | {
@@ -35,10 +38,11 @@ class StructuredJsonFormatter(logging.Formatter):
         }
         payload.update(_extra_fields(record))
         if record.exc_info:
-            payload["exception"] = self.formatException(record.exc_info)
-            exception = record.exc_info[1]
-            if exception is not None:
-                payload["exception_type"] = type(exception).__name__
+            # Never emit a raw traceback: it can echo absolute paths, URLs,
+            # provider response bodies or chained credential details. Only safe
+            # class names, a redacted chained message and a correlation id go
+            # out; the full diagnostic stays reproducible via internal_error_id.
+            payload.update(sanitize_exception(record.exc_info))
         return json.dumps(payload, ensure_ascii=False, default=_json_default)
 
 

@@ -194,11 +194,7 @@ def test_indexa_y_activa_el_bundle_por_http(client: TestClient) -> None:
 
     activation = client.post(
         "/api/indexing/activations",
-        json={
-            "run_id": indexing_run["run_id"],
-            "consumer_scope_type": SCOPE_TYPE,
-            "consumer_scope_id": SCOPE_ID,
-        },
+        json={"run_id": indexing_run["run_id"]},
     )
     assert activation.status_code == 200, activation.text
     assert activation.json()["activated_rows"] == 3
@@ -213,6 +209,62 @@ def test_el_contrato_de_indexing_no_pide_provider_ni_modelo(client: TestClient) 
     schema = client.app.openapi()["components"]["schemas"]["IndexingRunRequestSchema"]
 
     assert set(schema["properties"]) == {"embedding_bundle_id"}
+
+
+def test_activation_y_rollback_no_aceptan_consumer_scope_en_el_body(
+    client: TestClient,
+) -> None:
+    activation_schema = client.app.openapi()["components"]["schemas"][
+        "ActivationRequestSchema"
+    ]
+    rollback_schema = client.app.openapi()["components"]["schemas"][
+        "RollbackRequestSchema"
+    ]
+
+    assert "consumer_scope_type" not in activation_schema["properties"]
+    assert "consumer_scope_id" not in activation_schema["properties"]
+    assert "consumer_scope_type" not in rollback_schema["properties"]
+    assert "consumer_scope_id" not in rollback_schema["properties"]
+
+
+def test_activation_rechaza_scope_inyectado_en_el_body(client: TestClient) -> None:
+    embedding_run = _run_embedding(client)
+    indexing_run = _run_indexing(client, embedding_run["produced_embedding_bundle_id"])
+
+    # A client trying to smuggle another scope through the body is rejected by
+    # the strict schema; the scope can only come from the server.
+    response = client.post(
+        "/api/indexing/activations",
+        json={
+            "run_id": indexing_run["run_id"],
+            "consumer_scope_type": "attacker",
+            "consumer_scope_id": "other-tenant",
+        },
+    )
+
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "PIPELINE_INVALID_REQUEST"
+
+
+def test_activation_y_rollback_bloqueadas_con_el_flag_apagado(
+    blocked_client: TestClient,
+) -> None:
+    activation = blocked_client.post(
+        "/api/indexing/activations",
+        json={"run_id": "any-run"},
+    )
+    rollback = blocked_client.post(
+        "/api/indexing/rollbacks",
+        json={
+            "current_embedding_bundle_id": "curr",
+            "previous_embedding_bundle_id": "prev",
+        },
+    )
+
+    assert activation.status_code == 503
+    assert activation.json()["error"]["code"] == "INDEXING_BUNDLE_FIRST_DISABLED"
+    assert rollback.status_code == 503
+    assert rollback.json()["error"]["code"] == "INDEXING_BUNDLE_FIRST_DISABLED"
 
 
 def test_lista_documentos_y_errores_del_run(client: TestClient) -> None:
@@ -244,11 +296,7 @@ def test_flujo_completo_de_retrieval_por_http(client: TestClient) -> None:
     indexing_run = _run_indexing(client, embedding_run["produced_embedding_bundle_id"])
     activation = client.post(
         "/api/indexing/activations",
-        json={
-            "run_id": indexing_run["run_id"],
-            "consumer_scope_type": SCOPE_TYPE,
-            "consumer_scope_id": SCOPE_ID,
-        },
+        json={"run_id": indexing_run["run_id"]},
     ).json()
     retrieval_profile_id = activation["retrieval_profile_id"]
 

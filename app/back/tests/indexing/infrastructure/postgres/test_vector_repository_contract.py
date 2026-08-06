@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pytest
+from llama_index.core.schema import TextNode
 
 from indexing.domain.profiles import ResolvedIndexingProfile
 from indexing.infrastructure.llama_index.pgvector_store import VectorStoreWriteError
@@ -94,6 +95,28 @@ def test_postgres_vector_repository_inserts_bundle_vectors_inactive() -> None:
     assert "INSERT INTO idx_vec_llama_bge_m3_v1" in connection.cursor_obj.statements[0]
     assert "is_active" in connection.cursor_obj.statements[0]
     assert connection.cursor_obj.params[0][8] is False
+
+
+def test_postgres_vector_repository_replaces_legacy_vectors_with_partial_conflict_target() -> None:
+    connection = RecordingConnection()
+    repository = PostgresVectorRepository(connection)
+
+    repository.replace_document_vectors(
+        document_id="doc_1",
+        profile=_profile(),
+        nodes=[
+            TextNode(
+                id_="child_1",
+                text="Contenido SST",
+                metadata={"document_id": "doc_1"},
+            )
+        ],
+        embeddings=[[0.1, 0.2, 0.3]],
+    )
+
+    assert "ON CONFLICT (node_id) WHERE embedding_bundle_id IS NULL DO UPDATE SET" in (
+        connection.cursor_obj.statements[1]
+    )
 
 
 def test_postgres_vector_repository_activates_bundle_transactionally() -> None:

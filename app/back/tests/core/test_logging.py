@@ -137,6 +137,45 @@ def test_emit_observability_event_uses_safe_log_payload(
     assert payload["context"]["run_id"] == "run_123"
 
 
+def test_logger_sanitiza_tracebacks_y_no_expone_rutas_ni_urls(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    logger = get_logger("tests.core.logging.exceptions")
+
+    try:
+        try:
+            raise ValueError(
+                "provider failed at https://api.voyageai.com/v1/embeddings?token=abc123"
+            )
+        except ValueError as inner:
+            raise RuntimeError(
+                r"cache miss under C:\Users\svc\.cache\huggingface\models"
+            ) from inner
+    except RuntimeError:
+        logger.error("embedding runtime failed", exc_info=True)
+
+    captured = capsys.readouterr().out
+    payload = json.loads(captured)
+
+    # No raw traceback, no absolute paths, no URLs anywhere in the line.
+    assert "exception" not in payload
+    assert "Traceback" not in captured
+    assert "huggingface" not in captured
+    assert "voyageai.com" not in captured
+    assert "C:\\Users" not in captured
+    # Safe, correlatable summary instead.
+    assert payload["exception_type"] == "RuntimeError"
+    assert payload["exception_chain"] == "RuntimeError <- ValueError"
+    assert len(payload["internal_error_id"]) == 16
+
+
+def test_internal_error_id_es_estable_para_el_mismo_error() -> None:
+    from core.logging.observability import internal_error_id
+
+    error = RuntimeError("same failure")
+    assert internal_error_id(error) == internal_error_id(error)
+
+
 def test_observability_event_rejects_invalid_payload_cuando_event_is_empty() -> None:
     with pytest.raises(Exception):
         ObservabilityEvent(

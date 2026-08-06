@@ -150,6 +150,7 @@ activemq-data/
 # Environments
 .env
 .envrc
+.venv
 .venv/
 .venv*/
 .venv312/
@@ -194,6 +195,7 @@ pytest_temp_probe/
 
 # Local planning/context notes
 memory/
+/plans/
 
 # Local agent/rules files
 /.agents/
@@ -206,6 +208,11 @@ memory/
 /agents_back/
 .agents/
 .codex_tmp/
+
+# Claude Code local setup
+/CLAUDE.md
+/CLAUDE.local.md
+/.claude/
 
 # Spyder project settings
 .spyderproject
@@ -275,3 +282,4 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.claude/

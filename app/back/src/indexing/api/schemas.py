@@ -19,21 +19,24 @@ class IndexingRunRequestSchema(StrictModel):
 
 
 class ActivationRequestSchema(StrictModel):
-    """Explicit activation of one indexed bundle for a consumer scope."""
+    """Explicit activation of one indexed bundle.
+
+    The consumer scope is resolved server-side, never from the request body: a
+    client cannot choose which scope's active profile it mutates.
+    """
 
     run_id: str = Field(min_length=1)
-    consumer_scope_type: str = Field(min_length=1)
-    consumer_scope_id: str = Field(min_length=1)
     lexical_fallback_policy: str = "allowed_when_vector_unavailable"
 
 
 class RollbackRequestSchema(StrictModel):
-    """Revert one lane to a bundle that was already validated."""
+    """Revert one lane to a bundle that was already validated.
+
+    The consumer scope is resolved server-side (see ``ActivationRequestSchema``).
+    """
 
     current_embedding_bundle_id: str = Field(min_length=1)
     previous_embedding_bundle_id: str = Field(min_length=1)
-    consumer_scope_type: str = Field(min_length=1)
-    consumer_scope_id: str = Field(min_length=1)
 
 
 class IndexingTargetSchema(StrictModel):

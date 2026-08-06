@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
+from uuid import uuid4
 
 from ingestion.readers.pdf_digital_reader import PdfPage
 
@@ -46,12 +47,15 @@ class OcrMyPdfEngine:
     def extract_pages(self, source_path: Path) -> List[Dict]:
         self._validate_tesseract()
 
-        with tempfile.TemporaryDirectory(dir=str(self.temp_dir) if self.temp_dir else None) as temp_name:
-            temp_root = Path(temp_name)
-            working_input = temp_root / source_path.name
-            output_pdf = temp_root / "ocr_output.pdf"
-            sidecar_txt = temp_root / "ocr_output.txt"
-            shutil.copy2(source_path, working_input)
+        temp_root = self.temp_dir or Path(tempfile.gettempdir())
+        temp_root.mkdir(parents=True, exist_ok=True)
+        suffix = source_path.suffix or ".pdf"
+        working_input = temp_root / f".ocr_input_{uuid4().hex}{suffix}"
+        output_pdf = temp_root / f".ocr_output_{uuid4().hex}.pdf"
+        sidecar_txt = temp_root / f".ocr_output_{uuid4().hex}.txt"
+
+        try:
+            shutil.copyfile(source_path, working_input)
             command = [
                 self.ocrmypdf_cmd,
                 "--language",
@@ -80,6 +84,10 @@ class OcrMyPdfEngine:
                 pages = self.text_extractor.extract_pages(output_pdf)
                 return [self._page_to_dict(page) for page in pages]
             return self._pages_from_sidecar(sidecar_txt)
+        finally:
+            if not self.keep_temporary:
+                for path in (working_input, output_pdf, sidecar_txt):
+                    path.unlink(missing_ok=True)
 
     def _validate_tesseract(self) -> None:
         try:

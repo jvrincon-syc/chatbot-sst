@@ -413,11 +413,18 @@ Polling: `GET /api/indexing/runs/{run_id}` cada **1 s**.
 
 ### `POST /api/indexing/activations` (indexar ≠ activar)
 
+Requiere el flag `indexing_bundle_first`; con el flag apagado devuelve
+`503 INDEXING_BUNDLE_FIRST_DISABLED`.
+
+**El `consumer_scope` NO se envía en el body.** Lo resuelve el servidor
+(`SST_CONSUMER_SCOPE_TYPE` / `SST_CONSUMER_SCOPE_ID`, por defecto
+`chatbot` / `sst-default`). Un body que incluya `consumer_scope_type` o
+`consumer_scope_id` es rechazado con `422 PIPELINE_INVALID_REQUEST`: un cliente
+no puede elegir el scope cuyo perfil activo muta.
+
 ```json
 {
   "run_id": "indexing-run-...",
-  "consumer_scope_type": "chatbot",
-  "consumer_scope_id": "sst-default",
   "lexical_fallback_policy": "allowed_when_vector_unavailable"
 }
 ```
@@ -436,12 +443,13 @@ Polling: `GET /api/indexing/runs/{run_id}` cada **1 s**.
 
 ### `POST /api/indexing/rollbacks`
 
+Mismo gate (`indexing_bundle_first`) y mismo scope server-side que
+`/activations`. El scope tampoco se envía en el body.
+
 ```json
 {
   "current_embedding_bundle_id": "...",
-  "previous_embedding_bundle_id": "...",
-  "consumer_scope_type": "chatbot",
-  "consumer_scope_id": "sst-default"
+  "previous_embedding_bundle_id": "..."
 }
 ```
 
@@ -566,6 +574,30 @@ Con el flag apagado, las **lecturas siguen funcionando** y las escrituras
 devuelven `503` con `EMBEDDING_V2_DISABLED` / `INDEXING_BUNDLE_FIRST_DISABLED` /
 `RETRIEVAL_V1_DISABLED`. El frontend debe deshabilitar los botones de creación
 cuando reciba esos códigos, no ocultarlos.
+
+`/api/indexing/activations` y `/api/indexing/rollbacks` también exigen
+`indexing_bundle_first`; con el flag apagado devuelven `503
+INDEXING_BUNDLE_FIRST_DISABLED`.
+
+### Modo de persistencia (composición del servidor)
+
+El servidor GUI elige el modo de persistencia de forma explícita:
+
+```text
+SST_PERSISTENCE_MODE   memory | postgres   (por defecto: postgres si hay
+                                            SST_POSTGRES_DSN, si no memory)
+SST_POSTGRES_DSN       DSN durable de PostgreSQL
+```
+
+- `postgres`: perfiles, targets y repositorios se leen de la base durable;
+  aplica el filtro `review_status = approved`.
+- `memory`: adaptadores en memoria, solo para demo y desarrollo local.
+- En modo `postgres`, si la base no está disponible el arranque **falla cerrado**
+  (`PostgresUnavailableAtStartup`); nunca degrada silenciosamente a memoria.
+
+El scope de consumidor para activación/rollback es server-side
+(`SST_CONSUMER_SCOPE_TYPE` / `SST_CONSUMER_SCOPE_ID`, por defecto
+`chatbot` / `sst-default`) y no se acepta desde el body.
 
 ## 8. Flujo de pantalla recomendado
 

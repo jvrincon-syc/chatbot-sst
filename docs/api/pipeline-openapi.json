@@ -3,18 +3,8 @@
     "schemas": {
       "ActivationRequestSchema": {
         "additionalProperties": false,
-        "description": "Explicit activation of one indexed bundle for a consumer scope.",
+        "description": "Explicit activation of one indexed bundle.\n\nThe consumer scope is resolved server-side, never from the request body: a\nclient cannot choose which scope's active profile it mutates.",
         "properties": {
-          "consumer_scope_id": {
-            "minLength": 1,
-            "title": "Consumer Scope Id",
-            "type": "string"
-          },
-          "consumer_scope_type": {
-            "minLength": 1,
-            "title": "Consumer Scope Type",
-            "type": "string"
-          },
           "lexical_fallback_policy": {
             "default": "allowed_when_vector_unavailable",
             "title": "Lexical Fallback Policy",
@@ -27,9 +17,7 @@
           }
         },
         "required": [
-          "run_id",
-          "consumer_scope_type",
-          "consumer_scope_id"
+          "run_id"
         ],
         "title": "ActivationRequestSchema",
         "type": "object"
@@ -2076,18 +2064,8 @@
       },
       "RollbackRequestSchema": {
         "additionalProperties": false,
-        "description": "Revert one lane to a bundle that was already validated.",
+        "description": "Revert one lane to a bundle that was already validated.\n\nThe consumer scope is resolved server-side (see ``ActivationRequestSchema``).",
         "properties": {
-          "consumer_scope_id": {
-            "minLength": 1,
-            "title": "Consumer Scope Id",
-            "type": "string"
-          },
-          "consumer_scope_type": {
-            "minLength": 1,
-            "title": "Consumer Scope Type",
-            "type": "string"
-          },
           "current_embedding_bundle_id": {
             "minLength": 1,
             "title": "Current Embedding Bundle Id",
@@ -2101,9 +2079,7 @@
         },
         "required": [
           "current_embedding_bundle_id",
-          "previous_embedding_bundle_id",
-          "consumer_scope_type",
-          "consumer_scope_id"
+          "previous_embedding_bundle_id"
         ],
         "title": "RollbackRequestSchema",
         "type": "object"

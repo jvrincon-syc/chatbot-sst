@@ -22,7 +22,7 @@ from core.logging.observability import measure_duration_ms
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
 from ingestion.config.llama_settings import LlamaSettings
 from api.app import create_app
-from api.dependencies import build_pipeline_services
+from api.dependencies import build_pipeline_services_from_env
 from ingestion.gui.asgi_bridge import AsgiBridge
 from ingestion.gui.chunking_adapter import ChunkingApiBridge
 from ingestion.gui.review_store import (
@@ -1272,7 +1272,11 @@ def main() -> int:
     host = "127.0.0.1"
     port = 8765
     chunking_api = ChunkingApiBridge(docs_normalized=DOCS_NORMALIZED, chunks_root=CHUNKING_ROOT)
-    pipeline_services = build_pipeline_services(
+    # Persistence mode is explicit: PostgreSQL when SST_POSTGRES_DSN is set (or
+    # SST_PERSISTENCE_MODE=postgres), otherwise the in-memory demo adapters.
+    # Production never silently downgrades: a required-but-unavailable database
+    # raises at startup instead of quietly serving from memory.
+    pipeline_services = build_pipeline_services_from_env(
         chunks_root=CHUNKING_ROOT,
         embeddings_root=EMBEDDINGS_ROOT,
     )

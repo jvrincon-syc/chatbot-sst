@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
+import traceback
 from enum import Enum
 from time import perf_counter
 from typing import Protocol, TypeAlias, cast
@@ -44,6 +46,13 @@ _SIGNED_URL_PATTERN = re.compile(
     r"https?://\S*(?:signature|x-amz-signature|x-goog-signature|token|auth|sig)=\S*",
     re.IGNORECASE,
 )
+#: Absolute filesystem paths (Windows drive or POSIX root) that could leak a
+#: Hugging Face cache location or a local artifact directory into logs.
+_ABSOLUTE_PATH_PATTERN = re.compile(
+    r"(?:[A-Za-z]:\\|\\\\|/)[^\s\"']{2,}",
+)
+#: Bare URLs (with or without a query string) so provider endpoints never leak.
+_URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
 
 
 class ObservabilityDomain(str, Enum):
@@ -272,6 +281,72 @@ def _metric_int_or_float(value: int | float | None) -> int | float | None:
     if isinstance(value, bool):
         return None
     return value
+
+
+def sanitize_exception_text(text: str) -> str:
+    """Redact absolute paths and URLs from an exception string or traceback.
+
+    Provider exceptions and tracebacks routinely echo Hugging Face cache paths,
+    request URLs and query parameters. This collapses them to a stable
+    placeholder so nothing sensitive reaches ordinary log output. Sensitive
+    keys are still handled by the payload sanitizer; this only covers free text.
+    """
+
+    redacted = _SIGNED_URL_PATTERN.sub(_REDACTED, text)
+    redacted = _URL_PATTERN.sub(_REDACTED, redacted)
+    redacted = _ABSOLUTE_PATH_PATTERN.sub(_REDACTED, redacted)
+    return redacted
+
+
+def internal_error_id(exception: BaseException) -> str:
+    """Return a short stable id correlating a sanitized log line to an error.
+
+    The id is derived from the exception class and its full chained text, so the
+    same failure yields the same id, but the id itself carries nothing readable.
+    """
+
+    parts: list[str] = []
+    current: BaseException | None = exception
+    seen: set[int] = set()
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        parts.append(f"{type(current).__name__}:{current}")
+        current = current.__cause__ or current.__context__
+    digest = hashlib.sha256("\n".join(parts).encode("utf-8", "replace")).hexdigest()
+    return digest[:16]
+
+
+def sanitize_exception(exc_info) -> dict[str, str]:
+    """Return a sanitized, chained summary of an exception for structured logs.
+
+    Nothing raw is emitted: only the safe exception class names, a redacted
+    chained message and an internal error id for correlation.
+    """
+
+    exception = exc_info[1] if isinstance(exc_info, tuple) else exc_info
+    if exception is None:
+        return {}
+    classes: list[str] = []
+    messages: list[str] = []
+    current: BaseException | None = exception
+    seen: set[int] = set()
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        classes.append(type(current).__name__)
+        raw = "".join(
+            traceback.format_exception_only(type(current), current)
+        ).strip()
+        messages.append(sanitize_exception_text(raw))
+        current = current.__cause__ or current.__context__
+    return {
+        "exception_type": classes[0],
+        "exception_chain": " <- ".join(classes),
+        "exception_summary": _sanitize_string(
+            " <- ".join(messages), key="exception_summary"
+        )
+        or "",
+        "internal_error_id": internal_error_id(exception),
+    }
 
 
 def _python_log_level(status: EventStatus) -> int:

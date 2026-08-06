@@ -17,6 +17,12 @@ from core.logging.logger import configure_structured_logging  # noqa: E402
 
 
 def main() -> int:
+    """Validate the normalized tree.
+
+    Exit codes follow the CLI convention of `scripts/`:
+    ``0`` validation passed, ``1`` validation failed, ``2`` unexpected
+    execution error (the report may not have been written).
+    """
     configure_structured_logging(stream=sys.stderr, include_file_handler=False)
     logger = logging.getLogger(__name__)
     load_secrets_env(ROOT / "secrets.env")
@@ -47,21 +53,47 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
 
-    report = validate_normalized_tree(
-        args.docs_normalized,
-        raw_root=args.raw_root,
-        mode=args.mode,
-        run_id=args.run_id,
-    )
-    output = args.output or args.docs_normalized / "_manifests" / f"validation_{args.run_id}.json"
-    dump_json(output, report)
+    try:
+        report = validate_normalized_tree(
+            args.docs_normalized,
+            raw_root=args.raw_root,
+            mode=args.mode,
+            run_id=args.run_id,
+        )
+        output = (
+            args.output or args.docs_normalized / "_manifests" / f"validation_{args.run_id}.json"
+        )
+        dump_json(output, report)
+    except Exception as error:  # CLI boundary: never leak a raw traceback to stdout.
+        logger.error(
+            "validation_failed",
+            extra={
+                "stage": "validation",
+                "event": "validation_failed",
+                "status": "error",
+                "error_type": type(error).__name__,
+                "run_id": args.run_id,
+            },
+        )
+        print(
+            json.dumps(
+                {"status": "error", "error_type": type(error).__name__, "run_id": args.run_id},
+                ensure_ascii=False,
+                sort_keys=True,
+            )
+        )
+        return 2
+
+    # ValidationReport.errors/.warnings are counts (int), not collections.
     logger.info(
         "validation_report_written",
         extra={
             "stage": "validation",
             "event": "validation_report_written",
             "status": report.status,
-            "error_count": len(report.errors),
+            "documents_checked": report.documents_checked,
+            "error_count": report.errors,
+            "warning_count": report.warnings,
             "output": str(output),
             "run_id": args.run_id,
         },
@@ -70,7 +102,9 @@ def main() -> int:
         json.dumps(
             {
                 "status": report.status,
-                "error_count": len(report.errors),
+                "documents_checked": report.documents_checked,
+                "error_count": report.errors,
+                "warning_count": report.warnings,
                 "run_id": args.run_id,
                 "output": str(output),
                 "docs_normalized": str(args.docs_normalized),

@@ -13,6 +13,7 @@ from core.api.http import (
     http_error,
     paginate,
 )
+from core.consumer_scope import ConsumerScope
 from core.feature_flags import FeatureFlags
 from embedding.domain.errors import EmbeddingDomainError
 from indexing.api.schemas import (
@@ -94,6 +95,23 @@ def get_feature_flags(request: Request) -> FeatureFlags:
     return request.app.state.feature_flags
 
 
+def get_consumer_scope(request: Request) -> ConsumerScope:
+    """Return the server-controlled consumer scope for mutations."""
+
+    return request.app.state.consumer_scope
+
+
+def _require_bundle_first(flags: FeatureFlags) -> None:
+    """Fail closed when the bundle-first rollout flag is off."""
+
+    if not flags.indexing_bundle_first:
+        raise http_error(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            code="INDEXING_BUNDLE_FIRST_DISABLED",
+            message="the indexing_bundle_first feature flag is off",
+        )
+
+
 def _translate(error: Exception, *, run_id: str | None = None):
     code = getattr(error, "code", "INDEXING_DOMAIN_ERROR")
     http_status = int(getattr(error, "http_status", 400))
@@ -135,12 +153,7 @@ def create_run(
     service: IndexingReadService = Depends(get_read_service),
     flags: FeatureFlags = Depends(get_feature_flags),
 ) -> dict:
-    if not flags.indexing_bundle_first:
-        raise http_error(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            code="INDEXING_BUNDLE_FIRST_DISABLED",
-            message="the indexing_bundle_first feature flag is off",
-        )
+    _require_bundle_first(flags)
     try:
         run = use_case.execute(
             request=CreateIndexingRunRequest(
@@ -218,13 +231,16 @@ def get_retrieval_readiness(
 def activate_bundle(
     payload: ActivationRequestSchema,
     use_case: ActivateIndexedBundleUseCase = Depends(get_activate_use_case),
+    flags: FeatureFlags = Depends(get_feature_flags),
+    scope: ConsumerScope = Depends(get_consumer_scope),
 ) -> dict:
+    _require_bundle_first(flags)
     try:
         result = use_case.execute(
             ActivationRequest(
                 run_id=payload.run_id,
-                consumer_scope_type=payload.consumer_scope_type,
-                consumer_scope_id=payload.consumer_scope_id,
+                consumer_scope_type=scope.scope_type,
+                consumer_scope_id=scope.scope_id,
                 lexical_fallback_policy=payload.lexical_fallback_policy,
             )
         )
@@ -243,14 +259,17 @@ def activate_bundle(
 def rollback_bundle(
     payload: RollbackRequestSchema,
     use_case: RollbackIndexedBundleUseCase = Depends(get_rollback_use_case),
+    flags: FeatureFlags = Depends(get_feature_flags),
+    scope: ConsumerScope = Depends(get_consumer_scope),
 ) -> dict:
+    _require_bundle_first(flags)
     try:
         result = use_case.execute(
             RollbackRequest(
                 current_embedding_bundle_id=payload.current_embedding_bundle_id,
                 previous_embedding_bundle_id=payload.previous_embedding_bundle_id,
-                consumer_scope_type=payload.consumer_scope_type,
-                consumer_scope_id=payload.consumer_scope_id,
+                consumer_scope_type=scope.scope_type,
+                consumer_scope_id=scope.scope_id,
             )
         )
     except _DOMAIN_ERRORS as error:

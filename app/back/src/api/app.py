@@ -52,6 +52,7 @@ def create_app(*, services: PipelineServices) -> FastAPI:
 
     app = FastAPI(title="Chatbot SST Pipeline API", version="0.1.0", lifespan=lifespan)
     app.state.feature_flags = services.feature_flags
+    app.state.consumer_scope = services.consumer_scope
     app.state.embedding_read_service = services.embedding_read_service
     app.state.embedding_create_run = services.embedding_create_run
     app.state.embedding_executor = services.embedding_executor
