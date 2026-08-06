@@ -1,0 +1,1 @@
+"""In-memory retrieval adapters."""

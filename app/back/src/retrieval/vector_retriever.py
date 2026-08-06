@@ -16,6 +16,15 @@ class VectorCandidate:
 
 
 class VectorRetriever:
+    """In-memory cosine retriever kept only for the legacy fusion tests.
+
+    Superseded on the official path by
+    ``retrieval.infrastructure.postgres.repositories.PostgresVectorSearch``,
+    which filters by ``embedding_profile_id``, ``indexing_target_id``,
+    ``corpus_version`` and ``is_active``. Remove once the legacy retrieval path
+    is retired.
+    """
+
     def __init__(self, *, candidates: list[VectorCandidate]) -> None:
         self._candidates = candidates
 

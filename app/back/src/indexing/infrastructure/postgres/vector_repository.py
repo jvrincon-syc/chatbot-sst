@@ -212,6 +212,39 @@ class PostgresVectorRepository:
                 ),
             )
 
+    def count_active_rows(
+        self,
+        *,
+        profile: ResolvedIndexingProfile,
+        indexing_target_id: str,
+        corpus_version: str,
+        embedding_bundle_id: str,
+    ) -> int:
+        """Count active vector rows of one bundle inside one lane."""
+
+        table = profile.vector_table
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT count(*) FROM {table}
+                 WHERE embedding_profile_id = %s
+                   AND indexing_target_id = %s
+                   AND corpus_version = %s
+                   AND embedding_bundle_id = %s
+                   AND is_active = true
+                """,
+                (
+                    profile.profile_id,
+                    indexing_target_id,
+                    corpus_version,
+                    embedding_bundle_id,
+                ),
+            )
+            row = cursor.fetchone()
+        if row is None:
+            return 0
+        return int(row["count"] if isinstance(row, dict) else row[0])
+
     def rollback_to_bundle(
         self,
         *,

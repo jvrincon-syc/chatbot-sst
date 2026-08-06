@@ -39,7 +39,7 @@ from indexing.application.embedding_provider import (
     EmbeddingProviderRateLimitError,
     EmbeddingProviderTimeoutError,
 )
-from indexing.domain.models import IndexableDocument, IndexingResult
+from indexing.domain.models import IndexableDocument, IndexingProfile, IndexingResult
 from indexing.domain.profiles import IngestionOrigin, ResolvedIndexingProfile
 from indexing.infrastructure.embeddings.factory import EmbeddingFactory
 from indexing.infrastructure.llama_index.cache import (
@@ -274,6 +274,67 @@ class FilesystemBundleLoader:
         )
 
 
+class ProfileSemanticMismatchError(ValueError):
+    """The requested profile disagrees with the durable indexing profile."""
+
+
+def _durable_provider_profile(
+    *,
+    document: IndexableDocument,
+    resolved_profile: ResolvedIndexingProfile,
+) -> IndexingProfile:
+    """Build the provider profile from the durable registry, not from the request.
+
+    The legacy adapter still accepts ``document.profile`` so existing callers keep
+    working, but every semantic field is compared against the durable profile and
+    a mismatch fails closed instead of silently embedding into another space.
+    """
+
+    requested = document.profile
+    mismatches = [
+        name
+        for name, expected, observed in (
+            ("profile_id", resolved_profile.profile_id, requested.profile_id),
+            (
+                "embedding_provider",
+                resolved_profile.embedding_provider,
+                requested.embedding_provider,
+            ),
+            ("embedding_model", resolved_profile.embedding_model, requested.embedding_model),
+            (
+                "embedding_dimension",
+                resolved_profile.embedding_dimension,
+                requested.embedding_dimension,
+            ),
+            (
+                "chunking_version",
+                resolved_profile.chunking_version,
+                requested.chunking_version,
+            ),
+            (
+                "metadata_schema_version",
+                resolved_profile.metadata_schema_version,
+                requested.metadata_schema_version,
+            ),
+        )
+        if expected != observed
+    ]
+    if mismatches:
+        raise ProfileSemanticMismatchError(
+            "requested profile does not match the durable indexing profile: "
+            + ",".join(mismatches)
+        )
+    return IndexingProfile(
+        profile_id=resolved_profile.profile_id,
+        chunking_version=resolved_profile.chunking_version,
+        embedding_provider=resolved_profile.embedding_provider,
+        embedding_model=resolved_profile.embedding_model,
+        embedding_dimension=resolved_profile.embedding_dimension,
+        vector_store=resolved_profile.vector_table,
+        metadata_schema_version=resolved_profile.metadata_schema_version,
+    )
+
+
 class LlamaIndexingPort:
     def __init__(
         self,
@@ -425,7 +486,12 @@ class LlamaIndexingPort:
                 },
             )
 
-            embedding_provider = self._embedding_factory.create(document.profile)
+            embedding_provider = self._embedding_factory.create(
+                _durable_provider_profile(
+                    document=document,
+                    resolved_profile=resolved_profile,
+                )
+            )
             _emit_indexing_event(
                 event="embedding_provider_selected",
                 status=EventStatus.COMPLETED,

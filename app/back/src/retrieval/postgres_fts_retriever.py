@@ -11,6 +11,14 @@ class FtsQuery:
 
 
 class PostgresFtsRetriever:
+    """Legacy full-text retriever over ``llama_index_documents``.
+
+    Superseded on the official path by
+    ``retrieval.infrastructure.postgres.repositories.PostgresLexicalSearch``,
+    which reads ``indexing_nodes`` and honours the corpus and review
+    filters. Remove once the legacy retrieval path is retired.
+    """
+
     @staticmethod
     def build_query(filters: dict[str, Any] | None = None) -> FtsQuery:
         filters = filters or {}

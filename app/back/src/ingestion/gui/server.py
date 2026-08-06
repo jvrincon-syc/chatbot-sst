@@ -21,6 +21,9 @@ from core.logging.logger import configure_structured_logging
 from core.logging.observability import measure_duration_ms
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
 from ingestion.config.llama_settings import LlamaSettings
+from api.app import create_app
+from api.dependencies import build_pipeline_services
+from ingestion.gui.asgi_bridge import AsgiBridge
 from ingestion.gui.chunking_adapter import ChunkingApiBridge
 from ingestion.gui.review_store import (
     ReviewDecision,
@@ -39,6 +42,9 @@ ROOT = Path(__file__).resolve().parents[5]
 DOCS_RAW = ROOT / "data" / "docs_raw"
 DOCS_NORMALIZED = ROOT / "data" / "docs_normalized"
 CHUNKING_ROOT = ROOT / "data" / "chunks"
+EMBEDDINGS_ROOT = ROOT / "data" / "embeddings"
+#: Domains served by the FastAPI routers through the ASGI bridge.
+PIPELINE_API_PREFIXES = ("/api/embedding", "/api/indexing", "/api/retrieval")
 MANIFESTS_DIR = DOCS_NORMALIZED / "_manifests"
 REVIEW_DECISIONS_PATH = MANIFESTS_DIR / "review_decisions.json"
 GUI_SETTINGS_PATH = MANIFESTS_DIR / "gui_settings.json"
@@ -416,6 +422,8 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                 self._send_json(build_status_payload())
             elif path.startswith("/api/chunking"):
                 self._handle_chunking_get()
+            elif path.startswith(PIPELINE_API_PREFIXES):
+                self._handle_pipeline_api("GET")
             else:
                 self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
         except Exception as exc:
@@ -451,6 +459,8 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                 self._handle_promote()
             elif path.startswith("/api/chunking"):
                 self._handle_chunking_post()
+            elif path.startswith(PIPELINE_API_PREFIXES):
+                self._handle_pipeline_api("POST")
             else:
                 self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
         except Exception as exc:
@@ -466,6 +476,41 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             raise
         else:
             self._finalize_http_request()
+
+    def _handle_pipeline_api(self, method: str) -> None:
+        """Forward Embedding, Indexing and Retrieval requests into FastAPI."""
+
+        bridge = getattr(self.server, "pipeline_api", None)
+        if bridge is None:
+            self._send_json(
+                {
+                    "error": {
+                        "code": "PIPELINE_SERVICE_UNAVAILABLE",
+                        "message": "pipeline service is not configured",
+                        "run_id": None,
+                        "details": {},
+                    }
+                },
+                status=HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
+            return
+        length = int(self.headers.get("Content-Length") or 0)
+        body = self.rfile.read(length) if length else b""
+        response = bridge.handle(
+            method=method,
+            path=self.path,
+            headers={name: value for name, value in self.headers.items()},
+            body=body,
+        )
+        self._response_status_code = HTTPStatus(response.status)
+        self.send_response(response.status)
+        self.send_header(
+            "Content-Type",
+            response.headers.get("content-type", "application/json"),
+        )
+        self.send_header("Content-Length", str(len(response.body)))
+        self.end_headers()
+        self.wfile.write(response.body)
 
     def _handle_chunking_get(self) -> None:
         bridge = self._chunking_api()
@@ -1227,8 +1272,15 @@ def main() -> int:
     host = "127.0.0.1"
     port = 8765
     chunking_api = ChunkingApiBridge(docs_normalized=DOCS_NORMALIZED, chunks_root=CHUNKING_ROOT)
+    pipeline_services = build_pipeline_services(
+        chunks_root=CHUNKING_ROOT,
+        embeddings_root=EMBEDDINGS_ROOT,
+    )
+    pipeline_services.indexing_reconciler.reconcile()
+    pipeline_services.embedding_executor.reconcile()
     server = ThreadingHTTPServer((host, port), Phase1GuiHandler)
     server.chunking_api = chunking_api
+    server.pipeline_api = AsgiBridge(create_app(services=pipeline_services))
     server_logger.info(
         "Backend ready",
         extra={
@@ -1253,6 +1305,7 @@ def main() -> int:
             },
         )
         chunking_api.close()
+        pipeline_services.close()
         server.server_close()
         server_logger.info(
             "Backend shutdown completed",
