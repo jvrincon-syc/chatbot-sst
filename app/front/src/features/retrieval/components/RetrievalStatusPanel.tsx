@@ -28,18 +28,18 @@ export function RetrievalStatusPanel({
   });
 
   return (
-    <section className="panel chunking-panel" aria-label="Estado del perfil de retrieval">
+    <section className="panel" aria-label="Estado del perfil de retrieval">
       <div className="panel-heading">
         <div>
           <h2>Estado de retrieval</h2>
           <span>Runtime y readiness se evaluan por separado; ambos deben estar sanos.</span>
         </div>
-        <span className="chunking-pill">
+        <span className="ui-pill">
           <Search size={13} aria-hidden="true" /> Solo lectura
         </span>
       </div>
 
-      <div className="chunking-panel-body">
+      <div className="ui-panel-body">
         {error ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -48,7 +48,7 @@ export function RetrievalStatusPanel({
         ) : null}
 
         {stageState.stage === "unavailable" ? (
-          <div className="chunking-empty" role="status">
+          <div className="ui-empty" role="status">
             <span>
               Retrieval no esta disponible todavia. Aparecera cuando la activacion devuelva un
               retrieval profile.
@@ -57,14 +57,14 @@ export function RetrievalStatusPanel({
         ) : null}
 
         {stageState.stage === "loading" || (loading && !status) ? (
-          <div className="chunking-launch-hint" role="status">
+          <div className="ui-hint" role="status">
             <Loader2 className="spin" size={16} /> Cargando estado del perfil...
           </div>
         ) : null}
 
         {status ? (
           <>
-            <dl className="chunking-mini-metrics">
+            <dl className="ui-metrics">
               <div>
                 <dt>Perfil</dt>
                 <dd>{status.profile.retrievalProfileId}</dd>
@@ -79,11 +79,11 @@ export function RetrievalStatusPanel({
               </div>
             </dl>
 
-            <div className="chunking-profile-state" aria-label="Runtime del motor de consultas">
+            <div className="ui-state-card" aria-label="Runtime del motor de consultas">
               <span>Runtime</span>
-              <div className="chunking-status-row">
+              <div className="ui-status-row">
                 <span
-                  className={`chunking-status-chip ${retrievalRuntimeStatusTone(
+                  className={`ui-status-chip ${retrievalRuntimeStatusTone(
                     status.profile.lastRuntimeStatus,
                   )}`}
                 >
@@ -92,8 +92,8 @@ export function RetrievalStatusPanel({
                 <span
                   className={
                     status.runtime.queryEngineAvailable
-                      ? "chunking-status-chip success"
-                      : "chunking-status-chip danger"
+                      ? "ui-status-chip success"
+                      : "ui-status-chip danger"
                   }
                 >
                   {status.runtime.queryEngineAvailable ? (
@@ -106,28 +106,28 @@ export function RetrievalStatusPanel({
                     </>
                   )}
                 </span>
-                <span className="chunking-meta">
+                <span className="ui-meta">
                   Vector: {status.runtime.vectorRetrievalEnabled ? "si" : "no"}
                 </span>
-                <span className="chunking-meta">
+                <span className="ui-meta">
                   Fallback: {status.runtime.lexicalFallbackAllowed ? "si" : "no"}
                 </span>
               </div>
               {status.runtime.blockedReason ? (
-                <span className="chunking-field-note error">
+                <span className="ui-field-note error">
                   Motivo runtime: {status.runtime.blockedReason}
                 </span>
               ) : null}
             </div>
 
-            <div className="chunking-profile-state" aria-label="Readiness de retrieval">
+            <div className="ui-state-card" aria-label="Readiness de retrieval">
               <span>Readiness</span>
-              <div className="chunking-status-row">
+              <div className="ui-status-row">
                 <span
                   className={
                     status.readiness.ready
-                      ? "chunking-status-chip success"
-                      : "chunking-status-chip danger"
+                      ? "ui-status-chip success"
+                      : "ui-status-chip danger"
                   }
                 >
                   {status.readiness.ready ? (
@@ -140,12 +140,12 @@ export function RetrievalStatusPanel({
                     </>
                   )}
                 </span>
-                <span className="chunking-meta">
+                <span className="ui-meta">
                   {status.readiness.activeVectorRows} filas activas
                 </span>
               </div>
               {stageState.stage === "blocked" && stageState.blockingReasons.length > 0 ? (
-                <ul className="chunking-warning-box">
+                <ul className="ui-warning">
                   {stageState.blockingReasons.map((reason) => (
                     <li key={reason}>{reason}</li>
                   ))}

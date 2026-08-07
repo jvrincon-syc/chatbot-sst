@@ -321,9 +321,9 @@ export function DashboardApp() {
   };
 
   return (
-    <div className={isChunkingView ? "app-shell chunking-mode" : "app-shell"}>
+    <div className="app-shell">
       <DashboardSidebar activeView={preferences.activeView} onViewChange={setActiveView} />
-      <main className={isChunkingView ? "workspace chunking-workspace" : "workspace"}>
+      <main className="workspace">
         <header className="topbar">
           <div>
             <h1>{viewTitles[preferences.activeView]}</h1>

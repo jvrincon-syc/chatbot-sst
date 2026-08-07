@@ -20,18 +20,18 @@ export function IndexingDocumentsTable({
   const items = documentsPage?.items ?? [];
 
   return (
-    <section className="panel chunking-panel" aria-label="Documentos del run de indexing">
+    <section className="panel" aria-label="Documentos del run de indexing">
       <div className="panel-heading">
         <div>
           <h2>Documentos indexados</h2>
           <span>Un documento cuenta como indexado solo con fecha de commit.</span>
         </div>
-        <span className="chunking-meta">
+        <span className="ui-meta">
           {loading ? "Cargando..." : `${documentsPage?.totalItems ?? 0} documentos`}
         </span>
       </div>
 
-      <div className="chunking-panel-body">
+      <div className="ui-panel-body">
         {error ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -40,7 +40,7 @@ export function IndexingDocumentsTable({
         ) : null}
 
         <div className="table-wrap compact">
-          <table className="chunking-table">
+          <table className="ui-table">
             <thead>
               <tr>
                 <th scope="col">Documento</th>
@@ -63,14 +63,14 @@ export function IndexingDocumentsTable({
                   return (
                     <tr key={document.documentId}>
                       <td>
-                        <div className="chunking-row-cell">
+                        <div className="ui-row-cell">
                           <strong>{document.documentId}</strong>
                           <span>{document.sourceRelpath}</span>
                         </div>
                       </td>
                       <td>{document.status}</td>
                       <td>
-                        <div className="chunking-row-cell">
+                        <div className="ui-row-cell">
                           <strong>{document.eligibilityStatus}</strong>
                           <span>{document.eligibilityReason}</span>
                         </div>
@@ -78,11 +78,11 @@ export function IndexingDocumentsTable({
                       <td>{document.vectorCount}</td>
                       <td>
                         {committed ? (
-                          <span className="chunking-status-chip success">
+                          <span className="ui-status-chip success">
                             <CheckCircle2 size={13} aria-hidden="true" /> Indexado
                           </span>
                         ) : (
-                          <span className="chunking-status-chip warning">
+                          <span className="ui-status-chip warning">
                             {loading ? (
                               <Loader2 className="spin" size={13} aria-hidden="true" />
                             ) : (

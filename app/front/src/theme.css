@@ -1,11 +1,15 @@
+/* Unica fuente de verdad de color, tipografia y sombra.
+   Los tokens son semanticos: ningun componente escribe un hex de marca. */
 :root {
-  color: #17202a;
-  background: #ffffff;
+  color: var(--text);
+  background: var(--bg);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+
+  /* Superficies y texto */
   --bg: #ffffff;
   --panel: #ffffff;
   --panel-soft: #f6f8fa;
@@ -13,11 +17,29 @@
   --line-strong: #c3ccd5;
   --text: #17202a;
   --muted: #607080;
-  --teal: #007c78;
-  --teal-soft: #e0f4f1;
-  --amber: #c87500;
-  --amber-soft: #fff2d6;
-  --red: #d33b3b;
-  --red-soft: #ffe4e4;
   --shadow: 0 8px 24px rgba(22, 32, 42, 0.08);
+
+  /* Acento de marca: unico color de la cromatica interactiva (nav activo,
+     foco, boton primario, seleccion). Antes vivia solo en la vista chunking. */
+  --accent: #4f5bd5;
+  --accent-ink: #1f2749;
+  --accent-soft: #ecefff;
+  --accent-border: #ccd4ff;
+  --accent-line: #d9def3;
+  --accent-warm: #f6f2ff;
+  --accent-wash: rgba(79, 91, 213, 0.12);
+
+  /* Estados: nunca se usan como color de marca */
+  --success: #007c78;
+  --success-soft: #e0f4f1;
+  --success-border: #82c7c2;
+  --success-ink: #00615d;
+  --warning: #c87500;
+  --warning-soft: #fff2d6;
+  --warning-ink: #8b5600;
+  --neutral-soft: #eef2f5;
+  --neutral-ink: #536371;
+  --danger: #d33b3b;
+  --danger-soft: #ffe4e4;
+  --danger-ink: #c52727;
 }

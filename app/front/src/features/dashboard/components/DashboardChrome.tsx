@@ -18,6 +18,7 @@ import {
   XCircle,
 } from "lucide-react";
 import type { FormEvent } from "react";
+import { MetricCard } from "../../../components/ui/MetricCard.js";
 import {
   LLAMA_ROUTE_OPTIONS,
   llamaCloudConfigFromRoute,
@@ -436,28 +437,6 @@ export function PipelinePanel({
       </div>
       {lastResult ? <pre className="result-box">{JSON.stringify(lastResult, null, 2)}</pre> : null}
     </section>
-  );
-}
-
-function MetricCard({
-  label,
-  value,
-  icon,
-  tone,
-}: {
-  label: string;
-  value: number;
-  icon: JSX.Element;
-  tone: "neutral" | "success" | "warning" | "danger";
-}) {
-  return (
-    <article className={`metric-card ${tone}`}>
-      <div className="metric-icon">{icon}</div>
-      <div>
-        <span>{label}</span>
-        <strong>{value.toLocaleString("es-CO")}</strong>
-      </div>
-    </article>
   );
 }
 

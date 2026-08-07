@@ -35,19 +35,19 @@ export function RetrievalValidationPanel({
       : null;
 
   return (
-    <section className="panel chunking-panel" aria-label="Validacion de retrieval">
+    <section className="panel" aria-label="Validacion de retrieval">
       <div className="panel-heading">
         <div>
           <h2>Validacion de retrieval</h2>
           <span>Usa una query sintetica interna; nunca una pregunta real de usuario.</span>
         </div>
-        <span className="chunking-pill">
+        <span className="ui-pill">
           <ShieldCheck size={13} aria-hidden="true" /> Operador
         </span>
       </div>
 
-      <div className="chunking-panel-body">
-        <div className="chunking-launch-actions">
+      <div className="ui-panel-body">
+        <div className="ui-actions">
           <button
             type="button"
             className="secondary-button"
@@ -74,10 +74,10 @@ export function RetrievalValidationPanel({
         ) : null}
 
         {validationResult ? (
-          <div className="chunking-panel-body" aria-label="Resultado de validacion">
-            <div className="chunking-status-row">
+          <div className="ui-panel-body" aria-label="Resultado de validacion">
+            <div className="ui-status-row">
               <span
-                className={`chunking-status-chip ${retrievalValidationStatusTone(
+                className={`ui-status-chip ${retrievalValidationStatusTone(
                   validationResult.status,
                 )}`}
               >
@@ -88,17 +88,17 @@ export function RetrievalValidationPanel({
                 )}{" "}
                 {retrievalValidationStatusLabel(validationResult.status)}
               </span>
-              <span className="chunking-meta">
+              <span className="ui-meta">
                 {validationResult.candidatesFound} candidatos
               </span>
               {validationResult.queryDimension !== null ? (
-                <span className="chunking-meta">dim {validationResult.queryDimension}</span>
+                <span className="ui-meta">dim {validationResult.queryDimension}</span>
               ) : null}
-              <span className="chunking-meta">{validationResult.validatorVersion}</span>
+              <span className="ui-meta">{validationResult.validatorVersion}</span>
             </div>
 
             {validationResult.blockingReasons.length > 0 ? (
-              <div className="chunking-warning-box" role="status">
+              <div className="ui-warning" role="status">
                 <strong>Motivos de bloqueo</strong>
                 <ul>
                   {validationResult.blockingReasons.map((reason) => (

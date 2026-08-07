@@ -57,18 +57,18 @@ export function EmbeddingRunPanel({
   const statusTone = run ? embeddingRunStatusTone(run.status) : "neutral";
 
   return (
-    <section className="panel chunking-panel" aria-label="Ejecucion de embedding">
+    <section className="panel" aria-label="Ejecucion de embedding">
       <div className="panel-heading">
         <div>
           <h2>Ejecutar embedding</h2>
           <span>Crea un run sobre un chunk bundle con Idempotency-Key.</span>
         </div>
-        <span className="chunking-pill">
+        <span className="ui-pill">
           <Boxes size={13} aria-hidden="true" /> Runs
         </span>
       </div>
 
-      <div className="chunking-panel-body">
+      <div className="ui-panel-body">
         {chunkBundlesError ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -76,7 +76,7 @@ export function EmbeddingRunPanel({
           </div>
         ) : null}
 
-        <label className="chunking-field">
+        <label className="ui-field">
           <span id={CHUNK_BUNDLE_LABEL_ID}>Chunk bundle</span>
           <select
             aria-labelledby={CHUNK_BUNDLE_LABEL_ID}
@@ -94,11 +94,11 @@ export function EmbeddingRunPanel({
             ))}
           </select>
           {!chunkBundlesLoading && chunkBundles.length === 0 ? (
-            <span className="chunking-field-note">No hay chunk bundles disponibles.</span>
+            <span className="ui-field-note">No hay chunk bundles disponibles.</span>
           ) : null}
         </label>
 
-        <div className="chunking-launch-actions">
+        <div className="ui-actions">
           <button
             type="button"
             className="primary-button"
@@ -125,30 +125,30 @@ export function EmbeddingRunPanel({
         ) : null}
 
         {run ? (
-          <div className="chunking-panel-body" aria-label="Estado del run de embedding">
-            <div className="chunking-status-row">
-              <span className={`chunking-status-chip ${statusTone}`}>
+          <div className="ui-panel-body" aria-label="Estado del run de embedding">
+            <div className="ui-status-row">
+              <span className={`ui-status-chip ${statusTone}`}>
                 {embeddingRunStatusLabel(run.status)}
               </span>
               {polling ? (
-                <span className="chunking-meta">
+                <span className="ui-meta">
                   <Loader2 className="spin" size={13} aria-hidden="true" /> Actualizando
                 </span>
               ) : null}
-              <span className="chunking-meta">Run {run.embeddingRunId}</span>
+              <span className="ui-meta">Run {run.embeddingRunId}</span>
             </div>
 
-            <div className="chunking-progress">
-              <div className="chunking-progress-track">
-                <div className="chunking-progress-fill" style={{ width: `${progress}%` }} />
+            <div className="ui-progress">
+              <div className="ui-progress-track">
+                <div className="ui-progress-fill" style={{ width: `${progress}%` }} />
               </div>
-              <span className="chunking-meta" aria-live="polite">
+              <span className="ui-meta" aria-live="polite">
                 {run.summary.embeddedChildren}/{run.summary.requestedChildren} childs ({progress}%)
               </span>
             </div>
 
             {run.warnings.length > 0 ? (
-              <div className="chunking-warning-box" role="status">
+              <div className="ui-warning" role="status">
                 <strong>Advertencias</strong>
                 <ul>
                   {run.warnings.map((warning) => (
