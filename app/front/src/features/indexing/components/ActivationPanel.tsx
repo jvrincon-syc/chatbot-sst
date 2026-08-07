@@ -53,19 +53,19 @@ export function ActivationPanel({
   const canActivate = activatable && !activationBusy;
 
   return (
-    <section className="panel chunking-panel" aria-label="Activacion del bundle indexado">
+    <section className="panel" aria-label="Activacion del bundle indexado">
       <div className="panel-heading">
         <div>
           <h2>Activacion</h2>
           <span>Paso explicito e independiente del indexing. Habilita el handoff a retrieval.</span>
         </div>
-        <span className="chunking-pill">
+        <span className="ui-pill">
           <Waypoints size={13} aria-hidden="true" /> Etapa
         </span>
       </div>
 
-      <div className="chunking-panel-body">
-        <label className="chunking-field">
+      <div className="ui-panel-body">
+        <label className="ui-field">
           <span id={POLICY_LABEL_ID}>Politica de fallback lexico</span>
           <select
             aria-labelledby={POLICY_LABEL_ID}
@@ -79,12 +79,12 @@ export function ActivationPanel({
               </option>
             ))}
           </select>
-          <span className="chunking-field-note">
+          <span className="ui-field-note">
             El consumer scope lo resuelve el servidor; no se envia desde la interfaz.
           </span>
         </label>
 
-        <div className="chunking-launch-actions">
+        <div className="ui-actions">
           <button
             type="button"
             className="primary-button"
@@ -112,7 +112,7 @@ export function ActivationPanel({
 
         {readiness ? (
           <div
-            className={readiness.ready ? "chunking-profile-note" : "chunking-warning-box"}
+            className={readiness.ready ? "ui-note" : "ui-warning"}
             role="status"
           >
             <strong>
@@ -130,9 +130,9 @@ export function ActivationPanel({
         ) : null}
 
         {activationResult ? (
-          <div className="chunking-profile-note" role="status">
+          <div className="ui-note" role="status">
             <CheckCircle2 size={16} aria-hidden="true" />
-            <div className="chunking-row-cell">
+            <div className="ui-row-cell">
               <strong>Activacion completada · {activationResult.activatedRows} filas</strong>
               <span>
                 {activationResult.retrievalProfileId

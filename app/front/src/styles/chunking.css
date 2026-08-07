@@ -1,0 +1,70 @@
+.chunking-workspace {
+  position: relative;
+}
+
+.chunking-hero,
+.chunking-grid,
+.chunking-inspector-grid,
+.chunking-summary-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.chunking-hero {
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  margin-bottom: 16px;
+}
+
+.chunking-grid,
+.chunking-inspector-grid {
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  margin-top: 16px;
+}
+
+.chunking-summary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+
+
+/* La tarjeta de child reutiliza .ui-list-card y solo agrega su cabecera y meta. */
+.chunking-child-header {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.chunking-child-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.chunking-child-warning {
+  align-items: center;
+  color: var(--warning-ink);
+  display: flex;
+  font-size: 11px;
+  gap: 6px;
+}
+
+@media (max-width: 1180px) {
+  .chunking-hero,
+  .chunking-grid,
+  .chunking-inspector-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chunking-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .chunking-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

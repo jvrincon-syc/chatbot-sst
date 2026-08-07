@@ -24,15 +24,15 @@ export function PipelineHandoffPanel({
       </div>
       <div className="pipeline-handoff-body">
         {handedOff ? (
-          <div className="chunking-profile-note" role="status">
+          <div className="ui-note" role="status">
             <CheckCircle2 size={16} aria-hidden="true" />
-            <div className="chunking-row-cell">
+            <div className="ui-row-cell">
               <strong>Retrieval profile disponible</strong>
               <span>{retrievalProfileId}</span>
             </div>
           </div>
         ) : (
-          <div className="chunking-empty" role="status">
+          <div className="ui-empty" role="status">
             <CircleDashed size={16} aria-hidden="true" />
             <span>Aun no hay retrieval profile. Completa la activacion para habilitar retrieval.</span>
           </div>

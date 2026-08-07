@@ -30,7 +30,7 @@ export function EmbeddingBundleInspector({
   readiness,
 }: EmbeddingBundleInspectorProps) {
   return (
-    <section className="panel chunking-panel" aria-label="Inspector de embedding bundle">
+    <section className="panel" aria-label="Inspector de embedding bundle">
       <div className="panel-heading">
         <div>
           <h2>Inspeccion del bundle</h2>
@@ -38,7 +38,7 @@ export function EmbeddingBundleInspector({
         </div>
       </div>
 
-      <div className="chunking-panel-body">
+      <div className="ui-panel-body">
         {error ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -47,20 +47,20 @@ export function EmbeddingBundleInspector({
         ) : null}
 
         {loading ? (
-          <div className="chunking-launch-hint" role="status">
+          <div className="ui-hint" role="status">
             <Loader2 className="spin" size={16} /> Cargando bundle...
           </div>
         ) : null}
 
         {!loading && !error && !bundle ? (
-          <div className="chunking-empty" role="status">
+          <div className="ui-empty" role="status">
             <span>Un run completado mostrara aqui su embedding bundle producido.</span>
           </div>
         ) : null}
 
         {bundle ? (
           <>
-            <dl className="chunking-mini-metrics">
+            <dl className="ui-metrics">
               <div>
                 <dt>Bundle</dt>
                 <dd>{bundle.embeddingBundleId}</dd>
@@ -75,19 +75,19 @@ export function EmbeddingBundleInspector({
               </div>
             </dl>
 
-            <div className="chunking-status-row">
-              <span className="chunking-meta">Estado: {bundle.status}</span>
-              <span className="chunking-meta">Validacion: {bundle.validationStatus}</span>
-              <span className="chunking-meta">Readiness: {bundle.readinessStatus}</span>
+            <div className="ui-status-row">
+              <span className="ui-meta">Estado: {bundle.status}</span>
+              <span className="ui-meta">Validacion: {bundle.validationStatus}</span>
+              <span className="ui-meta">Readiness: {bundle.readinessStatus}</span>
             </div>
 
-            <div className="chunking-validation">
-              <div className="panel-heading chunking-subheading">
+            <div className="ui-section">
+              <div className="panel-heading ui-subheading">
                 <h2>Chunks del bundle</h2>
                 <span>{chunksLoading ? "Cargando..." : `${chunksPage?.totalItems ?? 0} chunks`}</span>
               </div>
               <div className="table-wrap compact">
-                <table className="chunking-table">
+                <table className="ui-table">
                   <thead>
                     <tr>
                       <th scope="col">Child chunk</th>
@@ -123,19 +123,19 @@ export function EmbeddingBundleInspector({
             </div>
 
             {validation ? (
-              <div className="chunking-list" aria-label="Checks de validacion">
+              <div className="ui-list" aria-label="Checks de validacion">
                 {validation.checks.map((check) => (
-                  <div key={check.name} className="chunking-status-row">
+                  <div key={check.name} className="ui-status-row">
                     {check.passed ? (
-                      <span className="chunking-status-chip success">
+                      <span className="ui-status-chip success">
                         <CheckCircle2 size={13} aria-hidden="true" /> {check.name}
                       </span>
                     ) : (
-                      <span className="chunking-status-chip danger">
+                      <span className="ui-status-chip danger">
                         <XCircle size={13} aria-hidden="true" /> {check.name}
                       </span>
                     )}
-                    {check.detail ? <span className="chunking-meta">{check.detail}</span> : null}
+                    {check.detail ? <span className="ui-meta">{check.detail}</span> : null}
                   </div>
                 ))}
               </div>
@@ -144,7 +144,7 @@ export function EmbeddingBundleInspector({
             {readiness ? (
               <div
                 className={
-                  readiness.status === "ready" ? "chunking-profile-note" : "chunking-warning-box"
+                  readiness.status === "ready" ? "ui-note" : "ui-warning"
                 }
                 role="status"
               >

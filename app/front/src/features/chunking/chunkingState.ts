@@ -1,5 +1,7 @@
 import type { ChunkingRunSummary } from "./chunkingTypes.js";
 
+export const DEFAULT_CHUNKING_PROFILE_ID = "local-structural-v1";
+
 export function parseChunkingDocumentIds(raw: string): string[] {
   const seen = new Set<string>();
   const values: string[] = [];

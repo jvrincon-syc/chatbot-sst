@@ -39,16 +39,16 @@ export function EmbeddingCatalogPanel({
   ).join(", ");
 
   return (
-    <section className="panel chunking-panel" aria-label="Catalogo de perfiles de embedding">
+    <section className="panel" aria-label="Catalogo de perfiles de embedding">
       <div className="panel-heading">
         <div>
           <h2>Perfiles de embedding</h2>
           <span>Metadata de solo lectura. Solo se puede elegir un perfil habilitado para documentos.</span>
         </div>
-        <span className="chunking-pill">Bundle-first</span>
+        <span className="ui-pill">Bundle-first</span>
       </div>
 
-      <div className="chunking-panel-body">
+      <div className="ui-panel-body">
         {error ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -57,19 +57,19 @@ export function EmbeddingCatalogPanel({
         ) : null}
 
         {loading ? (
-          <div className="chunking-launch-hint" role="status">
+          <div className="ui-hint" role="status">
             <Loader2 className="spin" size={16} /> Cargando perfiles...
           </div>
         ) : null}
 
         {!loading && !error && !hasProfiles ? (
-          <div className="chunking-empty" role="status">
+          <div className="ui-empty" role="status">
             <span>No hay perfiles de embedding disponibles.</span>
           </div>
         ) : null}
 
         {!loading && hasProfiles ? (
-          <label className="chunking-field">
+          <label className="ui-field">
             <span id={SELECT_LABEL_ID}>Perfil de embedding</span>
             <select
               aria-labelledby={SELECT_LABEL_ID}
@@ -91,15 +91,15 @@ export function EmbeddingCatalogPanel({
                 );
               })}
             </select>
-            <span className="chunking-field-note" id={HELP_ID}>
+            <span className="ui-field-note" id={HELP_ID}>
               Los perfiles bloqueados no pueden ejecutar embedding de documentos hasta la verificacion del backend.
             </span>
           </label>
         ) : null}
 
         {fullyBlocked ? (
-          <div className="chunking-warning-box" role="status" aria-label="Catalogo de embedding bloqueado">
-            <div className="chunking-status-row">
+          <div className="ui-warning" role="status" aria-label="Catalogo de embedding bloqueado">
+            <div className="ui-status-row">
               <Ban size={16} aria-hidden="true" />
               <strong>Ningun perfil habilitado para embedding de documentos</strong>
             </div>
@@ -115,19 +115,19 @@ export function EmbeddingCatalogPanel({
         ) : null}
 
         {!loading && hasProfiles ? (
-          <ul className="chunking-list" aria-label="Estado de cada perfil">
+          <ul className="ui-list" aria-label="Estado de cada perfil">
             {profiles.map((profile) => {
               const selectable = embeddingProfileSelectable(profile);
               const reason = embeddingProfileBlockedReason(profile);
               return (
-                <li key={profile.profileId} className="chunking-profile-state">
+                <li key={profile.profileId} className="ui-state-card">
                   <span>{profile.profileId}</span>
                   <strong>
                     {profile.provider} · {profile.model} · dim {profile.dimension}
                   </strong>
                   <span
                     className={
-                      selectable ? "chunking-status-chip success" : "chunking-status-chip danger"
+                      selectable ? "ui-status-chip success" : "ui-status-chip danger"
                     }
                   >
                     {selectable ? (

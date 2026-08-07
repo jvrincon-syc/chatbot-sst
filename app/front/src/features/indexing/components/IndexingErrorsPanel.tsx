@@ -14,18 +14,18 @@ export function IndexingErrorsPanel({ errorsPage, loading, error }: IndexingErro
   const items = errorsPage?.items ?? [];
 
   return (
-    <section className="panel chunking-panel" aria-label="Errores del run de indexing">
+    <section className="panel" aria-label="Errores del run de indexing">
       <div className="panel-heading">
         <div>
           <h2>Errores de indexing</h2>
           <span>Codigo de error e identificador interno para correlacionar con logs.</span>
         </div>
-        <span className="chunking-meta">
+        <span className="ui-meta">
           {loading ? "Cargando..." : `${errorsPage?.totalItems ?? 0} errores`}
         </span>
       </div>
 
-      <div className="chunking-panel-body">
+      <div className="ui-panel-body">
         {error ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -34,22 +34,22 @@ export function IndexingErrorsPanel({ errorsPage, loading, error }: IndexingErro
         ) : null}
 
         {!loading && !error && items.length === 0 ? (
-          <div className="chunking-profile-note" role="status">
+          <div className="ui-note" role="status">
             <CheckCircle2 size={16} aria-hidden="true" />
             <span>Sin errores registrados para este run.</span>
           </div>
         ) : null}
 
         {items.length > 0 ? (
-          <ul className="chunking-list" aria-label="Detalle de errores por documento">
+          <ul className="ui-list" aria-label="Detalle de errores por documento">
             {items.map((item) => (
-              <li key={`${item.documentId}-${item.internalErrorId ?? "na"}`} className="chunking-profile-state">
+              <li key={`${item.documentId}-${item.internalErrorId ?? "na"}`} className="ui-state-card">
                 <span>{item.documentId}</span>
                 <strong>{item.errorCode ?? "ERROR_DESCONOCIDO"}</strong>
-                <span className="chunking-status-row">
-                  <span className="chunking-status-chip danger">{item.status}</span>
+                <span className="ui-status-row">
+                  <span className="ui-status-chip danger">{item.status}</span>
                   {item.internalErrorId ? (
-                    <span className="chunking-meta">error id: {item.internalErrorId}</span>
+                    <span className="ui-meta">error id: {item.internalErrorId}</span>
                   ) : null}
                 </span>
               </li>
