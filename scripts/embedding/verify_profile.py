@@ -25,6 +25,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "app" / "back" / "src"))
+sys.path.insert(0, str(ROOT / "scripts" / "indexing"))
+
+from prepare_postgres_indexing import (  # noqa: E402
+    build_dsn_from_env,
+    load_env_file,
+)
 
 from embedding.application.engine_registry import (  # noqa: E402
     DefaultEmbeddingEngineRegistry,
@@ -63,10 +69,26 @@ class _ReadOnlyProfileRepository:
 
         return self._delegate.list_profiles()
 
-    def mark_verified(self, **_kwargs: object):
-        """Refuse to write in dry-run mode."""
+    def mark_verified(
+        self,
+        *,
+        profile_id: str,
+        configuration_fingerprint: str,
+        model_revision: str,
+        document_enabled: bool,
+        query_enabled: bool,
+    ):
+        """Return the promotion a dry-run would perform, without writing it."""
 
-        raise RuntimeError("dry-run must not promote a profile")
+        return self._delegate.get(profile_id).model_copy(
+            update={
+                "compatibility_status": "verified",
+                "configuration_fingerprint": configuration_fingerprint,
+                "model_revision": model_revision,
+                "document_enabled": document_enabled,
+                "query_enabled": query_enabled,
+            }
+        )
 
 
 def parse_args() -> argparse.Namespace:
@@ -82,7 +104,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--enable-queries", action="store_true", default=True)
     parser.add_argument("--no-enable-queries", dest="enable_queries", action="store_false")
     parser.add_argument("--allow-mock-engine", action="store_true")
+    parser.add_argument("--env-file", default="secrets.env")
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--dry-run", dest="apply", action="store_false")
     return parser.parse_args()
 
 
@@ -91,6 +115,13 @@ def main() -> int:
 
     args = parse_args()
     settings = PostgresIndexingSettings.from_env(os.environ)
+    if not settings.is_configured:
+        # secrets.env carries POSTGRES_* / DATABASE_URL, not SST_POSTGRES_DSN, so
+        # the documented npm command would otherwise always report dsn_missing.
+        env_path = Path(args.env_file)
+        if not env_path.is_absolute():
+            env_path = ROOT / env_path
+        settings = PostgresIndexingSettings(dsn=build_dsn_from_env(load_env_file(env_path)))
     if not settings.is_configured:
         print(json.dumps({"status": "blocked", "reason": "postgres_dsn_missing"}, sort_keys=True))
         return 2
