@@ -61,6 +61,7 @@ export function DashboardApp() {
   const {
     preferences,
     setActiveView,
+    setEmbeddingIndexingState,
     setEmbeddingIndexingActiveStage,
     setLlamaControls,
     setOcrThresholdInput,
@@ -435,7 +436,9 @@ export function DashboardApp() {
         {preferences.activeView === "embedding-indexing" ? (
           <EmbeddingIndexingWorkspace
             activeStage={preferences.embeddingIndexing.activeStage}
+            embeddingIndexingState={preferences.embeddingIndexing}
             onStageChange={setEmbeddingIndexingActiveStage}
+            onEmbeddingIndexingStateChange={setEmbeddingIndexingState}
           />
         ) : null}
       </main>

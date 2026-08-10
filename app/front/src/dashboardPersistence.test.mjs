@@ -97,6 +97,12 @@ test("keeps stored ui preferences while status drives operational settings", () 
   stored.selectedDocumentIds.review = "doc-review";
   stored.selectedDocumentIds.inventory = "doc-inventory";
   stored.embeddingIndexing.activeStage = "retrieval";
+  stored.embeddingIndexing.selectedChunkBundleId = "chunk-bundle-1";
+  stored.embeddingIndexing.activeEmbeddingRunId = "embedding-run-1";
+  stored.embeddingIndexing.selectedEmbeddingBundleId = "embedding-bundle-1";
+  stored.embeddingIndexing.activeIndexingRunId = "indexing-run-1";
+  stored.embeddingIndexing.activeActivationRunId = "indexing-run-1";
+  stored.embeddingIndexing.selectedRetrievalProfileId = "retrieval-profile-1";
 
   const preferences = resolveDashboardPreferences({
     stored,
@@ -106,6 +112,12 @@ test("keeps stored ui preferences while status drives operational settings", () 
   assert.equal(preferences.activeView, "inventory");
   assert.deepEqual(preferences.selectedDocumentIds, stored.selectedDocumentIds);
   assert.equal(preferences.embeddingIndexing.activeStage, "retrieval");
+  assert.equal(preferences.embeddingIndexing.selectedChunkBundleId, "chunk-bundle-1");
+  assert.equal(preferences.embeddingIndexing.activeEmbeddingRunId, "embedding-run-1");
+  assert.equal(preferences.embeddingIndexing.selectedEmbeddingBundleId, "embedding-bundle-1");
+  assert.equal(preferences.embeddingIndexing.activeIndexingRunId, "indexing-run-1");
+  assert.equal(preferences.embeddingIndexing.activeActivationRunId, "indexing-run-1");
+  assert.equal(preferences.embeddingIndexing.selectedRetrievalProfileId, "retrieval-profile-1");
   assert.equal(preferences.llamaControls.providerMode, "llama_cloud");
   assert.equal(preferences.llamaControls.route, "classify,parse,extract");
   assert.equal(preferences.ocrThresholdInput, "91");
@@ -127,6 +139,7 @@ test("preserves embedding-indexing as a stored dashboard view", () => {
   const stored = createStatusDrivenDashboardPreferences(null);
   stored.activeView = "embedding-indexing";
   stored.embeddingIndexing.activeStage = "activation";
+  stored.embeddingIndexing.selectedChunkBundleId = "chunk-bundle-1";
 
   const preferences = resolveDashboardPreferences({
     stored,
@@ -135,6 +148,7 @@ test("preserves embedding-indexing as a stored dashboard view", () => {
 
   assert.equal(preferences.activeView, "embedding-indexing");
   assert.equal(preferences.embeddingIndexing.activeStage, "activation");
+  assert.equal(preferences.embeddingIndexing.selectedChunkBundleId, "chunk-bundle-1");
 });
 
 test("migrates dashboard preferences from v1 to v2 with minimal embedding-indexing state", () => {
@@ -157,6 +171,12 @@ test("migrates dashboard preferences from v1 to v2 with minimal embedding-indexi
         inventory: "doc-inventory",
       });
       assert.equal(preferences?.embeddingIndexing.activeStage, "embedding");
+      assert.equal(preferences?.embeddingIndexing.selectedChunkBundleId, null);
+      assert.equal(preferences?.embeddingIndexing.activeEmbeddingRunId, null);
+      assert.equal(preferences?.embeddingIndexing.selectedEmbeddingBundleId, null);
+      assert.equal(preferences?.embeddingIndexing.activeIndexingRunId, null);
+      assert.equal(preferences?.embeddingIndexing.activeActivationRunId, null);
+      assert.equal(preferences?.embeddingIndexing.selectedRetrievalProfileId, null);
       assert.equal(storage.getItem(STORAGE_KEY_V1), null);
       assert.deepEqual(JSON.parse(storage.getItem(STORAGE_KEY_V2)), {
         activeView: "chunking",
@@ -166,6 +186,12 @@ test("migrates dashboard preferences from v1 to v2 with minimal embedding-indexi
         },
         embeddingIndexing: {
           activeStage: "embedding",
+          selectedChunkBundleId: null,
+          activeEmbeddingRunId: null,
+          selectedEmbeddingBundleId: null,
+          activeIndexingRunId: null,
+          activeActivationRunId: null,
+          selectedRetrievalProfileId: null,
         },
       });
     },
@@ -191,6 +217,12 @@ test("writes only the compact v2 dashboard preferences payload", () => {
         },
         embeddingIndexing: {
           activeStage: "retrieval",
+          selectedChunkBundleId: null,
+          activeEmbeddingRunId: null,
+          selectedEmbeddingBundleId: null,
+          activeIndexingRunId: null,
+          activeActivationRunId: null,
+          selectedRetrievalProfileId: null,
         },
       }),
     });

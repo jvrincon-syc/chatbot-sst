@@ -32,6 +32,12 @@ export type EmbeddingIndexingStage =
 
 export type EmbeddingIndexingState = {
   activeStage: EmbeddingIndexingStage;
+  selectedChunkBundleId: string | null;
+  activeEmbeddingRunId: string | null;
+  selectedEmbeddingBundleId: string | null;
+  activeIndexingRunId: string | null;
+  activeActivationRunId: string | null;
+  selectedRetrievalProfileId: string | null;
 };
 
 export type ReviewDecision = {
@@ -195,6 +201,12 @@ export function createDefaultDashboardPreferences(): DashboardPreferences {
     },
     embeddingIndexing: {
       activeStage: "embedding",
+      selectedChunkBundleId: null,
+      activeEmbeddingRunId: null,
+      selectedEmbeddingBundleId: null,
+      activeIndexingRunId: null,
+      activeActivationRunId: null,
+      selectedRetrievalProfileId: null,
     },
     llamaControls: DEFAULT_LLAMA_CONTROLS,
     ocrThresholdInput: "80",

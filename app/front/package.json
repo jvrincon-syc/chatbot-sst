@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "test": "tsc -p tsconfig.test.json && node src/llamaRoutes.test.mjs && node src/pipelineRequest.test.mjs && node src/documentReview.test.mjs && node src/ocrSettings.test.mjs && node src/dashboardPersistence.test.mjs && node src/features/chunking/chunkingState.test.mjs && node src/features/chunking/chunkingApi.test.mjs && node src/features/embedding/embeddingApi.test.mjs && node src/features/embedding/embeddingState.test.mjs && node src/features/indexing/indexingApi.test.mjs && node src/features/indexing/indexingState.test.mjs && node src/features/retrieval/retrievalApi.test.mjs && node src/features/retrieval/retrievalState.test.mjs && node src/features/embeddingIndexing/pipelineFlow.test.mjs && node -e \"require('fs').rmSync('.tmp-tests', { recursive: true, force: true })\" && npm run test:components",
-    "build": "tsc --noEmit && vite build",
-    "test:components": "vitest run",
+    "test": "tsc -p tsconfig.test.json && node src/llamaRoutes.test.mjs && node src/pipelineRequest.test.mjs && node src/documentReview.test.mjs && node src/ocrSettings.test.mjs && node src/dashboardPersistence.test.mjs && node src/shared/readJsonResponse.test.mjs && node src/features/chunking/chunkingState.test.mjs && node src/features/chunking/chunkingApi.test.mjs && node src/features/embedding/embeddingApi.test.mjs && node src/features/embedding/embeddingState.test.mjs && node src/features/indexing/indexingApi.test.mjs && node src/features/indexing/indexingState.test.mjs && node src/features/retrieval/retrievalApi.test.mjs && node src/features/retrieval/retrievalState.test.mjs && node src/features/embeddingIndexing/pipelineFlow.test.mjs && node -e \"require('fs').rmSync('.tmp-tests', { recursive: true, force: true })\" && npm run test:components",
+    "build": "node scripts/build.mjs",
+    "test:components": "node scripts/run-component-tests.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {

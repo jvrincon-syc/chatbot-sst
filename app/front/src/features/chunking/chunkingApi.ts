@@ -11,6 +11,7 @@ import type {
   ChunkingStoredDocumentsPage,
   ChunkingValidation,
 } from "./chunkingTypes.js";
+import { readJsonResponse } from "../../shared/readJsonResponse.js";
 
 type ChunkingHttpError = Error & {
   status: number;
@@ -33,7 +34,7 @@ function isChunkingHttpError(error: unknown): error is ChunkingHttpError {
 }
 
 async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await response.json()) as T & ChunkingErrorEnvelope;
+  const payload = (await readJsonResponse(response)) as T & ChunkingErrorEnvelope;
   if (!response.ok) {
     throw toChunkingHttpError(response, payload);
   }

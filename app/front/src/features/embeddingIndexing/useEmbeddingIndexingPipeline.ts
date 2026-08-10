@@ -35,24 +35,41 @@ import type {
 } from "../indexing/indexingTypes.js";
 import {
   loadRetrievalProfileStatus,
+  loadRetrievalProfiles,
   validateRetrievalProfile,
 } from "../retrieval/retrievalApi.js";
 import type {
+  RetrievalProfile,
   RetrievalProfileStatus,
   RetrievalValidationResult,
 } from "../retrieval/retrievalTypes.js";
 import { mapPipelineError } from "./shared/errorMapping.js";
 import type { PaginatedResponse } from "./shared/apiTypes.js";
+import type { EmbeddingIndexingState } from "../dashboard/dashboardTypes.js";
 
 function errorMessage(caught: unknown): string {
   return mapPipelineError(caught).message;
 }
 
 // Orchestrates the embedding -> indexing -> activation -> retrieval flow. It owns
-// the transient working ids (not persisted) and exposes typed slices the
+// the working ids that need to survive reloads and exposes typed slices the
 // workspace hands to each feature panel. Keeping this out of the view component
 // prevents the workspace from becoming a monolith.
-export function useEmbeddingIndexingPipeline() {
+type UseEmbeddingIndexingPipelineOptions = {
+  persistedState: EmbeddingIndexingState;
+  onPersistedStateChange: (patch: Partial<EmbeddingIndexingState>) => void;
+};
+
+export function useEmbeddingIndexingPipeline({
+  persistedState,
+  onPersistedStateChange,
+}: UseEmbeddingIndexingPipelineOptions) {
+  const persistState = useCallback(
+    (patch: Partial<EmbeddingIndexingState>) => {
+      onPersistedStateChange(patch);
+    },
+    [onPersistedStateChange],
+  );
   // --- Embedding catalog ---
   const [profiles, setProfiles] = useState<EmbeddingProfile[]>([]);
   const [profilesLoading, setProfilesLoading] = useState(true);
@@ -62,10 +79,14 @@ export function useEmbeddingIndexingPipeline() {
   const [chunkBundles, setChunkBundles] = useState<EmbeddingChunkBundleListItem[]>([]);
   const [chunkBundlesLoading, setChunkBundlesLoading] = useState(true);
   const [chunkBundlesError, setChunkBundlesError] = useState<string | null>(null);
-  const [selectedChunkBundleId, setSelectedChunkBundleId] = useState<string | null>(null);
+  const [selectedChunkBundleId, setSelectedChunkBundleId] = useState<string | null>(
+    persistedState.selectedChunkBundleId,
+  );
 
   // --- Embedding run ---
-  const [embeddingRunId, setEmbeddingRunId] = useState<string | null>(null);
+  const [embeddingRunId, setEmbeddingRunId] = useState<string | null>(
+    persistedState.activeEmbeddingRunId,
+  );
   const [embeddingLaunchBusy, setEmbeddingLaunchBusy] = useState(false);
   const [embeddingLaunchError, setEmbeddingLaunchError] = useState<string | null>(null);
   const embeddingPolling = useEmbeddingRunPolling(embeddingRunId);
@@ -79,10 +100,15 @@ export function useEmbeddingIndexingPipeline() {
   const [bundleChunksLoading, setBundleChunksLoading] = useState(false);
   const [bundleValidation, setBundleValidation] = useState<EmbeddingBundleValidation | null>(null);
   const [bundleReadiness, setBundleReadiness] = useState<EmbeddingIndexingReadiness | null>(null);
+  const [selectedEmbeddingBundleId, setSelectedEmbeddingBundleId] = useState<string | null>(
+    persistedState.selectedEmbeddingBundleId,
+  );
 
   // --- Indexing ---
   const [bundleFirstEnabled, setBundleFirstEnabled] = useState(true);
-  const [indexingRunId, setIndexingRunId] = useState<string | null>(null);
+  const [indexingRunId, setIndexingRunId] = useState<string | null>(
+    persistedState.activeIndexingRunId,
+  );
   const [indexingLaunchBusy, setIndexingLaunchBusy] = useState(false);
   const [indexingLaunchError, setIndexingLaunchError] = useState<string | null>(null);
   const indexingPolling = useIndexingRunPolling(indexingRunId);
@@ -100,6 +126,9 @@ export function useEmbeddingIndexingPipeline() {
   const [lexicalFallbackPolicy, setLexicalFallbackPolicy] = useState(
     "allowed_when_vector_unavailable",
   );
+  const [activationRunId, setActivationRunId] = useState<string | null>(
+    persistedState.activeActivationRunId,
+  );
   const [activationBusy, setActivationBusy] = useState(false);
   const [activationError, setActivationError] = useState<string | null>(null);
   const [activationResult, setActivationResult] = useState<ActivationResult | null>(null);
@@ -107,7 +136,12 @@ export function useEmbeddingIndexingPipeline() {
     useState<IndexingRetrievalReadiness | null>(null);
 
   // --- Retrieval ---
-  const [retrievalProfileId, setRetrievalProfileId] = useState<string | null>(null);
+  const [retrievalProfileId, setRetrievalProfileId] = useState<string | null>(
+    persistedState.selectedRetrievalProfileId,
+  );
+  const [retrievalProfiles, setRetrievalProfiles] = useState<RetrievalProfile[]>([]);
+  const [retrievalProfilesLoading, setRetrievalProfilesLoading] = useState(true);
+  const [retrievalProfilesError, setRetrievalProfilesError] = useState<string | null>(null);
   const [retrievalStatus, setRetrievalStatus] = useState<RetrievalProfileStatus | null>(null);
   const [retrievalStatusLoading, setRetrievalStatusLoading] = useState(false);
   const [retrievalStatusError, setRetrievalStatusError] = useState<string | null>(null);
@@ -119,6 +153,22 @@ export function useEmbeddingIndexingPipeline() {
   const selectedProfile = useMemo(
     () => profiles.find((profile) => profile.profileId === selectedProfileId) ?? null,
     [profiles, selectedProfileId],
+  );
+
+  const selectChunkBundle = useCallback(
+    (chunkBundleId: string | null) => {
+      setSelectedChunkBundleId(chunkBundleId);
+      persistState({ selectedChunkBundleId: chunkBundleId });
+    },
+    [persistState],
+  );
+
+  const selectRetrievalProfile = useCallback(
+    (selectedId: string | null) => {
+      setRetrievalProfileId(selectedId);
+      persistState({ selectedRetrievalProfileId: selectedId });
+    },
+    [persistState],
   );
 
   const refreshCatalog = useCallback(async () => {
@@ -156,6 +206,30 @@ export function useEmbeddingIndexingPipeline() {
     } finally {
       setChunkBundlesLoading(false);
     }
+
+    setRetrievalProfilesLoading(true);
+    setRetrievalProfilesError(null);
+    try {
+      const retrievalPage = await loadRetrievalProfiles();
+      setRetrievalProfiles(retrievalPage.items);
+      const nextRetrievalProfileId =
+        retrievalProfileId &&
+        retrievalPage.items.some(
+          (profile) => profile.retrievalProfileId === retrievalProfileId,
+        )
+          ? retrievalProfileId
+          : retrievalPage.items.find((profile) => profile.active)?.retrievalProfileId ??
+            retrievalProfileId ??
+            null;
+      setRetrievalProfileId(nextRetrievalProfileId);
+      if (nextRetrievalProfileId !== retrievalProfileId) {
+        persistState({ selectedRetrievalProfileId: nextRetrievalProfileId });
+      }
+    } catch (caught) {
+      setRetrievalProfilesError(errorMessage(caught));
+    } finally {
+      setRetrievalProfilesLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -175,18 +249,24 @@ export function useEmbeddingIndexingPipeline() {
         {},
       );
       setEmbeddingRunId(run.embeddingRunId);
+      persistState({
+        selectedChunkBundleId,
+        activeEmbeddingRunId: run.embeddingRunId,
+        activeStage: "embedding",
+      });
     } catch (caught) {
       setEmbeddingLaunchError(errorMessage(caught));
     } finally {
       setEmbeddingLaunchBusy(false);
     }
-  }, [selectedChunkBundleId, selectedProfileId]);
+  }, [persistState, selectedChunkBundleId, selectedProfileId]);
 
   // When the embedding run completes, pivot to its produced embedding bundle and
   // load bundle-level inspection (never run-documents/run-items).
   const producedBundleId = embeddingRun ? embeddingRunProducedBundleId(embeddingRun) : null;
+  const resolvedEmbeddingBundleId = selectedEmbeddingBundleId ?? producedBundleId;
   useEffect(() => {
-    if (!producedBundleId) {
+    if (!resolvedEmbeddingBundleId) {
       return;
     }
     let cancelled = false;
@@ -196,10 +276,10 @@ export function useEmbeddingIndexingPipeline() {
     void (async () => {
       try {
         const [bundle, chunks, validation, readiness] = await Promise.all([
-          loadEmbeddingBundle(producedBundleId),
-          loadEmbeddingBundleChunks(producedBundleId, { page: 1 }),
-          loadEmbeddingBundleValidation(producedBundleId).catch(() => null),
-          loadEmbeddingIndexingReadiness(producedBundleId).catch(() => null),
+          loadEmbeddingBundle(resolvedEmbeddingBundleId),
+          loadEmbeddingBundleChunks(resolvedEmbeddingBundleId, { page: 1 }),
+          loadEmbeddingBundleValidation(resolvedEmbeddingBundleId).catch(() => null),
+          loadEmbeddingIndexingReadiness(resolvedEmbeddingBundleId).catch(() => null),
         ]);
         if (cancelled) return;
         setEmbeddingBundle(bundle);
@@ -219,21 +299,37 @@ export function useEmbeddingIndexingPipeline() {
     return () => {
       cancelled = true;
     };
-  }, [producedBundleId]);
+  }, [resolvedEmbeddingBundleId]);
+
+  useEffect(() => {
+    if (!producedBundleId) {
+      return;
+    }
+    setSelectedEmbeddingBundleId(producedBundleId);
+    persistState({
+      selectedEmbeddingBundleId: producedBundleId,
+      activeEmbeddingRunId: embeddingRunId,
+    });
+  }, [embeddingRunId, persistState, producedBundleId]);
 
   const createIndexing = useCallback(async () => {
-    if (!producedBundleId) return;
+    if (!resolvedEmbeddingBundleId) return;
     setIndexingLaunchBusy(true);
     setIndexingLaunchError(null);
     try {
-      const run = await createIndexingRun({ embeddingBundleId: producedBundleId }, {});
+      const run = await createIndexingRun({ embeddingBundleId: resolvedEmbeddingBundleId }, {});
       setIndexingRunId(run.runId);
+      persistState({
+        selectedEmbeddingBundleId: resolvedEmbeddingBundleId,
+        activeIndexingRunId: run.runId,
+        activeStage: "indexing",
+      });
     } catch (caught) {
       setIndexingLaunchError(errorMessage(caught));
     } finally {
       setIndexingLaunchBusy(false);
     }
-  }, [producedBundleId]);
+  }, [persistState, resolvedEmbeddingBundleId]);
 
   // Load indexing run detail (documents, errors, retrieval readiness) whenever a
   // fresh indexing run snapshot arrives.
@@ -276,6 +372,11 @@ export function useEmbeddingIndexingPipeline() {
     if (!indexingRunId) return;
     setActivationBusy(true);
     setActivationError(null);
+    setActivationRunId(indexingRunId);
+    persistState({
+      activeActivationRunId: indexingRunId,
+      activeStage: "activation",
+    });
     try {
       const result = await activateIndexingRun({
         runId: indexingRunId,
@@ -284,13 +385,18 @@ export function useEmbeddingIndexingPipeline() {
       setActivationResult(result);
       if (result.retrievalProfileId) {
         setRetrievalProfileId(result.retrievalProfileId);
+        persistState({
+          selectedRetrievalProfileId: result.retrievalProfileId,
+          activeActivationRunId: indexingRunId,
+          activeStage: "retrieval",
+        });
       }
     } catch (caught) {
       setActivationError(errorMessage(caught));
     } finally {
       setActivationBusy(false);
     }
-  }, [indexingRunId, lexicalFallbackPolicy]);
+  }, [indexingRunId, lexicalFallbackPolicy, persistState]);
 
   const refreshRetrievalStatus = useCallback(async () => {
     if (!retrievalProfileId) return;
@@ -337,7 +443,7 @@ export function useEmbeddingIndexingPipeline() {
       chunkBundlesLoading,
       chunkBundlesError,
       selectedChunkBundleId,
-      selectChunkBundle: setSelectedChunkBundleId,
+      selectChunkBundle,
       run: embeddingRun,
       polling: embeddingPolling.polling,
       launchBusy: embeddingLaunchBusy,
@@ -352,7 +458,7 @@ export function useEmbeddingIndexingPipeline() {
       bundleReadiness,
     },
     indexing: {
-      embeddingBundleId: producedBundleId,
+      embeddingBundleId: resolvedEmbeddingBundleId,
       embeddingBundleReady: bundleReadiness?.status === "ready",
       bundleFirstEnabled,
       run: indexingRun,
@@ -369,6 +475,7 @@ export function useEmbeddingIndexingPipeline() {
     },
     activation: {
       run: indexingRun,
+      runId: activationRunId,
       readiness: indexingReadiness,
       lexicalFallbackPolicy,
       setLexicalFallbackPolicy,
@@ -379,6 +486,10 @@ export function useEmbeddingIndexingPipeline() {
     },
     retrieval: {
       retrievalProfileId,
+      profiles: retrievalProfiles,
+      profilesLoading: retrievalProfilesLoading,
+      profilesError: retrievalProfilesError,
+      selectRetrievalProfile,
       status: retrievalStatus,
       statusLoading: retrievalStatusLoading,
       statusError: retrievalStatusError,

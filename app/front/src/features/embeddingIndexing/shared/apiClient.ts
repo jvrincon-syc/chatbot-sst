@@ -3,6 +3,7 @@ import type {
   PaginatedResponse,
   PipelineHttpError,
 } from "./apiTypes.js";
+import { readJsonResponse } from "../../../shared/readJsonResponse.js";
 
 function toPipelineHttpError(response: Response, payload: ApiErrorEnvelope): PipelineHttpError {
   const error = new Error(payload.error?.message ?? `HTTP ${response.status}`) as PipelineHttpError;
@@ -14,7 +15,7 @@ function toPipelineHttpError(response: Response, payload: ApiErrorEnvelope): Pip
 }
 
 export async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await response.json()) as T & ApiErrorEnvelope;
+  const payload = (await readJsonResponse(response)) as T & ApiErrorEnvelope;
   if (!response.ok) {
     throw toPipelineHttpError(response, payload);
   }

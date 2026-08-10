@@ -1,4 +1,5 @@
 import { pipelineRequestForControls } from "../../pipelineRequest";
+import { readJsonResponse } from "../../shared/readJsonResponse.js";
 import type {
   ActionResult,
   DashboardUploadForm,
@@ -7,7 +8,7 @@ import type {
 } from "./dashboardTypes";
 
 async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await response.json()) as T & { error?: string };
+  const payload = (await readJsonResponse(response)) as T & { error?: string };
   if (!response.ok) {
     throw new Error(payload.error ?? `HTTP ${response.status}`);
   }

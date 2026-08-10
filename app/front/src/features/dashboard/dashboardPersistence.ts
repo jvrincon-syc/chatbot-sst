@@ -6,6 +6,7 @@ import {
 import { isDashboardView } from "./dashboardNavigation.js";
 import type {
   DashboardPreferences,
+  EmbeddingIndexingState,
   StatusPayload,
 } from "./dashboardTypes.js";
 
@@ -33,6 +34,29 @@ function isEmbeddingIndexingStage(
     value === "activation" ||
     value === "retrieval"
   );
+}
+
+function toStringOrNull(value: unknown): string | null {
+  return value === null || typeof value === "string" ? value : null;
+}
+
+function parseEmbeddingIndexingState(value: unknown): EmbeddingIndexingState {
+  const defaults = createDefaultDashboardPreferences().embeddingIndexing;
+  if (!isRecord(value)) {
+    return defaults;
+  }
+
+  return {
+    activeStage: isEmbeddingIndexingStage(value.activeStage)
+      ? value.activeStage
+      : defaults.activeStage,
+    selectedChunkBundleId: toStringOrNull(value.selectedChunkBundleId),
+    activeEmbeddingRunId: toStringOrNull(value.activeEmbeddingRunId),
+    selectedEmbeddingBundleId: toStringOrNull(value.selectedEmbeddingBundleId),
+    activeIndexingRunId: toStringOrNull(value.activeIndexingRunId),
+    activeActivationRunId: toStringOrNull(value.activeActivationRunId),
+    selectedRetrievalProfileId: toStringOrNull(value.selectedRetrievalProfileId),
+  };
 }
 
 function isLlamaControls(value: unknown): value is DashboardPreferences["llamaControls"] {
@@ -107,12 +131,7 @@ function parseStoredDashboardPreferences(raw: string): DashboardPreferences | nu
   }
 
   const defaults = createDefaultDashboardPreferences();
-  const embeddingIndexing = isRecord(parsed.embeddingIndexing)
-    ? parsed.embeddingIndexing
-    : null;
-  const activeStage = isEmbeddingIndexingStage(embeddingIndexing?.activeStage)
-    ? embeddingIndexing.activeStage
-    : defaults.embeddingIndexing.activeStage;
+  const embeddingIndexing = parseEmbeddingIndexingState(parsed.embeddingIndexing);
 
   return {
     ...defaults,
@@ -121,9 +140,7 @@ function parseStoredDashboardPreferences(raw: string): DashboardPreferences | nu
       review,
       inventory,
     },
-    embeddingIndexing: {
-      activeStage,
-    },
+    embeddingIndexing,
   };
 }
 

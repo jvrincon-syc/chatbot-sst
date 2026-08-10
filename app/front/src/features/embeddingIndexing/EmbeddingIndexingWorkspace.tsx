@@ -5,6 +5,7 @@ import { IndexingRunPanel } from "../indexing/components/IndexingRunPanel.js";
 import { IndexingDocumentsTable } from "../indexing/components/IndexingDocumentsTable.js";
 import { IndexingErrorsPanel } from "../indexing/components/IndexingErrorsPanel.js";
 import { ActivationPanel } from "../indexing/components/ActivationPanel.js";
+import { RetrievalProfilesPanel } from "../retrieval/components/RetrievalProfilesPanel.js";
 import { RetrievalStatusPanel } from "../retrieval/components/RetrievalStatusPanel.js";
 import { RetrievalValidationPanel } from "../retrieval/components/RetrievalValidationPanel.js";
 import { PipelineHeader } from "./PipelineHeader.js";
@@ -12,11 +13,16 @@ import { PipelineSummary } from "./PipelineSummary.js";
 import { PipelineHandoffPanel } from "./PipelineHandoffPanel.js";
 import { useEmbeddingIndexingPipeline } from "./useEmbeddingIndexingPipeline.js";
 import { deriveStageStatus } from "./pipelineStageStatus.js";
-import type { EmbeddingIndexingStage } from "../dashboard/dashboardTypes.js";
+import type {
+  EmbeddingIndexingStage,
+  EmbeddingIndexingState,
+} from "../dashboard/dashboardTypes.js";
 
 type EmbeddingIndexingWorkspaceProps = {
   activeStage: EmbeddingIndexingStage;
+  embeddingIndexingState: EmbeddingIndexingState;
   onStageChange: (stage: EmbeddingIndexingStage) => void;
+  onEmbeddingIndexingStateChange: (patch: Partial<EmbeddingIndexingState>) => void;
 };
 
 // Unified workspace for the bundle-first pipeline. It composes the feature
@@ -24,9 +30,14 @@ type EmbeddingIndexingWorkspaceProps = {
 // stays a thin orchestrator rather than a monolith.
 export function EmbeddingIndexingWorkspace({
   activeStage,
+  embeddingIndexingState,
   onStageChange,
+  onEmbeddingIndexingStateChange,
 }: EmbeddingIndexingWorkspaceProps) {
-  const pipeline = useEmbeddingIndexingPipeline();
+  const pipeline = useEmbeddingIndexingPipeline({
+    persistedState: embeddingIndexingState,
+    onPersistedStateChange: onEmbeddingIndexingStateChange,
+  });
   const { embedding, indexing, activation, retrieval } = pipeline;
 
   const stageStatus = deriveStageStatus({
@@ -137,6 +148,13 @@ export function EmbeddingIndexingWorkspace({
 
       {activeStage === "retrieval" ? (
         <div className="pipeline-stage-grid">
+          <RetrievalProfilesPanel
+            profiles={retrieval.profiles}
+            loading={retrieval.profilesLoading}
+            error={retrieval.profilesError}
+            selectedProfileId={retrieval.retrievalProfileId}
+            onSelectProfile={retrieval.selectRetrievalProfile}
+          />
           <RetrievalStatusPanel
             retrievalProfileId={retrieval.retrievalProfileId}
             status={retrieval.status}

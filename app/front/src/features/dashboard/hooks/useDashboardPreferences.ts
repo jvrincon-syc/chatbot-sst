@@ -7,7 +7,7 @@ import {
 import type {
   AppView,
   DashboardPreferences,
-  EmbeddingIndexingStage,
+  EmbeddingIndexingState,
   LlamaControls,
   StatusPayload,
   DocumentSelectionView,
@@ -60,13 +60,18 @@ export function useDashboardPreferences(status: StatusPayload | null) {
     }));
   };
 
-  const setEmbeddingIndexingActiveStage = (activeStage: EmbeddingIndexingStage) => {
+  const setEmbeddingIndexingState = (patch: Partial<EmbeddingIndexingState>) => {
     setPreferences((current) => ({
       ...current,
       embeddingIndexing: {
-        activeStage,
+        ...current.embeddingIndexing,
+        ...patch,
       },
     }));
+  };
+
+  const setEmbeddingIndexingActiveStage = (activeStage: EmbeddingIndexingState["activeStage"]) => {
+    setEmbeddingIndexingState({ activeStage });
   };
 
   return {
@@ -75,6 +80,7 @@ export function useDashboardPreferences(status: StatusPayload | null) {
     setLlamaControls,
     setOcrThresholdInput,
     setSelectedDocumentId,
+    setEmbeddingIndexingState,
     setEmbeddingIndexingActiveStage,
   };
 }
