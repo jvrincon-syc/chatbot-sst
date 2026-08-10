@@ -8,6 +8,8 @@ Bundle-first indexing persists approved pre-computed embedding bundles as durabl
 
 This reflects committed `main` at `f918b512a5320b6fc434feefe1e3e9f780bc097b`. No indexing README existed in that commit. Migrations `20260805_01` through `20260805_15` define the bundle-first contract; legacy LlamaIndex-oriented code and CLI remain committed.
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md` (autoridad del baseline reproducible; este hash histórico se conserva por precisión).
+
 ## 3. Code map
 
 - Domain runs, targets, nodes, and readiness: `app/back/src/indexing/domain/`.

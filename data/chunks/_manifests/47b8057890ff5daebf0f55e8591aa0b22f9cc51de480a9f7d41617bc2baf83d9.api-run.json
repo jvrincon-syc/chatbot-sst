@@ -1,0 +1,459 @@
+{
+  "completed_documents": 55,
+  "documents": [
+    {
+      "document_id": "doc_04c42c6f64c9d79e",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/conformacion_comite.md",
+      "reused": true,
+      "run_id": "2adb4ca7b95753722bb669e7073aa419e9e548fdd207a9ef78dc383d9a7aab39",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_0b8a9be32b2222f6",
+      "normalized_relpath": "convivencia_laboral/manual/funciones_comite-.md",
+      "reused": true,
+      "run_id": "fbb2e26f396a11de99dc7a978f015d34091f05b6668bff5fb8e66808bac3bb0a",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_133e0d5e86f00f91",
+      "normalized_relpath": "convivencia_laboral/manual/valores.md",
+      "reused": true,
+      "run_id": "358b09defc106ff87d896161a956e1efcaceecf56ab2fef9dcd78836d94ce47c",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_18e1e8a89146e6fc",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md",
+      "reused": true,
+      "run_id": "143eede819ada241d8acf33fae3ad1cb2fc04403eba28b39efbe42693a6b4e45",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_1d62a305753cb42e",
+      "normalized_relpath": "convivencia_laboral/manual/objetivo_general_comite.md",
+      "reused": true,
+      "run_id": "590d21182d453c1d471e3385a33832c2ac6fd50a4e9cb672ffe63a1139d651f4",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_1edf1a3d50d85305",
+      "normalized_relpath": "general_sst/manuales/mejora/mejora_info.md",
+      "reused": true,
+      "run_id": "323046e03b7c729841efbbb5719ee80d8b1dd41807c3542e940883b45f47c217",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_1ff1756177bf1b1f",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_acoso_laboral.md",
+      "reused": true,
+      "run_id": "1c24a5b0f3392103ce6baea336094dfe3dbee37d2bae4e337d8e091dc2bcc53d",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_221c00facfd6a2e8",
+      "normalized_relpath": "copasst/funciones_copasst.md",
+      "reused": true,
+      "run_id": "8e697cb5ac8bc8969f6e91953899190b270e884dd41fc4b22ac6cc10de1e0a49",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_27d458b700f2924d",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/funcionamiento_comite.md",
+      "reused": true,
+      "run_id": "69bad91fb87f97ef363ebbf2c97f1b6e057b3b91e6a5962efc5b0151afe4be90",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_2fd43b5d3bcb833b",
+      "normalized_relpath": "copasst/comunicacion.md",
+      "reused": true,
+      "run_id": "4ac1c920ba9876c076df151cc7fbe6ba867ef1d127d7d10718653d6b0b05af22",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_312e0abf441fcf34",
+      "normalized_relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md",
+      "reused": true,
+      "run_id": "9eddbb048659d88054085a82b2a8601ce32b486fd871a56b5bc182da9dcf0edc",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_31b00a8b31847796",
+      "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
+      "reused": true,
+      "run_id": "f802625fd912eea77c1e1a9933b51eff6eee07267c69d58ad72781a94140bbf9",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_33db5a236b33527d",
+      "normalized_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+      "reused": true,
+      "run_id": "fedaa81534e104ecb02f98ff93a8bbc036e04efbebbc00cc27d7b28686573e54",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_362801fe7bc968cb",
+      "normalized_relpath": "general_sst/manuales/aplicacion/aplicacion_info.md",
+      "reused": true,
+      "run_id": "d650c1f3444544997583ea274db86cbcb50b2480a4317bdbf39b44d6d2781cce",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_3e55236f58440bf5",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/1768504433896_syc_1723156961461_syc_vial.md",
+      "reused": true,
+      "run_id": "546321e63cdcf2a076346e398a0517191d2d6c32d67f755e878321fa0eb1a9bd",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_4815e73a2a6125e3",
+      "normalized_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/funciones_responsabilidades.md",
+      "reused": true,
+      "run_id": "6c9bdb1230c300c28f0abea17869955548ebc37b796a4db4bc3a3b5f77d08b2b",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_4c525cef1e737235",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",
+      "reused": true,
+      "run_id": "f837c85ca5451d18de93188412b874b34589da1bb8360a4099e702f339f908bf",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_4d54425dfa884153",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md",
+      "reused": true,
+      "run_id": "c8133a60ffdf03310a3f35d1efd274bb4e040206b4bd3a80f08a6cae86a6674f",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_53b1d7b44cf260c0",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
+      "reused": true,
+      "run_id": "a0b392921fd96fdd117fd6da5e10da50e37ef46f51c1c5cd4711814713a32c7b",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_56429da7ea5244e1",
+      "normalized_relpath": "general_sst/manuales/verificacion/verificacion_info.md",
+      "reused": true,
+      "run_id": "92bccd5cee98feab5c828f9deff37a4ea78dd7dda445cc5d8e7d01809dc56a1b",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_5773d940742c0a47",
+      "normalized_relpath": "convivencia_laboral/manual/derechos_convivencia.md",
+      "reused": true,
+      "run_id": "5c5c59a6fd831b3bc1575d8f331ad3a0d912bb93acfb98eb082961802a0e1143",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_5d2b57616d019b89",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/objetivo_comite.md",
+      "reused": true,
+      "run_id": "add2a96a04d7763a8982274a1519dd5fe6732f8df039299055f046b7e8926867",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_5e403a88299d2dc3",
+      "normalized_relpath": "copasst/miembros_copasst_2025_2027.md",
+      "reused": true,
+      "run_id": "7c4d2beeda75ea6316b6d03158e44a644ec20c778ff630bad5189cb07b0b8047",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_6035540fc4c4a90a",
+      "normalized_relpath": "convivencia_laboral/manual/politica_convivencia.md",
+      "reused": true,
+      "run_id": "0696c52e7eea5f8732542b6fd7f2fb5e24a96a2a1ecf3fbb1d67a5742bfcaf1a",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_65a09a83e5685e3a",
+      "normalized_relpath": "convivencia_laboral/manual/marco_legal.md",
+      "reused": true,
+      "run_id": "b06fa5fc8b57d1fa4477c12e2443aed482f9a7a91743ec64873efb8988ae1071",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_761c9402c48e05c7",
+      "normalized_relpath": "copasst/funciones_secretario_copasst.md",
+      "reused": true,
+      "run_id": "0acc2d0f1c8bb748873aed47e30351ac9317493337fd2a8ea4845af55a29ddb5",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_78c719156efb1dfd",
+      "normalized_relpath": "convivencia_laboral/manual/quejas_denuncias.md",
+      "reused": true,
+      "run_id": "af2b6010350de907fc4de2c2b1e35561c5536d6557d8a847a1fdbb281346a977",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_798b9dac49774271",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sgsst_info.md",
+      "reused": true,
+      "run_id": "9ecae24d34fa58f9e29fcf6b741d4a0172bac04ced8283be2d96636c21c9687c",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_7a0f56a63a930105",
+      "normalized_relpath": "convivencia_laboral/manual/deberes_convivencia.md",
+      "reused": true,
+      "run_id": "cbb6baaee3747aded6316002f6ec516cbe582b9e0bbb11e19d02a91ff29574a8",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_7d2eb40310345805",
+      "normalized_relpath": "general_sst/capacitaciones/pausas_activas/info.md",
+      "reused": true,
+      "run_id": "bc1f416fb3d3173d5871c80bda30c2160fa26f69978aee5c395e32b4b8993629",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_81325f8c3222110c",
+      "normalized_relpath": "general_sst/manuales/organizacion/organizacion.md",
+      "reused": true,
+      "run_id": "8c65cff759eb65610daf2523e044e2fa6ea07e43c3dcc9410fb4a7c61728f8d2",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_842df95c94a7e50d",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/metodologia_sesiones_comite.md",
+      "reused": true,
+      "run_id": "6c978a95b1466a9ba278d88e554cdf4c14966d76597584b18706c5628ffd73f7",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_864d906c5eae1183",
+      "normalized_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+      "reused": true,
+      "run_id": "d0c03e2294ae229e3130d81dd5edfa78a64c3f964efdb5747067eb8fbf41a09a",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_86b6f64f1c869610",
+      "normalized_relpath": "general_sst/manuales/planificacion/planificacion_info.md",
+      "reused": true,
+      "run_id": "9c4075cd0e08b0ff91220e8be5782770cb72c6d98a6d22a49965088a6030f50e",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_89b7978304549ddd",
+      "normalized_relpath": "general_sst/manuales/introduccion.md",
+      "reused": true,
+      "run_id": "317ece8ad8b0c7a2e24ce7a09616a2a0f6af56909ad0c4cd5a285d8a4af96e4f",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_99e74963bf956ead",
+      "normalized_relpath": "convivencia_laboral/manual/introduccion.md",
+      "reused": true,
+      "run_id": "ad080360859f6433771771801c4872a6745436698b054887bc523f9413a69095",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_9b35bf058b1a3a38",
+      "normalized_relpath": "general_sst/manuales/politica/politica.md",
+      "reused": true,
+      "run_id": "8cbd265fdbc42e19e8735ff35ee80a24095da8f2b60627b559bb0c38a866e020",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_a72c9be0df1f92fa",
+      "normalized_relpath": "convivencia_laboral/manual/politica_desconexion.md",
+      "reused": true,
+      "run_id": "1bf9780b56b7b373413ed8970cdef98c0cd3bdada62f0342d319edc64c4869d2",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_af426c4c9052023e",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/ventajas_sala_amigas.md",
+      "reused": true,
+      "run_id": "8ac62878fb51662b176a24b26947455143cb584e00d2120afa29bda77541162a",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_b87ef9d031af518e",
+      "normalized_relpath": "general_sst/manuales/organizacion/arl/funciones_responsabilidades.md",
+      "reused": true,
+      "run_id": "31fde9473d5a255b6350b7b3fd1ab24a12b73bebf0f6ed9b26a262ec6194d68d",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_c392ec7bf8d98194",
+      "normalized_relpath": "convivencia_laboral/manual/1772036012249_syc_mrh03sstmanualdeconv.md",
+      "reused": true,
+      "run_id": "5d82992f02b3ba02e13881bffe98a61b390cffa41c899d557077ebec6438c86a",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_caf88d615e56edd4",
+      "normalized_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+      "reused": true,
+      "run_id": "5b5477cb0d51b93425b27b3a7497832ac2a5d2bbd507a5e6ade5e588a187e848",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_cfca5f1723e21e1c",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/funciones_comite.md",
+      "reused": true,
+      "run_id": "9cb8028e7995dd6e580e39f19a812153e20c93d575af29a138244e5e648b79f2",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_d15d9f2596c32bed",
+      "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/prevencion_vial.md",
+      "reused": true,
+      "run_id": "3cc6ae0cefde1241f532b1f3b79115e0a361f1e6e3a5d18fbba69df8f88d4fb2",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_d4fca71ff51cb27b",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/1761609513260_syc_RG.RH-01-SST23102025.md",
+      "reused": true,
+      "run_id": "f1af3ac1eead5b037ac063738e0b9478107ed577a98e6b8d0b0af91da766fe7e",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_d57d21ff836e1ec0",
+      "normalized_relpath": "convivencia_laboral/manual/1781045390931_syc_politicadeprevencind.md",
+      "reused": true,
+      "run_id": "979fc8386a284eb55e64dbdde004d50c5ffc642be8feccd914c72be2e150fb34",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_d5f04608cf512575",
+      "normalized_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",
+      "reused": true,
+      "run_id": "eefa238946e9d476b517235253c58489cb0179aab501f574c4c5663088c96b12",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_d9b80cd19e111195",
+      "normalized_relpath": "general_sst/manuales/auditoria/auditoria_info.md",
+      "reused": true,
+      "run_id": "ed6ce81914f6a72cf6e14a0f27e9327d87fa5831721acde32943e021c6ae8fd4",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_dec6dc6770fea917",
+      "normalized_relpath": "general_sst/manuales/organizacion/comite_convivencia_laboral/aspectos_juridicos_laborales.md",
+      "reused": true,
+      "run_id": "3ae98d06f14c24f068df0e277cd6603fe3ec6fdb8cfca4ecfc4c84c4cd6efe30",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_e91e2fb644a2717c",
+      "normalized_relpath": "convivencia_laboral/manual/normas_convivencia.md",
+      "reused": true,
+      "run_id": "99822036d4a71084e879d3841839e74e880b6e184d46f5a810b9350a43b80f20",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_eb34bb480d443513",
+      "normalized_relpath": "copasst/funciones_presidente_copasst.md",
+      "reused": true,
+      "run_id": "b61ecf36184ddda5a38ac257b867f1bdcc1c231088b6435d609aed47c8411427",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_f2cf7868a801af0e",
+      "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",
+      "reused": true,
+      "run_id": "61d941b178489d0037659d5589e695a1711df4533f793e3de7310d3743b48421",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_f38f9f98d854feed",
+      "normalized_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.md",
+      "reused": true,
+      "run_id": "ea03598a05516cf8552d65d2bdb0f1d5858864e15d57e5d7a89974f64a7d101d",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_f3bdcdea0cf60ee0",
+      "normalized_relpath": "convivencia_laboral/manual/principios_convivencia.md",
+      "reused": true,
+      "run_id": "ae4eab04f0fb0329695de799ea171a3cb4a18bffb4997e2f33e85f2d86f0fdce",
+      "status": "completed"
+    },
+    {
+      "document_id": "doc_ff1fcf5ee88afc3b",
+      "normalized_relpath": "convivencia_laboral/manual/objetivos_especificos_comite.md",
+      "reused": true,
+      "run_id": "e23cd855bac5c65dc0cf70c681db5a96e6e9d1fa9da7bea5566403a3d0ca92d1",
+      "status": "completed"
+    }
+  ],
+  "idempotency_key": "chunking-42616f03-1bc2-4959-95cc-42ba79a0a6e2",
+  "payload_fingerprint": "f49c6ee0d4984179e5d971ee4ceceb22d48d9ef595587da3aef8052590724cde",
+  "request": {
+    "document_ids": [
+      "doc_04c42c6f64c9d79e",
+      "doc_0b8a9be32b2222f6",
+      "doc_133e0d5e86f00f91",
+      "doc_18e1e8a89146e6fc",
+      "doc_1d62a305753cb42e",
+      "doc_1edf1a3d50d85305",
+      "doc_1ff1756177bf1b1f",
+      "doc_221c00facfd6a2e8",
+      "doc_27d458b700f2924d",
+      "doc_2fd43b5d3bcb833b",
+      "doc_312e0abf441fcf34",
+      "doc_31b00a8b31847796",
+      "doc_33db5a236b33527d",
+      "doc_362801fe7bc968cb",
+      "doc_3e55236f58440bf5",
+      "doc_4815e73a2a6125e3",
+      "doc_4c525cef1e737235",
+      "doc_4d54425dfa884153",
+      "doc_53b1d7b44cf260c0",
+      "doc_56429da7ea5244e1",
+      "doc_5773d940742c0a47",
+      "doc_5d2b57616d019b89",
+      "doc_5e403a88299d2dc3",
+      "doc_6035540fc4c4a90a",
+      "doc_65a09a83e5685e3a",
+      "doc_761c9402c48e05c7",
+      "doc_78c719156efb1dfd",
+      "doc_798b9dac49774271",
+      "doc_7a0f56a63a930105",
+      "doc_7d2eb40310345805",
+      "doc_81325f8c3222110c",
+      "doc_842df95c94a7e50d",
+      "doc_864d906c5eae1183",
+      "doc_86b6f64f1c869610",
+      "doc_89b7978304549ddd",
+      "doc_99e74963bf956ead",
+      "doc_9b35bf058b1a3a38",
+      "doc_a72c9be0df1f92fa",
+      "doc_af426c4c9052023e",
+      "doc_b87ef9d031af518e",
+      "doc_c392ec7bf8d98194",
+      "doc_caf88d615e56edd4",
+      "doc_cfca5f1723e21e1c",
+      "doc_d15d9f2596c32bed",
+      "doc_d4fca71ff51cb27b",
+      "doc_d57d21ff836e1ec0",
+      "doc_d5f04608cf512575",
+      "doc_d9b80cd19e111195",
+      "doc_dec6dc6770fea917",
+      "doc_e91e2fb644a2717c",
+      "doc_eb34bb480d443513",
+      "doc_f2cf7868a801af0e",
+      "doc_f38f9f98d854feed",
+      "doc_f3bdcdea0cf60ee0",
+      "doc_ff1fcf5ee88afc3b"
+    ],
+    "force": false,
+    "profile_id": "local-structural-v1",
+    "request_id": "req_f133706fd67e435b901144a673f96a6c",
+    "scope": "corpus"
+  },
+  "requested_documents": 55,
+  "run_id": "47b8057890ff5daebf0f55e8591aa0b22f9cc51de480a9f7d41617bc2baf83d9",
+  "status": "completed",
+  "warnings": []
+}

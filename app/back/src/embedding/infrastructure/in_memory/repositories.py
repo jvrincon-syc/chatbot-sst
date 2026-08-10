@@ -116,6 +116,12 @@ class InMemoryChunkBundleRepository:
 
         return list(self._bundles.values())
 
+    def ensure_registered(self, bundle: ChunkBundleRef) -> ChunkBundleRef:
+        """Persist one bundle identity for later lookups."""
+
+        self._bundles[bundle.chunk_bundle_id] = bundle
+        return bundle
+
 
 class InMemoryEmbeddingRunRepository:
     """Deterministic ``embedding_runs`` double with a transactional claim."""

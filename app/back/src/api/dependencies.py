@@ -42,6 +42,10 @@ from embedding.infrastructure.filesystem.artifact_store import (
 from embedding.infrastructure.filesystem.chunk_bundle_reader import (
     FilesystemChunkBundleContentReader,
 )
+from embedding.infrastructure.filesystem.chunk_bundle_catalog import (
+    FilesystemChunkBundleCatalogRepository,
+    HybridChunkBundleRepository,
+)
 from embedding.infrastructure.in_memory.repositories import (
     InMemoryChunkBundleRepository,
     InMemoryEmbeddingBundleRepository,
@@ -90,6 +94,7 @@ from retrieval.application.retrieval_service import (
     GetRetrievalProfileStatusUseCase,
     RetrievalReadinessEvaluator,
     RetrievalSearchService,
+    SearchRetrievalUseCase,
     ValidateRetrievalUseCase,
 )
 from retrieval.infrastructure.in_memory.repositories import (
@@ -148,7 +153,7 @@ class PipelineServices:
     retrieval_activate_profile: ActivateRetrievalProfileUseCase
     retrieval_profile_status: GetRetrievalProfileStatusUseCase
     retrieval_validate: ValidateRetrievalUseCase
-    retrieval_search: RetrievalSearchService
+    retrieval_search: SearchRetrievalUseCase
     connection: object | None = None
 
     def close(self) -> None:
@@ -209,7 +214,10 @@ def build_pipeline_services(
     else:
         profiles = PostgresEmbeddingProfileRepository(connection)
         targets = PostgresIndexingTargetRepository(connection)
-        chunk_bundles = PostgresChunkBundleRepository(connection)
+        chunk_bundles = HybridChunkBundleRepository(
+            primary=PostgresChunkBundleRepository(connection),
+            filesystem=FilesystemChunkBundleCatalogRepository(chunks_root=chunks_root),
+        )
         embedding_runs = PostgresEmbeddingRunRepository(connection)
         bundles = PostgresEmbeddingBundleRepository(connection)
         readiness_checks = PostgresReadinessCheckRepository(connection)
@@ -285,6 +293,7 @@ def build_pipeline_services(
             profiles=profiles,
             chunk_bundles=chunk_bundles,
             registry=registry,
+            connection=connection,
         ),
         embedding_executor=EmbeddingRunExecutor(
             runs=embedding_runs,
@@ -294,6 +303,7 @@ def build_pipeline_services(
             registry=registry,
             builder=builder,
             content_reader=content_reader,
+            connection=connection,
         ),
         indexing_read_service=IndexingReadService(
             runs=indexing_runs,
@@ -359,7 +369,10 @@ def build_pipeline_services(
             search=search,
             readiness_checks=readiness_checks,
         ),
-        retrieval_search=search,
+        retrieval_search=SearchRetrievalUseCase(
+            retrieval_profiles=retrieval_profiles,
+            search=search,
+        ),
     )
 
 

@@ -11,6 +11,9 @@ from chunking.infrastructure.filesystem_chunk_repository import (
     FilesystemChunkBundleRepository,
 )
 from chunking.infrastructure.filesystem_run_repository import FilesystemRunRepository
+from chunking.infrastructure.postgres_chunk_repository import (
+    FilesystemBackedPostgresChunkBundleRepository,
+)
 
 
 def _bundle() -> NormalizedDocumentBundle:
@@ -126,3 +129,93 @@ class ExplodingChunkBundleRepository(FilesystemChunkBundleRepository):
         if metadata_stage.exists():
             metadata_stage.unlink()
         raise RuntimeError("forced promotion failure")
+
+
+def test_registra_chunk_bundle_en_postgres_ademas_del_filesystem(tmp_path: Path) -> None:
+    class RecordingLedger:
+        def __init__(self) -> None:
+            self.registered = []
+
+        def ensure_registered(self, bundle):
+            self.registered.append(bundle)
+            return bundle
+
+    class RecordingConnection:
+        def __init__(self) -> None:
+            self.commits = 0
+            self.rollbacks = 0
+
+        def commit(self) -> None:
+            self.commits += 1
+
+        def rollback(self) -> None:
+            self.rollbacks += 1
+
+    ledger = RecordingLedger()
+    connection = RecordingConnection()
+    document = _bundle()
+    repository = FilesystemBackedPostgresChunkBundleRepository(
+        output_root=tmp_path,
+        ledger=ledger,
+        connection=connection,
+    )
+    orchestrator = ChunkingOrchestrator(
+        engine=LocalChunkingEngine(),
+        bundle_repository=repository,
+        run_repository=FilesystemRunRepository(output_root=tmp_path),
+    )
+
+    result = orchestrator.process_document(
+        document=document,
+        profile=ChunkingProfile.local_structural_v1(),
+    )
+
+    assert result.reused is False
+    assert len(ledger.registered) == 1
+    assert ledger.registered[0].source_document_id == document.document_id
+    assert ledger.registered[0].source_relpath == document.source_relpath
+    assert ledger.registered[0].source_hash == document.source_hash
+    assert connection.commits == 1
+    assert connection.rollbacks == 0
+
+
+def test_reutilizacion_vuelve_a_registrar_el_bundle_en_postgres(tmp_path: Path) -> None:
+    class RecordingLedger:
+        def __init__(self) -> None:
+            self.registered = []
+
+        def ensure_registered(self, bundle):
+            self.registered.append(bundle)
+            return bundle
+
+    class RecordingConnection:
+        def __init__(self) -> None:
+            self.commits = 0
+
+        def commit(self) -> None:
+            self.commits += 1
+
+        def rollback(self) -> None:
+            raise AssertionError("rollback no esperado")
+
+    ledger = RecordingLedger()
+    connection = RecordingConnection()
+    repository = FilesystemBackedPostgresChunkBundleRepository(
+        output_root=tmp_path,
+        ledger=ledger,
+        connection=connection,
+    )
+    orchestrator = ChunkingOrchestrator(
+        engine=LocalChunkingEngine(),
+        bundle_repository=repository,
+        run_repository=FilesystemRunRepository(output_root=tmp_path),
+    )
+    profile = ChunkingProfile.local_structural_v1()
+
+    first = orchestrator.process_document(document=_bundle(), profile=profile)
+    second = orchestrator.process_document(document=_bundle(), profile=profile)
+
+    assert first.run_id == second.run_id
+    assert second.reused is True
+    assert len(ledger.registered) == 2
+    assert connection.commits == 2

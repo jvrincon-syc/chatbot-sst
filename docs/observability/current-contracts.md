@@ -88,6 +88,21 @@ It is a compatibility snapshot, not a future design target.
 - `indexing_document_completed`
 - `indexing_document_failed`
 
+### Embedding
+
+- `embedding_run_created`
+- `embedding_run_reused`
+- `embedding_run_queued`
+- `embedding_run_queue_rejected`
+- `embedding_run_claim_skipped`
+- `embedding_run_phase_completed`
+- `embedding_run_phase_failed`
+- `embedding_transaction_committed`
+- `embedding_transaction_rolled_back`
+- `embedding_run_completed`
+- `embedding_run_failed`
+- `embedding_run_queue_drained`
+
 ### CLI contract
 
 - CLI commands keep the final machine-readable JSON on `stdout`.

@@ -97,6 +97,7 @@ test("keeps stored ui preferences while status drives operational settings", () 
   stored.selectedDocumentIds.review = "doc-review";
   stored.selectedDocumentIds.inventory = "doc-inventory";
   stored.embeddingIndexing.activeStage = "retrieval";
+  stored.embeddingIndexing.selectedEmbeddingProfileId = "local-bge-m3-v1";
   stored.embeddingIndexing.selectedChunkBundleId = "chunk-bundle-1";
   stored.embeddingIndexing.activeEmbeddingRunId = "embedding-run-1";
   stored.embeddingIndexing.selectedEmbeddingBundleId = "embedding-bundle-1";
@@ -112,6 +113,7 @@ test("keeps stored ui preferences while status drives operational settings", () 
   assert.equal(preferences.activeView, "inventory");
   assert.deepEqual(preferences.selectedDocumentIds, stored.selectedDocumentIds);
   assert.equal(preferences.embeddingIndexing.activeStage, "retrieval");
+  assert.equal(preferences.embeddingIndexing.selectedEmbeddingProfileId, "local-bge-m3-v1");
   assert.equal(preferences.embeddingIndexing.selectedChunkBundleId, "chunk-bundle-1");
   assert.equal(preferences.embeddingIndexing.activeEmbeddingRunId, "embedding-run-1");
   assert.equal(preferences.embeddingIndexing.selectedEmbeddingBundleId, "embedding-bundle-1");
@@ -139,6 +141,7 @@ test("preserves embedding-indexing as a stored dashboard view", () => {
   const stored = createStatusDrivenDashboardPreferences(null);
   stored.activeView = "embedding-indexing";
   stored.embeddingIndexing.activeStage = "activation";
+  stored.embeddingIndexing.selectedEmbeddingProfileId = "local-bge-m3-v1";
   stored.embeddingIndexing.selectedChunkBundleId = "chunk-bundle-1";
 
   const preferences = resolveDashboardPreferences({
@@ -148,6 +151,7 @@ test("preserves embedding-indexing as a stored dashboard view", () => {
 
   assert.equal(preferences.activeView, "embedding-indexing");
   assert.equal(preferences.embeddingIndexing.activeStage, "activation");
+  assert.equal(preferences.embeddingIndexing.selectedEmbeddingProfileId, "local-bge-m3-v1");
   assert.equal(preferences.embeddingIndexing.selectedChunkBundleId, "chunk-bundle-1");
 });
 
@@ -171,6 +175,7 @@ test("migrates dashboard preferences from v1 to v2 with minimal embedding-indexi
         inventory: "doc-inventory",
       });
       assert.equal(preferences?.embeddingIndexing.activeStage, "embedding");
+      assert.equal(preferences?.embeddingIndexing.selectedEmbeddingProfileId, null);
       assert.equal(preferences?.embeddingIndexing.selectedChunkBundleId, null);
       assert.equal(preferences?.embeddingIndexing.activeEmbeddingRunId, null);
       assert.equal(preferences?.embeddingIndexing.selectedEmbeddingBundleId, null);
@@ -186,6 +191,7 @@ test("migrates dashboard preferences from v1 to v2 with minimal embedding-indexi
         },
         embeddingIndexing: {
           activeStage: "embedding",
+          selectedEmbeddingProfileId: null,
           selectedChunkBundleId: null,
           activeEmbeddingRunId: null,
           selectedEmbeddingBundleId: null,
@@ -204,6 +210,7 @@ test("writes only the compact v2 dashboard preferences payload", () => {
     preferences.activeView = "embedding-indexing";
     preferences.selectedDocumentIds.review = "doc-review";
     preferences.embeddingIndexing.activeStage = "retrieval";
+    preferences.embeddingIndexing.selectedEmbeddingProfileId = "local-bge-m3-v1";
 
     writeDashboardPreferences(preferences);
 
@@ -217,6 +224,7 @@ test("writes only the compact v2 dashboard preferences payload", () => {
         },
         embeddingIndexing: {
           activeStage: "retrieval",
+          selectedEmbeddingProfileId: "local-bge-m3-v1",
           selectedChunkBundleId: null,
           activeEmbeddingRunId: null,
           selectedEmbeddingBundleId: null,

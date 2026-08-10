@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   loadRetrievalProfileStatus,
   loadRetrievalProfiles,
+  searchRetrieval,
   validateRetrievalProfile,
 } from "../../../.tmp-tests/features/retrieval/retrievalApi.js";
 
@@ -110,4 +111,50 @@ await test("validates a retrieval profile without sending a user question", asyn
   assert.deepEqual(body, { retrieval_profile_id: "retrieval-profile-1" });
   assert.equal(result.status, "passed");
   assert.equal(result.candidatesFound, 3);
+});
+
+await test("executes retrieval search and maps evidence items", async () => {
+  const calls = [];
+  globalThis.fetch = async (input, init) => {
+    calls.push([input, init]);
+    return jsonResponse({
+      retrieval_profile_id: "retrieval-profile-1",
+      top_k: 2,
+      items: [
+        {
+          node_id: "node-1",
+          document_id: "doc-1",
+          parent_node_id: "parent-1",
+          child_chunk_id: "child-1",
+          text: "evidencia textual",
+          score: 0.91,
+          source: "vector",
+          page_start: 3,
+          page_end: 3,
+          section_title: "Alcance",
+          section_path: "Capitulo 1",
+          metadata: { lane: "primary" },
+          embedding_profile_id: "local-bge-m3-v1",
+          corpus_version: "phase1-main",
+          embedding_bundle_id: "embedding-bundle-1",
+        },
+      ],
+    });
+  };
+
+  const result = await searchRetrieval({
+    retrievalProfileId: "retrieval-profile-1",
+    query: "alcance del procedimiento",
+    topK: 2,
+  });
+
+  assert.equal(calls[0][0], "/api/retrieval/search");
+  assert.deepEqual(JSON.parse(calls[0][1].body), {
+    retrieval_profile_id: "retrieval-profile-1",
+    query: "alcance del procedimiento",
+    top_k: 2,
+  });
+  assert.equal(result.topK, 2);
+  assert.equal(result.items[0].documentId, "doc-1");
+  assert.equal(result.items[0].sectionTitle, "Alcance");
 });

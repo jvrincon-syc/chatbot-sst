@@ -36,9 +36,11 @@ import type {
 import {
   loadRetrievalProfileStatus,
   loadRetrievalProfiles,
+  searchRetrieval,
   validateRetrievalProfile,
 } from "../retrieval/retrievalApi.js";
 import type {
+  RetrievalSearchResult,
   RetrievalProfile,
   RetrievalProfileStatus,
   RetrievalValidationResult,
@@ -46,6 +48,7 @@ import type {
 import { mapPipelineError } from "./shared/errorMapping.js";
 import type { PaginatedResponse } from "./shared/apiTypes.js";
 import type { EmbeddingIndexingState } from "../dashboard/dashboardTypes.js";
+import { shouldAdvanceToIndexing } from "./shared/pipelineFlow.js";
 
 function errorMessage(caught: unknown): string {
   return mapPipelineError(caught).message;
@@ -74,7 +77,9 @@ export function useEmbeddingIndexingPipeline({
   const [profiles, setProfiles] = useState<EmbeddingProfile[]>([]);
   const [profilesLoading, setProfilesLoading] = useState(true);
   const [profilesError, setProfilesError] = useState<string | null>(null);
-  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
+  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
+    persistedState.selectedEmbeddingProfileId,
+  );
 
   const [chunkBundles, setChunkBundles] = useState<EmbeddingChunkBundleListItem[]>([]);
   const [chunkBundlesLoading, setChunkBundlesLoading] = useState(true);
@@ -149,10 +154,24 @@ export function useEmbeddingIndexingPipeline({
   const [retrievalValidationError, setRetrievalValidationError] = useState<string | null>(null);
   const [retrievalValidationResult, setRetrievalValidationResult] =
     useState<RetrievalValidationResult | null>(null);
+  const [retrievalQuery, setRetrievalQuery] = useState("");
+  const [retrievalTopK, setRetrievalTopK] = useState(5);
+  const [retrievalSearchBusy, setRetrievalSearchBusy] = useState(false);
+  const [retrievalSearchError, setRetrievalSearchError] = useState<string | null>(null);
+  const [retrievalSearchResult, setRetrievalSearchResult] =
+    useState<RetrievalSearchResult | null>(null);
 
   const selectedProfile = useMemo(
     () => profiles.find((profile) => profile.profileId === selectedProfileId) ?? null,
     [profiles, selectedProfileId],
+  );
+
+  const selectProfile = useCallback(
+    (profileId: string | null) => {
+      setSelectedProfileId(profileId);
+      persistState({ selectedEmbeddingProfileId: profileId });
+    },
+    [persistState],
   );
 
   const selectChunkBundle = useCallback(
@@ -187,7 +206,12 @@ export function useEmbeddingIndexingPipeline({
           return current;
         }
         const firstSelectable = profilePage.items.find(embeddingProfileSelectable);
-        return firstSelectable?.profileId ?? current ?? null;
+        const nextProfileId =
+          firstSelectable?.profileId ?? profilePage.items[0]?.profileId ?? current ?? null;
+        if (nextProfileId !== current) {
+          persistState({ selectedEmbeddingProfileId: nextProfileId });
+        }
+        return nextProfileId;
       });
       if (overview) {
         setBundleFirstEnabled(overview.bundleFirstEnabled);
@@ -201,6 +225,16 @@ export function useEmbeddingIndexingPipeline({
     try {
       const bundlePage = await loadChunkBundles();
       setChunkBundles(bundlePage.items);
+      setSelectedChunkBundleId((current) => {
+        if (current && bundlePage.items.some((bundle) => bundle.chunkBundleId === current)) {
+          return current;
+        }
+        const nextChunkBundleId = bundlePage.items[0]?.chunkBundleId ?? current ?? null;
+        if (nextChunkBundleId !== current) {
+          persistState({ selectedChunkBundleId: nextChunkBundleId });
+        }
+        return nextChunkBundleId;
+      });
     } catch (caught) {
       setChunkBundlesError(errorMessage(caught));
     } finally {
@@ -212,25 +246,26 @@ export function useEmbeddingIndexingPipeline({
     try {
       const retrievalPage = await loadRetrievalProfiles();
       setRetrievalProfiles(retrievalPage.items);
-      const nextRetrievalProfileId =
-        retrievalProfileId &&
-        retrievalPage.items.some(
-          (profile) => profile.retrievalProfileId === retrievalProfileId,
-        )
-          ? retrievalProfileId
+      setRetrievalProfileId((current) => {
+        const currentIsAvailable =
+          current &&
+          retrievalPage.items.some((profile) => profile.retrievalProfileId === current);
+        const nextRetrievalProfileId = currentIsAvailable
+          ? current
           : retrievalPage.items.find((profile) => profile.active)?.retrievalProfileId ??
-            retrievalProfileId ??
+            current ??
             null;
-      setRetrievalProfileId(nextRetrievalProfileId);
-      if (nextRetrievalProfileId !== retrievalProfileId) {
-        persistState({ selectedRetrievalProfileId: nextRetrievalProfileId });
-      }
+        if (nextRetrievalProfileId !== current) {
+          persistState({ selectedRetrievalProfileId: nextRetrievalProfileId });
+        }
+        return nextRetrievalProfileId;
+      });
     } catch (caught) {
       setRetrievalProfilesError(errorMessage(caught));
     } finally {
       setRetrievalProfilesLoading(false);
     }
-  }, []);
+  }, [persistState]);
 
   useEffect(() => {
     void refreshCatalog();
@@ -305,12 +340,20 @@ export function useEmbeddingIndexingPipeline({
     if (!producedBundleId) {
       return;
     }
+    const nextStage = shouldAdvanceToIndexing({
+      activeStage: persistedState.activeStage,
+      producedBundleId,
+      indexingRunId,
+    })
+      ? "indexing"
+      : persistedState.activeStage;
     setSelectedEmbeddingBundleId(producedBundleId);
     persistState({
       selectedEmbeddingBundleId: producedBundleId,
       activeEmbeddingRunId: embeddingRunId,
+      activeStage: nextStage,
     });
-  }, [embeddingRunId, persistState, producedBundleId]);
+  }, [embeddingRunId, indexingRunId, persistState, persistedState.activeStage, producedBundleId]);
 
   const createIndexing = useCallback(async () => {
     if (!resolvedEmbeddingBundleId) return;
@@ -416,6 +459,11 @@ export function useEmbeddingIndexingPipeline({
     void refreshRetrievalStatus();
   }, [refreshRetrievalStatus]);
 
+  useEffect(() => {
+    setRetrievalSearchError(null);
+    setRetrievalSearchResult(null);
+  }, [retrievalProfileId]);
+
   const validateRetrieval = useCallback(async () => {
     if (!retrievalProfileId) return;
     setRetrievalValidationBusy(true);
@@ -431,13 +479,38 @@ export function useEmbeddingIndexingPipeline({
     }
   }, [retrievalProfileId, refreshRetrievalStatus]);
 
+  const runRetrievalSearch = useCallback(async () => {
+    if (!retrievalProfileId) {
+      return;
+    }
+    const trimmedQuery = retrievalQuery.trim();
+    if (!trimmedQuery) {
+      setRetrievalSearchError("Escribe una consulta antes de buscar evidencia.");
+      return;
+    }
+    setRetrievalSearchBusy(true);
+    setRetrievalSearchError(null);
+    try {
+      const result = await searchRetrieval({
+        retrievalProfileId,
+        query: trimmedQuery,
+        topK: retrievalTopK,
+      });
+      setRetrievalSearchResult(result);
+    } catch (caught) {
+      setRetrievalSearchError(errorMessage(caught));
+    } finally {
+      setRetrievalSearchBusy(false);
+    }
+  }, [retrievalProfileId, retrievalQuery, retrievalTopK]);
+
   return {
     embedding: {
       profiles,
       profilesLoading,
       profilesError,
       selectedProfileId,
-      selectProfile: setSelectedProfileId,
+      selectProfile,
       selectedProfile,
       chunkBundles,
       chunkBundlesLoading,
@@ -497,6 +570,14 @@ export function useEmbeddingIndexingPipeline({
       validationError: retrievalValidationError,
       validationResult: retrievalValidationResult,
       validate: validateRetrieval,
+      query: retrievalQuery,
+      setQuery: setRetrievalQuery,
+      topK: retrievalTopK,
+      setTopK: setRetrievalTopK,
+      searchBusy: retrievalSearchBusy,
+      searchError: retrievalSearchError,
+      searchResult: retrievalSearchResult,
+      search: runRetrievalSearch,
     },
     refreshCatalog,
     refreshing: profilesLoading || chunkBundlesLoading,

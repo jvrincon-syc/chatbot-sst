@@ -10,6 +10,11 @@ import {
   loadChunkingValidationOptional,
 } from "./chunkingApi.js";
 import {
+  createChunkingWorkspaceFormState,
+  readChunkingWorkspaceSnapshot,
+  writeChunkingWorkspaceSnapshot,
+} from "./chunkingPersistence.js";
+import {
   chunkingPaginationLabel,
   chunkingRunIsTerminalStatus,
   chunkingRunProgressPercent,
@@ -44,13 +49,13 @@ export function useChunkingWorkspace() {
   const [profilesError, setProfilesError] = useState<string | null>(null);
   const [notice, setNotice] = useState<ChunkingNoticeState>(null);
 
-  const [form, setForm] = useState<ChunkingFormState>(() => ({
-    scope: "corpus",
-    documentIdsInput: "",
-    profileId: DEFAULT_CHUNKING_PROFILE_ID,
-    force: false,
-    idempotencyKey: createChunkingIdempotencyKey(),
-  }));
+  const [form, setForm] = useState<ChunkingFormState>(() =>
+    createChunkingWorkspaceFormState(readChunkingWorkspaceSnapshot()),
+  );
+
+  useEffect(() => {
+    writeChunkingWorkspaceSnapshot(form);
+  }, [form]);
 
   const [launchBusy, setLaunchBusy] = useState(false);
   const [runSummary, setRunSummary] = useState<ChunkingRunSummary | null>(null);

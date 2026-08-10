@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
-from chunking.api.dependencies import build_run_service
+from chunking.api.dependencies import build_run_service, build_run_service_from_env
 from chunking.application.run_service import (
     ChunkingDocumentNotFoundError,
     ChunkingIdempotencyConflictError,
@@ -71,10 +71,24 @@ def _header_value(headers: dict[str, str], name: str) -> str:
 class ChunkingApiBridge:
     """Expose the chunking HTTP contract through the existing GUI server."""
 
-    def __init__(self, *, docs_normalized: Path, chunks_root: Path) -> None:
-        self._service: ChunkingRunService = build_run_service(
-            docs_normalized=docs_normalized,
-            chunks_root=chunks_root,
+    def __init__(
+        self,
+        *,
+        docs_normalized: Path,
+        chunks_root: Path,
+        connection: object | None = None,
+    ) -> None:
+        self._service: ChunkingRunService = (
+            build_run_service(
+                docs_normalized=docs_normalized,
+                chunks_root=chunks_root,
+                connection=connection,
+            )
+            if connection is not None
+            else build_run_service_from_env(
+                docs_normalized=docs_normalized,
+                chunks_root=chunks_root,
+            )
         )
 
     def close(self) -> None:

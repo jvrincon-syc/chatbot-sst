@@ -30,6 +30,39 @@ def stable_document_id(source_relpath: str | os.PathLike[str]) -> str:
     return "doc_" + hashlib.sha1(canonical.encode("utf-8")).hexdigest()[:16]
 
 
+def platform_document_id(
+    project_slug: str, source_relpath: str | os.PathLike[str]
+) -> str:
+    """Return a project-scoped logical document id (``sdoc_...``).
+
+    Unlike :func:`stable_document_id`, the identity includes the owning project,
+    so two projects that share a ``source_relpath`` never collide (ADR-006 §2.2).
+    The path is a versioned locator, not the whole identity.
+    """
+
+    canonical = canonical_relpath(source_relpath)
+    payload = f"{project_slug}\x1f{canonical}"
+    return "sdoc_" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:32]
+
+
+def platform_revision_id(
+    project_slug: str,
+    source_relpath: str | os.PathLike[str],
+    raw_content_hash: str,
+) -> str:
+    """Return an immutable document revision id (``srev_...``).
+
+    A changed raw byte stream yields a different ``raw_content_hash`` and thus a
+    new revision id; the previous revision is never overwritten (ADR-006 §2.2).
+    """
+
+    canonical = canonical_relpath(source_relpath)
+    if not raw_content_hash:
+        raise ValueError("raw_content_hash must not be empty")
+    payload = f"{project_slug}\x1f{canonical}\x1f{raw_content_hash}"
+    return "srev_" + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:32]
+
+
 @dataclass(frozen=True)
 class ArtifactPaths:
     source_relpath: str

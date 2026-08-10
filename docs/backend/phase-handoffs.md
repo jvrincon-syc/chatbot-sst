@@ -139,6 +139,23 @@ El repo expone dos superficies distintas:
 Los CLIs siguen siendo la fuente más directa para inventario, pipeline,
 preparación PostgreSQL, verificación de perfiles y benchmarks.
 
+## Plataforma RAG: cuatro semánticas separadas (ADR-006)
+
+La plataforma multi-proyecto introduce estados que **no** son sinónimos entre sí
+ni de la activación legacy. El handoff entre fases debe preservar la distinción:
+
+| Concepto | Confirma | No implica |
+| --- | --- | --- |
+| `promoted` | promoción técnica del normalizado (gate legacy: validación estructural) | que la revisión sea releaseable |
+| `release_eligible` | la revisión puede entrar a un corpus snapshot | promoción ni publicación |
+| `PUBLISHED` | el catálogo de plataforma acepta la release | activación de retrieval ni cambio de consumidor |
+| activación legacy (`is_active`) | qué release consulta el chatbot | nada de lo anterior; no se toca en este plan |
+
+Una revisión `needs_review` exige decisión de elegibilidad versionada antes de
+entrar a un snapshot. Detalle en
+[identity-and-reuse-contract.md](../rag-platform/identity-and-reuse-contract.md)
+y baseline en [migration-baseline.md](../rag-platform/migration-baseline.md).
+
 ## Puntos de acoplamiento a vigilar
 
 - La ingesta y la GUI comparten mucha orquestación en archivos grandes.

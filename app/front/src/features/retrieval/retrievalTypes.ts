@@ -48,6 +48,30 @@ export type RetrievalValidationResult = {
   blockingReasons: string[];
 };
 
+export type RetrievalEvidence = {
+  nodeId: string;
+  documentId: string;
+  parentNodeId: string | null;
+  childChunkId: string;
+  text: string;
+  score: number;
+  source: string;
+  pageStart: number | null;
+  pageEnd: number | null;
+  sectionTitle: string | null;
+  sectionPath: string | null;
+  metadata: Record<string, unknown>;
+  embeddingProfileId: string;
+  corpusVersion: string;
+  embeddingBundleId: string | null;
+};
+
+export type RetrievalSearchResult = {
+  retrievalProfileId: string;
+  topK: number;
+  items: RetrievalEvidence[];
+};
+
 export type RetrievalStage = "unavailable" | "loading" | "ready" | "blocked";
 
 export type RetrievalStageState = {

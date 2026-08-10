@@ -36,10 +36,16 @@ class FilesystemChunkBundleRepository(ChunkBundleRepositoryPort):
         metadata_stage = metadata_path.with_suffix(metadata_path.suffix + ".tmp")
         metadata = StoredChunkBundleMetadata(
             document_id=document.document_id,
+            source_relpath=document.source_relpath,
+            source_hash=document.source_hash,
+            corpus_version=document.corpus_version,
             normalized_relpath=document.normalized_relpath,
             profile_id=bundle.profile.profile_id,
             profile_fingerprint=bundle.profile.fingerprint,
             bundle_fingerprint=bundle.fingerprint,
+            artifact_relpath=metadata_path.relative_to(self.output_root).as_posix(),
+            parent_count=len(bundle.parents),
+            child_count=len(bundle.children),
         )
         try:
             self._write_jsonl(parent_stage, [parent.as_payload() for parent in bundle.parents])
@@ -85,10 +91,16 @@ class FilesystemChunkBundleRepository(ChunkBundleRepositoryPort):
         payload = json.loads(metadata_path.read_text(encoding="utf-8"))
         return StoredChunkBundleMetadata(
             document_id=str(payload["document_id"]),
+            source_relpath=str(payload["source_relpath"]),
+            source_hash=str(payload["source_hash"]),
+            corpus_version=str(payload["corpus_version"]),
             normalized_relpath=str(payload["normalized_relpath"]),
             profile_id=str(payload["profile_id"]),
             profile_fingerprint=str(payload["profile_fingerprint"]),
             bundle_fingerprint=str(payload["bundle_fingerprint"]),
+            artifact_relpath=metadata_path.relative_to(self.output_root).as_posix(),
+            parent_count=int(payload["parent_count"]),
+            child_count=int(payload["child_count"]),
         )
 
     def parent_chunks_path(self, *, document: NormalizedDocumentBundle) -> Path:

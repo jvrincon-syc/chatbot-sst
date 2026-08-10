@@ -93,6 +93,29 @@ For PostgreSQL-backed indexing:
 2. Confirm `indexing_persistence_committed` after a successful transaction.
 3. Confirm `indexing_persistence_rolled_back` if the transaction is aborted.
 
+## Follow embedding
+
+The embedding path now exposes:
+
+- `embedding_run_created`
+- `embedding_run_reused`
+- `embedding_run_queued`
+- `embedding_run_queue_rejected`
+- `embedding_run_claim_skipped`
+- `embedding_run_phase_completed`
+- `embedding_run_phase_failed`
+- `embedding_transaction_committed`
+- `embedding_transaction_rolled_back`
+- `embedding_run_completed`
+- `embedding_run_failed`
+- `embedding_run_queue_drained`
+
+For PostgreSQL-backed embedding:
+
+1. Follow `embedding_run_phase_completed` with `phase=create_run` to confirm the initial durable row was inserted.
+2. If the worker fails, compare `embedding_run_phase_failed` and `embedding_transaction_rolled_back` to see whether the break happened in `load_source_bundle`, `resolve_engine`, `build_bundle` or persistence.
+3. Inspect `failure_kind`, `transaction_status_before`, `transaction_status_after`, `queue_depth`, `child_count` and `vector_count` to separate timeout, saturation and transaction-abort scenarios.
+
 ## Follow chunking
 
 When chunking is launched from the GUI or API, the request correlation is kept

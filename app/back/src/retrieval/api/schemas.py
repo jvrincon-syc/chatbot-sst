@@ -25,6 +25,14 @@ class ValidateRetrievalSchema(StrictModel):
     retrieval_profile_id: str = Field(min_length=1)
 
 
+class SearchRetrievalSchema(StrictModel):
+    """Run one retrieval search against one retrieval profile."""
+
+    retrieval_profile_id: str = Field(min_length=1)
+    query: str = Field(min_length=1)
+    top_k: int = Field(default=10, ge=1, le=25)
+
+
 class RetrievalProfileSchema(StrictModel):
     """Read-only view of one retrieval profile."""
 
@@ -83,6 +91,34 @@ class RetrievalValidationSchema(StrictModel):
     query_dimension: int | None = None
     candidates_found: int = Field(ge=0)
     blocking_reasons: list[str] = Field(default_factory=list)
+
+
+class RetrievedEvidenceSchema(StrictModel):
+    """One evidence item returned by retrieval search."""
+
+    node_id: str
+    document_id: str
+    parent_node_id: str | None = None
+    child_chunk_id: str
+    text: str
+    score: float
+    source: str
+    page_start: int | None = None
+    page_end: int | None = None
+    section_title: str | None = None
+    section_path: str | None = None
+    metadata: dict[str, object] = Field(default_factory=dict)
+    embedding_profile_id: str
+    corpus_version: str
+    embedding_bundle_id: str | None = None
+
+
+class RetrievalSearchResponseSchema(StrictModel):
+    """Evidence returned by one retrieval search."""
+
+    retrieval_profile_id: str
+    top_k: int = Field(ge=1)
+    items: list[RetrievedEvidenceSchema] = Field(default_factory=list)
 
 
 class PaginatedRetrievalProfilesSchema(StrictModel):

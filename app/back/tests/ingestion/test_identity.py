@@ -7,6 +7,8 @@ import pytest
 from ingestion.paths import (
     ArtifactPaths,
     canonical_relpath,
+    platform_document_id,
+    platform_revision_id,
     preflight_artifact_paths,
     stable_document_id,
 )
@@ -92,3 +94,27 @@ def test_preflight_artifact_paths_rejects_duplicate_sources() -> None:
 
 def test_stable_document_id_preserves_existing_sha1_algorithm() -> None:
     assert stable_document_id("manual/document.pdf") == "doc_2b3c08e8f7c22fc6"
+
+
+def test_platform_document_id_is_project_scoped() -> None:
+    # Misma ruta relativa en dos proyectos => identidades lógicas distintas.
+    a = platform_document_id("sst-general", "manual/document.pdf")
+    b = platform_document_id("calidad-interna", "manual/document.pdf")
+    assert a.startswith("sdoc_")
+    assert a != b
+    # Determinista: misma entrada => misma identidad.
+    assert a == platform_document_id("sst-general", "manual/document.pdf")
+
+
+def test_platform_revision_id_changes_with_raw_hash() -> None:
+    first = platform_revision_id("sst-general", "manual/document.pdf", "hash-v1")
+    second = platform_revision_id("sst-general", "manual/document.pdf", "hash-v2")
+    assert first.startswith("srev_")
+    assert first != second  # bytes distintos => revisión distinta
+    # El legacy sigue intacto: la identidad de plataforma no lo replica.
+    assert first != stable_document_id("manual/document.pdf")
+
+
+def test_platform_revision_id_requires_raw_hash() -> None:
+    with pytest.raises(ValueError):
+        platform_revision_id("sst-general", "manual/document.pdf", "")

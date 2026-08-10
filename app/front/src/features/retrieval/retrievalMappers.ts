@@ -1,7 +1,9 @@
 import type {
+  RetrievalEvidence,
   RetrievalProfile,
   RetrievalProfileStatus,
   RetrievalReadiness,
+  RetrievalSearchResult,
   RetrievalRuntimeStatus,
   RetrievalValidationResult,
 } from "./retrievalTypes.js";
@@ -85,5 +87,39 @@ export function toRetrievalValidationResult(
     queryDimension: toNullableNumber(payload.query_dimension),
     candidatesFound: Number(payload.candidates_found ?? 0),
     blockingReasons: toStringArray(payload.blocking_reasons),
+  };
+}
+
+export function toRetrievalEvidence(payload: Record<string, unknown>): RetrievalEvidence {
+  return {
+    nodeId: String(payload.node_id ?? ""),
+    documentId: String(payload.document_id ?? ""),
+    parentNodeId: toNullableString(payload.parent_node_id),
+    childChunkId: String(payload.child_chunk_id ?? ""),
+    text: String(payload.text ?? ""),
+    score: Number(payload.score ?? 0),
+    source: String(payload.source ?? ""),
+    pageStart: toNullableNumber(payload.page_start),
+    pageEnd: toNullableNumber(payload.page_end),
+    sectionTitle: toNullableString(payload.section_title),
+    sectionPath: toNullableString(payload.section_path),
+    metadata: toRecord(payload.metadata),
+    embeddingProfileId: String(payload.embedding_profile_id ?? ""),
+    corpusVersion: String(payload.corpus_version ?? ""),
+    embeddingBundleId: toNullableString(payload.embedding_bundle_id),
+  };
+}
+
+export function toRetrievalSearchResult(
+  payload: Record<string, unknown>,
+): RetrievalSearchResult {
+  return {
+    retrievalProfileId: String(payload.retrieval_profile_id ?? ""),
+    topK: Number(payload.top_k ?? 0),
+    items: Array.isArray(payload.items)
+      ? payload.items
+          .filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+          .map(toRetrievalEvidence)
+      : [],
   };
 }

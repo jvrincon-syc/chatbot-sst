@@ -50,6 +50,7 @@ function parseEmbeddingIndexingState(value: unknown): EmbeddingIndexingState {
     activeStage: isEmbeddingIndexingStage(value.activeStage)
       ? value.activeStage
       : defaults.activeStage,
+    selectedEmbeddingProfileId: toStringOrNull(value.selectedEmbeddingProfileId),
     selectedChunkBundleId: toStringOrNull(value.selectedChunkBundleId),
     activeEmbeddingRunId: toStringOrNull(value.activeEmbeddingRunId),
     selectedEmbeddingBundleId: toStringOrNull(value.selectedEmbeddingBundleId),

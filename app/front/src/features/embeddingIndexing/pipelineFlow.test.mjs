@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 
 import {
   pipelineStageOrder,
+  shouldAdvanceToIndexing,
   shouldContinuePolling,
 } from "../../../.tmp-tests/features/embeddingIndexing/shared/pipelineFlow.js";
 
@@ -36,4 +37,31 @@ test("stops embedding polling when the run reaches a terminal state", () => {
 test("stops indexing polling on terminal states too", () => {
   assert.equal(shouldContinuePolling("indexing", "completed"), false);
   assert.equal(shouldContinuePolling("indexing", "running"), true);
+});
+
+test("auto-advances to indexing when embedding already produced a bundle", () => {
+  assert.equal(
+    shouldAdvanceToIndexing({
+      activeStage: "embedding",
+      producedBundleId: "embedding-bundle-1",
+      indexingRunId: null,
+    }),
+    true,
+  );
+  assert.equal(
+    shouldAdvanceToIndexing({
+      activeStage: "indexing",
+      producedBundleId: "embedding-bundle-1",
+      indexingRunId: null,
+    }),
+    false,
+  );
+  assert.equal(
+    shouldAdvanceToIndexing({
+      activeStage: "embedding",
+      producedBundleId: "embedding-bundle-1",
+      indexingRunId: "indexing-run-1",
+    }),
+    false,
+  );
 });

@@ -21,3 +21,15 @@ export function shouldContinuePolling(kind: PipelineRunKind, status: string): bo
   void kind;
   return !RUN_TERMINAL_STATUSES.includes(status);
 }
+
+export function shouldAdvanceToIndexing(options: {
+  activeStage: PipelineStage;
+  producedBundleId: string | null;
+  indexingRunId: string | null;
+}): boolean {
+  return (
+    options.activeStage === "embedding" &&
+    options.producedBundleId !== null &&
+    options.indexingRunId === null
+  );
+}

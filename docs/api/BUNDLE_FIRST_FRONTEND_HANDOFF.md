@@ -563,6 +563,49 @@ Sin cuerpo. `409 RETRIEVAL_PROFILE_BLOCKED` si readiness falla; el perfil queda
 Usa una **query sintética** interna. Nunca se almacena una pregunta real de
 usuario en `readiness_checks`.
 
+### `POST /api/retrieval/search`
+
+```json
+{
+  "retrieval_profile_id": "retrieval-profile-...",
+  "query": "cual es el plazo maximo para responder una PQRS",
+  "top_k": 5
+}
+```
+
+-> 
+
+```json
+{
+  "retrieval_profile_id": "retrieval-profile-...",
+  "top_k": 5,
+  "items": [
+    {
+      "node_id": "node-...",
+      "document_id": "doc_...",
+      "parent_node_id": "parent-...",
+      "child_chunk_id": "child-...",
+      "text": "Evidencia recuperada...",
+      "score": 0.91,
+      "source": "vector",
+      "page_start": 3,
+      "page_end": 3,
+      "section_title": "Alcance",
+      "section_path": "Capitulo 1",
+      "metadata": {},
+      "embedding_profile_id": "local-bge-m3-v1",
+      "corpus_version": "phase1-main",
+      "embedding_bundle_id": "embedding-bundle-..."
+    }
+  ]
+}
+```
+
+Reglas:
+- El cliente nunca envia `vector_table`, `embedding_profile_id` ni `corpus_version` fuera del `retrieval_profile_id`.
+- La consulta no se persiste en `readiness_checks`.
+- Si el perfil no es usable o el fallback lexico esta prohibido, devuelve `409 RETRIEVAL_PROFILE_BLOCKED`.
+
 ---
 
 ## 7. Feature flags

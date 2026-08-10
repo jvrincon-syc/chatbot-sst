@@ -340,6 +340,9 @@ class ChunkingRunService:
 
     def close(self) -> None:
         self._executor.shutdown(wait=True, cancel_futures=False)
+        close = getattr(self._chunk_repository, "close", None)
+        if callable(close):
+            close()
 
     def _require_profile(self, profile_id: str) -> None:
         if profile_id != "local-structural-v1":

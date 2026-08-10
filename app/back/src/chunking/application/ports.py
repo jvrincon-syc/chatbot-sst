@@ -29,10 +29,16 @@ class StoredChunkBundleMetadata:
     """Persisted bundle identity used for idempotent chunking runs."""
 
     document_id: str
+    source_relpath: str
+    source_hash: str
+    corpus_version: str
     normalized_relpath: str
     profile_id: str
     profile_fingerprint: str
     bundle_fingerprint: str
+    artifact_relpath: str
+    parent_count: int
+    child_count: int
 
 
 class ChunkBundleRepositoryPort(Protocol):

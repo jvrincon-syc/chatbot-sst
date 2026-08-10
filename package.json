@@ -35,5 +35,12 @@
   "engines": {
     "node": ">=18",
     "python": ">=3.12,<3.13"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "jsdom": "^30.0.1"
   }
 }

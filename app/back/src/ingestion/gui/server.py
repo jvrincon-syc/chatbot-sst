@@ -1275,7 +1275,6 @@ def main() -> int:
     )
     host = "127.0.0.1"
     port = 8765
-    chunking_api = ChunkingApiBridge(docs_normalized=DOCS_NORMALIZED, chunks_root=CHUNKING_ROOT)
     # Persistence mode is explicit: PostgreSQL when SST_POSTGRES_DSN is set (or
     # SST_PERSISTENCE_MODE=postgres), otherwise the in-memory demo adapters.
     # Production never silently downgrades: a required-but-unavailable database
@@ -1283,6 +1282,11 @@ def main() -> int:
     pipeline_services = build_pipeline_services_from_env(
         chunks_root=CHUNKING_ROOT,
         embeddings_root=EMBEDDINGS_ROOT,
+    )
+    chunking_api = ChunkingApiBridge(
+        docs_normalized=DOCS_NORMALIZED,
+        chunks_root=CHUNKING_ROOT,
+        connection=pipeline_services.connection,
     )
     pipeline_services.indexing_reconciler.reconcile()
     pipeline_services.embedding_executor.reconcile()

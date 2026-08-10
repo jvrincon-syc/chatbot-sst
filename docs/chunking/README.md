@@ -10,6 +10,10 @@ chat requests.
 
 ## Current branch state
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md`
+> (autoridad del baseline reproducible; el hash histórico de abajo se conserva
+> por precisión).
+
 `main` at `f918b51` contains the local `local-structural-v1` engine, filesystem
 persistence, CLI, FastAPI API, run service, validation utility, golden corpus,
 and unit/integration/API tests. `docs/chunking/README.md` did not exist in the

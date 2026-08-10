@@ -10,6 +10,10 @@ downstream indexing, or PostgreSQL operations.
 
 ## Current branch state
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md`
+> (autoridad del baseline reproducible; el hash histórico de abajo se conserva
+> por precisión).
+
 `main` at `f918b51` implements adapters, settings, provider-run persistence,
 usage tracking, raw-result redaction, and `LlamaOrchestrator`. The lane can be
 selected through feature flags and the ingestion GUI; local fallback is also

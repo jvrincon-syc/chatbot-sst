@@ -11,6 +11,10 @@ truth.
 
 ## Current branch state
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md`
+> (autoridad del baseline reproducible; el hash histórico de abajo se conserva
+> por precisión).
+
 `main` at `f918b51` contains the local Schema 2.0 ingestion pipeline, its CLI,
 JSON schemas, GUI control path, validation, and tests. The optional Llama Cloud
 lane is implemented behind configuration and feeds the same normalized

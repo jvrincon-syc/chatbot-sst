@@ -8,7 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from chunking.api.dependencies import build_run_service
+from chunking.api.dependencies import build_run_service, build_run_service_from_env
 from chunking.api.router import router
 
 
@@ -16,10 +16,19 @@ def create_app(
     *,
     docs_normalized: Path,
     chunks_root: Path,
+    connection: object | None = None,
 ) -> FastAPI:
-    service = build_run_service(
-        docs_normalized=docs_normalized,
-        chunks_root=chunks_root,
+    service = (
+        build_run_service(
+            docs_normalized=docs_normalized,
+            chunks_root=chunks_root,
+            connection=connection,
+        )
+        if connection is not None
+        else build_run_service_from_env(
+            docs_normalized=docs_normalized,
+            chunks_root=chunks_root,
+        )
     )
 
     @asynccontextmanager

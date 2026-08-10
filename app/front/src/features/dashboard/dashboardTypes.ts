@@ -32,6 +32,7 @@ export type EmbeddingIndexingStage =
 
 export type EmbeddingIndexingState = {
   activeStage: EmbeddingIndexingStage;
+  selectedEmbeddingProfileId: string | null;
   selectedChunkBundleId: string | null;
   activeEmbeddingRunId: string | null;
   selectedEmbeddingBundleId: string | null;
@@ -201,6 +202,7 @@ export function createDefaultDashboardPreferences(): DashboardPreferences {
     },
     embeddingIndexing: {
       activeStage: "embedding",
+      selectedEmbeddingProfileId: null,
       selectedChunkBundleId: null,
       activeEmbeddingRunId: null,
       selectedEmbeddingBundleId: null,

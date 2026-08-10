@@ -8,9 +8,11 @@ import type { PageOptions, PaginatedResponse } from "../embeddingIndexing/shared
 import {
   toRetrievalProfile,
   toRetrievalProfileStatus,
+  toRetrievalSearchResult,
   toRetrievalValidationResult,
 } from "./retrievalMappers.js";
 import type {
+  RetrievalSearchResult,
   RetrievalProfile,
   RetrievalProfileStatus,
   RetrievalValidationResult,
@@ -53,4 +55,24 @@ export async function validateRetrievalProfile(
     { signal: options?.signal },
   );
   return toRetrievalValidationResult(payload);
+}
+
+export async function searchRetrieval(
+  request: {
+    retrievalProfileId: string;
+    query: string;
+    topK?: number;
+  },
+  options?: { signal?: AbortSignal },
+): Promise<RetrievalSearchResult> {
+  const payload = await postJson<Record<string, unknown>>(
+    "/api/retrieval/search",
+    {
+      retrieval_profile_id: request.retrievalProfileId,
+      query: request.query,
+      top_k: request.topK ?? 5,
+    },
+    { signal: options?.signal },
+  );
+  return toRetrievalSearchResult(payload);
 }

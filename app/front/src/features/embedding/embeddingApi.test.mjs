@@ -251,3 +251,17 @@ await test("propagates the error envelope as a pipeline http error", async () =>
   assert.equal(mapped.status, 409);
   assert.equal(mapped.retryable, false);
 });
+
+await test("falls back to a generic HTTP error when the backend returns null", async () => {
+  globalThis.fetch = async () => jsonResponse(null, false);
+
+  let caught = null;
+  try {
+    await loadEmbeddingProfiles();
+  } catch (error) {
+    caught = error;
+  }
+
+  assert.ok(caught instanceof Error);
+  assert.equal(caught.message, "HTTP 400");
+});

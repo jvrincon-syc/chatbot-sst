@@ -66,6 +66,7 @@ def create_app(*, services: PipelineServices) -> FastAPI:
     app.state.retrieval_activate_profile = services.retrieval_activate_profile
     app.state.retrieval_profile_status = services.retrieval_profile_status
     app.state.retrieval_validate = services.retrieval_validate
+    app.state.retrieval_search = services.retrieval_search
 
     @app.exception_handler(HTTPException)
     async def http_exception_handler(_request, exc: HTTPException) -> JSONResponse:

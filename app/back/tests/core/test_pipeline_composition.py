@@ -11,10 +11,19 @@ from api.dependencies import (
     _resolve_persistence_mode,
     build_pipeline_services_from_env,
 )
+from core.feature_flags import FeatureFlags
 
 
 def test_resuelve_memory_por_defecto_sin_dsn() -> None:
     assert _resolve_persistence_mode({}) == "memory"
+
+
+def test_feature_flags_quedan_activas_por_defecto_sin_env() -> None:
+    flags = FeatureFlags.from_env({})
+
+    assert flags.embedding_v2 is True
+    assert flags.indexing_bundle_first is True
+    assert flags.retrieval_v1 is True
 
 
 def test_resuelve_postgres_cuando_hay_dsn() -> None:

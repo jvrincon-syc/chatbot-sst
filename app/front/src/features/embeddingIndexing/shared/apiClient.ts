@@ -5,21 +5,26 @@ import type {
 } from "./apiTypes.js";
 import { readJsonResponse } from "../../../shared/readJsonResponse.js";
 
-function toPipelineHttpError(response: Response, payload: ApiErrorEnvelope): PipelineHttpError {
-  const error = new Error(payload.error?.message ?? `HTTP ${response.status}`) as PipelineHttpError;
+function toErrorEnvelope(payload: unknown): ApiErrorEnvelope {
+  return payload && typeof payload === "object" ? (payload as ApiErrorEnvelope) : {};
+}
+
+function toPipelineHttpError(response: Response, payload: unknown): PipelineHttpError {
+  const envelope = toErrorEnvelope(payload);
+  const error = new Error(envelope.error?.message ?? `HTTP ${response.status}`) as PipelineHttpError;
   error.status = response.status;
-  error.code = payload.error?.code ?? null;
-  error.runId = payload.error?.run_id ?? null;
-  error.details = payload.error?.details ?? {};
+  error.code = envelope.error?.code ?? null;
+  error.runId = envelope.error?.run_id ?? null;
+  error.details = envelope.error?.details ?? {};
   return error;
 }
 
 export async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await readJsonResponse(response)) as T & ApiErrorEnvelope;
+  const payload = await readJsonResponse<unknown>(response);
   if (!response.ok) {
     throw toPipelineHttpError(response, payload);
   }
-  return payload;
+  return payload as T;
 }
 
 // Builds a stable snake_case query string. Null and undefined values are

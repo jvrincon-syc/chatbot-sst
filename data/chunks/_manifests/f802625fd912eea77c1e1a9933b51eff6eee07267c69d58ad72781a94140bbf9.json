@@ -4,7 +4,7 @@
   "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",
   "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
   "profile_id": "local-structural-v1",
-  "reused": false,
+  "reused": true,
   "run_id": "f802625fd912eea77c1e1a9933b51eff6eee07267c69d58ad72781a94140bbf9",
   "status": "passed"
 }

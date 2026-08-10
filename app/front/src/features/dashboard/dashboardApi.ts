@@ -1,4 +1,4 @@
-import { pipelineRequestForControls } from "../../pipelineRequest";
+import { pipelineRequestForControls } from "../../pipelineRequest.js";
 import { readJsonResponse } from "../../shared/readJsonResponse.js";
 import type {
   ActionResult,
@@ -8,11 +8,15 @@ import type {
 } from "./dashboardTypes";
 
 async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await readJsonResponse(response)) as T & { error?: string };
+  const payload = await readJsonResponse<unknown>(response);
+  const envelope =
+    payload && typeof payload === "object" ? (payload as T & { error?: string }) : ({} as T & {
+      error?: string;
+    });
   if (!response.ok) {
-    throw new Error(payload.error ?? `HTTP ${response.status}`);
+    throw new Error(envelope.error ?? `HTTP ${response.status}`);
   }
-  return payload;
+  return payload as T;
 }
 
 export async function loadDashboardStatus(): Promise<StatusPayload> {

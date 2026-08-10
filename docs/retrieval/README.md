@@ -8,6 +8,8 @@ Retrieval validates a consumer-scoped lane, embeds queries with the exact durabl
 
 This reflects committed `main` at `f918b512a5320b6fc434feefe1e3e9f780bc097b`. No retrieval README existed in that commit. The durable retrieval profile table comes from `migrations/20260805_13_create_retrieval_profiles.sql`.
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md` (autoridad del baseline reproducible; este hash histórico se conserva por precisión).
+
 ## 3. Code map
 
 - Domain profiles, errors, and evidence: `app/back/src/retrieval/domain/`.
@@ -60,13 +62,10 @@ Focused coverage includes bundle-first end-to-end, API lifecycle, evidence/fusio
 
 ## 10. Visible inconsistencies and debt
 
-- The committed tree had no README for this area.
-- `RetrievalSearchService.search` exists, but the committed router exposes lifecycle/status/validation only: no HTTP search endpoint calls it.
 - The observability snapshot omits a retrieval event family despite shared event emission.
 
 ## 11. Missing pieces to reach the target model
 
-- No public guarded query endpoint and operator contract are committed.
 - No retrieval CLI/runbook covers smoke validation, policy decisions, failure, or rollback.
 - Answer generation and citation verification are outside this module and have no implemented handoff documented here.
 

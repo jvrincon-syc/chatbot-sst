@@ -215,3 +215,17 @@ await test("returns null for chunking validation while the run is not ready", as
 
   assert.equal(validation, null);
 });
+
+await test("falls back to a generic HTTP error when chunking returns null", async () => {
+  globalThis.fetch = async () => jsonResponse(null, false);
+
+  let caught = null;
+  try {
+    await loadChunkingProfiles();
+  } catch (error) {
+    caught = error;
+  }
+
+  assert.ok(caught instanceof Error);
+  assert.equal(caught.message, "HTTP 400");
+});

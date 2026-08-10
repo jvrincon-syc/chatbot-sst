@@ -20,12 +20,17 @@ type ChunkingHttpError = Error & {
   details: Record<string, unknown>;
 };
 
-function toChunkingHttpError(response: Response, payload: ChunkingErrorEnvelope): ChunkingHttpError {
-  const error = new Error(payload.error?.message ?? `HTTP ${response.status}`) as ChunkingHttpError;
+function toChunkingErrorEnvelope(payload: unknown): ChunkingErrorEnvelope {
+  return payload && typeof payload === "object" ? (payload as ChunkingErrorEnvelope) : {};
+}
+
+function toChunkingHttpError(response: Response, payload: unknown): ChunkingHttpError {
+  const envelope = toChunkingErrorEnvelope(payload);
+  const error = new Error(envelope.error?.message ?? `HTTP ${response.status}`) as ChunkingHttpError;
   error.status = response.status;
-  error.code = payload.error?.code ?? null;
-  error.runId = payload.error?.run_id ?? null;
-  error.details = payload.error?.details ?? {};
+  error.code = envelope.error?.code ?? null;
+  error.runId = envelope.error?.run_id ?? null;
+  error.details = envelope.error?.details ?? {};
   return error;
 }
 
@@ -34,11 +39,11 @@ function isChunkingHttpError(error: unknown): error is ChunkingHttpError {
 }
 
 async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await readJsonResponse(response)) as T & ChunkingErrorEnvelope;
+  const payload = await readJsonResponse<unknown>(response);
   if (!response.ok) {
     throw toChunkingHttpError(response, payload);
   }
-  return payload;
+  return payload as T;
 }
 
 function toProfile(payload: Record<string, unknown>): ChunkingProfile {

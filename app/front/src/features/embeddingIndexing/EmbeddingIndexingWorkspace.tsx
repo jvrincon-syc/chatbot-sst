@@ -6,6 +6,7 @@ import { IndexingDocumentsTable } from "../indexing/components/IndexingDocuments
 import { IndexingErrorsPanel } from "../indexing/components/IndexingErrorsPanel.js";
 import { ActivationPanel } from "../indexing/components/ActivationPanel.js";
 import { RetrievalProfilesPanel } from "../retrieval/components/RetrievalProfilesPanel.js";
+import { RetrievalSearchPanel } from "../retrieval/components/RetrievalSearchPanel.js";
 import { RetrievalStatusPanel } from "../retrieval/components/RetrievalStatusPanel.js";
 import { RetrievalValidationPanel } from "../retrieval/components/RetrievalValidationPanel.js";
 import { PipelineHeader } from "./PipelineHeader.js";
@@ -167,6 +168,18 @@ export function EmbeddingIndexingWorkspace({
             validationError={retrieval.validationError}
             validationResult={retrieval.validationResult}
             onValidate={() => void retrieval.validate()}
+          />
+          <RetrievalSearchPanel
+            retrievalProfileId={retrieval.retrievalProfileId}
+            status={retrieval.status}
+            query={retrieval.query}
+            onQueryChange={retrieval.setQuery}
+            topK={retrieval.topK}
+            onTopKChange={retrieval.setTopK}
+            searchBusy={retrieval.searchBusy}
+            searchError={retrieval.searchError}
+            searchResult={retrieval.searchResult}
+            onSearch={() => void retrieval.search()}
           />
         </div>
       ) : null}

@@ -8,6 +8,8 @@ Embedding turns one registered chunk bundle into a sealed, auditable embedding b
 
 This reflects committed `main` at `f918b512a5320b6fc434feefe1e3e9f780bc097b`. No embedding README existed in that commit. Migrations `20260805_01` through `20260806_01` define the durable contract.
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md` (autoridad del baseline reproducible; este hash histórico se conserva por precisión).
+
 ## 3. Code map
 
 - Domain models/errors: `app/back/src/embedding/domain/`.

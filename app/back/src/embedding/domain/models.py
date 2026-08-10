@@ -446,6 +446,9 @@ class ChunkBundleRef(StrictModel):
     corpus_version: str = Field(min_length=1)
     source_document_id: str = Field(min_length=1)
     artifact_relpath: str = Field(min_length=1)
+    source_relpath: str | None = None
+    normalized_relpath: str | None = None
+    source_hash: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     parent_count: int = Field(ge=0)
     child_count: int = Field(ge=0)
     status: CompatibilityStatus

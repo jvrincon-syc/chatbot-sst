@@ -18,7 +18,9 @@ from retrieval.api.schemas import (
     PaginatedRetrievalProfilesSchema,
     RetrievalProfileSchema,
     RetrievalProfileStatusSchema,
+    RetrievalSearchResponseSchema,
     RetrievalValidationSchema,
+    SearchRetrievalSchema,
     ValidateRetrievalSchema,
 )
 from retrieval.application.ports import RetrievalProfileRepository
@@ -27,6 +29,8 @@ from retrieval.application.retrieval_service import (
     CreateRetrievalProfileRequest,
     CreateRetrievalProfileUseCase,
     GetRetrievalProfileStatusUseCase,
+    SearchRetrievalRequest,
+    SearchRetrievalUseCase,
     ValidateRetrievalUseCase,
 )
 from retrieval.domain.errors import RetrievalDomainError
@@ -76,6 +80,12 @@ def get_validate_use_case(request: Request) -> ValidateRetrievalUseCase:
     """Return the validation use case bound to the application."""
 
     return request.app.state.retrieval_validate
+
+
+def get_search_use_case(request: Request) -> SearchRetrievalUseCase:
+    """Return the search use case bound to the application."""
+
+    return request.app.state.retrieval_search
 
 
 def get_feature_flags(request: Request) -> FeatureFlags:
@@ -183,3 +193,25 @@ def validate_retrieval(
         return use_case.execute(payload.retrieval_profile_id).model_dump()
     except _DOMAIN_ERRORS as error:
         raise _translate(error) from error
+
+
+@router.post("/search", response_model=RetrievalSearchResponseSchema)
+def search_retrieval(
+    payload: SearchRetrievalSchema,
+    use_case: SearchRetrievalUseCase = Depends(get_search_use_case),
+) -> dict:
+    try:
+        items = use_case.execute(
+            SearchRetrievalRequest(
+                retrieval_profile_id=payload.retrieval_profile_id,
+                query=payload.query,
+                top_k=payload.top_k,
+            )
+        )
+    except _DOMAIN_ERRORS as error:
+        raise _translate(error) from error
+    return {
+        "retrieval_profile_id": payload.retrieval_profile_id,
+        "top_k": payload.top_k,
+        "items": [item.model_dump(mode="json") for item in items],
+    }

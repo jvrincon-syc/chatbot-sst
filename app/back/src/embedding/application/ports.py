@@ -93,13 +93,16 @@ class EmbeddingProfileRepository(Protocol):
 
 
 class ChunkBundleRepository(Protocol):
-    """Durable read access to ``chunk_bundles``."""
+    """Durable read/write access to ``chunk_bundles``."""
 
     def get(self, chunk_bundle_id: str) -> ChunkBundleRef:
         """Return one registered chunk bundle or raise ``ChunkBundleNotFound``."""
 
     def list_bundles(self) -> list[ChunkBundleRef]:
         """Return every registered chunk bundle."""
+
+    def ensure_registered(self, bundle: ChunkBundleRef) -> ChunkBundleRef:
+        """Persist one chunk bundle identity so downstream FKs can reference it."""
 
 
 class EmbeddingRunRepository(Protocol):

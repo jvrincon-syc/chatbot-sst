@@ -11,6 +11,10 @@ arquitectonicas actuales.
   trazabilidad.
 - `ADR-004-production-parser-routing.md`: routing por feature flags y adopcion
   selectiva.
+- `ADR-005-postgres-pgvector-profile-separation.md`: una tabla pgvector por
+  perfil de embedding inmutable; separacion de lanes en base de datos.
+- `ADR-006-rag-platform-project-variant-release.md`: identidad de plataforma
+  multi-proyecto (project/variant/release), aditiva sobre la lane legacy.
 
 El estado operativo corto vive en `docs/README.md`,
 `docs/ingestion/README.md` y `docs/llama_first/README.md`.

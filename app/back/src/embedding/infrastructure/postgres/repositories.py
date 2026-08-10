@@ -26,6 +26,7 @@ from embedding.domain.models import (
     EmbeddingRun,
     ReadinessCheck,
 )
+from ingestion.paths import ArtifactPaths
 from indexing.domain.bundle_first import IndexingTarget
 
 
@@ -331,6 +332,87 @@ class PostgresChunkBundleRepository:
             ChunkBundleRef.model_validate(_row_to_mapping(row, _CHUNK_BUNDLE_COLUMNS))
             for row in rows
         ]
+
+    def ensure_registered(self, bundle: ChunkBundleRef) -> ChunkBundleRef:
+        """Upsert one chunk bundle so embedding and indexing FKs remain valid."""
+
+        self._ensure_source_document_registered(bundle)
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO chunk_bundles (
+                    chunk_bundle_id, bundle_fingerprint, profile_id,
+                    profile_fingerprint, corpus_version, source_document_id,
+                    artifact_relpath, parent_count, child_count, status
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (chunk_bundle_id) DO UPDATE SET
+                    bundle_fingerprint = EXCLUDED.bundle_fingerprint,
+                    profile_id = EXCLUDED.profile_id,
+                    profile_fingerprint = EXCLUDED.profile_fingerprint,
+                    corpus_version = EXCLUDED.corpus_version,
+                    source_document_id = EXCLUDED.source_document_id,
+                    artifact_relpath = EXCLUDED.artifact_relpath,
+                    parent_count = EXCLUDED.parent_count,
+                    child_count = EXCLUDED.child_count,
+                    status = EXCLUDED.status
+                """,
+                (
+                    bundle.chunk_bundle_id,
+                    bundle.bundle_fingerprint,
+                    bundle.profile_id,
+                    bundle.profile_fingerprint,
+                    bundle.corpus_version,
+                    bundle.source_document_id,
+                    bundle.artifact_relpath,
+                    bundle.parent_count,
+                    bundle.child_count,
+                    bundle.status,
+                ),
+            )
+        return self.get(bundle.chunk_bundle_id)
+
+    def _ensure_source_document_registered(self, bundle: ChunkBundleRef) -> None:
+        source_relpath = (bundle.source_relpath or "").strip()
+        source_hash = (bundle.source_hash or "").strip()
+        if not source_relpath or not source_hash:
+            return
+
+        artifact_paths = ArtifactPaths.for_source(source_relpath)
+        markdown_relpath = (bundle.normalized_relpath or "").strip() or artifact_paths.markdown
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO indexing_normalized_documents (
+                    document_id, source_relpath, source_hash, ingestion_origin,
+                    corpus_version, processing_status, markdown_relpath,
+                    metadata_relpath, pages_relpath, tables_relpath, forms_relpath,
+                    artifact_fingerprint, metadata
+                )
+                VALUES (%s, %s, %s, 'local', %s, 'processed', %s, %s, %s, %s, %s, %s, %s::jsonb)
+                ON CONFLICT (document_id) DO NOTHING
+                """,
+                (
+                    bundle.source_document_id,
+                    source_relpath,
+                    source_hash,
+                    bundle.corpus_version,
+                    markdown_relpath,
+                    artifact_paths.metadata,
+                    artifact_paths.pages,
+                    artifact_paths.tables,
+                    artifact_paths.forms,
+                    bundle.bundle_fingerprint,
+                    json.dumps(
+                        {
+                            "profile_id": bundle.profile_id,
+                            "profile_fingerprint": bundle.profile_fingerprint,
+                            "registration_origin": "embedding_chunk_bundle_backfill",
+                        },
+                        sort_keys=True,
+                    ),
+                ),
+            )
 
 
 class PostgresEmbeddingRunRepository:

@@ -8,6 +8,8 @@ Observability defines sanitized backend signals and their compatible operational
 
 This reflects committed `main` at `f918b512a5320b6fc434feefe1e3e9f780bc097b`. No observability README existed in that commit. [current-contracts.md](current-contracts.md) is the committed compatibility baseline, not a future design.
 
+> Baseline de plataforma RAG: ver `docs/rag-platform/migration-baseline.md` (autoridad del baseline reproducible; este hash histórico se conserva por precisión).
+
 ## 3. Code map
 
 - Structured logger/sinks: `app/back/src/core/logging/logger.py`.

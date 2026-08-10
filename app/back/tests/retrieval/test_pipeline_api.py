@@ -50,7 +50,11 @@ def blocked_client(tmp_path: Path) -> Iterator[TestClient]:
     services = build_pipeline_services(
         chunks_root=tmp_path / "chunks",
         embeddings_root=tmp_path / "embeddings",
-        feature_flags=FeatureFlags(),
+        feature_flags=FeatureFlags(
+            embedding_v2=False,
+            indexing_bundle_first=False,
+            retrieval_v1=False,
+        ),
         allow_mock_engine=True,
         seed_profiles=[profile],
         seed_targets=[build_target()],
@@ -315,6 +319,34 @@ def test_flujo_completo_de_retrieval_por_http(client: TestClient) -> None:
     )
     assert validation.status_code == 200
     assert validation.json()["status"] == "passed"
+
+
+def test_busca_evidencia_por_http_despues_de_activar_el_perfil(client: TestClient) -> None:
+    embedding_run = _run_embedding(client)
+    indexing_run = _run_indexing(client, embedding_run["produced_embedding_bundle_id"])
+    activation = client.post(
+        "/api/indexing/activations",
+        json={"run_id": indexing_run["run_id"]},
+    ).json()
+    retrieval_profile_id = activation["retrieval_profile_id"]
+
+    response = client.post(
+        "/api/retrieval/search",
+        json={
+            "retrieval_profile_id": retrieval_profile_id,
+            "query": "validacion sintetica de recuperacion",
+            "top_k": 3,
+        },
+    )
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["retrieval_profile_id"] == retrieval_profile_id
+    assert body["top_k"] == 3
+    assert len(body["items"]) >= 1
+    assert body["items"][0]["document_id"]
+    assert body["items"][0]["child_chunk_id"]
+    assert body["items"][0]["text"]
 
 
 def test_bloquea_activar_un_perfil_de_retrieval_sin_filas(client: TestClient) -> None:

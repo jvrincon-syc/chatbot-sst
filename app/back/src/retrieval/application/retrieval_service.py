@@ -65,6 +65,15 @@ class CreateRetrievalProfileRequest:
     lexical_fallback_policy: str = "allowed_when_vector_unavailable"
 
 
+@dataclass(frozen=True)
+class SearchRetrievalRequest:
+    """Public payload for one retrieval query against one active lane."""
+
+    retrieval_profile_id: str
+    query: str
+    top_k: int = 10
+
+
 class CreateRetrievalProfileUseCase:
     """Register one inactive retrieval profile."""
 
@@ -444,6 +453,27 @@ class RetrievalSearchService:
             if parent is not None and parent not in expanded:
                 expanded.append(parent)
         return expanded
+
+
+class SearchRetrievalUseCase:
+    """Resolve one retrieval profile and run one evidence search."""
+
+    def __init__(
+        self,
+        *,
+        retrieval_profiles: RetrievalProfileRepository,
+        search: RetrievalSearchService,
+    ) -> None:
+        self._retrieval_profiles = retrieval_profiles
+        self._search = search
+
+    def execute(self, request: SearchRetrievalRequest) -> list[RetrievedEvidence]:
+        retrieval_profile = self._retrieval_profiles.get(request.retrieval_profile_id)
+        return self._search.search(
+            retrieval_profile=retrieval_profile,
+            query=request.query,
+            top_k=request.top_k,
+        )
 
 
 class ValidateRetrievalUseCase:
