@@ -11,10 +11,10 @@ export const EMBEDDING_TERMINAL_STATUSES: readonly string[] = [
   "blocked",
 ];
 
-// A profile can only be picked for document embedding when all three flags hold.
-// Mirrors the backend contract: active && document_enabled && can_embed_documents.
+// The backend already publishes the effective document-embedding verdict in
+// can_embed_documents, including any narrow operational waivers.
 export function embeddingProfileSelectable(profile: EmbeddingProfile): boolean {
-  return profile.active && profile.documentEnabled && profile.canEmbedDocuments;
+  return profile.canEmbedDocuments;
 }
 
 // Returns a stable machine reason for why a profile cannot be selected today, or

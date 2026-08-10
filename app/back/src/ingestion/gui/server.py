@@ -49,6 +49,7 @@ MANIFESTS_DIR = DOCS_NORMALIZED / "_manifests"
 REVIEW_DECISIONS_PATH = MANIFESTS_DIR / "review_decisions.json"
 GUI_SETTINGS_PATH = MANIFESTS_DIR / "gui_settings.json"
 ALLOWED_UPLOAD_SUFFIXES = {".pdf", ".md", ".markdown"}
+ALLOWED_CORS_HEADERS = ("Content-Type", "Idempotency-Key", "Authorization")
 DEFAULT_LLAMA_ROUTE = "classify,parse,extract"
 ALLOWED_LLAMA_ROUTES = {
     "parse",
@@ -835,7 +836,10 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
     def _send_common_headers(self) -> None:
         self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1:5173")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            ", ".join(ALLOWED_CORS_HEADERS),
+        )
 
     def _chunking_api(self) -> ChunkingApiBridge | None:
         return getattr(self.server, "chunking_api", None)

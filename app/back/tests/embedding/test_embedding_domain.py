@@ -73,6 +73,23 @@ def test_perfil_legacy_queda_bloqueado_cuando_no_esta_verificado() -> None:
     assert profile.can_embed_queries is False
 
 
+def test_perfil_bge_m3_legacy_queda_libre_para_embedding_operativo() -> None:
+    profile = build_profile(
+        provider="bge",
+        model="BAAI/bge-m3",
+        dimension=1024,
+        normalization="unknown_normalization",
+        vector_table="idx_vec_local_bge_m3_v1",
+        compatibility_status="compatibility_not_proven",
+        document_enabled=False,
+        query_enabled=False,
+    )
+
+    assert profile.is_verified is False
+    assert profile.can_embed_documents is True
+    assert profile.can_embed_queries is True
+
+
 def test_perfil_bloquea_documentos_cuando_esta_deprecado() -> None:
     from datetime import datetime, timezone
 

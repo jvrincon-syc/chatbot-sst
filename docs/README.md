@@ -6,10 +6,16 @@ afectada. No cargues `data/`, `memory/`, `.tmp/`, `.venv*` ni
 
 ## Areas
 
+- `backend/README.md`: mapa transversal del backend, handoffs entre fases,
+  variables criticas y deuda visible.
 - `ingestion/README.md`: ingesta local, Schema 2.0, gates y consumo downstream.
 - `llama_first/README.md`: via experimental Llama Cloud/LlamaIndex, flags y
   bloqueos.
 - `chunking/`: contrato del chunking local y su API HTTP.
+- `embedding/README.md`: operacion de perfiles, runs y bundles de embeddings.
+- `indexing/README.md`: indexacion bundle-first, targets, activacion y rollback.
+- `retrieval/README.md`: perfiles de retrieval, readiness y busqueda.
+- `observability/README.md`: logs, eventos, correlacion y runbooks.
 - `adr/`: decisiones de arquitectura vigentes.
 - `runbooks/`: acciones operativas breves.
 - `rules/`: politicas obligatorias; leerlas cuando el cambio toque calidad,
@@ -22,6 +28,7 @@ afectada. No cargues `data/`, `memory/`, `.tmp/`, `.venv*` ni
   `constraints/llama-first.txt`, `secrets.example.env`.
 - AGENTS: `AGENTS.md`, `app/back/AGENTS_back.md`,
   `app/front/AGENTS_front.md`.
+- Flujo transversal y gaps del backend: `docs/backend/`.
 - Salidas generadas o sensibles: `data/`, `secrets.env`, `manual-test-temp/`
   y cualquier `pytest-*` temporal.
 - Planes historicos: `memory/`.

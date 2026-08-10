@@ -125,3 +125,49 @@ def test_runtime_status_marca_bloqueado_cuando_el_perfil_no_esta_verificado() ->
     assert status.supports_documents is False
     assert status.supports_queries is False
     assert status.blocked_reason == "EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN"
+
+
+def test_runtime_status_deja_libre_el_bge_m3_legacy() -> None:
+    registry = DefaultEmbeddingEngineRegistry(environ={}, allow_mock=True)
+    profile = build_profile(
+        provider="bge",
+        model="BAAI/bge-m3",
+        dimension=1024,
+        normalization="unknown_normalization",
+        vector_table="idx_vec_local_bge_m3_v1",
+        compatibility_status="compatibility_not_proven",
+        document_enabled=False,
+        query_enabled=False,
+    )
+
+    status = registry.get_runtime_status(profile)
+
+    assert status.engine_available is True
+    assert status.supports_documents is True
+    assert status.supports_queries is True
+    assert status.blocked_reason is None
+
+
+def test_trata_la_normalizacion_unknown_del_bge_m3_legacy_como_compatible() -> None:
+    registry = DefaultEmbeddingEngineRegistry(environ={}, allow_mock=True)
+    profile = build_profile(
+        provider="bge",
+        model="BAAI/bge-m3",
+        dimension=1024,
+        normalization="unknown_normalization",
+        vector_table="idx_vec_local_bge_m3_v1",
+        compatibility_status="compatibility_not_proven",
+        document_enabled=False,
+        query_enabled=False,
+    )
+
+    class LegacyBgeEngine:
+        provider_name = "bge"
+        model_name = "BAAI/bge-m3"
+        dimension = 1024
+        normalization = "l2"
+
+    report = registry.validate_engine_compatibility(profile, LegacyBgeEngine())
+
+    assert report.compatible is True
+    assert report.mismatches == []

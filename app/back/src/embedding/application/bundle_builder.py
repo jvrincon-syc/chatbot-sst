@@ -110,7 +110,7 @@ class EmbeddingBundleValidator:
             ),
             ValidationCheck(
                 name="profile_verified",
-                passed=profile.is_verified,
+                passed=profile.can_embed_documents,
                 detail=profile.compatibility_status,
             ),
             ValidationCheck(
@@ -491,9 +491,9 @@ class EmbeddingIndexingReadinessEvaluator:
         reasons: list[str] = []
         if not bundle.is_sealed:
             reasons.append("EMBEDDING_BUNDLE_INVALID")
-        if not profile.is_verified:
+        if not profile.compatibility_gate_open:
             reasons.append("EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN")
-        if not profile.document_enabled:
+        if not profile.document_enabled and not profile.has_operational_compatibility_waiver:
             reasons.append("EMBEDDING_PROFILE_DOCUMENTS_DISABLED")
         if bundle.configuration_fingerprint != profile.expected_fingerprint().value:
             reasons.append("EMBEDDING_ENGINE_SEMANTIC_MISMATCH")

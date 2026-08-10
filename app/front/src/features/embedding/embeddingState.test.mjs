@@ -47,6 +47,21 @@ test("marks a fully enabled profile as selectable with no blocked reason", () =>
   assert.equal(embeddingProfileBlockedReason(profile), null);
 });
 
+test("treats BAAI/bge-m3 dim 1024 as selectable when the backend frees it", () => {
+  const profile = toEmbeddingProfile({
+    profile_id: "local-bge-m3-v1",
+    model: "BAAI/bge-m3",
+    dimension: 1024,
+    active: true,
+    document_enabled: false,
+    can_embed_documents: true,
+    compatibility_status: "compatibility_not_proven",
+  });
+
+  assert.equal(embeddingProfileSelectable(profile), true);
+  assert.equal(embeddingProfileBlockedReason(profile), null);
+});
+
 test("uses bundle chunks instead of embedding run items", () => {
   const links = requiredEmbeddingBundleLinks({
     chunks: "/api/embedding/bundles/bundle-1/chunks",

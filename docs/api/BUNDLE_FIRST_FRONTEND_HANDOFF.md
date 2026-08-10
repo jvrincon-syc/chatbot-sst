@@ -95,8 +95,8 @@ Query params: `page >= 1`, `1 <= page_size <= 100` (default 25). Fuera de rango 
   "query_enabled": false,
   "compatibility_status": "compatibility_not_proven",
   "deprecated_at": null,
-  "can_embed_documents": false,
-  "can_embed_queries": false
+  "can_embed_documents": true,
+  "can_embed_queries": true
 }
 ```
 
@@ -108,9 +108,14 @@ Enums:
 - `normalization`: `unknown_normalization | none | l2 | provider_normalized`
 - `distance_metric`: `cosine | l2 | inner_product`
 
+**Veredicto operativo:** la UI debe confiar en `can_embed_documents` y
+`can_embed_queries`. `document_enabled` y `query_enabled` conservan el estado
+durable bruto, y el backend puede abrir un perfil legacy con una waiver
+operativa estrecha sin reescribir esas flags.
+
 **Selección permitida:** el usuario solo puede elegir un `profile_id` con
 `can_embed_documents == true`. Los demás deben mostrarse **bloqueados**
-(hoy los 7 perfiles legacy están bloqueados; ver §9).
+(si `can_embed_documents == false`; ver §9).
 
 ### `GET /api/embedding/runtime`
 
@@ -624,12 +629,23 @@ configuration_fingerprint = NULL
 model_revision       = "unknown_revision"
 ```
 
-Por tanto **`can_embed_documents` y `can_embed_queries` son `false` en todos**, y
+Por defecto eso deja `can_embed_documents` y `can_embed_queries` en `false`, y
 `POST /api/embedding/runs` responde `409
-EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN`. Es el comportamiento correcto:
-la UI debe mostrarlos bloqueados con ese motivo.
+EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN`.
 
-Se desbloquean solo por el proceso explícito de verificación del backend:
+Excepción operativa actual:
+
+```text
+provider  = bge
+model     = BAAI/bge-m3
+dimension = 1024
+```
+
+Ese perfil legacy queda libre por una waiver operativa estrecha. La UI debe
+seguir guiándose por `can_embed_documents` y `can_embed_queries`, no por asumir
+que todo `compatibility_not_proven` queda bloqueado.
+
+Los demás perfiles se desbloquean solo por el proceso explícito de verificación del backend:
 
 ```bash
 npm run embedding:verify-profile -- --profile-id local-bge-m3-v1 --apply

@@ -6,26 +6,34 @@ indexacion/RAG con trazabilidad verificable.
 ## Lectura rapida
 
 - Indice corto: `docs/README.md`.
+- Mapa transversal del backend y handoffs entre fases: `docs/backend/`.
 - Ingesta local y Schema 2.0: `docs/ingestion/README.md`.
+- Chunking local y contrato HTTP: `docs/chunking/README.md`.
+- Embedding bundle-first: `docs/embedding/README.md`.
+- Indexacion bundle-first: `docs/indexing/README.md`.
+- Retrieval y readiness: `docs/retrieval/README.md`.
 - Via Llama-first experimental: `docs/llama_first/README.md`.
-- Chunking local y contrato HTTP: `docs/chunking/`.
-- Observabilidad del backend: `docs/observability/current-contracts.md`
-  y `docs/runbooks/backend-observability.md`.
+- Observabilidad del backend: `docs/observability/README.md`.
 - Decisiones vigentes: `docs/adr/`.
 - Runbooks operativos: `docs/runbooks/`.
 - Reglas transversales: `docs/rules/`.
 
 `data/`, `memory/`, `.tmp/`, `.venv*`, `node_modules/`, `manual-test-temp/`
-y `pytest-*` no son contexto documental normal. Abrirlos solo cuando una tarea
-lo pida.
+y `pytest-*` no son contexto documental normal. `memory/`, `plans/` y
+`.claude/` son guias locales, no autoridad versionada. Abrirlos solo cuando una
+tarea lo pida.
 
 ## Guia de uso
 
-Este repo separa el trabajo en tres capas:
+Este repo separa el trabajo en capas operativas:
 
 - Ingesta local: normaliza documentos y conserva trazabilidad por pagina.
-- Chunking e indexacion: consumen bundles ya aprobados y mantienen contratos
+- Chunking: transforma documentos normalizados en bundles parent-child
   auditables.
+- Embedding: convierte chunk bundles en embedding bundles verificables.
+- Indexacion: persiste nodos y vectores por perfil/target sin regenerar
+  embeddings.
+- Retrieval: valida lanes de consulta y recupera evidencia con provenance.
 - Llama-first: experimento controlado con fallback y reglas de autorizacion.
 
 Si buscas el estado actual de una corrida, no confies en cifras escritas a mano
@@ -247,7 +255,10 @@ npm run schemas:export
 ### Indexacion
 
 ```powershell
+npm run test:embedding
 npm run test:indexing
+npm run test:retrieval
+npm run embedding:verify-profile -- --profile-id local-bge-m3-v1 --dry-run
 npm run indexing:prepare-postgres
 npm run indexing:run -- --dry-run
 npm run indexing:validate
@@ -289,6 +300,11 @@ resumenes de validacion cambian con el corpus y deben consultarse en la salida
 de `npm run ingestion:inventory` y `npm run ingestion:validate`, no en texto
 fijo del README.
 
-Chunking, indexacion y RAG deben indexar solo documentos aprobados o manejar
-`needs_review` explicitamente. Llama-first sigue detras de configuracion y
-autorizacion de datos.
+Chunking, embedding, indexacion y retrieval ya tienen superficies propias en
+el backend versionado, pero no todas tienen el mismo grado de madurez
+operativa. Consulta `docs/backend/gaps-and-debt.md` para distinguir estado
+vigente, deuda visible y faltantes al modelo objetivo.
+
+Chunking, embedding, indexacion y retrieval deben consumir solo documentos o
+bundles elegibles, o manejar `needs_review` explicitamente. Llama-first sigue
+detras de configuracion y autorizacion de datos.

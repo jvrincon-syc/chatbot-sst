@@ -8,6 +8,7 @@ import pytest
 import ingestion.gui.server as gui_server
 from ingestion.config.llama_settings import LlamaSettings
 from ingestion.gui.server import (
+    Phase1GuiHandler,
     ROOT,
     ReviewDecision,
     _document_payload_for_record,
@@ -127,6 +128,24 @@ def test_gui_http_logging_redacts_sensitive_route_segments() -> None:
 def test_gui_http_logging_redacts_client_address() -> None:
     assert _redact_client_address(("127.0.0.1", 1234)) == "***redacted***"
     assert _redact_client_address(None) is None
+
+
+def test_gui_common_headers_allow_pipeline_idempotency_and_auth_headers() -> None:
+    sent_headers: list[tuple[str, str]] = []
+
+    class _FakeHandler:
+        def send_header(self, name: str, value: str) -> None:
+            sent_headers.append((name, value))
+
+    Phase1GuiHandler._send_common_headers(_FakeHandler())  # type: ignore[arg-type]
+
+    headers = dict(sent_headers)
+    assert headers["Access-Control-Allow-Origin"] == "http://127.0.0.1:5173"
+    assert headers["Access-Control-Allow-Methods"] == "GET, POST, OPTIONS"
+    allowed_headers = headers["Access-Control-Allow-Headers"]
+    assert "Content-Type" in allowed_headers
+    assert "Idempotency-Key" in allowed_headers
+    assert "Authorization" in allowed_headers
 
 
 def test_validation_target_uses_recent_staging_root() -> None:

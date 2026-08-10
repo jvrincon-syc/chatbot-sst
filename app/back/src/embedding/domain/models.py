@@ -91,6 +91,14 @@ VALIDATOR_VERSION = "embedding-validator-v1"
 #: Schema version stamped on every bundle produced by this backend.
 BUNDLE_SCHEMA_VERSION = "embedding-bundle-v1"
 
+#: Narrow operational waivers for legacy profiles that must stay usable while
+#: their durable compatibility metadata is still incomplete.
+_OPERATIONAL_COMPATIBILITY_WAIVERS = frozenset(
+    {
+        ("bge", "BAAI/bge-m3", 1024),
+    }
+)
+
 
 def canonical_json(payload: object) -> str:
     """Serialize a payload deterministically for hashing.
@@ -181,16 +189,49 @@ class EmbeddingProfile(StrictModel):
         return self.compatibility_status == "verified" and self.deprecated_at is None
 
     @property
+    def has_operational_compatibility_waiver(self) -> bool:
+        """Return whether one narrow legacy waiver keeps the profile usable."""
+
+        return self.deprecated_at is None and (
+            self.provider,
+            self.model,
+            self.dimension,
+        ) in _OPERATIONAL_COMPATIBILITY_WAIVERS
+
+    @property
+    def compatibility_gate_open(self) -> bool:
+        """Return whether the profile may pass operational compatibility gates."""
+
+        return self.is_verified or self.has_operational_compatibility_waiver
+
+    def normalization_matches_runtime(self, observed: Normalization) -> bool:
+        """Return whether one runtime normalization is compatible with the profile."""
+
+        if self.normalization == observed:
+            return True
+        return (
+            self.has_operational_compatibility_waiver
+            and self.normalization == "unknown_normalization"
+            and observed == "l2"
+        )
+
+    @property
     def can_embed_documents(self) -> bool:
         """Return whether the profile may produce document vectors."""
 
-        return self.active and self.document_enabled and self.is_verified
+        return self.active and (
+            (self.document_enabled and self.compatibility_gate_open)
+            or self.has_operational_compatibility_waiver
+        )
 
     @property
     def can_embed_queries(self) -> bool:
         """Return whether the profile may produce query vectors."""
 
-        return self.active and self.query_enabled and self.is_verified
+        return self.active and (
+            (self.query_enabled and self.compatibility_gate_open)
+            or self.has_operational_compatibility_waiver
+        )
 
     def expected_fingerprint(self) -> EmbeddingConfigurationFingerprint:
         """Recompute the semantic fingerprint implied by this profile row."""

@@ -258,9 +258,9 @@ class IndexEmbeddingBundleUseCase:
                 f"embedding bundle {embedding_bundle_id} is not sealed and validated"
             )
         profile = self._profiles.get(bundle.embedding_profile_id)
-        if not profile.is_verified:
+        if not profile.can_embed_documents:
             raise EmbeddingProfileCompatibilityNotProven(
-                f"profile {profile.profile_id} is not verified"
+                f"profile {profile.profile_id} is not enabled for document embedding"
             )
         if bundle.configuration_fingerprint != profile.expected_fingerprint().value:
             raise EmbeddingBundleStale(

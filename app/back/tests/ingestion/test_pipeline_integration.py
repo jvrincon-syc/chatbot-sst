@@ -13,7 +13,7 @@ from ingestion.domain.models.classification import (
 from ingestion.domain.models.extraction import ExtractionField, ExtractionResult
 from ingestion.domain.models.llama_understanding import LlamaUnderstanding
 from ingestion.domain.models.provider import ProviderJobRef
-from ingestion.pipeline import _configured_tesseract_engine, run_pipeline
+from ingestion.pipeline import _configured_tesseract_engine, _run_pipeline_legacy, run_pipeline
 from ingestion.readers.base import ReadResult
 from ingestion.schemas.artifacts import (
     FormsArtifact,
@@ -169,6 +169,38 @@ def test_pipeline_reprocesses_modified_documents_by_hash(tmp_path: Path) -> None
     assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
     normalized_text = (normalized / "manual.md").read_text(encoding="utf-8")
     assert "Contenido modificado" in normalized_text
+
+
+def test_legacy_pipeline_helper_delegates_to_current_run_pipeline(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    docs_raw = tmp_path / "data" / "docs_raw"
+    docs_normalized = tmp_path / "data" / "docs_normalized"
+    docs_raw.mkdir(parents=True)
+    docs_normalized.mkdir(parents=True)
+    captured: dict[str, object] = {}
+
+    def fake_run_pipeline(**kwargs: object) -> dict[str, int]:
+        captured.update(kwargs)
+        return {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
+
+    monkeypatch.setattr(pipeline_module, "run_pipeline", fake_run_pipeline)
+
+    summary = _run_pipeline_legacy(
+        docs_raw=docs_raw,
+        docs_normalized=docs_normalized,
+        corpus_version="test",
+        pipeline_version="2.0.0",
+        run_id="legacy-alias",
+    )
+
+    assert summary == {"processed": 1, "failed": 0, "needs_review": 0, "skipped": 0}
+    assert captured["docs_raw"] == docs_raw
+    assert captured["docs_normalized"] == docs_normalized
+    assert captured["corpus_version"] == "test"
+    assert captured["pipeline_version"] == "2.0.0"
+    assert captured["run_id"] == "legacy-alias"
 
 
 def test_pipeline_writes_candidate_tree_without_touching_live_root(tmp_path: Path) -> None:

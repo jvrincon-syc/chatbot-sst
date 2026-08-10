@@ -4,7 +4,9 @@
 
 ### Scope
 
-- Plan source: `memory/plan-chunking-local-ajustado.md`
+- Plan source: historical local chunking adjustment note retired from
+  `memory/`; the surviving trace for this line of work is this decision log plus
+  `docs/chunking/README.md`
 - Working branch: `llamaparse_experiment`
 - Workspace mode: direct edits on the current branch and workspace by user request
 

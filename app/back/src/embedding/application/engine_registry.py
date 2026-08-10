@@ -275,7 +275,11 @@ class DefaultEmbeddingEngineRegistry:
             engine_revision_observed=engine.observe_revision(),
             supports_documents=profile.can_embed_documents,
             supports_queries=profile.can_embed_queries and engine.supports_queries,
-            blocked_reason=None if profile.is_verified else "EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN",
+            blocked_reason=(
+                None
+                if profile.compatibility_gate_open
+                else "EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN"
+            ),
         )
 
     def validate_engine_compatibility(
@@ -292,7 +296,12 @@ class DefaultEmbeddingEngineRegistry:
             ("dimension", str(profile.dimension), str(engine.dimension)),
             ("normalization", profile.normalization, engine.normalization),
         ):
-            if expected != observed:
+            matches = (
+                profile.normalization_matches_runtime(engine.normalization)
+                if field_name == "normalization"
+                else expected == observed
+            )
+            if not matches:
                 mismatches.append(
                     CompatibilityMismatch(
                         field_name=field_name,
