@@ -291,16 +291,16 @@ class RagBuildContext:
     semantic_recipe_fingerprint: str
 ```
 
-- [ ] Documentar que los artefactos físicos son propietarios del proyecto y que las releases solo los referencian.
-- [ ] Registrar la regla de negocio: documento agregado, retirado o reemplazado ⇒ corpus snapshot nuevo ⇒ release nueva.
-- [ ] Registrar la regla de variante: cambio semántico de parseo/normalización/chunking/embedding/perfil de recuperación ⇒ variante nueva y release nueva; cambio de target físicamente compatible ⇒ release nueva, no variante.
-- [ ] Separar tres conceptos en el contrato de handoff: `promoted` confirma que la promoción técnica terminó; `release_eligible` confirma que una revisión puede entrar a un snapshot; `PUBLISHED` confirma solo el catálogo de una release. Ninguno es sinónimo de los otros.
-- [ ] Para una revisión con `needs_review`, exigir una decisión de elegibilidad versionada (`approved_after_review`, `operator_waiver` o `blocked`) antes de incluirla en un corpus snapshot. La promoción legacy conserva su comportamiento actual y no se altera.
-- [ ] Declarar `corpus_version` como compatibilidad legacy y prohibir su uso como sustituto de `project_id`, `rag_variant_id`, `corpus_snapshot_id` o `rag_release_id` en nuevos contratos.
+- [x] Documentar que los artefactos físicos son propietarios del proyecto y que las releases solo los referencian.
+- [x] Registrar la regla de negocio: documento agregado, retirado o reemplazado ⇒ corpus snapshot nuevo ⇒ release nueva.
+- [x] Registrar la regla de variante: cambio semántico de parseo/normalización/chunking/embedding/perfil de recuperación ⇒ variante nueva y release nueva; cambio de target físicamente compatible ⇒ release nueva, no variante.
+- [x] Separar tres conceptos en el contrato de handoff: `promoted` confirma que la promoción técnica terminó; `release_eligible` confirma que una revisión puede entrar a un snapshot; `PUBLISHED` confirma solo el catálogo de una release. Ninguno es sinónimo de los otros.
+- [x] Para una revisión con `needs_review`, exigir una decisión de elegibilidad versionada (`approved_after_review`, `operator_waiver` o `blocked`) antes de incluirla en un corpus snapshot. La promoción legacy conserva su comportamiento actual y no se altera.
+- [x] Declarar `corpus_version` como compatibilidad legacy y prohibir su uso como sustituto de `project_id`, `rag_variant_id`, `corpus_snapshot_id` o `rag_release_id` en nuevos contratos.
 - [ ] Inventariar, en PostgreSQL real, conteos y hashes de `indexing_normalized_documents`, `chunk_bundles`, `embedding_bundles`, `embedding_runs`, `indexing_runs`, `indexing_nodes`, `idx_vec_*` y `retrieval_profiles` antes de cualquier migración.
 - [ ] Verificar los nombres reales de constraints, PKs e índices en la base que se migrará; no asumir que todos los entornos coinciden solo por los archivos SQL.
-- [ ] Crear un manifiesto de baseline con el commit, migraciones aplicadas, rutas de storage y hashes de los contratos. Corregir los READMEs que aún indican `f918b51` para que identifiquen el baseline real `3bc9a8a`, sin usar documentos no versionados como autoridad técnica.
-- [ ] Añadir pruebas de identidad que demuestren que `project_id`, variante, corpus snapshot y release no son intercambiables.
+- [x] Crear un manifiesto de baseline con el commit, migraciones aplicadas, rutas de storage y hashes de los contratos. Corregir los READMEs que aún indican `f918b51` para que identifiquen el baseline real `3bc9a8a`, sin usar documentos no versionados como autoridad técnica.
+- [x] Añadir pruebas de identidad que demuestren que `project_id`, variante, corpus snapshot y release no son intercambiables.
 
 **Exit criteria:** ADR aprobado; baseline reproducible archivado; `promoted`, elegibilidad de release, publicación y activación tienen semánticas documentadas distintas; no existe migración irreversible ni cambio de comportamiento.
 
@@ -333,16 +333,16 @@ class ProjectStorageResolver:
     def resolve_artifact(self, project_id: str, relative_path: PurePosixPath) -> Path: ...
 ```
 
-- [ ] Crear `rag_projects`, configuración versionada, tipos documentales por proyecto y perfiles de embedding permitidos.
-- [ ] Crear `document_processing_profiles` y `chunking_profiles` con proveedor, motor, revisión observada, configuración sanitizada, fingerprint, estado y timestamps. Las credenciales quedan exclusivamente en `secrets.env`/entorno.
-- [ ] Crear `rag_variants` con referencia a procesamiento, chunking y embedding, más `semantic_recipe_fingerprint` inmutable; crear `project_indexing_target_bindings` como allowlist backend de claves lógicas hacia targets globales compatibles.
-- [ ] Permitir que cada proyecto habilite de forma independiente perfiles de procesamiento `local` y/o `llama_cloud`, además de uno o más perfiles de embedding compatibles; crear una variante distinta por cada receta semántica seleccionada.
-- [ ] Implementar una plantilla genérica de tipos documentales que conserve las opciones SST como una plantilla seleccionable y añada opciones neutrales. Un proyecto nuevo no preselecciona SST; `sst-general` sí parte de la plantilla SST versionada.
-- [ ] Persistir una política de organización de corpus por proyecto, con cuatro opciones iniciales: `sst-legacy-v1`, `source-folders-v1`, `document-types-v1` y `hybrid-v1`. La política define la vista de ingreso/navegación y los relpaths lógicos; nunca define la identidad del documento ni la ubicación canónica de artefactos sellados.
-- [ ] En `document-types-v1`, enrutar inicialmente el archivo a `intake/`; solo después de clasificación o asignación humana se materializa la vista por tipo. No inferir que la ruta de entrada demuestra el tipo documental.
-- [ ] Implementar `ProjectStorageResolver` con raíces nuevas `data/projects/{project_id}/raw`, `normalized`, `chunks`, `embeddings` y `manifests`. Para `sst-general`, usar un adaptador de lectura de las rutas legacy durante el bootstrap, sin convertir las rutas legacy en la ruta canónica de artefactos nuevos.
-- [ ] Implementar `PlatformAccessPolicy` como puerto. En esta fase el adaptador puede representar operador interno, pero ningún handler toma `actor_id` de un body o header no autenticado.
-- [ ] Bloquear bindings o DRAFTs cuando el target no sea compatible con el perfil de embedding; bloquear variantes cuya receta use una revisión no verificable sin attestation explícita.
+- [x] Crear `rag_projects`, configuración versionada, tipos documentales por proyecto y perfiles de embedding permitidos.
+- [x] Crear `document_processing_profiles` y `chunking_profiles` con proveedor, motor, revisión observada, configuración sanitizada, fingerprint, estado y timestamps. Las credenciales quedan exclusivamente en `secrets.env`/entorno.
+- [x] Crear `rag_variants` con referencia a procesamiento, chunking y embedding, más `semantic_recipe_fingerprint` inmutable; crear `project_indexing_target_bindings` como allowlist backend de claves lógicas hacia targets globales compatibles.
+- [x] Permitir que cada proyecto habilite de forma independiente perfiles de procesamiento `local` y/o `llama_cloud`, además de uno o más perfiles de embedding compatibles; crear una variante distinta por cada receta semántica seleccionada.
+- [x] Implementar una plantilla genérica de tipos documentales que conserve las opciones SST como una plantilla seleccionable y añada opciones neutrales. Un proyecto nuevo no preselecciona SST; `sst-general` sí parte de la plantilla SST versionada.
+- [x] Persistir una política de organización de corpus por proyecto, con cuatro opciones iniciales: `sst-legacy-v1`, `source-folders-v1`, `document-types-v1` y `hybrid-v1`. La política define la vista de ingreso/navegación y los relpaths lógicos; nunca define la identidad del documento ni la ubicación canónica de artefactos sellados.
+- [x] En `document-types-v1`, enrutar inicialmente el archivo a `intake/`; solo después de clasificación o asignación humana se materializa la vista por tipo. No inferir que la ruta de entrada demuestra el tipo documental.
+- [x] Implementar `ProjectStorageResolver` con raíces nuevas `data/projects/{project_id}/raw`, `normalized`, `chunks`, `embeddings` y `manifests`. Para `sst-general`, usar un adaptador de lectura de las rutas legacy durante el bootstrap, sin convertir las rutas legacy en la ruta canónica de artefactos nuevos.
+- [x] Implementar `PlatformAccessPolicy` como puerto. En esta fase el adaptador puede representar operador interno, pero ningún handler toma `actor_id` de un body o header no autenticado.
+- [x] Bloquear bindings o DRAFTs cuando el target no sea compatible con el perfil de embedding; bloquear variantes cuya receta use una revisión no verificable sin attestation explícita.
 
 **Exit criteria:** dos proyectos pueden existir con taxonomía, configuración y variantes diferentes; sus raíces no se intersectan y no hay credenciales en la base o UI.
 
@@ -382,14 +382,14 @@ class ResolveNormalizedArtifactUseCase:
     ) -> NormalizedDocumentArtifact: ...
 ```
 
-- [ ] Crear documento lógico (`project_documents`) y revisión inmutable (`source_document_revisions`) con hash de raw, relpath y trazabilidad de carga. `logical_document_id` se genera al ingreso; `source_relpath` es solo un localizador versionado y puede cambiar sin colisionar entre proyectos.
+- [x] Crear documento lógico (`project_documents`) y revisión inmutable (`source_document_revisions`) con hash de raw, relpath y trazabilidad de carga. `logical_document_id` se genera al ingreso; `source_relpath` es solo un localizador versionado y puede cambiar sin colisionar entre proyectos.
 - [ ] Extender el contrato Schema 2.0 para datos nuevos con `project_id`, `source_document_revision_id`, `normalized_document_id`, `processing_profile_id` y fingerprints; conservar un adaptador explícito Schema 2.0 legacy para SST.
-- [ ] Reemplazar la identidad nueva basada solo en `source_relpath` por un ID determinista que incluya proyecto, revisión y recipe fingerprint. Los `document_id` legacy no se reescriben durante esta fase.
+- [x] Reemplazar la identidad nueva basada solo en `source_relpath` por un ID determinista que incluya proyecto, revisión y recipe fingerprint. Los `document_id` legacy no se reescriben durante esta fase.
 - [ ] Resolver `DocumentType` contra el catálogo y la política versionados del proyecto. El Literal actual solo permanece en el adaptador SST/legacy hasta que la validación de política esté cubierta.
 - [ ] Extraer reglas SST de `ingestion/classification/rules.py` hacia una política cargada desde el snapshot de configuración; conservar el adaptador que produce exactamente las decisiones SST actuales.
-- [ ] Crear `corpus_snapshots` con orden determinista, hashes de las revisiones seleccionadas, conteo de documentos y `manifest_hash`.
-- [ ] Guardar en cada membresía de snapshot la decisión de elegibilidad de su revisión; no permitir que un `needs_review` se haga releaseable solo porque fue promovido técnicamente.
-- [ ] Hacer que cualquier cambio material de selección genere un snapshot nuevo, incluso si la ruta lógica es igual.
+- [x] Crear `corpus_snapshots` con orden determinista, hashes de las revisiones seleccionadas, conteo de documentos y `manifest_hash`.
+- [x] Guardar en cada membresía de snapshot la decisión de elegibilidad de su revisión; no permitir que un `needs_review` se haga releaseable solo porque fue promovido técnicamente.
+- [x] Hacer que cualquier cambio material de selección genere un snapshot nuevo, incluso si la ruta lógica es igual.
 
 **Exit criteria:** un raw modificado no sobreescribe la revisión anterior; dos proyectos pueden tener la misma ruta relativa sin colisión; un corpus snapshot puede reconstruirse solo con sus rows y hashes.
 

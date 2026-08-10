@@ -42,7 +42,20 @@ _GENERIC_DOCUMENT_TYPES: tuple[ProjectDocumentType, ...] = (
     ProjectDocumentType(
         code="record", display_name="Registro", template=DocumentTypeTemplate.GENERIC
     ),
-)
+    ProjectDocumentType(
+        code="manual", display_name="Manual", template=DocumentTypeTemplate.GENERIC
+        ),
+    ProjectDocumentType(
+        code="acta", display_name="Acta", template=DocumentTypeTemplate.GENERIC
+            ),
+    ProjectDocumentType(
+        code="informe", display_name="Informe", template=DocumentTypeTemplate.GENERIC
+                ),
+    ProjectDocumentType(
+        code="guia", display_name="Guia", template=DocumentTypeTemplate.GENERIC
+        ),
+    )
+
 
 #: Taxonomía SST versionada; base de ``sst-general`` (plan §Fase 1).
 _SST_DOCUMENT_TYPES: tuple[ProjectDocumentType, ...] = (
