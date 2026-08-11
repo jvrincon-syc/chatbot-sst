@@ -181,6 +181,28 @@ class InMemoryVectorSearch:
             )
         )
 
+    def count_active_documents(
+        self,
+        *,
+        vector_table: str,
+        embedding_profile_id: str,
+        indexing_target_id: str,
+        corpus_version: str,
+    ) -> int:
+        """Count the distinct documents currently serving one lane."""
+
+        return len(
+            {
+                stored.record.document_id
+                for stored in self._active(
+                    vector_table=vector_table,
+                    embedding_profile_id=embedding_profile_id,
+                    indexing_target_id=indexing_target_id,
+                    corpus_version=corpus_version,
+                )
+            }
+        )
+
     def active_bundle_ids(
         self,
         *,
@@ -227,12 +249,12 @@ class InMemoryLexicalSearch:
     """Naive lexical search over the durable node records."""
 
     nodes: InMemoryIndexingNodeWriter
-    embedding_profile_id: str
 
     def search(
         self,
         *,
         query: str,
+        embedding_profile_id: str,
         corpus_version: str,
         top_k: int,
     ) -> list[RetrievedEvidence]:
@@ -256,7 +278,7 @@ class InMemoryLexicalSearch:
                     node=node,
                     score=float(overlap),
                     source="lexical",
-                    embedding_profile_id=self.embedding_profile_id,
+                    embedding_profile_id=embedding_profile_id,
                     embedding_bundle_id=None,
                 )
             )
@@ -268,12 +290,12 @@ class InMemoryParentExpansion:
     """Expand child evidence into its parent node."""
 
     nodes: InMemoryIndexingNodeWriter
-    embedding_profile_id: str
 
     def expand(
         self,
         *,
         parent_node_ids: Sequence[str],
+        embedding_profile_id: str,
         corpus_version: str,
     ) -> dict[str, RetrievedEvidence]:
         """Return parent evidence keyed by ``parent_node_id``."""
@@ -287,7 +309,7 @@ class InMemoryParentExpansion:
                 node=node,
                 score=0.0,
                 source="lexical",
-                embedding_profile_id=self.embedding_profile_id,
+                embedding_profile_id=embedding_profile_id,
                 embedding_bundle_id=None,
             )
         return parents

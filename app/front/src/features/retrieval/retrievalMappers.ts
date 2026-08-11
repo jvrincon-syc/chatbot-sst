@@ -62,6 +62,7 @@ export function toRetrievalReadiness(payload: Record<string, unknown>): Retrieva
     retrievalProfileId: String(payload.retrieval_profile_id ?? ""),
     ready: Boolean(payload.ready),
     activeVectorRows: Number(payload.active_vector_rows ?? 0),
+    activeDocumentCount: Number(payload.active_document_count ?? 0),
     embeddingBundleId: toNullableString(payload.embedding_bundle_id),
     blockingReasons: toStringArray(payload.blocking_reasons),
   };

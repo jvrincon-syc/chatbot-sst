@@ -172,7 +172,7 @@ class PostgresVectorRepository:
         corpus_version: str,
         embedding_bundle_id: str,
     ) -> None:
-        """Activate one bundle and supersede prior active rows for the same lane."""
+        """Activate one bundle and supersede prior active rows of the same documents."""
 
         table = profile.vector_table
         with self._connection.cursor() as cursor:
@@ -184,6 +184,14 @@ class PostgresVectorRepository:
                  WHERE embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
+                   AND document_id IN (
+                       SELECT DISTINCT document_id
+                         FROM {table}
+                        WHERE embedding_profile_id = %s
+                          AND indexing_target_id = %s
+                          AND corpus_version = %s
+                          AND embedding_bundle_id = %s
+                   )
                    AND embedding_bundle_id <> %s
                    AND is_active = true
                 """,
@@ -191,6 +199,10 @@ class PostgresVectorRepository:
                     profile.profile_id,
                     indexing_target_id,
                     corpus_version,
+                    profile.profile_id,
+                    indexing_target_id,
+                    corpus_version,
+                    embedding_bundle_id,
                     embedding_bundle_id,
                 ),
             )

@@ -539,7 +539,7 @@ Sin cuerpo. `409 RETRIEVAL_PROFILE_BLOCKED` si readiness falla; el perfil queda
 
 `blocking_reasons` posibles: `RETRIEVAL_PROFILE_BLOCKED`,
 `RETRIEVAL_PROFILE_NOT_VALIDATED`, `EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN`,
-`INDEXING_TARGET_INCOMPATIBLE`, `NO_ACTIVE_VECTOR_ROWS`, `MULTIPLE_ACTIVE_BUNDLES`.
+`INDEXING_TARGET_INCOMPATIBLE`, `NO_ACTIVE_VECTOR_ROWS`.
 
 ### `POST /api/retrieval/validate`
 
@@ -600,6 +600,9 @@ usuario en `readiness_checks`.
   ]
 }
 ```
+
+`items` must never exceed the requested `top_k`. Parent context may enrich each
+item, but it must not be emitted as extra ranked rows with duplicated scores.
 
 Reglas:
 - El cliente nunca envia `vector_table`, `embedding_profile_id` ni `corpus_version` fuera del `retrieval_profile_id`.

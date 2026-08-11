@@ -137,3 +137,27 @@ class DuplicateRevisionInSnapshot(RagPlatformError):
 
     code = "DUPLICATE_REVISION_IN_SNAPSHOT"
     http_status = 422
+
+
+class DocumentTypeNotPermitted(RagPlatformError):
+    """El ``document_type`` clasificado no está en el catálogo del proyecto.
+
+    Fail-closed: la plataforma no acepta un tipo documental que la configuración
+    versionada del proyecto no declara. El ``Literal`` legacy solo vive en el
+    adaptador SST; la identidad de plataforma valida contra el catálogo real.
+    """
+
+    code = "DOCUMENT_TYPE_NOT_PERMITTED"
+    http_status = 422
+
+
+class NoClassificationPolicyConfigured(RagPlatformError):
+    """El snapshot de configuración del proyecto no resuelve una política de clasificación.
+
+    Fail-closed: si la configuración versionada no permite derivar una política
+    (p. ej. una taxonomía sin motor de reglas asociado), no se degrada a un
+    clasificador por defecto; se exige configurar una política explícita.
+    """
+
+    code = "NO_CLASSIFICATION_POLICY_CONFIGURED"
+    http_status = 409

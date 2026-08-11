@@ -63,6 +63,30 @@ def blocked_client(tmp_path: Path) -> Iterator[TestClient]:
         yield test_client
 
 
+@pytest.fixture
+def client_default_lexical_profile(tmp_path: Path) -> Iterator[TestClient]:
+    profile = build_profile()
+    chunk_bundle = write_chunk_bundle(tmp_path / "chunks")
+    services = build_pipeline_services(
+        chunks_root=tmp_path / "chunks",
+        embeddings_root=tmp_path / "embeddings",
+        feature_flags=FeatureFlags(
+            embedding_v2=True,
+            indexing_bundle_first=True,
+            retrieval_v1=True,
+        ),
+        allow_mock_engine=True,
+        seed_profiles=[profile],
+        seed_targets=[build_target()],
+        seed_chunk_bundles=[chunk_bundle],
+    )
+    app = create_app(services=services)
+    app.state.test_profile = profile
+    app.state.test_chunk_bundle = chunk_bundle
+    with TestClient(app) as test_client:
+        yield test_client
+
+
 def _run_embedding(client: TestClient) -> dict:
     payload = {
         "chunk_bundle_id": client.app.state.test_chunk_bundle.chunk_bundle_id,
@@ -312,6 +336,7 @@ def test_flujo_completo_de_retrieval_por_http(client: TestClient) -> None:
     assert status_body["profile"]["active"] is True
     assert status_body["readiness"]["ready"] is True
     assert status_body["runtime"]["query_engine_available"] is True
+    assert status_body["readiness"]["active_document_count"] == 1
 
     validation = client.post(
         "/api/retrieval/validate",
@@ -335,18 +360,45 @@ def test_busca_evidencia_por_http_despues_de_activar_el_perfil(client: TestClien
         json={
             "retrieval_profile_id": retrieval_profile_id,
             "query": "validacion sintetica de recuperacion",
-            "top_k": 3,
+            "top_k": 2,
         },
     )
 
     assert response.status_code == 200, response.text
     body = response.json()
     assert body["retrieval_profile_id"] == retrieval_profile_id
-    assert body["top_k"] == 3
-    assert len(body["items"]) >= 1
+    assert body["top_k"] == 2
+    assert len(body["items"]) == 2
     assert body["items"][0]["document_id"]
     assert body["items"][0]["child_chunk_id"]
     assert body["items"][0]["text"]
+
+
+def test_busca_evidencia_con_wiring_por_defecto_sin_500(
+    client_default_lexical_profile: TestClient,
+) -> None:
+    embedding_run = _run_embedding(client_default_lexical_profile)
+    indexing_run = _run_indexing(
+        client_default_lexical_profile,
+        embedding_run["produced_embedding_bundle_id"],
+    )
+    activation = client_default_lexical_profile.post(
+        "/api/indexing/activations",
+        json={"run_id": indexing_run["run_id"]},
+    ).json()
+    retrieval_profile_id = activation["retrieval_profile_id"]
+
+    response = client_default_lexical_profile.post(
+        "/api/retrieval/search",
+        json={
+            "retrieval_profile_id": retrieval_profile_id,
+            "query": "validacion sintetica de recuperacion",
+            "top_k": 3,
+        },
+    )
+
+    assert response.status_code == 200, response.text
+    assert response.json()["items"]
 
 
 def test_bloquea_activar_un_perfil_de_retrieval_sin_filas(client: TestClient) -> None:

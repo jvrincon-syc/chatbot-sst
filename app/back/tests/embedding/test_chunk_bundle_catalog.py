@@ -47,3 +47,27 @@ def test_hybrid_registra_en_el_ledger_un_bundle_solo_presente_en_filesystem(tmp_
 
     assert stored.chunk_bundle_id == chunk_bundle.chunk_bundle_id
     assert repository.list_bundles()[0].artifact_relpath.endswith(".chunking_metadata.json")
+
+
+def test_hybrid_prefiere_el_bundle_canonico_del_filesystem_sobre_el_legacy(tmp_path) -> None:
+    chunk_bundle = write_chunk_bundle(tmp_path / "chunks")
+    legacy = chunk_bundle.model_copy(
+        update={
+            "chunk_bundle_id": f"legacy-{chunk_bundle.chunk_bundle_id}",
+            "artifact_relpath": chunk_bundle.source_relpath or "legacy.md",
+            "parent_count": 0,
+            "child_count": 0,
+            "status": "legacy_unverified",
+        }
+    )
+    repository = HybridChunkBundleRepository(
+        primary=InMemoryChunkBundleRepository([legacy]),
+        filesystem=FilesystemChunkBundleCatalogRepository(chunks_root=tmp_path / "chunks"),
+    )
+
+    bundles = repository.list_bundles()
+
+    assert len(bundles) == 1
+    assert bundles[0].chunk_bundle_id == chunk_bundle.chunk_bundle_id
+    assert bundles[0].artifact_relpath.endswith(".chunking_metadata.json")
+    assert bundles[0].child_count == chunk_bundle.child_count

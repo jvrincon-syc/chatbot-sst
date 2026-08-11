@@ -311,6 +311,33 @@ class PostgresVectorSearch:
             return 0
         return int(row["count"] if isinstance(row, Mapping) else row[0])
 
+    def count_active_documents(
+        self,
+        *,
+        vector_table: str,
+        embedding_profile_id: str,
+        indexing_target_id: str,
+        corpus_version: str,
+    ) -> int:
+        """Count the distinct documents currently serving one lane."""
+
+        table = _validated_table(vector_table)
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT count(DISTINCT document_id) FROM {table}
+                 WHERE is_active = true
+                   AND embedding_profile_id = %s
+                   AND indexing_target_id = %s
+                   AND corpus_version = %s
+                """,
+                (embedding_profile_id, indexing_target_id, corpus_version),
+            )
+            row = cursor.fetchone()
+        if row is None:
+            return 0
+        return int(row["count"] if isinstance(row, Mapping) else row[0])
+
     def active_bundle_ids(
         self,
         *,
@@ -344,14 +371,14 @@ class PostgresVectorSearch:
 class PostgresLexicalSearch:
     """Full-text search over ``indexing_nodes`` child rows."""
 
-    def __init__(self, connection: object, *, embedding_profile_id: str) -> None:
+    def __init__(self, connection: object) -> None:
         self._connection = connection
-        self._embedding_profile_id = embedding_profile_id
 
     def search(
         self,
         *,
         query: str,
+        embedding_profile_id: str,
         corpus_version: str,
         top_k: int,
     ) -> list[RetrievedEvidence]:
@@ -393,7 +420,7 @@ class PostgresLexicalSearch:
             _evidence_from_row(
                 row=row,
                 source="lexical",
-                embedding_profile_id=self._embedding_profile_id,
+                embedding_profile_id=embedding_profile_id,
                 corpus_version=corpus_version,
             )
             for row in rows
@@ -403,14 +430,14 @@ class PostgresLexicalSearch:
 class PostgresParentExpansion:
     """Expand retrieved child evidence into its parent node."""
 
-    def __init__(self, connection: object, *, embedding_profile_id: str) -> None:
+    def __init__(self, connection: object) -> None:
         self._connection = connection
-        self._embedding_profile_id = embedding_profile_id
 
     def expand(
         self,
         *,
         parent_node_ids: Sequence[str],
+        embedding_profile_id: str,
         corpus_version: str,
     ) -> dict[str, RetrievedEvidence]:
         """Return parent evidence keyed by ``parent_node_id``."""
@@ -444,7 +471,7 @@ class PostgresParentExpansion:
             evidence = _evidence_from_row(
                 row=row,
                 source="lexical",
-                embedding_profile_id=self._embedding_profile_id,
+                embedding_profile_id=embedding_profile_id,
                 corpus_version=corpus_version,
             )
             parents[evidence.node_id] = evidence

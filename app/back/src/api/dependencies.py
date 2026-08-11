@@ -203,14 +203,8 @@ def build_pipeline_services(
         retrieval_profiles: object = InMemoryRetrievalProfileRepository()
         transactions: object = NullTransactionManager()
         vector_search: object = InMemoryVectorSearch(vectors=vectors, nodes=nodes)
-        lexical_search: object = InMemoryLexicalSearch(
-            nodes=nodes,
-            embedding_profile_id=lexical_profile_id,
-        )
-        parent_expansion: object = InMemoryParentExpansion(
-            nodes=nodes,
-            embedding_profile_id=lexical_profile_id,
-        )
+        lexical_search: object = InMemoryLexicalSearch(nodes=nodes)
+        parent_expansion: object = InMemoryParentExpansion(nodes=nodes)
     else:
         profiles = PostgresEmbeddingProfileRepository(connection)
         targets = PostgresIndexingTargetRepository(connection)
@@ -228,22 +222,17 @@ def build_pipeline_services(
         retrieval_profiles = PostgresRetrievalProfileRepository(connection)
         transactions = PsycopgTransactionManager(connection)
         vector_search = PostgresVectorSearch(connection)
-        lexical_search = PostgresLexicalSearch(
-            connection,
-            embedding_profile_id=lexical_profile_id,
-        )
-        parent_expansion = PostgresParentExpansion(
-            connection,
-            embedding_profile_id=lexical_profile_id,
-        )
+        lexical_search = PostgresLexicalSearch(connection)
+        parent_expansion = PostgresParentExpansion(connection)
 
+    readiness_evaluator = EmbeddingIndexingReadinessEvaluator(targets=targets)
     builder = EmbeddingBundleBuilder(
         bundles=bundles,
         artifacts=artifacts,
         validator=EmbeddingBundleValidator(artifacts=artifacts),
         readiness_checks=readiness_checks,
+        readiness_evaluator=readiness_evaluator,
     )
-    readiness_evaluator = EmbeddingIndexingReadinessEvaluator(targets=targets)
     index_bundle = IndexEmbeddingBundleUseCase(
         profiles=profiles,
         chunk_bundles=chunk_bundles,

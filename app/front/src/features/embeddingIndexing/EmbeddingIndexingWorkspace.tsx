@@ -89,7 +89,11 @@ export function EmbeddingIndexingWorkspace({
             polling={embedding.polling}
             launchBusy={embedding.launchBusy}
             launchError={embedding.launchError}
+            corpusLaunchBusy={embedding.corpusLaunchBusy}
+            corpusLaunchError={embedding.corpusLaunchError}
+            corpusProgress={embedding.corpusProgress}
             onCreateRun={() => void embedding.createRun()}
+            onCreateCorpusRun={() => void embedding.createCorpusRun()}
           />
           <EmbeddingBundleInspector
             bundle={embedding.bundle}
@@ -113,7 +117,11 @@ export function EmbeddingIndexingWorkspace({
             polling={indexing.polling}
             launchBusy={indexing.launchBusy}
             launchError={indexing.launchError}
+            corpusLaunchBusy={indexing.corpusLaunchBusy}
+            corpusLaunchError={indexing.corpusLaunchError}
+            corpusProgress={indexing.corpusProgress}
             onCreateRun={() => void indexing.createRun()}
+            onCreateCorpusRun={() => void indexing.createCorpusRun()}
           />
           <IndexingDocumentsTable
             documentsPage={indexing.documents}

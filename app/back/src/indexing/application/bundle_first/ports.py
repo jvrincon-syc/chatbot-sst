@@ -95,7 +95,7 @@ class BundleVectorWriter(Protocol):
         corpus_version: str,
         embedding_bundle_id: str,
     ) -> None:
-        """Activate one bundle and supersede prior active rows for the lane."""
+        """Activate one bundle and supersede prior active rows of the same documents."""
 
     def rollback_to_bundle(
         self,

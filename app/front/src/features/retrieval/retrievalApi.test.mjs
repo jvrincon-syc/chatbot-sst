@@ -78,6 +78,7 @@ await test("loads profile status with runtime and readiness split", async () => 
         retrieval_profile_id: "retrieval-profile-1",
         ready: true,
         active_vector_rows: 12,
+        active_document_count: 1,
         embedding_bundle_id: "embedding-bundle-1",
         blocking_reasons: [],
       },
@@ -89,6 +90,7 @@ await test("loads profile status with runtime and readiness split", async () => 
   assert.equal(status.runtime.queryEngineAvailable, true);
   assert.equal(status.readiness.ready, true);
   assert.equal(status.readiness.activeVectorRows, 12);
+  assert.equal(status.readiness.activeDocumentCount, 1);
 });
 
 await test("validates a retrieval profile without sending a user question", async () => {

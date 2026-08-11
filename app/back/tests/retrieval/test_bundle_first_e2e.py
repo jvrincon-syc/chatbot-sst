@@ -31,7 +31,12 @@ from indexing.domain.errors import (
 from retrieval.application.retrieval_service import CreateRetrievalProfileRequest
 from retrieval.domain.errors import LexicalFallbackNotAllowed, RetrievalProfileBlocked
 
-from pipeline_fixtures import build_pipeline_stack, build_profile, build_target
+from pipeline_fixtures import (
+    build_pipeline_stack,
+    build_profile,
+    build_target,
+    write_chunk_bundle,
+)
 
 
 SCOPE_TYPE = "chatbot"
@@ -76,7 +81,8 @@ def test_e2e_devuelve_evidencia_del_target_correcto(stack) -> None:
     assert child.embedding_bundle_id == bundle_id
     assert child.parent_node_id is not None
     assert child.page_start == 1
-    assert any(item.node_id == child.parent_node_id for item in evidence)
+    assert len(evidence) == 3
+    assert all(item.node_id != child.parent_node_id for item in evidence)
     assert stack.indexing_runs.get(run_id).activation_status == "active"
 
 
@@ -112,6 +118,110 @@ def test_la_activacion_publica_exactamente_un_bundle_por_lane(stack) -> None:
     active = stack.vectors.active_rows()
     assert active
     assert {row.record.embedding_bundle_id for row in active} == {bundle_id}
+
+
+def test_activa_bundles_de_varios_documentos_en_el_mismo_corpus(stack, tmp_path: Path) -> None:
+    second_bundle_ref = write_chunk_bundle(
+        tmp_path / "chunks",
+        document_id="doc_test_0002",
+        base_relpath="unit/example-2",
+        source_relpath="unit/example-2.md",
+        child_text_template="Child chunk number {index} about disconnect policies.",
+        parent_text="Parent text for the disconnect policy document.",
+        page_start=2,
+        bundle_seed="bundle-2",
+        parent_seed="parent-2",
+        child_seed_prefix="child-2",
+    )
+    stack.chunk_bundles.ensure_registered(second_bundle_ref)
+
+    first_bundle, _first_run, retrieval_profile_id = _activate(stack)
+    second_bundle = stack.run_embedding(
+        chunk_bundle_id=second_bundle_ref.chunk_bundle_id,
+        idempotency_key="embed-2",
+    )
+    second_run = stack.run_indexing(second_bundle, idempotency_key="index-2")
+    stack.activate_bundle.execute(
+        ActivationRequest(
+            run_id=second_run,
+            consumer_scope_type=SCOPE_TYPE,
+            consumer_scope_id=SCOPE_ID,
+        )
+    )
+
+    active_bundle_ids = {row.record.embedding_bundle_id for row in stack.vectors.active_rows()}
+    active_document_ids = {row.record.document_id for row in stack.vectors.active_rows()}
+    readiness = stack.retrieval_readiness.evaluate(retrieval_profile_id)
+
+    assert active_bundle_ids == {first_bundle, second_bundle}
+    assert active_document_ids == {stack.chunk_bundle.source_document_id, "doc_test_0002"}
+    assert readiness.ready is True
+    assert readiness.active_document_count == 2
+    assert readiness.embedding_bundle_id is None
+
+
+def test_reactivar_un_documento_no_desactiva_otro_documento_del_corpus(
+    stack,
+    tmp_path: Path,
+) -> None:
+    second_bundle_ref = write_chunk_bundle(
+        tmp_path / "chunks",
+        document_id="doc_test_0002",
+        base_relpath="unit/example-2",
+        source_relpath="unit/example-2.md",
+        child_text_template="Child chunk number {index} about disconnect policies.",
+        parent_text="Parent text for the disconnect policy document.",
+        page_start=2,
+        bundle_seed="bundle-2",
+        parent_seed="parent-2",
+        child_seed_prefix="child-2",
+    )
+    stack.chunk_bundles.ensure_registered(second_bundle_ref)
+
+    first_bundle = stack.run_embedding(idempotency_key="embed-1")
+    first_run = stack.run_indexing(first_bundle, idempotency_key="index-1")
+    stack.activate_bundle.execute(
+        ActivationRequest(
+            run_id=first_run,
+            consumer_scope_type=SCOPE_TYPE,
+            consumer_scope_id=SCOPE_ID,
+        )
+    )
+    second_bundle = stack.run_embedding(
+        chunk_bundle_id=second_bundle_ref.chunk_bundle_id,
+        idempotency_key="embed-2",
+    )
+    second_run = stack.run_indexing(second_bundle, idempotency_key="index-2")
+    stack.activate_bundle.execute(
+        ActivationRequest(
+            run_id=second_run,
+            consumer_scope_type=SCOPE_TYPE,
+            consumer_scope_id=SCOPE_ID,
+        )
+    )
+
+    child_path = tmp_path / "chunks" / "unit" / "example.child_chunks.jsonl"
+    child_path.write_text(
+        child_path.read_text(encoding="utf-8").replace("safety rules", "updated safety rules"),
+        encoding="utf-8",
+    )
+    replacement_bundle = stack.run_embedding(idempotency_key="embed-3")
+    replacement_run = stack.run_indexing(replacement_bundle, idempotency_key="index-3")
+    stack.activate_bundle.execute(
+        ActivationRequest(
+            run_id=replacement_run,
+            consumer_scope_type=SCOPE_TYPE,
+            consumer_scope_id=SCOPE_ID,
+        )
+    )
+
+    active_bundle_ids = {row.record.embedding_bundle_id for row in stack.vectors.active_rows()}
+    active_document_ids = {row.record.document_id for row in stack.vectors.active_rows()}
+
+    assert replacement_bundle != first_bundle
+    assert active_bundle_ids == {replacement_bundle, second_bundle}
+    assert first_bundle not in active_bundle_ids
+    assert active_document_ids == {stack.chunk_bundle.source_document_id, "doc_test_0002"}
 
 
 def test_rechaza_indexar_un_bundle_que_no_esta_sellado(stack) -> None:

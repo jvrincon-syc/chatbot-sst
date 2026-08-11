@@ -209,12 +209,14 @@ class EmbeddingBundleBuilder:
         artifacts: FilesystemEmbeddingBundleArtifactStore,
         validator: EmbeddingBundleValidator,
         readiness_checks: ReadinessCheckRepository,
+        readiness_evaluator: EmbeddingIndexingReadinessEvaluator | None = None,
         batch_size: int = DEFAULT_EMBEDDING_BATCH_SIZE,
     ) -> None:
         self._bundles = bundles
         self._artifacts = artifacts
         self._validator = validator
         self._readiness_checks = readiness_checks
+        self._readiness_evaluator = readiness_evaluator
         self._batch_size = max(1, batch_size)
 
     def build(
@@ -273,7 +275,7 @@ class EmbeddingBundleBuilder:
                 vector_length=len(vectors[offset]),
                 vector_checksum=_vector_checksum(vectors[offset]),
                 content_hash=child.content_hash,
-                chunk_ordinal=child.ordinal,
+                chunk_ordinal=offset,
             )
             for offset, child in enumerate(content.children)
         )
@@ -364,15 +366,21 @@ class EmbeddingBundleBuilder:
             )
 
         self._artifacts.promote(embedding_bundle_id=bundle_id)
+        sealed_candidate = pending.model_copy(
+            update={
+                "status": "sealed",
+                "validation_status": "passed",
+                "readiness_status": "pending",
+                "sealed_at": _now(),
+            }
+        )
+        readiness_status = (
+            self._readiness_evaluator.evaluate(bundle=sealed_candidate, profile=profile).status
+            if self._readiness_evaluator is not None
+            else "pending"
+        )
         sealed = self._bundles.seal(
-            pending.model_copy(
-                update={
-                    "status": "sealed",
-                    "validation_status": "passed",
-                    "readiness_status": "pending",
-                    "sealed_at": _now(),
-                }
-            )
+            sealed_candidate.model_copy(update={"readiness_status": readiness_status})
         )
         emit_pipeline_event(
             logger=logger,
@@ -392,6 +400,7 @@ class EmbeddingBundleBuilder:
                 "embedding_profile_id": profile.profile_id,
                 "model": profile.model,
                 "model_revision": profile.model_revision,
+                "readiness_status": readiness_status,
             },
         )
         return BuiltBundle(bundle=sealed, chunks=chunks, validation=validation)

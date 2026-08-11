@@ -25,6 +25,7 @@
     "src/features/embeddingIndexing/shared/apiTypes.ts",
     "src/features/embeddingIndexing/shared/apiClient.ts",
     "src/features/embeddingIndexing/shared/errorMapping.ts",
+    "src/features/embeddingIndexing/shared/pipelineState.ts",
     "src/features/embeddingIndexing/shared/pipelineFlow.ts",
     "src/features/embedding/embeddingTypes.ts",
     "src/features/embedding/embeddingMappers.ts",

@@ -1,7 +1,7 @@
 """In-memory adapters for bundle-first indexing.
 
 They reproduce the observable behaviour of the PostgreSQL adapters, including
-append-only vector rows, the single-active-bundle rule per lane and the
+append-only vector rows, per-document bundle activation inside one lane and the
 transactional claim, so the same contract tests cover both implementations.
 """
 
@@ -155,7 +155,7 @@ class _StoredVector:
 
 @dataclass
 class InMemoryBundleVectorRepository:
-    """Append-only vector store double with bundle activation and rollback."""
+    """Append-only vector store double with per-document activation and rollback."""
 
     rows: dict[tuple[str, str, str], _StoredVector] = field(default_factory=dict)
 
@@ -191,8 +191,19 @@ class InMemoryBundleVectorRepository:
         corpus_version: str,
         embedding_bundle_id: str,
     ) -> None:
-        """Activate one bundle and supersede prior active rows for the lane."""
+        """Activate one bundle and supersede only prior active rows of its documents."""
 
+        activated_document_ids = {
+            stored.record.document_id
+            for stored in self.rows.values()
+            if stored.record.embedding_bundle_id == embedding_bundle_id
+            and self._same_lane(
+                stored,
+                profile=profile,
+                indexing_target_id=indexing_target_id,
+                corpus_version=corpus_version,
+            )
+        }
         for stored in self.rows.values():
             if not self._same_lane(
                 stored,
@@ -204,7 +215,7 @@ class InMemoryBundleVectorRepository:
             if stored.record.embedding_bundle_id == embedding_bundle_id:
                 stored.is_active = True
                 stored.superseded_at = None
-            elif stored.is_active:
+            elif stored.is_active and stored.record.document_id in activated_document_ids:
                 stored.is_active = False
                 stored.superseded_at = _now()
 

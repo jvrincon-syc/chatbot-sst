@@ -337,6 +337,7 @@ class PostgresChunkBundleRepository:
         """Upsert one chunk bundle so embedding and indexing FKs remain valid."""
 
         self._ensure_source_document_registered(bundle)
+        legacy_conflict = self._prepare_legacy_fingerprint_reconciliation(bundle)
         with self._connection.cursor() as cursor:
             cursor.execute(
                 """
@@ -370,7 +371,102 @@ class PostgresChunkBundleRepository:
                     bundle.status,
                 ),
             )
+        if legacy_conflict is not None:
+            self._finalize_legacy_fingerprint_reconciliation(bundle, legacy_conflict)
         return self.get(bundle.chunk_bundle_id)
+
+    def _prepare_legacy_fingerprint_reconciliation(
+        self,
+        bundle: ChunkBundleRef,
+    ) -> ChunkBundleRef | None:
+        existing = self._find_by_bundle_fingerprint(bundle.bundle_fingerprint)
+        if existing is None or existing.chunk_bundle_id == bundle.chunk_bundle_id:
+            return None
+        if not self._is_reconcilable_legacy_bundle(existing):
+            return None
+        temporary_fingerprint = (
+            f"{existing.bundle_fingerprint}::replaced-by::{bundle.chunk_bundle_id}"
+        )
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE chunk_bundles
+                   SET bundle_fingerprint = %s
+                 WHERE chunk_bundle_id = %s
+                   AND status = 'legacy_unverified'
+                """,
+                (temporary_fingerprint, existing.chunk_bundle_id),
+            )
+        return existing
+
+    def _finalize_legacy_fingerprint_reconciliation(
+        self,
+        bundle: ChunkBundleRef,
+        legacy_bundle: ChunkBundleRef,
+    ) -> None:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE embedding_runs
+                   SET source_chunk_bundle_id = %s
+                 WHERE source_chunk_bundle_id = %s
+                """,
+                (bundle.chunk_bundle_id, legacy_bundle.chunk_bundle_id),
+            )
+            cursor.execute(
+                """
+                UPDATE indexing_run_documents
+                   SET source_chunk_bundle_id = %s
+                 WHERE source_chunk_bundle_id = %s
+                """,
+                (bundle.chunk_bundle_id, legacy_bundle.chunk_bundle_id),
+            )
+            cursor.execute(
+                """
+                UPDATE indexing_nodes
+                   SET source_chunk_bundle_id = %s,
+                       chunking_bundle_fingerprint = %s
+                 WHERE source_chunk_bundle_id = %s
+                """,
+                (
+                    bundle.chunk_bundle_id,
+                    bundle.bundle_fingerprint,
+                    legacy_bundle.chunk_bundle_id,
+                ),
+            )
+            cursor.execute(
+                """
+                DELETE FROM embedding_bundles
+                 WHERE source_chunk_bundle_id = %s
+                   AND status = 'legacy_unverified'
+                """,
+                (legacy_bundle.chunk_bundle_id,),
+            )
+            cursor.execute(
+                """
+                DELETE FROM chunk_bundles
+                 WHERE chunk_bundle_id = %s
+                   AND status = 'legacy_unverified'
+                """,
+                (legacy_bundle.chunk_bundle_id,),
+            )
+
+    def _find_by_bundle_fingerprint(self, bundle_fingerprint: str) -> ChunkBundleRef | None:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"SELECT {', '.join(_CHUNK_BUNDLE_COLUMNS)} FROM chunk_bundles"
+                " WHERE bundle_fingerprint = %s",
+                (bundle_fingerprint,),
+            )
+            row = cursor.fetchone()
+        if row is None:
+            return None
+        return ChunkBundleRef.model_validate(_row_to_mapping(row, _CHUNK_BUNDLE_COLUMNS))
+
+    def _is_reconcilable_legacy_bundle(self, bundle: ChunkBundleRef) -> bool:
+        return bundle.status == "legacy_unverified" and bundle.chunk_bundle_id.startswith(
+            "legacy-"
+        )
 
     def _ensure_source_document_registered(self, bundle: ChunkBundleRef) -> None:
         source_relpath = (bundle.source_relpath or "").strip()

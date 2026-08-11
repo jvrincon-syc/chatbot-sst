@@ -14,7 +14,17 @@ type IndexingRunPanelProps = {
   polling: boolean;
   launchBusy: boolean;
   launchError: string | null;
+  corpusLaunchBusy: boolean;
+  corpusLaunchError: string | null;
+  corpusProgress: {
+    total: number;
+    completed: number;
+    succeeded: number;
+    failed: number;
+    currentLabel: string | null;
+  } | null;
   onCreateRun: () => void;
+  onCreateCorpusRun: () => void;
 };
 
 // Creates and tracks an indexing run over a single embedding bundle. It never
@@ -28,7 +38,11 @@ export function IndexingRunPanel({
   polling,
   launchBusy,
   launchError,
+  corpusLaunchBusy,
+  corpusLaunchError,
+  corpusProgress,
   onCreateRun,
+  onCreateCorpusRun,
 }: IndexingRunPanelProps) {
   const blockedReason = !embeddingBundleId
     ? "Primero completa un run de embedding con un bundle producido."
@@ -37,7 +51,8 @@ export function IndexingRunPanel({
       : !bundleFirstEnabled
         ? "El flag indexing_bundle_first esta apagado en el backend."
         : null;
-  const canLaunch = blockedReason === null && !launchBusy;
+  const canLaunch = blockedReason === null && !launchBusy && !corpusLaunchBusy;
+  const canLaunchCorpus = bundleFirstEnabled && !launchBusy && !corpusLaunchBusy;
 
   const progress = run ? indexingRunProgressPercent(run.summary) : 0;
   const statusTone = run ? indexingRunStatusTone(run.status) : "neutral";
@@ -77,6 +92,20 @@ export function IndexingRunPanel({
             {launchBusy ? <Loader2 className="spin" size={16} /> : <Play size={16} />}
             Ejecutar indexing
           </button>
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={onCreateCorpusRun}
+            disabled={!canLaunchCorpus}
+            title={
+              canLaunchCorpus
+                ? "Crear runs de indexing y activar todos los documentos del corpus"
+                : "El backend no permite indexing bundle-first"
+            }
+          >
+            {corpusLaunchBusy ? <Loader2 className="spin" size={16} /> : <Workflow size={16} />}
+            Indexing de todo el corpus
+          </button>
           {blockedReason ? (
             <span className="pipeline-action-alert" role="status">
               <AlertCircle size={14} aria-hidden="true" />
@@ -89,6 +118,26 @@ export function IndexingRunPanel({
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
             <span>{launchError}</span>
+          </div>
+        ) : null}
+
+        {corpusLaunchError ? (
+          <div className="notice notice-danger" role="alert">
+            <AlertCircle size={16} />
+            <span>{corpusLaunchError}</span>
+          </div>
+        ) : null}
+
+        {corpusProgress ? (
+          <div className="ui-warning" role="status" aria-live="polite">
+            <strong>Batch del corpus</strong>
+            <span>
+              {corpusProgress.completed}/{corpusProgress.total} completados ·{" "}
+              {corpusProgress.succeeded} exitosos · {corpusProgress.failed} fallidos
+            </span>
+            {corpusProgress.currentLabel ? (
+              <span>Actual: {corpusProgress.currentLabel}</span>
+            ) : null}
           </div>
         ) : null}
 

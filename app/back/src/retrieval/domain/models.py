@@ -115,6 +115,7 @@ class RetrievalReadiness(StrictModel):
     retrieval_profile_id: str = Field(min_length=1)
     ready: bool
     active_vector_rows: int = Field(default=0, ge=0)
+    active_document_count: int = Field(default=0, ge=0)
     embedding_bundle_id: str | None = None
     blocking_reasons: list[str] = Field(default_factory=list)
 

@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pytest
 
+from pydantic import ValidationError
+
 from ingestion.paths import (
     ArtifactPaths,
     canonical_relpath,
@@ -12,6 +14,7 @@ from ingestion.paths import (
     preflight_artifact_paths,
     stable_document_id,
 )
+from ingestion.schemas.artifacts import MetadataArtifact, PlatformDocumentIdentity
 
 
 @pytest.mark.parametrize(
@@ -118,3 +121,49 @@ def test_platform_revision_id_changes_with_raw_hash() -> None:
 def test_platform_revision_id_requires_raw_hash() -> None:
     with pytest.raises(ValueError):
         platform_revision_id("sst-general", "manual/document.pdf", "")
+
+
+# --- Fase 2: extensión aditiva del contrato Schema 2.0 (ADR-006) -------------
+
+
+def test_metadata_platform_identity_is_optional_for_legacy() -> None:
+    # El adaptador legacy no emite platform_identity: el default es None y los
+    # artefactos SST validan sin cambios.
+    field = MetadataArtifact.model_fields["platform_identity"]
+    assert field.default is None
+    assert not field.is_required()
+
+
+def test_platform_document_identity_accepts_typed_locators() -> None:
+    identity = PlatformDocumentIdentity(
+        project_id="proj_sst-general",
+        source_document_id=platform_document_id("sst-general", "manual/x.pdf"),
+        source_document_revision_id=platform_revision_id(
+            "sst-general", "manual/x.pdf", "hash-v1"
+        ),
+        processing_profile_id="pp_local-pdf-ocr-v1",
+        processing_profile_fingerprint="a" * 64,
+    )
+    assert identity.normalized_document_id is None  # generador llega en fase posterior
+    assert identity.schema_version == "2.0"
+
+
+@pytest.mark.parametrize(
+    "field,bad_value",
+    [
+        ("project_id", "sst-general"),  # sin prefijo proj_
+        ("source_document_revision_id", "proj_x"),  # prefijo equivocado
+        ("processing_profile_fingerprint", "not-hex"),  # fingerprint inválido
+    ],
+)
+def test_platform_document_identity_rejects_malformed_ids(field: str, bad_value: str) -> None:
+    valid = dict(
+        project_id="proj_sst-general",
+        source_document_id="sdoc_abc",
+        source_document_revision_id="srev_abc",
+        processing_profile_id="pp_local",
+        processing_profile_fingerprint="a" * 64,
+    )
+    valid[field] = bad_value
+    with pytest.raises(ValidationError):
+        PlatformDocumentIdentity(**valid)

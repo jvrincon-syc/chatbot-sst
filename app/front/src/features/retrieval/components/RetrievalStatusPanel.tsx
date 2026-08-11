@@ -143,7 +143,15 @@ export function RetrievalStatusPanel({
                 <span className="ui-meta">
                   {status.readiness.activeVectorRows} filas activas
                 </span>
+                <span className="ui-meta">
+                  {formatActiveDocumentLabel(status.readiness.activeDocumentCount)}
+                </span>
               </div>
+              {status.readiness.activeDocumentCount === 1 ? (
+                <span className="ui-field-note">
+                  El retrieval activo solo cubre 1 documento indexado en este corpus.
+                </span>
+              ) : null}
               {stageState.stage === "blocked" && stageState.blockingReasons.length > 0 ? (
                 <ul className="ui-warning">
                   {stageState.blockingReasons.map((reason) => (
@@ -157,4 +165,10 @@ export function RetrievalStatusPanel({
       </div>
     </section>
   );
+}
+
+function formatActiveDocumentLabel(activeDocumentCount: number): string {
+  return activeDocumentCount === 1
+    ? "1 documento activo"
+    : `${activeDocumentCount} documentos activos`;
 }

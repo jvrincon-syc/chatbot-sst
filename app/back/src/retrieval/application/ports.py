@@ -73,6 +73,16 @@ class VectorSearchPort(Protocol):
     ) -> int:
         """Count the active vector rows currently serving one lane."""
 
+    def count_active_documents(
+        self,
+        *,
+        vector_table: str,
+        embedding_profile_id: str,
+        indexing_target_id: str,
+        corpus_version: str,
+    ) -> int:
+        """Count the distinct documents currently serving one lane."""
+
     def active_bundle_ids(
         self,
         *,
@@ -91,6 +101,7 @@ class LexicalSearchPort(Protocol):
         self,
         *,
         query: str,
+        embedding_profile_id: str,
         corpus_version: str,
         top_k: int,
     ) -> list[RetrievedEvidence]:
@@ -104,6 +115,7 @@ class ParentExpansionPort(Protocol):
         self,
         *,
         parent_node_ids: Sequence[str],
+        embedding_profile_id: str,
         corpus_version: str,
     ) -> dict[str, RetrievedEvidence]:
         """Return parent evidence keyed by ``parent_node_id``."""

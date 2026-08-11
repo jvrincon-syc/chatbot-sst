@@ -154,6 +154,7 @@ class RetrievalReadinessEvaluator:
             reasons.append("EMBEDDING_PROFILE_COMPATIBILITY_NOT_PROVEN")
 
         active_rows = 0
+        active_documents = 0
         bundle_id: str | None = None
         try:
             target = self._targets.get(retrieval_profile.indexing_target_id)
@@ -170,6 +171,12 @@ class RetrievalReadinessEvaluator:
                 indexing_target_id=target.indexing_target_id,
                 corpus_version=retrieval_profile.corpus_version,
             )
+            active_documents = self._vector_search.count_active_documents(
+                vector_table=target.vector_table,
+                embedding_profile_id=profile.profile_id,
+                indexing_target_id=target.indexing_target_id,
+                corpus_version=retrieval_profile.corpus_version,
+            )
             if active_rows == 0:
                 reasons.append("NO_ACTIVE_VECTOR_ROWS")
             bundles = self._vector_search.active_bundle_ids(
@@ -178,9 +185,7 @@ class RetrievalReadinessEvaluator:
                 indexing_target_id=target.indexing_target_id,
                 corpus_version=retrieval_profile.corpus_version,
             )
-            if len(bundles) > 1:
-                reasons.append("MULTIPLE_ACTIVE_BUNDLES")
-            bundle_id = bundles[0] if bundles else None
+            bundle_id = bundles[0] if len(bundles) == 1 else None
 
         try:
             self._query_embedding.resolve_profile(retrieval_profile)
@@ -191,6 +196,7 @@ class RetrievalReadinessEvaluator:
             retrieval_profile_id=retrieval_profile_id,
             ready=not reasons,
             active_vector_rows=active_rows,
+            active_document_count=active_documents,
             embedding_bundle_id=bundle_id,
             blocking_reasons=sorted(set(reasons)),
         )
@@ -383,6 +389,7 @@ class RetrievalSearchService:
         )
         return self._with_parents(
             candidates=candidates,
+            embedding_profile_id=profile.profile_id,
             corpus_version=retrieval_profile.corpus_version,
         )
 
@@ -417,6 +424,7 @@ class RetrievalSearchService:
         )
         candidates = self._lexical_search.search(
             query=query,
+            embedding_profile_id=retrieval_profile.embedding_profile_id,
             corpus_version=retrieval_profile.corpus_version,
             top_k=top_k,
         )
@@ -426,6 +434,7 @@ class RetrievalSearchService:
         )
         return self._with_parents(
             candidates=candidates,
+            embedding_profile_id=retrieval_profile.embedding_profile_id,
             corpus_version=retrieval_profile.corpus_version,
         )
 
@@ -433,6 +442,7 @@ class RetrievalSearchService:
         self,
         *,
         candidates: Sequence[RetrievedEvidence],
+        embedding_profile_id: str,
         corpus_version: str,
     ) -> list[RetrievedEvidence]:
         parent_ids = [
@@ -444,15 +454,34 @@ class RetrievalSearchService:
             return list(candidates)
         parents = self._parent_expansion.expand(
             parent_node_ids=parent_ids,
+            embedding_profile_id=embedding_profile_id,
             corpus_version=corpus_version,
         )
-        expanded: list[RetrievedEvidence] = []
+        enriched: list[RetrievedEvidence] = []
         for candidate in candidates:
-            expanded.append(candidate)
             parent = parents.get(str(candidate.parent_node_id))
-            if parent is not None and parent not in expanded:
-                expanded.append(parent)
-        return expanded
+            if parent is None:
+                enriched.append(candidate)
+                continue
+            enriched.append(
+                candidate.model_copy(
+                    update={
+                        "page_start": (
+                            candidate.page_start
+                            if candidate.page_start is not None
+                            else parent.page_start
+                        ),
+                        "page_end": (
+                            candidate.page_end
+                            if candidate.page_end is not None
+                            else parent.page_end
+                        ),
+                        "section_title": candidate.section_title or parent.section_title,
+                        "section_path": candidate.section_path or parent.section_path,
+                    }
+                )
+            )
+        return enriched
 
 
 class SearchRetrievalUseCase:

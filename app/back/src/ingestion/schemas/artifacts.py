@@ -221,6 +221,40 @@ class Classification(StrictModel):
     warnings: list[str] = Field(default_factory=list)
 
 
+# Patrones de identidad de plataforma (ADR-006). Se validan como localizadores
+# tipados; la autoridad de identidad es ``rag_platform.domain.identity``, que NO
+# se importa aquí para no acoplar la lane legacy de ingestion al módulo nuevo.
+_PLATFORM_PROJECT_ID_PATTERN = r"^proj_[a-z0-9][a-z0-9-]{0,127}$"
+_PLATFORM_SOURCE_DOCUMENT_ID_PATTERN = r"^sdoc_[a-z0-9][a-z0-9-]{0,127}$"
+_PLATFORM_REVISION_ID_PATTERN = r"^srev_[a-z0-9][a-z0-9-]{0,127}$"
+_PLATFORM_PROCESSING_PROFILE_ID_PATTERN = r"^pp_[a-z0-9][a-z0-9-]{0,127}$"
+_PLATFORM_FINGERPRINT_PATTERN = r"^[0-9a-f]{64}$"
+
+
+class PlatformDocumentIdentity(StrictModel):
+    """Identidad de plataforma opcional para artefactos Schema 2.0 nuevos (ADR-006).
+
+    Es **aditiva**: los artefactos legacy SST no la emiten, por lo que
+    ``MetadataArtifact.platform_identity`` queda ``None`` y validan sin cambios
+    (ese ``None`` es el adaptador Schema 2.0 legacy). Cuando el pipeline de
+    plataforma produce un normalizado, la puebla para ligar el artefacto a
+    proyecto + revisión + receta, sin depender solo de ``source_relpath``
+    (plan §Fase 2, §4.4).
+
+    ``normalized_document_id`` es opcional porque su generador con prefijo llega
+    en una fase posterior; su identidad lógica ya la fijan ``project_id +
+    source_document_revision_id + processing_profile_fingerprint``.
+    """
+
+    project_id: str = Field(pattern=_PLATFORM_PROJECT_ID_PATTERN)
+    source_document_id: str = Field(pattern=_PLATFORM_SOURCE_DOCUMENT_ID_PATTERN)
+    source_document_revision_id: str = Field(pattern=_PLATFORM_REVISION_ID_PATTERN)
+    normalized_document_id: Optional[str] = Field(default=None, min_length=1)
+    processing_profile_id: str = Field(pattern=_PLATFORM_PROCESSING_PROFILE_ID_PATTERN)
+    processing_profile_fingerprint: str = Field(pattern=_PLATFORM_FINGERPRINT_PATTERN)
+    schema_version: SchemaVersion = "2.0"
+
+
 class MetadataArtifact(StrictModel):
     schema_version: SchemaVersion
     document_id: str = Field(min_length=1)
@@ -247,6 +281,9 @@ class MetadataArtifact(StrictModel):
     processing_status: ProcessingStatus
     review_reasons: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
+    # Aditivo (ADR-006): identidad de plataforma para normalizados nuevos. Los
+    # artefactos legacy SST lo dejan en None y validan igual.
+    platform_identity: Optional[PlatformDocumentIdentity] = None
     processed_at: str = Field(
         default_factory=lambda: datetime.now(timezone.utc).astimezone().isoformat()
     )

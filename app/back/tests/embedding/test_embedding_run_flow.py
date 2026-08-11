@@ -79,6 +79,7 @@ def test_crea_y_ejecuta_un_run_cuando_el_perfil_esta_verificado(harness) -> None
     assert completed.summary["embedded_children"] == harness.chunk_bundle.child_count
     bundle = harness.bundles.get(completed.produced_embedding_bundle_id)
     assert bundle.is_sealed is True
+    assert bundle.readiness_status == "ready"
     assert bundle.vector_count == harness.chunk_bundle.child_count
     assert bundle.vector_dtype == "float32"
 
@@ -342,6 +343,24 @@ def test_el_chunk_map_cubre_cada_child_chunk_sin_duplicados(harness) -> None:
     assert [chunk.vector_offset for chunk in chunks] == list(range(len(chunks)))
     assert len({chunk.child_chunk_id for chunk in chunks}) == len(chunks)
     assert all(chunk.vector_checksum for chunk in chunks)
+
+
+def test_el_bundle_reenumera_chunk_ordinal_cuando_el_origen_lo_repite(harness) -> None:
+    child_path = harness.content_reader.chunks_root / "unit" / "example.child_chunks.jsonl"
+    rows = [json.loads(line) for line in child_path.read_text(encoding="utf-8").splitlines()]
+    rows[1]["ordinal"] = 0
+    rows[2]["ordinal"] = 1
+    child_path.write_text(
+        "".join(json.dumps(row, ensure_ascii=True, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+    run = harness.create_run.execute(request=_request(harness), idempotency_key="key-local-ordinal")
+    completed = harness.executor.execute(run.embedding_run_id)
+    chunks = harness.bundles.list_chunks(completed.produced_embedding_bundle_id)
+
+    assert completed.status == "completed"
+    assert [chunk.chunk_ordinal for chunk in chunks] == [0, 1, 2]
 
 
 def test_la_validacion_falla_cuando_el_contenido_fuente_cambio(harness, tmp_path) -> None:

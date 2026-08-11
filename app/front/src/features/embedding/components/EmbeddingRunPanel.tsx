@@ -22,7 +22,17 @@ type EmbeddingRunPanelProps = {
   polling: boolean;
   launchBusy: boolean;
   launchError: string | null;
+  corpusLaunchBusy: boolean;
+  corpusLaunchError: string | null;
+  corpusProgress: {
+    total: number;
+    completed: number;
+    succeeded: number;
+    failed: number;
+    currentLabel: string | null;
+  } | null;
   onCreateRun: () => void;
+  onCreateCorpusRun: () => void;
 };
 
 const CHUNK_BUNDLE_LABEL_ID = "embedding-chunk-bundle-label";
@@ -41,7 +51,11 @@ export function EmbeddingRunPanel({
   polling,
   launchBusy,
   launchError,
+  corpusLaunchBusy,
+  corpusLaunchError,
+  corpusProgress,
   onCreateRun,
+  onCreateCorpusRun,
 }: EmbeddingRunPanelProps) {
   const profileSelectable = selectedProfile !== null && embeddingProfileSelectable(selectedProfile);
   const blockedReason = !selectedProfile
@@ -51,7 +65,13 @@ export function EmbeddingRunPanel({
       : !selectedChunkBundleId
         ? "Selecciona un chunk bundle."
         : null;
-  const canLaunch = blockedReason === null && !launchBusy;
+  const canLaunch = blockedReason === null && !launchBusy && !corpusLaunchBusy;
+  const canLaunchCorpus =
+    selectedProfile !== null &&
+    profileSelectable &&
+    chunkBundles.length > 0 &&
+    !launchBusy &&
+    !corpusLaunchBusy;
 
   const progress = run ? embeddingRunProgressPercent(run.summary) : 0;
   const statusTone = run ? embeddingRunStatusTone(run.status) : "neutral";
@@ -109,6 +129,20 @@ export function EmbeddingRunPanel({
             {launchBusy ? <Loader2 className="spin" size={16} /> : <Play size={16} />}
             Ejecutar embedding
           </button>
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={onCreateCorpusRun}
+            disabled={!canLaunchCorpus}
+            title={
+              canLaunchCorpus
+                ? "Crear runs de embedding para todos los chunk bundles del corpus"
+                : blockedReason ?? "No hay chunk bundles disponibles"
+            }
+          >
+            {corpusLaunchBusy ? <Loader2 className="spin" size={16} /> : <Boxes size={16} />}
+            Embedding de todo el corpus
+          </button>
           {blockedReason ? (
             <span className="pipeline-action-alert" role="status">
               <AlertCircle size={14} aria-hidden="true" />
@@ -121,6 +155,26 @@ export function EmbeddingRunPanel({
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
             <span>{launchError}</span>
+          </div>
+        ) : null}
+
+        {corpusLaunchError ? (
+          <div className="notice notice-danger" role="alert">
+            <AlertCircle size={16} />
+            <span>{corpusLaunchError}</span>
+          </div>
+        ) : null}
+
+        {corpusProgress ? (
+          <div className="ui-warning" role="status" aria-live="polite">
+            <strong>Batch del corpus</strong>
+            <span>
+              {corpusProgress.completed}/{corpusProgress.total} completados ·{" "}
+              {corpusProgress.succeeded} exitosos · {corpusProgress.failed} fallidos
+            </span>
+            {corpusProgress.currentLabel ? (
+              <span>Actual: {corpusProgress.currentLabel}</span>
+            ) : null}
           </div>
         ) : null}
 

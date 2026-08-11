@@ -29,6 +29,7 @@ export type RetrievalReadiness = {
   retrievalProfileId: string;
   ready: boolean;
   activeVectorRows: number;
+  activeDocumentCount: number;
   embeddingBundleId: string | null;
   blockingReasons: string[];
 };

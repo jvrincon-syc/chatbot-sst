@@ -58,26 +58,32 @@ _GENERIC_DOCUMENT_TYPES: tuple[ProjectDocumentType, ...] = (
 
 
 #: Taxonomía SST versionada; base de ``sst-general`` (plan §Fase 1).
-_SST_DOCUMENT_TYPES: tuple[ProjectDocumentType, ...] = (
-    ProjectDocumentType(
-        code="procedimiento",
-        display_name="Procedimiento",
-        template=DocumentTypeTemplate.SST,
-    ),
-    ProjectDocumentType(
-        code="instructivo",
-        display_name="Instructivo",
-        template=DocumentTypeTemplate.SST,
-    ),
-    ProjectDocumentType(
-        code="formato", display_name="Formato", template=DocumentTypeTemplate.SST
-    ),
-    ProjectDocumentType(
-        code="matriz", display_name="Matriz", template=DocumentTypeTemplate.SST
-    ),
-    ProjectDocumentType(
-        code="politica", display_name="Política", template=DocumentTypeTemplate.SST
-    ),
+#: Los ``code`` coinciden **exactamente** con las etiquetas que emite el
+#: clasificador SST legacy (``ingestion.classification.rules`` / el ``Literal``
+#: ``DocumentType`` de ``ingestion.schemas.artifacts``), de modo que
+#: ``resolve_document_type`` valide una clasificación SST real sin rechazarla
+#: fail-closed (plan §Fase 2, items de política documental). Desajuste plan/código
+#: resuelto: la plantilla previa (5 códigos, con ``formato`` en vez de
+#: ``formulario``) no cubría las decisiones del clasificador.
+_SST_DOCUMENT_TYPES: tuple[ProjectDocumentType, ...] = tuple(
+    ProjectDocumentType(code=code, display_name=display_name, template=DocumentTypeTemplate.SST)
+    for code, display_name in (
+        ("manual", "Manual"),
+        ("formulario", "Formulario"),
+        ("politica", "Política"),
+        ("reglamento", "Reglamento"),
+        ("programa", "Programa"),
+        ("matriz", "Matriz"),
+        ("procedimiento", "Procedimiento"),
+        ("anexo", "Anexo"),
+        ("instructivo", "Instructivo"),
+        ("capacitacion", "Capacitación"),
+        ("acta", "Acta"),
+        ("norma", "Norma"),
+        ("guia", "Guía"),
+        ("informacion_general", "Información general"),
+        ("otro", "Otro"),
+    )
 )
 
 _TEMPLATE_DOCUMENT_TYPES: dict[DocumentTypeTemplate, tuple[ProjectDocumentType, ...]] = {

@@ -7,6 +7,7 @@ import pytest
 
 from embedding.application.bundle_builder import (
     EmbeddingBundleBuilder,
+    EmbeddingIndexingReadinessEvaluator,
     EmbeddingBundleValidator,
 )
 from embedding.application.engine_registry import DefaultEmbeddingEngineRegistry
@@ -83,6 +84,7 @@ def harness(tmp_path: Path) -> EmbeddingHarness:
         artifacts=artifacts,
         validator=EmbeddingBundleValidator(artifacts=artifacts),
         readiness_checks=readiness_checks,
+        readiness_evaluator=EmbeddingIndexingReadinessEvaluator(targets=targets),
         batch_size=2,
     )
     return EmbeddingHarness(

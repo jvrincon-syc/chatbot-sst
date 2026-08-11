@@ -27,8 +27,8 @@ A profile binds consumer scope, corpus version, embedding profile, indexing targ
 
 1. Create an inactive profile after proving profile/target compatibility.
 2. Validate using a synthetic smoke query, then activate only when ready.
-3. Readiness requires active/validated profile, query engine, compatible target, active rows, and one active bundle.
-4. Resolve the query engine, vector-search the exact target/profile/corpus lane, then expand parents.
+3. Readiness requires an active/validated profile, a usable query engine, a compatible target, and active rows from at least one indexed document.
+4. Resolve the query engine, vector-search the exact target/profile/corpus lane, then enrich each ranked match with any missing parent context without inflating the `top_k` result count.
 5. On query embedding failure, use lexical-only search only when policy permits; otherwise block.
 
 ## 6. Rules and invariants
@@ -37,7 +37,7 @@ A profile binds consumer scope, corpus version, embedding profile, indexing targ
 - A usable profile is active, validated, and not deprecated; one active profile exists per scope/corpus.
 - Target table and metric must match the embedding profile.
 - PostgreSQL vector and lexical searches restrict evidence to processed, approved documents.
-- Zero or multiple active bundles block readiness; policy `never` forbids lexical-only answers.
+- Zero active vector rows block readiness; multiple active bundles are valid when they represent different documents in the same corpus lane. Policy `never` forbids lexical-only answers.
 
 ## 7. Critical variables and configuration
 

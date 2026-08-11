@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   createEmbeddingRun,
+  loadChunkBundleSummary,
   loadChunkBundles,
   loadEmbeddingBundle,
   loadEmbeddingBundleChunks,
   loadEmbeddingBundleValidation,
   loadEmbeddingIndexingReadiness,
+  loadEmbeddingRun,
   loadEmbeddingProfiles,
 } from "../embedding/embeddingApi.js";
 import { embeddingProfileSelectable, embeddingRunProducedBundleId } from "../embedding/embeddingState.js";
@@ -23,6 +25,7 @@ import {
   createIndexingRun,
   loadIndexingOverview,
   loadIndexingRetrievalReadiness,
+  loadIndexingRun,
   loadIndexingRunDocuments,
   loadIndexingRunErrors,
 } from "../indexing/indexingApi.js";
@@ -49,6 +52,10 @@ import { mapPipelineError } from "./shared/errorMapping.js";
 import type { PaginatedResponse } from "./shared/apiTypes.js";
 import type { EmbeddingIndexingState } from "../dashboard/dashboardTypes.js";
 import { shouldAdvanceToIndexing } from "./shared/pipelineFlow.js";
+import {
+  clearMissingPipelineResource,
+  type CorpusBatchProgress,
+} from "./shared/pipelineState.js";
 
 function errorMessage(caught: unknown): string {
   return mapPipelineError(caught).message;
@@ -62,6 +69,42 @@ type UseEmbeddingIndexingPipelineOptions = {
   persistedState: EmbeddingIndexingState;
   onPersistedStateChange: (patch: Partial<EmbeddingIndexingState>) => void;
 };
+
+const TERMINAL_RUN_STATUSES = new Set(["completed", "failed", "blocked", "cancelled"]);
+const CORPUS_PAGE_SIZE = 100;
+const POLL_INTERVAL_MS = 1000;
+const MAX_POLL_ATTEMPTS = 300;
+
+function sleep(delayMs: number): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, delayMs);
+  });
+}
+
+async function loadAllPages<T>(
+  loader: (options: { page: number; pageSize: number }) => Promise<PaginatedResponse<T>>,
+): Promise<T[]> {
+  const items: T[] = [];
+  let page = 1;
+  while (true) {
+    const response = await loader({ page, pageSize: CORPUS_PAGE_SIZE });
+    items.push(...response.items);
+    if (response.totalPages <= page || response.totalPages === 0) {
+      break;
+    }
+    page += 1;
+  }
+  return items;
+}
+
+function summarizeBatchFailures(label: string, failures: string[]): string | null {
+  if (failures.length === 0) {
+    return null;
+  }
+  const preview = failures.slice(0, 3).join(" | ");
+  const suffix = failures.length > 3 ? ` | +${failures.length - 3} mas` : "";
+  return `${label}: ${preview}${suffix}`;
+}
 
 export function useEmbeddingIndexingPipeline({
   persistedState,
@@ -94,6 +137,10 @@ export function useEmbeddingIndexingPipeline({
   );
   const [embeddingLaunchBusy, setEmbeddingLaunchBusy] = useState(false);
   const [embeddingLaunchError, setEmbeddingLaunchError] = useState<string | null>(null);
+  const [embeddingCorpusBusy, setEmbeddingCorpusBusy] = useState(false);
+  const [embeddingCorpusError, setEmbeddingCorpusError] = useState<string | null>(null);
+  const [embeddingCorpusProgress, setEmbeddingCorpusProgress] =
+    useState<CorpusBatchProgress | null>(null);
   const embeddingPolling = useEmbeddingRunPolling(embeddingRunId);
   const embeddingRun = embeddingPolling.run;
 
@@ -116,6 +163,10 @@ export function useEmbeddingIndexingPipeline({
   );
   const [indexingLaunchBusy, setIndexingLaunchBusy] = useState(false);
   const [indexingLaunchError, setIndexingLaunchError] = useState<string | null>(null);
+  const [indexingCorpusBusy, setIndexingCorpusBusy] = useState(false);
+  const [indexingCorpusError, setIndexingCorpusError] = useState<string | null>(null);
+  const [indexingCorpusProgress, setIndexingCorpusProgress] =
+    useState<CorpusBatchProgress | null>(null);
   const indexingPolling = useIndexingRunPolling(indexingRunId);
   const indexingRun = indexingPolling.run;
   const [indexingDocuments, setIndexingDocuments] =
@@ -296,6 +347,111 @@ export function useEmbeddingIndexingPipeline({
     }
   }, [persistState, selectedChunkBundleId, selectedProfileId]);
 
+  const waitForEmbeddingRun = useCallback(async (runId: string) => {
+    for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt += 1) {
+      const run = await loadEmbeddingRun(runId);
+      if (TERMINAL_RUN_STATUSES.has(run.status)) {
+        return run;
+      }
+      await sleep(POLL_INTERVAL_MS);
+    }
+    throw new Error(`El run de embedding ${runId} no alcanzo un estado terminal.`);
+  }, []);
+
+  const createCorpusEmbedding = useCallback(async () => {
+    if (!selectedProfileId) {
+      return;
+    }
+    setEmbeddingCorpusBusy(true);
+    setEmbeddingCorpusError(null);
+    try {
+      const allChunkBundles = await loadAllPages(loadChunkBundles);
+      setEmbeddingCorpusProgress({
+        total: allChunkBundles.length,
+        completed: 0,
+        succeeded: 0,
+        failed: 0,
+        currentLabel: null,
+      });
+      const failures: string[] = [];
+      let succeeded = 0;
+      let lastRunId: string | null = null;
+      let lastBundleId: string | null = null;
+      for (const [index, chunkBundle] of allChunkBundles.entries()) {
+        setEmbeddingCorpusProgress({
+          total: allChunkBundles.length,
+          completed: index,
+          succeeded,
+          failed: failures.length,
+          currentLabel: chunkBundle.chunkBundleId,
+        });
+        try {
+          setSelectedChunkBundleId(chunkBundle.chunkBundleId);
+          const run = await createEmbeddingRun(
+            {
+              chunkBundleId: chunkBundle.chunkBundleId,
+              profileId: selectedProfileId,
+            },
+            {},
+          );
+          setEmbeddingRunId(run.embeddingRunId);
+          lastRunId = run.embeddingRunId;
+          persistState({
+            selectedChunkBundleId: chunkBundle.chunkBundleId,
+            activeEmbeddingRunId: run.embeddingRunId,
+            activeStage: "embedding",
+          });
+          const completedRun = await waitForEmbeddingRun(run.embeddingRunId);
+          setEmbeddingRunId(completedRun.embeddingRunId);
+          if (
+            completedRun.status !== "completed" ||
+            completedRun.producedEmbeddingBundleId === null
+          ) {
+            failures.push(
+              `${chunkBundle.chunkBundleId}: ${completedRun.errorSummary ?? completedRun.status}`,
+            );
+          } else {
+            succeeded += 1;
+            lastBundleId = completedRun.producedEmbeddingBundleId;
+            setSelectedEmbeddingBundleId(completedRun.producedEmbeddingBundleId);
+            persistState({
+              selectedEmbeddingBundleId: completedRun.producedEmbeddingBundleId,
+              activeEmbeddingRunId: completedRun.embeddingRunId,
+            });
+          }
+        } catch (caught) {
+          failures.push(`${chunkBundle.chunkBundleId}: ${errorMessage(caught)}`);
+        }
+        setEmbeddingCorpusProgress({
+          total: allChunkBundles.length,
+          completed: index + 1,
+          succeeded,
+          failed: failures.length,
+          currentLabel: chunkBundle.chunkBundleId,
+        });
+      }
+      if (lastRunId) {
+        setEmbeddingRunId(lastRunId);
+      }
+      if (lastBundleId) {
+        setSelectedEmbeddingBundleId(lastBundleId);
+        persistState({
+          selectedEmbeddingBundleId: lastBundleId,
+          activeEmbeddingRunId: lastRunId,
+          activeStage: "indexing",
+        });
+      }
+      setEmbeddingCorpusError(
+        summarizeBatchFailures("Fallaron algunos embeddings del corpus", failures),
+      );
+    } catch (caught) {
+      setEmbeddingCorpusError(errorMessage(caught));
+    } finally {
+      setEmbeddingCorpusBusy(false);
+      await refreshCatalog();
+    }
+  }, [persistState, refreshCatalog, selectedProfileId, waitForEmbeddingRun]);
+
   // When the embedding run completes, pivot to its produced embedding bundle and
   // load bundle-level inspection (never run-documents/run-items).
   const producedBundleId = embeddingRun ? embeddingRunProducedBundleId(embeddingRun) : null;
@@ -323,7 +479,21 @@ export function useEmbeddingIndexingPipeline({
         setBundleReadiness(readiness);
       } catch (caught) {
         if (cancelled) return;
-        setEmbeddingBundleError(errorMessage(caught));
+        const error = mapPipelineError(caught);
+        if (error.code === "EMBEDDING_BUNDLE_NOT_FOUND") {
+          const patch = clearMissingPipelineResource(persistedState, "embeddingBundle");
+          setSelectedEmbeddingBundleId(null);
+          setIndexingRunId(null);
+          setActivationRunId(null);
+          setRetrievalProfileId(null);
+          setEmbeddingBundle(null);
+          setBundleChunks(null);
+          setBundleValidation(null);
+          setBundleReadiness(null);
+          persistState(patch);
+          return;
+        }
+        setEmbeddingBundleError(error.message);
       } finally {
         if (!cancelled) {
           setEmbeddingBundleLoading(false);
@@ -335,6 +505,15 @@ export function useEmbeddingIndexingPipeline({
       cancelled = true;
     };
   }, [resolvedEmbeddingBundleId]);
+
+  useEffect(() => {
+    if (embeddingPolling.error?.code !== "EMBEDDING_RUN_NOT_FOUND") {
+      return;
+    }
+    const patch = clearMissingPipelineResource(persistedState, "embeddingRun");
+    setEmbeddingRunId(null);
+    persistState(patch);
+  }, [embeddingPolling.error?.code, persistState, persistedState]);
 
   useEffect(() => {
     if (!producedBundleId) {
@@ -373,6 +552,159 @@ export function useEmbeddingIndexingPipeline({
       setIndexingLaunchBusy(false);
     }
   }, [persistState, resolvedEmbeddingBundleId]);
+
+  const waitForIndexingRun = useCallback(async (runId: string) => {
+    for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt += 1) {
+      const run = await loadIndexingRun(runId);
+      if (TERMINAL_RUN_STATUSES.has(run.status)) {
+        return run;
+      }
+      await sleep(POLL_INTERVAL_MS);
+    }
+    throw new Error(`El run de indexing ${runId} no alcanzo un estado terminal.`);
+  }, []);
+
+  const createCorpusIndexing = useCallback(async () => {
+    if (!selectedProfileId || !bundleFirstEnabled) {
+      return;
+    }
+    setIndexingCorpusBusy(true);
+    setIndexingCorpusError(null);
+    try {
+      const allChunkBundles = await loadAllPages(loadChunkBundles);
+      const candidates: Array<{ chunkBundleId: string; embeddingBundleId: string }> = [];
+      const preparationFailures: string[] = [];
+      for (const chunkBundle of allChunkBundles) {
+        try {
+          const summary = await loadChunkBundleSummary(chunkBundle.chunkBundleId);
+          const bundleDetails = await Promise.all(
+            summary.embeddingBundleIds.map((embeddingBundleId) =>
+              loadEmbeddingBundle(embeddingBundleId),
+            ),
+          );
+          const selectedBundle = bundleDetails
+            .filter(
+              (bundle) =>
+                bundle.embeddingProfileId === selectedProfileId &&
+                bundle.status === "sealed" &&
+                bundle.validationStatus === "passed" &&
+                bundle.readinessStatus === "ready",
+            )
+            .sort((left, right) => {
+              const leftTime = Date.parse(left.sealedAt ?? "") || 0;
+              const rightTime = Date.parse(right.sealedAt ?? "") || 0;
+              return rightTime - leftTime;
+            })[0];
+          if (!selectedBundle) {
+            preparationFailures.push(
+              `${chunkBundle.chunkBundleId}: no tiene embedding listo para ${selectedProfileId}`,
+            );
+            continue;
+          }
+          candidates.push({
+            chunkBundleId: chunkBundle.chunkBundleId,
+            embeddingBundleId: selectedBundle.embeddingBundleId,
+          });
+        } catch (caught) {
+          preparationFailures.push(`${chunkBundle.chunkBundleId}: ${errorMessage(caught)}`);
+        }
+      }
+      setIndexingCorpusProgress({
+        total: allChunkBundles.length,
+        completed: preparationFailures.length,
+        succeeded: 0,
+        failed: preparationFailures.length,
+        currentLabel: null,
+      });
+      const failures = [...preparationFailures];
+      let succeeded = 0;
+      let lastActivation: ActivationResult | null = null;
+      for (const [index, candidate] of candidates.entries()) {
+        setIndexingCorpusProgress({
+          total: allChunkBundles.length,
+          completed: preparationFailures.length + index,
+          succeeded,
+          failed: failures.length,
+          currentLabel: candidate.chunkBundleId,
+        });
+        try {
+          const run = await createIndexingRun(
+            { embeddingBundleId: candidate.embeddingBundleId },
+            {},
+          );
+          setIndexingRunId(run.runId);
+          persistState({
+            selectedEmbeddingBundleId: candidate.embeddingBundleId,
+            activeIndexingRunId: run.runId,
+            activeStage: "indexing",
+          });
+          const completedRun = await waitForIndexingRun(run.runId);
+          setIndexingRunId(completedRun.runId);
+          if (completedRun.status !== "completed") {
+            failures.push(`${candidate.chunkBundleId}: ${completedRun.status}`);
+          } else {
+            const activation = await activateIndexingRun({
+              runId: completedRun.runId,
+              lexicalFallbackPolicy,
+            });
+            lastActivation = activation;
+            succeeded += 1;
+            setActivationRunId(completedRun.runId);
+            setActivationResult(activation);
+            if (activation.retrievalProfileId) {
+              setRetrievalProfileId(activation.retrievalProfileId);
+              persistState({
+                selectedRetrievalProfileId: activation.retrievalProfileId,
+                activeActivationRunId: completedRun.runId,
+                activeStage: "retrieval",
+              });
+            }
+          }
+        } catch (caught) {
+          failures.push(`${candidate.chunkBundleId}: ${errorMessage(caught)}`);
+        }
+        setIndexingCorpusProgress({
+          total: allChunkBundles.length,
+          completed: preparationFailures.length + index + 1,
+          succeeded,
+          failed: failures.length,
+          currentLabel: candidate.chunkBundleId,
+        });
+      }
+      if (lastActivation?.retrievalProfileId) {
+        const status = await loadRetrievalProfileStatus(lastActivation.retrievalProfileId);
+        setRetrievalStatus(status);
+      }
+      setIndexingCorpusError(
+        summarizeBatchFailures("Fallaron algunos indexings del corpus", failures),
+      );
+    } catch (caught) {
+      setIndexingCorpusError(errorMessage(caught));
+    } finally {
+      setIndexingCorpusBusy(false);
+      await refreshCatalog();
+    }
+  }, [
+    bundleFirstEnabled,
+    lexicalFallbackPolicy,
+    persistState,
+    refreshCatalog,
+    selectedProfileId,
+    waitForIndexingRun,
+  ]);
+
+  useEffect(() => {
+    if (indexingPolling.error?.code !== "INDEXING_RUN_NOT_FOUND") {
+      return;
+    }
+    const patch = clearMissingPipelineResource(persistedState, "indexingRun");
+    setIndexingRunId(null);
+    setActivationRunId(null);
+    setIndexingDocuments(null);
+    setIndexingErrors(null);
+    setIndexingReadiness(null);
+    persistState(patch);
+  }, [indexingPolling.error?.code, persistState, persistedState]);
 
   // Load indexing run detail (documents, errors, retrieval readiness) whenever a
   // fresh indexing run snapshot arrives.
@@ -449,11 +781,21 @@ export function useEmbeddingIndexingPipeline({
       const status = await loadRetrievalProfileStatus(retrievalProfileId);
       setRetrievalStatus(status);
     } catch (caught) {
-      setRetrievalStatusError(errorMessage(caught));
+      const error = mapPipelineError(caught);
+      if (error.code === "RETRIEVAL_PROFILE_NOT_FOUND") {
+        const patch = clearMissingPipelineResource(persistedState, "retrievalProfile");
+        setRetrievalProfileId(null);
+        setRetrievalStatus(null);
+        setRetrievalValidationResult(null);
+        setRetrievalSearchResult(null);
+        persistState(patch);
+        return;
+      }
+      setRetrievalStatusError(error.message);
     } finally {
       setRetrievalStatusLoading(false);
     }
-  }, [retrievalProfileId]);
+  }, [persistState, persistedState, retrievalProfileId]);
 
   useEffect(() => {
     void refreshRetrievalStatus();
@@ -522,6 +864,10 @@ export function useEmbeddingIndexingPipeline({
       launchBusy: embeddingLaunchBusy,
       launchError: embeddingLaunchError,
       createRun: createEmbedding,
+      corpusLaunchBusy: embeddingCorpusBusy,
+      corpusLaunchError: embeddingCorpusError,
+      corpusProgress: embeddingCorpusProgress,
+      createCorpusRun: createCorpusEmbedding,
       bundle: embeddingBundle,
       bundleLoading: embeddingBundleLoading,
       bundleError: embeddingBundleError,
@@ -539,6 +885,10 @@ export function useEmbeddingIndexingPipeline({
       launchBusy: indexingLaunchBusy,
       launchError: indexingLaunchError,
       createRun: createIndexing,
+      corpusLaunchBusy: indexingCorpusBusy,
+      corpusLaunchError: indexingCorpusError,
+      corpusProgress: indexingCorpusProgress,
+      createCorpusRun: createCorpusIndexing,
       documents: indexingDocuments,
       documentsLoading: indexingDocumentsLoading,
       documentsError: indexingDocumentsError,

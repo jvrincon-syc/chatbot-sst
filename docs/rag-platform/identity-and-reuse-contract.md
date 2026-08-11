@@ -57,6 +57,29 @@ proyecto y solo por identidad exacta (hash/fingerprint). El reuso entre
 proyectos está prohibido por defecto aunque los bytes coincidan. La matriz
 completa está en la sección 6 del plan.
 
+## Identidad de plataforma en artefactos Schema 2.0 (Fase 2)
+
+`MetadataArtifact.platform_identity` (opcional, `PlatformDocumentIdentity`) liga
+un normalizado nuevo a `project_id + source_document_id +
+source_document_revision_id + processing_profile_id + processing_profile_fingerprint`,
+sin depender solo de `source_relpath`. Es **aditivo**: los artefactos legacy SST
+lo dejan en `None` y validan sin cambios. Los IDs se validan por prefijo tipado
+en `ingestion`; la autoridad de identidad sigue siendo
+`rag_platform.domain.identity` (no se importa en `ingestion` para no acoplar la
+lane legacy al módulo nuevo).
+
+## Clasificación documental por proyecto (Fase 2)
+
+El `document_type` de plataforma se resuelve **fail-closed** contra el catálogo
+versionado del proyecto (`resolve_document_type` → `DocumentTypeNotPermitted` si
+el código no está permitido). El `Literal` legacy de tipos queda confinado al
+adaptador SST (`SstClassificationPolicy`), que **envuelve**
+`ingestion.classification.rules.classify_document` sin reimplementar reglas y
+reproduce las decisiones SST exactas. La aplicación solo conoce el puerto
+`ClassificationPolicy`, de modo que otro proyecto puede aportar su política sin
+tocar el dominio. La plantilla SST del catálogo se alineó con las etiquetas que
+el clasificador legacy emite, para que una clasificación SST real no se rechace.
+
 ## Compatibilidad legacy
 
 `corpus_version`, `stable_document_id(source_relpath)`, `retrieval_profiles`,

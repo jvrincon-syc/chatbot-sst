@@ -34,6 +34,8 @@ export function RetrievalSearchPanel({
         ? "El perfil de retrieval seleccionado no esta activo."
         : null;
   const canSearch = blockedReason === null && !searchBusy;
+  const directMatches = searchResult?.items.filter((item) => item.parentNodeId !== null) ?? [];
+  const expandedContexts = searchResult?.items.filter((item) => item.parentNodeId === null) ?? [];
 
   return (
     <section className="panel" aria-label="Busqueda de retrieval">
@@ -84,6 +86,13 @@ export function RetrievalSearchPanel({
           {blockedReason ? <span className="ui-field-note error">{blockedReason}</span> : null}
         </div>
 
+        {status?.readiness.activeDocumentCount === 1 ? (
+          <div className="ui-field-note">
+            El retrieval activo solo tiene 1 documento indexado en este corpus; por eso los
+            resultados pueden concentrarse en la misma fuente.
+          </div>
+        ) : null}
+
         {searchError ? (
           <div className="notice notice-danger" role="alert">
             <AlertCircle size={16} />
@@ -94,7 +103,11 @@ export function RetrievalSearchPanel({
         {searchResult ? (
           <>
             <div className="ui-hint" role="status">
-              {searchResult.items.length} evidencias devueltas para {searchResult.retrievalProfileId}.
+              {directMatches.length} coincidencias base
+              {expandedContexts.length > 0
+                ? ` y ${expandedContexts.length} contextos ampliados`
+                : ""}{" "}
+              para {searchResult.retrievalProfileId}.
             </div>
             {searchResult.items.length === 0 ? (
               <div className="ui-empty" role="status">
@@ -104,10 +117,11 @@ export function RetrievalSearchPanel({
               <ol className="ui-list" aria-label="Resultados de retrieval">
                 {searchResult.items.map((item) => (
                   <li key={`${item.nodeId}-${item.source}`} className="ui-state-card">
+                    <strong>{evidenceHeading(item)}</strong>
                     <span>
-                      {item.documentId} · {item.source} · score {item.score.toFixed(3)}
+                      Documento {item.documentId} · {evidenceKindLabel(item)} ·{" "}
+                      {evidenceSourceLabel(item.source)} · score {item.score.toFixed(3)}
                     </span>
-                    <strong>{item.sectionTitle ?? item.sectionPath ?? item.childChunkId}</strong>
                     <small>
                       Paginas {item.pageStart ?? "?"}
                       {item.pageEnd && item.pageEnd !== item.pageStart ? `-${item.pageEnd}` : ""}
@@ -122,4 +136,22 @@ export function RetrievalSearchPanel({
       </div>
     </section>
   );
+}
+
+function evidenceHeading(item: RetrievalSearchResult["items"][number]): string {
+  if (item.sectionTitle) {
+    return item.sectionTitle;
+  }
+  if (item.sectionPath) {
+    return item.sectionPath;
+  }
+  return item.parentNodeId === null ? "Contexto ampliado" : "Fragmento sin seccion";
+}
+
+function evidenceKindLabel(item: RetrievalSearchResult["items"][number]): string {
+  return item.parentNodeId === null ? "contexto" : "coincidencia";
+}
+
+function evidenceSourceLabel(source: RetrievalSearchResult["items"][number]["source"]): string {
+  return source === "vector" ? "vector" : "lexico";
 }

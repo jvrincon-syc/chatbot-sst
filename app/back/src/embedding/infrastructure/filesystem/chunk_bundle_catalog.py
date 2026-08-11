@@ -9,6 +9,12 @@ from embedding.application.ports import ChunkBundleRepository
 from embedding.domain.errors import ChunkBundleNotFound
 from embedding.domain.models import ChunkBundleRef
 
+_METADATA_SUFFIX = ".chunking_metadata.json"
+
+
+def _is_metadata_artifact(artifact_relpath: str) -> bool:
+    return artifact_relpath.endswith(_METADATA_SUFFIX)
+
 
 class FilesystemChunkBundleCatalogRepository:
     """Read chunk bundle references directly from ``data/chunks`` artifacts."""
@@ -69,17 +75,34 @@ class HybridChunkBundleRepository:
 
     def get(self, chunk_bundle_id: str) -> ChunkBundleRef:
         try:
-            return self._primary.get(chunk_bundle_id)
+            bundle = self._primary.get(chunk_bundle_id)
         except ChunkBundleNotFound:
             return self._filesystem.get(chunk_bundle_id)
+        if _is_metadata_artifact(bundle.artifact_relpath):
+            return bundle
+        try:
+            return self._filesystem.get(bundle.bundle_fingerprint)
+        except ChunkBundleNotFound:
+            return bundle
 
     def list_bundles(self) -> list[ChunkBundleRef]:
-        merged = {
-            bundle.chunk_bundle_id: bundle for bundle in self._primary.list_bundles()
-        }
+        merged: dict[str, ChunkBundleRef] = {}
+        for bundle in self._primary.list_bundles():
+            visible = self._visible_bundle(bundle)
+            if visible is None:
+                continue
+            merged[visible.bundle_fingerprint] = visible
         for bundle in self._filesystem.list_bundles():
-            merged[bundle.chunk_bundle_id] = bundle
+            merged[bundle.bundle_fingerprint] = bundle
         return sorted(merged.values(), key=lambda bundle: bundle.chunk_bundle_id)
 
     def ensure_registered(self, bundle: ChunkBundleRef) -> ChunkBundleRef:
         return self._primary.ensure_registered(bundle)
+
+    def _visible_bundle(self, bundle: ChunkBundleRef) -> ChunkBundleRef | None:
+        if _is_metadata_artifact(bundle.artifact_relpath):
+            return bundle
+        try:
+            return self._filesystem.get(bundle.bundle_fingerprint)
+        except ChunkBundleNotFound:
+            return None

@@ -23,6 +23,7 @@ import pytest
 
 from embedding.application.bundle_builder import (
     EmbeddingBundleBuilder,
+    EmbeddingIndexingReadinessEvaluator,
     EmbeddingBundleValidator,
 )
 from embedding.application.engine_registry import DefaultEmbeddingEngineRegistry
@@ -269,6 +270,7 @@ def test_bundle_first_e2e_sobre_postgresql_y_pgvector_reales(tmp_path: Path) -> 
             artifacts=artifacts,
             validator=EmbeddingBundleValidator(artifacts=artifacts),
             readiness_checks=checks,
+            readiness_evaluator=EmbeddingIndexingReadinessEvaluator(targets=targets),
         )
         embedding_run = CreateEmbeddingRunUseCase(
             runs=runs,

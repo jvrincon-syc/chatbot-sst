@@ -133,6 +133,7 @@ def test_postgres_vector_repository_activates_bundle_transactionally() -> None:
     statements = connection.cursor_obj.statements
     assert "is_active = false" in statements[0]
     assert "superseded_at = now()" in statements[0]
+    assert "document_id IN (" in statements[0]
     assert "embedding_bundle_id <> %s" in statements[0]
     assert "is_active = true" in statements[1]
     assert "embedding_bundle_id = %s" in statements[1]

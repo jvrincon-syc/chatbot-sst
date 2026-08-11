@@ -34,6 +34,7 @@ function status(overrides: Partial<RetrievalProfileStatus> = {}): RetrievalProfi
       retrievalProfileId: "retrieval-1",
       ready: true,
       activeVectorRows: 42,
+      activeDocumentCount: 7,
       embeddingBundleId: "bundle-1",
       blockingReasons: [],
     },
@@ -59,6 +60,7 @@ describe("RetrievalStatusPanel", () => {
             retrievalProfileId: "retrieval-1",
             ready: false,
             activeVectorRows: 0,
+            activeDocumentCount: 0,
             embeddingBundleId: null,
             blockingReasons: ["no_active_vector_rows"],
           },
@@ -74,6 +76,29 @@ describe("RetrievalStatusPanel", () => {
     const readiness = screen.getByLabelText("Readiness de retrieval");
     expect(readiness.textContent).toContain("Bloqueado");
     expect(screen.getByText("no_active_vector_rows")).toBeTruthy();
+  });
+
+  it("makes a one-document active scope visible to the operator", () => {
+    render(
+      <RetrievalStatusPanel
+        retrievalProfileId="retrieval-1"
+        status={status({
+          readiness: {
+            retrievalProfileId: "retrieval-1",
+            ready: true,
+            activeVectorRows: 20,
+            activeDocumentCount: 1,
+            embeddingBundleId: "bundle-1",
+            blockingReasons: [],
+          },
+        })}
+        loading={false}
+        error={null}
+      />,
+    );
+
+    expect(screen.getByText("1 documento activo")).toBeTruthy();
+    expect(screen.getByText(/solo cubre 1 documento indexado/)).toBeTruthy();
   });
 
   it("surfaces a transport error as an alert without faking a status", () => {

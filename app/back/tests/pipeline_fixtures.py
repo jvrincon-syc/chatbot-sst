@@ -10,6 +10,7 @@ from pathlib import Path
 
 from embedding.application.bundle_builder import (
     EmbeddingBundleBuilder,
+    EmbeddingIndexingReadinessEvaluator,
     EmbeddingBundleValidator,
 )
 from embedding.application.engine_registry import DefaultEmbeddingEngineRegistry
@@ -131,35 +132,54 @@ def build_target(**overrides: object) -> IndexingTarget:
     return IndexingTarget.model_validate(values)
 
 
-def write_chunk_bundle(chunks_root: Path, *, child_count: int = 3) -> ChunkBundleRef:
+def write_chunk_bundle(
+    chunks_root: Path,
+    *,
+    child_count: int = 3,
+    document_id: str = DOCUMENT_ID,
+    base_relpath: str = "unit/example",
+    source_relpath: str = "unit/example.md",
+    child_text_template: str = "Child chunk number {index} about safety rules.",
+    parent_text: str = "Parent text for the unit corpus.",
+    page_start: int = 1,
+    bundle_seed: str = "bundle",
+    parent_seed: str = "parent",
+    child_seed_prefix: str = "child",
+) -> ChunkBundleRef:
     """Write a persisted chunk bundle and return its durable ledger row."""
 
-    base = chunks_root / "unit" / "example"
+    base = chunks_root / Path(base_relpath)
     base.parent.mkdir(parents=True, exist_ok=True)
-    parent_id = "parent-" + sha256(b"parent").hexdigest()
+    parent_id = "parent-" + sha256(parent_seed.encode("utf-8")).hexdigest()
     parents = [
         {
             "chunk_id": parent_id,
-            "document_id": DOCUMENT_ID,
+            "document_id": document_id,
             "profile_id": "local-structural-v1",
             "ordinal": 0,
-            "text": "Parent text for the unit corpus.",
-            "source_span": {"page_start": 1, "page_end": 1, "char_start": 0, "char_end": 32},
+            "text": parent_text,
+            "source_span": {
+                "page_start": page_start,
+                "page_end": page_start,
+                "char_start": 0,
+                "char_end": max(len(parent_text), 1),
+            },
             "block_ids": ["block-1"],
         }
     ]
     children = [
         {
-            "chunk_id": "child-" + sha256(f"child-{index}".encode()).hexdigest(),
+            "chunk_id": "child-"
+            + sha256(f"{child_seed_prefix}-{index}".encode("utf-8")).hexdigest(),
             "parent_id": parent_id,
-            "document_id": DOCUMENT_ID,
+            "document_id": document_id,
             "profile_id": "local-structural-v1",
             "ordinal": index,
             "context_prefix": "Section 1",
-            "text": f"Child chunk number {index} about safety rules.",
+            "text": child_text_template.format(index=index),
             "source_span": {
-                "page_start": 1,
-                "page_end": 1,
+                "page_start": page_start,
+                "page_end": page_start,
                 "char_start": index * 10,
                 "char_end": index * 10 + 9,
             },
@@ -169,20 +189,20 @@ def write_chunk_bundle(chunks_root: Path, *, child_count: int = 3) -> ChunkBundl
     ]
     _write_jsonl(Path(f"{base}.parent_chunks.jsonl"), parents)
     _write_jsonl(Path(f"{base}.child_chunks.jsonl"), children)
-    bundle_fingerprint = "chunk-bundle-" + sha256(b"bundle").hexdigest()
+    bundle_fingerprint = "chunk-bundle-" + sha256(bundle_seed.encode("utf-8")).hexdigest()
     Path(f"{base}.chunking_metadata.json").write_text(
         json.dumps(
             {
                 "bundle_fingerprint": bundle_fingerprint,
                 "child_count": len(children),
                 "corpus_version": CORPUS_VERSION,
-                "document_id": DOCUMENT_ID,
-                "normalized_relpath": "unit/example.md",
+                "document_id": document_id,
+                "normalized_relpath": source_relpath,
                 "parent_count": len(parents),
                 "profile_fingerprint": "chunking-profile-" + sha256(b"profile").hexdigest(),
                 "profile_id": "local-structural-v1",
                 "source_hash": SOURCE_HASH,
-                "source_relpath": "unit/example.md",
+                "source_relpath": source_relpath,
             },
             indent=2,
             sort_keys=True,
@@ -195,8 +215,8 @@ def write_chunk_bundle(chunks_root: Path, *, child_count: int = 3) -> ChunkBundl
         profile_id="local-structural-v1",
         profile_fingerprint="chunking-profile-" + sha256(b"profile").hexdigest(),
         corpus_version=CORPUS_VERSION,
-        source_document_id=DOCUMENT_ID,
-        artifact_relpath=ARTIFACT_RELPATH,
+        source_document_id=document_id,
+        artifact_relpath=f"{base_relpath}.chunking_metadata.json".replace("\\", "/"),
         parent_count=len(parents),
         child_count=len(children),
         status="legacy_unverified",
@@ -249,12 +269,17 @@ class PipelineStack:
     validate_retrieval: ValidateRetrievalUseCase
     create_retrieval_profile: CreateRetrievalProfileUseCase
 
-    def run_embedding(self, *, idempotency_key: str = "embed-1") -> str:
+    def run_embedding(
+        self,
+        *,
+        chunk_bundle_id: str | None = None,
+        idempotency_key: str = "embed-1",
+    ) -> str:
         """Create and execute one embedding run; return the sealed bundle id."""
 
         run = self.create_embedding_run.execute(
             request=CreateEmbeddingRunRequest(
-                chunk_bundle_id=self.chunk_bundle.chunk_bundle_id,
+                chunk_bundle_id=chunk_bundle_id or self.chunk_bundle.chunk_bundle_id,
                 profile_id=self.profile.profile_id,
             ),
             idempotency_key=idempotency_key,
@@ -296,6 +321,7 @@ def build_pipeline_stack(root: Path, *, child_count: int = 3) -> PipelineStack:
         artifacts=artifacts,
         validator=EmbeddingBundleValidator(artifacts=artifacts),
         readiness_checks=readiness_checks,
+        readiness_evaluator=EmbeddingIndexingReadinessEvaluator(targets=targets),
         batch_size=2,
     )
     indexing_runs = InMemoryIndexingRunRepository()
@@ -320,11 +346,8 @@ def build_pipeline_stack(root: Path, *, child_count: int = 3) -> PipelineStack:
     )
     query_embedding = QueryEmbeddingService(profiles=profiles, registry=registry)
     vector_search = InMemoryVectorSearch(vectors=vectors, nodes=nodes)
-    lexical_search = InMemoryLexicalSearch(nodes=nodes, embedding_profile_id=profile.profile_id)
-    parent_expansion = InMemoryParentExpansion(
-        nodes=nodes,
-        embedding_profile_id=profile.profile_id,
-    )
+    lexical_search = InMemoryLexicalSearch(nodes=nodes)
+    parent_expansion = InMemoryParentExpansion(nodes=nodes)
     search = RetrievalSearchService(
         retrieval_profiles=retrieval_profiles,
         profiles=profiles,

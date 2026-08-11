@@ -70,6 +70,7 @@ class RetrievalReadinessSchema(StrictModel):
     retrieval_profile_id: str
     ready: bool
     active_vector_rows: int = Field(ge=0)
+    active_document_count: int = Field(ge=0)
     embedding_bundle_id: str | None = None
     blocking_reasons: list[str] = Field(default_factory=list)
 
