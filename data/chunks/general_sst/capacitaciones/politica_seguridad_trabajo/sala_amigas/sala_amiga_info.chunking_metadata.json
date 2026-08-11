@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-66b7745cb9da8ed419ef2375b4f24a2cc661edc59226892b1a2bccb0ca374ab4",
-  "child_count": 2,
+  "artifact_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-2df98227cd63c7e154f57b51c88a1e4e65a2a5c1d5ada1919e01efa7d233b442",
+  "child_count": 4,
   "corpus_version": "phase1-main",
   "document_id": "doc_4d54425dfa884153",
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/sala_amigas/sala_amiga_info.md",

@@ -151,6 +151,42 @@ class DocumentTypeNotPermitted(RagPlatformError):
     http_status = 422
 
 
+class SealedBundleConflict(RagPlatformError):
+    """Se intentó sellar contenido distinto sobre un ``chunk_bundle_id`` ya sellado.
+
+    Fail-closed e inmutabilidad (invariante §3): un artefacto sellado es
+    append-only/content-addressed. Re-sellar bytes idénticos es idempotente; sellar
+    bytes distintos bajo la misma identidad se rechaza y jamás sobreescribe.
+    """
+
+    code = "SEALED_BUNDLE_CONFLICT"
+    http_status = 409
+
+
+class CrossProjectReuseForbidden(RagPlatformError):
+    """Se intentó reutilizar un artefacto de otro proyecto (aunque los bytes coincidan).
+
+    El reuso automático solo ocurre dentro del mismo proyecto y por identidad
+    exacta (invariante §4). Ni siquiera ``operator_approved`` puede salvar una
+    incompatibilidad de proyecto (ni de dimensión o métrica en fases de embedding).
+    """
+
+    code = "CROSS_PROJECT_REUSE_FORBIDDEN"
+    http_status = 409
+
+
+class BuildStepNotFound(RagPlatformError):
+    """Se intentó cerrar un paso de build (``rag_build_steps``) que no existe.
+
+    Fail-closed: un ``complete_step`` sobre un ``step_id`` desconocido produce un
+    error de dominio controlado en vez de propagar un ``TypeError``/``KeyError``
+    crudo con detalle de implementación.
+    """
+
+    code = "BUILD_STEP_NOT_FOUND"
+    http_status = 404
+
+
 class NoClassificationPolicyConfigured(RagPlatformError):
     """El snapshot de configuración del proyecto no resuelve una política de clasificación.
 

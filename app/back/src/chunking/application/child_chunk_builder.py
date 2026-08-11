@@ -36,6 +36,15 @@ class SentenceUnit:
     token_count: int
 
 
+@dataclass(frozen=True)
+class ParentSegment:
+    """Contiguous subset of one parent text with stable relative offsets."""
+
+    blocks: tuple[StructuralBlock, ...]
+    relative_char_start: int
+    relative_char_end: int
+
+
 class ChildChunkBuilder:
     """Builds retrieval children with bounded semantic overlap."""
 
@@ -49,11 +58,64 @@ class ChildChunkBuilder:
         blocks: tuple[StructuralBlock, ...],
         profile: ChunkingProfile,
     ) -> tuple[ChildChunk, ...]:
+        if self._is_mixed_parent(blocks):
+            return self._build_mixed_children(parent=parent, profile=profile, blocks=blocks)
         if self._is_table_parent(blocks):
             return self._build_table_children(parent=parent, profile=profile, blocks=blocks)
         if self._is_atomic_parent(parent=parent, blocks=blocks, profile=profile):
             return (self._build_atomic_child(parent=parent, profile=profile, blocks=blocks),)
         return self._build_continuous_children(parent=parent, profile=profile)
+
+    def _build_mixed_children(
+        self,
+        *,
+        parent: ParentChunk,
+        profile: ChunkingProfile,
+        blocks: tuple[StructuralBlock, ...],
+    ) -> tuple[ChildChunk, ...]:
+        children: list[ChildChunk] = []
+        next_ordinal = 0
+        for segment_index, segment in enumerate(self._segment_parent_blocks(parent=parent, blocks=blocks)):
+            segment_text = parent.text[segment.relative_char_start : segment.relative_char_end].strip()
+            if not segment_text:
+                continue
+            segment_parent = ParentChunk.create(
+                document_id=parent.document_id,
+                profile_id=parent.profile_id,
+                ordinal=segment_index,
+                text=segment_text,
+                source_span=self._merge_source_spans(segment.blocks),
+                block_ids=tuple(block.block_id for block in segment.blocks),
+            )
+            segment_children = self.build(
+                parent=segment_parent,
+                blocks=segment.blocks,
+                profile=profile,
+            )
+            token_prefix = self._tokenizer.count_tokens(parent.text[: segment.relative_char_start])
+            for child in segment_children:
+                children.append(
+                    ChildChunk.create(
+                        document_id=child.document_id,
+                        profile_id=child.profile_id,
+                        parent_id=parent.chunk_id,
+                        ordinal=next_ordinal,
+                        text=child.text,
+                        source_span=child.source_span,
+                        token_start=token_prefix + child.token_start,
+                        token_end=token_prefix + child.token_end,
+                        token_count=child.token_count,
+                        overlap_previous_tokens=child.overlap_previous_tokens,
+                        overlap_next_tokens=child.overlap_next_tokens,
+                        overlap_previous_span=child.overlap_previous_span,
+                        overlap_next_span=child.overlap_next_span,
+                        context_prefix=child.context_prefix,
+                        zero_overlap_reasons=child.zero_overlap_reasons,
+                        warnings=child.warnings,
+                    )
+                )
+                next_ordinal += 1
+        return tuple(children)
 
     def _build_table_children(
         self,
@@ -366,6 +428,99 @@ class ChildChunkBuilder:
 
     def _is_table_parent(self, blocks: tuple[StructuralBlock, ...]) -> bool:
         return any(block.kind is StructuralBlockKind.TABLE for block in blocks)
+
+    def _is_mixed_parent(self, blocks: tuple[StructuralBlock, ...]) -> bool:
+        non_heading = [
+            block
+            for block in blocks
+            if block.kind is not StructuralBlockKind.HEADING
+        ]
+        has_tabular = any(
+            block.kind in {StructuralBlockKind.TABLE, StructuralBlockKind.FORM}
+            for block in non_heading
+        )
+        has_narrative = any(
+            block.kind not in {StructuralBlockKind.TABLE, StructuralBlockKind.FORM}
+            for block in non_heading
+        )
+        return has_tabular and has_narrative
+
+    def _segment_parent_blocks(
+        self,
+        *,
+        parent: ParentChunk,
+        blocks: tuple[StructuralBlock, ...],
+    ) -> tuple[ParentSegment, ...]:
+        segments: list[ParentSegment] = []
+        current_blocks: list[StructuralBlock] = []
+        current_start: int | None = None
+        current_end: int | None = None
+        cursor = 0
+        for index, block in enumerate(blocks):
+            block_start = cursor
+            block_end = block_start + len(block.text)
+            is_tabular = block.kind in {StructuralBlockKind.TABLE, StructuralBlockKind.FORM}
+            if is_tabular:
+                if current_blocks and current_start is not None and current_end is not None:
+                    segments.append(
+                        ParentSegment(
+                            blocks=tuple(current_blocks),
+                            relative_char_start=current_start,
+                            relative_char_end=current_end,
+                        )
+                    )
+                    current_blocks = []
+                    current_start = None
+                    current_end = None
+                segments.append(
+                    ParentSegment(
+                        blocks=(block,),
+                        relative_char_start=block_start,
+                        relative_char_end=block_end,
+                    )
+                )
+            else:
+                if current_start is None:
+                    current_start = block_start
+                current_blocks.append(block)
+                current_end = block_end
+            cursor = block_end
+            if index < len(blocks) - 1:
+                cursor += 2
+        if current_blocks and current_start is not None and current_end is not None:
+            segments.append(
+                ParentSegment(
+                    blocks=tuple(current_blocks),
+                    relative_char_start=current_start,
+                    relative_char_end=current_end,
+                )
+            )
+        return tuple(segments)
+
+    def _merge_source_spans(self, blocks: tuple[StructuralBlock, ...]) -> SourceSpan:
+        spans = tuple(block.source_span for block in blocks)
+        page_numbers = [
+            span.page_start
+            for span in spans
+            if span.page_start is not None and span.page_end is not None
+        ]
+        page_ends = [
+            span.page_end
+            for span in spans
+            if span.page_start is not None and span.page_end is not None
+        ]
+        if len(page_numbers) != len(spans):
+            page_start = None
+            page_end = None
+        else:
+            page_start = min(page_numbers)
+            page_end = max(page_ends)
+        return SourceSpan(
+            page_start=page_start,
+            page_end=page_end,
+            char_start=min(span.char_start for span in spans),
+            char_end=max(span.char_end for span in spans),
+        )
 
     def _full_text(self, *, context_prefix: str, text: str) -> str:
         if not context_prefix:

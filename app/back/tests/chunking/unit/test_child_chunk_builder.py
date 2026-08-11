@@ -145,6 +145,56 @@ def _table_parent() -> tuple:
     return parent, blocks
 
 
+def _mixed_table_parent() -> tuple:
+    article_76 = (
+        "**ARTÍCULO 76.** Las faltas cometidas por los trabajadores en el desempeño "
+        "de sus funciones laborales o en representación de la empresa se "
+        "clasificarán en faltas leves y faltas muy graves."
+    )
+    intro = " ".join(
+        [article_76, *[_sentence_with_token_target(40, index=index) for index in range(21, 29)]]
+    )
+    outro = " ".join(
+        [
+            "**ARTÍCULO 79.** Las sanciones para aplicar son las siguientes.",
+            *[_sentence_with_token_target(38, index=index) for index in range(29, 35)],
+        ]
+    )
+    table = "\n".join(
+        [
+            "<tr><th>TIPO</th><th>SANCIÓN</th></tr>",
+            "<tr><td>A</td><td>Llamado de atención escrito</td></tr>",
+            "<tr><td>B</td><td>Suspensión del trabajador hasta 3 días laborales.</td></tr>",
+            "<tr><td>C</td><td>Suspensión del trabajador hasta 8 días laborales.</td></tr>",
+            "</table>",
+        ]
+    )
+    blocks = (
+        _block(0, StructuralBlockKind.HEADING, "CAPÍTULO XVIII", heading_path=("CAPÍTULO XVIII",)),
+        _block(1, StructuralBlockKind.PARAGRAPH, intro, heading_path=("CAPÍTULO XVIII",), char_start=20),
+        _block(
+            2,
+            StructuralBlockKind.TABLE,
+            table,
+            heading_path=("CAPÍTULO XVIII",),
+            char_start=20 + len(intro) + 2,
+        ),
+        _block(
+            3,
+            StructuralBlockKind.PARAGRAPH,
+            outro,
+            heading_path=("CAPÍTULO XVIII",),
+            char_start=20 + len(intro) + len(table) + 4,
+        ),
+    )
+    parent = ParentChunkBuilder().build(
+        document_id="doc-child",
+        profile=_profile(),
+        blocks=blocks,
+    )[0]
+    return parent, blocks
+
+
 def _form_parent() -> tuple:
     form = "\n".join(
         [
@@ -342,6 +392,20 @@ def test_repite_header_de_tabla_como_contexto_no_como_overlap() -> None:
     assert len(children) > 1
     assert children[1].context_prefix.startswith("| Campo | Valor |")
     assert children[1].overlap_previous_tokens == 0
+
+
+def test_parent_mixto_con_tabla_no_descarta_texto_narrativo() -> None:
+    parent, blocks = _mixed_table_parent()
+
+    children = ChildChunkBuilder(tokenizer=_tokenizer()).build(
+        parent=parent,
+        blocks=blocks,
+        profile=_profile(),
+    )
+
+    assert len(children) > 1
+    assert any("faltas leves y faltas muy graves" in child.text for child in children)
+    assert any("Llamado de atención escrito" in child.text for child in children)
 
 
 def test_no_solapa_bloques_autocontenidos_de_formulario() -> None:

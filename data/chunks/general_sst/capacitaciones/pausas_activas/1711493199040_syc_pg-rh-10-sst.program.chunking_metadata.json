@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-7f7be3d10b0d3fe6bc87a702980b14ed6d457ff6221186e27b989be1d56551d2",
-  "child_count": 20,
+  "artifact_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-2eaa26f1177340ebdd1cc6bf0d0ab933e7b174ff2cd2fc190514b9480d1efe0f",
+  "child_count": 43,
   "corpus_version": "phase1-main",
   "document_id": "doc_f2cf7868a801af0e",
   "normalized_relpath": "general_sst/capacitaciones/pausas_activas/1711493199040_syc_pg-rh-10-sst.program.md",

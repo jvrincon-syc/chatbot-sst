@@ -4,7 +4,7 @@
   "normalized_relpath": "general_sst/manuales/organizacion/copasst/Funciones_Responsabilidades.md",
   "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
   "profile_id": "local-structural-v1",
-  "reused": true,
+  "reused": false,
   "run_id": "9eddbb048659d88054085a82b2a8601ce32b486fd871a56b5bc182da9dcf0edc",
   "status": "passed"
 }

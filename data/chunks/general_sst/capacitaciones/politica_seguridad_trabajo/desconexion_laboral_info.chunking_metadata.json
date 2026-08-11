@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-82f851956e85ad2e37548d7032839b2c9b6a1bde8d460209070471c241b97ab6",
-  "child_count": 1,
+  "artifact_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-f951b032580f8cf65b7e7add533d8d8c3b78a07ca0fa742f41fc1cf07f702ab4",
+  "child_count": 3,
   "corpus_version": "phase1-main",
   "document_id": "doc_18e1e8a89146e6fc",
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md",

@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-1dd90f4bcd615fa33cfde926dbee0f0cab51568a8087e57e909717790f0ffe8a",
-  "child_count": 90,
+  "artifact_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-1e365b9553c34d2acf561d50f01c7bf5ab59ac86fb34b5f3b3ea692d5df38ef5",
+  "child_count": 104,
   "corpus_version": "phase1-main",
   "document_id": "doc_31b00a8b31847796",
   "normalized_relpath": "general_sst/manuales/organizacion/reglamento_interno_trabajo/1780069704133_syc_REGLAMENTOACTUALIZADO29052026.md",

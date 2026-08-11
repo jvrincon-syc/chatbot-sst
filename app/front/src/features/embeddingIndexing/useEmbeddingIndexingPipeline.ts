@@ -438,7 +438,6 @@ export function useEmbeddingIndexingPipeline({
         persistState({
           selectedEmbeddingBundleId: lastBundleId,
           activeEmbeddingRunId: lastRunId,
-          activeStage: "indexing",
         });
       }
       setEmbeddingCorpusError(
@@ -523,6 +522,7 @@ export function useEmbeddingIndexingPipeline({
       activeStage: persistedState.activeStage,
       producedBundleId,
       indexingRunId,
+      embeddingCorpusBusy,
     })
       ? "indexing"
       : persistedState.activeStage;
@@ -532,7 +532,14 @@ export function useEmbeddingIndexingPipeline({
       activeEmbeddingRunId: embeddingRunId,
       activeStage: nextStage,
     });
-  }, [embeddingRunId, indexingRunId, persistState, persistedState.activeStage, producedBundleId]);
+  }, [
+    embeddingCorpusBusy,
+    embeddingRunId,
+    indexingRunId,
+    persistState,
+    persistedState.activeStage,
+    producedBundleId,
+  ]);
 
   const createIndexing = useCallback(async () => {
     if (!resolvedEmbeddingBundleId) return;

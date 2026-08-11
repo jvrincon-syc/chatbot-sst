@@ -31,6 +31,7 @@ from typing import Annotated, Any, Mapping, Sequence
 from pydantic import AfterValidator, Field
 
 from ingestion.schemas.common import StrictModel
+from rag_platform.domain.errors import CrossProjectReuseForbidden
 from rag_platform.domain.identity import IdentityKind, PlatformId, _require
 
 
@@ -53,6 +54,7 @@ ChunkingProfileId = Annotated[
     PlatformId, AfterValidator(_kind(IdentityKind.CHUNKING_PROFILE))
 ]
 RagVariantId = Annotated[PlatformId, AfterValidator(_kind(IdentityKind.RAG_VARIANT))]
+RagReleaseId = Annotated[PlatformId, AfterValidator(_kind(IdentityKind.RAG_RELEASE))]
 SourceDocumentId = Annotated[
     PlatformId, AfterValidator(_kind(IdentityKind.SOURCE_DOCUMENT))
 ]
@@ -482,3 +484,120 @@ def compute_corpus_manifest_hash(
         payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     )
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+# --------------------------------------------------------------------------- #
+# Fase 3: artefactos físicos sellados y ledger de build                       #
+# --------------------------------------------------------------------------- #
+
+
+class SealingStatus(str, Enum):
+    """Estado de sellado de un artefacto físico de plataforma.
+
+    ``STAGED`` es transitorio durante la escritura; ``SEALED`` es append-only e
+    inmutable (invariante §3). Una release solo referencia artefactos ``SEALED``.
+    """
+
+    STAGED = "staged"
+    SEALED = "sealed"
+
+
+class BuildStage(str, Enum):
+    """Etapa del pipeline que un run de build ejecuta o reutiliza."""
+
+    NORMALIZE = "normalize"
+    CHUNK = "chunk"
+    EMBED = "embed"
+    INDEX = "index"
+
+
+class BuildOutcome(str, Enum):
+    """Resultado de un paso de build en el ledger."""
+
+    BUILT = "built"
+    REUSED = "reused"
+    FAILED = "failed"
+
+
+class ReuseKind(str, Enum):
+    """Clasificación auditable de un reuso de artefacto (plan §Fase 3).
+
+    ``EXACT_IDENTITY`` es el único reuso automático de esta fase: mismo proyecto e
+    identidad exacta. ``REVALIDATED_COMPATIBILITY`` y ``OPERATOR_APPROVED`` cubren
+    excepciones manuales revalidadas; ninguna puede salvar una incompatibilidad de
+    proyecto (ni de dimensión/métrica en embedding, Fase 4).
+    """
+
+    EXACT_IDENTITY = "exact_identity"
+    REVALIDATED_COMPATIBILITY = "revalidated_compatibility"
+    OPERATOR_APPROVED = "operator_approved"
+
+
+class SealedChunkBundle(StrictModel):
+    """Artefacto de chunking sellado, content-addressed y propiedad del proyecto.
+
+    Su identidad física es ``project_id + normalized_document_id +
+    chunking_profile_fingerprint + bundle_schema_version`` (plan §4.4). Los archivos
+    viven bajo ``chunks/{chunk_bundle_id}/`` y no cambian tras el sellado; una
+    release los referencia por membresía, nunca por el puntero ``latest``.
+    """
+
+    chunk_bundle_id: str = Field(min_length=1)
+    project_id: ProjectId
+    normalized_document_id: str = Field(min_length=1)
+    chunking_profile_fingerprint: str = Field(pattern=r"^[0-9a-f]{64}$")
+    bundle_schema_version: str = Field(min_length=1)
+    bundle_dir_relpath: str = Field(min_length=1)
+    checksums: Mapping[str, str]
+    parent_count: int = Field(ge=0)
+    child_count: int = Field(ge=0)
+    sealing_status: SealingStatus = SealingStatus.SEALED
+
+
+class RagBuildStep(StrictModel):
+    """Un paso durable del ledger de build (``rag_build_steps``).
+
+    El run apunta a la release (``rag_release_id``); el artefacto físico no. Un paso
+    registra la etapa, su resultado y, si hubo reuso, su clasificación y el
+    artefacto origen, para auditar cada intento operacional (invariante §9).
+    """
+
+    step_id: str = Field(min_length=1)
+    rag_build_run_id: str = Field(min_length=1)
+    rag_release_id: RagReleaseId
+    project_id: ProjectId
+    stage: BuildStage
+    outcome: BuildOutcome | None = None
+    reuse_kind: ReuseKind | None = None
+    source_artifact_id: str | None = None
+    started_at: datetime
+    completed_at: datetime | None = None
+
+
+def ensure_reuse_within_project(
+    *,
+    requested_project_id: PlatformId,
+    source_project_id: PlatformId,
+    reuse_kind: ReuseKind,
+) -> None:
+    """Falla cerrado si un reuso cruza proyectos (plan §Fase 3, invariante §4).
+
+    El reuso —incluido ``OPERATOR_APPROVED``— nunca puede compartir un artefacto
+    entre proyectos aunque los bytes coincidan. La dimensión/métrica de embedding
+    se validan en Fase 4.
+
+    ponytail: el reuso automático de Fase 3 ya es seguro por construcción (toda
+    clave de identidad incluye ``project_id``), por lo que este guard aún no tiene
+    caller de producción. Es la defensa del **camino de reuso manual** (que decide
+    ``REVALIDATED_COMPATIBILITY``/``OPERATOR_APPROVED``) que llega en Fase 4: debe
+    cablearse ahí, no antes. Se mantiene definido y probado para fijar la invariante.
+
+    Raises:
+        CrossProjectReuseForbidden: Si los proyectos difieren.
+    """
+
+    if requested_project_id != source_project_id:
+        raise CrossProjectReuseForbidden(
+            f"{reuse_kind.value} reuse cannot cross projects: "
+            f"{requested_project_id.value} != {source_project_id.value}"
+        )

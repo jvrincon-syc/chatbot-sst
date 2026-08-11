@@ -1286,7 +1286,6 @@ def main() -> int:
     chunking_api = ChunkingApiBridge(
         docs_normalized=DOCS_NORMALIZED,
         chunks_root=CHUNKING_ROOT,
-        connection=pipeline_services.connection,
     )
     pipeline_services.indexing_reconciler.reconcile()
     pipeline_services.embedding_executor.reconcile()

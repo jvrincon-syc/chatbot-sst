@@ -1,4 +1,5 @@
 {
+  "artifact_relpath": "general_sst/manuales/aplicacion/aplicacion_info.chunking_metadata.json",
   "bundle_fingerprint": "chunk-bundle-c2c33b058aa9d5f9f8b6b303831ea1707a362a65a7e0984fc2d1aab5257de94f",
   "child_count": 2,
   "corpus_version": "phase1-main",

@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-a6e4eb8916fc0207c77c6f02f4caca9bdf4d532c525508c67f26d85d214dba1b",
-  "child_count": 2,
+  "artifact_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-e3fcaabc98572997ee571ae9bf1b273c88620e2d7a1130af0a7e0795f9867191",
+  "child_count": 3,
   "corpus_version": "phase1-main",
   "document_id": "doc_53b1d7b44cf260c0",
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",

@@ -7,10 +7,13 @@ variantes activas y la inmutabilidad de ``project_id``. No consumen red.
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import threading
+import uuid
 
 from rag_platform.application.context import PlatformAccessPolicy
 from rag_platform.domain.errors import (
+    BuildStepNotFound,
     ChunkingProfileNotFound,
     DuplicateVariantRecipe,
     PlatformAccessDenied,
@@ -19,19 +22,24 @@ from rag_platform.domain.errors import (
     ProjectNotFound,
     SourceDocumentRevisionNotFound,
 )
-from rag_platform.domain.identity import PlatformId
+from rag_platform.domain.identity import PlatformId, RagBuildContext
 from rag_platform.domain.models import (
+    BuildOutcome,
+    BuildStage,
     ChunkingProfile,
     CorpusSnapshot,
     DocumentProcessingProfile,
     NormalizedDocumentArtifact,
     ProjectIndexingTargetBinding,
+    RagBuildStep,
     RagProject,
     RagVariant,
     RagVariantState,
+    ReuseKind,
     SourceDocument,
     SourceDocumentRevision,
 )
+from embedding.domain.models import ChunkBundleRef
 
 
 class InMemoryProjectRepository:
@@ -259,6 +267,130 @@ class InMemoryCorpusSnapshotRepository:
         key = (snapshot.project_id.value, snapshot.manifest_hash)
         self._by_manifest.setdefault(key, snapshot)
         return self._by_manifest[key]
+
+
+class InMemoryChunkBundleReuseRepository:
+    """Chunk bundles sellados indexados por identidad física exacta (Fase 3).
+
+    La clave incluye ``project_id``: dos proyectos con bytes idénticos nunca
+    comparten entrada, de modo que el reuso entre proyectos es imposible por
+    construcción (fail-closed).
+    """
+
+    def __init__(self) -> None:
+        self._by_identity: dict[tuple[str, str, str, str], ChunkBundleRef] = {}
+
+    @staticmethod
+    def _key(
+        project_id: PlatformId,
+        normalized_document_id: str,
+        chunking_profile_fingerprint: str,
+        bundle_schema_version: str,
+    ) -> tuple[str, str, str, str]:
+        return (
+            project_id.value,
+            normalized_document_id,
+            chunking_profile_fingerprint,
+            bundle_schema_version,
+        )
+
+    def register_sealed(
+        self,
+        bundle: ChunkBundleRef,
+        *,
+        project_id: PlatformId,
+        normalized_document_id: str,
+        chunking_profile_fingerprint: str,
+        bundle_schema_version: str,
+    ) -> ChunkBundleRef:
+        """Registra un bundle sellado; idempotente por identidad física."""
+
+        key = self._key(
+            project_id,
+            normalized_document_id,
+            chunking_profile_fingerprint,
+            bundle_schema_version,
+        )
+        self._by_identity.setdefault(key, bundle)
+        return self._by_identity[key]
+
+    def find_sealed(
+        self,
+        *,
+        project_id: PlatformId,
+        normalized_document_id: str,
+        chunking_profile_fingerprint: str,
+        bundle_schema_version: str,
+    ) -> ChunkBundleRef | None:
+        return self._by_identity.get(
+            self._key(
+                project_id,
+                normalized_document_id,
+                chunking_profile_fingerprint,
+                bundle_schema_version,
+            )
+        )
+
+
+class InMemoryRagBuildRunRepository:
+    """Ledger de runs y pasos de build en memoria (Fase 3)."""
+
+    def __init__(self) -> None:
+        self._steps: dict[str, RagBuildStep] = {}
+        self._runs: dict[str, tuple[PlatformId, PlatformId]] = {}
+        self._lock = threading.Lock()
+
+    def start_step(
+        self, *, context: RagBuildContext, stage: BuildStage
+    ) -> RagBuildStep:
+        run_id = f"rbr_{context.rag_release_id.value}"
+        step_id = f"rbs_{uuid.uuid4().hex}"
+        with self._lock:
+            self._runs.setdefault(
+                run_id, (context.rag_release_id, context.project_id)
+            )
+            step = RagBuildStep(
+                step_id=step_id,
+                rag_build_run_id=run_id,
+                rag_release_id=context.rag_release_id,
+                project_id=context.project_id,
+                stage=stage,
+                started_at=datetime.now(timezone.utc),
+            )
+            self._steps[step_id] = step
+        return step
+
+    def complete_step(
+        self,
+        *,
+        step_id: str,
+        outcome: BuildOutcome,
+        reuse_kind: ReuseKind | None = None,
+        source_artifact_id: str | None = None,
+    ) -> RagBuildStep:
+        with self._lock:
+            current = self._steps.get(step_id)
+            if current is None:
+                raise BuildStepNotFound(step_id)
+            completed = current.model_copy(
+                update={
+                    "outcome": outcome,
+                    "reuse_kind": reuse_kind,
+                    "source_artifact_id": source_artifact_id,
+                    "completed_at": datetime.now(timezone.utc),
+                }
+            )
+            self._steps[step_id] = completed
+        return completed
+
+    def steps_for(self, rag_release_id: PlatformId) -> tuple[RagBuildStep, ...]:
+        """Devuelve los pasos registrados para una release (ayuda de test)."""
+
+        with self._lock:
+            steps = tuple(self._steps.values())
+        return tuple(
+            step for step in steps if step.rag_release_id == rag_release_id
+        )
 
 
 # Verificación estructural: el adaptador satisface el puerto.

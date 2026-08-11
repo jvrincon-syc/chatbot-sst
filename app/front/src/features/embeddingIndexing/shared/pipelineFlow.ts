@@ -26,10 +26,12 @@ export function shouldAdvanceToIndexing(options: {
   activeStage: PipelineStage;
   producedBundleId: string | null;
   indexingRunId: string | null;
+  embeddingCorpusBusy: boolean;
 }): boolean {
   return (
     options.activeStage === "embedding" &&
     options.producedBundleId !== null &&
-    options.indexingRunId === null
+    options.indexingRunId === null &&
+    !options.embeddingCorpusBusy
   );
 }

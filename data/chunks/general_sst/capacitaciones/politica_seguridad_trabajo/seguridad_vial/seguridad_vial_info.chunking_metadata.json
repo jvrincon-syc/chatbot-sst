@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-df9830a9bb4227d525a0ac837e81682aaba9e58dcc1c3179c6a8ae1a1812c2cc",
-  "child_count": 2,
+  "artifact_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-8bbb3a0eb73f0d7657dcd8f5275b0fa9c8bd2a052ad548580f20b96d63d3b88a",
+  "child_count": 3,
   "corpus_version": "phase1-main",
   "document_id": "doc_4c525cef1e737235",
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/seguridad_vial/seguridad_vial_info.md",

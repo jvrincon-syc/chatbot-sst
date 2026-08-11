@@ -45,6 +45,7 @@ test("auto-advances to indexing when embedding already produced a bundle", () =>
       activeStage: "embedding",
       producedBundleId: "embedding-bundle-1",
       indexingRunId: null,
+      embeddingCorpusBusy: false,
     }),
     true,
   );
@@ -53,6 +54,7 @@ test("auto-advances to indexing when embedding already produced a bundle", () =>
       activeStage: "indexing",
       producedBundleId: "embedding-bundle-1",
       indexingRunId: null,
+      embeddingCorpusBusy: false,
     }),
     false,
   );
@@ -61,6 +63,16 @@ test("auto-advances to indexing when embedding already produced a bundle", () =>
       activeStage: "embedding",
       producedBundleId: "embedding-bundle-1",
       indexingRunId: "indexing-run-1",
+      embeddingCorpusBusy: false,
+    }),
+    false,
+  );
+  assert.equal(
+    shouldAdvanceToIndexing({
+      activeStage: "embedding",
+      producedBundleId: "embedding-bundle-1",
+      indexingRunId: null,
+      embeddingCorpusBusy: true,
     }),
     false,
   );

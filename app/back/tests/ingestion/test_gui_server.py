@@ -482,3 +482,62 @@ def test_parse_multipart_form_reads_fields_and_uploaded_file() -> None:
     assert form["folder"] == "sst"
     assert form["file"].filename == "manual.pdf"
     assert form["file"].file.read() == b"%PDF-1.4"
+
+
+def test_gui_backend_builds_chunking_bridge_without_sharing_pipeline_connection(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured_chunking_kwargs: dict[str, object] = {}
+
+    class _FakeChunkingApi:
+        def close(self) -> None:
+            return None
+
+    class _FakeReconciler:
+        def reconcile(self) -> None:
+            return None
+
+    class _FakeExecutor:
+        def reconcile(self) -> None:
+            return None
+
+    class _FakePipelineServices:
+        def __init__(self) -> None:
+            self.connection = object()
+            self.indexing_reconciler = _FakeReconciler()
+            self.embedding_executor = _FakeExecutor()
+
+        def close(self) -> None:
+            return None
+
+    class _FakeServer:
+        def __init__(self, *_args, **_kwargs) -> None:
+            self.chunking_api = None
+            self.pipeline_api = None
+
+        def serve_forever(self) -> None:
+            return None
+
+        def server_close(self) -> None:
+            return None
+
+    def _fake_chunking_api_bridge(**kwargs):
+        captured_chunking_kwargs.update(kwargs)
+        return _FakeChunkingApi()
+
+    monkeypatch.setattr(gui_server, "configure_structured_logging", lambda **_kwargs: None)
+    monkeypatch.setattr(gui_server, "load_secrets_env", lambda _path: None)
+    monkeypatch.setattr(
+        gui_server,
+        "build_pipeline_services_from_env",
+        lambda **_kwargs: _FakePipelineServices(),
+    )
+    monkeypatch.setattr(gui_server, "ChunkingApiBridge", _fake_chunking_api_bridge)
+    monkeypatch.setattr(gui_server, "create_app", lambda **_kwargs: object())
+    monkeypatch.setattr(gui_server, "AsgiBridge", lambda _app: object())
+    monkeypatch.setattr(gui_server, "ThreadingHTTPServer", _FakeServer)
+
+    assert gui_server.main() == 0
+    assert captured_chunking_kwargs["docs_normalized"] == gui_server.DOCS_NORMALIZED
+    assert captured_chunking_kwargs["chunks_root"] == gui_server.CHUNKING_ROOT
+    assert "connection" not in captured_chunking_kwargs

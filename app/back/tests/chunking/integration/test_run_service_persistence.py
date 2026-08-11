@@ -12,6 +12,11 @@ from chunking.application.run_service import (
     ChunkingRunRequest,
     ChunkingRunService,
 )
+from chunking.domain.models import (
+    ChunkingProfile as ChunkingProfileModel,
+    NormalizedDocumentBundle,
+    PageTrace,
+)
 from chunking.infrastructure.filesystem_chunk_repository import (
     FilesystemChunkBundleRepository,
 )
@@ -249,3 +254,81 @@ def test_rehidrata_corrida_y_reconstruye_idempotencia(tmp_path: Path) -> None:
     assert completed["status"] == "completed"
     assert completed["completed_documents"] == 1
     reloaded_service.close()
+
+
+def _byte_identity_bundle() -> NormalizedDocumentBundle:
+    markdown = (
+        "<!-- page: 1 -->\n\n"
+        "Primer apartado con obligaciones SST.\n\n"
+        "<!-- page: 2 -->\n\n"
+        "Segundo apartado con responsabilidades y evidencias."
+    )
+    return NormalizedDocumentBundle(
+        document_id="doc_bytes",
+        source_hash="b" * 64,
+        corpus_version="phase1",
+        source_relpath="manual/bytes.pdf",
+        normalized_relpath="manual/bytes.md",
+        markdown=markdown,
+        page_traces=(
+            PageTrace(
+                page_number=1,
+                char_start=0,
+                char_end=54,
+                text_raw="Primer apartado con obligaciones SST.",
+                text_normalized="Primer apartado con obligaciones SST.",
+            ),
+            PageTrace(
+                page_number=2,
+                char_start=56,
+                char_end=len(markdown),
+                text_raw="Segundo apartado con responsabilidades y evidencias.",
+                text_normalized="Segundo apartado con responsabilidades y evidencias.",
+            ),
+        ),
+    )
+
+
+def _assert_jsonl_canonical(path: Path) -> None:
+    """El archivo JSONL debe estar en el formato histórico exacto (byte-idéntico)."""
+
+    text = path.read_text(encoding="utf-8")
+    rows = [json.loads(line) for line in text.splitlines() if line.strip()]
+    expected = (
+        "\n".join(json.dumps(row, ensure_ascii=True, sort_keys=True) for row in rows)
+        + "\n"
+    )
+    assert text == expected
+
+
+def _assert_json_canonical(path: Path) -> None:
+    """El archivo JSON debe estar en el formato histórico exacto (byte-idéntico)."""
+
+    text = path.read_text(encoding="utf-8")
+    payload = json.loads(text)
+    expected = (
+        json.dumps(payload, ensure_ascii=True, indent=2, sort_keys=True) + "\n"
+    )
+    assert text == expected
+
+
+def test_replace_legacy_serializa_byte_identico_cuando_helpers_extraidos(
+    tmp_path: Path,
+) -> None:
+    chunks_root = tmp_path / "chunks"
+    repository = FilesystemChunkBundleRepository(output_root=chunks_root)
+    orchestrator = ChunkingOrchestrator(
+        engine=LocalChunkingEngine(),
+        bundle_repository=repository,
+        run_repository=FilesystemRunRepository(output_root=chunks_root),
+    )
+    document = _byte_identity_bundle()
+
+    orchestrator.process_document(
+        document=document,
+        profile=ChunkingProfileModel.local_structural_v1(),
+    )
+
+    _assert_jsonl_canonical(repository.parent_chunks_path(document=document))
+    _assert_jsonl_canonical(repository.child_chunks_path(document=document))
+    _assert_json_canonical(repository.metadata_path(document=document))

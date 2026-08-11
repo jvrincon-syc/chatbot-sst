@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-492b31a58f38c22f8089ea1a86d5e8762fca6722efabbc540eb6e4127144ca5d",
-  "child_count": 1,
+  "artifact_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-ae9d35106e6dd4cdd155ed6ad993bb128c8991ecb78f4aeafd5f7b76ca73d624",
+  "child_count": 3,
   "corpus_version": "phase1-main",
   "document_id": "doc_d5f04608cf512575",
   "normalized_relpath": "convivencia_laboral/reglamento_comite/vigencias_modificaciones_comite.md",

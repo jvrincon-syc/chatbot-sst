@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 import json
-import os
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +10,7 @@ from chunking.application.ports import (
     StoredChunkBundleMetadata,
 )
 from chunking.domain.models import ChunkBundle, NormalizedDocumentBundle
+from core import atomic_fs
 
 
 @dataclass(frozen=True)
@@ -162,14 +162,10 @@ class FilesystemChunkBundleRepository(ChunkBundleRepositoryPort):
         return base.parent / f"{base.name}.{suffix}.{extension}"
 
     def _write_jsonl(self, path: Path, rows: list[dict[str, Any]]) -> None:
-        payload = "\n".join(json.dumps(row, ensure_ascii=True, sort_keys=True) for row in rows)
-        path.write_text(payload + "\n", encoding="utf-8")
+        atomic_fs.write_jsonl(path, rows)
 
     def _write_json(self, path: Path, payload: dict[str, Any]) -> None:
-        path.write_text(
-            json.dumps(payload, ensure_ascii=True, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
+        atomic_fs.write_json(path, payload)
 
     def _read_jsonl(self, path: Path) -> list[dict[str, Any]]:
         if not path.exists():
@@ -190,8 +186,14 @@ class FilesystemChunkBundleRepository(ChunkBundleRepositoryPort):
         child_path: Path,
         metadata_path: Path,
     ) -> None:
-        if metadata_path.exists():
-            metadata_path.unlink()
-        os.replace(parent_stage, parent_path)
-        os.replace(child_stage, child_path)
-        os.replace(metadata_stage, metadata_path)
+        # El metadata es el marker de commit que ``read_metadata`` verifica: se
+        # promueve en último lugar para que un fallo parcial nunca deje metadata
+        # apuntando a chunks incompletos.
+        atomic_fs.promote_atomically(
+            [
+                (parent_stage, parent_path),
+                (child_stage, child_path),
+                (metadata_stage, metadata_path),
+            ],
+            marker=metadata_path,
+        )
