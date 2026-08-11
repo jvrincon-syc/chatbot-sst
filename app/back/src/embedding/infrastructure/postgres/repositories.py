@@ -66,6 +66,7 @@ _TARGET_COLUMNS = (
 
 _CHUNK_BUNDLE_COLUMNS = (
     "chunk_bundle_id",
+    "project_id",
     "bundle_fingerprint",
     "profile_id",
     "profile_fingerprint",

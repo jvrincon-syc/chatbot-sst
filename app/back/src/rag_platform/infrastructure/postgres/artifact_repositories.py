@@ -21,7 +21,10 @@ from datetime import datetime, timezone
 import uuid
 
 from embedding.domain.models import ChunkBundleRef
-from rag_platform.domain.errors import BuildStepNotFound
+from rag_platform.domain.errors import (
+    BuildStepNotFound,
+    CrossProjectLegacyFingerprintCollision,
+)
 from rag_platform.domain.identity import IdentityKind, PlatformId, RagBuildContext
 from rag_platform.domain.models import (
     BuildOutcome,
@@ -34,6 +37,20 @@ from rag_platform.domain.models import (
 
 def _pid(kind: IdentityKind, value: str) -> PlatformId:
     return PlatformId(kind=kind, value=value)
+
+
+def _is_unique_violation(error: Exception) -> bool:
+    """Best-effort detection of a PostgreSQL unique-violation (SQLSTATE 23505).
+
+    Mirrors ``project_repositories._is_unique_violation``: reads
+    ``sqlstate``/``pgcode`` and falls back to the class name, staying driver-agnostic
+    without importing the SDK here.
+    """
+
+    sqlstate = getattr(error, "sqlstate", None) or getattr(error, "pgcode", None)
+    if sqlstate == "23505":
+        return True
+    return type(error).__name__ == "UniqueViolation"
 
 
 class PostgresSealedChunkBundleRepository:
@@ -71,39 +88,52 @@ class PostgresSealedChunkBundleRepository:
         límite; la paridad fake↔Postgres para ese caso no debe darse por supuesta.
         """
 
-        with self._connection.cursor() as cursor:
-            cursor.execute(
-                """
-                INSERT INTO chunk_bundles (
-                    chunk_bundle_id, bundle_fingerprint, profile_id,
-                    profile_fingerprint, corpus_version, source_document_id,
-                    artifact_relpath, parent_count, child_count, status,
-                    project_id, normalized_document_id,
-                    chunking_profile_fingerprint, bundle_schema_version,
-                    sealing_status
+        try:
+            with self._connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO chunk_bundles (
+                        chunk_bundle_id, bundle_fingerprint, profile_id,
+                        profile_fingerprint, corpus_version, source_document_id,
+                        artifact_relpath, parent_count, child_count, status,
+                        project_id, normalized_document_id,
+                        chunking_profile_fingerprint, bundle_schema_version,
+                        sealing_status
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s)
+                    ON CONFLICT (chunk_bundle_id) DO NOTHING
+                    """,
+                    (
+                        bundle.chunk_bundle_id,
+                        bundle.bundle_fingerprint,
+                        bundle.profile_id,
+                        bundle.profile_fingerprint,
+                        bundle.corpus_version,
+                        bundle.source_document_id,
+                        bundle.artifact_relpath,
+                        bundle.parent_count,
+                        bundle.child_count,
+                        bundle.status,
+                        project_id.value,
+                        normalized_document_id,
+                        chunking_profile_fingerprint,
+                        bundle_schema_version,
+                        SealingStatus.SEALED.value,
+                    ),
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                        %s, %s, %s, %s, %s)
-                ON CONFLICT (chunk_bundle_id) DO NOTHING
-                """,
-                (
-                    bundle.chunk_bundle_id,
-                    bundle.bundle_fingerprint,
-                    bundle.profile_id,
-                    bundle.profile_fingerprint,
-                    bundle.corpus_version,
-                    bundle.source_document_id,
-                    bundle.artifact_relpath,
-                    bundle.parent_count,
-                    bundle.child_count,
-                    bundle.status,
-                    project_id.value,
-                    normalized_document_id,
-                    chunking_profile_fingerprint,
-                    bundle_schema_version,
-                    SealingStatus.SEALED.value,
-                ),
-            )
+        except Exception as error:  # noqa: BLE001 — borde de integración; se re-lanza
+            # Fail-closed (ADR-007 §9): la unicidad global legacy sobre
+            # ``bundle_fingerprint`` sigue vigente en Fase 4. Dos proyectos con bytes
+            # idénticos colisionan; se traduce a un error de dominio y NUNCA se reutiliza,
+            # renombra ni borra el artefacto del otro proyecto. Otras violaciones se
+            # re-lanzan intactas preservando la causa.
+            if _is_unique_violation(error):
+                raise CrossProjectLegacyFingerprintCollision(
+                    "bundle_fingerprint collides with another project's sealed bundle: "
+                    f"{bundle.bundle_fingerprint}"
+                ) from error
+            raise
         return bundle
 
     def find_sealed(

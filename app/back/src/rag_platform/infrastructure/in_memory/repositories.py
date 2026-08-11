@@ -16,6 +16,7 @@ from rag_platform.domain.errors import (
     BuildStepNotFound,
     ChunkingProfileNotFound,
     DuplicateVariantRecipe,
+    MaterializationSealed,
     PlatformAccessDenied,
     ProcessingProfileNotFound,
     ProjectAlreadyExists,
@@ -29,6 +30,8 @@ from rag_platform.domain.models import (
     ChunkingProfile,
     CorpusSnapshot,
     DocumentProcessingProfile,
+    IndexingMaterialization,
+    MaterializationStatus,
     NormalizedDocumentArtifact,
     ProjectIndexingTargetBinding,
     RagBuildStep,
@@ -36,6 +39,7 @@ from rag_platform.domain.models import (
     RagVariant,
     RagVariantState,
     ReuseKind,
+    SealedEmbeddingBundle,
     SourceDocument,
     SourceDocumentRevision,
 )
@@ -391,6 +395,194 @@ class InMemoryRagBuildRunRepository:
         return tuple(
             step for step in steps if step.rag_release_id == rag_release_id
         )
+
+
+class InMemorySealedEmbeddingBundleRepository:
+    """Embedding bundles sellados indexados por identidad física exacta (Fase 4).
+
+    La clave incluye ``project_id``: dos proyectos con bytes idénticos nunca comparten
+    entrada, de modo que el reuso entre proyectos es imposible por construcción.
+    """
+
+    def __init__(self) -> None:
+        self._by_identity: dict[tuple[str, str, str, str], SealedEmbeddingBundle] = {}
+
+    @staticmethod
+    def _key(
+        project_id: PlatformId,
+        source_chunk_bundle_id: str,
+        embedding_profile_id: str,
+        configuration_fingerprint: str,
+    ) -> tuple[str, str, str, str]:
+        return (
+            project_id.value,
+            source_chunk_bundle_id,
+            embedding_profile_id,
+            configuration_fingerprint,
+        )
+
+    def register_sealed(
+        self,
+        bundle: SealedEmbeddingBundle,
+        *,
+        embedding_profile_id: str,
+        configuration_fingerprint: str,
+    ) -> SealedEmbeddingBundle:
+        """Registra un bundle sellado; idempotente por identidad física."""
+
+        key = self._key(
+            bundle.project_id,
+            bundle.source_chunk_bundle_id,
+            embedding_profile_id,
+            configuration_fingerprint,
+        )
+        self._by_identity.setdefault(key, bundle)
+        return self._by_identity[key]
+
+    def find_sealed(
+        self,
+        *,
+        project_id: PlatformId,
+        source_chunk_bundle_id: str,
+        embedding_profile_id: str,
+        configuration_fingerprint: str,
+    ) -> SealedEmbeddingBundle | None:
+        return self._by_identity.get(
+            self._key(
+                project_id,
+                source_chunk_bundle_id,
+                embedding_profile_id,
+                configuration_fingerprint,
+            )
+        )
+
+
+class InMemoryIndexingMaterializationRepository:
+    """Lifecycle inmutable ``WRITING → SEALED | FAILED`` en memoria (Fase 4).
+
+    Reproduce el contrato observable del adaptador Postgres: ``begin_writing`` se
+    niega a reabrir una fila ``SEALED``; ``seal``/``mark_failed`` solo actúan sobre
+    ``WRITING``; ``find_sealed`` solo devuelve filas selladas.
+    """
+
+    def __init__(self) -> None:
+        self._by_id: dict[str, IndexingMaterialization] = {}
+        self._by_identity: dict[tuple[str, str, str, str], str] = {}
+        self._lock = threading.Lock()
+
+    @staticmethod
+    def _identity(
+        materialization: IndexingMaterialization,
+    ) -> tuple[str, str, str, str]:
+        return (
+            materialization.project_id.value,
+            materialization.embedding_bundle_id,
+            materialization.indexing_target_id,
+            materialization.storage_schema_version,
+        )
+
+    def find_sealed(
+        self,
+        *,
+        project_id: PlatformId,
+        embedding_bundle_id: str,
+        indexing_target_id: str,
+        storage_schema_version: str,
+    ) -> IndexingMaterialization | None:
+        key = (
+            project_id.value,
+            embedding_bundle_id,
+            indexing_target_id,
+            storage_schema_version,
+        )
+        with self._lock:
+            materialization_id = self._by_identity.get(key)
+            if materialization_id is None:
+                return None
+            current = self._by_id[materialization_id]
+        return current if current.status is MaterializationStatus.SEALED else None
+
+    def begin_writing(
+        self,
+        *,
+        project_id: PlatformId,
+        embedding_bundle_id: str,
+        indexing_target_id: str,
+        storage_schema_version: str,
+    ) -> IndexingMaterialization:
+        key = (
+            project_id.value,
+            embedding_bundle_id,
+            indexing_target_id,
+            storage_schema_version,
+        )
+        with self._lock:
+            existing_id = self._by_identity.get(key)
+            if existing_id is not None:
+                existing = self._by_id[existing_id]
+                if existing.status is MaterializationStatus.SEALED:
+                    raise MaterializationSealed(
+                        "materialization is already sealed and cannot be reopened"
+                    )
+            materialization = IndexingMaterialization(
+                materialization_id=f"mat_{uuid.uuid4().hex}",
+                project_id=project_id,
+                embedding_bundle_id=embedding_bundle_id,
+                indexing_target_id=indexing_target_id,
+                storage_schema_version=storage_schema_version,
+                status=MaterializationStatus.WRITING,
+                started_at=datetime.now(timezone.utc),
+            )
+            self._by_id[materialization.materialization_id] = materialization
+            self._by_identity[key] = materialization.materialization_id
+        return materialization
+
+    def seal(
+        self,
+        *,
+        materialization_id: str,
+        canonical_checksum: str,
+        parent_node_count: int,
+        child_node_count: int,
+        vector_count: int,
+    ) -> IndexingMaterialization:
+        with self._lock:
+            current = self._require_writing(materialization_id)
+            sealed = current.model_copy(
+                update={
+                    "status": MaterializationStatus.SEALED,
+                    "canonical_checksum": canonical_checksum,
+                    "parent_node_count": parent_node_count,
+                    "child_node_count": child_node_count,
+                    "vector_count": vector_count,
+                    "sealed_at": datetime.now(timezone.utc),
+                }
+            )
+            self._by_id[materialization_id] = sealed
+        return sealed
+
+    def mark_failed(
+        self, *, materialization_id: str, failure_code: str
+    ) -> IndexingMaterialization:
+        with self._lock:
+            current = self._require_writing(materialization_id)
+            failed = current.model_copy(
+                update={
+                    "status": MaterializationStatus.FAILED,
+                    "failed_at": datetime.now(timezone.utc),
+                    "failure_code": failure_code,
+                }
+            )
+            self._by_id[materialization_id] = failed
+        return failed
+
+    def _require_writing(self, materialization_id: str) -> IndexingMaterialization:
+        current = self._by_id.get(materialization_id)
+        if current is None or current.status is not MaterializationStatus.WRITING:
+            raise MaterializationSealed(
+                f"materialization {materialization_id!r} is not in WRITING state"
+            )
+        return current
 
 
 # Verificación estructural: el adaptador satisface el puerto.

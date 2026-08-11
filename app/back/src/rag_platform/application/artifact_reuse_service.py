@@ -24,13 +24,16 @@ from typing import Protocol, runtime_checkable
 
 from embedding.domain.models import ChunkBundleRef
 from rag_platform.application.context import NormalizedArtifactRepository
+from rag_platform.domain.errors import MaterializationValidationFailed
 from rag_platform.domain.identity import PlatformId, RagBuildContext
 from rag_platform.domain.models import (
     BuildOutcome,
     BuildStage,
     NormalizedDocumentArtifact,
+    PhysicalDistanceMetric,
     RagBuildStep,
     ReuseKind,
+    SealedEmbeddingBundle,
 )
 
 
@@ -50,6 +53,25 @@ class ChunkBundleReuseRepository(Protocol):
 
         La identidad incluye ``project_id``: un bundle de otro proyecto nunca
         coincide, aunque su contenido sea idéntico.
+        """
+
+
+@runtime_checkable
+class SealedEmbeddingBundleReuseRepository(Protocol):
+    """Consulta de embedding bundles sellados por identidad física exacta (§4)."""
+
+    def find_sealed(
+        self,
+        *,
+        project_id: PlatformId,
+        source_chunk_bundle_id: str,
+        embedding_profile_id: str,
+        configuration_fingerprint: str,
+    ) -> SealedEmbeddingBundle | None:
+        """Devuelve el embedding bundle sellado con esa identidad exacta, o ``None``.
+
+        La identidad incluye ``project_id``: un bundle de otro proyecto nunca
+        coincide, aunque su contenido sea idéntico (fail-closed).
         """
 
 
@@ -90,9 +112,11 @@ class ArtifactReusePolicy:
         *,
         normalized_repository: NormalizedArtifactRepository,
         chunk_bundle_repository: ChunkBundleReuseRepository,
+        embedding_bundle_repository: SealedEmbeddingBundleReuseRepository | None = None,
     ) -> None:
         self._normalized = normalized_repository
         self._chunk_bundles = chunk_bundle_repository
+        self._embedding_bundles = embedding_bundle_repository
 
     def find_reusable_normalized(
         self,
@@ -126,6 +150,42 @@ class ArtifactReusePolicy:
             bundle_schema_version=bundle_schema_version,
         )
 
-    # ponytail: reuso de embedding llega en Fase 4 (cambia identidad de embedding;
-    # añade validación de dimensión/métrica). No se implementa aquí a propósito
-    # para no dejar un NotImplemented silencioso ni un puerto sin adaptador real.
+    def find_reusable_embedding_bundle(
+        self,
+        *,
+        project_id: PlatformId,
+        source_chunk_bundle_id: str,
+        embedding_profile_id: str,
+        configuration_fingerprint: str,
+        expected_dimension: int,
+        expected_metric: PhysicalDistanceMetric,
+    ) -> SealedEmbeddingBundle | None:
+        """Devuelve el embedding bundle sellado reutilizable, o ``None`` (Fase 4).
+
+        Cierra la deuda de Fase 3-b: además de la identidad física exacta (que ya
+        incluye ``project_id``), revalida dimensión y métrica. Un bundle que coincide
+        en identidad pero difiere en dimensión/métrica **no** es reutilizable y falla
+        cerrado; ni siquiera un reuso manual puede salvar esa incompatibilidad.
+
+        Raises:
+            MaterializationValidationFailed: Si el bundle sellado coincide en identidad
+                pero su dimensión o métrica no son las esperadas.
+        """
+
+        if self._embedding_bundles is None:
+            return None
+        bundle = self._embedding_bundles.find_sealed(
+            project_id=project_id,
+            source_chunk_bundle_id=source_chunk_bundle_id,
+            embedding_profile_id=embedding_profile_id,
+            configuration_fingerprint=configuration_fingerprint,
+        )
+        if bundle is None:
+            return None
+        if bundle.dimension != expected_dimension or bundle.distance_metric != expected_metric:
+            raise MaterializationValidationFailed(
+                "sealed embedding bundle is not reusable: dimension/metric mismatch "
+                f"({bundle.dimension}/{bundle.distance_metric!r} != "
+                f"{expected_dimension}/{expected_metric!r})"
+            )
+        return bundle

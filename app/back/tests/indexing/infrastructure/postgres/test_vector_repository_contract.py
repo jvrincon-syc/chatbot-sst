@@ -88,13 +88,16 @@ def test_postgres_vector_repository_inserts_bundle_vectors_inactive() -> None:
                 corpus_version="phase1",
                 configuration_fingerprint="a" * 64,
                 vector_checksum="sha256:vector",
+                project_id="proj_alpha",
             )
         ],
     )
 
     assert "INSERT INTO idx_vec_llama_bge_m3_v1" in connection.cursor_obj.statements[0]
+    assert "project_id" in connection.cursor_obj.statements[0]
     assert "is_active" in connection.cursor_obj.statements[0]
-    assert connection.cursor_obj.params[0][8] is False
+    assert connection.cursor_obj.params[0][1] == "proj_alpha"
+    assert connection.cursor_obj.params[0][9] is False
 
 
 def test_postgres_vector_repository_replaces_legacy_vectors_with_partial_conflict_target() -> None:

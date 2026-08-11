@@ -130,12 +130,33 @@ class InMemoryIndexingNodeWriter:
         document_id: str,
         nodes: Sequence[IndexingNodeRecord],
     ) -> int:
-        """Replace the durable nodes of one document."""
+        """Replace the durable nodes of one document (legacy scope)."""
 
         stale = [
             node_id
             for node_id, node in self.nodes.items()
             if node.document_id == document_id
+        ]
+        for node_id in stale:
+            del self.nodes[node_id]
+        for node in nodes:
+            self.nodes[node.node_id] = node
+        return len(stale)
+
+    def replace_scoped_nodes(
+        self,
+        *,
+        project_id: str,
+        source_chunk_bundle_id: str,
+        nodes: Sequence[IndexingNodeRecord],
+    ) -> int:
+        """Replace the platform nodes of one bundle within one project."""
+
+        stale = [
+            node_id
+            for node_id, node in self.nodes.items()
+            if node.project_id == project_id
+            and node.source_chunk_bundle_id == source_chunk_bundle_id
         ]
         for node_id in stale:
             del self.nodes[node_id]

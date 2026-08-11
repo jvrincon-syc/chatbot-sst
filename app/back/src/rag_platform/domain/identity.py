@@ -22,7 +22,48 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+import hashlib
 import re
+
+
+#: Unit separator that fences each namespaced field so distinct tuples can never
+#: alias by concatenation (same convention as ``ingestion.paths``).
+_FIELD_SEP = "\x1f"
+#: Prefix of every physical (project-namespaced) indexing node id.
+_PHYSICAL_NODE_PREFIX = "pnode_"
+#: Hex length kept from the digest; matches ``platform_document_id`` (128 bits).
+_PHYSICAL_NODE_HEX_LEN = 32
+
+
+def physical_node_id(
+    *, project_id: str, source_chunk_bundle_id: str, source_chunk_id: str
+) -> str:
+    """Return the project-namespaced physical id of one indexing node.
+
+    Mirrors :func:`ingestion.paths.platform_document_id`: the identity is the
+    sha256 of a canonical, field-fenced representation that includes the owning
+    project, so two projects that share a ``source_chunk_id`` (evidence) never
+    collide on ``node_id`` (ADR-007 §2). The source chunk id is preserved
+    separately as weak evidence; it is not the physical identity.
+
+    Args:
+        project_id: Owning project id value (``proj_...``); namespaces the node.
+        source_chunk_bundle_id: Chunk bundle the node is adapted from.
+        source_chunk_id: Source chunk id (parent or child) that seeds the node.
+
+    Returns:
+        A deterministic ``pnode_`` id, stable across runs and processes.
+
+    Raises:
+        ValueError: If any component is empty (fail-closed; an empty component
+            would let two different tuples hash to the same fenced payload).
+    """
+
+    if not project_id or not source_chunk_bundle_id or not source_chunk_id:
+        raise ValueError("physical_node_id requires non-empty components")
+    payload = _FIELD_SEP.join((project_id, source_chunk_bundle_id, source_chunk_id))
+    digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return _PHYSICAL_NODE_PREFIX + digest[:_PHYSICAL_NODE_HEX_LEN]
 
 
 class IdentityKind(str, Enum):

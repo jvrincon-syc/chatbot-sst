@@ -35,7 +35,12 @@ from embedding.domain.errors import (
     EmbeddingDomainError,
     EmbeddingProfileCompatibilityNotProven,
 )
-from embedding.domain.models import EmbeddingBundle, EmbeddingProfile, ReadinessCheck
+from embedding.domain.models import (
+    EmbeddingBundle,
+    EmbeddingBundleChunk,
+    EmbeddingProfile,
+    ReadinessCheck,
+)
 from embedding.infrastructure.filesystem.artifact_store import (
     FilesystemEmbeddingBundleArtifactStore,
 )
@@ -66,6 +71,7 @@ from indexing.domain.errors import (
     IndexingTargetIncompatible,
 )
 from indexing.infrastructure.postgres.vector_repository import AppendOnlyVectorRecord
+from rag_platform.domain.identity import physical_node_id
 
 
 logger = logging.getLogger(__name__)
@@ -107,24 +113,46 @@ def build_nodes(
     chunking_bundle_fingerprint: str,
     chunking_version: str,
     ingestion_origin: str,
+    project_id: str | None = None,
 ) -> list[IndexingNodeRecord]:
     """Adapt a persisted chunk bundle into durable node records.
 
-    The chunk ids become the node ids verbatim, so the child chunk map of the
-    embedding bundle aligns with ``indexing_nodes`` without any re-chunking.
+    Namespacing is **gated** (ADR-007 §2, C-9):
+
+    - ``project_id is None`` (legacy): the chunk ids become the node ids verbatim
+      (``node_id == source_chunk_id``), so the output is byte-for-byte identical to
+      the pre-Fase-4 behaviour and the child chunk map still aligns without
+      re-chunking. The physical-identity fields stay ``None``.
+    - ``project_id`` present (platform): ``node_id`` is the namespaced
+      :func:`physical_node_id` and, for children, ``parent_node_id`` is the physical
+      id of the parent chunk (``physical_node_id(..., source_parent_chunk_id)``), so
+      parent→child expansion uses the physical parent, never the source chunk id.
+      Two projects that share a ``source_chunk_id`` get distinct ``node_id``.
     """
+
+    def _node_id(source_chunk_id: str) -> str:
+        if project_id is None:
+            return source_chunk_id
+        return physical_node_id(
+            project_id=project_id,
+            source_chunk_bundle_id=chunk_bundle_id,
+            source_chunk_id=source_chunk_id,
+        )
 
     nodes: list[IndexingNodeRecord] = []
     for parent in content.parents:
         nodes.append(
             IndexingNodeRecord(
-                node_id=parent.chunk_id,
+                node_id=_node_id(parent.chunk_id),
+                project_id=project_id,
                 document_id=content.document_id,
                 source_relpath=content.source_relpath,
                 source_hash=content.source_hash,
                 ingestion_origin=ingestion_origin,
                 node_role="parent",
                 parent_node_id=None,
+                source_chunk_id=parent.chunk_id if project_id is not None else None,
+                source_parent_chunk_id=None,
                 chunk_index=parent.ordinal,
                 page_start=parent.source_span.page_start,
                 page_end=parent.source_span.page_end,
@@ -149,13 +177,18 @@ def build_nodes(
     for child in content.children:
         nodes.append(
             IndexingNodeRecord(
-                node_id=child.chunk_id,
+                node_id=_node_id(child.chunk_id),
+                project_id=project_id,
                 document_id=content.document_id,
                 source_relpath=content.source_relpath,
                 source_hash=content.source_hash,
                 ingestion_origin=ingestion_origin,
                 node_role="child",
-                parent_node_id=child.parent_id,
+                parent_node_id=_node_id(child.parent_id),
+                source_chunk_id=child.chunk_id if project_id is not None else None,
+                source_parent_chunk_id=(
+                    child.parent_id if project_id is not None else None
+                ),
                 chunk_index=child.ordinal,
                 page_start=child.source_span.page_start,
                 page_end=child.source_span.page_end,
@@ -180,6 +213,59 @@ def build_nodes(
             )
         )
     return nodes
+
+
+def _build_vector_record(
+    *,
+    chunk: EmbeddingBundleChunk,
+    bundle: EmbeddingBundle,
+    profile: EmbeddingProfile,
+    chunk_bundle_id: str,
+    project_id: str | None,
+    child_nodes_by_source_chunk_id: dict[str, IndexingNodeRecord],
+    vector: list[float],
+) -> AppendOnlyVectorRecord:
+    """Align one vector row with the durable child-node identity.
+
+    Legacy keeps ``node_id == child_chunk_id`` and the original metadata payload.
+    Platform rows carry the namespaced physical ``node_id`` plus ``project_id`` and
+    preserve the source chunk ids explicitly for traceability.
+    """
+
+    child_node = child_nodes_by_source_chunk_id.get(chunk.child_chunk_id)
+    if child_node is None:
+        raise EmbeddingBundleInvalid(
+            "chunk map is not aligned with the built child nodes"
+        )
+
+    metadata = {
+        "document_id": chunk.document_id,
+        "parent_node_id": (
+            child_node.parent_node_id
+            if project_id is not None
+            else chunk.parent_chunk_id
+        ),
+        "child_chunk_id": chunk.child_chunk_id,
+        "chunk_ordinal": chunk.chunk_ordinal,
+        "embedding_bundle_id": bundle.embedding_bundle_id,
+        "embedding_profile_id": profile.profile_id,
+        "corpus_version": bundle.corpus_version,
+        "source_chunk_bundle_id": chunk_bundle_id,
+    }
+    if project_id is not None:
+        metadata["source_parent_chunk_id"] = chunk.parent_chunk_id
+
+    return AppendOnlyVectorRecord(
+        node_id=child_node.node_id,
+        document_id=chunk.document_id,
+        embedding=vector,
+        metadata=metadata,
+        embedding_bundle_id=bundle.embedding_bundle_id,
+        corpus_version=bundle.corpus_version,
+        configuration_fingerprint=bundle.configuration_fingerprint,
+        vector_checksum=str(chunk.vector_checksum or ""),
+        project_id=project_id,
+    )
 
 
 class IndexEmbeddingBundleUseCase:
@@ -288,32 +374,29 @@ class IndexEmbeddingBundleUseCase:
         if {chunk.child_chunk_id for chunk in chunk_map} != child_ids:
             raise EmbeddingBundleStale("chunk map is not aligned with the source child chunks")
 
+        project_id = chunk_bundle.project_id
         nodes = build_nodes(
             content=content,
             chunk_bundle_id=chunk_bundle.chunk_bundle_id,
             chunking_bundle_fingerprint=chunk_bundle.bundle_fingerprint,
             chunking_version=chunk_bundle.profile_id,
             ingestion_origin=profile.ingestion_origin,
+            project_id=project_id,
         )
+        child_nodes_by_source_chunk_id = {
+            (node.source_chunk_id or node.node_id): node
+            for node in nodes
+            if node.node_role == "child"
+        }
         records = [
-            AppendOnlyVectorRecord(
-                node_id=chunk.child_chunk_id,
-                document_id=chunk.document_id,
-                embedding=list(vectors[chunk.vector_offset]),
-                metadata={
-                    "document_id": chunk.document_id,
-                    "parent_node_id": chunk.parent_chunk_id,
-                    "child_chunk_id": chunk.child_chunk_id,
-                    "chunk_ordinal": chunk.chunk_ordinal,
-                    "embedding_bundle_id": bundle.embedding_bundle_id,
-                    "embedding_profile_id": profile.profile_id,
-                    "corpus_version": bundle.corpus_version,
-                    "source_chunk_bundle_id": chunk_bundle.chunk_bundle_id,
-                },
-                embedding_bundle_id=bundle.embedding_bundle_id,
-                corpus_version=bundle.corpus_version,
-                configuration_fingerprint=bundle.configuration_fingerprint,
-                vector_checksum=str(chunk.vector_checksum or ""),
+            _build_vector_record(
+                chunk=chunk,
+                bundle=bundle,
+                profile=profile,
+                chunk_bundle_id=chunk_bundle.chunk_bundle_id,
+                project_id=project_id,
+                child_nodes_by_source_chunk_id=child_nodes_by_source_chunk_id,
+                vector=list(vectors[chunk.vector_offset]),
             )
             for chunk in chunk_map
         ]
@@ -339,10 +422,17 @@ class IndexEmbeddingBundleUseCase:
         parent_nodes = sum(1 for node in nodes if node.node_role == "parent")
         child_nodes = len(nodes) - parent_nodes
         with self._transactions.transaction():
-            self._nodes.replace_document_nodes(
-                document_id=content.document_id,
-                nodes=nodes,
-            )
+            if project_id is None:
+                self._nodes.replace_document_nodes(
+                    document_id=content.document_id,
+                    nodes=nodes,
+                )
+            else:
+                self._nodes.replace_scoped_nodes(
+                    project_id=project_id,
+                    source_chunk_bundle_id=chunk_bundle.chunk_bundle_id,
+                    nodes=nodes,
+                )
             written = self._vectors.append_bundle_vectors(
                 profile=resolved_profile,
                 indexing_target_id=target.indexing_target_id,

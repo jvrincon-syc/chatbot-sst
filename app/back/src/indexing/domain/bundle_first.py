@@ -151,15 +151,23 @@ class IndexingNodeRecord(StrictModel):
 
     Nodes are adapted from the source chunk bundle without re-chunking, so the
     bundle-first path needs no LlamaIndex node objects at all.
+
+    ``project_id``/``source_chunk_id``/``source_parent_chunk_id`` are nullable and
+    only populated on the platform (project-owned) path (Fase 4, ADR-007 §2). On the
+    legacy path (``project_id is None``) ``node_id == source chunk id`` byte-for-byte
+    and these physical-identity fields stay ``None``, so legacy behaviour is unchanged.
     """
 
     node_id: str = Field(min_length=1)
+    project_id: str | None = None
     document_id: str = Field(min_length=1)
     source_relpath: str = Field(min_length=1)
     source_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     ingestion_origin: Literal["local", "llama_cloud"]
     node_role: Literal["parent", "child"]
     parent_node_id: str | None = None
+    source_chunk_id: str | None = None
+    source_parent_chunk_id: str | None = None
     chunk_index: int | None = None
     page_start: int | None = None
     page_end: int | None = None

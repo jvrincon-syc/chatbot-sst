@@ -437,9 +437,15 @@ class EmbeddingIndexingReadiness(StrictModel):
 
 
 class ChunkBundleRef(StrictModel):
-    """Durable identity of one registered chunk bundle."""
+    """Durable identity of one registered chunk bundle.
+
+    ``project_id`` is nullable so legacy rows (``project_id IS NULL``) keep their
+    current behaviour while platform-owned rows carry their owning project for the
+    composite-FK isolation introduced in Fase 4 (ADR-007 §1).
+    """
 
     chunk_bundle_id: str = Field(min_length=1)
+    project_id: str | None = None
     bundle_fingerprint: str = Field(min_length=1)
     profile_id: str = Field(min_length=1)
     profile_fingerprint: str = Field(min_length=1)

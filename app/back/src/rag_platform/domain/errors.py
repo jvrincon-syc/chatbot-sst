@@ -187,6 +187,55 @@ class BuildStepNotFound(RagPlatformError):
     http_status = 404
 
 
+class MaterializationSealed(RagPlatformError):
+    """Se intentó mutar una materialización de vectores ya ``SEALED``.
+
+    Inmutabilidad (ADR-007 §3): una materialización sellada no cambia vectores,
+    checksum ni conteos. Re-sellar con el mismo checksum es idempotente; cualquier
+    intento de re-escritura con contenido distinto se rechaza fail-closed y nunca
+    sobreescribe la fila sellada.
+    """
+
+    code = "MATERIALIZATION_SEALED"
+    http_status = 409
+
+
+class MaterializationValidationFailed(RagPlatformError):
+    """La validación transaccional de una materialización falló (fail-closed).
+
+    Owner de proyecto, pertenencia profile/target, dimensión, métrica, checksum o
+    conteos parent/child/vector no cuadran. La materialización se marca ``FAILED``
+    con un ``failure_code`` observable y nunca se sella a medias.
+    """
+
+    code = "MATERIALIZATION_VALIDATION_FAILED"
+    http_status = 409
+
+
+class CrossProjectLegacyFingerprintCollision(RagPlatformError):
+    """Dos proyectos chocaron en la unicidad global legacy de ``bundle_fingerprint``.
+
+    Fail-closed (ADR-007 §9): la unicidad global de ``chunk_bundles`` no se retira en
+    Fase 4, así que dos proyectos con bytes idénticos colisionan. El adaptador traduce
+    la ``UniqueViolation`` a este error y **nunca** reutiliza, renombra ni borra el
+    artefacto del otro proyecto.
+    """
+
+    code = "CROSS_PROJECT_LEGACY_FINGERPRINT_COLLISION"
+    http_status = 409
+
+
+class NodeProjectMismatch(RagPlatformError):
+    """Un nodo/artefacto derivado pertenece a un proyecto distinto al solicitado.
+
+    Fail-closed: la propiedad física la impone la BD por FK compuesta; en la capa de
+    aplicación este error protege la misma invariante antes de tocar la BD.
+    """
+
+    code = "NODE_PROJECT_MISMATCH"
+    http_status = 409
+
+
 class NoClassificationPolicyConfigured(RagPlatformError):
     """El snapshot de configuración del proyecto no resuelve una política de clasificación.
 

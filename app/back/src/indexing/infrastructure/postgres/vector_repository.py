@@ -63,6 +63,9 @@ class AppendOnlyVectorRecord:
     corpus_version: str
     configuration_fingerprint: str
     vector_checksum: str
+    # Aditivo (ADR-007): propiedad de proyecto en la fila vectorial. None = legacy
+    # (bypassa el FK compuesto por MATCH SIMPLE); presente = fila de plataforma.
+    project_id: str | None = None
 
 
 class PostgresVectorRepository:
@@ -129,13 +132,14 @@ class PostgresVectorRepository:
                 cursor.execute(
                     f"""
                     INSERT INTO {table} (
-                        node_id, document_id, embedding, metadata,
+                        node_id, project_id, document_id, embedding, metadata,
                         embedding_bundle_id, embedding_profile_id,
                         indexing_target_id, corpus_version, is_active,
                         configuration_fingerprint, vector_checksum
                     )
-                    VALUES (%s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)
+                    VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s, %s, %s, %s)
                     ON CONFLICT (embedding_bundle_id, node_id) DO UPDATE SET
+                        project_id = EXCLUDED.project_id,
                         document_id = EXCLUDED.document_id,
                         embedding = EXCLUDED.embedding,
                         metadata = EXCLUDED.metadata,
@@ -150,6 +154,7 @@ class PostgresVectorRepository:
                     """,
                     (
                         record.node_id,
+                        record.project_id,
                         record.document_id,
                         record.embedding,
                         json.dumps(record.metadata, sort_keys=True),

@@ -26,12 +26,17 @@ from enum import Enum
 import hashlib
 import json
 import re
-from typing import Annotated, Any, Mapping, Sequence
+from typing import Annotated, Any, Literal, Mapping, Sequence
 
 from pydantic import AfterValidator, Field
 
 from ingestion.schemas.common import StrictModel
-from rag_platform.domain.errors import CrossProjectReuseForbidden
+from rag_platform.domain.errors import (
+    CrossProjectReuseForbidden,
+    MaterializationSealed,
+    MaterializationValidationFailed,
+    NodeProjectMismatch,
+)
 from rag_platform.domain.identity import IdentityKind, PlatformId, _require
 
 
@@ -601,3 +606,183 @@ def ensure_reuse_within_project(
             f"{reuse_kind.value} reuse cannot cross projects: "
             f"{requested_project_id.value} != {source_project_id.value}"
         )
+
+
+# --------------------------------------------------------------------------- #
+# Fase 4: nodos físicos, materialización de vectores y embeddings sellados     #
+# --------------------------------------------------------------------------- #
+
+
+#: Métricas de distancia físicas (valores exactos aceptados por la BD).
+PhysicalDistanceMetric = Literal["cosine", "l2", "inner_product"]
+
+
+class MaterializationStatus(str, Enum):
+    """Ciclo de vida inmutable de una materialización de vectores (ADR-007 §3).
+
+    ``WRITING`` es transitorio; ``SEALED`` es inmutable (no cambian vectores,
+    checksum ni conteos); ``FAILED`` es terminal y observable. No existe ``upsert``
+    sobre una materialización ``SEALED``.
+    """
+
+    WRITING = "writing"
+    SEALED = "sealed"
+    FAILED = "failed"
+
+
+class PhysicalNode(StrictModel):
+    """Un nodo de indexación con identidad **física** namespaced por proyecto.
+
+    ``node_id`` es ``physical_node_id(project_id, source_chunk_bundle_id,
+    source_chunk_id)`` (ADR-007 §2); se separa de ``source_chunk_id`` (evidencia
+    débil). Para hijos, ``parent_node_id`` es también físico
+    (``physical_node_id(..., source_parent_chunk_id)``) y la expansión parent→child
+    lo usa, nunca ``source_parent_chunk_id``.
+    """
+
+    project_id: ProjectId
+    node_id: str = Field(min_length=1)
+    source_chunk_bundle_id: str = Field(min_length=1)
+    source_chunk_id: str = Field(min_length=1)
+    node_role: Literal["parent", "child"]
+    parent_node_id: str | None = None
+    source_parent_chunk_id: str | None = None
+
+    @property
+    def is_child(self) -> bool:
+        """Return whether this node is a child that expands from a parent."""
+
+        return self.node_role == "child"
+
+
+class IndexingMaterialization(StrictModel):
+    """Materialización física de vectores de un bundle en un target (ADR-007 §3).
+
+    Identidad ``(project_id, embedding_bundle_id, indexing_target_id,
+    storage_schema_version)``. ``canonical_checksum`` y los conteos quedan fijados al
+    sellar y no cambian después. Una release referencia la materialización, no un
+    estado activo global.
+    """
+
+    materialization_id: str = Field(min_length=1)
+    project_id: ProjectId
+    embedding_bundle_id: str = Field(min_length=1)
+    indexing_target_id: str = Field(min_length=1)
+    storage_schema_version: str = Field(min_length=1)
+    status: MaterializationStatus
+    canonical_checksum: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    parent_node_count: int = Field(default=0, ge=0)
+    child_node_count: int = Field(default=0, ge=0)
+    vector_count: int = Field(default=0, ge=0)
+    started_at: datetime
+    sealed_at: datetime | None = None
+    failed_at: datetime | None = None
+    failure_code: str | None = None
+
+    @property
+    def is_sealed(self) -> bool:
+        """Return whether this materialization is immutable and sealed."""
+
+        return self.status is MaterializationStatus.SEALED
+
+
+class SealedEmbeddingBundle(StrictModel):
+    """Artefacto de embeddings sellado, content-addressed y propiedad del proyecto.
+
+    Los archivos viven bajo ``embeddings/{embedding_bundle_id}/`` y no cambian tras
+    el sellado (ADR-007 §4). Conserva dimensión y métrica para que Indexing valide
+    compatibilidad sin re-leer el vector artifact.
+    """
+
+    embedding_bundle_id: str = Field(min_length=1)
+    project_id: ProjectId
+    source_chunk_bundle_id: str = Field(min_length=1)
+    bundle_dir_relpath: str = Field(min_length=1)
+    checksums: Mapping[str, str]
+    dimension: int = Field(gt=0)
+    distance_metric: PhysicalDistanceMetric
+    vector_count: int = Field(ge=0)
+    sealing_status: SealingStatus = SealingStatus.SEALED
+
+
+def ensure_materialization_sealed_is_immutable(
+    current: IndexingMaterialization | None,
+    *,
+    canonical_checksum: str,
+) -> bool:
+    """Falla cerrado si se muta una materialización sellada (ADR-007 §3).
+
+    Args:
+        current: Materialización persistida bajo la misma identidad, o ``None``.
+        canonical_checksum: Checksum que la nueva escritura pretende sellar.
+
+    Returns:
+        ``True`` cuando ya está sellada con el mismo checksum (re-sello idempotente,
+        el llamador debe devolver la existente); ``False`` cuando no hay sellada y se
+        puede proceder.
+
+    Raises:
+        MaterializationSealed: Si existe una sellada con un checksum distinto.
+    """
+
+    if current is None or current.status is not MaterializationStatus.SEALED:
+        return False
+    if current.canonical_checksum == canonical_checksum:
+        return True
+    raise MaterializationSealed(
+        f"materialization {current.materialization_id!r} is sealed with a "
+        "different checksum and cannot be mutated"
+    )
+
+
+def validate_materialization_ownership(
+    *,
+    requested_project_id: PlatformId,
+    bundle_project_id: PlatformId,
+) -> None:
+    """Falla cerrado si el embedding bundle pertenece a otro proyecto (ADR-007 §1)."""
+
+    if requested_project_id != bundle_project_id:
+        raise NodeProjectMismatch(
+            "embedding bundle owner project does not match the requested project: "
+            f"{requested_project_id.value} != {bundle_project_id.value}"
+        )
+
+
+def validate_materialization_counts(
+    *,
+    parent_node_count: int,
+    child_node_count: int,
+    vector_count: int,
+    target_dimension: int,
+    bundle_dimension: int,
+    target_metric: PhysicalDistanceMetric,
+    bundle_metric: PhysicalDistanceMetric,
+) -> None:
+    """Valida conteos, dimensión y métrica de una materialización (fail-closed).
+
+    Cada child chunk aporta exactamente un vector, por lo que ``vector_count`` debe
+    igualar ``child_node_count``. Dimensión y métrica del bundle deben coincidir con
+    las del target físico. Cualquier desajuste es un error de dominio observable.
+
+    Raises:
+        MaterializationValidationFailed: Si conteos, dimensión o métrica no cuadran.
+    """
+
+    failures: list[str] = []
+    if vector_count != child_node_count:
+        failures.append(
+            f"vector_count {vector_count} != child_node_count {child_node_count}"
+        )
+    if parent_node_count < 0 or child_node_count <= 0:
+        failures.append("node counts must be positive (parent>=0, child>0)")
+    if bundle_dimension != target_dimension:
+        failures.append(
+            f"dimension mismatch: bundle {bundle_dimension} != target {target_dimension}"
+        )
+    if bundle_metric != target_metric:
+        failures.append(
+            f"metric mismatch: bundle {bundle_metric!r} != target {target_metric!r}"
+        )
+    if failures:
+        raise MaterializationValidationFailed("; ".join(failures))

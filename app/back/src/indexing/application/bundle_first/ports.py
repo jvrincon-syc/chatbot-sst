@@ -72,7 +72,24 @@ class IndexingNodeWriter(Protocol):
         document_id: str,
         nodes: Sequence[IndexingNodeRecord],
     ) -> int:
-        """Replace the durable nodes of one document; returns deleted rows."""
+        """Replace the durable nodes of one document; returns deleted rows.
+
+        Legacy scope (``project_id IS NULL`` rows): unchanged pre-Fase-4 behaviour.
+        """
+
+    def replace_scoped_nodes(
+        self,
+        *,
+        project_id: str,
+        source_chunk_bundle_id: str,
+        nodes: Sequence[IndexingNodeRecord],
+    ) -> int:
+        """Replace the platform nodes of one bundle within one project (ADR-007 §2).
+
+        Scopes deletion by ``(project_id, source_chunk_bundle_id)`` instead of by
+        ``document_id`` so two projects (or two bundles) never clobber each other's
+        physical nodes. Returns the number of deleted rows.
+        """
 
 
 class BundleVectorWriter(Protocol):

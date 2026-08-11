@@ -458,22 +458,27 @@ def physical_node_id(
 ) -> str: ...
 
 class IndexingMaterializationRepository(Protocol):
-    def find_ready(
-        self, *, project_id: str, embedding_bundle_id: str, indexing_target_id: str
-    ) -> IndexingMaterialization | None: ...
+    def find_sealed(self, *, project_id: str, embedding_bundle_id: str, indexing_target_id: str) -> IndexingMaterialization | None: ...
+    def begin_writing(self, ...) -> IndexingMaterialization: ...
+    def seal(self, *, materialization_id: str, canonical_checksum: str, counts: ...) -> IndexingMaterialization: ...
+    def mark_failed(self, *, materialization_id: str, failure_code: str) -> IndexingMaterialization: ...
 ```
 
-- [ ] Hacer que `EmbeddingRun` e `IndexingRun` registren `project_id`, `rag_variant_id` y `rag_release_id` como contexto operacional. Esto no cambia la identidad de `EmbeddingBundle`.
-- [ ] Cambiar la identidad de `EmbeddingBundle` para que se base en proyecto, chunk bundle, profile/configuration fingerprint y contenido fuente; eliminar `corpus_version` de la unicidad de datos nuevos.
-- [ ] Migrar constraints en orden seguro: añadir columnas nullable y proyecciones de plataforma; verificar y backfillear los rows que tengan evidencia; crear índices parciales para datos con `project_id`; mover los writers; y solo entonces retirar la unicidad global que impediría que dos proyectos con bytes iguales tengan bundles propios. Los rows sin evidencia permanecen `legacy_unverified`.
-- [ ] Cambiar `IndexingNodeRecord` para separar `node_id` físico de `source_chunk_id` y `source_parent_chunk_id` de evidencia.
-- [ ] Reemplazar `replace_document_nodes(document_id=...)` por una operación scoped por `project_id + source_chunk_bundle_id`. No borrar ni actualizar nodos de otra materialización al indexar una variante o release posterior.
-- [ ] Generar `node_id` físico namespaced con un hash de una representación canónica etiquetada de `project_id`, `source_chunk_bundle_id` y `source_chunk_id`; conservar los IDs de chunks fuente en metadata y columnas explícitas. No concatenar valores sin separadores ni conservar `node_id == source_chunk_id` para filas de plataforma.
-- [ ] Añadir `project_id` a las tablas `idx_vec_*`; mantener la unicidad `(embedding_bundle_id, node_id)` y dejar `rag_release_id` fuera de las filas vectoriales.
-- [ ] Crear `indexing_materializations`/proyección equivalente que represente la escritura de un embedding bundle en un target. Una release referencia esta materialización, no un estado activo global.
-- [ ] Validar transaccionalmente: owner de proyecto, pertenencia de profile/target, dimensión, métrica, checksum, conteos de chunks/nodos/vectores y estado sellado.
+> **Enfoque revisado (2026-08-11, [ADR-007](../adr/ADR-007-phase4-physical-ownership-and-hard-reset.md); plan de trabajo `plans/2026-08-11-fase4-embedding-nodos-vectores.md`):** entorno de dev → **hard reset + rebuild** de artefactos derivados en vez de backfill `legacy_unverified`. Aislamiento por **FKs compuestas** `(project_id, id)`, no solo `project_id`. **No** se retira ninguna unicidad global en Fase 4 (colisión de fingerprint global → error de dominio fail-closed). SST **dormido** durante Fase 4–8. Orden: Gate 0 → DDL aditivo → dual-mode → reset → rebuild → validación → enable.
 
-**Exit criteria:** local/BGE y local/Voyage pueden compartir normalizado/chunks cuando corresponde; nunca comparten embedding/vector. LlamaParse y local generan artefactos distintos salvo una equivalencia explícitamente comprobada. Dos proyectos no pueden sobrescribir nodos o vectores entre sí.
+- [ ] `EmbeddingRun`/`IndexingRun` ganan `project_id`/`rag_variant_id`/`rag_release_id` como contexto operacional, **columnas nullable sin FK** (la tabla `rag_releases` es de Fase 5), derivadas por el servidor desde un build context validado, **nunca** del payload del cliente. No cambia la identidad de `EmbeddingBundle`.
+- [ ] Nueva identidad de `EmbeddingBundle` (proyecto + chunk bundle + profile/config fingerprint + contenido fuente) como **índice único parcial** `WHERE project_id IS NOT NULL`; `corpus_version` se mantiene NOT NULL (marcador legacy) fuera de la identidad. La unicidad legacy actual **no se retira** (ya incluye `source_chunk_bundle_id`).
+- [ ] **Aislamiento por FKs compuestas** (impuesto por la BD): `UNIQUE(project_id, chunk_bundle_id)`; `embedding_bundles`/`indexing_nodes`/`idx_vec_*`/`indexing_materializations` con `FK(project_id, ...)` a su padre. Con `project_id` nullable, las filas legacy bypassean el FK compuesto (MATCH SIMPLE) y solo plataforma queda blindada. Sin `DROP CONSTRAINT`.
+- [ ] `IndexingNodeRecord`: separar `node_id` físico de `source_chunk_id`; **y `parent_node_id` físico de `source_parent_chunk_id`**. La expansión parent→child usa `parent_node_id` físico, no el source.
+- [ ] Reemplazar `replace_document_nodes(document_id=...)` por operación scoped `project_id + source_chunk_bundle_id`. Namespacing **gated**: legacy (`project_id IS NULL`) conserva `node_id == source_chunk_id` byte-idéntico; plataforma usa `physical_node_id` namespaced.
+- [ ] `physical_node_id` = hash de representación canónica etiquetada (`project_id`,`source_chunk_bundle_id`,`source_chunk_id`); IDs fuente en columnas explícitas.
+- [ ] `project_id` en `idx_vec_*`; mantener `UNIQUE(embedding_bundle_id, node_id)`; `rag_release_id` fuera de las filas vectoriales.
+- [ ] Tabla real `indexing_materializations` con lifecycle inmutable `WRITING→SEALED|FAILED` (`begin_writing`/`seal`/`mark_failed`/`find_sealed`, nunca `upsert`); `UNIQUE(project_id, embedding_bundle_id, indexing_target_id, storage_schema_version)`, checksum canónico y conteos. Una release referencia la materialización, no un estado activo global.
+- [ ] **`SealedEmbeddingStore`** físico por proyecto (`data/projects/{project_id}/embeddings/{embedding_bundle_id}/`), reusa `core.atomic_fs`, espeja `SealedChunkStore`, nunca `replace()`.
+- [ ] Validación transaccional: owner de proyecto, pertenencia profile/target, dimensión, métrica, checksum, conteos parent/child/vector y estado sellado.
+- [ ] **Herramienta de reset** `reset_derived_rag_artifacts` (`--dry-run`/`--apply`, inventario before/after, se niega a borrar filas `is_active`) + **rebuild limpio** platform-only que no activa vectores.
+
+**Exit criteria:** local/BGE y local/Voyage comparten normalizado/chunks cuando corresponde; nunca embedding/vector. Dos proyectos no pueden sobrescribir ni referenciar nodos/vectores entre sí (impuesto por FKs compuestas). El reset+rebuild deja todo artefacto derivado con `project_id`; SST no queda activado.
 
 ### Fase 5: Variantes, DRAFT, membresías y orquestador de release
 

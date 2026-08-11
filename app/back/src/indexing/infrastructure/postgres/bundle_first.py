@@ -195,6 +195,100 @@ class PostgresIndexingNodeWriter:
                 )
         return int(deleted)
 
+    def replace_scoped_nodes(
+        self,
+        *,
+        project_id: str,
+        source_chunk_bundle_id: str,
+        nodes: Sequence[IndexingNodeRecord],
+    ) -> int:
+        """Replace the platform nodes of one bundle within one project (ADR-007 §2).
+
+        Deletion is scoped by ``(project_id, source_chunk_bundle_id)`` so it never
+        touches another project's or bundle's rows. Parents are inserted before
+        children so the deferred self FK resolves inside the same transaction. The
+        physical-identity columns (``project_id``/``source_chunk_id``/
+        ``source_parent_chunk_id``) are written explicitly; ``node_id``/
+        ``parent_node_id`` are the namespaced physical ids computed by ``build_nodes``.
+        """
+
+        ordered = [node for node in nodes if node.node_role == "parent"] + [
+            node for node in nodes if node.node_role == "child"
+        ]
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM indexing_nodes"
+                " WHERE project_id = %s AND source_chunk_bundle_id = %s",
+                (project_id, source_chunk_bundle_id),
+            )
+            deleted = cursor.rowcount
+            for node in ordered:
+                cursor.execute(
+                    """
+                    INSERT INTO indexing_nodes (
+                        node_id, project_id, document_id, source_relpath, source_hash,
+                        ingestion_origin, node_role, parent_node_id,
+                        source_chunk_id, source_parent_chunk_id, chunk_index,
+                        page_start, page_end, section_title, section_path, text,
+                        metadata, chunking_version, processing_fingerprint,
+                        source_chunk_bundle_id, chunking_bundle_fingerprint,
+                        corpus_version
+                    )
+                    VALUES (
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                        %s, %s::jsonb, %s, %s, %s, %s, %s
+                    )
+                    ON CONFLICT (node_id) DO UPDATE SET
+                        project_id = EXCLUDED.project_id,
+                        document_id = EXCLUDED.document_id,
+                        source_relpath = EXCLUDED.source_relpath,
+                        source_hash = EXCLUDED.source_hash,
+                        ingestion_origin = EXCLUDED.ingestion_origin,
+                        node_role = EXCLUDED.node_role,
+                        parent_node_id = EXCLUDED.parent_node_id,
+                        source_chunk_id = EXCLUDED.source_chunk_id,
+                        source_parent_chunk_id = EXCLUDED.source_parent_chunk_id,
+                        chunk_index = EXCLUDED.chunk_index,
+                        page_start = EXCLUDED.page_start,
+                        page_end = EXCLUDED.page_end,
+                        section_title = EXCLUDED.section_title,
+                        section_path = EXCLUDED.section_path,
+                        text = EXCLUDED.text,
+                        metadata = EXCLUDED.metadata,
+                        chunking_version = EXCLUDED.chunking_version,
+                        processing_fingerprint = EXCLUDED.processing_fingerprint,
+                        source_chunk_bundle_id = EXCLUDED.source_chunk_bundle_id,
+                        chunking_bundle_fingerprint = EXCLUDED.chunking_bundle_fingerprint,
+                        corpus_version = EXCLUDED.corpus_version,
+                        updated_at = now()
+                    """,
+                    (
+                        node.node_id,
+                        node.project_id,
+                        node.document_id,
+                        node.source_relpath,
+                        node.source_hash,
+                        node.ingestion_origin,
+                        node.node_role,
+                        node.parent_node_id,
+                        node.source_chunk_id,
+                        node.source_parent_chunk_id,
+                        node.chunk_index,
+                        node.page_start,
+                        node.page_end,
+                        node.section_title,
+                        node.section_path,
+                        node.text,
+                        json.dumps(node.metadata, sort_keys=True, default=str),
+                        node.chunking_version,
+                        node.processing_fingerprint,
+                        node.source_chunk_bundle_id,
+                        node.chunking_bundle_fingerprint,
+                        node.corpus_version,
+                    ),
+                )
+        return int(deleted)
+
 
 class PostgresIndexingRunRepository:
     """Durable ``indexing_runs`` ledger with a transactional claim."""
