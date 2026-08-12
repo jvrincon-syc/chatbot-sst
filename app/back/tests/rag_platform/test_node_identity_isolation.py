@@ -104,23 +104,19 @@ def test_parent_expansion_uses_physical_parent_node_id() -> None:
     assert parent_a != parent_b
 
 
-def test_build_nodes_legacy_conserva_node_id_byte_identico_cuando_sin_proyecto() -> None:
-    nodes = build_nodes(
-        content=_content(),
-        chunk_bundle_id=_BUNDLE,
-        chunking_bundle_fingerprint="f" * 64,
-        chunking_version="cp_v1",
-        ingestion_origin="local",
-    )
+def test_build_nodes_exige_project_id_pure_platform() -> None:
+    # ADR-008: la lane legacy fue retirada; build_nodes ya no acepta llamadas sin
+    # project_id (antes producía node_id == source_chunk_id byte-idéntico).
+    import pytest
 
-    parent = next(node for node in nodes if node.node_role == "parent")
-    child = next(node for node in nodes if node.node_role == "child")
-    assert parent.node_id == "p1"  # byte-idéntico a la lane legacy
-    assert child.node_id == "c1"
-    assert child.parent_node_id == "p1"
-    assert parent.project_id is None
-    assert child.source_chunk_id is None
-    assert child.source_parent_chunk_id is None
+    with pytest.raises(TypeError):
+        build_nodes(
+            content=_content(),
+            chunk_bundle_id=_BUNDLE,
+            chunking_bundle_fingerprint="f" * 64,
+            chunking_version="cp_v1",
+            ingestion_origin="local",
+        )
 
 
 def test_build_nodes_plataforma_namespaced_cuando_hay_proyecto() -> None:

@@ -102,7 +102,21 @@ class PostgresSealedChunkBundleRepository:
                     )
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s)
-                    ON CONFLICT (chunk_bundle_id) DO NOTHING
+                    ON CONFLICT (chunk_bundle_id) DO UPDATE SET
+                        bundle_fingerprint = EXCLUDED.bundle_fingerprint,
+                        profile_id = EXCLUDED.profile_id,
+                        profile_fingerprint = EXCLUDED.profile_fingerprint,
+                        corpus_version = EXCLUDED.corpus_version,
+                        source_document_id = EXCLUDED.source_document_id,
+                        artifact_relpath = EXCLUDED.artifact_relpath,
+                        parent_count = EXCLUDED.parent_count,
+                        child_count = EXCLUDED.child_count,
+                        status = EXCLUDED.status,
+                        project_id = EXCLUDED.project_id,
+                        normalized_document_id = EXCLUDED.normalized_document_id,
+                        chunking_profile_fingerprint = EXCLUDED.chunking_profile_fingerprint,
+                        bundle_schema_version = EXCLUDED.bundle_schema_version,
+                        sealing_status = EXCLUDED.sealing_status
                     """,
                     (
                         bundle.chunk_bundle_id,

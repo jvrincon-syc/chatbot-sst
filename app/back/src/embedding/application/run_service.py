@@ -164,13 +164,26 @@ def _rollback_connection(
         )
 
 
-def embedding_request_fingerprint(*, chunk_bundle_id: str, profile_id: str) -> str:
+def embedding_request_fingerprint(
+    *,
+    chunk_bundle_id: str,
+    profile_id: str,
+    project_id: str | None = None,
+    rag_variant_id: str | None = None,
+    rag_release_id: str | None = None,
+) -> str:
     """Return the deterministic fingerprint of one embedding run request."""
 
     return sha256(
-        canonical_json({"chunk_bundle_id": chunk_bundle_id, "profile_id": profile_id}).encode(
-            "utf-8"
-        )
+        canonical_json(
+            {
+                "chunk_bundle_id": chunk_bundle_id,
+                "profile_id": profile_id,
+                "project_id": project_id,
+                "rag_variant_id": rag_variant_id,
+                "rag_release_id": rag_release_id,
+            }
+        ).encode("utf-8")
     ).hexdigest()
 
 
@@ -180,6 +193,9 @@ class CreateEmbeddingRunRequest:
 
     chunk_bundle_id: str
     profile_id: str
+    project_id: str | None = None
+    rag_variant_id: str | None = None
+    rag_release_id: str | None = None
 
 
 class CreateEmbeddingRunUseCase:
@@ -229,6 +245,9 @@ class CreateEmbeddingRunUseCase:
             fingerprint = embedding_request_fingerprint(
                 chunk_bundle_id=chunk_bundle.chunk_bundle_id,
                 profile_id=profile.profile_id,
+                project_id=request.project_id,
+                rag_variant_id=request.rag_variant_id,
+                rag_release_id=request.rag_release_id,
             )
             existing = self._runs.find_by_idempotency_key(idempotency_key)
             if existing is not None:
@@ -276,6 +295,9 @@ class CreateEmbeddingRunUseCase:
                 source_chunk_bundle_id=chunk_bundle.chunk_bundle_id,
                 embedding_profile_id=profile.profile_id,
                 configuration_fingerprint=profile.expected_fingerprint().value,
+                project_id=request.project_id,
+                rag_variant_id=request.rag_variant_id,
+                rag_release_id=request.rag_release_id,
                 runtime_engine=profile.provider,
                 runtime_mode=runtime.runtime_mode,
                 engine_revision_observed=runtime.engine_revision_observed,

@@ -83,6 +83,7 @@ DOCUMENT_ID = "doc_test_0001"
 SOURCE_HASH = sha256(b"source").hexdigest()
 CORPUS_VERSION = "phase1-test"
 ARTIFACT_RELPATH = "unit/example.chunking_metadata.json"
+PROJECT_ID = "proj_test"
 
 
 def build_profile(**overrides: object) -> EmbeddingProfile:
@@ -136,6 +137,7 @@ def write_chunk_bundle(
     chunks_root: Path,
     *,
     child_count: int = 3,
+    project_id: str = PROJECT_ID,
     document_id: str = DOCUMENT_ID,
     base_relpath: str = "unit/example",
     source_relpath: str = "unit/example.md",
@@ -211,6 +213,7 @@ def write_chunk_bundle(
     )
     return ChunkBundleRef(
         chunk_bundle_id=bundle_fingerprint,
+        project_id=project_id,
         bundle_fingerprint=bundle_fingerprint,
         profile_id="local-structural-v1",
         profile_fingerprint="chunking-profile-" + sha256(b"profile").hexdigest(),

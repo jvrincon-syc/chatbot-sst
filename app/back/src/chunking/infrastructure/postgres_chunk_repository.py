@@ -13,10 +13,16 @@ from embedding.infrastructure.postgres.repositories import PostgresChunkBundleRe
 
 @dataclass(frozen=True)
 class FilesystemBackedPostgresChunkBundleRepository(FilesystemChunkBundleRepository):
-    """Persist chunk artifacts on disk and register their ledger rows in PostgreSQL."""
+    """Persist chunk artifacts on disk and register their ledger rows in PostgreSQL.
+
+    ``project_id`` es el dueño de plataforma (ADR-008): se estampa en la fila
+    ``chunk_bundles`` para que el bundle nazca con proyecto desde raw→chunk. La BD lo
+    exige NOT NULL, así que registrar sin ``project_id`` falla cerrado en el INSERT.
+    """
 
     ledger: PostgresChunkBundleRepository
     connection: object
+    project_id: str | None = None
     close_connection_on_close: bool = False
 
     def replace(
@@ -52,6 +58,7 @@ class FilesystemBackedPostgresChunkBundleRepository(FilesystemChunkBundleReposit
                 ChunkBundleRef(
                     chunk_bundle_id=metadata.bundle_fingerprint,
                     bundle_fingerprint=metadata.bundle_fingerprint,
+                    project_id=self.project_id,
                     profile_id=metadata.profile_id,
                     profile_fingerprint=metadata.profile_fingerprint,
                     corpus_version=metadata.corpus_version,

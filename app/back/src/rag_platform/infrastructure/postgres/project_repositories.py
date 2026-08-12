@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 import json
 
 from rag_platform.domain.errors import (
+    RagVariantNotFound,
     ChunkingProfileNotFound,
     DuplicateVariantRecipe,
     ProcessingProfileNotFound,
@@ -22,6 +23,7 @@ from rag_platform.domain.errors import (
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
     ChunkingProfile,
+    compute_project_configuration_fingerprint,
     CorpusOrganizationPolicy,
     DocumentProcessingProfile,
     ProcessingOrigin,
@@ -321,6 +323,20 @@ class PostgresRagVariantRepository:
             row = cursor.fetchone()
         return None if row is None else self._row_to_variant(row)
 
+    def get(self, rag_variant_id: PlatformId) -> RagVariant:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT rag_variant_id, project_id, processing_profile_id,"
+                " chunking_profile_id, embedding_profile_id,"
+                " semantic_recipe_fingerprint, state, created_at FROM rag_variants"
+                " WHERE rag_variant_id = %s",
+                (rag_variant_id.value,),
+            )
+            row = cursor.fetchone()
+        if row is None:
+            raise RagVariantNotFound(rag_variant_id.value)
+        return self._row_to_variant(row)
+
     def add(self, variant: RagVariant) -> RagVariant:
         try:
             with self._connection.cursor() as cursor:
@@ -385,6 +401,38 @@ class PostgresTargetBindingResolver:
             binding_key=str(row[0]),
             indexing_target_id=str(row[1]),
             embedding_profile_id=str(row[2]),
+        )
+
+
+class PostgresProjectConfigurationFingerprintReader:
+    """Reconstruye el fingerprint de la configuración vigente de un proyecto."""
+
+    def __init__(self, connection: object) -> None:
+        self._connection = connection
+        self._projects = PostgresProjectRepository(connection)
+
+    def configuration_fingerprint(self, project_id: PlatformId) -> str:
+        with self._connection.cursor() as cursor:
+            configuration = self._projects._load_configuration(cursor, project_id.value)
+        return compute_project_configuration_fingerprint(
+            version=configuration.version,
+            corpus_organization_policy=configuration.corpus_organization_policy,
+            document_types=tuple(
+                (doc_type.code, doc_type.display_name, doc_type.template.value)
+                for doc_type in configuration.document_types
+            ),
+            embedding_profiles=tuple(
+                (profile.embedding_profile_id, profile.enabled)
+                for profile in configuration.embedding_profiles
+            ),
+            target_bindings=tuple(
+                (
+                    binding.binding_key,
+                    binding.indexing_target_id,
+                    binding.embedding_profile_id,
+                )
+                for binding in configuration.target_bindings
+            ),
         )
 
 

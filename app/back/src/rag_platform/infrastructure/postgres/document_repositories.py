@@ -10,7 +10,10 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from rag_platform.domain.errors import SourceDocumentRevisionNotFound
+from rag_platform.domain.errors import (
+    CorpusSnapshotNotFound,
+    SourceDocumentRevisionNotFound,
+)
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
     CorpusSnapshot,
@@ -192,7 +195,12 @@ class PostgresNormalizedArtifactRepository:
                 " processing_profile_fingerprint, schema_version, artifact_relpath)"
                 " VALUES (%s, %s, %s, %s, %s)"
                 " ON CONFLICT (project_id, source_document_revision_id,"
-                " processing_profile_fingerprint) DO NOTHING",
+                " processing_profile_fingerprint) DO UPDATE SET"
+                " schema_version = EXCLUDED.schema_version,"
+                " artifact_relpath = COALESCE("
+                " EXCLUDED.artifact_relpath,"
+                " project_normalized_documents.artifact_relpath"
+                " )",
                 (
                     artifact.project_id.value,
                     artifact.source_document_revision_id.value,
@@ -228,6 +236,26 @@ class PostgresCorpusSnapshotRepository:
                 " FROM corpus_snapshot_documents WHERE corpus_snapshot_id = %s"
                 " ORDER BY ordinal",
                 (str(row[0]),),
+            )
+            member_rows = cursor.fetchall()
+        return self._row_to_snapshot(row, member_rows)
+
+    def get(self, corpus_snapshot_id: PlatformId) -> CorpusSnapshot:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT corpus_snapshot_id, project_id, manifest_hash,"
+                " document_count, created_at FROM corpus_snapshots"
+                " WHERE corpus_snapshot_id = %s",
+                (corpus_snapshot_id.value,),
+            )
+            row = cursor.fetchone()
+            if row is None:
+                raise CorpusSnapshotNotFound(corpus_snapshot_id.value)
+            cursor.execute(
+                "SELECT ordinal, source_document_revision_id, eligibility_decision"
+                " FROM corpus_snapshot_documents WHERE corpus_snapshot_id = %s"
+                " ORDER BY ordinal",
+                (corpus_snapshot_id.value,),
             )
             member_rows = cursor.fetchall()
         return self._row_to_snapshot(row, member_rows)

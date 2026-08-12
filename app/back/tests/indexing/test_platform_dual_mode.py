@@ -5,11 +5,16 @@ from pathlib import Path
 from indexing.application.bundle_first.activation import ActivationRequest
 from rag_platform.domain.identity import physical_node_id
 
-from pipeline_fixtures import build_pipeline_stack
+from pipeline_fixtures import build_pipeline_stack, write_chunk_bundle
 
 
-def test_legacy_activation_still_activates_legacy_bundle(tmp_path: Path) -> None:
+def test_activation_activates_platform_bundle(tmp_path: Path) -> None:
+    # ADR-008 (pure-platform): todo bundle es de plataforma (project_id obligatorio).
+    # La activación explícita sigue operando sobre el run indexado.
     stack = build_pipeline_stack(tmp_path)
+    project_id = "proj_alpha"
+    stack.chunk_bundle = stack.chunk_bundle.model_copy(update={"project_id": project_id})
+    stack.chunk_bundles.ensure_registered(stack.chunk_bundle)
 
     embedding_bundle_id = stack.run_embedding()
     run_id = stack.run_indexing(embedding_bundle_id)
@@ -23,12 +28,13 @@ def test_legacy_activation_still_activates_legacy_bundle(tmp_path: Path) -> None
 
     child_nodes = [node for node in stack.nodes.nodes.values() if node.node_role == "child"]
     assert child_nodes
-    assert all(node.project_id is None for node in child_nodes)
-    assert all(node.source_chunk_id is None for node in child_nodes)
+    # Nodos y vectores son físicos namespaced, con dueño de proyecto.
+    assert all(node.project_id == project_id for node in child_nodes)
+    assert all(node.source_chunk_id is not None for node in child_nodes)
     assert {node.node_id for node in child_nodes} == {
         row.record.node_id for row in stack.vectors.rows.values()
     }
-    assert all(row.record.project_id is None for row in stack.vectors.rows.values())
+    assert all(row.record.project_id == project_id for row in stack.vectors.rows.values())
     assert {row.record.embedding_bundle_id for row in stack.vectors.active_rows()} == {
         embedding_bundle_id
     }
@@ -66,48 +72,56 @@ def test_platform_indexing_does_not_activate_vectors(tmp_path: Path) -> None:
     assert stack.indexing_runs.get(run_id).activation_status == "pending"
 
 
-def test_platform_materialization_not_visible_to_legacy_retrieval(tmp_path: Path) -> None:
+def test_other_project_indexing_not_visible_to_active_retrieval(tmp_path: Path) -> None:
+    # ADR-008: aislamiento cross-proyecto. Un bundle de otro proyecto, indexado pero
+    # no activado, es invisible a la retrieval activa del proyecto A (SST dormido +
+    # propiedad física por proyecto). Sustituye al viejo test legacy-vs-plataforma.
     stack = build_pipeline_stack(tmp_path)
 
-    legacy_bundle_id = stack.run_embedding()
-    legacy_run_id = stack.run_indexing(legacy_bundle_id)
+    project_a = "proj_alpha"
+    stack.chunk_bundle = stack.chunk_bundle.model_copy(update={"project_id": project_a})
+    stack.chunk_bundles.ensure_registered(stack.chunk_bundle)
+    bundle_a = stack.run_embedding()
+    run_a = stack.run_indexing(bundle_a)
     activation = stack.activate_bundle.execute(
         ActivationRequest(
-            run_id=legacy_run_id,
+            run_id=run_a,
             consumer_scope_type="chatbot",
             consumer_scope_id="sst-default",
         )
     )
-    legacy_profile = stack.retrieval_profiles.get(activation.retrieval_profile_id)
-    legacy_results = stack.search.search(
-        retrieval_profile=legacy_profile,
-        query="safety rules",
-    )
+    profile_a = stack.retrieval_profiles.get(activation.retrieval_profile_id)
+    results_a = stack.search.search(retrieval_profile=profile_a, query="safety rules")
 
-    project_id = "proj_alpha"
-    project_bundle = stack.chunk_bundle.model_copy(update={"project_id": project_id})
-    stack.chunk_bundle = project_bundle
-    stack.chunk_bundles.ensure_registered(project_bundle)
-    platform_bundle_id = stack.run_embedding(idempotency_key="embed-platform")
-    stack.run_indexing(platform_bundle_id, idempotency_key="index-platform")
-
-    results_after_platform_indexing = stack.search.search(
-        retrieval_profile=legacy_profile,
-        query="safety rules",
+    # Segundo proyecto: chunk bundle distinto (otro documento), indexado sin activar.
+    bundle_b_ref = write_chunk_bundle(
+        tmp_path / "chunks",
+        document_id="doc-beta",
+        base_relpath="unit/example_beta",
+        source_relpath="unit/example_beta.md",
+        bundle_seed="bundle-beta",
+        parent_seed="parent-beta",
+        child_seed_prefix="child-beta",
+    ).model_copy(update={"project_id": "proj_beta"})
+    stack.chunk_bundles.ensure_registered(bundle_b_ref)
+    bundle_b = stack.run_embedding(
+        chunk_bundle_id=bundle_b_ref.chunk_bundle_id, idempotency_key="embed-beta"
     )
-    platform_node_ids = {
+    stack.run_indexing(bundle_b, idempotency_key="index-beta")
+
+    results_after = stack.search.search(retrieval_profile=profile_a, query="safety rules")
+    project_b_node_ids = {
         node.node_id
         for node in stack.nodes.nodes.values()
-        if node.project_id == project_id
+        if node.project_id == "proj_beta"
     }
 
-    assert legacy_results
+    assert results_a
+    # El indexado de proyecto B no activa vectores (SST dormido) ni cambia lo que A ve.
     assert all(
-        not row.is_active for row in stack.vectors.rows.values() if row.record.project_id == project_id
+        not row.is_active
+        for row in stack.vectors.rows.values()
+        if row.record.project_id == "proj_beta"
     )
-    assert [item.node_id for item in results_after_platform_indexing] == [
-        item.node_id for item in legacy_results
-    ]
-    assert platform_node_ids.isdisjoint(
-        {item.node_id for item in results_after_platform_indexing}
-    )
+    assert [item.node_id for item in results_after] == [item.node_id for item in results_a]
+    assert project_b_node_ids.isdisjoint({item.node_id for item in results_after})

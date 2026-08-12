@@ -161,3 +161,43 @@ def test_run_es_terminal_cuando_alcanza_un_estado_final() -> None:
     )
     assert run.is_terminal is False
     assert run.model_copy(update={"status": "failed"}).is_terminal is True
+
+
+def test_run_transporta_contexto_de_release_nullable() -> None:
+    """Fase 4 gap #2: el run transporta project/variant/release, nullable.
+
+    Legacy los deja en None; plataforma los recibe derivados del servidor. El
+    adaptador Postgres los persiste (columnas de la migración 05); aquí se prueba
+    el contrato de dominio (el round-trip real vive bajo postgres_live).
+    """
+
+    base = dict(
+        embedding_run_id="r1",
+        idempotency_key="k1",
+        request_fingerprint="c" * 64,
+        source_chunk_bundle_id="chunk-bundle-1",
+        embedding_profile_id="p1",
+        runtime_engine="mock",
+        runtime_mode="dry_run",
+        engine_revision_observed=UNKNOWN_REVISION,
+        status="running",
+    )
+    legacy = EmbeddingRun(**base)
+    assert (legacy.project_id, legacy.rag_variant_id, legacy.rag_release_id) == (
+        None,
+        None,
+        None,
+    )
+    platform = EmbeddingRun(
+        **base,
+        project_id="proj_alpha",
+        rag_variant_id="ragv_1",
+        rag_release_id="ragr_1",
+    )
+    assert platform.project_id == "proj_alpha"
+    assert platform.rag_variant_id == "ragv_1"
+    assert platform.rag_release_id == "ragr_1"
+
+    from embedding.infrastructure.postgres.repositories import _RUN_COLUMNS
+
+    assert {"project_id", "rag_variant_id", "rag_release_id"} <= set(_RUN_COLUMNS)

@@ -64,18 +64,7 @@ class IndexingTargetRepository(Protocol):
 
 
 class IndexingNodeWriter(Protocol):
-    """Persist neutral node records into ``indexing_nodes``."""
-
-    def replace_document_nodes(
-        self,
-        *,
-        document_id: str,
-        nodes: Sequence[IndexingNodeRecord],
-    ) -> int:
-        """Replace the durable nodes of one document; returns deleted rows.
-
-        Legacy scope (``project_id IS NULL`` rows): unchanged pre-Fase-4 behaviour.
-        """
+    """Persist physical node records into ``indexing_nodes`` (pure-platform)."""
 
     def replace_scoped_nodes(
         self,

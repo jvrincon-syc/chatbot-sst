@@ -304,6 +304,12 @@ class EmbeddingRun(StrictModel):
     source_chunk_bundle_id: str = Field(min_length=1)
     embedding_profile_id: str = Field(min_length=1)
     configuration_fingerprint: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    # Contexto de release (Fase 4, gap #1/#2): nullable, derivado por el servidor
+    # desde un build context validado, nunca del payload. Legacy escribe NULL.
+    # No forma parte de la identidad del run ni del bundle producido (ADR-007).
+    project_id: str | None = None
+    rag_variant_id: str | None = None
+    rag_release_id: str | None = None
     runtime_engine: str = Field(min_length=1)
     runtime_mode: EmbeddingRuntimeMode
     engine_revision_observed: str = UNKNOWN_REVISION

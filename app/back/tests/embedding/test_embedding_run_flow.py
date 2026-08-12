@@ -108,6 +108,23 @@ def test_create_run_confirma_la_transaccion_en_exito(harness) -> None:
     assert connection.rollbacks == 0
 
 
+def test_create_run_persiste_contexto_de_release_derivado_del_servidor(harness) -> None:
+    run = harness.create_run.execute(
+        request=CreateEmbeddingRunRequest(
+            chunk_bundle_id=harness.chunk_bundle.chunk_bundle_id,
+            profile_id=harness.profile.profile_id,
+            project_id="proj_alpha",
+            rag_variant_id="ragv_alpha",
+            rag_release_id="ragr_alpha",
+        ),
+        idempotency_key="key-platform-context",
+    )
+
+    assert run.project_id == "proj_alpha"
+    assert run.rag_variant_id == "ragv_alpha"
+    assert run.rag_release_id == "ragr_alpha"
+
+
 def test_create_run_revierte_la_transaccion_si_falla_el_registro(harness) -> None:
     class FailingRunsRepository:
         def find_by_idempotency_key(self, _idempotency_key: str):

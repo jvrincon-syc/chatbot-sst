@@ -349,6 +349,49 @@ def compute_semantic_recipe_fingerprint(
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
+def compute_project_configuration_fingerprint(
+    *,
+    version: int,
+    corpus_organization_policy: CorpusOrganizationPolicy,
+    document_types: Sequence[tuple[str, str, str]],
+    embedding_profiles: Sequence[tuple[str, bool]],
+    target_bindings: Sequence[tuple[str, str, str]],
+) -> str:
+    """Computa el fingerprint determinista de una configuración versionada."""
+
+    payload = {
+        "version": version,
+        "corpus_organization_policy": corpus_organization_policy.value,
+        "document_types": [
+            {
+                "code": code,
+                "display_name": display_name,
+                "template": template,
+            }
+            for code, display_name, template in document_types
+        ],
+        "embedding_profiles": [
+            {
+                "embedding_profile_id": embedding_profile_id,
+                "enabled": enabled,
+            }
+            for embedding_profile_id, enabled in embedding_profiles
+        ],
+        "target_bindings": [
+            {
+                "binding_key": binding_key,
+                "indexing_target_id": indexing_target_id,
+                "embedding_profile_id": embedding_profile_id,
+            }
+            for binding_key, indexing_target_id, embedding_profile_id in target_bindings
+        ],
+    }
+    serialized = json.dumps(
+        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
 # --------------------------------------------------------------------------- #
 # Fase 2: revisiones documentales, normalizados y corpus snapshots            #
 # --------------------------------------------------------------------------- #

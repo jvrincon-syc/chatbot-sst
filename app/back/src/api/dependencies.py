@@ -157,6 +157,7 @@ class PipelineServices:
     connection: object | None = None
     # RAG platform admin services (Fase 6). Only wired when the
     # ``rag_platform_v1`` flag is on; ``None`` keeps the legacy surface untouched.
+    rag_platform_build: object | None = None
     rag_platform_publish: object | None = None
 
     def close(self) -> None:
@@ -369,10 +370,75 @@ def build_pipeline_services(
     # RAG platform admin lane (Fase 6): wired only behind the flag, never touching
     # the legacy retrieval services already built above.
     if flags.rag_platform_v1:
+        services.rag_platform_build = _build_rag_platform_build(
+            connection=connection,
+            data_root=chunks_root.parent,
+        )
         services.rag_platform_publish = _build_rag_platform_publish(
             connection=connection, transactions=transactions
         )
     return services
+
+
+def _build_rag_platform_build(*, connection: object | None, data_root: Path) -> object:
+    """Build the release planner with either in-memory or Postgres-backed adapters."""
+
+    from rag_platform.application.release_build_service import BuildRagReleaseUseCase
+    from rag_platform.infrastructure.in_memory.release_build_resolver import (
+        InMemoryRevisionArtifactResolver,
+    )
+    from rag_platform.infrastructure.in_memory.release_repositories import (
+        InMemoryCorpusSnapshotReader,
+        InMemoryRagReleaseMembershipRepository,
+        InMemoryRagReleaseRepository,
+        InMemoryRagVariantReader,
+    )
+    from rag_platform.infrastructure.in_memory.repositories import (
+        InMemoryRagBuildRunRepository,
+        InMemoryTargetBindingResolver,
+    )
+
+    if connection is None:
+        return BuildRagReleaseUseCase(
+            releases=InMemoryRagReleaseRepository(),
+            variants=InMemoryRagVariantReader(()),
+            snapshots=InMemoryCorpusSnapshotReader(()),
+            resolver=InMemoryRevisionArtifactResolver(),
+            memberships=InMemoryRagReleaseMembershipRepository(),
+            ledger=InMemoryRagBuildRunRepository(),
+            bindings=InMemoryTargetBindingResolver(()),
+        )
+
+    from rag_platform.infrastructure.postgres.document_repositories import (
+        PostgresCorpusSnapshotRepository,
+    )
+    from rag_platform.infrastructure.postgres.project_repositories import (
+        PostgresRagVariantRepository,
+        PostgresTargetBindingResolver,
+    )
+    from rag_platform.infrastructure.postgres.release_repositories import (
+        PostgresRagReleaseMembershipRepository,
+        PostgresRagReleaseRepository,
+    )
+    from rag_platform.infrastructure.release_build_resolver import (
+        PostgresRevisionArtifactResolver,
+    )
+    from rag_platform.infrastructure.postgres.artifact_repositories import (
+        PostgresRagBuildRunRepository,
+    )
+
+    return BuildRagReleaseUseCase(
+        releases=PostgresRagReleaseRepository(connection),
+        variants=PostgresRagVariantRepository(connection),
+        snapshots=PostgresCorpusSnapshotRepository(connection),
+        resolver=PostgresRevisionArtifactResolver(
+            connection=connection,
+            data_root=data_root,
+        ),
+        memberships=PostgresRagReleaseMembershipRepository(connection),
+        ledger=PostgresRagBuildRunRepository(connection),
+        bindings=PostgresTargetBindingResolver(connection),
+    )
 
 
 def _build_rag_platform_publish(*, connection: object | None, transactions: object) -> object:

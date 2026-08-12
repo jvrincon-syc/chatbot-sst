@@ -28,6 +28,9 @@ _RUN_COLUMNS = (
     "embedding_profile_id",
     "indexing_target_id",
     "corpus_version",
+    "project_id",
+    "rag_variant_id",
+    "rag_release_id",
     "request_fingerprint",
     "idempotency_key",
     "validation_status",
@@ -109,91 +112,10 @@ class PsycopgTransactionManager:
 
 
 class PostgresIndexingNodeWriter:
-    """Persist neutral node records into ``indexing_nodes``."""
+    """Persist physical node records into ``indexing_nodes`` (pure-platform)."""
 
     def __init__(self, connection: object) -> None:
         self._connection = connection
-
-    def replace_document_nodes(
-        self,
-        *,
-        document_id: str,
-        nodes: Sequence[IndexingNodeRecord],
-    ) -> int:
-        """Replace the durable nodes of one document.
-
-        Parents are written before children so the deferred self foreign key
-        added by ``20260805_10`` always resolves inside the same transaction.
-        """
-
-        ordered = [node for node in nodes if node.node_role == "parent"] + [
-            node for node in nodes if node.node_role == "child"
-        ]
-        with self._connection.cursor() as cursor:
-            cursor.execute(
-                "DELETE FROM indexing_nodes WHERE document_id = %s",
-                (document_id,),
-            )
-            deleted = cursor.rowcount
-            for node in ordered:
-                cursor.execute(
-                    """
-                    INSERT INTO indexing_nodes (
-                        node_id, document_id, source_relpath, source_hash,
-                        ingestion_origin, node_role, parent_node_id, chunk_index,
-                        page_start, page_end, section_title, section_path, text,
-                        metadata, chunking_version, processing_fingerprint,
-                        source_chunk_bundle_id, chunking_bundle_fingerprint,
-                        corpus_version
-                    )
-                    VALUES (
-                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                        %s::jsonb, %s, %s, %s, %s, %s
-                    )
-                    ON CONFLICT (node_id) DO UPDATE SET
-                        document_id = EXCLUDED.document_id,
-                        source_relpath = EXCLUDED.source_relpath,
-                        source_hash = EXCLUDED.source_hash,
-                        ingestion_origin = EXCLUDED.ingestion_origin,
-                        node_role = EXCLUDED.node_role,
-                        parent_node_id = EXCLUDED.parent_node_id,
-                        chunk_index = EXCLUDED.chunk_index,
-                        page_start = EXCLUDED.page_start,
-                        page_end = EXCLUDED.page_end,
-                        section_title = EXCLUDED.section_title,
-                        section_path = EXCLUDED.section_path,
-                        text = EXCLUDED.text,
-                        metadata = EXCLUDED.metadata,
-                        chunking_version = EXCLUDED.chunking_version,
-                        processing_fingerprint = EXCLUDED.processing_fingerprint,
-                        source_chunk_bundle_id = EXCLUDED.source_chunk_bundle_id,
-                        chunking_bundle_fingerprint = EXCLUDED.chunking_bundle_fingerprint,
-                        corpus_version = EXCLUDED.corpus_version,
-                        updated_at = now()
-                    """,
-                    (
-                        node.node_id,
-                        node.document_id,
-                        node.source_relpath,
-                        node.source_hash,
-                        node.ingestion_origin,
-                        node.node_role,
-                        node.parent_node_id,
-                        node.chunk_index,
-                        node.page_start,
-                        node.page_end,
-                        node.section_title,
-                        node.section_path,
-                        node.text,
-                        json.dumps(node.metadata, sort_keys=True, default=str),
-                        node.chunking_version,
-                        node.processing_fingerprint,
-                        node.source_chunk_bundle_id,
-                        node.chunking_bundle_fingerprint,
-                        node.corpus_version,
-                    ),
-                )
-        return int(deleted)
 
     def replace_scoped_nodes(
         self,
@@ -305,10 +227,11 @@ class PostgresIndexingRunRepository:
                 INSERT INTO indexing_runs (
                     run_id, profile_id, status, config_hash, embedding_bundle_id,
                     embedding_profile_id, indexing_target_id, corpus_version,
+                    project_id, rag_variant_id, rag_release_id,
                     request_fingerprint, idempotency_key, validation_status,
                     activation_status, summary, warnings
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s::jsonb)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s::jsonb)
                 ON CONFLICT (run_id) DO NOTHING
                 """,
                 (
@@ -320,6 +243,9 @@ class PostgresIndexingRunRepository:
                     run.embedding_profile_id,
                     run.indexing_target_id,
                     run.corpus_version,
+                    run.project_id,
+                    run.rag_variant_id,
+                    run.rag_release_id,
                     run.request_fingerprint,
                     run.idempotency_key,
                     run.validation_status,

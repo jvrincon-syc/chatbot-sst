@@ -95,6 +95,11 @@ class IndexingRun(StrictModel):
     embedding_profile_id: str | None = None
     indexing_target_id: str | None = None
     corpus_version: str | None = None
+    # Contexto de release (Fase 4, gap #2): nullable, derivado por el servidor desde
+    # un build context validado, nunca del payload. Legacy escribe NULL.
+    project_id: str | None = None
+    rag_variant_id: str | None = None
+    rag_release_id: str | None = None
     request_fingerprint: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     idempotency_key: str | None = None
     validation_status: IndexingValidationStatus = "pending"
@@ -203,11 +208,22 @@ class IndexingRetrievalReadiness(StrictModel):
     blocking_reasons: list[str] = Field(default_factory=list)
 
 
-def indexing_request_fingerprint(*, embedding_bundle_id: str) -> str:
+def indexing_request_fingerprint(
+    *,
+    embedding_bundle_id: str,
+    project_id: str | None = None,
+    rag_variant_id: str | None = None,
+    rag_release_id: str | None = None,
+) -> str:
     """Return the deterministic fingerprint of one indexing request payload."""
 
     payload = json.dumps(
-        {"embedding_bundle_id": embedding_bundle_id},
+        {
+            "embedding_bundle_id": embedding_bundle_id,
+            "project_id": project_id,
+            "rag_variant_id": rag_variant_id,
+            "rag_release_id": rag_release_id,
+        },
         ensure_ascii=True,
         sort_keys=True,
         separators=(",", ":"),

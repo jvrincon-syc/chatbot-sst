@@ -113,26 +113,19 @@ def build_nodes(
     chunking_bundle_fingerprint: str,
     chunking_version: str,
     ingestion_origin: str,
-    project_id: str | None = None,
+    project_id: str,
 ) -> list[IndexingNodeRecord]:
-    """Adapt a persisted chunk bundle into durable node records.
+    """Adapt a persisted chunk bundle into durable node records (pure-platform).
 
-    Namespacing is **gated** (ADR-007 §2, C-9):
-
-    - ``project_id is None`` (legacy): the chunk ids become the node ids verbatim
-      (``node_id == source_chunk_id``), so the output is byte-for-byte identical to
-      the pre-Fase-4 behaviour and the child chunk map still aligns without
-      re-chunking. The physical-identity fields stay ``None``.
-    - ``project_id`` present (platform): ``node_id`` is the namespaced
-      :func:`physical_node_id` and, for children, ``parent_node_id`` is the physical
-      id of the parent chunk (``physical_node_id(..., source_parent_chunk_id)``), so
-      parent→child expansion uses the physical parent, never the source chunk id.
-      Two projects that share a ``source_chunk_id`` get distinct ``node_id``.
+    ADR-008 retiró la lane legacy: ``project_id`` es **obligatorio**. ``node_id`` es
+    siempre el namespaced :func:`physical_node_id` y, para los hijos,
+    ``parent_node_id`` es el id físico del chunk padre
+    (``physical_node_id(..., source_parent_chunk_id)``), de modo que la expansión
+    parent→child usa el padre físico, nunca el source chunk id. Dos proyectos que
+    comparten un ``source_chunk_id`` obtienen ``node_id`` distinto.
     """
 
     def _node_id(source_chunk_id: str) -> str:
-        if project_id is None:
-            return source_chunk_id
         return physical_node_id(
             project_id=project_id,
             source_chunk_bundle_id=chunk_bundle_id,
@@ -151,7 +144,7 @@ def build_nodes(
                 ingestion_origin=ingestion_origin,
                 node_role="parent",
                 parent_node_id=None,
-                source_chunk_id=parent.chunk_id if project_id is not None else None,
+                source_chunk_id=parent.chunk_id,
                 source_parent_chunk_id=None,
                 chunk_index=parent.ordinal,
                 page_start=parent.source_span.page_start,
@@ -185,10 +178,8 @@ def build_nodes(
                 ingestion_origin=ingestion_origin,
                 node_role="child",
                 parent_node_id=_node_id(child.parent_id),
-                source_chunk_id=child.chunk_id if project_id is not None else None,
-                source_parent_chunk_id=(
-                    child.parent_id if project_id is not None else None
-                ),
+                source_chunk_id=child.chunk_id,
+                source_parent_chunk_id=child.parent_id,
                 chunk_index=child.ordinal,
                 page_start=child.source_span.page_start,
                 page_end=child.source_span.page_end,
@@ -221,15 +212,14 @@ def _build_vector_record(
     bundle: EmbeddingBundle,
     profile: EmbeddingProfile,
     chunk_bundle_id: str,
-    project_id: str | None,
+    project_id: str,
     child_nodes_by_source_chunk_id: dict[str, IndexingNodeRecord],
     vector: list[float],
 ) -> AppendOnlyVectorRecord:
-    """Align one vector row with the durable child-node identity.
+    """Align one vector row with the durable child-node identity (pure-platform).
 
-    Legacy keeps ``node_id == child_chunk_id`` and the original metadata payload.
-    Platform rows carry the namespaced physical ``node_id`` plus ``project_id`` and
-    preserve the source chunk ids explicitly for traceability.
+    ADR-008: la fila vectorial lleva el ``node_id`` físico namespaced, su
+    ``project_id`` y preserva explícitamente los source chunk ids como evidencia.
     """
 
     child_node = child_nodes_by_source_chunk_id.get(chunk.child_chunk_id)
@@ -240,20 +230,15 @@ def _build_vector_record(
 
     metadata = {
         "document_id": chunk.document_id,
-        "parent_node_id": (
-            child_node.parent_node_id
-            if project_id is not None
-            else chunk.parent_chunk_id
-        ),
+        "parent_node_id": child_node.parent_node_id,
         "child_chunk_id": chunk.child_chunk_id,
         "chunk_ordinal": chunk.chunk_ordinal,
         "embedding_bundle_id": bundle.embedding_bundle_id,
         "embedding_profile_id": profile.profile_id,
         "corpus_version": bundle.corpus_version,
         "source_chunk_bundle_id": chunk_bundle_id,
+        "source_parent_chunk_id": chunk.parent_chunk_id,
     }
-    if project_id is not None:
-        metadata["source_parent_chunk_id"] = chunk.parent_chunk_id
 
     return AppendOnlyVectorRecord(
         node_id=child_node.node_id,
@@ -375,6 +360,12 @@ class IndexEmbeddingBundleUseCase:
             raise EmbeddingBundleStale("chunk map is not aligned with the source child chunks")
 
         project_id = chunk_bundle.project_id
+        if project_id is None:
+            # ADR-008 pure-platform: un chunk bundle sin dueño de proyecto no puede
+            # indexarse. La BD ya lo prohíbe (project_id NOT NULL); fail-closed aquí.
+            raise EmbeddingBundleInvalid(
+                f"chunk bundle {chunk_bundle.chunk_bundle_id} has no project_id"
+            )
         nodes = build_nodes(
             content=content,
             chunk_bundle_id=chunk_bundle.chunk_bundle_id,
@@ -384,7 +375,7 @@ class IndexEmbeddingBundleUseCase:
             project_id=project_id,
         )
         child_nodes_by_source_chunk_id = {
-            (node.source_chunk_id or node.node_id): node
+            node.source_chunk_id: node
             for node in nodes
             if node.node_role == "child"
         }
@@ -422,17 +413,11 @@ class IndexEmbeddingBundleUseCase:
         parent_nodes = sum(1 for node in nodes if node.node_role == "parent")
         child_nodes = len(nodes) - parent_nodes
         with self._transactions.transaction():
-            if project_id is None:
-                self._nodes.replace_document_nodes(
-                    document_id=content.document_id,
-                    nodes=nodes,
-                )
-            else:
-                self._nodes.replace_scoped_nodes(
-                    project_id=project_id,
-                    source_chunk_bundle_id=chunk_bundle.chunk_bundle_id,
-                    nodes=nodes,
-                )
+            self._nodes.replace_scoped_nodes(
+                project_id=project_id,
+                source_chunk_bundle_id=chunk_bundle.chunk_bundle_id,
+                nodes=nodes,
+            )
             written = self._vectors.append_bundle_vectors(
                 profile=resolved_profile,
                 indexing_target_id=target.indexing_target_id,
@@ -517,6 +502,9 @@ class CreateIndexingRunRequest:
     """Public payload: only the embedding bundle id."""
 
     embedding_bundle_id: str
+    project_id: str | None = None
+    rag_variant_id: str | None = None
+    rag_release_id: str | None = None
 
 
 class CreateIndexingRunUseCase:
@@ -559,7 +547,10 @@ class CreateIndexingRunUseCase:
         target = self._index_use_case.resolve_target(profile, bundle)
 
         fingerprint = indexing_request_fingerprint(
-            embedding_bundle_id=bundle.embedding_bundle_id
+            embedding_bundle_id=bundle.embedding_bundle_id,
+            project_id=request.project_id,
+            rag_variant_id=request.rag_variant_id,
+            rag_release_id=request.rag_release_id,
         )
         existing = self._runs.find_by_idempotency_key(idempotency_key)
         if existing is not None:
@@ -578,6 +569,9 @@ class CreateIndexingRunUseCase:
             embedding_profile_id=profile.profile_id,
             indexing_target_id=target.indexing_target_id,
             corpus_version=bundle.corpus_version,
+            project_id=request.project_id,
+            rag_variant_id=request.rag_variant_id,
+            rag_release_id=request.rag_release_id,
             request_fingerprint=fingerprint,
             idempotency_key=idempotency_key,
             validation_status="pending",

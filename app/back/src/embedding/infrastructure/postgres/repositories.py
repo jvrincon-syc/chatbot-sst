@@ -85,6 +85,9 @@ _RUN_COLUMNS = (
     "source_chunk_bundle_id",
     "embedding_profile_id",
     "configuration_fingerprint",
+    "project_id",
+    "rag_variant_id",
+    "rag_release_id",
     "runtime_engine",
     "runtime_mode",
     "engine_revision_observed",
@@ -528,10 +531,11 @@ class PostgresEmbeddingRunRepository:
                 INSERT INTO embedding_runs (
                     embedding_run_id, idempotency_key, request_fingerprint,
                     source_chunk_bundle_id, embedding_profile_id,
-                    configuration_fingerprint, runtime_engine, runtime_mode,
+                    configuration_fingerprint, project_id, rag_variant_id,
+                    rag_release_id, runtime_engine, runtime_mode,
                     engine_revision_observed, status, summary_json, warnings_json
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s::jsonb)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s::jsonb)
                 ON CONFLICT (idempotency_key, request_fingerprint) DO NOTHING
                 """,
                 (
@@ -541,6 +545,9 @@ class PostgresEmbeddingRunRepository:
                     run.source_chunk_bundle_id,
                     run.embedding_profile_id,
                     run.configuration_fingerprint,
+                    run.project_id,
+                    run.rag_variant_id,
+                    run.rag_release_id,
                     run.runtime_engine,
                     run.runtime_mode,
                     run.engine_revision_observed,
@@ -663,6 +670,9 @@ def _run_from_row(row: Mapping[str, object] | Sequence[object]) -> EmbeddingRun:
             "source_chunk_bundle_id": values["source_chunk_bundle_id"],
             "embedding_profile_id": values["embedding_profile_id"],
             "configuration_fingerprint": values["configuration_fingerprint"],
+            "project_id": values["project_id"],
+            "rag_variant_id": values["rag_variant_id"],
+            "rag_release_id": values["rag_release_id"],
             "runtime_engine": values["runtime_engine"],
             "runtime_mode": values["runtime_mode"],
             "engine_revision_observed": values["engine_revision_observed"],

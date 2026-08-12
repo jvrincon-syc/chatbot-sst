@@ -65,6 +65,14 @@ class ProjectStorageResolver:
             manifests=f"{prefix}/manifests",
         )
 
+    def resolve_root(self, project_id: PlatformId, root_name: str) -> Path:
+        """Return the absolute path of one canonical project root."""
+
+        if root_name not in _ARTIFACT_ROOTS:
+            raise UnsafeArtifactPath(f"unknown project root: {root_name!r}")
+        slug = _project_slug(project_id)
+        return (self._projects_dir / slug / root_name).resolve()
+
     def resolve_artifact(
         self, project_id: PlatformId, relative_path: PurePosixPath
     ) -> Path:

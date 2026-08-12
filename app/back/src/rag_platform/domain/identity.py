@@ -33,6 +33,7 @@ _FIELD_SEP = "\x1f"
 _PHYSICAL_NODE_PREFIX = "pnode_"
 #: Hex length kept from the digest; matches ``platform_document_id`` (128 bits).
 _PHYSICAL_NODE_HEX_LEN = 32
+_NORMALIZED_DOC_PREFIX = "ndoc_"
 
 
 def physical_node_id(
@@ -64,6 +65,25 @@ def physical_node_id(
     payload = _FIELD_SEP.join((project_id, source_chunk_bundle_id, source_chunk_id))
     digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
     return _PHYSICAL_NODE_PREFIX + digest[:_PHYSICAL_NODE_HEX_LEN]
+
+
+def normalized_document_id(
+    *, project_id: str, source_document_revision_id: str, processing_profile_fingerprint: str
+) -> str:
+    """Return the deterministic platform id of one normalized document artifact.
+
+    The identity follows ADR-006 Fase 2: ``project + source revision + processing
+    fingerprint``. It stays deterministic and project-scoped even before the full
+    normalized-document catalog lands.
+    """
+
+    if not project_id or not source_document_revision_id or not processing_profile_fingerprint:
+        raise ValueError("normalized_document_id requires non-empty components")
+    payload = _FIELD_SEP.join(
+        (project_id, source_document_revision_id, processing_profile_fingerprint)
+    )
+    digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return _NORMALIZED_DOC_PREFIX + digest[:_PHYSICAL_NODE_HEX_LEN]
 
 
 class IdentityKind(str, Enum):

@@ -124,25 +124,6 @@ class InMemoryIndexingNodeWriter:
     def __init__(self) -> None:
         self.nodes: dict[str, IndexingNodeRecord] = {}
 
-    def replace_document_nodes(
-        self,
-        *,
-        document_id: str,
-        nodes: Sequence[IndexingNodeRecord],
-    ) -> int:
-        """Replace the durable nodes of one document (legacy scope)."""
-
-        stale = [
-            node_id
-            for node_id, node in self.nodes.items()
-            if node.document_id == document_id
-        ]
-        for node_id in stale:
-            del self.nodes[node_id]
-        for node in nodes:
-            self.nodes[node.node_id] = node
-        return len(stale)
-
     def replace_scoped_nodes(
         self,
         *,

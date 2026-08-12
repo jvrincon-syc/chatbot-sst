@@ -27,6 +27,7 @@ def build_run_service(
     chunks_root: Path,
     connection: object | None = None,
     close_connection_on_close: bool = False,
+    project_id: str | None = None,
 ) -> ChunkingRunService:
     chunk_repository: FilesystemChunkBundleRepository
     if connection is None:
@@ -36,6 +37,7 @@ def build_run_service(
             output_root=chunks_root,
             ledger=PostgresChunkBundleRepository(connection),
             connection=connection,
+            project_id=project_id,
             close_connection_on_close=close_connection_on_close,
         )
     return ChunkingRunService(
@@ -55,6 +57,7 @@ def build_run_service_from_env(
     *,
     docs_normalized: Path,
     chunks_root: Path,
+    project_id: str | None = None,
 ) -> ChunkingRunService:
     connection: object | None = None
     close_connection_on_close = False
@@ -68,6 +71,7 @@ def build_run_service_from_env(
         chunks_root=chunks_root,
         connection=connection,
         close_connection_on_close=close_connection_on_close,
+        project_id=project_id,
     )
 
 
