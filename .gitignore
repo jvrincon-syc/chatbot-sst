@@ -283,3 +283,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 .claude/
+
+# macOS
+.DS_Store
