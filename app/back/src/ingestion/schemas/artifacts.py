@@ -232,6 +232,23 @@ _PLATFORM_RAG_VARIANT_ID_PATTERN = r"^ragv_[a-z0-9][a-z0-9-]{0,127}$"
 _PLATFORM_FINGERPRINT_PATTERN = r"^[0-9a-f]{64}$"
 
 
+class PlatformArtifactProvenance(StrictModel):
+    """Optional semantic audit provenance shared by platform artifacts."""
+
+    rag_variant_id: Optional[str] = Field(default=None, pattern=_PLATFORM_RAG_VARIANT_ID_PATTERN)
+    semantic_recipe_fingerprint: Optional[str] = Field(
+        default=None, pattern=_PLATFORM_FINGERPRINT_PATTERN
+    )
+
+    @model_validator(mode="after")
+    def validate_complete_semantic_provenance(self) -> "PlatformArtifactProvenance":
+        if (self.rag_variant_id is None) != (self.semantic_recipe_fingerprint is None):
+            raise ValueError(
+                "rag_variant_id and semantic_recipe_fingerprint must be set together"
+            )
+        return self
+
+
 class PlatformDocumentIdentity(StrictModel):
     """Identidad de plataforma opcional para artefactos Schema 2.0 nuevos (ADR-006).
 
@@ -253,19 +270,45 @@ class PlatformDocumentIdentity(StrictModel):
     normalized_document_id: Optional[str] = Field(default=None, min_length=1)
     processing_profile_id: str = Field(pattern=_PLATFORM_PROCESSING_PROFILE_ID_PATTERN)
     processing_profile_fingerprint: str = Field(pattern=_PLATFORM_FINGERPRINT_PATTERN)
-    rag_variant_id: Optional[str] = Field(default=None, pattern=_PLATFORM_RAG_VARIANT_ID_PATTERN)
-    semantic_recipe_fingerprint: Optional[str] = Field(
-        default=None, pattern=_PLATFORM_FINGERPRINT_PATTERN
-    )
+    provenance: PlatformArtifactProvenance = Field(default_factory=PlatformArtifactProvenance)
     schema_version: SchemaVersion = "2.0"
 
-    @model_validator(mode="after")
-    def validate_semantic_provenance(self) -> "PlatformDocumentIdentity":
-        if (self.rag_variant_id is None) != (self.semantic_recipe_fingerprint is None):
-            raise ValueError(
-                "rag_variant_id and semantic_recipe_fingerprint must be set together"
-            )
-        return self
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_flat_provenance(cls, value: Any) -> Any:
+        """Migrate historical flat provenance without accepting ambiguity."""
+
+        if not isinstance(value, dict):
+            return value
+        flat_keys = ("rag_variant_id", "semantic_recipe_fingerprint")
+        flat = {key: value[key] for key in flat_keys if key in value}
+        if not flat:
+            return value
+
+        normalized = dict(value)
+        nested = normalized.get("provenance")
+        if nested is None:
+            normalized["provenance"] = flat
+        elif not isinstance(nested, dict):
+            return normalized
+        else:
+            if any(nested.get(key) != field_value for key, field_value in flat.items()):
+                raise ValueError("conflicting flat and nested provenance")
+        for key in flat_keys:
+            normalized.pop(key, None)
+        return normalized
+
+    @property
+    def rag_variant_id(self) -> Optional[str]:
+        """Expose semantic audit provenance without making it identity."""
+
+        return self.provenance.rag_variant_id
+
+    @property
+    def semantic_recipe_fingerprint(self) -> Optional[str]:
+        """Expose semantic audit provenance without making it identity."""
+
+        return self.provenance.semantic_recipe_fingerprint
 
 
 class MetadataArtifact(StrictModel):

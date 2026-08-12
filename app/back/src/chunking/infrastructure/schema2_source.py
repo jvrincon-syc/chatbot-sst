@@ -5,7 +5,11 @@ import re
 from pathlib import Path
 
 from chunking.application.source_span_resolver import SourceSpanResolver
-from chunking.domain.models import NormalizedDocumentBundle, ValidatedSidecars
+from chunking.domain.models import (
+    NormalizedDocumentBundle,
+    NormalizedDocumentPlatformContext,
+    ValidatedSidecars,
+)
 from ingestion.schemas.artifacts import (
     FormsArtifact,
     MetadataArtifact,
@@ -71,6 +75,22 @@ class Schema2BundleAssembler:
                 ),
             ),
             warnings=resolution.warnings,
+            platform_context=self._platform_context(metadata),
+        )
+
+    @staticmethod
+    def _platform_context(metadata: MetadataArtifact) -> NormalizedDocumentPlatformContext | None:
+        identity = metadata.platform_identity
+        if identity is None:
+            return None
+        return NormalizedDocumentPlatformContext(
+            project_id=identity.project_id,
+            source_document_id=identity.source_document_id,
+            source_document_revision_id=identity.source_document_revision_id,
+            processing_profile_id=identity.processing_profile_id,
+            processing_profile_fingerprint=identity.processing_profile_fingerprint,
+            normalized_document_id=identity.normalized_document_id,
+            provenance=identity.provenance,
         )
 
     def _validate_consistency(

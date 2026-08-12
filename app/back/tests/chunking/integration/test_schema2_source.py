@@ -237,6 +237,69 @@ def test_loads_incomplete_and_absent_optional_sidecars_without_inventing_values(
     assert document.structural_blocks == ()
 
 
+def test_load_maps_metadata_platform_identity_to_bundle_context(tmp_path: Path) -> None:
+    metadata = _metadata()
+    metadata["platform_identity"] = {
+        "project_id": "proj_sst-general",
+        "source_document_id": "sdoc_1234",
+        "source_document_revision_id": "srev_1234",
+        "processing_profile_id": "pp_local-pdf",
+        "processing_profile_fingerprint": "a" * 64,
+        "provenance": {
+            "rag_variant_id": "ragv_local-bge",
+            "semantic_recipe_fingerprint": "b" * 64,
+        },
+    }
+    _write_bundle(tmp_path, markdown="Codigo SST-01\n\nFecha 2026-07-23\n", metadata=metadata)
+
+    bundle = Schema2NormalizedDocumentSource(tmp_path).load(RELATIVE_PATH)
+
+    assert bundle.platform_context is not None
+    assert bundle.platform_context.project_id == "proj_sst-general"
+    assert bundle.platform_context.rag_variant_id == "ragv_local-bge"
+
+
+def test_load_migrates_flat_metadata_provenance_to_bundle_context(tmp_path: Path) -> None:
+    metadata = _metadata()
+    metadata["platform_identity"] = {
+        "project_id": "proj_sst-general",
+        "source_document_id": "sdoc_1234",
+        "source_document_revision_id": "srev_1234",
+        "processing_profile_id": "pp_local-pdf",
+        "processing_profile_fingerprint": "a" * 64,
+        "rag_variant_id": "ragv_local-bge",
+        "semantic_recipe_fingerprint": "b" * 64,
+    }
+    _write_bundle(tmp_path, markdown="Codigo SST-01\n\nFecha 2026-07-23\n", metadata=metadata)
+
+    bundle = Schema2NormalizedDocumentSource(tmp_path).load(RELATIVE_PATH)
+
+    assert bundle.platform_context is not None
+    assert bundle.platform_context.provenance.rag_variant_id == "ragv_local-bge"
+    assert bundle.platform_context.provenance.semantic_recipe_fingerprint == "b" * 64
+
+
+def test_load_rejects_conflicting_flat_and_nested_metadata_provenance(tmp_path: Path) -> None:
+    metadata = _metadata()
+    metadata["platform_identity"] = {
+        "project_id": "proj_sst-general",
+        "source_document_id": "sdoc_1234",
+        "source_document_revision_id": "srev_1234",
+        "processing_profile_id": "pp_local-pdf",
+        "processing_profile_fingerprint": "a" * 64,
+        "rag_variant_id": "ragv_local-bge",
+        "semantic_recipe_fingerprint": "b" * 64,
+        "provenance": {
+            "rag_variant_id": "ragv_other",
+            "semantic_recipe_fingerprint": "b" * 64,
+        },
+    }
+    _write_bundle(tmp_path, markdown="Codigo SST-01\n\nFecha 2026-07-23\n", metadata=metadata)
+
+    with pytest.raises(ValueError, match="conflicting flat and nested provenance"):
+        Schema2NormalizedDocumentSource(tmp_path).load(RELATIVE_PATH)
+
+
 def test_emits_unresolved_warning_when_pages_cannot_be_safely_aligned(tmp_path: Path) -> None:
     _write_bundle(
         tmp_path,

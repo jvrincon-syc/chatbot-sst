@@ -17,6 +17,7 @@ from chunking.domain.invariants import (
     require_unique,
 )
 from chunking.domain.policies import LOCAL_STRUCTURAL_ZERO_OVERLAP_POLICY, ZeroOverlapPolicy
+from ingestion.schemas.artifacts import PlatformArtifactProvenance
 
 
 def _stable_id(prefix: str, payload: dict[str, object]) -> str:
@@ -196,8 +197,7 @@ class NormalizedDocumentPlatformContext:
     processing_profile_id: str
     processing_profile_fingerprint: str
     normalized_document_id: str | None = None
-    rag_variant_id: str | None = None
-    semantic_recipe_fingerprint: str | None = None
+    provenance: PlatformArtifactProvenance = field(default_factory=PlatformArtifactProvenance)
 
     def __post_init__(self) -> None:
         for field_name in (
@@ -208,10 +208,18 @@ class NormalizedDocumentPlatformContext:
             "processing_profile_fingerprint",
         ):
             require_non_empty(getattr(self, field_name), field_name=field_name)
-        if (self.rag_variant_id is None) != (self.semantic_recipe_fingerprint is None):
-            raise ChunkInvariantError(
-                "rag_variant_id and semantic_recipe_fingerprint must be set together"
-            )
+
+    @property
+    def rag_variant_id(self) -> str | None:
+        """Expose semantic audit provenance without changing chunk identity."""
+
+        return self.provenance.rag_variant_id
+
+    @property
+    def semantic_recipe_fingerprint(self) -> str | None:
+        """Expose semantic audit provenance without changing chunk identity."""
+
+        return self.provenance.semantic_recipe_fingerprint
 
 
 @dataclass(frozen=True)

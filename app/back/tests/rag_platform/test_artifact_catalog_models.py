@@ -39,6 +39,24 @@ def test_normalized_artifact_record_exige_provenance_de_procesamiento() -> None:
     assert record.semantic_recipe_fingerprint is None
 
 
+@pytest.mark.parametrize("unsafe_path", ["../../outside", "/absolute", "C:/drive/path"])
+def test_artifact_records_rechazan_relpaths_inseguros(unsafe_path: str) -> None:
+    with pytest.raises(ValidationError):
+        RawDocumentArtifactRecord.model_validate(
+            {
+                "project_id": "proj_sst-general",
+                "source_document_revision_id": "srev_1234",
+                "logical_document_id": "sdoc_1234",
+                "artifact_relpath": unsafe_path,
+                "source_relpath": "general/doc.pdf",
+                "raw_content_hash": "a" * 64,
+                "file_size": 42,
+                "uploaded_by": "operator",
+                "uploaded_at": "2026-08-12T00:00:00Z",
+            }
+        )
+
+
 def test_raw_artifact_record_preserva_la_identidad_logica_y_el_sidecar_fisico() -> None:
     record = RawDocumentArtifactRecord.model_validate(
         {

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from chunking.domain.models import NormalizedDocumentBundle, NormalizedDocumentPlatformContext
+from ingestion.schemas.artifacts import PlatformArtifactProvenance
 
 
 def test_schema2_bundle_preserva_platform_provenance() -> None:
@@ -15,8 +16,10 @@ def test_schema2_bundle_preserva_platform_provenance() -> None:
             source_document_revision_id="srev_1234",
             processing_profile_id="pp_local-pdf",
             processing_profile_fingerprint="a" * 64,
-            rag_variant_id="ragv_local-bge",
-            semantic_recipe_fingerprint="b" * 64,
+            provenance=PlatformArtifactProvenance(
+                rag_variant_id="ragv_local-bge",
+                semantic_recipe_fingerprint="b" * 64,
+            ),
         ),
     )
 
