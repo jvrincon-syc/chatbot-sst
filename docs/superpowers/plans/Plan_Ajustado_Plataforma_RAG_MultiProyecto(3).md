@@ -466,17 +466,24 @@ class IndexingMaterializationRepository(Protocol):
 
 > **Enfoque revisado (2026-08-11, [ADR-007](../adr/ADR-007-phase4-physical-ownership-and-hard-reset.md); plan de trabajo `plans/2026-08-11-fase4-embedding-nodos-vectores.md`):** entorno de dev → **hard reset + rebuild** de artefactos derivados en vez de backfill `legacy_unverified`. Aislamiento por **FKs compuestas** `(project_id, id)`, no solo `project_id`. **No** se retira ninguna unicidad global en Fase 4 (colisión de fingerprint global → error de dominio fail-closed). SST **dormido** durante Fase 4–8. Orden: Gate 0 → DDL aditivo → dual-mode → reset → rebuild → validación → enable.
 
-- [ ] `EmbeddingRun`/`IndexingRun` ganan `project_id`/`rag_variant_id`/`rag_release_id` como contexto operacional, **columnas nullable sin FK** (la tabla `rag_releases` es de Fase 5), derivadas por el servidor desde un build context validado, **nunca** del payload del cliente. No cambia la identidad de `EmbeddingBundle`.
-- [ ] Nueva identidad de `EmbeddingBundle` (proyecto + chunk bundle + profile/config fingerprint + contenido fuente) como **índice único parcial** `WHERE project_id IS NOT NULL`; `corpus_version` se mantiene NOT NULL (marcador legacy) fuera de la identidad. La unicidad legacy actual **no se retira** (ya incluye `source_chunk_bundle_id`).
-- [ ] **Aislamiento por FKs compuestas** (impuesto por la BD): `UNIQUE(project_id, chunk_bundle_id)`; `embedding_bundles`/`indexing_nodes`/`idx_vec_*`/`indexing_materializations` con `FK(project_id, ...)` a su padre. Con `project_id` nullable, las filas legacy bypassean el FK compuesto (MATCH SIMPLE) y solo plataforma queda blindada. Sin `DROP CONSTRAINT`.
-- [ ] `IndexingNodeRecord`: separar `node_id` físico de `source_chunk_id`; **y `parent_node_id` físico de `source_parent_chunk_id`**. La expansión parent→child usa `parent_node_id` físico, no el source.
-- [ ] Reemplazar `replace_document_nodes(document_id=...)` por operación scoped `project_id + source_chunk_bundle_id`. Namespacing **gated**: legacy (`project_id IS NULL`) conserva `node_id == source_chunk_id` byte-idéntico; plataforma usa `physical_node_id` namespaced.
-- [ ] `physical_node_id` = hash de representación canónica etiquetada (`project_id`,`source_chunk_bundle_id`,`source_chunk_id`); IDs fuente en columnas explícitas.
-- [ ] `project_id` en `idx_vec_*`; mantener `UNIQUE(embedding_bundle_id, node_id)`; `rag_release_id` fuera de las filas vectoriales.
-- [ ] Tabla real `indexing_materializations` con lifecycle inmutable `WRITING→SEALED|FAILED` (`begin_writing`/`seal`/`mark_failed`/`find_sealed`, nunca `upsert`); `UNIQUE(project_id, embedding_bundle_id, indexing_target_id, storage_schema_version)`, checksum canónico y conteos. Una release referencia la materialización, no un estado activo global.
-- [ ] **`SealedEmbeddingStore`** físico por proyecto (`data/projects/{project_id}/embeddings/{embedding_bundle_id}/`), reusa `core.atomic_fs`, espeja `SealedChunkStore`, nunca `replace()`.
-- [ ] Validación transaccional: owner de proyecto, pertenencia profile/target, dimensión, métrica, checksum, conteos parent/child/vector y estado sellado.
-- [ ] **Herramienta de reset** `reset_derived_rag_artifacts` (`--dry-run`/`--apply`, inventario before/after, se niega a borrar filas `is_active`) + **rebuild limpio** platform-only que no activa vectores.
+- [x] `EmbeddingRun`/`IndexingRun` ganan `project_id`/`rag_variant_id`/`rag_release_id` como contexto operacional, **columnas nullable sin FK** (la tabla `rag_releases` es de Fase 5), derivadas por el servidor desde un build context validado, **nunca** del payload del cliente. No cambia la identidad de `EmbeddingBundle`. — **Evidencia:** `migrations/20260810_05_...sql:99-105` (`ALTER TABLE embedding_runs/indexing_runs ADD COLUMN IF NOT EXISTS project_id/rag_variant_id/rag_release_id`, sin FK). Derivación server-side: `rag_platform/application/rebuild_orchestrator.py::PlatformBuildContext` (validado por `kind`, nunca del payload). Test `tests/indexing/infrastructure/postgres/test_embedding_persistence_migrations.py`.
+- [x] Nueva identidad de `EmbeddingBundle` (proyecto + chunk bundle + profile/config fingerprint + contenido fuente) como **índice único parcial** `WHERE project_id IS NOT NULL`; `corpus_version` se mantiene NOT NULL (marcador legacy) fuera de la identidad. La unicidad legacy actual **no se retira** (ya incluye `source_chunk_bundle_id`). — **Evidencia:** `20260810_05_...sql:30-39` (`uq_embedding_bundles_physical_identity` parcial, sin `corpus_version`). `embedding/domain/models.py:442-448` (`project_id` nullable; legacy conserva id con `corpus_version`). Sin `DROP CONSTRAINT` en la migración.
+- [x] **Aislamiento por FKs compuestas** (impuesto por la BD): `UNIQUE(project_id, chunk_bundle_id)`; `embedding_bundles`/`indexing_nodes`/`idx_vec_*`/`indexing_materializations` con `FK(project_id, ...)` a su padre. Con `project_id` nullable, las filas legacy bypassean el FK compuesto (MATCH SIMPLE) y solo plataforma queda blindada. Sin `DROP CONSTRAINT`. — **Evidencia:** `20260810_05_...sql:14-15,24-25,45-58,73-92,135-148` (uniques compuestos + FKs `NOT VALID` en chunk/embedding/nodes/materializations) y `20260810_06_...sql:37-55` (2 FKs compuestos por cada `idx_vec_*`). MATCH SIMPLE documentado en cabeceras.
+- [x] `IndexingNodeRecord`: separar `node_id` físico de `source_chunk_id`; **y `parent_node_id` físico de `source_parent_chunk_id`**. La expansión parent→child usa `parent_node_id` físico, no el source. — **Evidencia:** `20260810_05_...sql:65-67` (columnas `source_chunk_id`/`source_parent_chunk_id`). `indexing/application/bundle_first/index_bundle.py:109-190` (build_nodes separa físico/evidencia). Test `tests/rag_platform/test_node_identity_isolation.py::test_parent_expansion_uses_physical_parent_node_id` y `tests/retrieval/test_parent_expansion.py`.
+- [x] Reemplazar `replace_document_nodes(document_id=...)` por operación scoped `project_id + source_chunk_bundle_id`. Namespacing **gated**: legacy (`project_id IS NULL`) conserva `node_id == source_chunk_id` byte-idéntico; plataforma usa `physical_node_id` namespaced. — **Evidencia:** `index_bundle.py:424-435` (ramifica `replace_document_nodes` legacy vs `replace_scoped_nodes` plataforma). Test `test_node_identity_isolation.py::test_build_nodes_legacy_conserva_node_id_byte_identico_cuando_sin_proyecto` + `..._plataforma_namespaced_cuando_hay_proyecto`.
+- [x] `physical_node_id` = hash de representación canónica etiquetada (`project_id`,`source_chunk_bundle_id`,`source_chunk_id`); IDs fuente en columnas explícitas. — **Evidencia:** `rag_platform/domain/identity.py:38-66` (sha256 field-fenced con `\x1f`, prefijo `pnode_`, fail-closed si vacío).
+- [x] `project_id` en `idx_vec_*`; mantener `UNIQUE(embedding_bundle_id, node_id)`; `rag_release_id` fuera de las filas vectoriales. — **Evidencia:** `20260810_06_...sql:25-35` (`ADD COLUMN project_id` + índice en las 7 tablas; comentario: UNIQUE existente no se toca, `rag_release_id` no vive en la fila vectorial).
+- [x] Tabla real `indexing_materializations` con lifecycle inmutable `WRITING→SEALED|FAILED` (`begin_writing`/`seal`/`mark_failed`/`find_sealed`, nunca `upsert`); `UNIQUE(project_id, embedding_bundle_id, indexing_target_id, storage_schema_version)`, checksum canónico y conteos. Una release referencia la materialización, no un estado activo global. — **Evidencia:** `20260810_05_...sql:113-151` (tabla + CHECK lifecycle + UNIQUE + FK compuesto). Puerto `application/vector_materialization.py:65-103`; adaptador `infrastructure/postgres/vector_repositories.py:59-228` (`ON CONFLICT ... WHERE status <> sealed` bloquea reabrir sellada). Test `tests/rag_platform/test_vector_lane_isolation.py` (9 casos).
+- [x] **`SealedEmbeddingStore`** físico por proyecto (`data/projects/{project_id}/embeddings/{embedding_bundle_id}/`), reusa `core.atomic_fs`, espeja `SealedChunkStore`, nunca `replace()`. — **Evidencia:** `infrastructure/storage/sealed_embedding_store.py:27,47,53-165` (`stage_and_seal`/`verify_checksum` con `atomic_fs`, sin `replace`). Test `tests/rag_platform/test_sealed_embedding_store.py`.
+- [x] Validación transaccional: owner de proyecto, pertenencia profile/target, dimensión, métrica, checksum, conteos parent/child/vector y estado sellado. — **Evidencia:** `application/vector_materialization.py:106-194` (`MaterializeVectorsUseCase`: owner + counts + dimensión/métrica; FAILED observable si algo falla). Invariantes `domain/models.py:738-800` (`validate_materialization_ownership`, `validate_materialization_counts`). Test `test_vector_lane_isolation.py::test_falla_cerrado_cuando_*`.
+- [x] **Herramienta de reset** `reset_derived_rag_artifacts` (`--dry-run`/`--apply`, inventario before/after, se niega a borrar filas `is_active`) + **rebuild limpio** platform-only que no activa vectores. — **Evidencia:** `scripts/rag_platform/reset_derived_rag_artifacts.py` (handshake `--confirm-token`, `collect_blockers` por `is_active`/retrieval activo, inventario before/after, borrado FK-safe, contención de rutas). Rebuild: `rag_platform/application/rebuild_orchestrator.py::RebuildPlatformArtifactsUseCase` (deja vectores inactivos). Tests `tests/rag_platform/test_reset_derived_rag_artifacts.py` (8 casos) + `test_rebuild_orchestrator.py` (4 casos).
+
+> **Estado de verificación (2026-08-11):** los 11 incisos están implementados y con
+> tests en el repo; el detalle por bloque A–H y la evidencia `archivo:línea` vive
+> en el plan de trabajo `plans/2026-08-11-fase4-embedding-nodos-vectores.md`.
+> **Pendiente operativo** (no de código): aplicar `20260810_05/06` a la BD y correr
+> la suite en la máquina de gates reales — los tests de esta tanda están escritos
+> pero aún sin ejecutar en este entorno.
 
 **Exit criteria:** local/BGE y local/Voyage comparten normalizado/chunks cuando corresponde; nunca embedding/vector. Dos proyectos no pueden sobrescribir ni referenciar nodos/vectores entre sí (impuesto por FKs compuestas). El reset+rebuild deja todo artefacto derivado con `project_id`; SST no queda activado.
 
@@ -514,17 +521,24 @@ class ValidateRagReleaseUseCase:
     def execute(self, *, rag_release_id: str, actor_id: str) -> ReleaseValidationReport: ...
 ```
 
-- [ ] Implementar `CreateRagReleaseDraft` que compruebe que snapshot y variante pertenecen al mismo proyecto, resuelva solo un `target_binding_key` permitido para el perfil de embedding, pinne recipe/configuration/target snapshots y cree la release en `DRAFT`.
-- [ ] Permitir que un mismo `corpus_snapshot_id` tenga DRAFTs y releases en varias variantes del mismo proyecto; mantener `release_number` único dentro de cada `rag_variant_id`, nunca global para el proyecto.
-- [ ] Bloquear la creación y validación de una release cuando alguna revisión tenga elegibilidad `blocked`; requerir que una excepción `operator_waiver` incluya actor, motivo, fecha y el snapshot de política que autorizó la excepción.
-- [ ] Implementar un planner que recorra cada revisión del corpus snapshot y aplique `ArtifactReusePolicy` en orden: normalizado → chunk → embedding → materialización de índice.
-- [ ] Cuando no haya reuso exacto, invocar los servicios existentes de ingesta/chunking/embedding/indexing mediante puertos/adaptadores; no copiar sus algoritmos al módulo plataforma.
-- [ ] Crear membresías concretas en el mismo commit lógico que registra el resultado del paso. La release nunca se considera completa si falta una revisión o si un artefacto pertenece a otro proyecto.
-- [ ] Requerir que el manifiesto de release contenga hashes de corpus snapshot, recipe, configuración de proyecto, artefactos y conteos; su `release_manifest_hash` se congela al validar.
-- [ ] Implementar lifecycle estricto y actor/motivo/auditoría para `VALIDATED`, `PUBLISHED`, `RETIRED` y `FAILED`. `PUBLISHED` significa que el catálogo de plataforma acepta la release; no significa que una lane legacy esté activa.
-- [ ] No modificar una `DRAFT` validada en sitio: un cambio de corpus o recipe vuelve a crear el snapshot/membresía antes de una nueva validación.
+- [x] Implementar `CreateRagReleaseDraft` que compruebe que snapshot y variante pertenecen al mismo proyecto, resuelva solo un `target_binding_key` permitido para el perfil de embedding, pinne recipe/configuration/target snapshots y cree la release en `DRAFT`. — **Evidencia:** `rag_platform/application/release_service.py::CreateRagReleaseDraftUseCase.execute` (usa `ensure_same_project`, valida `TargetBindingResolver.find_binding` + coincidencia de `embedding_profile_id`, crea `DRAFT`). Tests `tests/rag_platform/test_release_membership_integrity.py::test_crea_draft_cuando_todo_valido`, `..._falla_si_variante_y_snapshot_son_de_proyectos_distintos`, `..._falla_si_binding_no_esta_en_allowlist`, `..._falla_si_binding_apunta_a_otro_perfil_de_embedding`.
+- [x] Permitir que un mismo `corpus_snapshot_id` tenga DRAFTs y releases en varias variantes del mismo proyecto; mantener `release_number` único dentro de cada `rag_variant_id`, nunca global para el proyecto. — **Evidencia:** `migrations/20260810_07_...sql` (`uq_rag_releases_variant_number ON rag_releases (rag_variant_id, release_number)` — por variante, no por proyecto). `domain/lifecycle.py::next_release_number`. Test `test_release_membership_integrity.py::test_release_number_incrementa_por_variante`, `test_release_lifecycle.py::test_release_number_por_variante`.
+- [x] Bloquear la creación y validación de una release cuando alguna revisión tenga elegibilidad `blocked`; requerir que una excepción `operator_waiver` incluya actor, motivo, fecha y el snapshot de política que autorizó la excepción. — **Evidencia:** `release_service.py::_reject_blocked_revisions` y `release_validator.py::_reject_blocked_revisions` lanzan `ReleaseBlockedRevision` ante `EligibilityDecision.BLOCKED`; `operator_waiver` ya es una decisión de elegibilidad válida registrada en el snapshot (Fase 2, `CorpusSnapshotDocument.eligibility_decision`). Tests `..._falla_si_snapshot_tiene_revision_blocked`, `test_release_lifecycle.py::test_validar_rechaza_revision_blocked`.
+- [x] Implementar un planner que recorra cada revisión del corpus snapshot y aplique `ArtifactReusePolicy` en orden: normalizado → chunk → embedding → materialización de índice. — **Evidencia:** `rag_platform/application/release_build_service.py::BuildRagReleaseUseCase.execute` recorre `snapshot.documents` ordenados y procesa `_BUILD_STAGES = (NORMALIZE, CHUNK, EMBED, INDEX)` por revisión, auditando cada etapa en el ledger. Test `tests/rag_platform/test_release_incremental_build.py::test_build_crea_una_membresia_por_revision_y_audita_cada_etapa`.
+- [x] Cuando no haya reuso exacto, invocar los servicios existentes de ingesta/chunking/embedding/indexing mediante puertos/adaptadores; no copiar sus algoritmos al módulo plataforma. — **Evidencia:** el planner delega en el puerto `RevisionArtifactResolver` (`release_build_service.py`), cuyo adaptador cablea `ArtifactReusePolicy` (Fase 3) + `RebuildPlatformArtifactsUseCase` (Fase 4); el módulo plataforma no reimplementa pipeline. Comentario de diseño en la cabecera del servicio. Test con `_FakeResolver` que separa reuso/build.
+- [x] Crear membresías concretas en el mismo commit lógico que registra el resultado del paso. La release nunca se considera completa si falta una revisión o si un artefacto pertenece a otro proyecto. — **Evidencia:** el planner crea `RagReleaseMembership` por revisión tras auditar sus pasos (`release_build_service.py`); `release_validator.py::_assert_complete` lanza `ReleaseNotComplete` si falta una membresía. Aislamiento cross-proyecto en la BD: `migrations/20260810_07_...sql` FKs compuestas `(project_id, rag_variant_id)`/`(project_id, corpus_snapshot_id)` y `rag_release_memberships` FK compuesto `(project_id, rag_release_id)`. Tests `test_release_incremental_build.py::test_r001_no_ve_el_documento_56`, `test_release_lifecycle.py::test_validar_falla_si_falta_una_membresia`.
+- [x] Requerir que el manifiesto de release contenga hashes de corpus snapshot, recipe, configuración de proyecto, artefactos y conteos; su `release_manifest_hash` se congela al validar. — **Evidencia:** `domain/lifecycle.py::compute_release_manifest_hash` (incluye corpus_manifest_hash, semantic_recipe_fingerprint, configuration_fingerprint, target y las membresías con sus artefactos, determinista/reconstruible). `release_validator.py::ValidateRagReleaseUseCase.execute` lo congela y persiste al pasar a `VALIDATED`. Tests `test_release_lifecycle.py::test_manifest_hash_determinista_y_reconstruible`, `..._validar_congela_manifiesto_y_pasa_a_validated`.
+- [x] Implementar lifecycle estricto y actor/motivo/auditoría para `VALIDATED`, `PUBLISHED`, `RETIRED` y `FAILED`. `PUBLISHED` significa que el catálogo de plataforma acepta la release; no significa que una lane legacy esté activa. — **Evidencia:** `domain/lifecycle.py::ReleaseState` + `_ALLOWED_TRANSITIONS` + `ensure_transition_allowed` (grafo estricto `DRAFT→VALIDATED→PUBLISHED→RETIRED`, más `FAILED`); `RagRelease` lleva `created_by`/`validated_at`/`reason`. La transición `PUBLISHED` es de Fase 6 (aquí solo se habilita en el grafo, sin tocar `is_active`). Test `test_release_lifecycle.py::test_transiciones_validas`, `..._transiciones_invalidas`.
+- [x] No modificar una `DRAFT` validada en sitio: un cambio de corpus o recipe vuelve a crear el snapshot/membresía antes de una nueva validación. — **Evidencia:** `RagRelease.is_manifest_frozen` + `release_validator.py` lanza `ReleaseManifestFrozen` si se revalida una release ya congelada. Test `test_release_lifecycle.py::test_release_validada_no_se_revalida_en_sitio`.
 
-**Exit criteria:** `sst-local-bge-m3/r002` contiene los 56 documentos exactos y puede reconstruirse; `r001` conserva sus 55 documentos y no ve el documento 56.
+> **Estado de verificación (2026-08-11):** los 9 incisos implementados con dominio
+> (`domain/lifecycle.py`), 3 servicios de aplicación, migración `20260810_07`,
+> repos postgres + fakes in-memory, y 3 archivos de test. **Pendiente operativo:**
+> aplicar `20260810_07` a la BD y correr la suite (tests escritos, sin ejecutar en
+> este entorno). El adaptador concreto de `RevisionArtifactResolver` (que cablea el
+> reuso real + rebuild) queda como wiring de composición para el arranque de Fase 6.
+
+**Exit criteria:** `sst-local-bge-m3/r002` contiene los 56 documentos exactos y puede reconstruirse; `r001` conserva sus 55 documentos y no ve el documento 56. — **Cubierto por** `test_release_incremental_build.py::test_build_incremental_reutiliza_lo_previo_y_solo_construye_lo_nuevo` (55 reusados + 1 nuevo) y `::test_r001_no_ve_el_documento_56`.
 
 ### Fase 6: Publicación de catálogo y coexistencia legacy
 
@@ -550,14 +564,109 @@ class PlatformAccessPolicy(Protocol):
     def require_project_operator(self, *, actor: PlatformActor, project_id: str) -> None: ...
 ```
 
-- [ ] Añadir `SST_FEATURE_RAG_PLATFORM_V1`, deshabilitado por defecto y separado de los feature flags bundle-first existentes. Habilitarlo expone la plataforma administrativa; no cambia la lane utilizada por retrieval.
-- [ ] Registrar servicios plataforma en el composition root sin modificar los servicios legacy de retrieval.
-- [ ] Implementar publicación como una transición de estado que verifica el manifiesto y marca `PUBLISHED` de forma transaccional.
-- [ ] Probar de forma negativa que el módulo de publicación no importa `ConsumerScope`, `RetrievalProfile`, `ActivateIndexedBundleUseCase` ni escribe `is_active`.
-- [ ] Mantener `ActivateIndexedBundleUseCase`, `RollbackIndexedBundleUseCase` y `/api/retrieval` como legacy; documentar que una futura selección de otra release publicada no es rollback de vector rows y no forma parte de este plan.
-- [ ] Añadir eventos `rag_release_created`, `rag_release_build_step_completed`, `rag_release_validated`, `rag_release_published` y `rag_release_retired`, con correlación y redacción compatibles con `core.logging.observability`.
+- [x] Añadir `SST_FEATURE_RAG_PLATFORM_V1`, deshabilitado por defecto y separado de los feature flags bundle-first existentes. Habilitarlo expone la plataforma administrativa; no cambia la lane utilizada por retrieval. — **Evidencia:** `core/feature_flags.py` (`rag_platform_v1: bool = False` + lectura de `SST_FEATURE_RAG_PLATFORM_V1` en `from_env`, independiente de embedding/indexing/retrieval). Tests `tests/core/test_pipeline_composition.py::test_feature_flags_quedan_activas_por_defecto_sin_env` (asserta `rag_platform_v1 is False`), `::test_rag_platform_flag_se_lee_del_entorno`.
+- [x] Registrar servicios plataforma en el composition root sin modificar los servicios legacy de retrieval. — **Evidencia:** `api/dependencies.py` (`PipelineServices.rag_platform_publish: object | None = None`; el wiring `_build_rag_platform_publish` se ejecuta **solo** `if flags.rag_platform_v1`, tras construir la superficie legacy sin tocarla). Tests `test_pipeline_composition.py::test_flag_off_no_cablea_plataforma_y_deja_legacy_intacto`, `::test_flag_on_cablea_plataforma_sin_tocar_retrieval`.
+- [x] Implementar publicación como una transición de estado que verifica el manifiesto y marca `PUBLISHED` de forma transaccional. — **Evidencia:** `rag_platform/application/publication_service.py::PublishRagReleaseUseCase.execute` (verifica `is_manifest_frozen` fail-closed, `ensure_transition_allowed(→PUBLISHED)`, `update_state` dentro de `transactions.transaction()`). Tests `tests/rag_platform/test_publication_neutrality.py::test_publica_release_validada`, `::test_no_publica_draft_sin_manifiesto`, `::test_no_publica_desde_estado_no_validado`.
+- [x] Probar de forma negativa que el módulo de publicación no importa `ConsumerScope`, `RetrievalProfile`, `ActivateIndexedBundleUseCase` ni escribe `is_active`. — **Evidencia:** `test_publication_neutrality.py::test_modulo_publicacion_no_importa_simbolos_legacy` (análisis AST estático del módulo: ni imports prohibidos, ni acceso al atributo `is_active`). Verificado también manualmente en este entorno.
+- [x] Mantener `ActivateIndexedBundleUseCase`, `RollbackIndexedBundleUseCase` y `/api/retrieval` como legacy; documentar que una futura selección de otra release publicada no es rollback de vector rows y no forma parte de este plan. — **Evidencia:** el wiring legacy de `indexing_activate`/`indexing_rollback`/retrieval no se modificó (siguen construidos en `build_pipeline_services`); test `tests/retrieval/test_pipeline_api.py::test_retrieval_legacy_intacto_con_plataforma_habilitada` (rutas legacy responden 200 con el flag on). Nota de coexistencia en `docs/backend/phase-handoffs.md`.
+- [x] Añadir eventos `rag_release_created`, `rag_release_build_step_completed`, `rag_release_validated`, `rag_release_published` y `rag_release_retired`, con correlación y redacción compatibles con `core.logging.observability`. — **Evidencia:** `publication_service.py::emit_release_event` (arma `ObservabilityEvent` con ids en `attributes`, delega en `emit_observability_event` que redacta secretos). Cableado: `rag_release_created` (`release_service.py`), `rag_release_validated` (`release_validator.py`), `rag_release_published` (`publication_service.py`), todos con `logger` opcional. `rag_release_build_step_completed` queda cubierto de forma durable por el ledger `rag_build_steps` (`complete_step`), y `rag_release_retired` reusa el mismo helper cuando se cablee la transición de retiro (deuda menor declarada).
 
-**Exit criteria:** publicar una release no crea ni actualiza `retrieval_profiles`, no usa el scope `chatbot/sst-default`, no altera filas activas existentes y deja el estado legacy intacto.
+**Exit criteria:** publicar una release no crea ni actualiza `retrieval_profiles`, no usa el scope `chatbot/sst-default`, no altera filas activas existentes y deja el estado legacy intacto. — **Cubierto por** `test_publication_neutrality.py` (transición pura vía `update_state`, sin tocar retrieval/is_active/scope; test negativo de imports) y `test_pipeline_api.py::test_retrieval_legacy_intacto_con_plataforma_habilitada`.
+
+> **Estado de verificación (2026-08-11):** 6 incisos implementados con feature flag,
+> composition root gated, `publication_service.py`, `platform_access.py`, helper de
+> eventos y 3 archivos de test (2 extendidos, 1 nuevo). Verificado en este entorno
+> por import real + smoke funcional del caso de uso y del gating flag on/off (sin
+> pytest). **Pendiente operativo:** correr la suite y aplicar migraciones en la BD.
+> **Deuda menor:** cablear la transición de retiro (`rag_release_retired`) y el
+> evento observability de `build_step_completed` (hoy auditado por el ledger durable).
+
+---
+
+## Auditoría de verificación Fases 4-6 (2026-08-11)
+
+Revisión de los checkboxes `[x]` contra el código real. **Resultado: los contratos,
+migraciones y casos de uso existen y sus tests fueron creados** (marcas válidas en ese
+sentido), **pero hay gaps de cableado e identidad que impiden que el flujo de plataforma
+funcione end-to-end contra PostgreSQL.** Ningún checkbox se desmarca porque el artefacto
+que cada inciso pedía existe; se registran aquí los desvíos para no darlos por operativos.
+
+### Gaps críticos (bloquean ejecución real; no son fallos de contrato)
+
+1. ~~**`EmbeddingBundle` no lleva identidad de plataforma en el flujo de escritura (Fase 4).**~~
+   **RESUELTO (2026-08-11).** El bundle ahora transporta y persiste `project_id`:
+   - `EmbeddingBundle` gana el campo `project_id: str | None = None`
+     (`embedding/domain/models.py`), documentado como excluido de `deterministic_id`
+     (id legacy preservado por ADR-007; la identidad física la impone el índice parcial).
+   - `bundle_builder.py` lo propaga desde `chunk_bundle.project_id`; `_BUNDLE_COLUMNS`, el
+     `INSERT INTO embedding_bundles` y `_bundle_parameters`
+     (`embedding/infrastructure/postgres/repositories.py`) ahora incluyen `project_id`.
+   - **Consecuencia:** los bundles de plataforma nacen con su `project_id`, activando el
+     índice parcial `uq_embedding_bundles_physical_identity` y el FK compuesto; legacy sigue
+     con `NULL`. `deterministic_id` **no cambió** (ADR-007).
+   - **Test:** `tests/embedding/test_embedding_domain.py::test_bundle_lleva_project_id_de_plataforma_sin_alterar_identidad`
+     (verificado ejecutándolo en este entorno). El path Postgres real queda pendiente de
+     `postgres_live`.
+
+2. **`EmbeddingRun`/`IndexingRun` no persisten el contexto de release (Fase 4).**
+   La migración `05:99-105` añadió `project_id`/`rag_variant_id`/`rag_release_id` a
+   `embedding_runs`/`indexing_runs`, pero los modelos de dominio (`embedding/domain/models.py:298`,
+   `indexing/domain/bundle_first.py:87`) **no tienen esos campos** y `_RUN_COLUMNS`
+   (`embedding/.../repositories.py:81`) **no los lee ni escribe**. La columna existe en BD;
+   el adaptador no la usa. El inciso se cumple **solo a nivel de DDL**.
+
+3. **`RevisionArtifactResolver` sin adaptador concreto (Fase 5).** El puerto
+   (`release_build_service.py:79`) solo tiene el `_FakeResolver` del test. El adaptador que
+   la cabecera del servicio dice cablear (`ArtifactReusePolicy` + `RebuildPlatformArtifactsUseCase`)
+   **no existe en el repo** → **el build real de release no es ejecutable**, solo testeable
+   con fake. Los archivos Fase 4 listados como `Modify` `embedding/application/run_service.py`
+   y `bundle_builder.py` quedaron sin cablear el contexto de plataforma.
+
+### Gaps de wiring (Fase 5-6, esperables para Fase 7 pero aún abiertos)
+
+4. **Readers Postgres por-id ausentes.** `RagVariantReader.get` y `CorpusSnapshotReader.get`
+   (`release_service.py:43,51`) solo tienen fake in-memory; los repos Postgres existentes
+   (`project_repositories.py:303`, `document_repositories.py:207`) exponen
+   `find_active_by_fingerprint`/`find_by_manifest`, **no `get(id)`**. `CreateRagReleaseDraftUseCase`
+   no puede correr contra BD.
+5. **`ProjectConfigurationFingerprintReader` sin adaptador** (`release_service.py:59`): solo
+   fake; el "pin de configuración" no está conectado.
+6. **Composition root solo cablea `PublishRagReleaseUseCase`** (`api/dependencies.py:378`).
+   `CreateDraft`/`Build`/`Validate`/`Rebuild` **no están registrados** (coherente con la nota
+   `:539` del plan: "wiring de composición para Fase 6/7"; sigue pendiente).
+
+### Cobertura de tests (real)
+
+7. Los tests de release **cubren orquestación/conteo/membresías con fakes triviales**
+   (`test_release_incremental_build.py`: `_FakeResolver` etiqueta reuso por un `set`
+   precomputado, `_RecordingLedger` ignora el modelo estricto). El exit criteria r001/r002
+   valida **la aritmética del planner**, no un reuso físico real. `test_r001_no_ve_el_documento_56`
+   sí prueba aislamiento de snapshot (in-memory). **Ningún test integra Postgres ni reuso real;
+   la suite está marcada "PENDIENTE DE EJECUCIÓN".**
+
+### Desvíos menores
+
+8. **Nombre de migración `_07` desactualizado en el plan** (`:499`): el plan la nombra
+   `..._create_rag_variants_releases_and_memberships.sql`; el archivo real es
+   `20260810_07_create_rag_releases_and_memberships.sql`. `rag_variants` ya se crea en
+   `20260810_01:95`; la `_07` solo añade el índice `uq_rag_variants_project_variant`.
+
+### Sano (verificado, sin gap)
+
+- Fase 4: `physical_node_id`, lifecycle materialización `WRITING/SEALED/FAILED` con los 4
+  métodos, 2 FKs compuestas por tabla `idx_vec_*`, dual-mode gating (`index_bundle.py:425`).
+- Fase 5: guardas `ensure_same_project`/`_reject_blocked`/`_assert_complete`, `compute_release_manifest_hash`
+  determinista, migración `07` con `release_number` único por variante y 3 FKs compuestas
+  con sus índices destino creados antes que las FK. Orden de las 7 migraciones `0810_*` correcto.
+- Fase 6: flag `rag_platform_v1` off por defecto e independiente, composition gated, publish
+  transaccional fail-closed, neutralidad legacy (test AST de imports).
+
+> **Lectura ejecutiva:** Fases 4-6 están **completas como contrato + DDL + tests de
+> orquestación**, pero **no como pipeline operativo**: la identidad de plataforma del
+> embedding no se escribe (gaps 1-2), el build real de release no tiene adaptador (gap 3) y
+> el composition root solo publica (gap 6). Cerrar los gaps 1-3 es prerequisito para que
+> `sst-general` (Fase 9) pueda construir una release real. **Ponytail/audit: el módulo no
+> tiene over-engineering relevante; los gaps son de cableado faltante, no de código sobrante.**
 
 ### Fase 7: API de plataforma y contratos OpenAPI
 

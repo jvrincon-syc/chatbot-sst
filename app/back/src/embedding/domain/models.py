@@ -338,9 +338,17 @@ class EmbeddingBundleChunk(StrictModel):
 
 
 class EmbeddingBundle(StrictModel):
-    """Sealed, immutable set of document vectors for one chunk bundle."""
+    """Sealed, immutable set of document vectors for one chunk bundle.
+
+    ``project_id`` is nullable so legacy rows (``project_id IS NULL``) keep their
+    behaviour, while platform bundles carry the owning project. It is **not** part
+    of ``deterministic_id`` (the legacy id is preserved by ADR-007); the physical
+    platform identity is enforced by the partial index
+    ``uq_embedding_bundles_physical_identity`` at the database level.
+    """
 
     embedding_bundle_id: str = Field(min_length=1)
+    project_id: str | None = None
     source_chunk_bundle_id: str = Field(min_length=1)
     embedding_profile_id: str = Field(min_length=1)
     provider: str = Field(min_length=1)

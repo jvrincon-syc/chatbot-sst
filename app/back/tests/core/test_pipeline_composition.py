@@ -9,6 +9,7 @@ import pytest
 from api.dependencies import (
     PostgresUnavailableAtStartup,
     _resolve_persistence_mode,
+    build_pipeline_services,
     build_pipeline_services_from_env,
 )
 from core.feature_flags import FeatureFlags
@@ -24,6 +25,47 @@ def test_feature_flags_quedan_activas_por_defecto_sin_env() -> None:
     assert flags.embedding_v2 is True
     assert flags.indexing_bundle_first is True
     assert flags.retrieval_v1 is True
+    # Fase 6: la lane de plataforma está apagada por defecto.
+    assert flags.rag_platform_v1 is False
+
+
+def test_rag_platform_flag_se_lee_del_entorno() -> None:
+    assert FeatureFlags.from_env(
+        {"SST_FEATURE_RAG_PLATFORM_V1": "on"}
+    ).rag_platform_v1 is True
+    assert FeatureFlags.from_env({}).rag_platform_v1 is False
+
+
+def test_flag_off_no_cablea_plataforma_y_deja_legacy_intacto(tmp_path: Path) -> None:
+    services = build_pipeline_services(
+        chunks_root=tmp_path / "chunks",
+        embeddings_root=tmp_path / "embeddings",
+        allow_mock_engine=True,
+        feature_flags=FeatureFlags(rag_platform_v1=False),
+    )
+    try:
+        assert services.rag_platform_publish is None
+        # La superficie legacy de retrieval sigue construida.
+        assert services.retrieval_search is not None
+        assert services.indexing_activate is not None
+    finally:
+        services.close()
+
+
+def test_flag_on_cablea_plataforma_sin_tocar_retrieval(tmp_path: Path) -> None:
+    services = build_pipeline_services(
+        chunks_root=tmp_path / "chunks",
+        embeddings_root=tmp_path / "embeddings",
+        allow_mock_engine=True,
+        feature_flags=FeatureFlags(rag_platform_v1=True),
+    )
+    try:
+        assert services.rag_platform_publish is not None
+        # El wiring legacy de retrieval no cambia al habilitar la plataforma.
+        assert services.retrieval_search is not None
+        assert services.indexing_activate is not None
+    finally:
+        services.close()
 
 
 def test_resuelve_postgres_cuando_hay_dsn() -> None:

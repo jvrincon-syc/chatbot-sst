@@ -465,3 +465,39 @@ def test_rechaza_page_size_fuera_de_rango(client: TestClient) -> None:
 
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "PIPELINE_INVALID_REQUEST"
+
+
+@pytest.fixture
+def platform_enabled_client(tmp_path: Path) -> Iterator[TestClient]:
+    """Cliente con la lane de plataforma habilitada (Fase 6)."""
+
+    profile = build_profile()
+    chunk_bundle = write_chunk_bundle(tmp_path / "chunks")
+    services = build_pipeline_services(
+        chunks_root=tmp_path / "chunks",
+        embeddings_root=tmp_path / "embeddings",
+        feature_flags=FeatureFlags(
+            embedding_v2=True,
+            indexing_bundle_first=True,
+            retrieval_v1=True,
+            rag_platform_v1=True,
+        ),
+        allow_mock_engine=True,
+        seed_profiles=[profile],
+        seed_targets=[build_target()],
+        seed_chunk_bundles=[chunk_bundle],
+        lexical_profile_id=profile.profile_id,
+    )
+    with TestClient(create_app(services=services)) as test_client:
+        yield test_client
+
+
+def test_retrieval_legacy_intacto_con_plataforma_habilitada(
+    platform_enabled_client: TestClient,
+) -> None:
+    """Habilitar la plataforma no cambia el comportamiento de la lane legacy."""
+
+    # Las rutas legacy responden igual (comportamiento, no SQL byte-idéntico).
+    assert platform_enabled_client.get("/api/retrieval/profiles").status_code == 200
+    assert platform_enabled_client.get("/api/embedding/profiles").status_code == 200
+    assert platform_enabled_client.get("/api/indexing/targets").status_code == 200

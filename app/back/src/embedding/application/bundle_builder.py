@@ -317,6 +317,7 @@ class EmbeddingBundleBuilder:
 
         pending = EmbeddingBundle(
             embedding_bundle_id=bundle_id,
+            project_id=chunk_bundle.project_id,
             source_chunk_bundle_id=chunk_bundle.chunk_bundle_id,
             embedding_profile_id=profile.profile_id,
             provider=profile.provider,

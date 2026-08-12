@@ -156,6 +156,23 @@ entrar a un snapshot. Detalle en
 [identity-and-reuse-contract.md](../rag-platform/identity-and-reuse-contract.md)
 y baseline en [migration-baseline.md](../rag-platform/migration-baseline.md).
 
+## Coexistencia legacy tras Fase 6 (publicación de catálogo)
+
+La lane de plataforma se activa con `SST_FEATURE_RAG_PLATFORM_V1` (**off por
+defecto**, independiente de los flags bundle-first). Con el flag off el runtime
+legacy es byte-idéntico; con el flag on el composition root registra los servicios
+de plataforma **sin** modificar el wiring de retrieval.
+
+`PublishRagReleaseUseCase` (`rag_platform/application/publication_service.py`)
+publica una release como transición `VALIDATED → PUBLISHED`; **no** escribe
+`is_active`, **no** crea/actualiza `retrieval_profiles` y **no** usa el scope
+legacy `chatbot/sst-default`. `ActivateIndexedBundleUseCase`,
+`RollbackIndexedBundleUseCase` y `/api/retrieval` permanecen como la lane legacy.
+
+Nota de alcance: seleccionar una release publicada distinta como consumidor de
+retrieval **no** es un rollback de filas vectoriales (`is_active`) y **no** forma
+parte de este plan; es trabajo de una fase posterior de reconexión del consumidor.
+
 ## Puntos de acoplamiento a vigilar
 
 - La ingesta y la GUI comparten mucha orquestación en archivos grandes.

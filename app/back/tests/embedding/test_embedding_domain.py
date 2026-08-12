@@ -113,6 +113,40 @@ def test_bundle_id_es_deterministico_para_la_misma_identidad() -> None:
     )
 
 
+def test_bundle_lleva_project_id_de_plataforma_sin_alterar_identidad() -> None:
+    """Fase 4 gap: el bundle transporta project_id, pero la identidad no cambia.
+
+    project_id se puebla para bundles de plataforma (lo escribe el repositorio y
+    lo usa el índice parcial de identidad física), es None para legacy, y NO forma
+    parte de deterministic_id (id legacy preservado por ADR-007).
+    """
+
+    base = {
+        "embedding_bundle_id": "eb-1",
+        "source_chunk_bundle_id": "cb-1",
+        "embedding_profile_id": "p1",
+        "provider": "mock",
+        "model": "m",
+        "model_revision": "r",
+        "dimension": 8,
+        "normalization": "none",
+        "distance_metric": "cosine",
+        "configuration_fingerprint": "a" * 64,
+        "corpus_version": "v1",
+        "source_content_fingerprint": "b" * 64,
+        "status": "pending",
+    }
+    legacy = EmbeddingBundle(**base)
+    platform = EmbeddingBundle(**{**base, "project_id": "proj_alpha"})
+
+    assert legacy.project_id is None
+    assert platform.project_id == "proj_alpha"
+    # deterministic_id no acepta project_id: la identidad legacy se conserva.
+    import inspect
+
+    assert "project_id" not in inspect.signature(EmbeddingBundle.deterministic_id).parameters
+
+
 def test_run_es_terminal_cuando_alcanza_un_estado_final() -> None:
     run = EmbeddingRun(
         embedding_run_id="r1",

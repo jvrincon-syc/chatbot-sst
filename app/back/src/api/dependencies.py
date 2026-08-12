@@ -155,6 +155,9 @@ class PipelineServices:
     retrieval_validate: ValidateRetrievalUseCase
     retrieval_search: SearchRetrievalUseCase
     connection: object | None = None
+    # RAG platform admin services (Fase 6). Only wired when the
+    # ``rag_platform_v1`` flag is on; ``None`` keeps the legacy surface untouched.
+    rag_platform_publish: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -263,7 +266,7 @@ def build_pipeline_services(
         vector_search=vector_search,
         query_embedding=query_embedding,
     )
-    return PipelineServices(
+    services = PipelineServices(
         feature_flags=flags,
         consumer_scope=scope,
         persistence_mode=persistence_mode,
@@ -362,6 +365,44 @@ def build_pipeline_services(
             retrieval_profiles=retrieval_profiles,
             search=search,
         ),
+    )
+    # RAG platform admin lane (Fase 6): wired only behind the flag, never touching
+    # the legacy retrieval services already built above.
+    if flags.rag_platform_v1:
+        services.rag_platform_publish = _build_rag_platform_publish(
+            connection=connection, transactions=transactions
+        )
+    return services
+
+
+def _build_rag_platform_publish(*, connection: object | None, transactions: object) -> object:
+    """Build the release publication use case (postgres or in-memory repo).
+
+    Kept out of the main wiring so the legacy surface is unchanged when the flag
+    is off. The access policy authorises any non-empty operator; a project-scoped
+    policy is layered by the API dependency (Fase 7).
+    """
+
+    from rag_platform.application.publication_service import PublishRagReleaseUseCase
+    from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
+
+    if connection is None:
+        from rag_platform.infrastructure.in_memory.release_repositories import (
+            InMemoryRagReleaseRepository,
+        )
+
+        releases: object = InMemoryRagReleaseRepository()
+    else:
+        from rag_platform.infrastructure.postgres.release_repositories import (
+            PostgresRagReleaseRepository,
+        )
+
+        releases = PostgresRagReleaseRepository(connection)
+    return PublishRagReleaseUseCase(
+        releases=releases,
+        access_policy=AllowAllAccessPolicy(),
+        transactions=transactions,
+        logger=get_logger("rag_platform.publication"),
     )
 
 

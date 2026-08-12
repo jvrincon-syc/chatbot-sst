@@ -246,3 +246,87 @@ class NoClassificationPolicyConfigured(RagPlatformError):
 
     code = "NO_CLASSIFICATION_POLICY_CONFIGURED"
     http_status = 409
+
+
+# --------------------------------------------------------------------------- #
+# Fase 5: releases, membresías y lifecycle                                    #
+# --------------------------------------------------------------------------- #
+
+
+class ReleaseProjectMismatch(RagPlatformError):
+    """La variante y el corpus snapshot de una release no son del mismo proyecto.
+
+    Fail-closed: una release solo puede combinar artefactos del proyecto que la
+    posee; una variante o un snapshot de otro proyecto se rechaza sin degradar.
+    """
+
+    code = "RELEASE_PROJECT_MISMATCH"
+    http_status = 409
+
+
+class InvalidReleaseTransition(RagPlatformError):
+    """Se intentó una transición de estado no permitida por el lifecycle de release.
+
+    Fail-closed: el lifecycle ``DRAFT → VALIDATED → PUBLISHED → RETIRED`` (más
+    ``FAILED``) es estricto; una transición fuera de ese grafo se rechaza y jamás
+    se aplica en sitio.
+    """
+
+    code = "INVALID_RELEASE_TRANSITION"
+    http_status = 409
+
+
+class ReleaseNotComplete(RagPlatformError):
+    """Se intentó validar una release a la que le falta la membresía de una revisión.
+
+    Fail-closed: una release solo es válida si cada revisión del corpus snapshot
+    tiene su membresía con artefactos concretos; una revisión sin construir la
+    invalida.
+    """
+
+    code = "RELEASE_NOT_COMPLETE"
+    http_status = 409
+
+
+class ReleaseBlockedRevision(RagPlatformError):
+    """El corpus snapshot de la release contiene una revisión ``blocked`` sin waiver.
+
+    Fail-closed: una revisión con elegibilidad ``blocked`` impide crear o validar
+    la release salvo excepción ``operator_waiver`` explícita (actor, motivo, fecha
+    y snapshot de política que la autorizó).
+    """
+
+    code = "RELEASE_BLOCKED_REVISION"
+    http_status = 409
+
+
+class ReleaseManifestFrozen(RagPlatformError):
+    """Se intentó mutar una release cuyo ``release_manifest_hash`` ya está congelado.
+
+    Fail-closed: una release ``VALIDATED`` no se edita en sitio; un cambio de
+    corpus o receta obliga a crear un nuevo snapshot/membresía antes de revalidar.
+    """
+
+    code = "RELEASE_MANIFEST_FROZEN"
+    http_status = 409
+
+
+class RagVariantNotFound(RagPlatformError):
+    """Se referenció una variante que no existe."""
+
+    code = "RAG_VARIANT_NOT_FOUND"
+    http_status = 404
+
+
+class CorpusSnapshotNotFound(RagPlatformError):
+    """Se referenció un corpus snapshot que no existe."""
+
+    code = "CORPUS_SNAPSHOT_NOT_FOUND"
+    http_status = 404
+
+
+class RagReleaseNotFound(RagPlatformError):
+    """Se referenció una release que no existe."""
+
+    code = "RAG_RELEASE_NOT_FOUND"
+    http_status = 404

@@ -100,6 +100,7 @@ _RUN_COLUMNS = (
 
 _BUNDLE_COLUMNS = (
     "embedding_bundle_id",
+    "project_id",
     "source_chunk_bundle_id",
     "embedding_profile_id",
     "provider",
@@ -691,7 +692,8 @@ class PostgresEmbeddingBundleRepository:
             cursor.execute(
                 """
                 INSERT INTO embedding_bundles (
-                    embedding_bundle_id, source_chunk_bundle_id, embedding_profile_id,
+                    embedding_bundle_id, project_id, source_chunk_bundle_id,
+                    embedding_profile_id,
                     provider, model, model_revision, dimension, normalization,
                     distance_metric, configuration_fingerprint, corpus_version,
                     semantic_config_json, bundle_schema_version,
@@ -701,7 +703,7 @@ class PostgresEmbeddingBundleRepository:
                     sealed_at
                 )
                 VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s,
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, %s, %s,
                     %s, %s, %s, %s, %s, %s::jsonb, %s, %s, %s, %s
                 )
                 ON CONFLICT (embedding_bundle_id) DO UPDATE SET
@@ -864,6 +866,7 @@ class PostgresEmbeddingBundleRepository:
 def _bundle_parameters(bundle: EmbeddingBundle) -> tuple[object, ...]:
     return (
         bundle.embedding_bundle_id,
+        bundle.project_id,
         bundle.source_chunk_bundle_id,
         bundle.embedding_profile_id,
         bundle.provider,
