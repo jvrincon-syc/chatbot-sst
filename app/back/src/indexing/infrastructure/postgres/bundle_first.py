@@ -428,6 +428,7 @@ class PostgresIndexingRunDocumentRepository:
             )
         return document
 
+
     def list_for_run(self, run_id: str) -> list[IndexingRunDocument]:
         """Return every document row of one run."""
 
