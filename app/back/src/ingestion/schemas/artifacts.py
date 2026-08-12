@@ -228,6 +228,7 @@ _PLATFORM_PROJECT_ID_PATTERN = r"^proj_[a-z0-9][a-z0-9-]{0,127}$"
 _PLATFORM_SOURCE_DOCUMENT_ID_PATTERN = r"^sdoc_[a-z0-9][a-z0-9-]{0,127}$"
 _PLATFORM_REVISION_ID_PATTERN = r"^srev_[a-z0-9][a-z0-9-]{0,127}$"
 _PLATFORM_PROCESSING_PROFILE_ID_PATTERN = r"^pp_[a-z0-9][a-z0-9-]{0,127}$"
+_PLATFORM_RAG_VARIANT_ID_PATTERN = r"^ragv_[a-z0-9][a-z0-9-]{0,127}$"
 _PLATFORM_FINGERPRINT_PATTERN = r"^[0-9a-f]{64}$"
 
 
@@ -252,7 +253,19 @@ class PlatformDocumentIdentity(StrictModel):
     normalized_document_id: Optional[str] = Field(default=None, min_length=1)
     processing_profile_id: str = Field(pattern=_PLATFORM_PROCESSING_PROFILE_ID_PATTERN)
     processing_profile_fingerprint: str = Field(pattern=_PLATFORM_FINGERPRINT_PATTERN)
+    rag_variant_id: Optional[str] = Field(default=None, pattern=_PLATFORM_RAG_VARIANT_ID_PATTERN)
+    semantic_recipe_fingerprint: Optional[str] = Field(
+        default=None, pattern=_PLATFORM_FINGERPRINT_PATTERN
+    )
     schema_version: SchemaVersion = "2.0"
+
+    @model_validator(mode="after")
+    def validate_semantic_provenance(self) -> "PlatformDocumentIdentity":
+        if (self.rag_variant_id is None) != (self.semantic_recipe_fingerprint is None):
+            raise ValueError(
+                "rag_variant_id and semantic_recipe_fingerprint must be set together"
+            )
+        return self
 
 
 class MetadataArtifact(StrictModel):

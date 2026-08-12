@@ -16,6 +16,10 @@ from __future__ import annotations
 from typing import Protocol, runtime_checkable
 
 from rag_platform.domain.identity import PlatformId, ProjectDocumentContext
+from rag_platform.domain.artifact_catalog import (
+    NormalizedDocumentArtifactRecord,
+    RawDocumentArtifactRecord,
+)
 from rag_platform.domain.models import (
     ChunkingProfile,
     CorpusSnapshot,
@@ -151,6 +155,24 @@ class NormalizedArtifactRepository(Protocol):
         self, artifact: NormalizedDocumentArtifact
     ) -> NormalizedDocumentArtifact:
         """Registra un normalizado recién construido."""
+
+
+@runtime_checkable
+class RawArtifactCatalogRepository(Protocol):
+    """Persistencia del catálogo físico de bytes raw auditables."""
+
+    def upsert(self, record: RawDocumentArtifactRecord) -> RawDocumentArtifactRecord:
+        """Registra el sidecar físico raw por su revisión inmutable."""
+
+
+@runtime_checkable
+class NormalizedArtifactCatalogRepository(Protocol):
+    """Persistencia del catálogo físico de sidecars normalizados."""
+
+    def upsert(
+        self, record: NormalizedDocumentArtifactRecord
+    ) -> NormalizedDocumentArtifactRecord:
+        """Registra los sidecars de un normalizado por su identidad física."""
 
 
 @runtime_checkable

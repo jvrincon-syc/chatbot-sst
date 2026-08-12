@@ -187,6 +187,34 @@ class ValidatedSidecars:
 
 
 @dataclass(frozen=True)
+class NormalizedDocumentPlatformContext:
+    """Platform provenance carried with, but not defining, chunk identity."""
+
+    project_id: str
+    source_document_id: str
+    source_document_revision_id: str
+    processing_profile_id: str
+    processing_profile_fingerprint: str
+    normalized_document_id: str | None = None
+    rag_variant_id: str | None = None
+    semantic_recipe_fingerprint: str | None = None
+
+    def __post_init__(self) -> None:
+        for field_name in (
+            "project_id",
+            "source_document_id",
+            "source_document_revision_id",
+            "processing_profile_id",
+            "processing_profile_fingerprint",
+        ):
+            require_non_empty(getattr(self, field_name), field_name=field_name)
+        if (self.rag_variant_id is None) != (self.semantic_recipe_fingerprint is None):
+            raise ChunkInvariantError(
+                "rag_variant_id and semantic_recipe_fingerprint must be set together"
+            )
+
+
+@dataclass(frozen=True)
 class NormalizedDocumentBundle:
     """Pre-structural normalized document consumed before Task 3 block creation."""
 
@@ -200,6 +228,7 @@ class NormalizedDocumentBundle:
     structural_blocks: tuple[StructuralBlock, ...] = ()
     sidecars: ValidatedSidecars = field(default_factory=ValidatedSidecars)
     warnings: tuple[str, ...] = ()
+    platform_context: NormalizedDocumentPlatformContext | None = None
 
     def __post_init__(self) -> None:
         require_non_empty(self.document_id, field_name="document_id")

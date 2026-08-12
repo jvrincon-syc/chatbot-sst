@@ -3,7 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from chunking.domain.models import ChunkBundle, ChunkingProfile, NormalizedDocumentBundle
+from chunking.domain.models import (
+    ChunkBundle,
+    ChunkingProfile,
+    NormalizedDocumentBundle,
+    NormalizedDocumentPlatformContext,
+)
 
 
 class TokenCounterPort(Protocol):
@@ -39,6 +44,7 @@ class StoredChunkBundleMetadata:
     artifact_relpath: str
     parent_count: int
     child_count: int
+    platform_context: NormalizedDocumentPlatformContext | None = None
 
 
 class ChunkBundleRepositoryPort(Protocol):
