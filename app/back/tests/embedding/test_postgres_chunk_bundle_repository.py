@@ -9,6 +9,7 @@ def test_reconcilia_fila_legacy_antes_de_registrar_el_bundle_canonico() -> None:
         fetchone_results=[
             {
                 "chunk_bundle_id": "legacy-chunk-bundle-abc",
+                "project_id": "proj_alpha",
                 "bundle_fingerprint": "chunk-bundle-abc",
                 "profile_id": "local-structural-v1",
                 "profile_fingerprint": "legacy-profile",
@@ -21,6 +22,7 @@ def test_reconcilia_fila_legacy_antes_de_registrar_el_bundle_canonico() -> None:
             },
             {
                 "chunk_bundle_id": "chunk-bundle-abc",
+                "project_id": "proj_alpha",
                 "bundle_fingerprint": "chunk-bundle-abc",
                 "profile_id": "local-structural-v1",
                 "profile_fingerprint": "chunking-profile-abc",
@@ -38,6 +40,7 @@ def test_reconcilia_fila_legacy_antes_de_registrar_el_bundle_canonico() -> None:
     stored = repository.ensure_registered(
         ChunkBundleRef(
             chunk_bundle_id="chunk-bundle-abc",
+            project_id="proj_alpha",
             bundle_fingerprint="chunk-bundle-abc",
             profile_id="local-structural-v1",
             profile_fingerprint="chunking-profile-abc",
@@ -93,3 +96,55 @@ class ChunkBundleRecordingCursor:
         if not self._fetchone_results:
             return None
         return self._fetchone_results.pop(0)
+
+
+def test_ensure_registered_persiste_variant_provenance() -> None:
+    # Task 6: la provenance de variante viaja al INSERT de chunk_bundles y vuelve en
+    # el read-back, sin ser identidad (nullable, par atómico).
+    stored_row = {
+        "chunk_bundle_id": "chunk-bundle-var",
+        "project_id": "proj_alpha",
+        "bundle_fingerprint": "chunk-bundle-var",
+        "profile_id": "local-structural-v1",
+        "profile_fingerprint": "chunking-profile-var",
+        "corpus_version": "platform",
+        "source_document_id": "doc_1",
+        "artifact_relpath": "unit/example.chunking_metadata.json",
+        "parent_count": 1,
+        "child_count": 2,
+        "status": "verified",
+        "rag_variant_id": "ragv_local_bge",
+        "semantic_recipe_fingerprint": "b" * 64,
+    }
+    connection = ChunkBundleRecordingConnection(fetchone_results=[None, stored_row])
+    repository = PostgresChunkBundleRepository(connection)
+
+    stored = repository.ensure_registered(
+        ChunkBundleRef(
+            chunk_bundle_id="chunk-bundle-var",
+            project_id="proj_alpha",
+            bundle_fingerprint="chunk-bundle-var",
+            profile_id="local-structural-v1",
+            profile_fingerprint="chunking-profile-var",
+            corpus_version="platform",
+            source_document_id="doc_1",
+            artifact_relpath="unit/example.chunking_metadata.json",
+            parent_count=1,
+            child_count=2,
+            status="verified",
+            rag_variant_id="ragv_local_bge",
+            semantic_recipe_fingerprint="b" * 64,
+        )
+    )
+
+    insert_idx = next(
+        index
+        for index, statement in enumerate(connection.cursor_obj.statements)
+        if "INSERT INTO chunk_bundles" in statement
+    )
+    assert "rag_variant_id" in connection.cursor_obj.statements[insert_idx]
+    assert "ragv_local_bge" in connection.cursor_obj.params[insert_idx]
+    assert ("b" * 64) in connection.cursor_obj.params[insert_idx]
+    # project_id también se persiste (antes se caía del INSERT).
+    assert "proj_alpha" in connection.cursor_obj.params[insert_idx]
+    assert stored.rag_variant_id == "ragv_local_bge"

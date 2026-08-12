@@ -53,6 +53,9 @@ class FilesystemBackedPostgresChunkBundleRepository(FilesystemChunkBundleReposit
             close()
 
     def _register(self, metadata: StoredChunkBundleMetadata) -> None:
+        # Provenance de variante (Task 6): viaja en el platform_context del normalizado,
+        # no es identidad. Ausente => par nullable, chunk sin contexto de variante.
+        platform = metadata.platform_context
         try:
             self.ledger.ensure_registered(
                 ChunkBundleRef(
@@ -70,6 +73,10 @@ class FilesystemBackedPostgresChunkBundleRepository(FilesystemChunkBundleReposit
                     parent_count=metadata.parent_count,
                     child_count=metadata.child_count,
                     status="verified",
+                    rag_variant_id=platform.rag_variant_id if platform else None,
+                    semantic_recipe_fingerprint=(
+                        platform.semantic_recipe_fingerprint if platform else None
+                    ),
                 )
             )
             commit = getattr(self.connection, "commit", None)

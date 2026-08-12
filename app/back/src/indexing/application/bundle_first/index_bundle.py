@@ -569,7 +569,9 @@ class CreateIndexingRunUseCase:
             embedding_profile_id=profile.profile_id,
             indexing_target_id=target.indexing_target_id,
             corpus_version=bundle.corpus_version,
-            project_id=request.project_id,
+            # ADR-008: dueño del build context validado; fallback al embedding bundle
+            # (siempre presente, server-side) para que project_id nunca sea None.
+            project_id=request.project_id or bundle.project_id,
             rag_variant_id=request.rag_variant_id,
             rag_release_id=request.rag_release_id,
             request_fingerprint=fingerprint,

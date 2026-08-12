@@ -146,6 +146,7 @@ def test_postgres_sealed_chunk_bundle_repository_actualiza_fila_existente_con_me
     repository.register_sealed_bundle(
         ChunkBundleRef(
             chunk_bundle_id="chunk-bundle-1",
+            project_id="proj_alpha",
             bundle_fingerprint="fingerprint-1",
             profile_id="local-structural-v1",
             profile_fingerprint="chunking-profile-1",

@@ -340,6 +340,9 @@ class MetadataArtifact(StrictModel):
     # Aditivo (ADR-006): identidad de plataforma para normalizados nuevos. Los
     # artefactos legacy SST lo dejan en None y validan igual.
     platform_identity: Optional[PlatformDocumentIdentity] = None
+    # Aditivo: provenance semántica auditable (variante + receta) como bloque
+    # separado de la identidad. Nullable: la lane legacy lo deja en None.
+    platform_provenance: Optional[PlatformArtifactProvenance] = None
     processed_at: str = Field(
         default_factory=lambda: datetime.now(timezone.utc).astimezone().isoformat()
     )

@@ -46,6 +46,7 @@ def test_flag_off_no_cablea_plataforma_y_deja_legacy_intacto(tmp_path: Path) -> 
     try:
         assert services.rag_platform_build is None
         assert services.rag_platform_publish is None
+        assert services.rag_platform_rebuild is None
         # La superficie legacy de retrieval sigue construida.
         assert services.retrieval_search is not None
         assert services.indexing_activate is not None
@@ -63,6 +64,9 @@ def test_flag_on_cablea_plataforma_sin_tocar_retrieval(tmp_path: Path) -> None:
     try:
         assert services.rag_platform_build is not None
         assert services.rag_platform_publish is not None
+        # rebuild sella en Postgres: en modo memoria (sin conexión) queda None por
+        # diseño; su wiring con conexión se cubre en test_wire_rag_platform_rebuild.
+        assert services.rag_platform_rebuild is None
         # El wiring legacy de retrieval no cambia al habilitar la plataforma.
         assert services.retrieval_search is not None
         assert services.indexing_activate is not None
@@ -151,3 +155,41 @@ def test_composicion_emite_evento_de_startup_con_el_modo(
         assert startup[-1]["attributes"]["persistence_mode"] == "memory"
     finally:
         services.close()
+
+
+def test_wire_rag_platform_rebuild_con_conexion_devuelve_orquestador() -> None:
+    # Con conexión (modo Postgres) el composition root cablea el rebuild pure-platform
+    # reusando los casos de uso; los deps solo se almacenan, no se ejecutan al construir.
+    from api.dependencies import _build_rag_platform_rebuild
+    from rag_platform.application.rebuild_orchestrator import (
+        RebuildPlatformArtifactsUseCase,
+    )
+
+    rebuild = _build_rag_platform_rebuild(
+        connection=object(),
+        indexing_runs=object(),
+        bundles=object(),
+        profiles=object(),
+        index_bundle=object(),
+        run_documents=object(),
+    )
+    try:
+        assert isinstance(rebuild, RebuildPlatformArtifactsUseCase)
+    finally:
+        rebuild._indexing_executor.close()
+
+
+def test_wire_rag_platform_rebuild_sin_conexion_es_none() -> None:
+    from api.dependencies import _build_rag_platform_rebuild
+
+    assert (
+        _build_rag_platform_rebuild(
+            connection=None,
+            indexing_runs=None,
+            bundles=None,
+            profiles=None,
+            index_bundle=None,
+            run_documents=None,
+        )
+        is None
+    )

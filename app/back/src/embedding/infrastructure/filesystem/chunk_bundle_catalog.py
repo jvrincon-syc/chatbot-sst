@@ -42,8 +42,12 @@ class FilesystemChunkBundleCatalogRepository:
         except (OSError, json.JSONDecodeError):
             return None
         try:
+            project_id = payload.get("project_id")
+            variant = payload.get("rag_variant_id")
+            recipe = payload.get("semantic_recipe_fingerprint")
             return ChunkBundleRef(
                 chunk_bundle_id=str(payload["bundle_fingerprint"]),
+                project_id=None if project_id is None else str(project_id),
                 bundle_fingerprint=str(payload["bundle_fingerprint"]),
                 profile_id=str(payload["profile_id"]),
                 profile_fingerprint=str(payload["profile_fingerprint"]),
@@ -56,6 +60,9 @@ class FilesystemChunkBundleCatalogRepository:
                 parent_count=int(payload["parent_count"]),
                 child_count=int(payload["child_count"]),
                 status="verified",
+                # Provenance de variante (Task 6): auditable, nullable.
+                rag_variant_id=None if variant is None else str(variant),
+                semantic_recipe_fingerprint=None if recipe is None else str(recipe),
             )
         except (KeyError, TypeError, ValueError):
             return None

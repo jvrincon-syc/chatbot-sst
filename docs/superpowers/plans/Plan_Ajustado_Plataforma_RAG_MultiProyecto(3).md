@@ -682,8 +682,15 @@ que cada inciso pedía existe; se registran aquí los desvíos para no darlos po
    - `api/dependencies.py` ya no cablea solo `PublishRagReleaseUseCase`: ahora expone
      también `rag_platform_build` y lo resuelve contra Postgres o in-memory según el
      backend activo.
-   - **Sigue pendiente** registrar por composición `CreateDraft`/`Validate`/`Rebuild`
-     para tener la superficie admin completa detrás de `rag_platform_v1`.
+   - **Rebuild cableado (2026-08-12):** `PipelineServices.rag_platform_rebuild` +
+     `_build_rag_platform_rebuild(...)` cablean `RebuildPlatformArtifactsUseCase`
+     (indexado bundle-first + materialización sellada) tras `rag_platform_v1` con
+     conexión Postgres; sin conexión → `None` (sella en Postgres). Evidencia:
+     `app/back/src/api/dependencies.py`; tests
+     `app/back/tests/core/test_pipeline_composition.py::test_wire_rag_platform_rebuild_*`
+     (`core`+`rag_platform` 158 passed).
+   - **Sigue pendiente** registrar por composición `CreateDraft`/`Validate` (release
+     admin de Fase 5) para tener la superficie admin completa detrás de `rag_platform_v1`.
 
 ### Cobertura de tests (real)
 
@@ -728,6 +735,20 @@ que cada inciso pedía existe; se registran aquí los desvíos para no darlos po
 > wiring admin es prerequisito para que `sst-general` (Fase 9) construya una release real.
 > **Ponytail/audit: el módulo no tiene over-engineering relevante; los gaps son de
 > cableado faltante, no de código sobrante.**
+
+> **Wiring raw/normalized (actualizado 2026-08-12):** implementado el plan
+> `docs/superpowers/plans/2026-08-12-project-raw-normalized-catalog-wiring.md`
+> (Tasks 1-7). Catálogos físicos `project_raw_document_artifacts` /
+> `project_normalized_document_artifacts` por `project_id` (migraciones `20260812_01/02`),
+> provenance de variante en `chunk_bundles` (`20260812_03`), contrato único
+> `PlatformArtifactProvenance` compuesto (sin duplicar), servicios
+> `RegisterProjectRawArtifactUseCase` / `PersistNormalizedArtifactCatalogUseCase`,
+> `run_pipeline(platform_context_resolver=...)` aditivo (legacy byte-idéntico), y
+> wrappers `scripts/rag_platform/run_project_ingestion.py` + `rebuild_platform.py`
+> fail-closed con derivación server-side de la receta de variante. Runbook en
+> `docs/rag-platform/raw-normalized-catalog-runbook.md`. **Operativo pendiente:** la
+> etapa normalized dentro del CLI (necesita motor de normalización) y el end-to-end
+> vivo con BGE quedan como corrida operativa, no de contrato.
 
 ### Fase 7: API de plataforma y contratos OpenAPI
 

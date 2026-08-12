@@ -47,6 +47,7 @@ def _revision(body: str) -> PlatformId:
 def _ref(bundle_id: str) -> ChunkBundleRef:
     return ChunkBundleRef(
         chunk_bundle_id=bundle_id,
+        project_id="proj_alpha",
         bundle_fingerprint=bundle_id,
         profile_id="local-structural-v1",
         profile_fingerprint=_FINGERPRINT,

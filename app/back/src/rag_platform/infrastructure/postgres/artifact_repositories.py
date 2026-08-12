@@ -182,12 +182,13 @@ class PostgresSealedChunkBundleRepository:
                 ),
             )
             row = cursor.fetchone()
-        return None if row is None else self._row_to_ref(row)
+        return None if row is None else self._row_to_ref(row, project_id.value)
 
     @staticmethod
-    def _row_to_ref(row: Sequence[object]) -> ChunkBundleRef:
+    def _row_to_ref(row: Sequence[object], project_id: str) -> ChunkBundleRef:
         return ChunkBundleRef(
             chunk_bundle_id=str(row[0]),
+            project_id=project_id,
             bundle_fingerprint=str(row[1]),
             profile_id=str(row[2]),
             profile_fingerprint=str(row[3]),

@@ -46,19 +46,41 @@ class FilesystemChunkBundleRepository(ChunkBundleRepositoryPort):
             artifact_relpath=metadata_path.relative_to(self.output_root).as_posix(),
             parent_count=len(bundle.parents),
             child_count=len(bundle.children),
+            platform_context=document.platform_context,
         )
+        # platform_context viaja en el objeto (lo consume el registrador Postgres),
+        # pero al sidecar JSON van sus campos planos, no el objeto anidado (que
+        # incluye un modelo pydantic no serializable por ``asdict``).
+        metadata_json = {
+            key: value for key, value in asdict(metadata).items() if key != "platform_context"
+        }
+        platform = document.platform_context
         try:
             self._write_jsonl(parent_stage, [parent.as_payload() for parent in bundle.parents])
             self._write_jsonl(child_stage, [child.as_payload() for child in bundle.children])
             self._write_json(
                 metadata_stage,
                 {
-                    **asdict(metadata),
+                    **metadata_json,
                     "source_relpath": document.source_relpath,
                     "source_hash": document.source_hash,
                     "corpus_version": document.corpus_version,
                     "parent_count": len(bundle.parents),
                     "child_count": len(bundle.children),
+                    # ADR-008: dueño de proyecto (si la repo lo tiene) + provenance de
+                    # plataforma (Task 6) para que el catálogo filesystem reconstruya el
+                    # ChunkBundleRef con project_id y su contexto de variante auditable.
+                    "project_id": getattr(self, "project_id", None),
+                    "source_document_revision_id": (
+                        platform.source_document_revision_id if platform else None
+                    ),
+                    "normalized_document_id": (
+                        platform.normalized_document_id if platform else None
+                    ),
+                    "rag_variant_id": platform.rag_variant_id if platform else None,
+                    "semantic_recipe_fingerprint": (
+                        platform.semantic_recipe_fingerprint if platform else None
+                    ),
                 },
             )
             self._promote_staged_files(

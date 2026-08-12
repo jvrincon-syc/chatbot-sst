@@ -71,3 +71,40 @@ def test_hybrid_prefiere_el_bundle_canonico_del_filesystem_sobre_el_legacy(tmp_p
     assert bundles[0].chunk_bundle_id == chunk_bundle.chunk_bundle_id
     assert bundles[0].artifact_relpath.endswith(".chunking_metadata.json")
     assert bundles[0].child_count == chunk_bundle.child_count
+
+
+def test_catalogo_chunk_lee_variant_provenance_desde_chunking_metadata(tmp_path) -> None:
+    # Task 6: el catálogo reconstruye el ChunkBundleRef con project_id + provenance de
+    # variante escrita por el chunking de plataforma en el sidecar.
+    import json
+    from pathlib import Path
+
+    base = tmp_path / "chunks" / "general" / "doc"
+    base.parent.mkdir(parents=True, exist_ok=True)
+    Path(f"{base}.chunking_metadata.json").write_text(
+        json.dumps(
+            {
+                "document_id": "doc_1",
+                "bundle_fingerprint": "chunk_1",
+                "profile_id": "local-structural-v1",
+                "profile_fingerprint": "a" * 64,
+                "corpus_version": "platform",
+                "source_hash": "c" * 64,
+                "project_id": "proj_sst-general",
+                "source_document_revision_id": "srev_manual",
+                "normalized_document_id": "ndoc_manual",
+                "rag_variant_id": "ragv_local_bge",
+                "semantic_recipe_fingerprint": "b" * 64,
+                "parent_count": 2,
+                "child_count": 3,
+            }
+        ),
+        encoding="utf-8",
+    )
+    repo = FilesystemChunkBundleCatalogRepository(chunks_root=tmp_path / "chunks")
+
+    bundle = repo.get("chunk_1")
+
+    assert bundle.project_id == "proj_sst-general"
+    assert bundle.rag_variant_id == "ragv_local_bge"
+    assert bundle.semantic_recipe_fingerprint == "b" * 64

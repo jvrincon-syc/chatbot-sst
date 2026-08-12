@@ -14,7 +14,7 @@ from pathlib import Path, PurePosixPath
 
 from rag_platform.domain.errors import UnsafeArtifactPath
 from rag_platform.domain.identity import IdentityKind, PlatformId, _require
-from rag_platform.domain.models import ProjectStorageRoots
+from rag_platform.domain.models import ProjectStorageRoots, RagProject
 
 
 #: Subdirectorios canónicos bajo la raíz de cada proyecto.
@@ -45,7 +45,8 @@ class ProjectStorageResolver:
                 raíces de proyecto cuelgan de ``base_dir/projects/{slug}/``.
         """
 
-        self._projects_dir = Path(base_dir) / "projects"
+        self._base_dir = Path(base_dir)
+        self._projects_dir = self._base_dir / "projects"
 
     def roots_for(self, project_id: PlatformId) -> ProjectStorageRoots:
         """Devuelve las raíces relativas y aisladas de un proyecto.
@@ -72,6 +73,27 @@ class ProjectStorageResolver:
             raise UnsafeArtifactPath(f"unknown project root: {root_name!r}")
         slug = _project_slug(project_id)
         return (self._projects_dir / slug / root_name).resolve()
+
+    def resolve_declared_root(self, project: RagProject, root_name: str) -> Path:
+        """Resuelve una raíz desde el catálogo (``project.storage_roots``).
+
+        Honra el relpath declarado en el catálogo (p. ej. ``docs_raw`` legacy) en
+        vez de asumir el layout canónico, para que el drift ``raw``/``docs_raw`` sea
+        catalog-driven y no una constante. Mantiene contención bajo ``base_dir``.
+        """
+
+        if root_name not in _ARTIFACT_ROOTS:
+            raise UnsafeArtifactPath(f"unknown project root: {root_name!r}")
+        relpath = str(getattr(project.storage_roots, root_name))
+        if not relpath or "\\" in relpath or relpath.startswith("/"):
+            raise UnsafeArtifactPath(f"declared root must be relative POSIX: {relpath!r}")
+        if any(part in {"", ".", ".."} for part in relpath.split("/")):
+            raise UnsafeArtifactPath(f"declared root has unsafe component: {relpath!r}")
+        base = self._base_dir.resolve()
+        candidate = (base / relpath).resolve()
+        if base != candidate and base not in candidate.parents:
+            raise UnsafeArtifactPath(f"declared root escapes base dir: {relpath!r}")
+        return candidate
 
     def resolve_artifact(
         self, project_id: PlatformId, relative_path: PurePosixPath

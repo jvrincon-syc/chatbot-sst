@@ -159,6 +159,7 @@ class PipelineServices:
     # ``rag_platform_v1`` flag is on; ``None`` keeps the legacy surface untouched.
     rag_platform_build: object | None = None
     rag_platform_publish: object | None = None
+    rag_platform_rebuild: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -377,7 +378,69 @@ def build_pipeline_services(
         services.rag_platform_publish = _build_rag_platform_publish(
             connection=connection, transactions=transactions
         )
+        services.rag_platform_rebuild = _build_rag_platform_rebuild(
+            connection=connection,
+            indexing_runs=indexing_runs,
+            bundles=bundles,
+            profiles=profiles,
+            index_bundle=index_bundle,
+            run_documents=run_documents,
+        )
     return services
+
+
+def _build_rag_platform_rebuild(
+    *,
+    connection: object | None,
+    indexing_runs: object,
+    bundles: object,
+    profiles: object,
+    index_bundle: object,
+    run_documents: object,
+) -> object | None:
+    """Cablea el rebuild pure-platform (Fase 4 Stage 3) en el composition root.
+
+    Encadena indexado bundle-first + materialización sellada reusando los casos de
+    uso ya construidos. La materialización sella en Postgres, así que sin conexión
+    (modo memoria) no aplica y se deja ``None``.
+    """
+
+    if connection is None:
+        return None
+
+    from indexing.application.bundle_first.index_bundle import (
+        CreateIndexingRunUseCase,
+        IndexingRunExecutor,
+    )
+    from rag_platform.application.rebuild_orchestrator import (
+        RebuildPlatformArtifactsUseCase,
+    )
+    from rag_platform.application.vector_materialization import MaterializeVectorsUseCase
+    from rag_platform.infrastructure.postgres.vector_repositories import (
+        PostgresIndexingMaterializationRepository,
+    )
+
+    return RebuildPlatformArtifactsUseCase(
+        # ponytail: se reconstruyen create_run/executor (thin wrappers sobre los
+        # mismos repos); el rebuild usa execute() síncrono, no el pool de submit().
+        create_indexing_run=CreateIndexingRunUseCase(
+            runs=indexing_runs,
+            bundles=bundles,
+            profiles=profiles,
+            index_use_case=index_bundle,
+        ),
+        indexing_executor=IndexingRunExecutor(
+            runs=indexing_runs,
+            index_use_case=index_bundle,
+        ),
+        run_documents=run_documents,
+        materialize=MaterializeVectorsUseCase(
+            repository=PostgresIndexingMaterializationRepository(connection)
+        ),
+        # ponytail: default del target (indexing_targets.storage_schema_version); si
+        # coexisten targets con schema versions distintas, leerlo del target resuelto.
+        storage_schema_version="idx-vec-v1",
+    )
 
 
 def _build_rag_platform_build(*, connection: object | None, data_root: Path) -> object:

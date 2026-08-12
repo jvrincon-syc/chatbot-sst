@@ -158,6 +158,7 @@ def test_registra_chunk_bundle_en_postgres_ademas_del_filesystem(tmp_path: Path)
         output_root=tmp_path,
         ledger=ledger,
         connection=connection,
+        project_id="proj_alpha",
     )
     orchestrator = ChunkingOrchestrator(
         engine=LocalChunkingEngine(),
@@ -204,6 +205,7 @@ def test_reutilizacion_vuelve_a_registrar_el_bundle_en_postgres(tmp_path: Path) 
         output_root=tmp_path,
         ledger=ledger,
         connection=connection,
+        project_id="proj_alpha",
     )
     orchestrator = ChunkingOrchestrator(
         engine=LocalChunkingEngine(),

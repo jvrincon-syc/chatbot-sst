@@ -63,9 +63,9 @@ class AppendOnlyVectorRecord:
     corpus_version: str
     configuration_fingerprint: str
     vector_checksum: str
-    # Aditivo (ADR-007): propiedad de proyecto en la fila vectorial. None = legacy
-    # (bypassa el FK compuesto por MATCH SIMPLE); presente = fila de plataforma.
-    project_id: str | None = None
+    # ADR-008 pure-platform: propiedad de proyecto obligatoria en la fila vectorial
+    # (la BD la exige NOT NULL; el FK compuesto ya no se bypassa).
+    project_id: str
 
 
 class PostgresVectorRepository:

@@ -95,9 +95,9 @@ class IndexingRun(StrictModel):
     embedding_profile_id: str | None = None
     indexing_target_id: str | None = None
     corpus_version: str | None = None
-    # Contexto de release (Fase 4, gap #2): nullable, derivado por el servidor desde
-    # un build context validado, nunca del payload. Legacy escribe NULL.
-    project_id: str | None = None
+    # Contexto de release: project_id obligatorio (ADR-008, derivado del embedding
+    # bundle server-side); rag_variant/release nullable (Fase 5).
+    project_id: str = Field(min_length=1)
     rag_variant_id: str | None = None
     rag_release_id: str | None = None
     request_fingerprint: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
@@ -157,14 +157,13 @@ class IndexingNodeRecord(StrictModel):
     Nodes are adapted from the source chunk bundle without re-chunking, so the
     bundle-first path needs no LlamaIndex node objects at all.
 
-    ``project_id``/``source_chunk_id``/``source_parent_chunk_id`` are nullable and
-    only populated on the platform (project-owned) path (Fase 4, ADR-007 §2). On the
-    legacy path (``project_id is None``) ``node_id == source chunk id`` byte-for-byte
-    and these physical-identity fields stay ``None``, so legacy behaviour is unchanged.
+    ``project_id`` es **obligatorio** (ADR-008, pure-platform): todo nodo nace con
+    dueño de proyecto y su ``node_id`` es el físico namespaced. ``source_chunk_id``/
+    ``source_parent_chunk_id`` conservan la evidencia del chunk de origen.
     """
 
     node_id: str = Field(min_length=1)
-    project_id: str | None = None
+    project_id: str = Field(min_length=1)
     document_id: str = Field(min_length=1)
     source_relpath: str = Field(min_length=1)
     source_hash: str = Field(pattern=r"^[0-9a-f]{64}$")

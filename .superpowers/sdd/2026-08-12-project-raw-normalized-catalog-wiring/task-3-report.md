@@ -1,58 +1,55 @@
-# Task 3 Report: blocked
+# Task 3 Report: PostgreSQL raw and normalized physical catalogs
 
-## Estado
+## Implementation
 
-Task 3 no se implemento porque el `HEAD` actual no contiene los contratos
-obligatorios de Task 2 y el write set de esta tarea prohbe crearlos o
-modificarlos.
+- Added `PostgresRawArtifactCatalogRepository` for parameterized, idempotent
+  upserts into `project_raw_document_artifacts` by
+  `source_document_revision_id`.
+- Added `PostgresNormalizedArtifactCatalogRepository` for parameterized upserts
+  by the existing physical identity `(project_id, source_document_revision_id,
+  processing_profile_fingerprint)`. The upsert refreshes nullable
+  `rag_variant_id` and `semantic_recipe_fingerprint` as provenance without
+  changing `normalized_document_id` identity.
+- Reused `RawDocumentArtifactRecord`, `NormalizedDocumentArtifactRecord`, and
+  their shared `PlatformArtifactProvenance`; no parallel provenance contract
+  was introduced.
 
-## Conflicto brief vs HEAD
+## DDL Decision
 
-El brief de Task 3 exige que los adapters consuman estos simbolos:
+`20260812_01_create_project_raw_and_normalized_artifact_catalogs.sql` already
+defines the catalog tables, their physical identity, direct FKs, checks, and
+the needed lookup indexes. `20260812_02_add_normalized_catalog_fk_indexes.sql`
+adds only the complementary composite uniqueness and FKs needed to keep a
+normalized catalog row scoped to the same project as its processing profile and
+optional RAG variant. It adds no speculative index and does not redesign `01`.
 
-- `RawArtifactCatalogRepository`
-- `NormalizedArtifactCatalogRepository`
-- `RawDocumentArtifactRecord`
-- `NormalizedDocumentArtifactRecord`
+## Tests
 
-En `HEAD`, la ruta esperada
-`app/back/src/rag_platform/domain/artifact_catalog.py` no existe. La busqueda
-en `app/back/src` y `app/back/tests` tampoco encontro esas definiciones. Por
-lo tanto, no es posible escribir una prueba de comportamiento ni un adapter
-tipado que cumpla el contrato sin editar el write set exclusivo de Task 2.
+Red evidence:
 
-Se priorizo `HEAD`, como ordena el encargo. No se creo un contrato alternativo
-ni se usaron `dict` o tipos locales como sustituto, pues eso desalinearia los
-adapters de los puertos de aplicacion que Task 3 debe consumir.
+```text
+C:\venvs\chatbot-sst\Scripts\python.exe -m pytest app\back\tests\rag_platform\test_postgres_artifact_catalog_repositories.py -q
+ERROR: ModuleNotFoundError: ...artifact_catalog_repositories
+```
 
-## Base vigente observada
+Green and affected regression evidence:
 
-- `migrations/20260812_01_create_project_raw_and_normalized_artifact_catalogs.sql`
-  existe en el arbol de trabajo y se trato como base vigente, sin redisenarla.
-- La migracion esta sin seguimiento y existen otros cambios ajenos en el
-  arbol de trabajo; no se modificaron ni se revirtieron.
-- `artifact_repositories.py` ya contiene el sealed chunk/build ledger y no
-  fue modificado.
+```text
+C:\venvs\chatbot-sst\Scripts\python.exe -m pytest app\back\tests\rag_platform\test_postgres_artifact_catalog_repositories.py app\back\tests\indexing\test_prepare_postgres_indexing.py -q
+9 passed
 
-## TDD y verificacion
+C:\venvs\chatbot-sst\Scripts\python.exe -m pytest app\back\tests\rag_platform\test_artifact_catalog_models.py app\back\tests\rag_platform\test_postgres_artifact_catalog_repositories.py app\back\tests\indexing\test_prepare_postgres_indexing.py -q
+15 passed
+```
 
-No se agrego una prueba fallida: hacerlo requeriria importar los registros y
-puertos inexistentes, y no se puede completar el ciclo red-green dentro del
-write set permitido. No se ejecutaron pruebas focalizadas, ya que no hay una
-implementacion valida que verificar.
+Pytest emitted only an existing cache-directory permission warning; no test
+warnings or failures originated in Task 3 code.
 
 ## Self-review
 
-- Alcance: sin cambios funcionales fuera del reporte requerido.
-- Arquitectura: se preserva la separacion entre identidad logica y catalogos
-  fisicos; no se introducen sustitutos incompatibles.
-- Seguridad: no se tocaron documentos, secretos ni datos persistidos.
-- Reversibilidad: el reporte es aditivo; no hay migraciones ni codigo para
-  revertir.
-
-## Desbloqueo requerido
-
-Incorporar primero Task 2 en `HEAD` (al menos
-`rag_platform/domain/artifact_catalog.py` y sus puertos). Luego Task 3 puede
-crear los adapters, la migracion de indices FK y sus pruebas focalizadas sin
-violar el write set.
+- SQL is parameterized and catalogs remain physical projections, not logical
+  identity replacements.
+- Provenance remains nullable and is not part of either conflict target.
+- Migration ordering is covered by `prepare_postgres` tests.
+- The commit is limited to the Task 3 write set; unrelated Task 2/6 worktree
+  changes were not staged.

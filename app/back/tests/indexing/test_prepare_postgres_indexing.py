@@ -73,6 +73,14 @@ def test_migration_files_include_schema_before_seed() -> None:
     )
 
 
+def test_migration_files_ordenan_catalogos_fisicos_despues_de_su_schema_base() -> None:
+    names = [path.name for path in migration_files(Path("migrations"))]
+
+    assert names.index("20260812_01_create_project_raw_and_normalized_artifact_catalogs.sql") < names.index(
+        "20260812_02_add_normalized_catalog_fk_indexes.sql"
+    )
+
+
 def test_prepare_database_uses_parsed_connection_kwargs(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

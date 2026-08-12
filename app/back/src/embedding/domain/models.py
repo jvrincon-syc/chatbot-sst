@@ -304,10 +304,10 @@ class EmbeddingRun(StrictModel):
     source_chunk_bundle_id: str = Field(min_length=1)
     embedding_profile_id: str = Field(min_length=1)
     configuration_fingerprint: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
-    # Contexto de release (Fase 4, gap #1/#2): nullable, derivado por el servidor
-    # desde un build context validado, nunca del payload. Legacy escribe NULL.
-    # No forma parte de la identidad del run ni del bundle producido (ADR-007).
-    project_id: str | None = None
+    # Contexto de release: project_id es obligatorio (ADR-008, derivado del chunk
+    # bundle server-side); rag_variant/release siguen nullable (Fase 5). No forman
+    # parte de la identidad del run ni del bundle producido (ADR-007).
+    project_id: str = Field(min_length=1)
     rag_variant_id: str | None = None
     rag_release_id: str | None = None
     runtime_engine: str = Field(min_length=1)
@@ -346,15 +346,14 @@ class EmbeddingBundleChunk(StrictModel):
 class EmbeddingBundle(StrictModel):
     """Sealed, immutable set of document vectors for one chunk bundle.
 
-    ``project_id`` is nullable so legacy rows (``project_id IS NULL``) keep their
-    behaviour, while platform bundles carry the owning project. It is **not** part
-    of ``deterministic_id`` (the legacy id is preserved by ADR-007); the physical
-    platform identity is enforced by the partial index
-    ``uq_embedding_bundles_physical_identity`` at the database level.
+    ``project_id`` es **obligatorio** (ADR-008, pure-platform): todo bundle carga su
+    proyecto dueño (la BD lo exige NOT NULL). **No** forma parte de
+    ``deterministic_id`` (el id es estable entre proyectos, ADR-007); la identidad
+    física la impone el índice parcial ``uq_embedding_bundles_physical_identity``.
     """
 
     embedding_bundle_id: str = Field(min_length=1)
-    project_id: str | None = None
+    project_id: str = Field(min_length=1)
     source_chunk_bundle_id: str = Field(min_length=1)
     embedding_profile_id: str = Field(min_length=1)
     provider: str = Field(min_length=1)
@@ -453,13 +452,14 @@ class EmbeddingIndexingReadiness(StrictModel):
 class ChunkBundleRef(StrictModel):
     """Durable identity of one registered chunk bundle.
 
-    ``project_id`` is nullable so legacy rows (``project_id IS NULL``) keep their
-    current behaviour while platform-owned rows carry their owning project for the
-    composite-FK isolation introduced in Fase 4 (ADR-007 §1).
+    ``project_id`` es **obligatorio** (ADR-008, pure-platform): todo chunk bundle
+    nace con dueño de proyecto, que impone el aislamiento por FK compuesta y la BD
+    exige NOT NULL. El artefacto de chunk lo persiste en su metadata para que el
+    catálogo filesystem lo reconstruya.
     """
 
     chunk_bundle_id: str = Field(min_length=1)
-    project_id: str | None = None
+    project_id: str = Field(min_length=1)
     bundle_fingerprint: str = Field(min_length=1)
     profile_id: str = Field(min_length=1)
     profile_fingerprint: str = Field(min_length=1)
@@ -472,6 +472,10 @@ class ChunkBundleRef(StrictModel):
     parent_count: int = Field(ge=0)
     child_count: int = Field(ge=0)
     status: CompatibilityStatus
+    # Provenance de variante (Task 6): auditable, nullable, par atómico. NO es
+    # identidad ni dueño (eso es project_id); solo registra el contexto de variante.
+    rag_variant_id: str | None = None
+    semantic_recipe_fingerprint: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
 
 
 class ReadinessCheck(StrictModel):

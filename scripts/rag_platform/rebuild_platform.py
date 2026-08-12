@@ -40,9 +40,14 @@ from prepare_postgres_indexing import build_dsn_from_env, load_env_file  # noqa:
 logger = logging.getLogger(__name__)
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: "list[str] | None" = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-id", required=True)
+    parser.add_argument(
+        "--rag-variant-id",
+        default=None,
+        help="Variante opcional; su receta semántica se deriva server-side (provenance).",
+    )
     parser.add_argument("--docs-normalized", default="data/docs_normalized")
     parser.add_argument("--chunks-root", default="data/chunks")
     parser.add_argument("--document", action="append", default=[])
@@ -50,12 +55,62 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scope", default="platform-rebuild")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--env-file", default="secrets.env")
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> int:
+#: Centinela: el contexto no resolvió (proyecto/variante inexistente), fail-closed.
+_CONTEXT_BLOCKED = object()
+
+
+def _resolve_context(*, dsn: str, project_id: str, rag_variant_id: str | None):
+    """Resuelve project + variante server-side; deriva la receta semántica.
+
+    Devuelve ``(rag_variant_id, semantic_recipe_fingerprint)`` o
+    ``(_CONTEXT_BLOCKED, blocked_payload)`` si el proyecto o la variante no existen.
+    """
+
+    import psycopg2
+    from psycopg2.extensions import parse_dsn
+
+    from rag_platform.domain.errors import ProjectNotFound, RagVariantNotFound
+    from rag_platform.domain.identity import IdentityKind, PlatformId
+    from rag_platform.infrastructure.postgres.project_repositories import (
+        PostgresProjectRepository,
+        PostgresRagVariantRepository,
+    )
+
+    connection = psycopg2.connect(**parse_dsn(dsn))
+    try:
+        try:
+            PostgresProjectRepository(connection).get(
+                PlatformId(kind=IdentityKind.PROJECT, value=project_id)
+            )
+        except ProjectNotFound:
+            return _CONTEXT_BLOCKED, {
+                "status": "blocked",
+                "reason": "project_not_found",
+                "project_id": project_id,
+            }
+        if rag_variant_id is None:
+            return None, None
+        try:
+            variant = PostgresRagVariantRepository(connection).get(
+                PlatformId(kind=IdentityKind.RAG_VARIANT, value=rag_variant_id)
+            )
+        except RagVariantNotFound:
+            return _CONTEXT_BLOCKED, {
+                "status": "blocked",
+                "reason": "rag_variant_not_found",
+                "rag_variant_id": rag_variant_id,
+            }
+        return variant.rag_variant_id.value, variant.semantic_recipe_fingerprint
+    finally:
+        connection.close()
+
+
+def main(argv: "list[str] | None" = None) -> int:
     configure_structured_logging(stream=sys.stderr, include_file_handler=False)
-    args = parse_args()
+    args = parse_args(argv)
 
     # Pure-platform escribe en Postgres con project_id NOT NULL: exige DSN.
     env = load_env_file(Path(args.env_file))
@@ -65,6 +120,17 @@ def main() -> int:
         return 2
     os.environ["SST_POSTGRES_DSN"] = dsn
     os.environ["SST_PERSISTENCE_MODE"] = "postgres"
+
+    # Resolución server-side fail-closed del contexto: el proyecto debe existir y,
+    # si se pide una variante, su receta semántica se deriva de la BD (nunca del
+    # payload del cliente, ADR-007 §7). La provenance viaja al chunk vía el sidecar
+    # normalizado; aquí se valida y se expone para auditoría.
+    rag_variant_id, semantic_recipe_fingerprint = _resolve_context(
+        dsn=dsn, project_id=args.project_id, rag_variant_id=args.rag_variant_id
+    )
+    if rag_variant_id is _CONTEXT_BLOCKED:
+        print(json.dumps(semantic_recipe_fingerprint, sort_keys=True))
+        return 2
 
     # Import diferido: build_run_service_from_env lee os.environ ya configurado.
     from chunking.api.dependencies import build_run_service_from_env
@@ -96,6 +162,8 @@ def main() -> int:
     summary = {
         "status": "chunked",
         "project_id": args.project_id,
+        "rag_variant_id": rag_variant_id,
+        "semantic_recipe_fingerprint": semantic_recipe_fingerprint,
         "run_id": final.run_id,
         "requested_documents": final.requested_documents,
         "completed_documents": final.completed_documents,

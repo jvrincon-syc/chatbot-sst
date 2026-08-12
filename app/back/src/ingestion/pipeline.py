@@ -5,12 +5,16 @@ import os
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 from time import perf_counter
 
 from pydantic import ValidationError
 
 from core.logging.observability import measure_duration_ms
+from ingestion.application.platform_metadata import (
+    PlatformMetadataContext,
+    apply_platform_metadata,
+)
 from ingestion.classification.rules import classify_document
 from ingestion.document_control.extractor import extract_document_control
 from ingestion.inventory.scanner import scan_docs_raw
@@ -450,6 +454,7 @@ def _write_success_artifacts(
     pipeline_version: str,
     classification_review_threshold: float,
     ocr_review_threshold: float,
+    platform_context: PlatformMetadataContext | None = None,
 ) -> tuple[MetadataArtifact, object]:
     paths = ArtifactPaths.for_source(record.source_relpath)
     normalized_md = docs_normalized / Path(paths.markdown)
@@ -465,6 +470,10 @@ def _write_success_artifacts(
         classification_review_threshold=classification_review_threshold,
         ocr_review_threshold=ocr_review_threshold,
     )
+    # Aditivo: solo la vía de plataforma adjunta identidad y provenance. Sin
+    # contexto, el metadata queda idéntico al legacy.
+    if platform_context is not None:
+        metadata = apply_platform_metadata(metadata, platform_context)
     pages = PagesArtifact(schema_version="2.0", document_id=record.document_id, page_count=result.page_count, pages=result.pages)
     ocr = result.ocr or OcrArtifact(
         schema_version="2.0",
@@ -896,6 +905,10 @@ def run_pipeline(
     golden_status: Optional[str] = None,
     llama_settings_override: LlamaSettings | None = None,
     request_id: str | None = None,
+    platform_context_resolver: Callable[
+        [InventoryRecord], PlatformMetadataContext | None
+    ]
+    | None = None,
 ) -> Dict[str, int]:
     run_id = run_id or "run_" + datetime.now(timezone.utc).astimezone().strftime("%Y%m%d_%H%M%S")
     output_root = staging_root or docs_normalized
@@ -1063,6 +1076,11 @@ def run_pipeline(
                     llama_settings=llama_settings_override,
                     event_logger=event_logger,
                 )
+                platform_context = (
+                    platform_context_resolver(record)
+                    if platform_context_resolver is not None
+                    else None
+                )
                 metadata, bundle = _write_success_artifacts(
                     record=record,
                     result=result,
@@ -1072,6 +1090,7 @@ def run_pipeline(
                     pipeline_version=pipeline_version,
                     classification_review_threshold=classification_review_threshold,
                     ocr_review_threshold=ocr_review_threshold,
+                    platform_context=platform_context,
                 )
                 bundle_manifests.append(bundle)
                 record.processing_status = metadata.processing_status

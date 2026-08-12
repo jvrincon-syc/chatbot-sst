@@ -76,6 +76,8 @@ _CHUNK_BUNDLE_COLUMNS = (
     "parent_count",
     "child_count",
     "status",
+    "rag_variant_id",
+    "semantic_recipe_fingerprint",
 )
 
 _RUN_COLUMNS = (
@@ -347,12 +349,14 @@ class PostgresChunkBundleRepository:
             cursor.execute(
                 """
                 INSERT INTO chunk_bundles (
-                    chunk_bundle_id, bundle_fingerprint, profile_id,
+                    chunk_bundle_id, project_id, bundle_fingerprint, profile_id,
                     profile_fingerprint, corpus_version, source_document_id,
-                    artifact_relpath, parent_count, child_count, status
+                    artifact_relpath, parent_count, child_count, status,
+                    rag_variant_id, semantic_recipe_fingerprint
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (chunk_bundle_id) DO UPDATE SET
+                    project_id = EXCLUDED.project_id,
                     bundle_fingerprint = EXCLUDED.bundle_fingerprint,
                     profile_id = EXCLUDED.profile_id,
                     profile_fingerprint = EXCLUDED.profile_fingerprint,
@@ -361,10 +365,13 @@ class PostgresChunkBundleRepository:
                     artifact_relpath = EXCLUDED.artifact_relpath,
                     parent_count = EXCLUDED.parent_count,
                     child_count = EXCLUDED.child_count,
-                    status = EXCLUDED.status
+                    status = EXCLUDED.status,
+                    rag_variant_id = EXCLUDED.rag_variant_id,
+                    semantic_recipe_fingerprint = EXCLUDED.semantic_recipe_fingerprint
                 """,
                 (
                     bundle.chunk_bundle_id,
+                    bundle.project_id,
                     bundle.bundle_fingerprint,
                     bundle.profile_id,
                     bundle.profile_fingerprint,
@@ -374,6 +381,8 @@ class PostgresChunkBundleRepository:
                     bundle.parent_count,
                     bundle.child_count,
                     bundle.status,
+                    bundle.rag_variant_id,
+                    bundle.semantic_recipe_fingerprint,
                 ),
             )
         if legacy_conflict is not None:

@@ -295,7 +295,9 @@ class CreateEmbeddingRunUseCase:
                 source_chunk_bundle_id=chunk_bundle.chunk_bundle_id,
                 embedding_profile_id=profile.profile_id,
                 configuration_fingerprint=profile.expected_fingerprint().value,
-                project_id=request.project_id,
+                # ADR-008: dueño del build context validado; fallback al chunk bundle
+                # (siempre presente, server-side) para que project_id nunca sea None.
+                project_id=request.project_id or chunk_bundle.project_id,
                 rag_variant_id=request.rag_variant_id,
                 rag_release_id=request.rag_release_id,
                 runtime_engine=profile.provider,

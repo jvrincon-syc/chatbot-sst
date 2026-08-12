@@ -136,12 +136,12 @@ def test_bundle_lleva_project_id_de_plataforma_sin_alterar_identidad() -> None:
         "source_content_fingerprint": "b" * 64,
         "status": "pending",
     }
-    legacy = EmbeddingBundle(**base)
     platform = EmbeddingBundle(**{**base, "project_id": "proj_alpha"})
+    other = EmbeddingBundle(**{**base, "project_id": "proj_beta"})
 
-    assert legacy.project_id is None
     assert platform.project_id == "proj_alpha"
-    # deterministic_id no acepta project_id: la identidad legacy se conserva.
+    assert other.project_id == "proj_beta"
+    # project_id NO forma parte de deterministic_id: id estable entre proyectos.
     import inspect
 
     assert "project_id" not in inspect.signature(EmbeddingBundle.deterministic_id).parameters
@@ -154,6 +154,7 @@ def test_run_es_terminal_cuando_alcanza_un_estado_final() -> None:
         request_fingerprint="c" * 64,
         source_chunk_bundle_id="chunk-bundle-1",
         embedding_profile_id="p1",
+        project_id="proj_alpha",
         runtime_engine="mock",
         runtime_mode="dry_run",
         engine_revision_observed=UNKNOWN_REVISION,
@@ -163,12 +164,11 @@ def test_run_es_terminal_cuando_alcanza_un_estado_final() -> None:
     assert run.model_copy(update={"status": "failed"}).is_terminal is True
 
 
-def test_run_transporta_contexto_de_release_nullable() -> None:
-    """Fase 4 gap #2: el run transporta project/variant/release, nullable.
+def test_run_transporta_contexto_de_release() -> None:
+    """ADR-008: project_id obligatorio; rag_variant/release nullable (Fase 5).
 
-    Legacy los deja en None; plataforma los recibe derivados del servidor. El
-    adaptador Postgres los persiste (columnas de la migración 05); aquí se prueba
-    el contrato de dominio (el round-trip real vive bajo postgres_live).
+    El run recibe project_id derivado del servidor (chunk bundle). variant/release
+    quedan None hasta que un build context de Fase 5 los fije.
     """
 
     base = dict(
@@ -177,24 +177,20 @@ def test_run_transporta_contexto_de_release_nullable() -> None:
         request_fingerprint="c" * 64,
         source_chunk_bundle_id="chunk-bundle-1",
         embedding_profile_id="p1",
+        project_id="proj_alpha",
         runtime_engine="mock",
         runtime_mode="dry_run",
         engine_revision_observed=UNKNOWN_REVISION,
         status="running",
     )
-    legacy = EmbeddingRun(**base)
-    assert (legacy.project_id, legacy.rag_variant_id, legacy.rag_release_id) == (
-        None,
-        None,
-        None,
-    )
+    sin_release = EmbeddingRun(**base)
+    assert sin_release.project_id == "proj_alpha"
+    assert (sin_release.rag_variant_id, sin_release.rag_release_id) == (None, None)
     platform = EmbeddingRun(
         **base,
-        project_id="proj_alpha",
         rag_variant_id="ragv_1",
         rag_release_id="ragr_1",
     )
-    assert platform.project_id == "proj_alpha"
     assert platform.rag_variant_id == "ragv_1"
     assert platform.rag_release_id == "ragr_1"
 

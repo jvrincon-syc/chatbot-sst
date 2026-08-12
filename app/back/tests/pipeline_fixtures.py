@@ -196,6 +196,7 @@ def write_chunk_bundle(
         json.dumps(
             {
                 "bundle_fingerprint": bundle_fingerprint,
+                "project_id": project_id,
                 "child_count": len(children),
                 "corpus_version": CORPUS_VERSION,
                 "document_id": document_id,

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 
 import pytest
@@ -15,7 +16,9 @@ from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
     CorpusOrganizationPolicy,
     DocumentTypeTemplate,
+    ProjectConfiguration,
     ProjectEmbeddingProfile,
+    ProjectStorageRoots,
     RagProject,
 )
 from rag_platform.infrastructure.in_memory.repositories import (
@@ -178,3 +181,38 @@ def test_repositorio_rechaza_project_id_duplicado(tmp_path: Path) -> None:
     projects.add(project)
     with pytest.raises(ProjectAlreadyExists):
         projects.add(project)
+
+
+def _project_with_roots(*, raw: str, normalized: str) -> RagProject:
+    pid = PlatformId(IdentityKind.PROJECT, "proj_sst-general")
+    now = datetime(2026, 8, 12, tzinfo=timezone.utc)
+    return RagProject(
+        project_id=pid,
+        display_name="SST General",
+        storage_roots=ProjectStorageRoots(
+            project_id=pid,
+            raw=raw,
+            normalized=normalized,
+            chunks="projects/sst-general/chunks",
+            embeddings="projects/sst-general/embeddings",
+            manifests="projects/sst-general/manifests",
+        ),
+        configuration=ProjectConfiguration(
+            version=1,
+            corpus_organization_policy=CorpusOrganizationPolicy.SST_LEGACY_V1,
+            created_at=now,
+        ),
+        created_at=now,
+    )
+
+
+def test_resolve_declared_root_usa_storage_root_raw_del_catalogo(tmp_path: Path) -> None:
+    resolver = ProjectStorageResolver(tmp_path)
+    project = _project_with_roots(
+        raw="projects/sst-general/docs_raw",
+        normalized="projects/sst-general/normalized",
+    )
+
+    resolved = resolver.resolve_declared_root(project, "raw")
+
+    assert resolved == (tmp_path / "projects" / "sst-general" / "docs_raw").resolve()
