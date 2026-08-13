@@ -1,6 +1,7 @@
 {
-  "bundle_fingerprint": "chunk-bundle-eed436248f9cd53d64df7607b8eb05466c5db4091c67a97b39b1a59ede8eef05",
-  "child_count": 1,
+  "artifact_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-073d747cf003cecc24d1b51956b8c1d1f25f6d87caea818d7958b898cf4b5d6a",
+  "child_count": 4,
   "corpus_version": "phase1-main",
   "document_id": "doc_f38f9f98d854feed",
   "normalized_relpath": "general_sst/manuales/politica/1778000305710_syc_politicadeseguridady.md",
