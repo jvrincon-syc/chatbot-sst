@@ -28,10 +28,9 @@ from rag_platform.infrastructure.in_memory.repositories import (
     InMemoryIndexingMaterializationRepository,
 )
 
-from pipeline_fixtures import DIMENSION, build_pipeline_stack
+from pipeline_fixtures import build_pipeline_stack
 
 _PROJECT = "proj_alpha"
-_CHECKSUM = "a" * 64
 _STORAGE_SCHEMA = "idx-materialization-v1"
 
 
@@ -53,28 +52,22 @@ def _use_case(stack) -> tuple[
         create_indexing_run=stack.create_indexing_run,
         indexing_executor=stack.indexing_executor,
         run_documents=stack.run_documents,
+        bundles=stack.bundles,
+        profiles=stack.profiles,
         materialize=MaterializeVectorsUseCase(repository=materialization_repo),
         storage_schema_version=_STORAGE_SCHEMA,
     )
     return use_case, materialization_repo
 
 
-def _rebuild(use_case, stack, **overrides):
-    embedding_bundle_id = overrides.pop("embedding_bundle_id", None) or stack.run_embedding()
-    payload = {
-        "context": PlatformBuildContext(
-            project_id=PlatformId(IdentityKind.PROJECT, _PROJECT)
+def _rebuild(use_case, stack, *, project_id: str = _PROJECT, embedding_bundle_id=None):
+    embedding_bundle_id = embedding_bundle_id or stack.run_embedding()
+    return use_case.execute(
+        context=PlatformBuildContext(
+            project_id=PlatformId(IdentityKind.PROJECT, project_id)
         ),
-        "embedding_bundle_id": embedding_bundle_id,
-        "bundle_project_id": PlatformId(IdentityKind.PROJECT, _PROJECT),
-        "canonical_checksum": _CHECKSUM,
-        "bundle_dimension": DIMENSION,
-        "target_dimension": DIMENSION,
-        "bundle_metric": "cosine",
-        "target_metric": "cosine",
-    }
-    payload.update(overrides)
-    return use_case.execute(**payload)
+        embedding_bundle_id=embedding_bundle_id,
+    )
 
 
 def test_rebuild_sella_materializacion_del_proyecto(tmp_path: Path) -> None:
@@ -84,7 +77,9 @@ def test_rebuild_sella_materializacion_del_proyecto(tmp_path: Path) -> None:
     result = _rebuild(use_case, stack)
 
     assert result.materialization.status is MaterializationStatus.SEALED
-    assert result.materialization.canonical_checksum == _CHECKSUM
+    # Checksum canónico derivado server-side del bundle (64 hex determinista).
+    assert len(result.materialization.canonical_checksum) == 64
+    int(result.materialization.canonical_checksum, 16)
     # vector_count == child_node_count (cada child aporta un vector).
     assert result.materialization.vector_count == result.materialization.child_node_count
     assert result.materialization.child_node_count > 0
@@ -107,17 +102,18 @@ def test_rebuild_falla_cerrado_si_bundle_es_de_otro_proyecto(tmp_path: Path) -> 
     use_case, repo = _use_case(stack)
     embedding_bundle_id = stack.run_embedding()
 
+    # El bundle es de _PROJECT; pedir la materialización bajo otro proyecto falla.
     with pytest.raises(NodeProjectMismatch):
         _rebuild(
             use_case,
             stack,
+            project_id="proj_beta",
             embedding_bundle_id=embedding_bundle_id,
-            bundle_project_id=PlatformId(IdentityKind.PROJECT, "proj_beta"),
         )
 
     # La materialización queda observable como FAILED, nunca sellada a medias.
     sealed = repo.find_sealed(
-        project_id=PlatformId(IdentityKind.PROJECT, _PROJECT),
+        project_id=PlatformId(IdentityKind.PROJECT, "proj_beta"),
         embedding_bundle_id=embedding_bundle_id,
         indexing_target_id=stack.target.indexing_target_id,
         storage_schema_version=_STORAGE_SCHEMA,

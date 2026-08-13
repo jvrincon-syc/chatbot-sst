@@ -434,6 +434,10 @@ def _build_rag_platform_rebuild(
             index_use_case=index_bundle,
         ),
         run_documents=run_documents,
+        # El orquestador deriva checksum/propietario/dimensión/métrica del bundle y
+        # del perfil (target-side), así que ambos repos se inyectan aquí.
+        bundles=bundles,
+        profiles=profiles,
         materialize=MaterializeVectorsUseCase(
             repository=PostgresIndexingMaterializationRepository(connection)
         ),

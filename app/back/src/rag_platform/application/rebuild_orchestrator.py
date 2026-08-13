@@ -18,8 +18,14 @@ Dirección de dependencias ``dominio → aplicación``: aquí solo se conocen pu
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from hashlib import sha256
 
+from embedding.application.ports import (
+    EmbeddingBundleRepository,
+    EmbeddingProfileRepository,
+)
 from indexing.application.bundle_first.index_bundle import (
     CreateIndexingRunRequest,
     CreateIndexingRunUseCase,
@@ -28,7 +34,7 @@ from indexing.application.bundle_first.index_bundle import (
 from indexing.application.bundle_first.ports import IndexingRunDocumentRepository
 from rag_platform.application.vector_materialization import MaterializeVectorsUseCase
 from rag_platform.domain.identity import IdentityKind, PlatformId
-from rag_platform.domain.models import IndexingMaterialization, PhysicalDistanceMetric
+from rag_platform.domain.models import IndexingMaterialization
 
 
 @dataclass(frozen=True)
@@ -85,12 +91,16 @@ class RebuildPlatformArtifactsUseCase:
         create_indexing_run: CreateIndexingRunUseCase,
         indexing_executor: IndexingRunExecutor,
         run_documents: IndexingRunDocumentRepository,
+        bundles: EmbeddingBundleRepository,
+        profiles: EmbeddingProfileRepository,
         materialize: MaterializeVectorsUseCase,
         storage_schema_version: str,
     ) -> None:
         self._create_indexing_run = create_indexing_run
         self._indexing_executor = indexing_executor
         self._run_documents = run_documents
+        self._bundles = bundles
+        self._profiles = profiles
         self._materialize = materialize
         self._storage_schema_version = storage_schema_version
 
@@ -99,15 +109,15 @@ class RebuildPlatformArtifactsUseCase:
         *,
         context: PlatformBuildContext,
         embedding_bundle_id: str,
-        bundle_project_id: PlatformId,
-        canonical_checksum: str,
-        bundle_dimension: int,
-        target_dimension: int,
-        bundle_metric: PhysicalDistanceMetric,
-        target_metric: PhysicalDistanceMetric,
         idempotency_key: str = "rebuild-1",
     ) -> RebuildResult:
         """Indexa el bundle y sella su materialización bajo el proyecto del contexto.
+
+        Los parámetros de materialización (checksum, propietario, dimensión/métrica)
+        se derivan server-side del propio bundle y del perfil de embedding que sirve
+        el target resuelto; el caller solo aporta el contexto validado y el
+        ``embedding_bundle_id``. Así ningún caller (CLI incluido) reconstruye esa
+        compatibilidad a mano ni la conoce antes de indexar.
 
         Raises:
             NodeProjectMismatch: Si el bundle pertenece a otro proyecto.
@@ -124,6 +134,16 @@ class RebuildPlatformArtifactsUseCase:
             raise ValueError(
                 f"indexing run {completed.run_id} completed without a target"
             )
+        if completed.embedding_profile_id is None:
+            raise ValueError(
+                f"indexing run {completed.run_id} completed without an embedding profile"
+            )
+
+        # El bundle es la autoridad del lado fuente (proyecto, dimensión, métrica); el
+        # perfil que sirve el target resuelto es la autoridad del lado destino. La
+        # compatibilidad la valida MaterializeVectorsUseCase (fail-closed).
+        bundle = self._bundles.get(embedding_bundle_id)
+        profile = self._profiles.get(completed.embedding_profile_id)
 
         # Conteos reales del run, agregados de sus documentos (fuente de verdad; el
         # indexado deja los vectores inactivos y aún sin materialización).
@@ -131,18 +151,20 @@ class RebuildPlatformArtifactsUseCase:
 
         materialization = self._materialize.materialize(
             requested_project_id=context.project_id,
-            bundle_project_id=bundle_project_id,
+            bundle_project_id=PlatformId(IdentityKind.PROJECT, bundle.project_id),
             embedding_bundle_id=embedding_bundle_id,
             indexing_target_id=completed.indexing_target_id,
             storage_schema_version=self._storage_schema_version,
-            canonical_checksum=canonical_checksum,
+            canonical_checksum=_canonical_checksum(bundle),
             parent_node_count=parent,
             child_node_count=child,
             vector_count=vectors,
-            bundle_dimension=bundle_dimension,
-            target_dimension=target_dimension,
-            bundle_metric=bundle_metric,
-            target_metric=target_metric,
+            bundle_dimension=bundle.dimension,
+            target_dimension=profile.dimension,
+            # PhysicalDistanceMetric y DistanceMetric comparten los mismos literales
+            # ("cosine"/"l2"/"inner_product"): no requiere mapeo.
+            bundle_metric=bundle.distance_metric,
+            target_metric=profile.distance_metric,
         )
         return RebuildResult(
             indexing_run_id=completed.run_id,
@@ -159,3 +181,23 @@ class RebuildPlatformArtifactsUseCase:
         child = sum(doc.indexed_child_nodes for doc in documents)
         vectors = sum(doc.vector_count for doc in documents)
         return parent, child, vectors
+
+
+def _canonical_checksum(bundle: object) -> str:
+    """Deriva un checksum canónico estable para la identidad de la materialización.
+
+    ponytail: se colapsan los checksums de artefacto del bundle sellado (vectores,
+    chunk map, manifest) más su fingerprint de contenido en un solo digest
+    determinista. Es idempotente por bundle y siempre presente (el bundle ya sellado
+    trae ``checksums``); no depende de un ``SealedEmbeddingStore`` aparte, porque el
+    rebuild indexa bundle-first en ``idx_vec_*``, no en el store físico.
+    """
+
+    material = {
+        "embedding_bundle_id": getattr(bundle, "embedding_bundle_id", ""),
+        "source_content_fingerprint": getattr(bundle, "source_content_fingerprint", ""),
+        "checksums": dict(sorted(getattr(bundle, "checksums", {}).items())),
+    }
+    return sha256(
+        json.dumps(material, sort_keys=True, ensure_ascii=True).encode("utf-8")
+    ).hexdigest()
