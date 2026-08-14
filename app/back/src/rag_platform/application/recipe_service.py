@@ -10,9 +10,23 @@ attestation explícita (plan §Fase 1, política fail-closed).
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from typing import Any, Protocol, runtime_checkable
 
 from ingestion.schemas.common import StrictModel
 from pydantic import Field
+
+
+@runtime_checkable
+class EmbeddingProfileReader(Protocol):
+    """Puerto estrecho para leer un perfil de embedding global (ADR-005).
+
+    Solo se necesita ``get``; el objeto devuelto debe exponer
+    ``expected_fingerprint()`` (el digest de su config semántica). El adaptador
+    ``PostgresEmbeddingProfileRepository`` ya satisface este contrato.
+    """
+
+    def get(self, profile_id: str) -> Any:
+        """Devuelve el perfil de embedding o lanza si no existe."""
 
 from rag_platform.application.context import (
     ChunkingProfileRepository,
@@ -61,12 +75,14 @@ class CreateRagVariantUseCase:
         variants: RagVariantRepository,
         processing_profiles: ProcessingProfileRepository,
         chunking_profiles: ChunkingProfileRepository,
+        embedding_profiles: EmbeddingProfileReader,
         target_bindings: TargetBindingResolver,
         access_policy: PlatformAccessPolicy,
     ) -> None:
         self._variants = variants
         self._processing_profiles = processing_profiles
         self._chunking_profiles = chunking_profiles
+        self._embedding_profiles = embedding_profiles
         self._target_bindings = target_bindings
         self._access_policy = access_policy
 
@@ -129,6 +145,13 @@ class CreateRagVariantUseCase:
         if binding is None or binding.embedding_profile_id != request.embedding_profile_id:
             raise IncompatibleTargetBinding(request.target_binding_key)
 
+        # La config del motor de embedding (dimensión/modelo/normalización/métrica) queda
+        # fijada en la receta vía su fingerprint, no solo por el id del perfil.
+        embedding_profile = self._embedding_profiles.get(request.embedding_profile_id)
+        embedding_configuration_fingerprint = (
+            embedding_profile.expected_fingerprint().value
+        )
+
         fingerprint = compute_semantic_recipe_fingerprint(
             processing_provider=processing.provider,
             processing_engine=processing.engine,
@@ -137,6 +160,7 @@ class CreateRagVariantUseCase:
             chunking_strategy=chunking.strategy,
             chunking_config=chunking.sanitized_config,
             embedding_profile_id=request.embedding_profile_id,
+            embedding_configuration_fingerprint=embedding_configuration_fingerprint,
         )
 
         if (

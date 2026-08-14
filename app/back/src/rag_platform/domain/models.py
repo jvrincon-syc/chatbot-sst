@@ -309,6 +309,7 @@ def compute_semantic_recipe_fingerprint(
     chunking_strategy: str,
     chunking_config: Mapping[str, Any],
     embedding_profile_id: str,
+    embedding_configuration_fingerprint: str,
 ) -> str:
     """Computa el fingerprint determinista de una receta semántica.
 
@@ -324,7 +325,9 @@ def compute_semantic_recipe_fingerprint(
         processing_config: Configuración de procesamiento (se sanitiza).
         chunking_strategy: Estrategia de chunking.
         chunking_config: Configuración de chunking (se sanitiza).
-        embedding_profile_id: Perfil de embedding global de la variante.
+        embedding_profile_id: Perfil de embedding global de la variante (referencia).
+        embedding_configuration_fingerprint: Digest de la config semántica del motor de
+            embedding (provider/model/revisión/dimensión/normalización/métrica).
 
     Returns:
         Digest hex sha256 de 64 caracteres.
@@ -341,7 +344,13 @@ def compute_semantic_recipe_fingerprint(
             "strategy": chunking_strategy,
             "config": _sanitize(chunking_config),
         },
-        "embedding_profile_id": embedding_profile_id,
+        # La receta captura la CONFIG del motor de embedding (provider/model/revisión/
+        # dimensión/normalización/métrica vía su fingerprint), no solo la referencia al
+        # perfil: cambiar la config del espacio vectorial crea otra variante (ADR-006 §2.3).
+        "embedding": {
+            "profile_id": embedding_profile_id,
+            "configuration_fingerprint": embedding_configuration_fingerprint,
+        },
     }
     serialized = json.dumps(
         payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")

@@ -34,6 +34,29 @@ from rag_platform.infrastructure.in_memory.repositories import (
 
 
 _PROJECT = "sst-general"
+_EMBEDDING_FP = "c" * 64
+
+
+class _FakeEmbeddingProfile:
+    """Perfil de embedding fake con un fingerprint de config fijo."""
+
+    def __init__(self, fingerprint: str) -> None:
+        self._fingerprint = fingerprint
+
+    def expected_fingerprint(self) -> "object":
+        from types import SimpleNamespace
+
+        return SimpleNamespace(value=self._fingerprint)
+
+
+class _FakeEmbeddingProfiles:
+    """Lector de perfiles de embedding en memoria para las pruebas de receta."""
+
+    def __init__(self, fingerprint: str = _EMBEDDING_FP) -> None:
+        self._fingerprint = fingerprint
+
+    def get(self, profile_id: str) -> _FakeEmbeddingProfile:
+        return _FakeEmbeddingProfile(self._fingerprint)
 
 
 def _now() -> datetime:
@@ -54,6 +77,7 @@ def _processing(
         chunking_strategy="structural-v1",
         chunking_config={},
         embedding_profile_id="bge-m3",
+        embedding_configuration_fingerprint=_EMBEDDING_FP,
     )
     return DocumentProcessingProfile(
         processing_profile_id=PlatformId(IdentityKind.PROCESSING_PROFILE, "pp_local-v1"),
@@ -78,6 +102,7 @@ def _chunking() -> ChunkingProfile:
         chunking_strategy="structural-v1",
         chunking_config={},
         embedding_profile_id="x",
+        embedding_configuration_fingerprint=_EMBEDDING_FP,
     )
     return ChunkingProfile(
         chunking_profile_id=PlatformId(IdentityKind.CHUNKING_PROFILE, "cp_structural-v1"),
@@ -101,6 +126,7 @@ def _use_case(
         variants=variants,
         processing_profiles=InMemoryProcessingProfileRepository((processing,)),
         chunking_profiles=InMemoryChunkingProfileRepository((_chunking(),)),
+        embedding_profiles=_FakeEmbeddingProfiles(),
         target_bindings=InMemoryTargetBindingResolver(
             (
                 ProjectIndexingTargetBinding(
@@ -169,6 +195,7 @@ def test_cambio_de_credencial_no_cambia_fingerprint() -> None:
         chunking_strategy="structural-v1",
         chunking_config={},
         embedding_profile_id="bge-m3",
+        embedding_configuration_fingerprint=_EMBEDDING_FP,
     )
     with_secret = compute_semantic_recipe_fingerprint(
         processing_provider="llama_cloud",
@@ -178,6 +205,7 @@ def test_cambio_de_credencial_no_cambia_fingerprint() -> None:
         chunking_strategy="structural-v1",
         chunking_config={},
         embedding_profile_id="bge-m3",
+        embedding_configuration_fingerprint=_EMBEDDING_FP,
     )
     assert without_secret == with_secret
 

@@ -231,10 +231,15 @@ def main(argv: Sequence[str] | None = None) -> int:
                 summary["chunking_profile_id"] = chunking_id
 
                 # 3) Variante RAG (receta semántica inmutable).
+                from embedding.infrastructure.postgres.repositories import (
+                    PostgresEmbeddingProfileRepository,
+                )
+
                 variant_use_case = CreateRagVariantUseCase(
                     variants=PostgresRagVariantRepository(connection),
                     processing_profiles=PostgresProcessingProfileRepository(connection),
                     chunking_profiles=PostgresChunkingProfileRepository(connection),
+                    embedding_profiles=PostgresEmbeddingProfileRepository(connection),
                     target_bindings=PostgresTargetBindingResolver(connection),
                     access_policy=access,
                 )

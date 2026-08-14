@@ -206,3 +206,32 @@ Estos hallazgos no significan que el repo esté incoherente; significan que hoy
 la arquitectura y la documentación no tienen el mismo grado de uniformidad en
 todas las fases. La documentación canónica debe dejar eso explícito en vez de
 suponer una homogeneidad que el código aún no tiene.
+
+## Deuda registrada (2026-08-14) — calidad de chunking/retrieval y prueba de release
+
+Detectada durante el end-to-end local de plataforma (`app/back/tests/rag_platform/
+test_end_to_end_local_platform.py`). El retrieval rankea bien (BGE-M3 + cosine), pero
+hay mejoras genéricas (multi-proyecto, no del test) diferidas **antes de Fase 7**:
+
+1. **`section_title` + `section_path` desde chunking** (no solo indexing). El parser ya
+   captura `StructuralBlock.heading_path`, pero no llega al `ChildChunk` ni al nodo:
+   `indexing_nodes.section_title/section_path` quedan NULL. Propagar desde chunking →
+   sealed bundle → `build_nodes`. **Prioridad alta**; enabler de #4.
+2. **Dedup como diversidad del candidate set** en retrieval (no hard-delete físico). Hoy
+   headers/boilerplate repetidos generan vectores idénticos que ocupan slots del top_k.
+3. **`boilerplate_policy` configurable por perfil/proyecto** (refactor de capacidades
+   existentes; no hardcode global). Excluir headers/código/campos de formulario del texto
+   indexable según política del proyecto.
+4. **Contexto estructural en el embedding**: prefijar la sección/heading al texto del child
+   antes de embeder (reusar `ChildChunk.context_prefix`). **Más importante** — mejora la
+   discriminación semántica del vector.
+5. **Retrieval híbrido vector + lexical** (denso BGE + léxico/FTS con fusión). **Más
+   importante** — robustez frente a consultas por término exacto/código.
+
+**Prueba de release pendiente del end-to-end:** el flujo actual materializa artefactos
+físicos pero **no construye una release**, así que `rag_release_id` queda NULL en
+`embedding_runs`/`indexing_runs` (el reporte lo declara). Falta el tramo de release
+(corpus snapshot + `CreateRagReleaseDraft`/`Validate`/`Build`) para verificar que
+`rag_release_id` se persiste; se probará agregando 2 documentos más (nuevo snapshot →
+nueva release) según lo acordado. Depende de cerrar el Gap 6 (wiring admin, ya hecho) y
+del tramo de build de release.
