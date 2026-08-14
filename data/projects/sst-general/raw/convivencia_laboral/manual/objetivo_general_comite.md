@@ -1,0 +1,1 @@
+Establecer a traves de una accion participativa y plural de todos los trabajadores de la empresa las normas de conducta etica, para que se conviertan en el manual de convivencia, en la guia y orientacion para actos del contexto laboral al momento de desenvolverse y tomar decisiones que involucren a la empresa.

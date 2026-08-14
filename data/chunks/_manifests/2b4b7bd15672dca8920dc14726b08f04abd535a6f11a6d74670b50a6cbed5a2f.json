@@ -4,7 +4,7 @@
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/desconexion_laboral_info.md",
   "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
   "profile_id": "local-structural-v1",
-  "reused": false,
+  "reused": true,
   "run_id": "2b4b7bd15672dca8920dc14726b08f04abd535a6f11a6d74670b50a6cbed5a2f",
   "status": "passed"
 }

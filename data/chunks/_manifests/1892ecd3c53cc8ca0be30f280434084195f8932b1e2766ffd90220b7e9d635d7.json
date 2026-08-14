@@ -4,7 +4,7 @@
   "normalized_relpath": "general_sst/capacitaciones/politica_seguridad_trabajo/prevencion_alcohol_drogas/prevencion_alcohol_drogas.md",
   "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
   "profile_id": "local-structural-v1",
-  "reused": false,
+  "reused": true,
   "run_id": "1892ecd3c53cc8ca0be30f280434084195f8932b1e2766ffd90220b7e9d635d7",
   "status": "passed"
 }
