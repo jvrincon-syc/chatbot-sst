@@ -1,0 +1,18 @@
+{
+  "artifact_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.chunking_metadata.json",
+  "bundle_fingerprint": "chunk-bundle-4c76aa697a3294ea1ddabdc93da257147f6700f5070d9428fd2b6bade218488c",
+  "child_count": 11,
+  "corpus_version": "platform-normalized",
+  "document_id": "doc_864d906c5eae1183",
+  "normalized_document_id": "ndoc_b325a2aeb9786dd5212ab6a0cfff2863",
+  "normalized_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.md",
+  "parent_count": 3,
+  "profile_fingerprint": "chunking-profile-63fa08787c766a7581fa9a19e8a50dcf531f63018b594181410772f9d6c29c4e",
+  "profile_id": "local-structural-v1",
+  "project_id": "proj_sst-general",
+  "rag_variant_id": "ragv_local-bge",
+  "semantic_recipe_fingerprint": "bd82bb646dcddaf91a4c9e4bb94e877c937a9c2ab18ed8f296f2a0827c34eece",
+  "source_document_revision_id": "srev_328f18fcb23b0d1c8f1de1ab347df808",
+  "source_hash": "6eb13cd6e4aeccd1322bd05e2c857bfbf34a2bec760bbd6d1762d220294964b3",
+  "source_relpath": "convivencia_laboral/manual/1761580555950_syc_RE.RH-04SST23102025.pdf"
+}

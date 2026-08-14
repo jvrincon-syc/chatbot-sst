@@ -375,7 +375,7 @@ def build_pipeline_services(
     if flags.rag_platform_v1:
         services.rag_platform_build = _build_rag_platform_build(
             connection=connection,
-            data_root=chunks_root.parent,
+            data_root=_platform_data_root(chunks_root),
         )
         services.rag_platform_publish = _build_rag_platform_publish(
             connection=connection, transactions=transactions
@@ -556,6 +556,21 @@ def _build_rag_platform_rebuild(
         # coexisten targets con schema versions distintas, leerlo del target resuelto.
         storage_schema_version="idx-vec-v1",
     )
+
+
+def _platform_data_root(chunks_root: Path) -> Path:
+    """Return the ``.../data`` root that contains ``projects/``.
+
+    El almacenamiento de plataforma vive en ``<data>/projects/<slug>/<root>`` y
+    ``ProjectStorageResolver`` re-deriva ``projects/<slug>`` a partir de ``<data>``.
+    Derivarlo como ``chunks_root.parent`` doblaba ``projects/<slug>`` cuando la raíz
+    de chunks ya era la del proyecto; se ancla en ``projects/`` para evitarlo.
+    """
+
+    for parent in chunks_root.parents:
+        if parent.name == "projects":
+            return parent.parent
+    return chunks_root.parent
 
 
 def _build_rag_platform_build(*, connection: object | None, data_root: Path) -> object:

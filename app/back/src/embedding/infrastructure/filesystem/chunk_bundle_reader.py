@@ -47,6 +47,8 @@ class SourceParentChunk(StrictModel):
     text: str
     source_span: SourceSpanRecord
     block_ids: list[str] = Field(default_factory=list)
+    section_title: str | None = None
+    section_path: str | None = None
 
 
 class SourceChildChunk(StrictModel):
@@ -61,6 +63,8 @@ class SourceChildChunk(StrictModel):
     text: str
     source_span: SourceSpanRecord
     token_count: int = Field(ge=0)
+    section_title: str | None = None
+    section_path: str | None = None
 
     @property
     def embedding_input(self) -> str:
@@ -156,6 +160,8 @@ def _child_payload(row: dict[str, object]) -> dict[str, object]:
         "text",
         "source_span",
         "token_count",
+        "section_title",
+        "section_path",
     }
     return {key: value for key, value in row.items() if key in allowed}
 

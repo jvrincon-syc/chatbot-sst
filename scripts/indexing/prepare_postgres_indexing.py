@@ -151,6 +151,9 @@ def prepare_database(*, dsn: str, migrations: Sequence[Path]) -> dict[str, objec
         with connection:
             with connection.cursor() as cursor:
                 for migration in migrations:
+                    logging.getLogger(__name__).info(
+                        "applying migration %s", migration.name
+                    )
                     cursor.execute(migration.read_text(encoding="utf-8"))
                 summary = _verification_summary(cursor=cursor, migrations=migrations)
         return summary

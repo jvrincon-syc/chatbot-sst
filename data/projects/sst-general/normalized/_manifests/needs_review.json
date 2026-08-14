@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-08-14T17:59:24.070007-05:00",
+  "items": [
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_7d2eb40310345805",
+      "reasons": [
+        "ambiguous_classification"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/capacitaciones/pausas_activas/info.md"
+    },
+    {
+      "details": [
+        "Revisar advertencias de extracción antes de indexar."
+      ],
+      "document_id": "doc_33db5a236b33527d",
+      "reasons": [
+        "ambiguous_classification"
+      ],
+      "schema_version": "2.0",
+      "source_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md"
+    }
+  ],
+  "run_id": "run_20260814_175849",
+  "schema_version": "2.0"
+}

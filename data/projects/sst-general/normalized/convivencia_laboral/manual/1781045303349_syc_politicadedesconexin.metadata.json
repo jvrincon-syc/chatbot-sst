@@ -1,0 +1,217 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "formulario",
+    "document_type": "politica",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "politica:politica:title_control",
+      "politica:politica:content",
+      "politica:politica:filename",
+      "Convivencia laboral:desconexion laboral:title_control",
+      "Convivencia laboral:convivencia laboral:content",
+      "Convivencia laboral:convivencia laboral:route",
+      "Desconexión laboral:desconexion laboral:title_control"
+    ],
+    "subtopic": "Desconexión laboral",
+    "topic": "Convivencia laboral",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.95,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "platform-normalized",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr",
+          "text": "\"CODIGO PL.RH-035ST | CLASIFICACIÓN | USO INTERNO (NC2)",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "PL.RH-03SST",
+      "value_raw": "PL.RH-035ST",
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr",
+          "text": "POLÍTICA DE DESCONEXION LABORAL",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "POLÍTICA DE DESCONEXION LABORAL",
+      "value_raw": "POLÍTICA DE DESCONEXION LABORAL",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "ocr",
+          "text": "¡O INTERNO (NC2) | Versión | 0.1",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "0.1",
+      "value_raw": "0.1",
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_caf88d615e56edd4",
+  "document_name": "1781045303349_syc_politicadedesconexin.pdf",
+  "extraction_method": "ocr",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": "ocr_text",
+    "status": "not_detected",
+    "value": false,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": {
+          "bottom": 1441.0,
+          "coordinate_system": "pixels",
+          "top": 1234.0,
+          "x0": 139.0,
+          "x1": 633.0
+        },
+        "page_number": 1,
+        "pattern": null,
+        "region": null,
+        "source": "opencv_signature_stroke",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "opencv_signature_stroke",
+    "status": "detected",
+    "value": true,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\data\\projects\\sst-general\\.normalized.staging\\convivencia_laboral\\manual\\1781045303349_syc_politicadedesconexin.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "llama_cloud": null,
+  "normalized_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.md",
+  "ocr_confidence": {
+    "engine": "tesseract",
+    "engine_version": "5.4.0.20240606",
+    "kind": "estimated",
+    "method": "page_confidence_average",
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": 0.9472077394863013,
+    "warnings": [
+      "ocr_confidence_not_word_measured"
+    ]
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "platform_identity": {
+    "normalized_document_id": "ndoc_22f876d2fc6563522d88c96a855cca49",
+    "processing_profile_fingerprint": "69a6eacf2959f2b76a02711d7fd33dc8cb8ce14a2a8523da433781c4a212dfdb",
+    "processing_profile_id": "pp_local",
+    "project_id": "proj_sst-general",
+    "provenance": {
+      "rag_variant_id": null,
+      "semantic_recipe_fingerprint": null
+    },
+    "schema_version": "2.0",
+    "source_document_id": "sdoc_96967fa5b50b48fcb08caacdee7967b2",
+    "source_document_revision_id": "srev_bf01600d5ef4e7ad1855fc808b7c7240"
+  },
+  "platform_provenance": {
+    "rag_variant_id": "ragv_local-bge",
+    "semantic_recipe_fingerprint": "bd82bb646dcddaf91a4c9e4bb94e877c937a9c2ab18ed8f296f2a0827c34eece"
+  },
+  "processed_at": "2026-08-14T17:58:54.160501-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "d900fc39e017bfe4dd681f2f72ce556dd7a9c7d3eccf007b79264fb29c281d77",
+  "source_relpath": "convivencia_laboral/manual/1781045303349_syc_politicadedesconexin.pdf",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [
+      {
+        "bbox": null,
+        "page_number": null,
+        "pattern": null,
+        "region": null,
+        "source": "tables_artifact",
+        "text": null,
+        "warnings": []
+      }
+    ],
+    "method": "reader_tables",
+    "status": "detected",
+    "value": true,
+    "warnings": [
+      "table_evidence_available_in_tables_artifact"
+    ]
+  },
+  "warnings": []
+}

@@ -228,10 +228,12 @@ hay mejoras genéricas (multi-proyecto, no del test) diferidas **antes de Fase 7
 5. **Retrieval híbrido vector + lexical** (denso BGE + léxico/FTS con fusión). **Más
    importante** — robustez frente a consultas por término exacto/código.
 
-**Prueba de release pendiente del end-to-end:** el flujo actual materializa artefactos
-físicos pero **no construye una release**, así que `rag_release_id` queda NULL en
-`embedding_runs`/`indexing_runs` (el reporte lo declara). Falta el tramo de release
-(corpus snapshot + `CreateRagReleaseDraft`/`Validate`/`Build`) para verificar que
-`rag_release_id` se persiste; se probará agregando 2 documentos más (nuevo snapshot →
-nueva release) según lo acordado. Depende de cerrar el Gap 6 (wiring admin, ya hecho) y
-del tramo de build de release.
+**Prueba de release — CERRADA (2026-08-14).** El tramo de release
+(corpus snapshot + `CreateRagReleaseDraft` + `BuildRagReleaseUseCase`) se corrió
+end-to-end contra PostgreSQL limpio + BGE vivo y quedó verde:
+`app/back/tests/rag_platform/test_end_to_end_release_build.py` verifica que
+`embedding_runs.rag_release_id` **e** `indexing_runs.rag_release_id` se persisten con el
+`rag_release_id` de la release construida. La corrida destapó y corrigió 5 bugs de
+cableado de la lane de build (nunca ejecutada end-to-end); detalle en
+`docs/superpowers/plans/Plan_Ajustado_Plataforma_RAG_MultiProyecto(3).md`
+("Cierre de verificación — corrida real del build de release (2026-08-14)").

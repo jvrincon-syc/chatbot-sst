@@ -102,6 +102,7 @@ from rag_platform.infrastructure.storage.project_storage import ProjectStorageRe
 
 
 _SUPPORTED_CHUNKING_STRATEGIES = {
+    "structural",
     "local-structural",
     "local-structural-v1",
     "local_structural_v1",
@@ -344,6 +345,7 @@ class PostgresRevisionArtifactResolver:
             output_root=chunks_root,
             ledger=PostgresChunkBundleRepository(self._connection),
             connection=self._connection,
+            project_id=context.project_id.value,
         )
         orchestrator = ChunkingOrchestrator(
             engine=LocalChunkingEngine(),
@@ -447,10 +449,15 @@ class PostgresRevisionArtifactResolver:
                 reuse_kind=ReuseKind.EXACT_IDENTITY,
             )
 
+        # RebuildPlatformArtifactsUseCase deriva checksum/dimensión/métrica/conteos
+        # server-side desde el bundle y el perfil del target; el resolver solo aporta
+        # contexto validado + embedding_bundle_id (firma vigente de rebuild_orchestrator).
         rebuild = RebuildPlatformArtifactsUseCase(
             create_indexing_run=runtime.create_indexing_run,
             indexing_executor=runtime.indexing_executor,
             run_documents=runtime.run_documents,
+            bundles=runtime.bundles,
+            profiles=runtime.profiles,
             materialize=MaterializeVectorsUseCase(repository=self._materializations),
             storage_schema_version=target.storage_schema_version,
         )
@@ -461,16 +468,6 @@ class PostgresRevisionArtifactResolver:
                 rag_release_id=context.rag_release_id,
             ),
             embedding_bundle_id=embedding_bundle.embedding_bundle_id,
-            bundle_project_id=context.project_id,
-            canonical_checksum=_materialization_checksum(
-                embedding_bundle=embedding_bundle,
-                indexing_target_id=context.indexing_target_id,
-                storage_schema_version=target.storage_schema_version,
-            ),
-            bundle_dimension=embedding_bundle.dimension,
-            target_dimension=embedding_profile.dimension,
-            bundle_metric=embedding_bundle.distance_metric,
-            target_metric=embedding_profile.distance_metric,
             idempotency_key=_idempotency_key(
                 "index",
                 context.rag_release_id.value,

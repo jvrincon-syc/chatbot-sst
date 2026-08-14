@@ -149,6 +149,8 @@ def build_nodes(
                 chunk_index=parent.ordinal,
                 page_start=parent.source_span.page_start,
                 page_end=parent.source_span.page_end,
+                section_title=parent.section_title,
+                section_path=parent.section_path,
                 text=parent.text,
                 metadata={
                     "node_role": "parent",
@@ -183,6 +185,8 @@ def build_nodes(
                 chunk_index=child.ordinal,
                 page_start=child.source_span.page_start,
                 page_end=child.source_span.page_end,
+                section_title=child.section_title,
+                section_path=child.section_path,
                 text=child.text,
                 metadata={
                     "node_role": "child",

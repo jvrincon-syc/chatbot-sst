@@ -1,0 +1,167 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": "informacion_general",
+    "document_type": "informacion_general",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "route_prior": null,
+    "signals": [
+      "informacion_general:miembros:content",
+      "informacion_general:miembros:filename",
+      "COPASST:copasst:content",
+      "COPASST:copasst:filename",
+      "COPASST:copasst:route"
+    ],
+    "subtopic": null,
+    "topic": "COPASST",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "corpus_version": "platform-normalized",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [
+        {
+          "bbox": null,
+          "page_number": 1,
+          "pattern": null,
+          "region": null,
+          "source": "markdown",
+          "text": "REPRESENTANTES DE LOS TRABAJADORES",
+          "warnings": []
+        }
+      ],
+      "status": "extracted",
+      "value": "REPRESENTANTES DE LOS TRABAJADORES",
+      "value_raw": "REPRESENTANTES DE LOS TRABAJADORES",
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_5e403a88299d2dc3",
+  "document_name": "miembros_copasst_2025_2027.md",
+  "extraction_method": "markdown",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\data\\projects\\sst-general\\.normalized.staging\\copasst\\miembros_copasst_2025_2027.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "llama_cloud": null,
+  "normalized_relpath": "copasst/miembros_copasst_2025_2027.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "platform_identity": {
+    "normalized_document_id": "ndoc_be32188f04e01b366937be81e8410a24",
+    "processing_profile_fingerprint": "69a6eacf2959f2b76a02711d7fd33dc8cb8ce14a2a8523da433781c4a212dfdb",
+    "processing_profile_id": "pp_local",
+    "project_id": "proj_sst-general",
+    "provenance": {
+      "rag_variant_id": null,
+      "semantic_recipe_fingerprint": null
+    },
+    "schema_version": "2.0",
+    "source_document_id": "sdoc_03632d86ac70573be8f982a63af1d21d",
+    "source_document_revision_id": "srev_cd1d0954bac97fb5be10d897c7ac9581"
+  },
+  "platform_provenance": {
+    "rag_variant_id": "ragv_local-bge",
+    "semantic_recipe_fingerprint": "bd82bb646dcddaf91a4c9e4bb94e877c937a9c2ab18ed8f296f2a0827c34eece"
+  },
+  "processed_at": "2026-08-14T17:58:59.756905-05:00",
+  "processing_status": "processed",
+  "review_reasons": [],
+  "schema_version": "2.0",
+  "source_hash": "fc71de81035060914c1c2c32013c1791cb66d3a3d5cd14e3ead8d61c6166a370",
+  "source_relpath": "copasst/miembros_copasst_2025_2027.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "missing_title"
+  ]
+}

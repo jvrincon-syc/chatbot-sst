@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from hashlib import sha256
 import json
 
@@ -267,6 +267,9 @@ class ChunkingProfile:
     zero_overlap_reasons: frozenset[ZeroOverlapReason] = field(
         default_factory=lambda: LOCAL_STRUCTURAL_ZERO_OVERLAP_POLICY.allowed_reasons
     )
+    #: When true, the section heading is propagated into chunk metadata and the
+    #: embedded context prefix. Opt-in per profile so v1 identity never shifts.
+    include_section_context: bool = False
 
     def __post_init__(self) -> None:
         require_non_empty(self.profile_id, field_name="profile_id")
@@ -309,22 +312,37 @@ class ChunkingProfile:
             zero_overlap_reasons=LOCAL_STRUCTURAL_ZERO_OVERLAP_POLICY.allowed_reasons,
         )
 
+    @classmethod
+    def local_structural_v2(cls) -> ChunkingProfile:
+        """Return v1's recipe with opt-in section-context propagation enabled.
+
+        Identical token/overlap policy as :meth:`local_structural_v1`; the only
+        semantic change is ``include_section_context=True``, which produces a
+        distinct profile fingerprint and distinct child ids (new variant).
+        """
+        return replace(
+            cls.local_structural_v1(),
+            profile_id="local-structural-v2",
+            include_section_context=True,
+        )
+
     @property
     def fingerprint(self) -> str:
         """Return the deterministic identity of all semantic profile settings."""
-        return _stable_id(
-            "chunking-profile",
-            {
-                "profile_id": self.profile_id,
-                "child_min_tokens": self.child_min_tokens,
-                "child_target_tokens": self.child_target_tokens,
-                "child_max_tokens": self.child_max_tokens,
-                "overlap_ratio": self.overlap_ratio,
-                "overlap_min_tokens": self.overlap_min_tokens,
-                "overlap_max_tokens": self.overlap_max_tokens,
-                "zero_overlap_reasons": sorted(reason.value for reason in self.zero_overlap_reasons),
-            },
-        )
+        payload: dict[str, object] = {
+            "profile_id": self.profile_id,
+            "child_min_tokens": self.child_min_tokens,
+            "child_target_tokens": self.child_target_tokens,
+            "child_max_tokens": self.child_max_tokens,
+            "overlap_ratio": self.overlap_ratio,
+            "overlap_min_tokens": self.overlap_min_tokens,
+            "overlap_max_tokens": self.overlap_max_tokens,
+            "zero_overlap_reasons": sorted(reason.value for reason in self.zero_overlap_reasons),
+        }
+        # Only add the key when enabled so v1's fingerprint stays byte-identical.
+        if self.include_section_context:
+            payload["include_section_context"] = True
+        return _stable_id("chunking-profile", payload)
 
     def overlap_tokens_for_target(self) -> int:
         """Calculate the bounded overlap count for a target-sized child."""
@@ -348,6 +366,10 @@ class ParentChunk:
     text: str
     source_span: SourceSpan
     block_ids: tuple[str, ...]
+    #: Section provenance, populated only by section-context profiles. Never part
+    #: of the identity payload, so it can be absent without changing chunk_id.
+    section_title: str | None = None
+    section_path: str | None = None
 
     def __post_init__(self) -> None:
         require_non_empty(self.chunk_id, field_name="chunk_id")
@@ -374,7 +396,7 @@ class ParentChunk:
 
     def as_payload(self) -> dict[str, object]:
         """Return the complete canonical parent payload for traceability."""
-        return {
+        payload: dict[str, object] = {
             "chunk_id": self.chunk_id,
             "document_id": self.document_id,
             "profile_id": self.profile_id,
@@ -383,6 +405,12 @@ class ParentChunk:
             "source_span": self.source_span.as_payload(),
             "block_ids": list(self.block_ids),
         }
+        # Emit section keys only when present so v1 payloads stay byte-identical.
+        if self.section_title is not None:
+            payload["section_title"] = self.section_title
+        if self.section_path is not None:
+            payload["section_path"] = self.section_path
+        return payload
 
     @classmethod
     def create(
@@ -394,6 +422,8 @@ class ParentChunk:
         text: str,
         source_span: SourceSpan,
         block_ids: tuple[str, ...],
+        section_title: str | None = None,
+        section_path: str | None = None,
     ) -> ParentChunk:
         """Create a parent with a deterministic content-and-structure identifier."""
         require_non_empty(document_id, field_name="document_id")
@@ -414,7 +444,17 @@ class ParentChunk:
                 "block_ids": block_ids,
             },
         )
-        return cls(chunk_id, document_id, profile_id, ordinal, text, source_span, block_ids)
+        return cls(
+            chunk_id,
+            document_id,
+            profile_id,
+            ordinal,
+            text,
+            source_span,
+            block_ids,
+            section_title,
+            section_path,
+        )
 
 
 @dataclass(frozen=True)
@@ -438,6 +478,11 @@ class ChildChunk:
     context_prefix: str = ""
     zero_overlap_reasons: frozenset[ZeroOverlapReason] = field(default_factory=frozenset)
     warnings: tuple[str, ...] = ()
+    #: Section provenance inherited from the parent, populated only by
+    #: section-context profiles. Not part of the identity payload; the heading is
+    #: instead folded into ``context_prefix`` (which is), so v2 gets new ids.
+    section_title: str | None = None
+    section_path: str | None = None
 
     def __post_init__(self) -> None:
         require_non_empty(self.chunk_id, field_name="chunk_id")
@@ -541,7 +586,7 @@ class ChildChunk:
 
     def as_payload(self) -> dict[str, object]:
         """Return the complete canonical child payload for traceability."""
-        return {
+        payload: dict[str, object] = {
             "chunk_id": self.chunk_id,
             "document_id": self.document_id,
             "profile_id": self.profile_id,
@@ -570,6 +615,12 @@ class ChildChunk:
             ),
             "warnings": list(self.warnings),
         }
+        # Emit section keys only when present so v1 payloads stay byte-identical.
+        if self.section_title is not None:
+            payload["section_title"] = self.section_title
+        if self.section_path is not None:
+            payload["section_path"] = self.section_path
+        return payload
 
     @classmethod
     def create(
@@ -591,6 +642,8 @@ class ChildChunk:
         context_prefix: str = "",
         zero_overlap_reasons: frozenset[ZeroOverlapReason] = frozenset(),
         warnings: tuple[str, ...] = (),
+        section_title: str | None = None,
+        section_path: str | None = None,
     ) -> ChildChunk:
         """Create a child with a deterministic parent-scoped identifier."""
         require_non_empty(document_id, field_name="document_id")
@@ -658,6 +711,8 @@ class ChildChunk:
             context_prefix,
             zero_overlap_reasons,
             warnings,
+            section_title,
+            section_path,
         )
 
 

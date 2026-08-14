@@ -190,6 +190,37 @@ selección de celda. Alternativa descartada: catálogo estático hardcoded de co
 (mismo para todo proyecto, ignora lo habilitado por proyecto y arrastra drift
 etiqueta-vs-perfil).
 
+#### 2.3.2 Persistencia del motor de embedding como filtro de selección (decisión 2026-08-14)
+
+**Requisito acordado:** además de la matriz server-side, la selección de un RAG debe
+poder filtrar por **motor de embedding** — saber qué artefactos de la base fueron
+embebidos con exactamente el mismo motor — como criterio de selección junto a
+`project_id`. Dos artefactos solo son comparables/mezclables en un mismo espacio
+vectorial si comparten el motor (proveedor, modelo, revisión, dimensión, métrica,
+normalización).
+
+**Estado real (verificado en código, 2026-08-14):** la configuración del motor **ya se
+persiste** a nivel de artefacto físico, no solo referida por el perfil:
+
+- `embedding_bundles` almacena `provider`, `model`, `model_revision`,
+  `embedding_dimension`, `normalization`, `distance_metric` y el
+  `configuration_fingerprint` (SHA-256 canónico de esa config). Migración
+  `20260805_06_create_embedding_bundles.sql`.
+- `embedding_runs` persiste el `configuration_fingerprint` del run (y, por §2.3.2,
+  `project_id`/`rag_variant_id`/`rag_release_id` de contexto).
+- La variante pinea ese mismo `configuration_fingerprint` dentro de su
+  `semantic_recipe_fingerprint` (`recipe_service.py`), de modo que el motor es parte
+  inmutable de la identidad de la variante.
+
+**Lo que faltaba (esta iteración):** exponer un **read-model de selección** que, por
+proyecto, liste los motores de embedding **con artefactos realmente materializados**
+(join `embedding_bundles` → `indexing_materializations`), devolviendo por cada motor su
+`configuration_fingerprint`, los campos legibles (`provider`/`model`/`dimension`/
+`metric`/`normalization`) y conteos. Ese read-model es el filtro `(project_id, motor)` que
+acompaña a la matriz de variantes; el cliente nunca envía tabla vectorial ni
+`indexing_target_id`. La identidad y reproducibilidad no cambian: el filtro **lee** lo ya
+persistido, no introduce un rótulo nuevo que pueda derivar.
+
 ### 2.4 Corpus snapshot
 
 `corpus_snapshot_id` es una lista ordenada e inmutable de revisiones documentales pertenecientes a un proyecto, con `manifest_hash`/Merkle hash y conteos. Agregar, quitar o reemplazar un documento genera otro snapshot.
@@ -831,6 +862,55 @@ Fase 7 (API/router) puede exponer la superficie admin ya compuesta.
   con `platform_identity`/`platform_provenance`. Simetría de catálogo con `raw`, no crítica.
 - **`schemas:export`** — regenerar el snapshot JSON Schema por el campo aditivo
   `platform_provenance` (no bloqueante; `test_schemas` verde).
+
+## Cierre de verificación — corrida real del build de release (2026-08-14)
+
+La **corrida operativa end-to-end del build de release** (antes bloqueada) se ejecutó
+contra PostgreSQL limpio + BGE vivo y quedó **verde**. Con esto se cierra la deuda #1
+"prueba de release / `rag_release_id` persistido" y el pendiente operativo de Fase 4-5.
+
+**Prueba:** `app/back/tests/rag_platform/test_end_to_end_release_build.py::test_release_build_persiste_rag_release_id`
+(markers `corpus`/`bge_runtime`/`postgres_live`). El flujo real
+`raw → normalize → corpus snapshot → CreateRagReleaseDraft → BuildRagReleaseUseCase`
+(chunk → embed BGE → index → materializa) **PASA**, y verifica en la BD que
+`embedding_runs.rag_release_id` **e** `indexing_runs.rag_release_id` quedan estampados
+con el `rag_release_id` de la release construida (no NULL). Antes solo se probaba la
+materialización física (`rebuild_platform`), que deja `rag_release_id` NULL a propósito.
+
+**Bugs reales de producción destapados por la corrida y corregidos** (la lane de release
+build nunca se había ejecutado end-to-end; todos eran drift de cableado, no de contrato):
+
+1. `api/dependencies.py::_build_rag_platform_build` pasaba `data_root=chunks_root.parent`
+   (dir del proyecto) al `PostgresRevisionArtifactResolver`, que espera `.../data` y
+   re-deriva `projects/<slug>`; la ruta del normalizado quedaba doblada. Se ancla en
+   `projects/` (`_platform_data_root`).
+2. `release_build_resolver.py::_SUPPORTED_CHUNKING_STRATEGIES` no reconocía la estrategia
+   `structural` que siembra `seed_project.py` (todas mapean al runtime
+   `local_structural_v1`). Se añadió a la allowlist.
+3. `release_build_resolver.py::_resolve_chunk_bundle` construía
+   `FilesystemBackedPostgresChunkBundleRepository` sin `project_id` → violaba NOT NULL
+   pure-platform (ADR-008). Se estampa `context.project_id`.
+4. `release_build_resolver.py::_resolve_materialization` construía
+   `RebuildPlatformArtifactsUseCase` con firma vieja (faltaban `bundles`/`profiles` en
+   `__init__`) y le pasaba a `execute()` 6 kwargs ya inexistentes (checksum/dimensión/
+   métrica se derivan server-side). Se alineó a la firma vigente de `rebuild_orchestrator`.
+5. `rebuild_orchestrator.py::execute` creaba `CreateIndexingRunRequest(embedding_bundle_id=...)`
+   sin contexto → `indexing_runs.rag_release_id`/`rag_variant_id` quedaban NULL. Se pasa
+   ahora `project_id`/`rag_variant_id`/`rag_release_id` del `PlatformBuildContext` validado
+   (runs release-aware, plan Fase 4). Sin regresión en `rebuild_platform` (release NULL,
+   variante/proyecto sí estampados).
+
+**Read-model de selección por motor (§2.3.2) implementado y verde:**
+`ListProjectEmbeddingEnginesUseCase` + `PostgresProjectEmbeddingEngineReader` +
+DTO `ProjectEmbeddingEngine`; filtro `(project_id, configuration_fingerprint)` que solo
+cuenta materializaciones `sealed`. Prueba `test_engine_selection.py` (5/5).
+
+**Deuda de calidad de retrieval que sigue abierta antes de Fase 7** (no bloquea el
+contrato de API): perfil `local-structural-v2` opt-in (propaga `section_title`/
+`section_path` a nodos y antepone el heading al texto embebido; v1 byte-idéntico) —
+escrito, pendiente de gate; dedup por diversidad del candidate set; `boilerplate_policy`
+por perfil/proyecto; retrieval híbrido vector+léxico. El retiro de la lane legacy
+`llama_index` (Stage 2b-iii) queda diferido a evaluación futura.
 
 ### Fase 7: API de plataforma y contratos OpenAPI
 

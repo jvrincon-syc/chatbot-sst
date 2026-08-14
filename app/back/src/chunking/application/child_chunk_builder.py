@@ -86,6 +86,10 @@ class ChildChunkBuilder:
                 text=segment_text,
                 source_span=self._merge_source_spans(segment.blocks),
                 block_ids=tuple(block.block_id for block in segment.blocks),
+                # Inherit the section so the recursive build folds it into each
+                # child's context prefix exactly once (never double-applied here).
+                section_title=parent.section_title,
+                section_path=parent.section_path,
             )
             segment_children = self.build(
                 parent=segment_parent,
@@ -112,6 +116,8 @@ class ChildChunkBuilder:
                         context_prefix=child.context_prefix,
                         zero_overlap_reasons=child.zero_overlap_reasons,
                         warnings=child.warnings,
+                        section_title=child.section_title,
+                        section_path=child.section_path,
                     )
                 )
                 next_ordinal += 1
@@ -155,7 +161,12 @@ class ChildChunkBuilder:
         token_cursor = 0
         for ordinal, group in enumerate(groups):
             text = "\n".join(group)
-            context_prefix = "" if ordinal == 0 else header_text
+            base_prefix = "" if ordinal == 0 else header_text
+            context_prefix = self._section_prefix(
+                parent=parent,
+                profile=profile,
+                base_prefix=base_prefix,
+            )
             full_text = self._full_text(context_prefix=context_prefix, text=text)
             token_count = self._tokenizer.count_tokens(full_text)
             warnings = ()
@@ -190,6 +201,8 @@ class ChildChunkBuilder:
                     context_prefix=context_prefix,
                     zero_overlap_reasons=zero_overlap_reasons,
                     warnings=warnings,
+                    section_title=parent.section_title,
+                    section_path=parent.section_path,
                 )
             )
             char_cursor = char_end + 1
@@ -218,7 +231,10 @@ class ChildChunkBuilder:
             token_count=self._tokenizer.count_tokens(parent.text),
             overlap_previous_tokens=0,
             overlap_next_tokens=0,
+            context_prefix=self._section_prefix(parent=parent, profile=profile),
             zero_overlap_reasons=frozenset(reasons),
+            section_title=parent.section_title,
+            section_path=parent.section_path,
         )
 
     def _build_continuous_children(
@@ -296,7 +312,10 @@ class ChildChunkBuilder:
                         if next_overlap_tokens > 0
                         else None
                     ),
+                    context_prefix=self._section_prefix(parent=parent, profile=profile),
                     zero_overlap_reasons=frozenset(zero_overlap_reasons),
+                    section_title=parent.section_title,
+                    section_path=parent.section_path,
                 )
             )
         logger.info(
@@ -526,3 +545,23 @@ class ChildChunkBuilder:
         if not context_prefix:
             return text
         return f"{context_prefix}\n{text}"
+
+    def _section_prefix(
+        self,
+        *,
+        parent: ParentChunk,
+        profile: ChunkingProfile,
+        base_prefix: str = "",
+    ) -> str:
+        """Fold the section heading into a child's context prefix (opt-in).
+
+        Only profiles with ``include_section_context`` and a parent carrying a
+        ``section_title`` change anything; otherwise the base prefix is returned
+        untouched so v1 children stay byte-identical. The heading is prepended so
+        the embedded string leads with the section context.
+        """
+        if not profile.include_section_context or not parent.section_title:
+            return base_prefix
+        if not base_prefix:
+            return parent.section_title
+        return f"{parent.section_title}\n{base_prefix}"

@@ -125,8 +125,20 @@ class RebuildPlatformArtifactsUseCase:
             MaterializationValidationFailed: Si conteos/dimensión/métrica no cuadran.
         """
 
+        # El contexto de plataforma (validado server-side) hace el indexing run
+        # release-aware: project_id/variante/release se derivan de aquí, nunca del
+        # payload del cliente (plan Fase 4, runs release-aware).
         run = self._create_indexing_run.execute(
-            request=CreateIndexingRunRequest(embedding_bundle_id=embedding_bundle_id),
+            request=CreateIndexingRunRequest(
+                embedding_bundle_id=embedding_bundle_id,
+                project_id=context.project_id.value,
+                rag_variant_id=(
+                    context.rag_variant_id.value if context.rag_variant_id else None
+                ),
+                rag_release_id=(
+                    context.rag_release_id.value if context.rag_release_id else None
+                ),
+            ),
             idempotency_key=idempotency_key,
         )
         completed = self._indexing_executor.execute(run.run_id)

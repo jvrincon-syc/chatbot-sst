@@ -112,9 +112,15 @@ def _write_retrieval_report(path: Path, *, results: list, facts: dict) -> None:
         f"- provider `{facts['embedding']['provider']}` · model `{facts['embedding']['model']}` "
         f"· dimensión {facts['embedding']['dimension']} · métrica `{facts['embedding']['metric']}` "
         f"· normalización `{facts['embedding']['normalization']}`",
-        "- La dimensión/modelo/métrica/normalización viven en el **perfil de embedding** "
-        "(recurso global, ADR-005); cambiarlos crea otro perfil y por tanto otra variante RAG. "
-        "1024 es la dimensión nativa de BGE-M3 (no es parámetro libre del motor).",
+        f"- **Pinned por la variante** (provenance atada a `rag_variant_id`): "
+        f"`rag_variants.embedding_profile_id` = `{facts['embedding']['profile_id']}`, "
+        f"`configuration_fingerprint` del motor = `{facts['embedding']['configuration_fingerprint']}`, "
+        f"congelado dentro de `semantic_recipe_fingerprint` = `{facts['variant_fingerprint']}`.",
+        "- provider/model/**dimensión**/métrica/normalización entran al fingerprint del perfil "
+        "(`EmbeddingProfile.expected_fingerprint`) y, vía este, al `semantic_recipe_fingerprint` "
+        "de la variante (`recipe_service`). Cambiar cualquiera crea otra variante RAG. La "
+        "dimensión NO es fija por el motor: BGE-M3 admite truncado Matryoshka (1024/768/512), "
+        "así que es parámetro semántico libre y por eso viaja en el fingerprint.",
         "",
         f"## Retrieval — {len(results)} preguntas, top_k={facts['top_k']} "
         f"(vectores materializados, cosine, embedding de query BGE-M3)",
@@ -345,6 +351,20 @@ def test_end_to_end_local_propaga_project_y_variant(capsys) -> None:
                 (_PROJECT_ID,),
             )
             run_variants, run_releases = cursor.fetchone()
+            # Provenance del motor: la config vive pineada en la variante, no en un
+            # perfil global suelto que pueda derivar. Se lee el pin real desde
+            # rag_variants y se confirma que apunta al perfil que reporta la config.
+            cursor.execute(
+                "SELECT embedding_profile_id, semantic_recipe_fingerprint"
+                " FROM rag_variants WHERE rag_variant_id = %s",
+                (_VARIANT_ID,),
+            )
+            variant_row = cursor.fetchone()
+        assert variant_row is not None, "la variante no está sembrada en rag_variants"
+        variant_embedding_profile_id, variant_fingerprint = variant_row
+        assert variant_embedding_profile_id == _EMBEDDING_PROFILE_ID, (
+            "la config del motor reportada no es la que la variante tiene pineada"
+        )
 
         release_values = [value for value in (run_releases or []) if value is not None]
         facts = {
@@ -360,12 +380,15 @@ def test_end_to_end_local_propaga_project_y_variant(capsys) -> None:
             "vector_total": total_vectors,
             "materializations": materializations,
             "run_variants": [v for v in (run_variants or []) if v is not None] or None,
+            "variant_fingerprint": variant_fingerprint,
             "embedding": {
                 "provider": profile.provider,
                 "model": profile.model,
                 "dimension": profile.dimension,
                 "metric": profile.distance_metric,
                 "normalization": profile.normalization,
+                "profile_id": _EMBEDDING_PROFILE_ID,
+                "configuration_fingerprint": profile.expected_fingerprint().value,
             },
             "release_value": release_values or "NULL",
             "release_note": (

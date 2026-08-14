@@ -1,0 +1,160 @@
+{
+  "classification": {
+    "conflict_status": "none",
+    "conflicts": [],
+    "content_prediction": null,
+    "document_type": "manual",
+    "document_type_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.45,
+      "warnings": []
+    },
+    "route_prior": "manual",
+    "signals": [
+      "manual:manual:route",
+      "Sistema de Gestión de Seguridad y Salud en el Trabajo:seguridad y salud en el trabajo:content"
+    ],
+    "subtopic": null,
+    "topic": "Sistema de Gestión de Seguridad y Salud en el Trabajo",
+    "topic_confidence": {
+      "engine": null,
+      "engine_version": null,
+      "kind": "estimated",
+      "method": "evidence_precedence",
+      "provenance": null,
+      "sample_size": null,
+      "unit": null,
+      "value": 0.78,
+      "warnings": []
+    },
+    "warnings": [
+      "route_only_low_confidence"
+    ]
+  },
+  "corpus_version": "platform-normalized",
+  "document_control": {
+    "change_history": [],
+    "code": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "effective_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "publication_date": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "title": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "version": {
+      "evidence": [],
+      "status": "not_found",
+      "value": null,
+      "value_raw": null,
+      "warnings": []
+    },
+    "warnings": []
+  },
+  "document_id": "doc_33db5a236b33527d",
+  "document_name": "Aspectos_juridicos_laborales.md",
+  "extraction_method": "markdown",
+  "feature_observations": {},
+  "forms": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "handwriting": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "language": "es",
+  "legacy_normalized_path": "C:\\Users\\jvrincon\\Documents\\chatbot_sst\\chatbot-sst\\data\\projects\\sst-general\\.normalized.staging\\general_sst\\manuales\\organizacion\\copasst\\Aspectos_juridicos_laborales.md",
+  "legacy_path": null,
+  "legacy_source_path": null,
+  "llama_cloud": null,
+  "normalized_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+  "ocr_confidence": {
+    "engine": null,
+    "engine_version": null,
+    "kind": "unavailable",
+    "method": null,
+    "provenance": null,
+    "sample_size": null,
+    "unit": null,
+    "value": null,
+    "warnings": []
+  },
+  "page_count": 1,
+  "pipeline_version": "2.0.0",
+  "platform_identity": {
+    "normalized_document_id": "ndoc_e0999b202d1a7488a253cf2a16f50428",
+    "processing_profile_fingerprint": "69a6eacf2959f2b76a02711d7fd33dc8cb8ce14a2a8523da433781c4a212dfdb",
+    "processing_profile_id": "pp_local",
+    "project_id": "proj_sst-general",
+    "provenance": {
+      "rag_variant_id": null,
+      "semantic_recipe_fingerprint": null
+    },
+    "schema_version": "2.0",
+    "source_document_id": "sdoc_7c57b765e0117f2a91fafe408a4ff321",
+    "source_document_revision_id": "srev_809cf399cf94ba0f1cbeaccdb7345688"
+  },
+  "platform_provenance": {
+    "rag_variant_id": "ragv_local-bge",
+    "semantic_recipe_fingerprint": "bd82bb646dcddaf91a4c9e4bb94e877c937a9c2ab18ed8f296f2a0827c34eece"
+  },
+  "processed_at": "2026-08-14T17:59:11.750251-05:00",
+  "processing_status": "needs_review",
+  "review_reasons": [
+    "ambiguous_classification"
+  ],
+  "schema_version": "2.0",
+  "source_hash": "8f7a42bf80ea17f28b6e5aee604de18e79b0da72edf57dcf17a561239e1bc742",
+  "source_relpath": "general_sst/manuales/organizacion/copasst/Aspectos_juridicos_laborales.md",
+  "tables": {
+    "engine": null,
+    "engine_version": null,
+    "evidence": [],
+    "method": null,
+    "status": "not_evaluated",
+    "value": null,
+    "warnings": []
+  },
+  "warnings": [
+    "missing_title",
+    "route_only_low_confidence",
+    "ambiguous_classification"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "document_id": "doc_caf88d615e56edd4",
+  "groups": [],
+  "page_observations": [
+    {
+      "engine": null,
+      "engine_version": null,
+      "evidence": [],
+      "method": "ocr_text",
+      "status": "not_detected",
+      "value": false,
+      "warnings": []
+    }
+  ],
+  "schema_version": "2.0",
+  "warnings": []
+}

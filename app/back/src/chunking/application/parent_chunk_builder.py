@@ -151,6 +151,7 @@ class ParentChunkBuilder:
     ) -> ParentChunk:
         text = "\n\n".join(block.text for block in blocks)
         source_span = self._merge_source_spans(tuple(block.source_span for block in blocks))
+        section_title, section_path = self._section_from_blocks(profile=profile, blocks=blocks)
         return ParentChunk.create(
             document_id=document_id,
             profile_id=profile.profile_id,
@@ -158,7 +159,34 @@ class ParentChunkBuilder:
             text=text,
             source_span=source_span,
             block_ids=tuple(block.block_id for block in blocks),
+            section_title=section_title,
+            section_path=section_path,
         )
+
+    def _section_from_blocks(
+        self,
+        *,
+        profile: ChunkingProfile,
+        blocks: tuple[StructuralBlock, ...],
+    ) -> tuple[str | None, str | None]:
+        """Derive the section title/path for a parent from its blocks' heading path.
+
+        Opt-in: profiles without ``include_section_context`` keep both values None
+        so v1 chunk identity and payloads are unchanged. Convention: use the
+        deepest (longest) non-empty ``heading_path`` among the parent's blocks,
+        tie-broken by first occurrence. A parent normally lives in one section, so
+        all its content blocks share the same path; the longest path is the most
+        specific heading that dominates the parent body.
+        """
+        if not profile.include_section_context:
+            return None, None
+        deepest: tuple[str, ...] = ()
+        for block in blocks:
+            if len(block.heading_path) > len(deepest):
+                deepest = block.heading_path
+        if not deepest:
+            return None, None
+        return deepest[-1], "/".join(deepest)
 
     def _merge_source_spans(self, spans: tuple[SourceSpan, ...]) -> SourceSpan:
         page_numbers = [
