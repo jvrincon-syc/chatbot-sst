@@ -55,6 +55,9 @@ class ChunkingRunDocumentSchema(StrictModel):
     status: str
     reused: bool
     run_id: str
+    # Chunk bundle producido por el documento; opcional (una fila fallida/omitida no lo
+    # lleva). El run state lo reporta para que los consumidores encadenen embed/index.
+    bundle_fingerprint: str | None = None
     normalized_relpath: str
 
 

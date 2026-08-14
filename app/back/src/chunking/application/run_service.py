@@ -220,6 +220,10 @@ class ChunkingRunService:
                     "status": "completed",
                     "reused": result.reused,
                     "run_id": result.run_id,
+                    # El run state reporta el chunk bundle producido por cada documento;
+                    # los consumidores aguas abajo (p. ej. el CLI de rebuild de plataforma)
+                    # lo necesitan para encadenar embed -> index sin re-derivarlo.
+                    "bundle_fingerprint": result.bundle_fingerprint,
                     "normalized_relpath": bundle.normalized_relpath,
                 }
             )

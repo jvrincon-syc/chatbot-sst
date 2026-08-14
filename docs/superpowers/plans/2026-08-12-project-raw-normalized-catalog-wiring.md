@@ -1,5 +1,15 @@
 # Project Raw/Normalized Catalog Wiring Implementation Plan
 
+> ✅ **PLAN CERRADO — 100% ejecutado (2026-08-13).** Tasks 1-7 implementadas,
+> commiteadas y verdes (`rag_platform` **135 passed**). Todos los gaps cerrados: el
+> gap operativo #6 (etapa `normalize` dentro de `run_project_ingestion.py`) se
+> implementó el 2026-08-13 (motor real `run_pipeline` raw→normalized por proyecto con
+> `platform_context_resolver`; test `test_project_ingestion_normalize.py`). Dos
+> hallazgos menores se trasladaron al plan maestro (persistencia catálogo-tabla
+> `project_normalized_document_artifacts` desde el CLI —diferida, nadie la consume— y
+> `schemas:export` del campo aditivo `platform_provenance`). Ver "Estado de cierre" al
+> final. Ningún trabajo de este plan queda abierto.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Conectar la lane de plataforma para que registre en PostgreSQL el catálogo de `raw` por `project_id`, persista el catálogo enriquecido de `normalized`, y propague `rag_variant_id` como provenance auditable desde normalized hasta chunk sin convertir la variante en dueña física del artefacto.
@@ -722,5 +732,17 @@ combinado **264 passed, 7 skipped** · `prepare-postgres` = `prepared` (31 migra
 3. **Task 1**: el test del plan asume raíz declarada `docs_raw`; el disco real usa `raw`. Se implementó el resolver catalog-driven (sirve ambos) en vez de forzar `docs_raw`.
 4. **Task 4**: el servicio deriva la raíz de `project.storage_roots.raw` (dominio, vía `ProjectRepository`) y el CLI usa `ProjectStorageResolver` — más hexagonal que el plan (sin infra en application). `document_revision_service.py` no fue necesario modificarlo.
 5. **Task 5**: se añadió `MetadataArtifact.platform_provenance` (aditivo, simétrico a `platform_identity`), necesario para el bloque top-level del sidecar bajo `extra="forbid"`. Se usó un puerto estrecho `RagVariantReader` (ISP).
-6. **Task 5/7 diferido (operativo, no contrato)**: cablear la etapa normalized DENTRO de `run_project_ingestion.py` (necesita `NormalizedArtifactBuilder`/motor de normalización) y el end-to-end vivo con BGE quedan como corrida operativa. Evita stub sin test.
-7. **`schemas:export`**: el campo `platform_provenance` es aditivo; si hay snapshot JSON Schema versionado, regenerar en cambio aparte (no bloqueante; `test_schemas` verde en la suite).
+6. **Task 5/7 — etapa normalized DENTRO de `run_project_ingestion.py`: CERRADO (2026-08-13).**
+   Se cableó la etapa `normalize` (flag `--normalize`): corre el motor real `run_pipeline`
+   raw→`data/projects/{slug}/normalized` con un `platform_context_resolver` construido desde
+   las revisiones recién registradas en la etapa raw; el sidecar queda con `platform_identity`
+   + `platform_provenance`. Fail-closed sin perfil de procesamiento resoluble
+   (`processing_profile_unresolved`). Evidencia: `scripts/rag_platform/run_project_ingestion.py`
+   (`_build_platform_context_resolver`, `_resolve_normalize_context`); test
+   `app/back/tests/rag_platform/test_project_ingestion_normalize.py`. **Diferido (menor,
+   trasladado al maestro):** la persistencia del catálogo-tabla
+   `project_normalized_document_artifacts` desde el CLI (`PersistNormalizedArtifactCatalogUseCase`)
+   — nada aguas abajo la consume (el chunk stage lee markdown de disco). El end-to-end vivo con
+   BGE queda como corrida operativa, bloqueada por seed de proyecto/variante en BD.
+7. **`schemas:export`: trasladado al plan maestro** (hallazgo menor). Campo `platform_provenance`
+   aditivo; regenerar el snapshot JSON Schema en cambio aparte (no bloqueante; `test_schemas` verde).

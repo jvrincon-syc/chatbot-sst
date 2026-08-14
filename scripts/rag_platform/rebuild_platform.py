@@ -200,10 +200,26 @@ def main(argv: "list[str] | None" = None) -> int:
         else resolver.resolve_declared_root(project, "embeddings")
     )
 
-    documents = tuple(args.document) or _discover_documents(normalized_root)
-    if not documents:
-        print(json.dumps({"status": "blocked", "reason": "no_documents"}, sort_keys=True))
-        return 2
+    # Resolver el alcance del chunking: con ``--document`` se chunkean solo esos
+    # documentos (``scope="documents"``, ids del inventario); sin él, todo el corpus
+    # normalizado (``scope="corpus"``, document_ids vacío, como exige el contrato).
+    if args.document:
+        chunk_scope = "documents"
+        document_ids, unknown = _resolve_document_ids(normalized_root, tuple(args.document))
+        if unknown:
+            print(
+                json.dumps(
+                    {"status": "blocked", "reason": "unknown_documents", "documents": sorted(unknown)},
+                    sort_keys=True,
+                )
+            )
+            return 2
+        if not document_ids:
+            print(json.dumps({"status": "blocked", "reason": "no_documents"}, sort_keys=True))
+            return 2
+    else:
+        chunk_scope = "corpus"
+        document_ids = ()
 
     # --- Etapa 1: chunk -----------------------------------------------------
     from chunking.api.dependencies import build_run_service_from_env
@@ -214,14 +230,33 @@ def main(argv: "list[str] | None" = None) -> int:
         chunks_root=chunks_root,
         project_id=args.project_id,
     )
+    # La idempotency key debe ser específica del payload: el servicio de chunking exige
+    # que una key mapee siempre al mismo payload (scope + documentos + perfil + force);
+    # una key gruesa colisiona (ChunkingIdempotencyConflictError) al cambiar --force o el
+    # conjunto de documentos. Se le adjunta un hash estable del payload.
+    from hashlib import sha256
+
+    chunk_payload = json.dumps(
+        {
+            "scope": chunk_scope,
+            "documents": sorted(document_ids),
+            "profile": args.profile,
+            "force": bool(args.force),
+        },
+        sort_keys=True,
+    )
+    chunk_idempotency_key = (
+        f"platform-chunk-{args.project_id}-{chunk_scope}-"
+        f"{sha256(chunk_payload.encode('utf-8')).hexdigest()[:12]}"
+    )
     state = chunk_service.create_run(
         request=ChunkingRunRequest(
-            scope=args.scope,
-            document_ids=documents,
+            scope=chunk_scope,
+            document_ids=document_ids,
             profile_id=args.profile,
             force=args.force,
         ),
-        idempotency_key=f"platform-chunk-{args.project_id}-{args.scope}",
+        idempotency_key=chunk_idempotency_key,
     )
     chunk_service.execute_run(state.run_id)
     chunk_final = chunk_service.get_run_state(state.run_id)
@@ -325,16 +360,42 @@ def main(argv: "list[str] | None" = None) -> int:
     return 0
 
 
-def _discover_documents(docs_root: Path) -> tuple[str, ...]:
-    if not docs_root.exists():
-        return ()
-    return tuple(
-        sorted(
-            path.relative_to(docs_root).as_posix()
-            for path in docs_root.rglob("*.md")
-            if "_manifests" not in path.parts
-        )
+def _resolve_document_ids(
+    normalized_root: Path, requested: "tuple[str, ...]"
+) -> "tuple[tuple[str, ...], set[str]]":
+    """Mapea cada valor pedido a un ``document_id`` del inventario normalizado.
+
+    ``--document`` acepta un ``document_id`` (``doc_...``) directo o un
+    ``source_relpath`` **raw** (p. ej. el ``.pdf`` original); ambos se resuelven contra
+    ``_manifests/inventory.json``. Devuelve ``(document_ids_resueltos, no_encontrados)``.
+    """
+
+    inventory_path = normalized_root / "_manifests" / "inventory.json"
+    payload = (
+        json.loads(inventory_path.read_text(encoding="utf-8"))
+        if inventory_path.exists()
+        else {}
     )
+    records = payload.get("records", []) if isinstance(payload, dict) else []
+    known_ids: set[str] = set()
+    by_relpath: dict[str, str] = {}
+    for record in records:
+        document_id = record.get("document_id")
+        source_relpath = record.get("source_relpath")
+        if document_id and source_relpath:
+            known_ids.add(str(document_id))
+            by_relpath[str(source_relpath)] = str(document_id)
+
+    resolved: list[str] = []
+    unknown: set[str] = set()
+    for item in requested:
+        if item in known_ids:
+            resolved.append(item)
+        elif item in by_relpath:
+            resolved.append(by_relpath[item])
+        else:
+            unknown.add(item)
+    return tuple(resolved), unknown
 
 
 if __name__ == "__main__":

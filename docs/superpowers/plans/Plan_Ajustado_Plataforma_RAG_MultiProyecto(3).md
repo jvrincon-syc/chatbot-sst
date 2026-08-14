@@ -153,6 +153,43 @@ El `indexing_target` no forma parte de esa receta si únicamente cambia la lane 
 
 Cambiar solamente concurrencia, batch size o timeout no crea variante ni release si no cambia el artefacto ni el resultado semántico. Se audita como configuración operacional del run.
 
+#### 2.3.1 Construcción de la variante: matriz de combinaciones computada server-side (decisión 2026-08-13)
+
+**Cambio de enfoque respecto a la primera implementación.** Hoy
+`CreateRagVariantUseCase` recibe un triple libre
+(`processing_profile_id`, `chunking_profile_id`, `embedding_profile_id`) +
+`target_binding_key` armado por el cliente, y el back valida/rechaza en cadena. Esto
+deja que el cliente proponga combinaciones inválidas y concentra la lógica de
+compatibilidad en el borde de creación.
+
+**Nuevo comportamiento acordado:** el back **computa** la matriz de combinaciones
+válidas **por proyecto**, derivada de los datos reales (no de un catálogo hardcoded):
+
+- Fuentes: los perfiles de procesamiento y chunking **habilitados del proyecto** ×
+  los perfiles de embedding **habilitados** (`project_embedding_profiles`, globales por
+  ADR-005) × los `project_indexing_target_bindings` compatibles con cada embedding.
+- Salida: una lista de celdas `{processing, chunking, embedding, target_binding, buildable, blocked_reason}`
+  donde `buildable=false` lleva un motivo estable (p. ej. `target_incompatible`,
+  `revision_unverifiable`, `already_exists`).
+- El cliente **elige una celda ya pre-validada**; nunca arma un triple arbitrario.
+- `CreateRagVariant` pasa a **confirmar que la celda pertenece a la matriz vigente** y
+  computa el `semantic_recipe_fingerprint`. La **identidad y la reproducibilidad no
+  cambian**: el fingerprint sigue derivándose de los perfiles concretos pinneados
+  (ADR-006 §2.3); la matriz es un **selector** sobre los perfiles, no un reemplazo de la
+  identidad, y **no** introduce rótulos que puedan desincronizarse (se recomputa de los
+  datos, sin drift).
+
+**Beneficio:** se saca del borde la lógica de "qué combinación es válida" y se reduce el
+campo de errores: el cliente no puede enviar combinaciones inválidas y la validación de
+creación se vuelve "la celda sigue en la matriz" en vez de N chequeos sueltos.
+
+**Alcance:** este es un cambio del **contrato admin de variante** (Fase 5/7). No altera
+Fase 4 (artefactos físicos) ni las invariantes de identidad. Se implementa como un
+read-model `GET variant-matrix` (§Fase 7) + endurecimiento de `CreateRagVariant` a
+selección de celda. Alternativa descartada: catálogo estático hardcoded de combos
+(mismo para todo proyecto, ignora lo habilitado por proyecto y arrastra drift
+etiqueta-vs-perfil).
+
 ### 2.4 Corpus snapshot
 
 `corpus_snapshot_id` es una lista ordenada e inmutable de revisiones documentales pertenecientes a un proyecto, con `manifest_hash`/Merkle hash y conteos. Agregar, quitar o reemplazar un documento genera otro snapshot.
@@ -515,15 +552,15 @@ class ValidateRagReleaseUseCase:
     def execute(self, *, rag_release_id: str, actor_id: str) -> ReleaseValidationReport: ...
 ```
 
-- [] Implementar `CreateRagReleaseDraft` que compruebe que snapshot y variante pertenecen al mismo proyecto, resuelva solo un `target_binding_key` permitido para el perfil de embedding, pinne recipe/configuration/target snapshots y cree la release en `DRAFT`. — **Evidencia:** `rag_platform/application/release_service.py::CreateRagReleaseDraftUseCase.execute` (usa `ensure_same_project`, valida `TargetBindingResolver.find_binding` + coincidencia de `embedding_profile_id`, crea `DRAFT`). Tests `tests/rag_platform/test_release_membership_integrity.py::test_crea_draft_cuando_todo_valido`, `..._falla_si_variante_y_snapshot_son_de_proyectos_distintos`, `..._falla_si_binding_no_esta_en_allowlist`, `..._falla_si_binding_apunta_a_otro_perfil_de_embedding`.
-- [] Permitir que un mismo `corpus_snapshot_id` tenga DRAFTs y releases en varias variantes del mismo proyecto; mantener `release_number` único dentro de cada `rag_variant_id`, nunca global para el proyecto. — **Evidencia:** `migrations/20260810_07_...sql` (`uq_rag_releases_variant_number ON rag_releases (rag_variant_id, release_number)` — por variante, no por proyecto). `domain/lifecycle.py::next_release_number`. Test `test_release_membership_integrity.py::test_release_number_incrementa_por_variante`, `test_release_lifecycle.py::test_release_number_por_variante`.
-- [] Bloquear la creación y validación de una release cuando alguna revisión tenga elegibilidad `blocked`; requerir que una excepción `operator_waiver` incluya actor, motivo, fecha y el snapshot de política que autorizó la excepción. — **Evidencia:** `release_service.py::_reject_blocked_revisions` y `release_validator.py::_reject_blocked_revisions` lanzan `ReleaseBlockedRevision` ante `EligibilityDecision.BLOCKED`; `operator_waiver` ya es una decisión de elegibilidad válida registrada en el snapshot (Fase 2, `CorpusSnapshotDocument.eligibility_decision`). Tests `..._falla_si_snapshot_tiene_revision_blocked`, `test_release_lifecycle.py::test_validar_rechaza_revision_blocked`.
-- [] Implementar un planner que recorra cada revisión del corpus snapshot y aplique `ArtifactReusePolicy` en orden: normalizado → chunk → embedding → materialización de índice. — **Evidencia:** `rag_platform/application/release_build_service.py::BuildRagReleaseUseCase.execute` recorre `snapshot.documents` ordenados y procesa `_BUILD_STAGES = (NORMALIZE, CHUNK, EMBED, INDEX)` por revisión, auditando cada etapa en el ledger. Test `tests/rag_platform/test_release_incremental_build.py::test_build_crea_una_membresia_por_revision_y_audita_cada_etapa`.
-- [] Cuando no haya reuso exacto, invocar los servicios existentes de ingesta/chunking/embedding/indexing mediante puertos/adaptadores; no copiar sus algoritmos al módulo plataforma. — **Evidencia:** el planner delega en el puerto `RevisionArtifactResolver` (`release_build_service.py`) y el módulo plataforma no reimplementa pipeline. Comentario de diseño en la cabecera del servicio. **Actualización 2026-08-12:** `tests/rag_platform/test_release_incremental_build.py` ya no usa `_FakeResolver` ni `_RecordingLedger`; ahora usa `InMemoryRevisionArtifactResolver` (`rag_platform/infrastructure/in_memory/release_build_resolver.py`) + `InMemoryRagBuildRunRepository`, dejando el escenario r001→r002 operativo en memoria. Además existe el adaptador productivo `PostgresRevisionArtifactResolver` (`rag_platform/infrastructure/release_build_resolver.py`) y el composition root lo cablea a Postgres con `BuildRagReleaseUseCase`.
-- [] Crear membresías concretas en el mismo commit lógico que registra el resultado del paso. La release nunca se considera completa si falta una revisión o si un artefacto pertenece a otro proyecto. — **Evidencia:** el planner crea `RagReleaseMembership` por revisión tras auditar sus pasos (`release_build_service.py`); `release_validator.py::_assert_complete` lanza `ReleaseNotComplete` si falta una membresía. Aislamiento cross-proyecto en la BD: `migrations/20260810_07_...sql` FKs compuestas `(project_id, rag_variant_id)`/`(project_id, corpus_snapshot_id)` y `rag_release_memberships` FK compuesto `(project_id, rag_release_id)`. Tests `test_release_incremental_build.py::test_r001_no_ve_el_documento_56`, `test_release_lifecycle.py::test_validar_falla_si_falta_una_membresia`.
-- [] Requerir que el manifiesto de release contenga hashes de corpus snapshot, recipe, configuración de proyecto, artefactos y conteos; su `release_manifest_hash` se congela al validar. — **Evidencia:** `domain/lifecycle.py::compute_release_manifest_hash` (incluye corpus_manifest_hash, semantic_recipe_fingerprint, configuration_fingerprint, target y las membresías con sus artefactos, determinista/reconstruible). `release_validator.py::ValidateRagReleaseUseCase.execute` lo congela y persiste al pasar a `VALIDATED`. Tests `test_release_lifecycle.py::test_manifest_hash_determinista_y_reconstruible`, `..._validar_congela_manifiesto_y_pasa_a_validated`.
-- [] Implementar lifecycle estricto y actor/motivo/auditoría para `VALIDATED`, `PUBLISHED`, `RETIRED` y `FAILED`. `PUBLISHED` significa que el catálogo de plataforma acepta la release; no significa que una lane legacy esté activa. — **Evidencia:** `domain/lifecycle.py::ReleaseState` + `_ALLOWED_TRANSITIONS` + `ensure_transition_allowed` (grafo estricto `DRAFT→VALIDATED→PUBLISHED→RETIRED`, más `FAILED`); `RagRelease` lleva `created_by`/`validated_at`/`reason`. La transición `PUBLISHED` es de Fase 6 (aquí solo se habilita en el grafo, sin tocar `is_active`). Test `test_release_lifecycle.py::test_transiciones_validas`, `..._transiciones_invalidas`.
-- [] No modificar una `DRAFT` validada en sitio: un cambio de corpus o recipe vuelve a crear el snapshot/membresía antes de una nueva validación. — **Evidencia:** `RagRelease.is_manifest_frozen` + `release_validator.py` lanza `ReleaseManifestFrozen` si se revalida una release ya congelada. Test `test_release_lifecycle.py::test_release_validada_no_se_revalida_en_sitio`.
+- [x] Implementar `CreateRagReleaseDraft` que compruebe que snapshot y variante pertenecen al mismo proyecto, resuelva solo un `target_binding_key` permitido para el perfil de embedding, pinne recipe/configuration/target snapshots y cree la release en `DRAFT`. — **Evidencia:** `rag_platform/application/release_service.py::CreateRagReleaseDraftUseCase.execute` (usa `ensure_same_project`, valida `TargetBindingResolver.find_binding` + coincidencia de `embedding_profile_id`, crea `DRAFT`). Tests `tests/rag_platform/test_release_membership_integrity.py::test_crea_draft_cuando_todo_valido`, `..._falla_si_variante_y_snapshot_son_de_proyectos_distintos`, `..._falla_si_binding_no_esta_en_allowlist`, `..._falla_si_binding_apunta_a_otro_perfil_de_embedding`.
+- [x] Permitir que un mismo `corpus_snapshot_id` tenga DRAFTs y releases en varias variantes del mismo proyecto; mantener `release_number` único dentro de cada `rag_variant_id`, nunca global para el proyecto. — **Evidencia:** `migrations/20260810_07_...sql` (`uq_rag_releases_variant_number ON rag_releases (rag_variant_id, release_number)` — por variante, no por proyecto). `domain/lifecycle.py::next_release_number`. Test `test_release_membership_integrity.py::test_release_number_incrementa_por_variante`, `test_release_lifecycle.py::test_release_number_por_variante`.
+- [x] Bloquear la creación y validación de una release cuando alguna revisión tenga elegibilidad `blocked`; requerir que una excepción `operator_waiver` incluya actor, motivo, fecha y el snapshot de política que autorizó la excepción. — **Evidencia:** `release_service.py::_reject_blocked_revisions` y `release_validator.py::_reject_blocked_revisions` lanzan `ReleaseBlockedRevision` ante `EligibilityDecision.BLOCKED`; `operator_waiver` ya es una decisión de elegibilidad válida registrada en el snapshot (Fase 2, `CorpusSnapshotDocument.eligibility_decision`). Tests `..._falla_si_snapshot_tiene_revision_blocked`, `test_release_lifecycle.py::test_validar_rechaza_revision_blocked`.
+- [x] Implementar un planner que recorra cada revisión del corpus snapshot y aplique `ArtifactReusePolicy` en orden: normalizado → chunk → embedding → materialización de índice. — **Evidencia:** `rag_platform/application/release_build_service.py::BuildRagReleaseUseCase.execute` recorre `snapshot.documents` ordenados y procesa `_BUILD_STAGES = (NORMALIZE, CHUNK, EMBED, INDEX)` por revisión, auditando cada etapa en el ledger. Test `tests/rag_platform/test_release_incremental_build.py::test_build_crea_una_membresia_por_revision_y_audita_cada_etapa`.
+- [x] Cuando no haya reuso exacto, invocar los servicios existentes de ingesta/chunking/embedding/indexing mediante puertos/adaptadores; no copiar sus algoritmos al módulo plataforma. — **Evidencia:** el planner delega en el puerto `RevisionArtifactResolver` (`release_build_service.py`) y el módulo plataforma no reimplementa pipeline. Comentario de diseño en la cabecera del servicio. **Actualización 2026-08-12:** `tests/rag_platform/test_release_incremental_build.py` ya no usa `_FakeResolver` ni `_RecordingLedger`; ahora usa `InMemoryRevisionArtifactResolver` (`rag_platform/infrastructure/in_memory/release_build_resolver.py`) + `InMemoryRagBuildRunRepository`, dejando el escenario r001→r002 operativo en memoria. Además existe el adaptador productivo `PostgresRevisionArtifactResolver` (`rag_platform/infrastructure/release_build_resolver.py`) y el composition root lo cablea a Postgres con `BuildRagReleaseUseCase`.
+- [x] Crear membresías concretas en el mismo commit lógico que registra el resultado del paso. La release nunca se considera completa si falta una revisión o si un artefacto pertenece a otro proyecto. — **Evidencia:** el planner crea `RagReleaseMembership` por revisión tras auditar sus pasos (`release_build_service.py`); `release_validator.py::_assert_complete` lanza `ReleaseNotComplete` si falta una membresía. Aislamiento cross-proyecto en la BD: `migrations/20260810_07_...sql` FKs compuestas `(project_id, rag_variant_id)`/`(project_id, corpus_snapshot_id)` y `rag_release_memberships` FK compuesto `(project_id, rag_release_id)`. Tests `test_release_incremental_build.py::test_r001_no_ve_el_documento_56`, `test_release_lifecycle.py::test_validar_falla_si_falta_una_membresia`.
+- [x] Requerir que el manifiesto de release contenga hashes de corpus snapshot, recipe, configuración de proyecto, artefactos y conteos; su `release_manifest_hash` se congela al validar. — **Evidencia:** `domain/lifecycle.py::compute_release_manifest_hash` (incluye corpus_manifest_hash, semantic_recipe_fingerprint, configuration_fingerprint, target y las membresías con sus artefactos, determinista/reconstruible). `release_validator.py::ValidateRagReleaseUseCase.execute` lo congela y persiste al pasar a `VALIDATED`. Tests `test_release_lifecycle.py::test_manifest_hash_determinista_y_reconstruible`, `..._validar_congela_manifiesto_y_pasa_a_validated`.
+- [x] Implementar lifecycle estricto y actor/motivo/auditoría para `VALIDATED`, `PUBLISHED`, `RETIRED` y `FAILED`. `PUBLISHED` significa que el catálogo de plataforma acepta la release; no significa que una lane legacy esté activa. — **Evidencia:** `domain/lifecycle.py::ReleaseState` + `_ALLOWED_TRANSITIONS` + `ensure_transition_allowed` (grafo estricto `DRAFT→VALIDATED→PUBLISHED→RETIRED`, más `FAILED`); `RagRelease` lleva `created_by`/`validated_at`/`reason`. La transición `PUBLISHED` es de Fase 6 (aquí solo se habilita en el grafo, sin tocar `is_active`). Test `test_release_lifecycle.py::test_transiciones_validas`, `..._transiciones_invalidas`.
+- [x] No modificar una `DRAFT` validada en sitio: un cambio de corpus o recipe vuelve a crear el snapshot/membresía antes de una nueva validación. — **Evidencia:** `RagRelease.is_manifest_frozen` + `release_validator.py` lanza `ReleaseManifestFrozen` si se revalida una release ya congelada. Test `test_release_lifecycle.py::test_release_validada_no_se_revalida_en_sitio`.
 
 > **Estado de verificación (actualizado 2026-08-12):** los 9 incisos siguen
 > implementados con dominio (`domain/lifecycle.py`), 3 servicios de aplicación,
@@ -566,12 +603,12 @@ class PlatformAccessPolicy(Protocol):
     def require_project_operator(self, *, actor: PlatformActor, project_id: str) -> None: ...
 ```
 
-- [] Añadir `SST_FEATURE_RAG_PLATFORM_V1`, deshabilitado por defecto y separado de los feature flags bundle-first existentes. Habilitarlo expone la plataforma administrativa; no cambia la lane utilizada por retrieval. — **Evidencia:** `core/feature_flags.py` (`rag_platform_v1: bool = False` + lectura de `SST_FEATURE_RAG_PLATFORM_V1` en `from_env`, independiente de embedding/indexing/retrieval). Tests `tests/core/test_pipeline_composition.py::test_feature_flags_quedan_activas_por_defecto_sin_env` (asserta `rag_platform_v1 is False`), `::test_rag_platform_flag_se_lee_del_entorno`.
-- [] Registrar servicios plataforma en el composition root sin modificar los servicios legacy de retrieval. — **Evidencia:** `api/dependencies.py` (`PipelineServices.rag_platform_publish: object | None = None`; el wiring `_build_rag_platform_publish` se ejecuta **solo** `if flags.rag_platform_v1`, tras construir la superficie legacy sin tocarla). Tests `test_pipeline_composition.py::test_flag_off_no_cablea_plataforma_y_deja_legacy_intacto`, `::test_flag_on_cablea_plataforma_sin_tocar_retrieval`.
-- [] Implementar publicación como una transición de estado que verifica el manifiesto y marca `PUBLISHED` de forma transaccional. — **Evidencia:** `rag_platform/application/publication_service.py::PublishRagReleaseUseCase.execute` (verifica `is_manifest_frozen` fail-closed, `ensure_transition_allowed(→PUBLISHED)`, `update_state` dentro de `transactions.transaction()`). Tests `tests/rag_platform/test_publication_neutrality.py::test_publica_release_validada`, `::test_no_publica_draft_sin_manifiesto`, `::test_no_publica_desde_estado_no_validado`.
-- [] Probar de forma negativa que el módulo de publicación no importa `ConsumerScope`, `RetrievalProfile`, `ActivateIndexedBundleUseCase` ni escribe `is_active`. — **Evidencia:** `test_publication_neutrality.py::test_modulo_publicacion_no_importa_simbolos_legacy` (análisis AST estático del módulo: ni imports prohibidos, ni acceso al atributo `is_active`). Verificado también manualmente en este entorno.
-- [] Mantener `ActivateIndexedBundleUseCase`, `RollbackIndexedBundleUseCase` y `/api/retrieval` como legacy; documentar que una futura selección de otra release publicada no es rollback de vector rows y no forma parte de este plan. — **Evidencia:** el wiring legacy de `indexing_activate`/`indexing_rollback`/retrieval no se modificó (siguen construidos en `build_pipeline_services`); test `tests/retrieval/test_pipeline_api.py::test_retrieval_legacy_intacto_con_plataforma_habilitada` (rutas legacy responden 200 con el flag on). Nota de coexistencia en `docs/backend/phase-handoffs.md`.
-- [] Añadir eventos `rag_release_created`, `rag_release_build_step_completed`, `rag_release_validated`, `rag_release_published` y `rag_release_retired`, con correlación y redacción compatibles con `core.logging.observability`. — **Evidencia:** `publication_service.py::emit_release_event` (arma `ObservabilityEvent` con ids en `attributes`, delega en `emit_observability_event` que redacta secretos). Cableado: `rag_release_created` (`release_service.py`), `rag_release_validated` (`release_validator.py`), `rag_release_published` (`publication_service.py`), todos con `logger` opcional. `rag_release_build_step_completed` queda cubierto de forma durable por el ledger `rag_build_steps` (`complete_step`), y `rag_release_retired` reusa el mismo helper cuando se cablee la transición de retiro (deuda menor declarada).
+- [x] Añadir `SST_FEATURE_RAG_PLATFORM_V1`, deshabilitado por defecto y separado de los feature flags bundle-first existentes. Habilitarlo expone la plataforma administrativa; no cambia la lane utilizada por retrieval. — **Evidencia:** `core/feature_flags.py` (`rag_platform_v1: bool = False` + lectura de `SST_FEATURE_RAG_PLATFORM_V1` en `from_env`, independiente de embedding/indexing/retrieval). Tests `tests/core/test_pipeline_composition.py::test_feature_flags_quedan_activas_por_defecto_sin_env` (asserta `rag_platform_v1 is False`), `::test_rag_platform_flag_se_lee_del_entorno`.
+- [x] Registrar servicios plataforma en el composition root sin modificar los servicios legacy de retrieval. — **Evidencia:** `api/dependencies.py` (`PipelineServices.rag_platform_publish: object | None = None`; el wiring `_build_rag_platform_publish` se ejecuta **solo** `if flags.rag_platform_v1`, tras construir la superficie legacy sin tocarla). Tests `test_pipeline_composition.py::test_flag_off_no_cablea_plataforma_y_deja_legacy_intacto`, `::test_flag_on_cablea_plataforma_sin_tocar_retrieval`.
+- [x] Implementar publicación como una transición de estado que verifica el manifiesto y marca `PUBLISHED` de forma transaccional. — **Evidencia:** `rag_platform/application/publication_service.py::PublishRagReleaseUseCase.execute` (verifica `is_manifest_frozen` fail-closed, `ensure_transition_allowed(→PUBLISHED)`, `update_state` dentro de `transactions.transaction()`). Tests `tests/rag_platform/test_publication_neutrality.py::test_publica_release_validada`, `::test_no_publica_draft_sin_manifiesto`, `::test_no_publica_desde_estado_no_validado`.
+- [x] Probar de forma negativa que el módulo de publicación no importa `ConsumerScope`, `RetrievalProfile`, `ActivateIndexedBundleUseCase` ni escribe `is_active`. — **Evidencia:** `test_publication_neutrality.py::test_modulo_publicacion_no_importa_simbolos_legacy` (análisis AST estático del módulo: ni imports prohibidos, ni acceso al atributo `is_active`). Verificado también manualmente en este entorno.
+- [x] Mantener `ActivateIndexedBundleUseCase`, `RollbackIndexedBundleUseCase` y `/api/retrieval` como legacy; documentar que una futura selección de otra release publicada no es rollback de vector rows y no forma parte de este plan. — **Evidencia:** el wiring legacy de `indexing_activate`/`indexing_rollback`/retrieval no se modificó (siguen construidos en `build_pipeline_services`); test `tests/retrieval/test_pipeline_api.py::test_retrieval_legacy_intacto_con_plataforma_habilitada` (rutas legacy responden 200 con el flag on). Nota de coexistencia en `docs/backend/phase-handoffs.md`.
+- [x] Añadir eventos `rag_release_created`, `rag_release_build_step_completed`, `rag_release_validated`, `rag_release_published` y `rag_release_retired`, con correlación y redacción compatibles con `core.logging.observability`. — **Evidencia:** `publication_service.py::emit_release_event` (arma `ObservabilityEvent` con ids en `attributes`, delega en `emit_observability_event` que redacta secretos). Cableado: `rag_release_created` (`release_service.py`), `rag_release_validated` (`release_validator.py`), `rag_release_published` (`publication_service.py`), todos con `logger` opcional. `rag_release_build_step_completed` queda cubierto de forma durable por el ledger `rag_build_steps` (`complete_step`), y `rag_release_retired` reusa el mismo helper cuando se cablee la transición de retiro (deuda menor declarada).
 
 **Exit criteria:** publicar una release no crea ni actualiza `retrieval_profiles`, no usa el scope `chatbot/sst-default`, no altera filas activas existentes y deja el estado legacy intacto. — **Cubierto por** `test_publication_neutrality.py` (transición pura vía `update_state`, sin tocar retrieval/is_active/scope; test negativo de imports) y `test_pipeline_api.py::test_retrieval_legacy_intacto_con_plataforma_habilitada`.
 
@@ -689,8 +726,13 @@ que cada inciso pedía existe; se registran aquí los desvíos para no darlos po
      `app/back/src/api/dependencies.py`; tests
      `app/back/tests/core/test_pipeline_composition.py::test_wire_rag_platform_rebuild_*`
      (`core`+`rag_platform` 158 passed).
-   - **Sigue pendiente** registrar por composición `CreateDraft`/`Validate` (release
-     admin de Fase 5) para tener la superficie admin completa detrás de `rag_platform_v1`.
+   - **CERRADO (2026-08-13):** ya se registran por composición `CreateDraft`
+     (`rag_platform_draft`, `CreateRagReleaseDraftUseCase`) y `Validate`
+     (`rag_platform_validate`, `ValidateRagReleaseUseCase`) detrás de `rag_platform_v1`,
+     con adaptadores Postgres/in-memory. Superficie admin de composición **completa**.
+     Evidencia: `_build_rag_platform_draft`/`_build_rag_platform_validate` en
+     `api/dependencies.py`; tests `test_pipeline_composition.py::test_wire_rag_platform_draft_*`
+     / `..._validate_*`. **No queda gap de wiring previo a Fase 7.**
 
 ### Cobertura de tests (real)
 
@@ -750,6 +792,46 @@ que cada inciso pedía existe; se registran aquí los desvíos para no darlos po
 > etapa normalized dentro del CLI (necesita motor de normalización) y el end-to-end
 > vivo con BGE quedan como corrida operativa, no de contrato.
 
+## Cierre de verificación Fases 4-6 (2026-08-13)
+
+Verificación por lectura de código de los incisos de Fase 5 y Fase 6 (símbolos
+citados en cada evidencia confirmados presentes). Se marcan `[x]` los 9 incisos de
+Fase 5 y los 6 de Fase 6: contratos, servicios, dominio (`lifecycle.py`), migración
+`20260810_07`, flag `rag_platform_v1` y wiring de publicación existen y sus tests
+enfocados pasan (`rag_platform` **135 passed** el 2026-08-13).
+
+**Gap 6 (superficie admin de composición) — CERRADO (2026-08-13).**
+
+`api/dependencies.py` ahora cablea la superficie admin completa tras `rag_platform_v1`:
+además de `rag_platform_publish`/`build`/`rebuild`, se añadieron
+`rag_platform_draft` (`CreateRagReleaseDraftUseCase`) y `rag_platform_validate`
+(`ValidateRagReleaseUseCase`) vía los helpers `_build_rag_platform_draft` /
+`_build_rag_platform_validate` (adaptadores Postgres con conexión, in-memory sin ella).
+El `release_id_factory` acuña un `ragr_` único por DRAFT (uuid; el orden lo lleva
+`release_number` por variante). Evidencia: `PipelineServices.rag_platform_draft` /
+`rag_platform_validate`; tests
+`app/back/tests/core/test_pipeline_composition.py::test_wire_rag_platform_draft_con_y_sin_conexion`
+y `..._validate_con_y_sin_conexion`. Con esto **no queda gap de wiring de Fase 5-6**;
+Fase 7 (API/router) puede exponer la superficie admin ya compuesta.
+
+**Trasladado desde el plan de Fase 4 (cerrado en código el 2026-08-13):**
+
+- **Stage 2b-iii — retirar la lane legacy document** (`scripts/indexing/run_indexing.py`
+  + `IndexDocumentUseCase` + `LlamaIndexingPort`/`pipeline_factory.py` + `node_repository.py`,
+  ~1600 LOC + ~30 tests in-memory). Escribe `project_id NULL` → rompe contra la BD NOT NULL.
+  Prerequisito (CLI de plataforma end-to-end) ya cumplido; queda el borrado con cirugía de tests.
+- **Corrida operativa end-to-end** `raw→normalize→chunk→embed→index→materializa` con BGE vivo.
+  Bloqueada hoy por falta de proyecto/variante sembrados en BD (no hay CLI de seed) y BGE runtime.
+
+**Trasladado desde el plan de wiring raw/normalized (cerrado el 2026-08-13):**
+
+- **Persistencia catálogo-tabla `project_normalized_document_artifacts`** desde el CLI
+  (`PersistNormalizedArtifactCatalogUseCase`). Diferida: nada aguas abajo la consume (el
+  chunk stage lee el markdown de disco); la etapa normalize del CLI ya escribe el sidecar
+  con `platform_identity`/`platform_provenance`. Simetría de catálogo con `raw`, no crítica.
+- **`schemas:export`** — regenerar el snapshot JSON Schema por el campo aditivo
+  `platform_provenance` (no bloqueante; `test_schemas` verde).
+
 ### Fase 7: API de plataforma y contratos OpenAPI
 
 **Files:**
@@ -773,6 +855,7 @@ GET    /api/platform/projects/{project_id}
 PATCH  /api/platform/projects/{project_id}
 GET    /api/platform/projects/{project_id}/configuration
 PATCH  /api/platform/projects/{project_id}/configuration
+GET    /api/platform/projects/{project_id}/variant-matrix
 GET    /api/platform/projects/{project_id}/variants
 POST   /api/platform/projects/{project_id}/variants
 POST   /api/platform/corpus-snapshots
@@ -785,6 +868,7 @@ POST   /api/platform/releases/{rag_release_id}/retire
 ```
 
 - [ ] Cada comando de build/lifecycle recibe `rag_release_id` como identidad primaria; el servidor deriva `project_id`, variante, perfil y target ya congelado. La creación de DRAFT acepta como máximo un `target_binding_key` validado, nunca un `indexing_target_id` o nombre de tabla.
+- [ ] Exponer `GET variant-matrix`: read-model que computa server-side, por proyecto, las combinaciones válidas (processing×chunking×embedding habilitados filtrados por target-binding compatible), cada celda con `buildable` y `blocked_reason` estable. `POST variants` acepta **una celda de la matriz vigente**, no un triple libre; el back reconfirma la celda y computa el `semantic_recipe_fingerprint` (identidad sin cambio, §2.3.1). Reduce el campo de errores del cliente.
 - [ ] Las rutas de creación de snapshot/variant validan cada FK y rechazo de combinación cruzada antes de iniciar workers.
 - [ ] Aceptar la elección de layout solo mediante valores de plantilla permitidos y validar que los relpaths de ingreso permanezcan dentro de la raíz del proyecto. Ningún endpoint recibe una ruta absoluta, nombre de tabla o secreto.
 - [ ] Requerir `Idempotency-Key` para mutaciones de build y lifecycle, con fingerprint que incluya la acción y el release, no contenido sensible.

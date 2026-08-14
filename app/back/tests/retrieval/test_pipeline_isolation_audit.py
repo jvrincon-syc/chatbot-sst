@@ -8,6 +8,7 @@ invalidating the documentation.
 from __future__ import annotations
 
 import ast
+import re
 from pathlib import Path
 
 import pytest
@@ -49,7 +50,12 @@ def test_indexing_bundle_first_no_menciona_simbolos_de_embedding(module: str) ->
     source = _executable_source(BUNDLE_FIRST / module)
 
     for symbol in FORBIDDEN_IN_INDEXING:
-        assert symbol not in source, f"{module} references {symbol}"
+        # Límite de identificador: un símbolo prohibido cuenta solo como identificador
+        # completo (llamada/uso real), no como subcadena de otro nombre. Así
+        # ``profile.can_embed_documents`` (flag de compatibilidad, no una operación de
+        # embedding) no dispara un falso positivo sobre ``embed_documents``.
+        pattern = rf"(?<![A-Za-z0-9_]){re.escape(symbol)}(?![A-Za-z0-9_])"
+        assert not re.search(pattern, source), f"{module} references {symbol}"
 
 
 def test_indexing_bundle_first_no_lee_document_profile() -> None:

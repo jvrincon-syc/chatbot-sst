@@ -130,6 +130,7 @@ class PostgresIndexingMaterializationRepository:
                     indexing_target_id,
                     storage_schema_version,
                     MaterializationStatus.WRITING.value,
+                    started_at,
                     MaterializationStatus.SEALED.value,
                 ),
             )

@@ -1,5 +1,15 @@
 # Fase 4 — Embedding, nodos y vectores físicos sin colisiones
 
+> ✅ **CÓDIGO Y CONTRATO CERRADOS AL 100% (2026-08-13).** Bloques A–H + Stage 1/2a/2b-i/2b-ii
+> + Stage 3 completo (CLI `rebuild_platform.py` encadena chunk→embed→index→materializa **y** la
+> etapa `normalize` en `run_project_ingestion.py`) implementados, commiteados y verdes
+> (`rag_platform` **135 passed**, 2026-08-13). No queda contrato abierto.
+>
+> **Remanentes NO de contrato, trasladados al plan maestro** (por eso el plan no es "100%
+> operativo"): (1) **Stage 2b-iii** — retiro de la lane legacy document (~1600 LOC + ~30 tests,
+> refactor de borrado; prerequisito ya cumplido); (2) **corrida operativa end-to-end con BGE
+> vivo**, hoy bloqueada por falta de seed de proyecto/variante en BD. Ver "Cierre Fase 4" al final.
+
 - **Fecha**: 2026-08-11 · unificado 2026-08-12
 - **Rama**: main (aditivo; sin activar consumidores legacy)
 - **Área**: embedding + indexing + rag_platform (dominio → aplicación → adaptadores → composition root)
@@ -341,9 +351,11 @@ supersede ADR-007 §1 (nullable), §2 (dual-mode) y §9/D1 (unicidad global).
 
 **2b-ii COMPLETO:** `ChunkBundleRef`, `EmbeddingBundle`, `IndexingNodeRecord`,
 `AppendOnlyVectorRecord`, `EmbeddingRun`, `IndexingRun` — todos `project_id` requerido.
-- **[ ] Stage 2b-iii — retirar la lane legacy document** (`run_indexing.py` →
+- **[→] Stage 2b-iii — retirar la lane legacy document** (`run_indexing.py` →
   `IndexDocumentUseCase` → `LlamaIndexingPort`), que escribe `project_id NULL` y ahora
   fallaría contra la BD (NOT NULL). Capa grande; sus tests son in-memory y hoy pasan.
+  **TRASLADADO AL PLAN MAESTRO (2026-08-13)** como refactor de borrado, no de contrato;
+  su prerequisito (CLI de plataforma end-to-end) ya está cumplido.
 - **Stage 3 — CLI de rebuild de plataforma** (`chunk→embed→index→materializa` con `project_id`):
   - **[x] Enabler raw→chunk:** `FilesystemBackedPostgresChunkBundleRepository` gana
     `project_id` y lo estampa en el `ChunkBundleRef` que registra en `chunk_bundles`
@@ -353,11 +365,16 @@ supersede ADR-007 §1 (nullable), §2 (dual-mode) y §9/D1 (unicidad global).
   - **[x] Etapa chunk del CLI:** `scripts/rag_platform/rebuild_platform.py --project-id`
     reusa `build_run_service_from_env(project_id=...)` → registra `chunk_bundles` con
     dueño de proyecto. `py_compile` OK. **Falta tu corrida** (chunking tests + run real).
-  - **[ ] Etapas embed → index → materializa del CLI:** requieren BGE vivo y cablear
-    `CreateEmbeddingRunUseCase`/`CreateIndexingRunUseCase` (ya en
-    `build_pipeline_services`) + `RebuildPlatformArtifactsUseCase` (aún no en el
-    composition root; ligado a gap #6). El embedding hereda `project_id` del chunk
-    bundle vía `bundle_builder`; indexing lo namespacea (Stage 2a).
+  - **[x] Etapas embed → index → materializa del CLI (2026-08-13):**
+    `scripts/rag_platform/rebuild_platform.py` encadena `chunk→embed→index→materializa`:
+    resuelve el perfil de embedding de la variante server-side, corre
+    `embedding_create_run`+`embedding_executor` (BGE) y `rag_platform_rebuild`
+    (`RebuildPlatformArtifactsUseCase`, ya en el composition root), namespaced por proyecto,
+    vectores inactivos. El orquestador deriva checksum/dimensión/métrica server-side (firma
+    colapsada). Raíces por proyecto vía `ProjectStorageResolver`. Fail-closed:
+    `embedding_profile_unresolved`, `postgres_required_for_materialization`. Tests
+    `test_rebuild_orchestrator.py` (reencuadrado) + `test_platform_cli_wrappers.py`.
+    **Falta solo la corrida con BGE vivo** (operativo, trasladado al maestro).
 
 ## Gaps y trabajo pendiente de Fase 4
 
@@ -462,9 +479,15 @@ npm run indexing:validate
        **158 passed** (2026-08-12).
    - **[ ] Falta:** correr `chunk→embed→index→materializa` end-to-end con **BGE vivo**
      (operativo, datos reales). El wiring de contrato ya está; resta la corrida.
-3. **Corrida operativa end-to-end sobre datos reales** (`raw→normalize→chunk→embed→
-   index→materializa` para un proyecto), incluida la etapa normalized dentro de
-   `run_project_ingestion.py` (necesita motor de normalización) — diferida en Task 7.
+3. **Etapa `normalize` dentro de `run_project_ingestion.py`: CERRADA (2026-08-13).**
+   Se cableó el motor real `run_pipeline` raw→`data/projects/{slug}/normalized` por proyecto
+   con `platform_context_resolver` (sidecar con `platform_identity`/`platform_provenance`),
+   fail-closed sin perfil resoluble. Evidencia: `scripts/rag_platform/run_project_ingestion.py`;
+   test `test_project_ingestion_normalize.py`. Con esto **todo el código de la cadena
+   `raw→normalize→chunk→embed→index→materializa` existe**.
+4. **Corrida operativa end-to-end con BGE vivo** para un proyecto — **trasladada al plan
+   maestro**. Bloqueada hoy por falta de proyecto/variante sembrados en BD (no hay CLI de seed).
 
-Items 2 y 3 son **operativos** (requieren BGE + datos); item 1 es refactor de borrado.
-Nada de esto es contrato abierto: A–H y el wiring de catálogos están cerrados.
+Los remanentes son **operativos** (item 4: BGE + datos + seed) o **refactor de borrado**
+(item 1: Stage 2b-iii), ambos trasladados al plan maestro. **Nada de contrato queda abierto:
+A–H, Stage 3 (CLI embed→index→materializa + normalize) y el wiring de catálogos están cerrados.**

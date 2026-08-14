@@ -193,3 +193,31 @@ def test_wire_rag_platform_rebuild_sin_conexion_es_none() -> None:
         )
         is None
     )
+
+
+def test_wire_rag_platform_draft_con_y_sin_conexion() -> None:
+    # Gap 6: la superficie admin de DRAFT queda cableada tras el flag, con adaptadores
+    # Postgres (conexión) o in-memory (sin conexión); ambos construyen el caso de uso.
+    from api.dependencies import _build_rag_platform_draft
+    from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
+
+    postgres = _build_rag_platform_draft(connection=object())
+    memory = _build_rag_platform_draft(connection=None)
+    assert isinstance(postgres, CreateRagReleaseDraftUseCase)
+    assert isinstance(memory, CreateRagReleaseDraftUseCase)
+    # El factory acuña un id RAG_RELEASE con prefijo y sin colisión entre llamadas.
+    first = postgres._release_id_factory()
+    second = postgres._release_id_factory()
+    assert first.value.startswith("ragr_") and first != second
+
+
+def test_wire_rag_platform_validate_con_y_sin_conexion() -> None:
+    from api.dependencies import _build_rag_platform_validate
+    from rag_platform.application.release_validator import ValidateRagReleaseUseCase
+
+    assert isinstance(
+        _build_rag_platform_validate(connection=object()), ValidateRagReleaseUseCase
+    )
+    assert isinstance(
+        _build_rag_platform_validate(connection=None), ValidateRagReleaseUseCase
+    )

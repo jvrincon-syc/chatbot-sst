@@ -160,6 +160,8 @@ class PipelineServices:
     rag_platform_build: object | None = None
     rag_platform_publish: object | None = None
     rag_platform_rebuild: object | None = None
+    rag_platform_draft: object | None = None
+    rag_platform_validate: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -386,7 +388,116 @@ def build_pipeline_services(
             index_bundle=index_bundle,
             run_documents=run_documents,
         )
+        # Superficie admin de release (Fase 5) faltante en composición (Gap 6):
+        # DRAFT y VALIDATE se cablean aquí para completar la superficie tras el flag.
+        services.rag_platform_draft = _build_rag_platform_draft(connection=connection)
+        services.rag_platform_validate = _build_rag_platform_validate(connection=connection)
     return services
+
+
+def _build_rag_platform_draft(*, connection: object | None) -> object:
+    """Cablea ``CreateRagReleaseDraftUseCase`` (postgres o in-memory).
+
+    El ``release_id_factory`` acuña un ``ragr_`` único por DRAFT (uuid): el orden
+    lo lleva ``release_number`` por variante, no el id, así que un id fresco por
+    intento es correcto y evita colisiones entre procesos.
+    """
+
+    import uuid
+
+    from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
+    from rag_platform.domain.identity import IdentityKind, PlatformId
+
+    def _release_id_factory() -> PlatformId:
+        return PlatformId(
+            kind=IdentityKind.RAG_RELEASE, value="ragr_" + uuid.uuid4().hex[:16]
+        )
+
+    if connection is None:
+        from rag_platform.infrastructure.in_memory.release_repositories import (
+            InMemoryCorpusSnapshotReader,
+            InMemoryRagReleaseRepository,
+            InMemoryRagVariantReader,
+        )
+        from rag_platform.infrastructure.in_memory.repositories import (
+            InMemoryTargetBindingResolver,
+        )
+
+        return CreateRagReleaseDraftUseCase(
+            variants=InMemoryRagVariantReader(()),
+            snapshots=InMemoryCorpusSnapshotReader(()),
+            bindings=InMemoryTargetBindingResolver(()),
+            releases=InMemoryRagReleaseRepository(),
+            release_id_factory=_release_id_factory,
+            logger=get_logger("rag_platform.release_draft"),
+        )
+
+    from rag_platform.infrastructure.postgres.document_repositories import (
+        PostgresCorpusSnapshotRepository,
+    )
+    from rag_platform.infrastructure.postgres.project_repositories import (
+        PostgresRagVariantRepository,
+        PostgresTargetBindingResolver,
+    )
+    from rag_platform.infrastructure.postgres.release_repositories import (
+        PostgresRagReleaseRepository,
+    )
+
+    return CreateRagReleaseDraftUseCase(
+        variants=PostgresRagVariantRepository(connection),
+        snapshots=PostgresCorpusSnapshotRepository(connection),
+        bindings=PostgresTargetBindingResolver(connection),
+        releases=PostgresRagReleaseRepository(connection),
+        release_id_factory=_release_id_factory,
+        logger=get_logger("rag_platform.release_draft"),
+    )
+
+
+def _build_rag_platform_validate(*, connection: object | None) -> object:
+    """Cablea ``ValidateRagReleaseUseCase`` (postgres o in-memory)."""
+
+    from rag_platform.application.release_validator import ValidateRagReleaseUseCase
+
+    if connection is None:
+        from rag_platform.infrastructure.in_memory.release_repositories import (
+            InMemoryCorpusSnapshotReader,
+            InMemoryRagReleaseMembershipRepository,
+            InMemoryRagReleaseRepository,
+            InMemoryRagVariantReader,
+            StaticConfigurationFingerprintReader,
+        )
+
+        return ValidateRagReleaseUseCase(
+            releases=InMemoryRagReleaseRepository(),
+            variants=InMemoryRagVariantReader(()),
+            snapshots=InMemoryCorpusSnapshotReader(()),
+            memberships=InMemoryRagReleaseMembershipRepository(),
+            configuration_fingerprints=StaticConfigurationFingerprintReader(),
+            logger=get_logger("rag_platform.release_validate"),
+        )
+
+    from rag_platform.infrastructure.postgres.document_repositories import (
+        PostgresCorpusSnapshotRepository,
+    )
+    from rag_platform.infrastructure.postgres.project_repositories import (
+        PostgresProjectConfigurationFingerprintReader,
+        PostgresRagVariantRepository,
+    )
+    from rag_platform.infrastructure.postgres.release_repositories import (
+        PostgresRagReleaseMembershipRepository,
+        PostgresRagReleaseRepository,
+    )
+
+    return ValidateRagReleaseUseCase(
+        releases=PostgresRagReleaseRepository(connection),
+        variants=PostgresRagVariantRepository(connection),
+        snapshots=PostgresCorpusSnapshotRepository(connection),
+        memberships=PostgresRagReleaseMembershipRepository(connection),
+        configuration_fingerprints=PostgresProjectConfigurationFingerprintReader(
+            connection
+        ),
+        logger=get_logger("rag_platform.release_validate"),
+    )
 
 
 def _build_rag_platform_rebuild(
@@ -610,18 +721,32 @@ def build_pipeline_services_from_env(
         feature_flags=flags,
         allow_mock_engine=allow_mock_engine,
     )
-    _emit_startup_observability(services)
+    _emit_startup_observability(services, connection=connection)
     return services
 
 
-def _emit_startup_observability(services: PipelineServices) -> None:
+def _emit_startup_observability(
+    services: PipelineServices, *, connection: object | None = None
+) -> None:
     """Emit a safe, structured startup event describing the composition."""
 
     overview: dict[str, object] = {}
     try:
         overview = services.indexing_read_service.overview()
-    except Exception:  # noqa: BLE001 - observability must never block startup
-        logger.warning("startup_overview_unavailable", extra={"stage": "backend"})
+    except Exception as error:  # noqa: BLE001 - observability must never block startup
+        # Un read fallido aborta la transacción de la conexión compartida (psycopg2
+        # sin autocommit). Sin rollback, el resto del arranque (reconcile, etc.)
+        # hereda esa transacción abortada y muere con InFailedSqlTransaction. La
+        # garantía "observability must never block startup" exige limpiar la conexión.
+        if connection is not None:
+            try:
+                connection.rollback()  # type: ignore[attr-defined]
+            except Exception:  # noqa: BLE001 - rollback best-effort en el borde de arranque
+                pass
+        logger.warning(
+            "startup_overview_unavailable",
+            extra={"stage": "backend", "error_type": type(error).__name__},
+        )
 
     emit_pipeline_event(
         logger=logger,

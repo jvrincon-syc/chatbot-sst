@@ -83,6 +83,14 @@ class Schema2BundleAssembler:
         identity = metadata.platform_identity
         if identity is None:
             return None
+        # La provenance de variante puede venir en el bloque top-level
+        # ``platform_provenance`` (donde la escribe ``apply_platform_metadata`` /
+        # wiring Task 5) o, en sidecars legacy, dentro de ``platform_identity``. Se
+        # prefiere la top-level cuando trae variante y se cae a la de identidad; sin
+        # esto el chunk bundle nacía sin ``rag_variant_id`` porque solo se leía identity.
+        provenance = metadata.platform_provenance
+        if provenance is None or provenance.rag_variant_id is None:
+            provenance = identity.provenance
         return NormalizedDocumentPlatformContext(
             project_id=identity.project_id,
             source_document_id=identity.source_document_id,
@@ -90,7 +98,7 @@ class Schema2BundleAssembler:
             processing_profile_id=identity.processing_profile_id,
             processing_profile_fingerprint=identity.processing_profile_fingerprint,
             normalized_document_id=identity.normalized_document_id,
-            provenance=identity.provenance,
+            provenance=provenance,
         )
 
     def _validate_consistency(
