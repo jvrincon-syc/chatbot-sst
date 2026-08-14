@@ -519,20 +519,31 @@ export function useEmbeddingIndexingPipeline({
     if (!producedBundleId) {
       return;
     }
-    const nextStage = shouldAdvanceToIndexing({
-      activeStage: persistedState.activeStage,
-      producedBundleId,
-      indexingRunId,
-    })
-      ? "indexing"
-      : persistedState.activeStage;
+    // Durante el batch de corpus cada bundle terminado setea producedBundleId; no
+    // saltar la vista a indexing hasta que el batch cierre (lo hace el loop al final).
+    const nextStage =
+      !embeddingCorpusBusy &&
+      shouldAdvanceToIndexing({
+        activeStage: persistedState.activeStage,
+        producedBundleId,
+        indexingRunId,
+      })
+        ? "indexing"
+        : persistedState.activeStage;
     setSelectedEmbeddingBundleId(producedBundleId);
     persistState({
       selectedEmbeddingBundleId: producedBundleId,
       activeEmbeddingRunId: embeddingRunId,
       activeStage: nextStage,
     });
-  }, [embeddingRunId, indexingRunId, persistState, persistedState.activeStage, producedBundleId]);
+  }, [
+    embeddingCorpusBusy,
+    embeddingRunId,
+    indexingRunId,
+    persistState,
+    persistedState.activeStage,
+    producedBundleId,
+  ]);
 
   const createIndexing = useCallback(async () => {
     if (!resolvedEmbeddingBundleId) return;
