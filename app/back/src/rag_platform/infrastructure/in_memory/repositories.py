@@ -15,12 +15,14 @@ from rag_platform.application.context import PlatformAccessPolicy
 from rag_platform.domain.errors import (
     BuildStepNotFound,
     ChunkingProfileNotFound,
+    CorpusSnapshotNotFound,
     DuplicateVariantRecipe,
     MaterializationSealed,
     PlatformAccessDenied,
     ProcessingProfileNotFound,
     ProjectAlreadyExists,
     ProjectNotFound,
+    RagVariantNotFound,
     SourceDocumentRevisionNotFound,
 )
 from rag_platform.domain.identity import IdentityKind, PlatformId, RagBuildContext
@@ -43,6 +45,7 @@ from rag_platform.domain.models import (
     SealedEmbeddingBundle,
     SourceDocument,
     SourceDocumentRevision,
+    compute_project_configuration_fingerprint,
 )
 from embedding.domain.models import ChunkBundleRef
 
@@ -124,6 +127,38 @@ class InMemoryProjectRepository:
     def _current_configuration(self, project_id_value: str) -> ProjectConfiguration:
         versions = self._configurations[project_id_value]
         return versions[max(versions)]
+
+    def current_configuration_version(self, project_id: PlatformId) -> int:
+        """Devuelve la versión vigente del proyecto (máxima) para pinning release."""
+
+        return self._current_configuration(project_id.value).version
+
+    def configuration_fingerprint(
+        self, project_id: PlatformId, configuration_version: int
+    ) -> str:
+        """Reconstruye el fingerprint de una configuración versionada en memoria."""
+
+        configuration = self.get_version(project_id, configuration_version)
+        return compute_project_configuration_fingerprint(
+            version=configuration.version,
+            corpus_organization_policy=configuration.corpus_organization_policy,
+            document_types=tuple(
+                (doc_type.code, doc_type.display_name, doc_type.template.value)
+                for doc_type in configuration.document_types
+            ),
+            embedding_profiles=tuple(
+                (profile.embedding_profile_id, profile.enabled)
+                for profile in configuration.embedding_profiles
+            ),
+            target_bindings=tuple(
+                (
+                    binding.binding_key,
+                    binding.indexing_target_id,
+                    binding.embedding_profile_id,
+                )
+                for binding in configuration.target_bindings
+            ),
+        )
 
     def has_documents(self, project_id: PlatformId) -> bool:
         return project_id.value in self._with_documents
@@ -212,6 +247,14 @@ class InMemoryRagVariantRepository:
                 raise DuplicateVariantRecipe(variant.semantic_recipe_fingerprint)
             self._variants[variant.rag_variant_id.value] = variant
         return variant
+
+    def get(self, rag_variant_id: PlatformId) -> RagVariant:
+        """Devuelve la variante por id o falla cerrado."""
+
+        try:
+            return self._variants[rag_variant_id.value]
+        except KeyError as error:
+            raise RagVariantNotFound(rag_variant_id.value) from error
 
     def list_for_project(self, project_id: PlatformId) -> tuple[RagVariant, ...]:
         return tuple(
@@ -373,6 +416,14 @@ class InMemoryCorpusSnapshotRepository:
         key = (snapshot.project_id.value, snapshot.manifest_hash)
         self._by_manifest.setdefault(key, snapshot)
         return self._by_manifest[key]
+
+    def get(self, corpus_snapshot_id: PlatformId) -> CorpusSnapshot:
+        """Devuelve el snapshot por id o falla cerrado."""
+
+        for snapshot in self._by_manifest.values():
+            if snapshot.corpus_snapshot_id == corpus_snapshot_id:
+                return snapshot
+        raise CorpusSnapshotNotFound(corpus_snapshot_id.value)
 
 
 class InMemoryChunkBundleReuseRepository:

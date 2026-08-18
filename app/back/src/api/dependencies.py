@@ -380,36 +380,36 @@ def build_pipeline_services(
     # RAG platform admin lane (Fase 6): wired only behind the flag, never touching
     # the legacy retrieval services already built above.
     if flags.rag_platform_v1:
-        services.rag_platform_build = _build_rag_platform_build(
+        platform = _build_rag_platform_services(
             connection=connection,
             data_root=_platform_data_root(chunks_root),
-        )
-        services.rag_platform_publish = _build_rag_platform_publish(
-            connection=connection, transactions=transactions
-        )
-        services.rag_platform_rebuild = _build_rag_platform_rebuild(
-            connection=connection,
+            transactions=transactions,
             indexing_runs=indexing_runs,
             bundles=bundles,
             profiles=profiles,
             index_bundle=index_bundle,
             run_documents=run_documents,
         )
-        # Superficie admin de release (Fase 5) faltante en composición (Gap 6):
-        # DRAFT y VALIDATE se cablean aquí para completar la superficie tras el flag.
-        services.rag_platform_draft = _build_rag_platform_draft(connection=connection)
-        services.rag_platform_validate = _build_rag_platform_validate(connection=connection)
-        # Task 3: superficie tipada de proyectos/configuración para Fase 7.
-        services.rag_platform = _build_rag_platform_services(
-            connection=connection,
-            data_root=_platform_data_root(chunks_root),
-            transactions=transactions,
-        )
+        services.rag_platform = platform
+        # Compat legacy: los aliases apuntan a la misma composición tipada.
+        services.rag_platform_build = platform.build_release
+        services.rag_platform_publish = platform.publish_release
+        services.rag_platform_rebuild = platform.rebuild_platform
+        services.rag_platform_draft = platform.create_release_draft
+        services.rag_platform_validate = platform.validate_release
     return services
 
 
 def _build_rag_platform_services(
-    *, connection: object | None, data_root: Path, transactions: object
+    *,
+    connection: object | None,
+    data_root: Path,
+    transactions: object,
+    indexing_runs: object,
+    bundles: object,
+    profiles: object,
+    index_bundle: object,
+    run_documents: object,
 ) -> "RagPlatformServices":
     """Cablea la superficie tipada única de plataforma para Fase 7 (Task 3 + Task 4).
 
@@ -417,13 +417,11 @@ def _build_rag_platform_services(
     ``ProjectConfigurationRepository`` (lectura version-aware por versión). Sin
     conexión usa adaptadores in-memory; con conexión, Postgres. Variantes,
     snapshots y releases se cablean sobre el **mismo** ``RagPlatformServices``, no
-    una segunda superficie.
-
-    ponytail: los casos de uso de draft/validate/build/publish se reusan de los
-    builders ya existentes. Con conexión comparten el ``connection`` (coherentes);
-    sin conexión (dry-run/test) cada builder crea sus propios repos in-memory, lo
-    que basta para el smoke de composición.
+    una segunda superficie. Los aliases legacy de ``PipelineServices`` apuntan a
+    estas mismas instancias para no recomponer una lane paralela.
     """
+
+    import uuid
 
     from rag_platform.application.corpus_snapshot_service import (
         CreateCorpusSnapshotUseCase,
@@ -441,7 +439,9 @@ def _build_rag_platform_services(
         UpdateProjectMetadataUseCase,
     )
     from rag_platform.application.project_service import CreateProjectUseCase
+    from rag_platform.application.publication_service import PublishRagReleaseUseCase
     from rag_platform.application.recipe_service import CreateRagVariantUseCase
+    from rag_platform.application.release_build_service import BuildRagReleaseUseCase
     from rag_platform.application.release_query_service import (
         GetReleaseUseCase,
         ListProjectReleasesUseCase,
@@ -449,6 +449,8 @@ def _build_rag_platform_services(
     from rag_platform.application.release_retirement_service import (
         RetireRagReleaseUseCase,
     )
+    from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
+    from rag_platform.application.release_validator import ValidateRagReleaseUseCase
     from rag_platform.application.services import RagPlatformServices
     from rag_platform.application.variant_matrix_service import (
         CreateRagVariantFromMatrixCellUseCase,
@@ -465,20 +467,32 @@ def _build_rag_platform_services(
     access_policy = AllowAllAccessPolicy()
     storage_roots = ProjectStorageResolver(data_root)
 
+    def _release_id_factory() -> object:
+        from rag_platform.domain.identity import IdentityKind, PlatformId
+
+        return PlatformId(
+            kind=IdentityKind.RAG_RELEASE, value="ragr_" + uuid.uuid4().hex[:16]
+        )
+
     if connection is None:
         from embedding.infrastructure.in_memory.repositories import (
             InMemoryEmbeddingProfileRepository,
+        )
+        from rag_platform.infrastructure.in_memory.release_build_resolver import (
+            InMemoryRevisionArtifactResolver,
         )
         from rag_platform.infrastructure.in_memory.repositories import (
             InMemoryChunkingProfileRepository,
             InMemoryCorpusSnapshotRepository,
             InMemoryProcessingProfileRepository,
             InMemoryProjectRepository,
+            InMemoryRagBuildRunRepository,
             InMemoryRagVariantRepository,
             InMemorySourceDocumentRepository,
             InMemoryTargetBindingResolver,
         )
         from rag_platform.infrastructure.in_memory.release_repositories import (
+            InMemoryRagReleaseMembershipRepository,
             InMemoryRagReleaseRepository,
         )
 
@@ -491,9 +505,17 @@ def _build_rag_platform_services(
         documents: object = InMemorySourceDocumentRepository()
         embedding_profiles: object = InMemoryEmbeddingProfileRepository()
         bindings: object = InMemoryTargetBindingResolver()
+        memberships: object = InMemoryRagReleaseMembershipRepository()
+        configuration_versions: object = projects
+        configuration_fingerprints: object = projects
+        build_ledger: object = InMemoryRagBuildRunRepository()
+        revision_resolver: object = InMemoryRevisionArtifactResolver()
     else:
         from embedding.infrastructure.postgres.repositories import (
             PostgresEmbeddingProfileRepository,
+        )
+        from rag_platform.infrastructure.postgres.artifact_repositories import (
+            PostgresRagBuildRunRepository,
         )
         from rag_platform.infrastructure.postgres.document_repositories import (
             PostgresCorpusSnapshotRepository,
@@ -502,12 +524,17 @@ def _build_rag_platform_services(
         from rag_platform.infrastructure.postgres.project_repositories import (
             PostgresChunkingProfileRepository,
             PostgresProcessingProfileRepository,
+            PostgresProjectConfigurationFingerprintReader,
             PostgresProjectRepository,
             PostgresRagVariantRepository,
             PostgresTargetBindingResolver,
         )
         from rag_platform.infrastructure.postgres.release_repositories import (
+            PostgresRagReleaseMembershipRepository,
             PostgresRagReleaseRepository,
+        )
+        from rag_platform.infrastructure.release_build_resolver import (
+            PostgresRevisionArtifactResolver,
         )
 
         projects = PostgresProjectRepository(connection)
@@ -519,6 +546,16 @@ def _build_rag_platform_services(
         documents = PostgresSourceDocumentRepository(connection)
         embedding_profiles = PostgresEmbeddingProfileRepository(connection)
         bindings = PostgresTargetBindingResolver(connection)
+        memberships = PostgresRagReleaseMembershipRepository(connection)
+        configuration_versions = projects
+        configuration_fingerprints = PostgresProjectConfigurationFingerprintReader(
+            connection
+        )
+        build_ledger = PostgresRagBuildRunRepository(connection)
+        revision_resolver = PostgresRevisionArtifactResolver(
+            connection=connection,
+            data_root=data_root,
+        )
 
     variant_matrix = GetVariantMatrixUseCase(
         projects=projects,
@@ -532,6 +569,46 @@ def _build_rag_platform_services(
         embedding_profiles=embedding_profiles,
         target_bindings=bindings,
         access_policy=access_policy,
+    )
+    release_draft = CreateRagReleaseDraftUseCase(
+        variants=variants,
+        snapshots=snapshots,
+        bindings=bindings,
+        releases=releases,
+        configuration_versions=configuration_versions,
+        release_id_factory=_release_id_factory,
+        logger=get_logger("rag_platform.release_draft"),
+    )
+    build_release = BuildRagReleaseUseCase(
+        releases=releases,
+        variants=variants,
+        snapshots=snapshots,
+        resolver=revision_resolver,
+        memberships=memberships,
+        ledger=build_ledger,
+        bindings=bindings,
+    )
+    validate_release = ValidateRagReleaseUseCase(
+        releases=releases,
+        variants=variants,
+        snapshots=snapshots,
+        memberships=memberships,
+        configuration_fingerprints=configuration_fingerprints,
+        logger=get_logger("rag_platform.release_validate"),
+    )
+    publish_release = PublishRagReleaseUseCase(
+        releases=releases,
+        access_policy=access_policy,
+        transactions=transactions,
+        logger=get_logger("rag_platform.publication"),
+    )
+    rebuild_platform = _build_rag_platform_rebuild(
+        connection=connection,
+        indexing_runs=indexing_runs,
+        bundles=bundles,
+        profiles=profiles,
+        index_bundle=index_bundle,
+        run_documents=run_documents,
     )
 
     return RagPlatformServices(
@@ -562,21 +639,18 @@ def _build_rag_platform_services(
         create_corpus_snapshot=CreateCorpusSnapshotUseCase(
             snapshots=snapshots, documents=documents, access_policy=access_policy
         ),
-        create_release_draft=_build_rag_platform_draft(connection=connection),
+        create_release_draft=release_draft,
         get_release=GetReleaseUseCase(releases=releases),
         list_project_releases=ListProjectReleasesUseCase(releases=releases),
-        build_release=_build_rag_platform_build(
-            connection=connection, data_root=data_root
-        ),
-        validate_release=_build_rag_platform_validate(connection=connection),
-        publish_release=_build_rag_platform_publish(
-            connection=connection, transactions=transactions
-        ),
+        build_release=build_release,
+        validate_release=validate_release,
+        publish_release=publish_release,
         retire_release=RetireRagReleaseUseCase(
             releases=releases,
             access_policy=access_policy,
             logger=get_logger("rag_platform.release_retire"),
         ),
+        rebuild_platform=rebuild_platform,
     )
 
 

@@ -28,6 +28,7 @@ from rag_platform.application.project_query_service import (
 )
 from rag_platform.application.project_service import CreateProjectUseCase
 from rag_platform.application.publication_service import PublishRagReleaseUseCase
+from rag_platform.application.rebuild_orchestrator import RebuildPlatformArtifactsUseCase
 from rag_platform.application.release_build_service import BuildRagReleaseUseCase
 from rag_platform.application.release_query_service import (
     GetReleaseUseCase,
@@ -83,3 +84,4 @@ class RagPlatformServices:
     validate_release: ValidateRagReleaseUseCase
     publish_release: PublishRagReleaseUseCase
     retire_release: RetireRagReleaseUseCase
+    rebuild_platform: RebuildPlatformArtifactsUseCase | None

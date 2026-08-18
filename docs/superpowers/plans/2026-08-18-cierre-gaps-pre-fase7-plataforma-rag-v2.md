@@ -183,21 +183,25 @@ esquema en head, seed 1-versión determinista). Reset/rebuild dev ADR-007 aplica
 
 Registrados para arreglar como paso previo/paralelo a Task 5. No bloquean los verdes de Gate 1-2.
 
-- [ ] **[ALTO] Incoherencia in-memory de `services.rag_platform.*`.** `_build_rag_platform_services`
-  (`api/dependencies.py:481`) instancia variants/releases/snapshots/bindings compartidos para la
-  superficie tipada, pero `create_release_draft/build/validate/publish` se toman de los builders
-  `_build_rag_platform_*` (`dependencies.py:561`) que, con `connection is None`, **fabrican sus propios**
-  `InMemoryRagVariantReader(())`, `InMemoryCorpusSnapshotReader(())`, `InMemoryRagReleaseRepository()`,
-  `InMemoryTargetBindingResolver(())` (`:597`, `:647`, `:780`, `:834`). Efecto: en memoria, una variante/
-  snapshot creada vía `services.rag_platform` **no** es visible para `create_release_draft`/`build` del mismo
-  contenedor (comentario `ponytail` ya lo admite en `:418`). En Postgres son coherentes por `connection`.
-  **Fix:** un único factory de repos in-memory compartido inyectado en TODOS los casos de uso de plataforma
-  (draft/build/validate/publish incluidos), consolidando la superficie única del plan.
+- [x] **[ALTO] Incoherencia in-memory de `services.rag_platform.*` — CERRADO (2026-08-18).**
+  `_build_rag_platform_services()` ahora compone una **única** superficie compartida y crea
+  `release_draft/build_release/validate_release/publish_release` con los mismos repos que usan
+  proyectos/variantes/snapshots/releases en `api/dependencies.py:403-653`. Evidencia del fix:
+  `configuration_versions=projects` + `configuration_fingerprints=projects` + repos/memberships/ledger
+  compartidos en `dependencies.py:499-512`; wiring unificado de draft/build/validate/publish en
+  `dependencies.py:573-612`; aliases legacy apuntando a esas mismas instancias en
+  `dependencies.py:393-399`. Soporte in-memory añadido para lectura/pinning real en
+  `in_memory/repositories.py:131-161` (`current_configuration_version` +
+  `configuration_fingerprint`), `:251-257` (`RagVariantRepository.get`) y `:420-426`
+  (`CorpusSnapshotRepository.get`).
 - [x] **[MED] DI tipada — CERRADO (2026-08-18).** `PipelineServices.rag_platform: RagPlatformServices | None`
   y `_build_rag_platform_services() -> "RagPlatformServices"`; import bajo `TYPE_CHECKING` (anotación lazy por
   `from __future__ import annotations`, sin costo de import en runtime). `py_compile` OK. Fix inline mínimo.
-- [ ] **[BAJO] `rag_platform_build/publish/rebuild/draft/validate` = compat debt.** Se desvían del "single
-  surface" del plan pero no son regresión; colapsarlos dentro de `RagPlatformServices` cierra el [ALTO] de paso.
+- [x] **[BAJO] `rag_platform_build/publish/rebuild/draft/validate` = compat debt — CERRADO (2026-08-18).**
+  La compat se mantiene sin superficie paralela: `PipelineServices.rag_platform_*` quedó como alias de la
+  composición tipada única en `api/dependencies.py:393-399`, y `RagPlatformServices` ahora expone también
+  `rebuild_platform` en `app/back/src/rag_platform/application/services.py:87` para contener toda la lane
+  administrativa bajo un solo root tipado.
 
 **Task 5-7:** pendientes.
 
