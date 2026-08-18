@@ -50,6 +50,10 @@ from rag_platform.domain.models import (
 from embedding.domain.models import ChunkBundleRef
 
 
+
+"""Eliminacion de la  clase InMemoryProjectRepository y reemplazo por PostgresProjectRepository,
+ pero por ahora se mantiene para pruebas y demos locales"""
+
 class InMemoryProjectRepository:
     """Catálogo de proyectos en memoria con ``project_id`` estable.
 

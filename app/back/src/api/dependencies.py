@@ -475,6 +475,7 @@ def _build_rag_platform_services(
         )
 
     if connection is None:
+        """eliminstar el in memory y reemplazar por postgres, pero por ahora se mantiene para pruebas y demos locales"""
         from embedding.infrastructure.in_memory.repositories import (
             InMemoryEmbeddingProfileRepository,
         )
@@ -496,6 +497,7 @@ def _build_rag_platform_services(
             InMemoryRagReleaseRepository,
         )
 
+        """ a futuro eliminacion del in memory y reemplazo por postgres, pero por ahora se mantiene para pruebas y demos locales """
         projects: object = InMemoryProjectRepository()
         processing: object = InMemoryProcessingProfileRepository()
         chunking: object = InMemoryChunkingProfileRepository()
@@ -844,6 +846,8 @@ def _build_rag_platform_build(*, connection: object | None, data_root: Path) -> 
     from rag_platform.infrastructure.in_memory.release_build_resolver import (
         InMemoryRevisionArtifactResolver,
     )
+
+    """ a futuro eliminacion del in memory y reemplazo por postgres, pero por ahora se mantiene para pruebas y demos locales """
     from rag_platform.infrastructure.in_memory.release_repositories import (
         InMemoryCorpusSnapshotReader,
         InMemoryRagReleaseMembershipRepository,
