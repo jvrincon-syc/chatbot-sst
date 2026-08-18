@@ -1,0 +1,88 @@
+"""Task 3: configuración versionada por proyecto (lectura vigente/histórica + nueva versión).
+
+La historia no se colapsa en la última versión: leer la versión 1 tras crear la 2
+sigue devolviendo sus ``target_bindings`` originales (in-memory, sin Postgres).
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+from rag_platform.application.project_configuration_service import (
+    CreateProjectConfigurationVersionUseCase,
+    GetProjectConfigurationUseCase,
+    GetProjectConfigurationVersionUseCase,
+    UpdateProjectConfigurationRequest,
+)
+from rag_platform.application.project_service import (
+    CreateProjectRequest,
+    CreateProjectUseCase,
+)
+from rag_platform.domain.identity import IdentityKind, PlatformId
+from rag_platform.domain.models import (
+    CorpusOrganizationPolicy,
+    ProjectIndexingTargetBinding,
+)
+from rag_platform.infrastructure.in_memory.repositories import (
+    AllowAllAccessPolicy,
+    InMemoryProjectRepository,
+)
+from rag_platform.infrastructure.storage.project_storage import ProjectStorageResolver
+
+
+def _pid() -> PlatformId:
+    return PlatformId(IdentityKind.PROJECT, "proj_sst-general")
+
+
+def _seed(tmp_path: Path) -> InMemoryProjectRepository:
+    projects = InMemoryProjectRepository()
+    CreateProjectUseCase(
+        projects=projects,
+        storage_roots=ProjectStorageResolver(tmp_path / "data"),
+        access_policy=AllowAllAccessPolicy(),
+    ).execute(
+        CreateProjectRequest(project_slug="sst-general", display_name="SST"),
+        actor_id="op",
+    )
+    return projects
+
+
+def test_get_configuration_vigente_es_la_ultima_version(tmp_path: Path) -> None:
+    projects = _seed(tmp_path)
+    config = GetProjectConfigurationUseCase(projects=projects).execute(_pid())
+    assert config.version == 1
+
+
+def test_create_version_incrementa_monotona_y_preserva_historia(tmp_path: Path) -> None:
+    projects = _seed(tmp_path)
+    new = CreateProjectConfigurationVersionUseCase(
+        projects=projects,
+        configurations=projects,
+        access_policy=AllowAllAccessPolicy(),
+    ).execute(
+        _pid(),
+        request=UpdateProjectConfigurationRequest(
+            corpus_organization_policy=CorpusOrganizationPolicy.SOURCE_FOLDERS_V1,
+            target_bindings=(
+                ProjectIndexingTargetBinding(
+                    binding_key="default",
+                    indexing_target_id="idx_vec_local_bge_m3_v1",
+                    embedding_profile_id="bge-m3",
+                ),
+            ),
+        ),
+        actor_id="op",
+    )
+    assert new.version == 2
+
+    # La versión 1 histórica NO se colapsa: sigue sin el binding nuevo.
+    v1 = GetProjectConfigurationVersionUseCase(configurations=projects).execute(
+        _pid(), version=1
+    )
+    assert v1.version == 1
+    assert v1.target_bindings == ()
+
+    v2 = GetProjectConfigurationVersionUseCase(configurations=projects).execute(
+        _pid(), version=2
+    )
+    assert {binding.binding_key for binding in v2.target_bindings} == {"default"}

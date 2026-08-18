@@ -66,6 +66,7 @@ def _release(*, state: ReleaseState, manifest: str | None) -> RagRelease:
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="primary",
+        configuration_version=1,
         release_number=1,
         state=state,
         release_manifest_hash=manifest,

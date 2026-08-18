@@ -67,14 +67,53 @@ class InMemoryCorpusSnapshotReader:
 
 
 class StaticConfigurationFingerprintReader:
-    """Fingerprint de configuración fijo por proyecto (determinista para tests)."""
+    """Fingerprint de configuración por ``(proyecto, versión)`` (determinista, tests).
 
-    def __init__(self, fingerprints: dict[str, str] | None = None) -> None:
+    Acepta un fingerprint fijo por proyecto o, opcionalmente, por
+    ``(project_id, version)`` para probar el pinning: dos versiones de un mismo
+    proyecto pueden devolver fingerprints distintos.
+    """
+
+    def __init__(
+        self,
+        fingerprints: dict[str, str] | None = None,
+        *,
+        by_version: dict[tuple[str, int], str] | None = None,
+    ) -> None:
         self._by_project = dict(fingerprints or {})
+        self._by_version = dict(by_version or {})
 
-    def configuration_fingerprint(self, project_id: PlatformId) -> str:
+    def configuration_fingerprint(
+        self, project_id: PlatformId, configuration_version: int
+    ) -> str:
+        keyed = self._by_version.get((project_id.value, configuration_version))
+        if keyed is not None:
+            return keyed
         # Determinista: si no hay override, deriva un marcador estable del id.
         return self._by_project.get(project_id.value, "0" * 64)
+
+
+class InMemoryCurrentConfigurationVersionReader:
+    """Versión de configuración vigente por proyecto (mutable para tests de pinning).
+
+    Permite simular que la configuración avanza entre crear un DRAFT y validar/
+    construir, para verificar que la release usa la versión pinneada y no la
+    vigente.
+    """
+
+    def __init__(
+        self, versions: dict[str, int] | None = None, *, default: int = 1
+    ) -> None:
+        self._by_project = dict(versions or {})
+        self._default = default
+
+    def set_version(self, project_id: PlatformId, version: int) -> None:
+        """Fija la versión vigente de un proyecto (helper de test)."""
+
+        self._by_project[project_id.value] = version
+
+    def current_configuration_version(self, project_id: PlatformId) -> int:
+        return self._by_project.get(project_id.value, self._default)
 
 
 class InMemoryRagReleaseRepository:
@@ -94,6 +133,13 @@ class InMemoryRagReleaseRepository:
             return self._by_id[rag_release_id.value]
         except KeyError as error:
             raise RagReleaseNotFound(rag_release_id.value) from error
+
+    def list_for_project(self, project_id: PlatformId) -> list[RagRelease]:
+        return [
+            release
+            for _, release in sorted(self._by_id.items())
+            if release.project_id == project_id
+        ]
 
     def list_release_numbers(self, rag_variant_id: PlatformId) -> list[int]:
         return [

@@ -46,7 +46,7 @@ _RECIPE_FP = "a" * 64
 
 
 class _StaticBindingResolver:
-    def find_binding(self, project_id, binding_key):
+    def find_binding(self, project_id, configuration_version, binding_key):
         return ProjectIndexingTargetBinding(
             binding_key=binding_key,
             indexing_target_id="it_bge",
@@ -97,6 +97,7 @@ def _release(release_id: PlatformId, snapshot_id: PlatformId) -> RagRelease:
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=snapshot_id,
         target_binding_key="primary",
+        configuration_version=1,
         release_number=1,
         state=ReleaseState.DRAFT,
         created_by="op-1",

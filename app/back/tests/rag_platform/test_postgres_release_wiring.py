@@ -116,7 +116,7 @@ def test_postgres_project_configuration_fingerprint_reader_reconstruye_fingerpri
     )
 
     fingerprint = PostgresProjectConfigurationFingerprintReader(connection).configuration_fingerprint(
-        PlatformId(IdentityKind.PROJECT, "proj_alpha")
+        PlatformId(IdentityKind.PROJECT, "proj_alpha"), 3
     )
 
     assert fingerprint == compute_project_configuration_fingerprint(

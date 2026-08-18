@@ -358,6 +358,43 @@ def compute_semantic_recipe_fingerprint(
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
+def compute_chunking_profile_fingerprint(
+    *,
+    strategy: str,
+    sanitized_config: Mapping[str, Any],
+) -> str:
+    """Computa el fingerprint determinista de una receta de chunking.
+
+    Es el **único** helper canónico de identidad de chunking: el seeder y el
+    resolver de runtime comparten esta fórmula y ninguno la reimplementa. Cuando
+    ``sanitized_config`` está vacía, reproduce byte a byte el fingerprint legacy
+    del seeder (``sha256("chunking\\x1f{strategy}")``) para no invalidar las
+    variantes v1 ya persistidas; una configuración semántica presente (p. ej.
+    ``include_section_context``) agrega un componente y produce un fingerprint
+    distinto (v2 es otra receta, no una edición de v1).
+
+    La configuración se sanitiza igual que la receta semántica: una credencial
+    dentro de la configuración jamás altera el fingerprint.
+
+    Args:
+        strategy: Estrategia de chunking persistida en el perfil.
+        sanitized_config: Configuración semántica del perfil (se sanitiza).
+
+    Returns:
+        Digest hex sha256 de 64 caracteres.
+    """
+
+    sanitized = _sanitize(dict(sanitized_config))
+    parts = ["chunking", strategy]
+    if sanitized:
+        parts.append(
+            json.dumps(
+                sanitized, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            )
+        )
+    return hashlib.sha256("\x1f".join(parts).encode("utf-8")).hexdigest()
+
+
 def compute_project_configuration_fingerprint(
     *,
     version: int,

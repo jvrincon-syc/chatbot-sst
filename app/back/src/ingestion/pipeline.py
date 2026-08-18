@@ -837,6 +837,25 @@ def _failure_recommendation(reason: str, exc: Exception) -> str:
     return "Configurar extractor PDF/OCR para este documento."
 
 
+def _apply_only_sources(
+    records: List[InventoryRecord], only_sources: Optional[List[str]]
+) -> List[InventoryRecord]:
+    """Acota ``records`` a la selección ``only_sources``.
+
+    Compartido por ``run_pipeline`` y el preflight de identidad de plataforma para
+    que el conjunto de documentos seleccionados nunca difiera entre el chequeo
+    fail-closed y los documentos que el pipeline procesa realmente.
+    """
+
+    if only_sources is None:
+        return list(records)
+    selected = {
+        canonical_relpath(str(source).replace("\\", "/"))
+        for source in only_sources
+    }
+    return [record for record in records if record.source_relpath in selected]
+
+
 def _run_document(
     record: InventoryRecord,
     *,
@@ -1011,12 +1030,7 @@ def run_pipeline(
             corpus_version=corpus_version,
             pipeline_version=pipeline_version,
         )
-        if only_sources is not None:
-            selected = {
-                canonical_relpath(str(source).replace("\\", "/"))
-                for source in only_sources
-            }
-            records = [record for record in records if record.source_relpath in selected]
+        records = _apply_only_sources(records, only_sources)
 
         _emit_pipeline_event(
             level=logging.INFO,

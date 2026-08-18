@@ -63,6 +63,11 @@ class CreateRagVariantRequest(StrictModel):
     chunking_profile_id: str = Field(min_length=1)
     embedding_profile_id: str = Field(min_length=1)
     target_binding_key: str = Field(min_length=1)
+    # La versión de configuración del proyecto contra la que se resuelve el
+    # binding. El llamador (matrix-cell wrapper, seed) la pasa **explícita**: el
+    # caso de uso nunca re-resuelve la versión "vigente" a espaldas de la celda
+    # ya reconfirmada (plan Task 4, sin TOCTOU).
+    configuration_version: int = Field(ge=1)
     allow_unverifiable_revision: bool = False
 
 
@@ -140,7 +145,7 @@ class CreateRagVariantUseCase:
         # Fail-closed: el target debe estar en la allowlist y ser compatible con
         # el perfil de embedding de la variante.
         binding = self._target_bindings.find_binding(
-            project_id, request.target_binding_key
+            project_id, request.configuration_version, request.target_binding_key
         )
         if binding is None or binding.embedding_profile_id != request.embedding_profile_id:
             raise IncompatibleTargetBinding(request.target_binding_key)

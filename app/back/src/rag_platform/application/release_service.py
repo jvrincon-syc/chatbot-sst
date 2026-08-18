@@ -60,8 +60,28 @@ class CorpusSnapshotReader(Protocol):
 class ProjectConfigurationFingerprintReader(Protocol):
     """Fingerprint de la configuración versionada que congela la release."""
 
-    def configuration_fingerprint(self, project_id: PlatformId) -> str:
-        """Devuelve el fingerprint determinista de la configuración vigente."""
+    def configuration_fingerprint(
+        self, project_id: PlatformId, configuration_version: int
+    ) -> str:
+        """Devuelve el fingerprint determinista de la versión ``configuration_version``.
+
+        La versión es la que la release pinneó en su DRAFT; nunca la "vigente",
+        para que validar no dependa de mutaciones posteriores de configuración
+        (plan Task 4).
+        """
+
+
+@runtime_checkable
+class CurrentProjectConfigurationVersionReader(Protocol):
+    """Lee la versión de configuración **vigente** de un proyecto.
+
+    Solo se usa al crear un DRAFT para pinnear la versión exacta; una vez
+    pinneada, la release nunca vuelve a leer la versión vigente (fail-closed
+    contra drift).
+    """
+
+    def current_configuration_version(self, project_id: PlatformId) -> int:
+        """Devuelve la versión (>=1) vigente o lanza ``ProjectNotFound``."""
 
 
 @runtime_checkable
@@ -73,6 +93,9 @@ class RagReleaseRepository(Protocol):
 
     def get(self, rag_release_id: PlatformId) -> RagRelease:
         """Devuelve la release o lanza un error de dominio si no existe."""
+
+    def list_for_project(self, project_id: PlatformId) -> Sequence[RagRelease]:
+        """Devuelve las releases del proyecto en orden estable (por id)."""
 
     def list_release_numbers(self, rag_variant_id: PlatformId) -> Sequence[int]:
         """Números de release ya usados por la variante (para el siguiente)."""
@@ -116,6 +139,7 @@ class CreateRagReleaseDraftUseCase:
         snapshots: CorpusSnapshotReader,
         bindings: TargetBindingResolver,
         releases: RagReleaseRepository,
+        configuration_versions: CurrentProjectConfigurationVersionReader,
         release_id_factory: Callable[[], PlatformId],
         clock: Callable[[], datetime] = _now,
         logger: logging.Logger | None = None,
@@ -124,6 +148,7 @@ class CreateRagReleaseDraftUseCase:
         self._snapshots = snapshots
         self._bindings = bindings
         self._releases = releases
+        self._configuration_versions = configuration_versions
         self._release_id_factory = release_id_factory
         self._clock = clock
         self._logger = logger
@@ -153,7 +178,17 @@ class CreateRagReleaseDraftUseCase:
         )
         _reject_blocked_revisions(snapshot)
 
-        binding = self._bindings.find_binding(variant.project_id, target_binding_key)
+        # Pinnea la versión de configuración vigente en el DRAFT: a partir de aquí
+        # el binding se resuelve siempre contra esta versión, no contra la actual.
+        configuration_version = (
+            self._configuration_versions.current_configuration_version(
+                variant.project_id
+            )
+        )
+
+        binding = self._bindings.find_binding(
+            variant.project_id, configuration_version, target_binding_key
+        )
         if binding is None:
             raise IncompatibleTargetBinding(
                 f"target binding {target_binding_key!r} is not allowed for the project"
@@ -172,6 +207,7 @@ class CreateRagReleaseDraftUseCase:
             rag_variant_id=rag_variant_id,
             corpus_snapshot_id=corpus_snapshot_id,
             target_binding_key=target_binding_key,
+            configuration_version=configuration_version,
             release_number=release_number,
             state=ReleaseState.DRAFT,
             created_by=actor_id,

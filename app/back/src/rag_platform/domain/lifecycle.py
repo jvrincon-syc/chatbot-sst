@@ -120,6 +120,13 @@ class RagRelease(StrictModel):
     rag_variant_id: RagVariantId
     corpus_snapshot_id: CorpusSnapshotId
     target_binding_key: str = Field(min_length=1, max_length=128)
+    # Única identidad nueva persistida (plan Task 4): pinnea la versión exacta de
+    # configuración vigente al crear el DRAFT. El ``indexing_target`` NO se
+    # persiste en la release; se DERIVA del binding versionado
+    # ``(project_id, configuration_version, target_binding_key)``, de modo que un
+    # cambio posterior de configuración no puede desviar (drift) la release ya
+    # pinneada.
+    configuration_version: int = Field(ge=1)
     release_number: int = Field(ge=1)
     state: ReleaseState = ReleaseState.DRAFT
     release_manifest_hash: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")

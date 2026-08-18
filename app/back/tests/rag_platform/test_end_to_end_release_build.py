@@ -161,6 +161,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
         PostgresSourceDocumentRepository,
     )
     from rag_platform.infrastructure.postgres.project_repositories import (
+        PostgresProjectRepository,
         PostgresRagVariantRepository,
         PostgresTargetBindingResolver,
     )
@@ -213,6 +214,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
             snapshots=PostgresCorpusSnapshotRepository(conn),
             bindings=PostgresTargetBindingResolver(conn),
             releases=PostgresRagReleaseRepository(conn),
+            configuration_versions=PostgresProjectRepository(conn),
             release_id_factory=lambda: PlatformId(
                 kind=IdentityKind.RAG_RELEASE, value="ragr_" + uuid.uuid4().hex[:16]
             ),

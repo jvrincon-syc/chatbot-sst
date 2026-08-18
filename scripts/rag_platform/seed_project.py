@@ -27,8 +27,9 @@ import argparse
 import hashlib
 import json
 import sys
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Sequence
+from typing import Mapping, Sequence
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_REPO_ROOT / "app" / "back" / "src"))
@@ -45,6 +46,7 @@ from rag_platform.application.recipe_service import (  # noqa: E402
     CreateRagVariantUseCase,
 )
 from rag_platform.domain.errors import (  # noqa: E402
+    ChunkingProfileSeedConflict,
     DuplicateVariantRecipe,
     ProjectAlreadyExists,
 )
@@ -52,6 +54,7 @@ from rag_platform.domain.identity import IdentityKind  # noqa: E402
 from rag_platform.domain.models import (  # noqa: E402
     ProjectEmbeddingProfile,
     ProjectIndexingTargetBinding,
+    compute_chunking_profile_fingerprint,
 )
 from rag_platform.infrastructure.in_memory.repositories import (  # noqa: E402
     AllowAllAccessPolicy,
@@ -96,12 +99,24 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--processing-provider", default="local")
     parser.add_argument("--processing-engine", default="pdfium-tesseract")
     parser.add_argument("--processing-revision", default="2026.08")
-    parser.add_argument("--chunking-slug", default="structural")
+    parser.add_argument(
+        "--chunking-slug",
+        default=None,
+        help=(
+            "Slug opcional del perfil de chunking. Omitido, se deriva de "
+            "--chunking-strategy: structural -> structural; "
+            "local-structural-v2 -> structural-v2."
+        ),
+    )
     parser.add_argument("--chunking-strategy", default="structural")
     parser.add_argument("--env-file", default="secrets.env")
     parser.add_argument("--data-dir", default=str(_REPO_ROOT / "data"))
     parser.add_argument("--json", action="store_true")
     return parser.parse_args(argv)
+
+
+#: Estrategia que activa la receta v2 (contexto de sección) en el seeder.
+_V2_STRATEGY = "local-structural-v2"
 
 
 def _fingerprint(*parts: str) -> str:
@@ -110,19 +125,108 @@ def _fingerprint(*parts: str) -> str:
     return hashlib.sha256("\x1f".join(parts).encode("utf-8")).hexdigest()
 
 
+@dataclass(frozen=True)
+class _ChunkingRecipe:
+    """Receta de chunking efectiva derivada de la estrategia y el slug del CLI."""
+
+    strategy: str
+    effective_slug: str
+    chunking_id: str
+    sanitized_config: dict[str, object]
+    fingerprint: str
+
+
+def _resolve_chunking_recipe(*, strategy: str, slug: str | None) -> _ChunkingRecipe:
+    """Deriva la receta de chunking efectiva (slug/config/fingerprint) del CLI.
+
+    El slug explícito manda; omitido, se deriva de la estrategia. v2 persiste
+    ``include_section_context`` real y no reutiliza el id de v1. El fingerprint es
+    el canónico compartido con el resolver de runtime.
+    """
+
+    if strategy == _V2_STRATEGY:
+        sanitized_config: dict[str, object] = {"include_section_context": True}
+        effective_slug = slug or "structural-v2"
+    else:
+        sanitized_config = {}
+        effective_slug = slug or "structural"
+    chunking_id = f"{IdentityKind.CHUNKING_PROFILE.value}_{effective_slug}"
+    fingerprint = compute_chunking_profile_fingerprint(
+        strategy=strategy, sanitized_config=sanitized_config
+    )
+    return _ChunkingRecipe(
+        strategy=strategy,
+        effective_slug=effective_slug,
+        chunking_id=chunking_id,
+        sanitized_config=sanitized_config,
+        fingerprint=fingerprint,
+    )
+
+
+def _load_existing_chunking_profile(
+    cursor: object, chunking_id: str
+) -> tuple[str, dict[str, object], str] | None:
+    """Devuelve ``(strategy, sanitized_config, fingerprint)`` persistidos o ``None``."""
+
+    cursor.execute(
+        "SELECT strategy, sanitized_config_json, fingerprint FROM chunking_profiles"
+        " WHERE chunking_profile_id = %s",
+        (chunking_id,),
+    )
+    row = cursor.fetchone()
+    if row is None:
+        return None
+    strategy, config_value, fingerprint = row
+    # psycopg2 decodifica jsonb a dict; toleramos también texto por robustez.
+    if isinstance(config_value, Mapping):
+        config: dict[str, object] = dict(config_value)
+    else:
+        config = json.loads(config_value)
+    return strategy, config, fingerprint
+
+
+def _ensure_recipe_matches_existing(
+    existing: tuple[str, Mapping[str, object], str] | None,
+    recipe: _ChunkingRecipe,
+) -> bool:
+    """Decide si insertar la receta o si ya existe idéntica (idempotencia exacta).
+
+    Returns:
+        ``True`` si debe insertarse (no existía); ``False`` si la fila persistida
+        es exactamente la misma receta (éxito idempotente).
+
+    Raises:
+        ChunkingProfileSeedConflict: Si el ``chunking_profile_id`` ya existe con
+            una estrategia, configuración o fingerprint distintos. Nunca se
+            sobreescribe ni se ignora en silencio.
+    """
+
+    if existing is None:
+        return True
+    existing_strategy, existing_config, existing_fp = existing
+    if (
+        existing_strategy != recipe.strategy
+        or dict(existing_config) != recipe.sanitized_config
+        or existing_fp != recipe.fingerprint
+    ):
+        raise ChunkingProfileSeedConflict(recipe.chunking_id)
+    return False
+
+
 def _upsert_profile_rows(
     cursor: object,
     *,
     project_id_value: str,
     processing_id: str,
-    chunking_id: str,
+    chunking_recipe: _ChunkingRecipe,
     args: argparse.Namespace,
 ) -> tuple[str, str]:
     """Inserta (idempotente) el perfil de procesamiento y de chunking del proyecto.
 
     No hay caso de uso de creación para estas recetas; son filas de catálogo con
-    fingerprint inmutable. ``ON CONFLICT DO NOTHING`` hace el seeder re-ejecutable.
-    Devuelve ``(processing_fingerprint, chunking_fingerprint)``.
+    fingerprint inmutable. El procesamiento usa ``ON CONFLICT DO NOTHING``; el
+    chunking usa idempotencia por receta exacta y falla cerrado ante una receta
+    distinta bajo el mismo id. Devuelve ``(processing_fingerprint, chunking_fingerprint)``.
     """
 
     processing_fp = _fingerprint(
@@ -131,7 +235,6 @@ def _upsert_profile_rows(
         args.processing_engine,
         args.processing_revision,
     )
-    chunking_fp = _fingerprint("chunking", args.chunking_strategy)
     cursor.execute(
         "INSERT INTO document_processing_profiles (processing_profile_id, project_id,"
         " provider, engine, observed_revision, origin, sanitized_config_json,"
@@ -147,14 +250,21 @@ def _upsert_profile_rows(
             processing_fp,
         ),
     )
-    cursor.execute(
-        "INSERT INTO chunking_profiles (chunking_profile_id, project_id, strategy,"
-        " sanitized_config_json, fingerprint, status)"
-        " VALUES (%s, %s, %s, '{}'::jsonb, %s, 'verified')"
-        " ON CONFLICT (chunking_profile_id) DO NOTHING",
-        (chunking_id, project_id_value, args.chunking_strategy, chunking_fp),
-    )
-    return processing_fp, chunking_fp
+    existing = _load_existing_chunking_profile(cursor, chunking_recipe.chunking_id)
+    if _ensure_recipe_matches_existing(existing, chunking_recipe):
+        cursor.execute(
+            "INSERT INTO chunking_profiles (chunking_profile_id, project_id, strategy,"
+            " sanitized_config_json, fingerprint, status)"
+            " VALUES (%s, %s, %s, %s::jsonb, %s, 'verified')",
+            (
+                chunking_recipe.chunking_id,
+                project_id_value,
+                chunking_recipe.strategy,
+                json.dumps(chunking_recipe.sanitized_config),
+                chunking_recipe.fingerprint,
+            ),
+        )
+    return processing_fp, chunking_recipe.fingerprint
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -167,7 +277,9 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     project_id_value = f"{IdentityKind.PROJECT.value}_{args.project_slug}"
     processing_id = f"{IdentityKind.PROCESSING_PROFILE.value}_{args.processing_slug}"
-    chunking_id = f"{IdentityKind.CHUNKING_PROFILE.value}_{args.chunking_slug}"
+    chunking_recipe = _resolve_chunking_recipe(
+        strategy=args.chunking_strategy, slug=args.chunking_slug
+    )
     variant_id_value = f"{IdentityKind.RAG_VARIANT.value}_{args.variant_slug}"
 
     import psycopg2
@@ -224,11 +336,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                     cursor,
                     project_id_value=project_id_value,
                     processing_id=processing_id,
-                    chunking_id=chunking_id,
+                    chunking_recipe=chunking_recipe,
                     args=args,
                 )
                 summary["processing_profile_id"] = processing_id
-                summary["chunking_profile_id"] = chunking_id
+                summary["chunking_profile_id"] = chunking_recipe.chunking_id
 
                 # 3) Variante RAG (receta semántica inmutable).
                 from embedding.infrastructure.postgres.repositories import (
@@ -249,9 +361,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                             variant_slug=args.variant_slug,
                             project_id=args.project_slug,
                             processing_profile_id=args.processing_slug,
-                            chunking_profile_id=args.chunking_slug,
+                            chunking_profile_id=chunking_recipe.effective_slug,
                             embedding_profile_id=args.embedding_profile_id,
                             target_binding_key=_BINDING_KEY,
+                            # El seed materializa la configuración inicial (versión 1);
+                            # el binding se resuelve contra esa versión explícita.
+                            configuration_version=1,
                         ),
                         actor_id=_ACTOR,
                     )

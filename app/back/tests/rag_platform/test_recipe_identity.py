@@ -149,6 +149,7 @@ def _request(**overrides: object) -> CreateRagVariantRequest:
         "chunking_profile_id": "structural-v1",
         "embedding_profile_id": "bge-m3",
         "target_binding_key": "local-bge-primary",
+        "configuration_version": 1,
     }
     base.update(overrides)
     return CreateRagVariantRequest(**base)  # type: ignore[arg-type]

@@ -35,6 +35,7 @@ from rag_platform.domain.models import (
 )
 from rag_platform.infrastructure.in_memory.release_repositories import (
     InMemoryCorpusSnapshotReader,
+    InMemoryCurrentConfigurationVersionReader,
     InMemoryRagReleaseRepository,
     InMemoryRagVariantReader,
 )
@@ -53,7 +54,7 @@ class _StaticBindingResolver:
     def __init__(self, binding: ProjectIndexingTargetBinding | None) -> None:
         self._binding = binding
 
-    def find_binding(self, project_id, binding_key):
+    def find_binding(self, project_id, configuration_version, binding_key):
         if self._binding is not None and self._binding.binding_key == binding_key:
             return self._binding
         return None
@@ -124,6 +125,7 @@ def _use_case(
         snapshots=InMemoryCorpusSnapshotReader((snapshot,)),
         bindings=_StaticBindingResolver(binding),
         releases=releases,
+        configuration_versions=InMemoryCurrentConfigurationVersionReader(),
         release_id_factory=_factory,
         clock=lambda: _NOW,
     )

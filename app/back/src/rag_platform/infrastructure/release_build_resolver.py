@@ -98,15 +98,10 @@ from rag_platform.infrastructure.postgres.vector_repositories import (
     PostgresIndexingMaterializationRepository,
     PostgresSealedEmbeddingBundleRepository,
 )
+from rag_platform.infrastructure.runtime_chunking_profiles import (
+    RuntimeChunkingProfileResolver,
+)
 from rag_platform.infrastructure.storage.project_storage import ProjectStorageResolver
-
-
-_SUPPORTED_CHUNKING_STRATEGIES = {
-    "structural",
-    "local-structural",
-    "local-structural-v1",
-    "local_structural_v1",
-}
 
 
 @dataclass(frozen=True)
@@ -559,12 +554,9 @@ class PostgresRevisionArtifactResolver:
     def _runtime_chunking_profile(self, rag_variant_id) -> RuntimeChunkingProfile:
         variant = self._variants.get(rag_variant_id)
         platform_profile = self._chunking_profiles.get(variant.chunking_profile_id)
-        if platform_profile.strategy not in _SUPPORTED_CHUNKING_STRATEGIES:
-            raise ValueError(
-                "unsupported chunking strategy for production release build: "
-                f"{platform_profile.strategy}"
-            )
-        return RuntimeChunkingProfile.local_structural_v1()
+        # Mapea la receta persistida (v1/v2) a su runtime concreto; nunca colapsa
+        # todo a v1. Una receta desconocida falla cerrado en el resolver.
+        return RuntimeChunkingProfileResolver().resolve(platform_profile)
 
     def _normalized_exists(self, project_id, artifact_relpath: str | None) -> bool:
         if not artifact_relpath:

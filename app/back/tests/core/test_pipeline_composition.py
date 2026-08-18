@@ -70,6 +70,21 @@ def test_flag_on_cablea_plataforma_sin_tocar_retrieval(tmp_path: Path) -> None:
         # El wiring legacy de retrieval no cambia al habilitar la plataforma.
         assert services.retrieval_search is not None
         assert services.indexing_activate is not None
+        # Superficie tipada única de Fase 7 (Task 3 + Task 4) bajo el flag.
+        assert services.rag_platform is not None
+        assert services.rag_platform.list_projects is not None
+        assert services.rag_platform.get_project_configuration is not None
+        assert services.rag_platform.get_variant_matrix is not None
+        assert services.rag_platform.create_variant_from_matrix_cell is not None
+        assert services.rag_platform.list_project_variants is not None
+        assert services.rag_platform.create_corpus_snapshot is not None
+        assert services.rag_platform.create_release_draft is not None
+        assert services.rag_platform.get_release is not None
+        assert services.rag_platform.list_project_releases is not None
+        assert services.rag_platform.build_release is not None
+        assert services.rag_platform.validate_release is not None
+        assert services.rag_platform.publish_release is not None
+        assert services.rag_platform.retire_release is not None
     finally:
         services.close()
 

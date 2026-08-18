@@ -25,6 +25,7 @@ from rag_platform.domain.models import (
     CorpusSnapshot,
     DocumentProcessingProfile,
     NormalizedDocumentArtifact,
+    ProjectConfiguration,
     ProjectIndexingTargetBinding,
     ProjectStorageRoots,
     RagProject,
@@ -62,6 +63,38 @@ class ProjectRepository(Protocol):
     def has_documents(self, project_id: PlatformId) -> bool:
         """Indica si el proyecto ya tiene documentos (``project_id`` inmutable)."""
 
+    def list_all(self) -> tuple[RagProject, ...]:
+        """Devuelve todos los proyectos del catálogo con su configuración vigente."""
+
+    def update_metadata(
+        self, project_id: PlatformId, *, display_name: str
+    ) -> RagProject:
+        """Actualiza los metadatos editables (``display_name``); ``project_id`` es inmutable.
+
+        Raises:
+            ProjectNotFound: Si el proyecto no está registrado.
+        """
+
+
+@runtime_checkable
+class ProjectConfigurationRepository(Protocol):
+    """Lectura y escritura de configuraciones **versionadas** de un proyecto.
+
+    Cada versión es inmutable una vez creada; sus ``target_bindings`` se leen por
+    ``(project_id, configuration_version, binding_key)`` para no colapsar la
+    historia en la versión más reciente (plan Task 3).
+    """
+
+    def get_version(
+        self, project_id: PlatformId, version: int
+    ) -> ProjectConfiguration:
+        """Devuelve la configuración exacta de ``version`` o lanza ``ProjectNotFound``."""
+
+    def create_version(
+        self, project_id: PlatformId, configuration: ProjectConfiguration
+    ) -> ProjectConfiguration:
+        """Persiste una configuración versionada nueva y la devuelve."""
+
 
 @runtime_checkable
 class ProcessingProfileRepository(Protocol):
@@ -70,6 +103,11 @@ class ProcessingProfileRepository(Protocol):
     def get(self, processing_profile_id: PlatformId) -> DocumentProcessingProfile:
         """Devuelve el perfil o lanza ``ProcessingProfileNotFound``."""
 
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[DocumentProcessingProfile, ...]:
+        """Devuelve los perfiles de procesamiento del proyecto (orden estable)."""
+
 
 @runtime_checkable
 class ChunkingProfileRepository(Protocol):
@@ -77,6 +115,11 @@ class ChunkingProfileRepository(Protocol):
 
     def get(self, chunking_profile_id: PlatformId) -> ChunkingProfile:
         """Devuelve el perfil o lanza ``ChunkingProfileNotFound``."""
+
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[ChunkingProfile, ...]:
+        """Devuelve los perfiles de chunking del proyecto (orden estable)."""
 
 
 @runtime_checkable
@@ -91,6 +134,9 @@ class RagVariantRepository(Protocol):
     def add(self, variant: RagVariant) -> RagVariant:
         """Inserta una variante o lanza ``DuplicateVariantRecipe``."""
 
+    def list_for_project(self, project_id: PlatformId) -> tuple[RagVariant, ...]:
+        """Devuelve las variantes del proyecto en orden estable (por id)."""
+
 
 @runtime_checkable
 class StorageRootsProvider(Protocol):
@@ -102,10 +148,19 @@ class StorageRootsProvider(Protocol):
 
 @runtime_checkable
 class TargetBindingResolver(Protocol):
-    """Resuelve y valida allowlist de bindings target por proyecto."""
+    """Resuelve y valida allowlist de bindings target **versionada** por proyecto.
+
+    La lectura es por ``(project_id, configuration_version, binding_key)`` (plan
+    Task 3/4): la BD ya versiona los bindings, así que un binding solo se resuelve
+    contra la versión de configuración exacta que la receta o la release pinnearon.
+    Nunca colapsa la historia en la versión más reciente.
+    """
 
     def find_binding(
-        self, project_id: PlatformId, binding_key: str
+        self,
+        project_id: PlatformId,
+        configuration_version: int,
+        binding_key: str,
     ) -> ProjectIndexingTargetBinding | None:
         """Devuelve el binding permitido o ``None`` si no está en la allowlist."""
 

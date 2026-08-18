@@ -58,6 +58,31 @@ class ProfileProjectMismatch(RagPlatformError):
     http_status = 409
 
 
+class UnsupportedRuntimeChunkingRecipe(RagPlatformError):
+    """La receta de chunking persistida no mapea a un runtime soportado.
+
+    Fail-closed: una estrategia/configuración desconocida —o un fingerprint que no
+    corresponde a su receta canónica— nunca se degrada silenciosamente a v1. El
+    build se detiene con un error observable en vez de indexar con un perfil que
+    no es el que la variante fijó.
+    """
+
+    code = "UNSUPPORTED_RUNTIME_CHUNKING_RECIPE"
+    http_status = 409
+
+
+class ChunkingProfileSeedConflict(RagPlatformError):
+    """El ``chunking_profile_id`` ya existe con una receta distinta a la seedeada.
+
+    Fail-closed: el seeder es idempotente solo para la receta exacta ya persistida
+    (misma estrategia, configuración y fingerprint). Un ``chunking_profile_id`` que
+    apunte a otra receta jamás se sobreescribe ni se ignora en silencio.
+    """
+
+    code = "CHUNKING_PROFILE_SEED_CONFLICT"
+    http_status = 409
+
+
 class IncompatibleTargetBinding(RagPlatformError):
     """El ``target_binding_key`` no es compatible con el perfil de embedding."""
 
@@ -330,3 +355,34 @@ class RagReleaseNotFound(RagPlatformError):
 
     code = "RAG_RELEASE_NOT_FOUND"
     http_status = 404
+
+
+# --------------------------------------------------------------------------- #
+# Fase 7: matriz de variantes                                                 #
+# --------------------------------------------------------------------------- #
+
+
+class InvalidVariantMatrixCell(RagPlatformError):
+    """El ``cell_id`` de la matriz de variantes está malformado.
+
+    Fail-closed: un ``cell_id`` que no respeta el formato
+    ``processing|chunking|embedding|binding|configuration_version`` no se
+    interpreta de forma laxa; se rechaza antes de construir nada.
+    """
+
+    code = "INVALID_VARIANT_MATRIX_CELL"
+    http_status = 422
+
+
+class StaleVariantMatrixCell(RagPlatformError):
+    """La celda de la matriz de variantes ya no refleja la configuración vigente.
+
+    Fail-closed contra TOCTOU: si la configuración del proyecto avanzó entre el
+    ``GET`` de la matriz y el ``POST`` de la variante, la celda pinneada a una
+    versión anterior deja de ser construible y se rechaza; el operador debe
+    releer la matriz vigente. Nunca se re-resuelve la versión "actual" en
+    silencio para forzar el éxito.
+    """
+
+    code = "STALE_VARIANT_MATRIX_CELL"
+    http_status = 409

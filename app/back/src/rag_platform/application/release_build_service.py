@@ -182,8 +182,13 @@ class BuildRagReleaseUseCase:
     ) -> RagBuildContext:
         """Deriva el ``RagBuildContext`` server-side desde la release y su variante."""
 
+        # Deriva el target desde el binding **versionado** pinneado por la release,
+        # nunca desde la configuración vigente: así el build no desvía (drift) si la
+        # configuración avanzó tras crear el DRAFT (plan Task 4).
         binding = self._bindings.find_binding(
-            release.project_id, release.target_binding_key
+            release.project_id,
+            release.configuration_version,
+            release.target_binding_key,
         )
         if binding is None:
             raise IncompatibleTargetBinding(

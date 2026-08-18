@@ -100,7 +100,7 @@ class ValidateRagReleaseUseCase:
             corpus_manifest_hash=snapshot.manifest_hash,
             semantic_recipe_fingerprint=variant.semantic_recipe_fingerprint,
             configuration_fingerprint=self._configuration_fingerprints.configuration_fingerprint(
-                release.project_id
+                release.project_id, release.configuration_version
             ),
             target_binding_key=release.target_binding_key,
             memberships=memberships,

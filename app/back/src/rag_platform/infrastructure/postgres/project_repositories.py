@@ -85,10 +85,26 @@ class PostgresProjectRepository:
         return self._row_to_project(row, configuration)
 
     def has_documents(self, project_id: PlatformId) -> bool:
-        # Fase 1 has no project_documents table yet; the projection lands in
-        # Fase 2. Until then no project owns documents.
-        # ponytail: returns False until 20260810_02 adds project_documents.
-        return False
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT 1 FROM project_documents WHERE project_id = %s LIMIT 1",
+                (project_id.value,),
+            )
+            return cursor.fetchone() is not None
+
+    def current_configuration_version(self, project_id: PlatformId) -> int:
+        """Devuelve la versión de configuración vigente (máxima) del proyecto."""
+
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT max(version) FROM project_configuration_versions"
+                " WHERE project_id = %s",
+                (project_id.value,),
+            )
+            row = cursor.fetchone()
+        if row is None or row[0] is None:
+            raise ProjectNotFound(project_id.value)
+        return int(row[0])
 
     def add(self, project: RagProject) -> RagProject:
         roots = project.storage_roots
@@ -151,10 +167,12 @@ class PostgresProjectRepository:
                 for binding in config.target_bindings:
                     cursor.execute(
                         "INSERT INTO project_indexing_target_bindings"
-                        " (project_id, binding_key, indexing_target_id, embedding_profile_id)"
-                        " VALUES (%s, %s, %s, %s)",
+                        " (project_id, configuration_version, binding_key,"
+                        " indexing_target_id, embedding_profile_id)"
+                        " VALUES (%s, %s, %s, %s, %s)",
                         (
                             project.project_id.value,
+                            config.version,
                             binding.binding_key,
                             binding.indexing_target_id,
                             binding.embedding_profile_id,
@@ -168,22 +186,37 @@ class PostgresProjectRepository:
         return project
 
     def _load_configuration(
-        self, cursor: object, project_id_value: str
+        self, cursor: object, project_id_value: str, version: int | None = None
     ) -> ProjectConfiguration:
-        cursor.execute(
-            "SELECT version, corpus_organization_policy, created_at"
-            " FROM project_configuration_versions"
-            " WHERE project_id = %s ORDER BY version DESC LIMIT 1",
-            (project_id_value,),
-        )
+        """Carga una configuración versionada.
+
+        Con ``version=None`` devuelve la vigente (máxima). Los ``target_bindings``
+        se leen por ``(project_id, configuration_version)`` para no colapsar la
+        historia en la última versión (plan Task 3).
+        """
+
+        if version is None:
+            cursor.execute(
+                "SELECT version, corpus_organization_policy, created_at"
+                " FROM project_configuration_versions"
+                " WHERE project_id = %s ORDER BY version DESC LIMIT 1",
+                (project_id_value,),
+            )
+        else:
+            cursor.execute(
+                "SELECT version, corpus_organization_policy, created_at"
+                " FROM project_configuration_versions"
+                " WHERE project_id = %s AND version = %s",
+                (project_id_value, version),
+            )
         row = cursor.fetchone()
         if row is None:
             raise ProjectNotFound(project_id_value)
-        version, policy, created_at = row[0], row[1], row[2]
+        resolved_version, policy, created_at = row[0], row[1], row[2]
         cursor.execute(
             "SELECT code, display_name, template FROM project_document_types"
             " WHERE project_id = %s AND configuration_version = %s ORDER BY code",
-            (project_id_value, version),
+            (project_id_value, resolved_version),
         )
         document_types = tuple(
             ProjectDocumentType(code=r[0], display_name=r[1], template=r[2])
@@ -193,7 +226,7 @@ class PostgresProjectRepository:
             "SELECT embedding_profile_id, enabled FROM project_embedding_profiles"
             " WHERE project_id = %s AND configuration_version = %s"
             " ORDER BY embedding_profile_id",
-            (project_id_value, version),
+            (project_id_value, resolved_version),
         )
         embedding_profiles = tuple(
             ProjectEmbeddingProfile(embedding_profile_id=r[0], enabled=r[1])
@@ -202,8 +235,9 @@ class PostgresProjectRepository:
         cursor.execute(
             "SELECT binding_key, indexing_target_id, embedding_profile_id"
             " FROM project_indexing_target_bindings"
-            " WHERE project_id = %s ORDER BY binding_key",
-            (project_id_value,),
+            " WHERE project_id = %s AND configuration_version = %s"
+            " ORDER BY binding_key",
+            (project_id_value, resolved_version),
         )
         target_bindings = tuple(
             ProjectIndexingTargetBinding(
@@ -212,13 +246,104 @@ class PostgresProjectRepository:
             for r in cursor.fetchall()
         )
         return ProjectConfiguration(
-            version=version,
+            version=resolved_version,
             document_types=document_types,
             embedding_profiles=embedding_profiles,
             target_bindings=target_bindings,
             corpus_organization_policy=CorpusOrganizationPolicy(policy),
             created_at=created_at,
         )
+
+    def list_all(self) -> tuple[RagProject, ...]:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT project_id, display_name, state, storage_root_raw,"
+                " storage_root_normalized, storage_root_chunks,"
+                " storage_root_embeddings, storage_root_manifests, created_at"
+                " FROM rag_projects ORDER BY project_id"
+            )
+            rows = cursor.fetchall()
+            projects = tuple(
+                self._row_to_project(
+                    row, self._load_configuration(cursor, str(row[0]))
+                )
+                for row in rows
+            )
+        return projects
+
+    def update_metadata(
+        self, project_id: PlatformId, *, display_name: str
+    ) -> RagProject:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE rag_projects SET display_name = %s WHERE project_id = %s",
+                (display_name, project_id.value),
+            )
+            if cursor.rowcount == 0:
+                raise ProjectNotFound(project_id.value)
+        return self.get(project_id)
+
+    def get_version(
+        self, project_id: PlatformId, version: int
+    ) -> ProjectConfiguration:
+        with self._connection.cursor() as cursor:
+            return self._load_configuration(cursor, project_id.value, version)
+
+    def create_version(
+        self, project_id: PlatformId, configuration: ProjectConfiguration
+    ) -> ProjectConfiguration:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO project_configuration_versions"
+                " (project_id, version, corpus_organization_policy, created_at)"
+                " VALUES (%s, %s, %s, %s)",
+                (
+                    project_id.value,
+                    configuration.version,
+                    configuration.corpus_organization_policy.value,
+                    configuration.created_at,
+                ),
+            )
+            for doc_type in configuration.document_types:
+                cursor.execute(
+                    "INSERT INTO project_document_types"
+                    " (project_id, configuration_version, code, display_name, template)"
+                    " VALUES (%s, %s, %s, %s, %s)",
+                    (
+                        project_id.value,
+                        configuration.version,
+                        doc_type.code,
+                        doc_type.display_name,
+                        doc_type.template.value,
+                    ),
+                )
+            for emb in configuration.embedding_profiles:
+                cursor.execute(
+                    "INSERT INTO project_embedding_profiles"
+                    " (project_id, configuration_version, embedding_profile_id, enabled)"
+                    " VALUES (%s, %s, %s, %s)",
+                    (
+                        project_id.value,
+                        configuration.version,
+                        emb.embedding_profile_id,
+                        emb.enabled,
+                    ),
+                )
+            for binding in configuration.target_bindings:
+                cursor.execute(
+                    "INSERT INTO project_indexing_target_bindings"
+                    " (project_id, configuration_version, binding_key,"
+                    " indexing_target_id, embedding_profile_id)"
+                    " VALUES (%s, %s, %s, %s, %s)",
+                    (
+                        project_id.value,
+                        configuration.version,
+                        binding.binding_key,
+                        binding.indexing_target_id,
+                        binding.embedding_profile_id,
+                    ),
+                )
+        return configuration
 
     @staticmethod
     def _row_to_project(
@@ -364,6 +489,18 @@ class PostgresRagVariantRepository:
             raise
         return variant
 
+    def list_for_project(self, project_id: PlatformId) -> tuple[RagVariant, ...]:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT rag_variant_id, project_id, processing_profile_id,"
+                " chunking_profile_id, embedding_profile_id,"
+                " semantic_recipe_fingerprint, state, created_at FROM rag_variants"
+                " WHERE project_id = %s ORDER BY rag_variant_id",
+                (project_id.value,),
+            )
+            rows = cursor.fetchall()
+        return tuple(self._row_to_variant(row) for row in rows)
+
     @staticmethod
     def _row_to_variant(row: Sequence[object]) -> RagVariant:
         return RagVariant(
@@ -385,14 +522,18 @@ class PostgresTargetBindingResolver:
         self._connection = connection
 
     def find_binding(
-        self, project_id: PlatformId, binding_key: str
+        self,
+        project_id: PlatformId,
+        configuration_version: int,
+        binding_key: str,
     ) -> ProjectIndexingTargetBinding | None:
         with self._connection.cursor() as cursor:
             cursor.execute(
                 "SELECT binding_key, indexing_target_id, embedding_profile_id"
                 " FROM project_indexing_target_bindings"
-                " WHERE project_id = %s AND binding_key = %s",
-                (project_id.value, binding_key),
+                " WHERE project_id = %s AND configuration_version = %s"
+                " AND binding_key = %s",
+                (project_id.value, configuration_version, binding_key),
             )
             row = cursor.fetchone()
         if row is None:
@@ -411,9 +552,13 @@ class PostgresProjectConfigurationFingerprintReader:
         self._connection = connection
         self._projects = PostgresProjectRepository(connection)
 
-    def configuration_fingerprint(self, project_id: PlatformId) -> str:
+    def configuration_fingerprint(
+        self, project_id: PlatformId, configuration_version: int
+    ) -> str:
         with self._connection.cursor() as cursor:
-            configuration = self._projects._load_configuration(cursor, project_id.value)
+            configuration = self._projects._load_configuration(
+                cursor, project_id.value, configuration_version
+            )
         return compute_project_configuration_fingerprint(
             version=configuration.version,
             corpus_organization_policy=configuration.corpus_organization_policy,

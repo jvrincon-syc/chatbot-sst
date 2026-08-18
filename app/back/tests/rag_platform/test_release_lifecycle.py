@@ -116,6 +116,7 @@ def _draft_release() -> RagRelease:
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="primary",
+        configuration_version=1,
         release_number=1,
         state=ReleaseState.DRAFT,
         created_by="op-1",

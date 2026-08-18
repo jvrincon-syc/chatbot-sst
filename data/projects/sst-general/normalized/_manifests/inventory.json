@@ -1,6 +1,6 @@
 {
   "corpus_version": "platform-normalized",
-  "generated_at": "2026-08-14T17:59:24.057324-05:00",
+  "generated_at": "2026-08-18T08:31:28.986210-05:00",
   "identity_version": "relpath-posix-v1",
   "pipeline_version": "2.0.0",
   "records": [
@@ -14,7 +14,7 @@
       "document_version": null,
       "file_size": 166454,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -46,7 +46,7 @@
       "document_version": null,
       "file_size": 291504,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -78,7 +78,7 @@
       "document_version": null,
       "file_size": 36949,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -112,7 +112,7 @@
       "document_version": null,
       "file_size": 37029,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -146,7 +146,7 @@
       "document_version": null,
       "file_size": 924,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -178,7 +178,7 @@
       "document_version": null,
       "file_size": 749,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -210,7 +210,7 @@
       "document_version": null,
       "file_size": 636,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -242,7 +242,7 @@
       "document_version": null,
       "file_size": 572,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -274,7 +274,7 @@
       "document_version": null,
       "file_size": 1540,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -306,7 +306,7 @@
       "document_version": null,
       "file_size": 7084,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -338,7 +338,7 @@
       "document_version": null,
       "file_size": 311,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -370,7 +370,7 @@
       "document_version": null,
       "file_size": 419,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -402,7 +402,7 @@
       "document_version": null,
       "file_size": 1707,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -434,7 +434,7 @@
       "document_version": null,
       "file_size": 1629,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -466,7 +466,7 @@
       "document_version": null,
       "file_size": 635,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -498,7 +498,7 @@
       "document_version": null,
       "file_size": 2518,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -530,7 +530,7 @@
       "document_version": null,
       "file_size": 904,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -562,7 +562,7 @@
       "document_version": null,
       "file_size": 215881,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -594,7 +594,7 @@
       "document_version": null,
       "file_size": 5185,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -626,7 +626,7 @@
       "document_version": null,
       "file_size": 2876,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -658,7 +658,7 @@
       "document_version": null,
       "file_size": 3823,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -690,7 +690,7 @@
       "document_version": null,
       "file_size": 1858,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -722,7 +722,7 @@
       "document_version": null,
       "file_size": 599,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -754,7 +754,7 @@
       "document_version": null,
       "file_size": 519,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -786,7 +786,7 @@
       "document_version": null,
       "file_size": 101,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -818,7 +818,7 @@
       "document_version": null,
       "file_size": 1416,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -850,7 +850,7 @@
       "document_version": null,
       "file_size": 664,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -882,7 +882,7 @@
       "document_version": null,
       "file_size": 1072,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -914,7 +914,7 @@
       "document_version": null,
       "file_size": 1454,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -946,7 +946,7 @@
       "document_version": null,
       "file_size": 896195,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -978,7 +978,7 @@
       "document_version": null,
       "file_size": 2237,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1010,7 +1010,7 @@
       "document_version": null,
       "file_size": 1807,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1042,7 +1042,7 @@
       "document_version": null,
       "file_size": 1844,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1074,7 +1074,7 @@
       "document_version": null,
       "file_size": 1932,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1106,7 +1106,7 @@
       "document_version": null,
       "file_size": 1941,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1138,7 +1138,7 @@
       "document_version": null,
       "file_size": 2447,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1170,7 +1170,7 @@
       "document_version": null,
       "file_size": 91231,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -1202,7 +1202,7 @@
       "document_version": null,
       "file_size": 874,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1234,7 +1234,7 @@
       "document_version": null,
       "file_size": 1906,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1266,7 +1266,7 @@
       "document_version": null,
       "file_size": 2326,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1298,7 +1298,7 @@
       "document_version": null,
       "file_size": 3060,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1330,7 +1330,7 @@
       "document_version": null,
       "file_size": 1720,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1362,7 +1362,7 @@
       "document_version": null,
       "file_size": 1394,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1394,7 +1394,7 @@
       "document_version": null,
       "file_size": 1976,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1426,7 +1426,7 @@
       "document_version": null,
       "file_size": 562,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1458,7 +1458,7 @@
       "document_version": null,
       "file_size": 416,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1490,7 +1490,7 @@
       "document_version": null,
       "file_size": 1790,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1522,7 +1522,7 @@
       "document_version": null,
       "file_size": 350,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1554,7 +1554,7 @@
       "document_version": null,
       "file_size": 2199,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1586,7 +1586,7 @@
       "document_version": null,
       "file_size": 995,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1618,7 +1618,7 @@
       "document_version": null,
       "file_size": 735357,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -1650,7 +1650,7 @@
       "document_version": null,
       "file_size": 2700,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1682,7 +1682,7 @@
       "document_version": null,
       "file_size": 69049,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "application/pdf",
       "ocr_confidence": {
@@ -1716,7 +1716,7 @@
       "document_version": null,
       "file_size": 2300,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {
@@ -1748,7 +1748,7 @@
       "document_version": null,
       "file_size": 2297,
       "identity_version": "relpath-posix-v1",
-      "ingestion_date": "2026-08-14T17:58:49.146789-05:00",
+      "ingestion_date": "2026-08-18T08:30:57.994966-05:00",
       "legacy_path": null,
       "mime_type": "text/markdown",
       "ocr_confidence": {

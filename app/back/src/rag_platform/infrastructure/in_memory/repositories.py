@@ -23,7 +23,7 @@ from rag_platform.domain.errors import (
     ProjectNotFound,
     SourceDocumentRevisionNotFound,
 )
-from rag_platform.domain.identity import PlatformId, RagBuildContext
+from rag_platform.domain.identity import IdentityKind, PlatformId, RagBuildContext
 from rag_platform.domain.models import (
     BuildOutcome,
     BuildStage,
@@ -33,6 +33,7 @@ from rag_platform.domain.models import (
     IndexingMaterialization,
     MaterializationStatus,
     NormalizedDocumentArtifact,
+    ProjectConfiguration,
     ProjectIndexingTargetBinding,
     RagBuildStep,
     RagProject,
@@ -47,10 +48,17 @@ from embedding.domain.models import ChunkBundleRef
 
 
 class InMemoryProjectRepository:
-    """Catálogo de proyectos en memoria con ``project_id`` estable."""
+    """Catálogo de proyectos en memoria con ``project_id`` estable.
+
+    Además de ``ProjectRepository`` satisface ``ProjectConfigurationRepository``:
+    guarda las configuraciones **por versión** para que una lectura histórica no
+    colapse en la última. ``get`` devuelve el proyecto con su configuración
+    vigente (versión máxima), de modo que una edición posterior sea visible.
+    """
 
     def __init__(self) -> None:
         self._projects: dict[str, RagProject] = {}
+        self._configurations: dict[str, dict[int, ProjectConfiguration]] = {}
         self._with_documents: set[str] = set()
         self._lock = threading.Lock()
 
@@ -59,16 +67,63 @@ class InMemoryProjectRepository:
 
     def get(self, project_id: PlatformId) -> RagProject:
         try:
-            return self._projects[project_id.value]
+            project = self._projects[project_id.value]
         except KeyError as error:
             raise ProjectNotFound(project_id.value) from error
+        return project.model_copy(
+            update={"configuration": self._current_configuration(project_id.value)}
+        )
 
     def add(self, project: RagProject) -> RagProject:
         with self._lock:
             if project.project_id.value in self._projects:
                 raise ProjectAlreadyExists(project.project_id.value)
             self._projects[project.project_id.value] = project
+            self._configurations[project.project_id.value] = {
+                project.configuration.version: project.configuration
+            }
         return project
+
+    def list_all(self) -> tuple[RagProject, ...]:
+        with self._lock:
+            ids = tuple(self._projects.keys())
+        return tuple(
+            self.get(PlatformId(kind=IdentityKind.PROJECT, value=pid)) for pid in ids
+        )
+
+    def update_metadata(
+        self, project_id: PlatformId, *, display_name: str
+    ) -> RagProject:
+        with self._lock:
+            current = self._projects.get(project_id.value)
+            if current is None:
+                raise ProjectNotFound(project_id.value)
+            updated = current.model_copy(update={"display_name": display_name})
+            self._projects[project_id.value] = updated
+        return self.get(project_id)
+
+    def get_version(
+        self, project_id: PlatformId, version: int
+    ) -> ProjectConfiguration:
+        try:
+            return self._configurations[project_id.value][version]
+        except KeyError as error:
+            raise ProjectNotFound(project_id.value) from error
+
+    def create_version(
+        self, project_id: PlatformId, configuration: ProjectConfiguration
+    ) -> ProjectConfiguration:
+        with self._lock:
+            if project_id.value not in self._projects:
+                raise ProjectNotFound(project_id.value)
+            self._configurations[project_id.value][configuration.version] = (
+                configuration
+            )
+        return configuration
+
+    def _current_configuration(self, project_id_value: str) -> ProjectConfiguration:
+        versions = self._configurations[project_id_value]
+        return versions[max(versions)]
 
     def has_documents(self, project_id: PlatformId) -> bool:
         return project_id.value in self._with_documents
@@ -94,6 +149,15 @@ class InMemoryProcessingProfileRepository:
         except KeyError as error:
             raise ProcessingProfileNotFound(processing_profile_id.value) from error
 
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[DocumentProcessingProfile, ...]:
+        return tuple(
+            profile
+            for _, profile in sorted(self._profiles.items())
+            if profile.project_id == project_id
+        )
+
 
 class InMemoryChunkingProfileRepository:
     """Perfiles de chunking en memoria."""
@@ -109,6 +173,15 @@ class InMemoryChunkingProfileRepository:
             return self._profiles[chunking_profile_id.value]
         except KeyError as error:
             raise ChunkingProfileNotFound(chunking_profile_id.value) from error
+
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[ChunkingProfile, ...]:
+        return tuple(
+            profile
+            for _, profile in sorted(self._profiles.items())
+            if profile.project_id == project_id
+        )
 
 
 class InMemoryRagVariantRepository:
@@ -140,20 +213,49 @@ class InMemoryRagVariantRepository:
             self._variants[variant.rag_variant_id.value] = variant
         return variant
 
+    def list_for_project(self, project_id: PlatformId) -> tuple[RagVariant, ...]:
+        return tuple(
+            variant
+            for _, variant in sorted(self._variants.items())
+            if variant.project_id == project_id
+        )
+
 
 class InMemoryTargetBindingResolver:
-    """Allowlist de bindings target en memoria."""
+    """Allowlist de bindings target **versionada** en memoria.
 
-    def __init__(self, bindings: tuple[ProjectIndexingTargetBinding, ...] = ()) -> None:
-        # Clave: (project_id.value, binding_key). El proyecto se pasa al resolver.
-        self._by_key: dict[str, ProjectIndexingTargetBinding] = {
-            b.binding_key: b for b in bindings
-        }
+    Espeja el esquema versionado ``PK(project_id, configuration_version,
+    binding_key)``: la clave incluye la versión, de modo que dos versiones de
+    configuración pueden mapear el mismo ``binding_key`` a targets distintos sin
+    colapsar la historia. Por compatibilidad con los tests existentes, los
+    bindings pasados al constructor se registran bajo ``configuration_version``
+    (por defecto 1).
+    """
+
+    def __init__(
+        self,
+        bindings: tuple[ProjectIndexingTargetBinding, ...] = (),
+        *,
+        configuration_version: int = 1,
+    ) -> None:
+        self._by_key: dict[tuple[int, str], ProjectIndexingTargetBinding] = {}
+        for binding in bindings:
+            self._by_key[(configuration_version, binding.binding_key)] = binding
+
+    def add_binding(
+        self, *, configuration_version: int, binding: ProjectIndexingTargetBinding
+    ) -> None:
+        """Registra un binding bajo una versión de configuración (helper de test)."""
+
+        self._by_key[(configuration_version, binding.binding_key)] = binding
 
     def find_binding(
-        self, project_id: PlatformId, binding_key: str
+        self,
+        project_id: PlatformId,
+        configuration_version: int,
+        binding_key: str,
     ) -> ProjectIndexingTargetBinding | None:
-        return self._by_key.get(binding_key)
+        return self._by_key.get((configuration_version, binding_key))
 
 
 class AllowAllAccessPolicy:

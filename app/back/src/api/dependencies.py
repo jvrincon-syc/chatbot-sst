@@ -162,6 +162,9 @@ class PipelineServices:
     rag_platform_rebuild: object | None = None
     rag_platform_draft: object | None = None
     rag_platform_validate: object | None = None
+    # Task 3: superficie tipada de proyectos/configuración (``RagPlatformServices``).
+    # Task 4 la extenderá con variantes/releases; ``None`` deja el legacy intacto.
+    rag_platform: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -392,7 +395,185 @@ def build_pipeline_services(
         # DRAFT y VALIDATE se cablean aquí para completar la superficie tras el flag.
         services.rag_platform_draft = _build_rag_platform_draft(connection=connection)
         services.rag_platform_validate = _build_rag_platform_validate(connection=connection)
+        # Task 3: superficie tipada de proyectos/configuración para Fase 7.
+        services.rag_platform = _build_rag_platform_services(
+            connection=connection,
+            data_root=_platform_data_root(chunks_root),
+            transactions=transactions,
+        )
     return services
+
+
+def _build_rag_platform_services(
+    *, connection: object | None, data_root: Path, transactions: object
+) -> object:
+    """Cablea la superficie tipada única de plataforma para Fase 7 (Task 3 + Task 4).
+
+    Un mismo repositorio de proyectos satisface ``ProjectRepository`` y
+    ``ProjectConfigurationRepository`` (lectura version-aware por versión). Sin
+    conexión usa adaptadores in-memory; con conexión, Postgres. Variantes,
+    snapshots y releases se cablean sobre el **mismo** ``RagPlatformServices``, no
+    una segunda superficie.
+
+    ponytail: los casos de uso de draft/validate/build/publish se reusan de los
+    builders ya existentes. Con conexión comparten el ``connection`` (coherentes);
+    sin conexión (dry-run/test) cada builder crea sus propios repos in-memory, lo
+    que basta para el smoke de composición.
+    """
+
+    from rag_platform.application.corpus_snapshot_service import (
+        CreateCorpusSnapshotUseCase,
+    )
+    from rag_platform.application.project_configuration_service import (
+        CreateProjectConfigurationVersionUseCase,
+        GetProjectConfigurationUseCase,
+        GetProjectConfigurationVersionUseCase,
+    )
+    from rag_platform.application.project_query_service import (
+        GetProjectUseCase,
+        ListChunkingProfilesUseCase,
+        ListProcessingProfilesUseCase,
+        ListProjectsUseCase,
+        UpdateProjectMetadataUseCase,
+    )
+    from rag_platform.application.project_service import CreateProjectUseCase
+    from rag_platform.application.recipe_service import CreateRagVariantUseCase
+    from rag_platform.application.release_query_service import (
+        GetReleaseUseCase,
+        ListProjectReleasesUseCase,
+    )
+    from rag_platform.application.release_retirement_service import (
+        RetireRagReleaseUseCase,
+    )
+    from rag_platform.application.services import RagPlatformServices
+    from rag_platform.application.variant_matrix_service import (
+        CreateRagVariantFromMatrixCellUseCase,
+        GetVariantMatrixUseCase,
+    )
+    from rag_platform.application.variant_query_service import (
+        ListProjectVariantsUseCase,
+    )
+    from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
+    from rag_platform.infrastructure.storage.project_storage import (
+        ProjectStorageResolver,
+    )
+
+    access_policy = AllowAllAccessPolicy()
+    storage_roots = ProjectStorageResolver(data_root)
+
+    if connection is None:
+        from embedding.infrastructure.in_memory.repositories import (
+            InMemoryEmbeddingProfileRepository,
+        )
+        from rag_platform.infrastructure.in_memory.repositories import (
+            InMemoryChunkingProfileRepository,
+            InMemoryCorpusSnapshotRepository,
+            InMemoryProcessingProfileRepository,
+            InMemoryProjectRepository,
+            InMemoryRagVariantRepository,
+            InMemorySourceDocumentRepository,
+            InMemoryTargetBindingResolver,
+        )
+        from rag_platform.infrastructure.in_memory.release_repositories import (
+            InMemoryRagReleaseRepository,
+        )
+
+        projects: object = InMemoryProjectRepository()
+        processing: object = InMemoryProcessingProfileRepository()
+        chunking: object = InMemoryChunkingProfileRepository()
+        variants: object = InMemoryRagVariantRepository()
+        releases: object = InMemoryRagReleaseRepository()
+        snapshots: object = InMemoryCorpusSnapshotRepository()
+        documents: object = InMemorySourceDocumentRepository()
+        embedding_profiles: object = InMemoryEmbeddingProfileRepository()
+        bindings: object = InMemoryTargetBindingResolver()
+    else:
+        from embedding.infrastructure.postgres.repositories import (
+            PostgresEmbeddingProfileRepository,
+        )
+        from rag_platform.infrastructure.postgres.document_repositories import (
+            PostgresCorpusSnapshotRepository,
+            PostgresSourceDocumentRepository,
+        )
+        from rag_platform.infrastructure.postgres.project_repositories import (
+            PostgresChunkingProfileRepository,
+            PostgresProcessingProfileRepository,
+            PostgresProjectRepository,
+            PostgresRagVariantRepository,
+            PostgresTargetBindingResolver,
+        )
+        from rag_platform.infrastructure.postgres.release_repositories import (
+            PostgresRagReleaseRepository,
+        )
+
+        projects = PostgresProjectRepository(connection)
+        processing = PostgresProcessingProfileRepository(connection)
+        chunking = PostgresChunkingProfileRepository(connection)
+        variants = PostgresRagVariantRepository(connection)
+        releases = PostgresRagReleaseRepository(connection)
+        snapshots = PostgresCorpusSnapshotRepository(connection)
+        documents = PostgresSourceDocumentRepository(connection)
+        embedding_profiles = PostgresEmbeddingProfileRepository(connection)
+        bindings = PostgresTargetBindingResolver(connection)
+
+    variant_matrix = GetVariantMatrixUseCase(
+        projects=projects,
+        processing_profiles=processing,
+        chunking_profiles=chunking,
+    )
+    create_variant = CreateRagVariantUseCase(
+        variants=variants,
+        processing_profiles=processing,
+        chunking_profiles=chunking,
+        embedding_profiles=embedding_profiles,
+        target_bindings=bindings,
+        access_policy=access_policy,
+    )
+
+    return RagPlatformServices(
+        create_project=CreateProjectUseCase(
+            projects=projects, storage_roots=storage_roots, access_policy=access_policy
+        ),
+        get_project=GetProjectUseCase(projects=projects),
+        list_projects=ListProjectsUseCase(projects=projects),
+        update_project_metadata=UpdateProjectMetadataUseCase(
+            projects=projects, access_policy=access_policy
+        ),
+        get_project_configuration=GetProjectConfigurationUseCase(projects=projects),
+        get_project_configuration_version=GetProjectConfigurationVersionUseCase(
+            configurations=projects
+        ),
+        create_project_configuration_version=CreateProjectConfigurationVersionUseCase(
+            projects=projects, configurations=projects, access_policy=access_policy
+        ),
+        list_processing_profiles=ListProcessingProfilesUseCase(
+            processing_profiles=processing
+        ),
+        list_chunking_profiles=ListChunkingProfilesUseCase(chunking_profiles=chunking),
+        get_variant_matrix=variant_matrix,
+        create_variant_from_matrix_cell=CreateRagVariantFromMatrixCellUseCase(
+            matrix=variant_matrix, create_variant=create_variant
+        ),
+        list_project_variants=ListProjectVariantsUseCase(variants=variants),
+        create_corpus_snapshot=CreateCorpusSnapshotUseCase(
+            snapshots=snapshots, documents=documents, access_policy=access_policy
+        ),
+        create_release_draft=_build_rag_platform_draft(connection=connection),
+        get_release=GetReleaseUseCase(releases=releases),
+        list_project_releases=ListProjectReleasesUseCase(releases=releases),
+        build_release=_build_rag_platform_build(
+            connection=connection, data_root=data_root
+        ),
+        validate_release=_build_rag_platform_validate(connection=connection),
+        publish_release=_build_rag_platform_publish(
+            connection=connection, transactions=transactions
+        ),
+        retire_release=RetireRagReleaseUseCase(
+            releases=releases,
+            access_policy=access_policy,
+            logger=get_logger("rag_platform.release_retire"),
+        ),
+    )
 
 
 def _build_rag_platform_draft(*, connection: object | None) -> object:
@@ -416,6 +597,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
     if connection is None:
         from rag_platform.infrastructure.in_memory.release_repositories import (
             InMemoryCorpusSnapshotReader,
+            InMemoryCurrentConfigurationVersionReader,
             InMemoryRagReleaseRepository,
             InMemoryRagVariantReader,
         )
@@ -428,6 +610,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
             snapshots=InMemoryCorpusSnapshotReader(()),
             bindings=InMemoryTargetBindingResolver(()),
             releases=InMemoryRagReleaseRepository(),
+            configuration_versions=InMemoryCurrentConfigurationVersionReader(),
             release_id_factory=_release_id_factory,
             logger=get_logger("rag_platform.release_draft"),
         )
@@ -436,6 +619,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
         PostgresCorpusSnapshotRepository,
     )
     from rag_platform.infrastructure.postgres.project_repositories import (
+        PostgresProjectRepository,
         PostgresRagVariantRepository,
         PostgresTargetBindingResolver,
     )
@@ -448,6 +632,8 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
         snapshots=PostgresCorpusSnapshotRepository(connection),
         bindings=PostgresTargetBindingResolver(connection),
         releases=PostgresRagReleaseRepository(connection),
+        # ``PostgresProjectRepository`` satisface el reader de versión vigente.
+        configuration_versions=PostgresProjectRepository(connection),
         release_id_factory=_release_id_factory,
         logger=get_logger("rag_platform.release_draft"),
     )

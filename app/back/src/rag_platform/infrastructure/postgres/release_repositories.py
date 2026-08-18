@@ -23,6 +23,7 @@ _RELEASE_COLUMNS = (
     "rag_variant_id",
     "corpus_snapshot_id",
     "target_binding_key",
+    "configuration_version",
     "release_number",
     "state",
     "release_manifest_hash",
@@ -48,15 +49,16 @@ class PostgresRagReleaseRepository:
             cursor.execute(
                 "INSERT INTO rag_releases ("
                 " rag_release_id, project_id, rag_variant_id, corpus_snapshot_id,"
-                " target_binding_key, release_number, state, release_manifest_hash,"
-                " created_by, created_at, validated_at, reason)"
-                " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                " target_binding_key, configuration_version, release_number, state,"
+                " release_manifest_hash, created_by, created_at, validated_at, reason)"
+                " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                 (
                     release.rag_release_id.value,
                     release.project_id.value,
                     release.rag_variant_id.value,
                     release.corpus_snapshot_id.value,
                     release.target_binding_key,
+                    release.configuration_version,
                     release.release_number,
                     release.state.value,
                     release.release_manifest_hash,
@@ -79,6 +81,16 @@ class PostgresRagReleaseRepository:
         if row is None:
             raise RagReleaseNotFound(rag_release_id.value)
         return _row_to_release(row)
+
+    def list_for_project(self, project_id: PlatformId) -> list[RagRelease]:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"SELECT {', '.join(_RELEASE_COLUMNS)} FROM rag_releases"
+                " WHERE project_id = %s ORDER BY rag_release_id",
+                (project_id.value,),
+            )
+            rows = cursor.fetchall()
+        return [_row_to_release(row) for row in rows]
 
     def list_release_numbers(self, rag_variant_id: PlatformId) -> list[int]:
         with self._connection.cursor() as cursor:
@@ -167,13 +179,14 @@ def _row_to_release(row) -> RagRelease:
         rag_variant_id=_pid(IdentityKind.RAG_VARIANT, str(row[2])),
         corpus_snapshot_id=_pid(IdentityKind.CORPUS_SNAPSHOT, str(row[3])),
         target_binding_key=str(row[4]),
-        release_number=int(row[5]),
-        state=ReleaseState(str(row[6])),
-        release_manifest_hash=row[7],
-        created_by=str(row[8]),
-        created_at=row[9],
-        validated_at=row[10],
-        reason=row[11],
+        configuration_version=int(row[5]),
+        release_number=int(row[6]),
+        state=ReleaseState(str(row[7])),
+        release_manifest_hash=row[8],
+        created_by=str(row[9]),
+        created_at=row[10],
+        validated_at=row[11],
+        reason=row[12],
     )
 
 

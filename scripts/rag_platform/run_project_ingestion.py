@@ -28,7 +28,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Callable, Sequence
+from typing import Sequence
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_REPO_ROOT / "app" / "back" / "src"))
@@ -36,10 +36,12 @@ sys.path.insert(0, str(_REPO_ROOT / "scripts" / "indexing"))
 
 from prepare_postgres_indexing import build_dsn_from_env, load_env_file  # noqa: E402
 
-from ingestion.application.platform_metadata import PlatformMetadataContext  # noqa: E402
+from ingestion.application.platform_metadata import (  # noqa: E402
+    PlatformContextResolutionError,
+    resolve_platform_contexts_or_raise,
+)
 from ingestion.inventory.scanner import scan_docs_raw  # noqa: E402
 from ingestion.paths import canonical_relpath  # noqa: E402
-from ingestion.schemas.inventory import InventoryRecord  # noqa: E402
 from rag_platform.application.document_revision_service import (  # noqa: E402
     CreateSourceDocumentRevisionUseCase,
 )
@@ -55,7 +57,6 @@ from rag_platform.domain.errors import (  # noqa: E402
 from rag_platform.domain.identity import (  # noqa: E402
     IdentityKind,
     PlatformId,
-    normalized_document_id,
 )
 from rag_platform.domain.models import SourceDocumentRevision  # noqa: E402
 from rag_platform.infrastructure.in_memory.repositories import (  # noqa: E402
@@ -136,56 +137,17 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _build_platform_context_resolver(
-    *,
-    project_id: str,
-    revisions_by_relpath: dict[str, SourceDocumentRevision],
-    processing_profile_id: str,
-    processing_profile_fingerprint: str,
-    rag_variant_id: str | None,
-    semantic_recipe_fingerprint: str | None,
-) -> Callable[[InventoryRecord], PlatformMetadataContext | None]:
-    """Devuelve el resolver ``(InventoryRecord) -> PlatformMetadataContext | None``.
+def _connect(dsn: str) -> object:
+    """Abre una conexión PostgreSQL desde un DSN (costura para pruebas).
 
-    Mapea cada documento del escaneo a la revisión que la etapa raw registró (por
-    ``source_relpath`` canónico) y compone su contexto de plataforma. Un documento
-    sin revisión (no debería ocurrir tras la etapa raw) devuelve ``None``: el
-    pipeline lo normaliza sin identidad de plataforma en vez de abortar.
-
-    Args:
-        project_id: Identidad del proyecto (``proj_...``), dueña de la identidad.
-        revisions_by_relpath: Revisiones registradas indexadas por ruta canónica.
-        processing_profile_id: Perfil de procesamiento resuelto (autoridad de la
-            receta física).
-        processing_profile_fingerprint: Fingerprint de ese perfil.
-        rag_variant_id: Variante de origen (provenance nullable).
-        semantic_recipe_fingerprint: Receta semántica de la variante (provenance).
-
-    Returns:
-        Un callable puro apto para ``run_pipeline(platform_context_resolver=...)``.
+    Aísla el único punto que toca el driver real para que las pruebas del wrapper
+    puedan inyectar una conexión falsa sin infraestructura viva.
     """
 
-    def _resolve(record: InventoryRecord) -> PlatformMetadataContext | None:
-        revision = revisions_by_relpath.get(canonical_relpath(record.source_relpath))
-        if revision is None:
-            return None
-        revision_id = revision.source_document_revision_id.value
-        return PlatformMetadataContext(
-            project_id=project_id,
-            source_document_id=revision.logical_document_id.value,
-            source_document_revision_id=revision_id,
-            processing_profile_id=processing_profile_id,
-            processing_profile_fingerprint=processing_profile_fingerprint,
-            normalized_document_id=normalized_document_id(
-                project_id=project_id,
-                source_document_revision_id=revision_id,
-                processing_profile_fingerprint=processing_profile_fingerprint,
-            ),
-            rag_variant_id=rag_variant_id,
-            semantic_recipe_fingerprint=semantic_recipe_fingerprint,
-        )
+    import psycopg2
+    from psycopg2.extensions import parse_dsn
 
-    return _resolve
+    return psycopg2.connect(**parse_dsn(dsn))
 
 
 def _build_use_case(connection: object) -> RegisterProjectRawArtifactUseCase:
@@ -241,6 +203,23 @@ def _resolve_normalize_context(
     return profile_id, profile.fingerprint, variant_id, recipe_fp
 
 
+def _select_records(records: Sequence[object], only_source: Sequence[str] | None) -> list[object]:
+    """Acota los registros a ``--only-source`` con ``source_relpath`` canónico.
+
+    El preflight y ``run_pipeline`` deben ver la misma selección; sin
+    ``--only-source`` no filtra nada.
+    """
+
+    if not only_source:
+        return list(records)
+    wanted = {canonical_relpath(source) for source in only_source}
+    return [
+        record
+        for record in records
+        if canonical_relpath(record.source_relpath) in wanted  # type: ignore[attr-defined]
+    ]
+
+
 def _emit(payload: dict[str, object], *, as_json: bool) -> None:
     print(json.dumps(payload, indent=None if as_json else 2, ensure_ascii=False))
 
@@ -257,15 +236,12 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     project_pid = PlatformId(kind=IdentityKind.PROJECT, value=args.project_id)
 
-    import psycopg2
-    from psycopg2.extensions import parse_dsn
-
     storage = ProjectStorageResolver(Path(args.data_dir))
     # Plan de normalize resuelto server-side (raíz + resolver puro); se ejecuta
     # fuera de la conexión porque run_pipeline es filesystem + LlamaSettings, no BD.
     normalize_plan: dict[str, object] | None = None
 
-    connection = psycopg2.connect(**parse_dsn(dsn))
+    connection = _connect(dsn)
     try:
         projects = PostgresProjectRepository(connection)
         try:
@@ -319,15 +295,37 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
                 return 2
             profile_id, fingerprint, variant_id, recipe_fp = resolved
-            normalize_plan = {
-                "normalized_root": storage.resolve_declared_root(project, "normalized"),
-                "resolver": _build_platform_context_resolver(
-                    project_id=args.project_id,
+            # Preflight fail-closed: resuelve la identidad de plataforma de TODOS los
+            # documentos seleccionados ANTES de leer/escribir/promover ninguno. Un
+            # documento seleccionado sin revisión aborta el normalize completo con
+            # `platform_identity_incomplete` y cero sidecars.
+            selected_records = _select_records(records, args.only_source)
+            try:
+                resolved_contexts = resolve_platform_contexts_or_raise(
+                    records=selected_records,
                     revisions_by_relpath=revisions_by_relpath,
+                    project_id=args.project_id,
                     processing_profile_id=profile_id,
                     processing_profile_fingerprint=fingerprint,
                     rag_variant_id=variant_id,
                     semantic_recipe_fingerprint=recipe_fp,
+                )
+            except PlatformContextResolutionError as exc:
+                _emit(
+                    {
+                        "status": "blocked",
+                        "reason": "platform_identity_incomplete",
+                        "detail": str(exc),
+                    },
+                    as_json=args.json,
+                )
+                return 2
+            normalize_plan = {
+                "normalized_root": storage.resolve_declared_root(project, "normalized"),
+                "resolver": (
+                    lambda record: resolved_contexts[
+                        canonical_relpath(record.source_relpath)
+                    ]
                 ),
                 "rag_variant_id": variant_id,
             }
