@@ -71,6 +71,11 @@ export function DashboardApp() {
   const isChunkingView = preferences.activeView === "chunking";
   const isStandaloneWorkspaceView =
     preferences.activeView === "chunking" || preferences.activeView === "embedding-indexing";
+  const activeViewSubtitle = isChunkingView
+    ? "Legacy pipeline actual - Inspeccion de corridas parent-child y evidencia de chunks"
+    : `Legacy pipeline actual - Schema ${status?.summary.schemaVersion ?? "2.0"} - ${
+        status?.summary.runId ?? "sin run"
+      }`;
 
   const loadStatus = async () => {
     setLoading(true);
@@ -328,11 +333,7 @@ export function DashboardApp() {
         <header className="topbar">
           <div>
             <h1>{viewTitles[preferences.activeView]}</h1>
-            <p>
-              {isChunkingView
-                ? "Inspeccion de corridas parent-child y evidencia de chunks"
-                : `Schema ${status?.summary.schemaVersion ?? "2.0"} · ${status?.summary.runId ?? "sin run"}`}
-            </p>
+            <p>{activeViewSubtitle}</p>
           </div>
           <div className="topbar-actions">
             <div className="view-switcher" aria-label="Cambiar vista">

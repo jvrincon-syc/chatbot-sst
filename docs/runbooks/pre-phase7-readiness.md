@@ -369,3 +369,28 @@ quirúrgico. La BD quedó **sin seed de plataforma** (proj_sst-general se re-sie
 con `seed_project.py` cuando se necesite).
 
 # GATE 0: PASS
+
+---
+
+## Addendum Task 6 (2026-08-18)
+
+- Script canÃ³nico del health checker pre-Fase 7:
+  `scripts/rag_platform/check_pre_phase7_health.py`
+- Comando del operador:
+
+```powershell
+npm run python -- scripts/rag_platform/check_pre_phase7_health.py --json
+```
+
+- CategorÃ­as reportadas por el checker:
+  - `ownership`
+  - `orphans`
+  - `releases`
+  - `runs`
+  - `materializations`
+  - `vectors`
+  - `project_mismatches`
+- Contrato operativo:
+  - es **read-only**;
+  - devuelve `status="blocked"` si alguna categorÃ­a tiene hallazgos;
+  - no repara, no backfillea, no elimina y no muta filas.

@@ -5,6 +5,19 @@ Contrato **real implementado**. OpenAPI completo: `docs/api/pipeline-openapi.jso
 
 Todos los cuerpos JSON son `snake_case`.
 
+## Frontera legacy antes de Fase 8
+
+Este handoff describe la **superficie frontend legacy bundle-first** que existe hoy.
+La GUI actual de dashboard, incluido el workspace de Embedding/Indexing/Activation/Retrieval,
+debe presentarse explícitamente como `Legacy pipeline`; no es todavía la futura UI
+de plataforma.
+
+`app/front/src/features/platform/platformApi.ts`,
+`app/front/src/features/platform/platformTypes.ts` y cualquier contrato frontend
+para `/api/platform/*` quedan **diferidos a Fase 8**, después de que exista un
+OpenAPI real exportado para esa superficie. Antes de eso, la persistencia del
+dashboard sigue siendo solo del workspace legacy actual.
+
 ---
 
 ## 1. Envelope de error (idéntico a Chunking)

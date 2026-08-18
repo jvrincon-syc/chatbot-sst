@@ -1,12 +1,23 @@
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
+from typing import Protocol
 
+from indexing.domain.bundle_first import IndexingTarget
 from indexing.domain.profiles import ResolvedIndexingProfile
+from indexing.infrastructure.llama_index.pgvector_store import VectorStoreWriteError
+from psycopg2 import sql
 
 
 class ProfileNotFoundError(LookupError):
     """Raised when an indexing profile is missing from the registry."""
+
+
+class IndexingTargetReader(Protocol):
+    """Minimal read port over the durable indexing target catalog."""
+
+    def get(self, indexing_target_id: str) -> IndexingTarget:
+        """Return one target or fail closed."""
 
 
 class InMemoryProfileRegistry:
@@ -49,6 +60,22 @@ class PostgresProfileRegistry:
         if row is None:
             raise ProfileNotFoundError(f"indexing profile not found: {profile_id}")
         return _profile_from_row(row)
+
+
+def safe_vector_table_identifier(
+    *,
+    profile_id: str,
+    indexing_target_id: str,
+    registry: "PostgresProfileRegistry | InMemoryProfileRegistry",
+    targets: IndexingTargetReader,
+) -> sql.Identifier:
+    """Return the trusted physical vector table identifier for bundle-first writes."""
+
+    profile = registry.get(profile_id)
+    target = targets.get(indexing_target_id)
+    if target.vector_table != profile.vector_table:
+        raise VectorStoreWriteError("indexing target/catalog table mismatch")
+    return sql.Identifier(target.postgres_schema, target.vector_table)
 
 
 def _profile_from_row(row: Mapping[str, object] | tuple[object, ...]) -> ResolvedIndexingProfile:

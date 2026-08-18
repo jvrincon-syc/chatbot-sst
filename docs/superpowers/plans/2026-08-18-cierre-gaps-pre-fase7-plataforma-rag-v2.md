@@ -203,7 +203,71 @@ Registrados para arreglar como paso previo/paralelo a Task 5. No bloquean los ve
   `rebuild_platform` en `app/back/src/rag_platform/application/services.py:87` para contener toda la lane
   administrativa bajo un solo root tipado.
 
-**Task 5-7:** pendientes.
+**Task 5 â€” COMPLETA (13 passed, verificado por el operador 2026-08-18):**
+- [x] Step 1 (tests escritos): `app/back/tests/indexing/test_run_indexing_cli.py` ahora cubre
+  bloqueo temprano por ownership `PLATFORM` real desde sidecar, sidecar faltante y sidecar
+  corrupto; los casos PostgreSQL legacy preexistentes reciben sidecar legacy vÃ¡lido para seguir
+  cubriendo guards de provider/API key.
+- [x] Step 3 (impl): `scripts/indexing/run_indexing.py` clasifica ownership desde
+  `MetadataArtifact` (`PLATFORM | LEGACY | UNVERIFIABLE`) y bloquea la lane
+  `store="postgres"` antes de `_postgres_indexing_components(...)`, emitiendo
+  `legacy_postgres_document_lane_blocked` o `document_ownership_unverifiable` y
+  `replacement_command` hacia `scripts/rag_platform/rebuild_platform.py`.
+- [x] Evidencia lateral: `app/back/tests/indexing/test_platform_dual_mode.py` documenta que la
+  ruta bundle-first pura sigue siendo la lane soportada, y `docs/backend/gaps-and-debt.md`
+  registra que el riesgo correctness de escritura insegura por el CLI legacy quedÃ³ mitigado.
+- [x] Step 4: handoff del operador verificado en verde (**13 passed**) para
+  `app/back/tests/indexing/test_run_indexing_cli.py` +
+  `app/back/tests/indexing/test_platform_dual_mode.py`.
+- [ ] Step 2: no ejecutado en esta corrida; el flujo fue implementaciÃ³n directa y verificaciÃ³n
+  final del operador, sin snapshot intermedio del fallo esperado previo al fix.
+
+**Task 6 â€” COMPLETA (17 passed, verificado por el operador 2026-08-18):**
+- [x] Step 1 (tests escritos): nuevos `test_vector_repository_sql_safety.py`,
+  `test_pre_phase7_health.py` y `test_rag_platform_migrations.py`; `test_sql.py`
+  congelado a `sql.Composed` + tabla calificada/no-calificaciÃ³n de Ã­ndices.
+  Ajuste de compatibilidad en `test_vector_repository_contract.py` para el nuevo
+  lookup de catÃ¡logo previo a las escrituras bundle-first.
+- [x] Step 3 (impl): `vector_repository.py` compone identificadores dinÃ¡micos con
+  `psycopg2.sql.Identifier`; lane legacy usa `sql.Identifier(profile.vector_table)`
+  y lane bundle-first usa `safe_vector_table_identifier(...)` desde
+  `profile_registry.py`, validando `profile.vector_table == target.vector_table`
+  antes de DML. `sql.py::create_vector_table_sql(profile, target)` ahora devuelve
+  `sql.Composed` con tabla calificada por `indexing_targets` e Ã­ndices no
+  calificados. Se crea el checker read-only
+  `scripts/rag_platform/check_pre_phase7_health.py`.
+- [x] Evidencia lateral: `docs/runbooks/pre-phase7-readiness.md` registra el
+  comando/categorÃ­as del health checker pre-Fase 7.
+- [x] Step 4: handoff del operador verificado en verde (**17 passed**) para
+  `app/back/tests/indexing/infrastructure/postgres/test_vector_repository_sql_safety.py`,
+  `app/back/tests/indexing/infrastructure/postgres/test_sql.py`,
+  `app/back/tests/rag_platform/test_pre_phase7_health.py` y
+  `app/back/tests/rag_platform/test_rag_platform_migrations.py`. El ajuste final
+  que cerrÃ³ el rojo intermedio quedÃ³ en
+  `app/back/src/indexing/infrastructure/postgres/sql.py` al renderizar la
+  dimensiÃ³n del vector sin `sql.Literal(...)`.
+- [ ] Step 2: no ejecutado en esta corrida; el flujo fue implementaciÃ³n directa y verificaciÃ³n
+  final del operador, sin snapshot intermedio del fallo esperado previo al fix.
+
+**Task 7 â€” COMPLETA (frontend tests + build + gates finales, verificado por el operador 2026-08-18):**
+- [x] Step 1 (tests escritos): `app/front/src/dashboardLegacyBoundary.test.mjs` congela el
+  etiquetado `Legacy pipeline` para toda la navegaciÃ³n legacy; `app/front/src/dashboardPersistence.test.mjs`
+  verifica que el payload persistido siga siendo legacy-only y no incorpore
+  `selectedProjectId`, `selectedRagVariantId` ni `selectedRagReleaseId`.
+- [x] Step 3 (impl): `app/front/src/features/dashboard/dashboardTypes.ts` etiqueta todas las
+  vistas actuales como `Legacy pipeline`; `app/front/src/features/dashboard/DashboardApp.tsx`
+  refuerza la frontera visible en el subtÃ­tulo; `app/front/src/features/dashboard/dashboardPersistence.ts`
+  expone `writePayloadForTest()` y mantiene la persistencia acotada a
+  `activeView`, `selectedDocumentIds` y `embeddingIndexing`.
+- [x] Evidencia lateral: `app/front/package.json` incluye el nuevo test en `npm --prefix app/front run test`;
+  `docs/api/BUNDLE_FIRST_FRONTEND_HANDOFF.md`, `docs/backend/gaps-and-debt.md` y
+  `docs/superpowers/plans/Plan_Ajustado_Plataforma_RAG_MultiProyecto(3).md` dejan explÃ­cita la
+  deferencia de `platformApi.ts`/`platformTypes.ts` y de cualquier contrato frontend
+  para `/api/platform/*` hasta Fase 8.
+- [x] Step 4: handoff del operador verificado en verde para `npm --prefix app/front run test`,
+  y ademÃ¡s `npm --prefix app/front run build` quedÃ³ verde dentro de los `Final Verification Gates`.
+- [ ] Step 2: no ejecutado en esta corrida; el flujo fue implementaciÃ³n directa y verificaciÃ³n
+  final del operador, sin snapshot intermedio del fallo esperado previo al fix.
 
 ---
 
@@ -241,7 +305,7 @@ Produces:
 - `resolve_platform_contexts_or_raise(records: Sequence[InventoryRecord], ...) -> dict[str, PlatformMetadataContext]`;
 - CLI blocked reason `platform_identity_incomplete`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 def test_preflight_fails_when_a_selected_record_has_no_revision() -> None:
@@ -292,7 +356,7 @@ Expected: FAIL because missing revisions still return `None`, the pipeline still
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 ```python
 class PlatformContextResolutionError(RuntimeError):
@@ -339,7 +403,7 @@ except PlatformContextResolutionError as exc:
 
 The preflight must occur before reading, writing, or promotion of any selected normalized document.
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -424,7 +488,7 @@ Produces:
 - fail-closed error `UnsupportedRuntimeChunkingRecipe`;
 - fail-closed seed error `ChunkingProfileSeedConflict`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 def test_resolve_runtime_chunking_profile_v2() -> None:
@@ -542,7 +606,7 @@ Expected: FAIL because release build currently returns `RuntimeChunkingProfile.l
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 Canonical runtime resolver:
 
@@ -652,7 +716,7 @@ def _runtime_chunking_profile(
     return RuntimeChunkingProfileResolver().resolve(platform_profile)
 ```
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -663,6 +727,16 @@ npm run python -- -m pytest app/back/tests/rag_platform/test_release_build_resol
 Expected: PASS. v2 is persisted under a distinct immutable `chunking_profile_id`; the seed path derives `cp_structural-v2` when v2 is selected without an explicit slug; the seed path is idempotent only for the exact same recipe; the fingerprint matches the persisted recipe; unknown recipes no longer degrade to v1.
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
+
+Operator evidence (2026-08-18): PASS. `npm --prefix app/front run test` quedÃ³ verde con los
+checks nuevos de frontera legacy en `app/front/src/dashboardLegacyBoundary.test.mjs` y el guard de
+persistencia legacy-only en `app/front/src/dashboardPersistence.test.mjs`. La implementaciÃ³n
+verificada estÃ¡ en `app/front/src/features/dashboard/dashboardTypes.ts`,
+`app/front/src/features/dashboard/DashboardApp.tsx`,
+`app/front/src/features/dashboard/dashboardPersistence.ts`,
+`docs/api/BUNDLE_FIRST_FRONTEND_HANDOFF.md`,
+`docs/backend/gaps-and-debt.md` y
+`docs/superpowers/plans/Plan_Ajustado_Plataforma_RAG_MultiProyecto(3).md`.
 
 ---
 
@@ -734,7 +808,7 @@ Produces:
 - `ListChunkingProfilesUseCase`;
 - version-aware target-binding reads by `(project_id, configuration_version, binding_key)`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 def test_postgres_has_documents_queries_project_documents(
@@ -781,7 +855,7 @@ Expected: FAIL because `has_documents()` is hardcoded to `False`; list/update/co
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 ```python
 @dataclass(frozen=True)
@@ -906,7 +980,7 @@ def find_binding(
     ...
 ```
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -981,7 +1055,7 @@ Produces:
 - `RagRelease.configuration_version`;
 - `TrustedPlatformActorProvider`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 def test_variant_matrix_returns_stable_buildable_and_blocked_reason() -> None:
@@ -1134,7 +1208,7 @@ Expected: FAIL because variant list/matrix services do not exist; variant creati
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 Final form of the single platform application container:
 
@@ -1377,7 +1451,7 @@ class RetireRagReleaseUseCase:
         return retired
 ```
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -1415,7 +1489,7 @@ Produces:
 - blocked reason `document_ownership_unverifiable` for `UNVERIFIABLE`;
 - replacement command pointing to `scripts/rag_platform/rebuild_platform.py`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 def test_run_indexing_blocks_legacy_postgres_lane_from_real_normalized_output(
@@ -1511,7 +1585,7 @@ Expected: FAIL because the legacy CLI still proceeds into the PostgreSQL documen
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 ```python
 class Ownership(enum.Enum):
@@ -1590,7 +1664,7 @@ if store == "postgres":
 
 `PLATFORM` dominates classification. Otherwise, any unverified selected record makes the set `UNVERIFIABLE`.
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -1601,6 +1675,8 @@ npm run python -- -m pytest app/back/tests/indexing/test_run_indexing_cli.py app
 Expected: PASS. Memory/test flows remain allowed; PostgreSQL blocking uses the actual ownership signal from normalized metadata sidecars; missing/invalid ownership blocks with `document_ownership_unverifiable` instead of entering the legacy PostgreSQL lane.
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
+
+Operator evidence (2026-08-18): PASS, **13 passed**. The verified implementation is in `scripts/indexing/run_indexing.py`, `app/back/tests/indexing/test_run_indexing_cli.py`, `app/back/tests/indexing/test_platform_dual_mode.py`, and `docs/backend/gaps-and-debt.md`.
 
 ---
 
@@ -1643,7 +1719,7 @@ Produces:
 
 > `docs/runbooks/pre-phase7-readiness.md` was created by Gate 0. Task 6 only updates its health-check section.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Test the real legacy repository path, not a test-only query builder:
 
@@ -1727,7 +1803,7 @@ Expected: FAIL because table names are still directly interpolated across DELETE
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 Change the DDL helper contract:
 
@@ -1859,7 +1935,7 @@ The migration tests must cover both:
 - clean-schema upgrade;
 - "live-ish" seeded data from before `_01/_02/_03`, including target bindings and releases.
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -1870,6 +1946,8 @@ npm run python -- -m pytest app/back/tests/indexing/infrastructure/postgres/test
 Expected: PASS. Dynamic DML/DDL identifiers are composed from trusted catalog/profile authority; `create_vector_table_sql()` is frozen as `sql.Composed` with target-authoritative qualified tables and non-qualified index names; one health checker exists for pre-Phase 7 readiness; migration tests cover both clean schema and previous data.
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
+
+Operator evidence (2026-08-18): PASS, **17 passed**. The verified implementation is in `app/back/src/indexing/infrastructure/postgres/profile_registry.py` (`safe_vector_table_identifier`), `app/back/src/indexing/infrastructure/postgres/sql.py` (`create_vector_table_sql` returning `sql.Composed`), `app/back/src/indexing/infrastructure/postgres/vector_repository.py` (Identifier-based DML in both lanes), `scripts/rag_platform/check_pre_phase7_health.py` (read-only checker), and `docs/runbooks/pre-phase7-readiness.md` (health-check handoff/runbook).
 
 ---
 
@@ -1900,7 +1978,7 @@ Produces:
 - legacy-only storage semantics;
 - explicit documentation that `platformApi.ts` and `platformTypes.ts` begin in Phase 8, not before.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```javascript
 test("dashboard labels the current surface as legacy pipeline", () => {
@@ -1942,7 +2020,7 @@ Expected: FAIL because the UI still presents the current dashboard as the defaul
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
 
-- [ ] **Step 3: Write the minimal implementation**
+- [x] **Step 3: Write the minimal implementation**
 
 ```ts
 export const viewTitles: Record<AppView, string> = {
@@ -1966,7 +2044,7 @@ Documentation:
 
 Do not add platform-selection fields to current dashboard persistence during this task.
 
-- [ ] **Step 4: Operator verification handoff — confirm the tests pass**
+- [x] **Step 4: Operator verification handoff — confirm the tests pass**
 
 Command:
 
@@ -1977,6 +2055,16 @@ npm --prefix app/front run test
 Expected: PASS. The current UI remains behaviorally legacy but no longer presents itself as the future platform surface.
 
 **The agent MUST NOT execute this command. Stop and ask the operator to run it and paste the output.**
+
+Operator evidence (2026-08-18): PASS. `npm --prefix app/front run test` quedÃ³ verde con los
+checks nuevos de frontera legacy en `app/front/src/dashboardLegacyBoundary.test.mjs` y el guard de
+persistencia legacy-only en `app/front/src/dashboardPersistence.test.mjs`. La implementaciÃ³n
+verificada estÃ¡ en `app/front/src/features/dashboard/dashboardTypes.ts`,
+`app/front/src/features/dashboard/DashboardApp.tsx`,
+`app/front/src/features/dashboard/dashboardPersistence.ts`,
+`docs/api/BUNDLE_FIRST_FRONTEND_HANDOFF.md`,
+`docs/backend/gaps-and-debt.md` y
+`docs/superpowers/plans/Plan_Ajustado_Plataforma_RAG_MultiProyecto(3).md`.
 
 ---
 
@@ -2005,6 +2093,39 @@ npm --prefix app/front run test
 
 npm --prefix app/front run build
 ```
+
+Operator evidence (2026-08-18): PASS. **Todos** los comandos anteriores quedaron verdes en la
+validaciÃ³n final del operador, incluyendo:
+
+- las cinco corridas backend de pytest de Tasks 1â€“6;
+- `npm run python -- scripts/rag_platform/check_pre_phase7_health.py --json`;
+- `npm run python -- -m pip check`;
+- `npm --prefix app/front run test`;
+- `npm --prefix app/front run build`.
+
+La evidencia de implementaciÃ³n que sustenta esos gates queda registrada en:
+
+- `app/back/src/ingestion/application/platform_metadata.py`,
+  `app/back/src/ingestion/pipeline.py`,
+  `scripts/rag_platform/run_project_ingestion.py`;
+- `app/back/src/rag_platform/infrastructure/runtime_chunking_profiles.py`,
+  `app/back/src/rag_platform/domain/models.py`,
+  `app/back/src/rag_platform/application/release_build_resolver.py`;
+- `app/back/src/rag_platform/application/services.py`,
+  `app/back/src/api/dependencies.py`,
+  `migrations/20260818_01_version_project_target_bindings.sql`,
+  `migrations/20260818_02_pin_release_configuration_version.sql`,
+  `migrations/20260818_03_enforce_release_configuration_pin.sql`;
+- `app/back/src/indexing/infrastructure/postgres/profile_registry.py`,
+  `app/back/src/indexing/infrastructure/postgres/sql.py`,
+  `app/back/src/indexing/infrastructure/postgres/vector_repository.py`,
+  `scripts/rag_platform/check_pre_phase7_health.py`,
+  `docs/runbooks/pre-phase7-readiness.md`;
+- `app/front/src/features/dashboard/dashboardTypes.ts`,
+  `app/front/src/features/dashboard/DashboardApp.tsx`,
+  `app/front/src/features/dashboard/dashboardPersistence.ts`,
+  `app/front/src/dashboardLegacyBoundary.test.mjs`,
+  `app/front/src/dashboardPersistence.test.mjs`.
 
 ## Risks and Mitigations
 

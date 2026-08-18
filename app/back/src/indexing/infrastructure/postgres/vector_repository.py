@@ -1,13 +1,19 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from collections.abc import Sequence
 
 from llama_index.core.schema import BaseNode
 
+from embedding.infrastructure.postgres.repositories import PostgresIndexingTargetRepository
 from indexing.domain.profiles import ResolvedIndexingProfile
 from indexing.infrastructure.llama_index.pgvector_store import VectorStoreWriteError
+from indexing.infrastructure.postgres.profile_registry import (
+    PostgresProfileRegistry,
+    safe_vector_table_identifier,
+)
+from psycopg2 import sql
 
 
 class InMemoryVectorRepository:
@@ -73,6 +79,8 @@ class PostgresVectorRepository:
 
     def __init__(self, connection: object) -> None:
         self._connection = connection
+        self._profiles = PostgresProfileRegistry(connection)
+        self._targets = PostgresIndexingTargetRepository(connection)
 
     def replace_document_vectors(
         self,
@@ -85,21 +93,26 @@ class PostgresVectorRepository:
         """Replace vectors inside the selected profile table."""
 
         _validate_embeddings(profile=profile, nodes=nodes, embeddings=embeddings)
-        table = profile.vector_table
+        table_identifier = sql.Identifier(profile.vector_table)
         with self._connection.cursor() as cursor:
-            cursor.execute(f"DELETE FROM {table} WHERE document_id = %s", (document_id,))
+            cursor.execute(
+                sql.SQL("DELETE FROM {} WHERE document_id = %s").format(table_identifier),
+                (document_id,),
+            )
             deleted = cursor.rowcount
             for node, embedding in zip(nodes, embeddings):
                 cursor.execute(
-                    f"""
-                    INSERT INTO {table} (node_id, document_id, embedding, metadata)
+                    sql.SQL(
+                        """
+                    INSERT INTO {} (node_id, document_id, embedding, metadata)
                     VALUES (%s, %s, %s, %s::jsonb)
                     ON CONFLICT (node_id) WHERE embedding_bundle_id IS NULL DO UPDATE SET
                         document_id = EXCLUDED.document_id,
                         embedding = EXCLUDED.embedding,
                         metadata = EXCLUDED.metadata,
                         updated_at = now()
-                    """,
+                    """
+                    ).format(table_identifier),
                     (
                         node.id_,
                         document_id,
@@ -126,12 +139,18 @@ class PostgresVectorRepository:
                     "embedding dimension does not match selected profile"
                 )
 
-        table = profile.vector_table
+        table_identifier = safe_vector_table_identifier(
+            profile_id=profile.profile_id,
+            indexing_target_id=indexing_target_id,
+            registry=self._profiles,
+            targets=self._targets,
+        )
         with self._connection.cursor() as cursor:
             for record in records:
                 cursor.execute(
-                    f"""
-                    INSERT INTO {table} (
+                    sql.SQL(
+                        """
+                    INSERT INTO {} (
                         node_id, project_id, document_id, embedding, metadata,
                         embedding_bundle_id, embedding_profile_id,
                         indexing_target_id, corpus_version, is_active,
@@ -151,7 +170,8 @@ class PostgresVectorRepository:
                         configuration_fingerprint = EXCLUDED.configuration_fingerprint,
                         vector_checksum = EXCLUDED.vector_checksum,
                         updated_at = now()
-                    """,
+                    """
+                    ).format(table_identifier),
                     (
                         record.node_id,
                         record.project_id,
@@ -179,11 +199,17 @@ class PostgresVectorRepository:
     ) -> None:
         """Activate one bundle and supersede prior active rows of the same documents."""
 
-        table = profile.vector_table
+        table_identifier = safe_vector_table_identifier(
+            profile_id=profile.profile_id,
+            indexing_target_id=indexing_target_id,
+            registry=self._profiles,
+            targets=self._targets,
+        )
         with self._connection.cursor() as cursor:
             cursor.execute(
-                f"""
-                UPDATE {table}
+                sql.SQL(
+                    """
+                UPDATE {}
                    SET is_active = false,
                        superseded_at = now()
                  WHERE embedding_profile_id = %s
@@ -191,7 +217,7 @@ class PostgresVectorRepository:
                    AND corpus_version = %s
                    AND document_id IN (
                        SELECT DISTINCT document_id
-                         FROM {table}
+                         FROM {}
                         WHERE embedding_profile_id = %s
                           AND indexing_target_id = %s
                           AND corpus_version = %s
@@ -199,7 +225,8 @@ class PostgresVectorRepository:
                    )
                    AND embedding_bundle_id <> %s
                    AND is_active = true
-                """,
+                """
+                ).format(table_identifier, table_identifier),
                 (
                     profile.profile_id,
                     indexing_target_id,
@@ -212,15 +239,17 @@ class PostgresVectorRepository:
                 ),
             )
             cursor.execute(
-                f"""
-                UPDATE {table}
+                sql.SQL(
+                    """
+                UPDATE {}
                    SET is_active = true,
                        superseded_at = NULL
                  WHERE embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
-                """,
+                """
+                ).format(table_identifier),
                 (
                     profile.profile_id,
                     indexing_target_id,
@@ -239,17 +268,24 @@ class PostgresVectorRepository:
     ) -> int:
         """Count active vector rows of one bundle inside one lane."""
 
-        table = profile.vector_table
+        table_identifier = safe_vector_table_identifier(
+            profile_id=profile.profile_id,
+            indexing_target_id=indexing_target_id,
+            registry=self._profiles,
+            targets=self._targets,
+        )
         with self._connection.cursor() as cursor:
             cursor.execute(
-                f"""
-                SELECT count(*) FROM {table}
+                sql.SQL(
+                    """
+                SELECT count(*) FROM {}
                  WHERE embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
                    AND is_active = true
-                """,
+                """
+                ).format(table_identifier),
                 (
                     profile.profile_id,
                     indexing_target_id,
@@ -260,7 +296,7 @@ class PostgresVectorRepository:
             row = cursor.fetchone()
         if row is None:
             return 0
-        return int(row["count"] if isinstance(row, dict) else row[0])
+        return int(row["count"] if isinstance(row, Mapping) else row[0])
 
     def rollback_to_bundle(
         self,
@@ -273,18 +309,25 @@ class PostgresVectorRepository:
     ) -> None:
         """Deactivate the current bundle and reactivate a previous validated bundle."""
 
-        table = profile.vector_table
+        table_identifier = safe_vector_table_identifier(
+            profile_id=profile.profile_id,
+            indexing_target_id=indexing_target_id,
+            registry=self._profiles,
+            targets=self._targets,
+        )
         with self._connection.cursor() as cursor:
             cursor.execute(
-                f"""
-                UPDATE {table}
+                sql.SQL(
+                    """
+                UPDATE {}
                    SET is_active = false,
                        superseded_at = now()
                  WHERE embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
-                """,
+                """
+                ).format(table_identifier),
                 (
                     profile.profile_id,
                     indexing_target_id,
@@ -293,15 +336,17 @@ class PostgresVectorRepository:
                 ),
             )
             cursor.execute(
-                f"""
-                UPDATE {table}
+                sql.SQL(
+                    """
+                UPDATE {}
                    SET is_active = true,
                        superseded_at = NULL
                  WHERE embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
-                """,
+                """
+                ).format(table_identifier),
                 (
                     profile.profile_id,
                     indexing_target_id,

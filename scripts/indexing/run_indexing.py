@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import enum
 import json
 import logging
 import os
 import sys
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
@@ -25,6 +26,7 @@ from core.logging.observability import (  # noqa: E402
     measure_duration_ms,
 )
 from ingestion.paths import ArtifactPaths, stable_document_id
+from ingestion.schemas.artifacts import MetadataArtifact
 from ingestion.gui.review_store import load_review_decisions
 from indexing.application.eligibility import IndexingEligibilityService
 from indexing.application.use_cases.index_document import IndexDocumentUseCase
@@ -38,6 +40,7 @@ from indexing.infrastructure.llama_index.pipeline_factory import (
     LlamaIndexingPort,
 )
 from indexing.infrastructure.postgres.settings import PostgresIndexingSettings
+from pydantic import ValidationError
 
 
 logger = logging.getLogger(__name__)
@@ -71,6 +74,19 @@ class PostgresConnection(Protocol):
 
     def close(self) -> None:
         """Close the connection."""
+
+
+class Ownership(enum.Enum):
+    PLATFORM = "platform"
+    LEGACY = "legacy"
+    UNVERIFIABLE = "unverifiable"
+
+
+@dataclass(frozen=True)
+class OwnershipClassification:
+    ownership: Ownership
+    project_id: str | None = None
+    rag_variant_id: str | None = None
 
 
 def _emit_indexing_event(
@@ -315,6 +331,67 @@ def run_indexing(
     indexer_kwargs: dict[str, object] = {}
     connection: PostgresConnection | None = None
     if store == "postgres":
+        ownership = _classify_documents_ownership(
+            normalized_root=normalized_root,
+            records=approved,
+        )
+        if ownership.ownership is Ownership.PLATFORM:
+            summary = {
+                "status": "blocked",
+                "reason": "legacy_postgres_document_lane_blocked",
+                "profile": profile_id,
+                "store": store,
+                "ingestion_origin": ingestion_origin,
+                "replacement_command": _rebuild_platform_command(ownership),
+            }
+            _emit_indexing_event(
+                event="indexing_profile_rejected",
+                status=EventStatus.BLOCKED,
+                message="Indexing blocked: platform-owned documents must use the platform rebuild lane",
+                profile_id=profile_id,
+                capability="index",
+                attributes={
+                    "store": store,
+                    "reason": summary["reason"],
+                    "ingestion_origin": ingestion_origin,
+                },
+            )
+            logger.warning(
+                "indexing blocked: reason=%s profile=%s store=%s ownership=%s",
+                summary["reason"],
+                profile_id,
+                store,
+                ownership.ownership.value,
+            )
+            return summary
+        if ownership.ownership is Ownership.UNVERIFIABLE:
+            summary = {
+                "status": "blocked",
+                "reason": "document_ownership_unverifiable",
+                "profile": profile_id,
+                "store": store,
+                "ingestion_origin": ingestion_origin,
+            }
+            _emit_indexing_event(
+                event="indexing_profile_rejected",
+                status=EventStatus.BLOCKED,
+                message="Indexing blocked: document ownership could not be verified",
+                profile_id=profile_id,
+                capability="index",
+                attributes={
+                    "store": store,
+                    "reason": summary["reason"],
+                    "ingestion_origin": ingestion_origin,
+                },
+            )
+            logger.warning(
+                "indexing blocked: reason=%s profile=%s store=%s ownership=%s",
+                summary["reason"],
+                profile_id,
+                store,
+                ownership.ownership.value,
+            )
+            return summary
         postgres_indexing = _postgres_indexing_components(
             settings=settings,
             profile_id=profile_id,
@@ -433,6 +510,56 @@ def run_indexing(
         summary["indexed_child_nodes"],
     )
     return summary
+
+
+def _classify_documents_ownership(
+    *,
+    normalized_root: Path,
+    records: Sequence[dict[str, object]],
+) -> OwnershipClassification:
+    """Classify selected documents before entering the legacy PostgreSQL lane."""
+
+    saw_unverifiable = False
+    for record in records:
+        try:
+            source_relpath = str(record.get("source_relpath") or "")
+            metadata_relpath = ArtifactPaths.for_source(source_relpath).metadata
+            metadata_path = normalized_root / Path(metadata_relpath)
+            if not metadata_path.exists():
+                saw_unverifiable = True
+                continue
+            metadata = MetadataArtifact.model_validate_json(
+                metadata_path.read_text(encoding="utf-8")
+            )
+        except (OSError, ValidationError, ValueError):
+            saw_unverifiable = True
+            continue
+
+        identity = metadata.platform_identity
+        if identity is not None and identity.project_id:
+            provenance = metadata.platform_provenance
+            return OwnershipClassification(
+                ownership=Ownership.PLATFORM,
+                project_id=identity.project_id,
+                rag_variant_id=(
+                    provenance.rag_variant_id
+                    if provenance is not None
+                    else None
+                ),
+            )
+
+    if saw_unverifiable:
+        return OwnershipClassification(ownership=Ownership.UNVERIFIABLE)
+    return OwnershipClassification(ownership=Ownership.LEGACY)
+
+
+def _rebuild_platform_command(ownership: OwnershipClassification) -> str:
+    project_id = ownership.project_id or "<proj_...>"
+    rag_variant_id = ownership.rag_variant_id or "<ragv_...>"
+    return (
+        "npm run python -- scripts/rag_platform/rebuild_platform.py "
+        f"--project-id {project_id} --rag-variant-id {rag_variant_id}"
+    )
 
 
 def _review_decision_map(normalized_root: Path) -> dict[str, object]:

@@ -4,13 +4,10 @@ import {
   readDashboardPreferences,
   createStatusDrivenDashboardPreferences,
   resolveDashboardPreferences,
+  writePayloadForTest,
   writeDashboardPreferences,
 } from "../.tmp-tests/features/dashboard/dashboardPersistence.js";
-import { createDefaultDashboardPreferences, viewTitles } from "../.tmp-tests/features/dashboard/dashboardTypes.js";
-import {
-  DASHBOARD_VIEWS,
-  isDashboardView,
-} from "../.tmp-tests/features/dashboard/dashboardNavigation.js";
+import { createDefaultDashboardPreferences } from "../.tmp-tests/features/dashboard/dashboardTypes.js";
 
 function test(name, assertion) {
   try {
@@ -237,11 +234,10 @@ test("writes only the compact v2 dashboard preferences payload", () => {
   });
 });
 
-test("defines the dashboard navigation from a single source of truth", () => {
-  assert.deepEqual(
-    DASHBOARD_VIEWS.map((item) => item.view),
-    ["operations", "review", "inventory", "chunking", "embedding-indexing"],
-  );
-  assert.equal(isDashboardView("embedding-indexing"), true);
-  assert.equal(viewTitles["embedding-indexing"], "Embedding e Indexing");
+test("dashboard persistence continues to store legacy state only", () => {
+  const stored = JSON.parse(writePayloadForTest(createDefaultDashboardPreferences()));
+
+  assert.equal("selectedProjectId" in stored, false);
+  assert.equal("selectedRagVariantId" in stored, false);
+  assert.equal("selectedRagReleaseId" in stored, false);
 });

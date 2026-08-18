@@ -959,6 +959,13 @@ POST   /api/platform/releases/{rag_release_id}/retire
 
 ### Fase 8: GUI de plataforma integrada con la UI actual
 
+> **Nota de frontera (2026-08-18):** `app/front/src/features/platform/platformApi.ts`,
+> `app/front/src/features/platform/platformTypes.ts` y cualquier contrato frontend
+> para `/api/platform/*` **empiezan aquí, no antes**. Hasta que Fase 8 exista sobre
+> un OpenAPI real de plataforma, el dashboard actual permanece etiquetado como
+> **Legacy pipeline** y su persistencia local no debe crecer prematuramente con
+> `selectedProjectId`, `selectedRagVariantId` ni `selectedRagReleaseId`.
+
 **Files:**
 
 - Create: `app/front/src/features/platform/platformApi.ts`

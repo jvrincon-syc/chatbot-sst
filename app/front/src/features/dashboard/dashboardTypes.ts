@@ -186,11 +186,11 @@ export const statusLabels: Record<DisplayStatus, string> = {
 };
 
 export const viewTitles: Record<AppView, string> = {
-  operations: "Operacion de ingesta",
-  review: "Revision documental",
-  inventory: "Inventario documental",
-  chunking: "Chunking local",
-  "embedding-indexing": "Embedding e Indexing",
+  operations: "Legacy pipeline - Operacion de ingesta",
+  review: "Legacy pipeline - Revision documental",
+  inventory: "Legacy pipeline - Inventario documental",
+  chunking: "Legacy pipeline - Chunking local",
+  "embedding-indexing": "Legacy pipeline - Embedding e Indexing",
 };
 
 export function createDefaultDashboardPreferences(): DashboardPreferences {

@@ -125,6 +125,14 @@ actual.
     (`unsupported_live_embedding_provider`, `voyage_api_key_missing`),
     preparación de infraestructura PostgreSQL y loop de negocio con
     `LlamaIndexingPort` conviven en el mismo entrypoint.
+  - El cierre pre-Fase 7 ya mitigÃ³ la arista mÃ¡s riesgosa de esa mezcla:
+    cuando `store="postgres"` el CLI clasifica ownership desde los sidecars
+    `*.metadata.json` y bloquea en modo `fail-closed` los normalizados de
+    plataforma (`legacy_postgres_document_lane_blocked`) o cualquier selecciÃ³n
+    con ownership no verificable (`document_ownership_unverifiable`) **antes**
+    de abrir la conexiÃ³n PostgreSQL. La deuda visible aquÃ­ sigue siendo de
+    concentraciÃ³n/composiciÃ³n, no de permitir escrituras inseguras por esa
+    lane.
   - Riesgo operativo: si la lógica de elegibilidad, perfil o persistencia cambia
     en la API bundle-first y no se extrae a un servicio compartido, este CLI
     puede derivar en drift funcional respecto al camino HTTP.
@@ -172,6 +180,12 @@ actual.
 - no existe todavía una capa final de respuesta/chat SST documentada y
   versionada por encima de `retrieval`; el repo llega hasta evidencia
   recuperable, perfiles y readiness.
+- la GUI vigente de dashboard para `chunking`, `embedding`, `indexing`,
+  `activation` y `retrieval` sigue siendo una superficie **legacy bundle-first**:
+  antes de Fase 8 no existen `app/front/src/features/platform/platformApi.ts`,
+  `app/front/src/features/platform/platformTypes.ts` ni un contrato frontend
+  canónico para `/api/platform/*`. La UI debe etiquetarse como `Legacy pipeline`
+  y la persistencia local debe seguir limitada al estado del dashboard actual.
 - Redis aparece como configuración disponible, pero no como superficie backend
   principal comparable a PostgreSQL o filesystem en la ruta versionada actual.
 - la unificación completa entre GUI heredada y API bundle-first todavía no está

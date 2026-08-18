@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+"""Pure-platform bundle-first indexing remains the supported lane.
+
+Task 5 quarantines platform-owned normalized documents from the legacy
+`scripts/indexing/run_indexing.py --store postgres` lane. These tests keep the
+bundle-first project-owned path explicit and independent from that legacy CLI.
+"""
+
 from pathlib import Path
 
 from indexing.application.bundle_first.activation import ActivationRequest

@@ -13,6 +13,14 @@ import type {
 const LEGACY_STORAGE_KEY = "chatbot-sst.dashboard.preferences.v1";
 const STORAGE_KEY = "chatbot-sst.dashboard.preferences.v2";
 
+function serializeDashboardPreferences(value: DashboardPreferences): string {
+  return JSON.stringify({
+    activeView: value.activeView,
+    selectedDocumentIds: value.selectedDocumentIds,
+    embeddingIndexing: value.embeddingIndexing,
+  });
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -146,15 +154,12 @@ function parseStoredDashboardPreferences(raw: string): DashboardPreferences | nu
 }
 
 function persistDashboardPreferences(value: DashboardPreferences): void {
-  window.localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({
-      activeView: value.activeView,
-      selectedDocumentIds: value.selectedDocumentIds,
-      embeddingIndexing: value.embeddingIndexing,
-    }),
-  );
+  window.localStorage.setItem(STORAGE_KEY, serializeDashboardPreferences(value));
   window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+}
+
+export function writePayloadForTest(value: DashboardPreferences): string {
+  return serializeDashboardPreferences(value);
 }
 
 export function readDashboardPreferences(): DashboardPreferences | null {

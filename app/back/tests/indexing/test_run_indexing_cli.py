@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from types import SimpleNamespace
+
+import pytest
 
 from chunking.domain.enums import ZeroOverlapReason
 from chunking.domain.models import (
@@ -11,11 +14,15 @@ from chunking.domain.models import (
     ParentChunk,
     SourceSpan,
 )
+from ingestion.paths import ArtifactPaths
 from indexing.domain.models import IndexableDocument
 from indexing.domain.profiles import ResolvedIndexingProfile
 from indexing.infrastructure.llama_index.pipeline_factory import LoadedChunkBundle
 from scripts.indexing.run_indexing import finalize_postgres_connection
 from scripts.indexing.run_indexing import run_indexing
+
+_PROCESSING_PROFILE_FINGERPRINT = "c" * 64
+_SEMANTIC_RECIPE_FINGERPRINT = "d" * 64
 
 
 class StaticBundleLoader:
@@ -197,6 +204,89 @@ def test_run_indexing_blocks_postgres_without_dsn(tmp_path) -> None:
     assert result["reason"] == "postgres_dsn_missing"
 
 
+def test_run_indexing_blocks_postgres_for_platform_owned_normalized_output(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _write_inventory(tmp_path, provider="platform", platform_owned=True)
+    monkeypatch.setattr(
+        "scripts.indexing.run_indexing._postgres_indexing_components",
+        lambda **kwargs: pytest.fail("Task 5 must block before opening PostgreSQL"),
+    )
+
+    result = run_indexing(
+        normalized_root=tmp_path,
+        only_sources=[],
+        force=False,
+        profile_id="local-bge-m3-v1",
+        dry_run=False,
+        store="postgres",
+        ingestion_origin="local",
+        persist_confirmed=True,
+        environ={"SST_POSTGRES_DSN": "postgresql://user:secret@localhost/sst"},
+    )
+
+    assert result["status"] == "blocked"
+    assert result["reason"] == "legacy_postgres_document_lane_blocked"
+    assert (
+        result["replacement_command"]
+        == "npm run python -- scripts/rag_platform/rebuild_platform.py "
+        "--project-id proj_demo --rag-variant-id ragv_demo"
+    )
+
+
+def test_run_indexing_blocks_postgres_when_metadata_sidecar_is_missing(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _write_inventory(tmp_path, provider="missing", write_metadata_sidecar=False)
+    monkeypatch.setattr(
+        "scripts.indexing.run_indexing._postgres_indexing_components",
+        lambda **kwargs: pytest.fail("Task 5 must block before opening PostgreSQL"),
+    )
+
+    result = run_indexing(
+        normalized_root=tmp_path,
+        only_sources=[],
+        force=False,
+        profile_id="local-bge-m3-v1",
+        dry_run=False,
+        store="postgres",
+        ingestion_origin="local",
+        persist_confirmed=True,
+        environ={"SST_POSTGRES_DSN": "postgresql://user:secret@localhost/sst"},
+    )
+
+    assert result["status"] == "blocked"
+    assert result["reason"] == "document_ownership_unverifiable"
+
+
+def test_run_indexing_blocks_postgres_when_metadata_sidecar_is_invalid(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    _write_inventory(tmp_path, provider="invalid", corrupt_metadata_sidecar=True)
+    monkeypatch.setattr(
+        "scripts.indexing.run_indexing._postgres_indexing_components",
+        lambda **kwargs: pytest.fail("Task 5 must block before opening PostgreSQL"),
+    )
+
+    result = run_indexing(
+        normalized_root=tmp_path,
+        only_sources=[],
+        force=False,
+        profile_id="local-bge-m3-v1",
+        dry_run=False,
+        store="postgres",
+        ingestion_origin="local",
+        persist_confirmed=True,
+        environ={"SST_POSTGRES_DSN": "postgresql://user:secret@localhost/sst"},
+    )
+
+    assert result["status"] == "blocked"
+    assert result["reason"] == "document_ownership_unverifiable"
+
+
 def test_run_indexing_blocks_postgres_for_unsupported_live_provider(
     tmp_path,
     monkeypatch,
@@ -301,7 +391,14 @@ class RecordingConnection:
         self.calls.append("close")
 
 
-def _write_inventory(tmp_path, *, provider: str) -> None:
+def _write_inventory(
+    tmp_path,
+    *,
+    provider: str,
+    write_metadata_sidecar: bool = True,
+    platform_owned: bool = False,
+    corrupt_metadata_sidecar: bool = False,
+) -> None:
     manifests = tmp_path / "_manifests"
     manifests.mkdir(parents=True)
     source_relpath = f"manual/{provider}.pdf"
@@ -320,6 +417,108 @@ def _write_inventory(tmp_path, *, provider: str) -> None:
         ),
         encoding="utf-8",
     )
+    if not write_metadata_sidecar:
+        return
+    _write_metadata_sidecar(
+        normalized_root=tmp_path,
+        source_relpath=source_relpath,
+        document_id=f"{provider}_doc",
+        platform_owned=platform_owned,
+        corrupt=corrupt_metadata_sidecar,
+    )
+
+
+def _write_metadata_sidecar(
+    *,
+    normalized_root: Path,
+    source_relpath: str,
+    document_id: str,
+    platform_owned: bool,
+    corrupt: bool,
+) -> None:
+    metadata_path = normalized_root / Path(ArtifactPaths.for_source(source_relpath).metadata)
+    metadata_path.parent.mkdir(parents=True, exist_ok=True)
+    if corrupt:
+        metadata_path.write_text("{invalid-json", encoding="utf-8")
+        return
+    payload = _metadata_payload(
+        document_id=document_id,
+        source_relpath=source_relpath,
+        platform_owned=platform_owned,
+    )
+    metadata_path.write_text(json.dumps(payload), encoding="utf-8")
+
+
+def _metadata_payload(
+    *,
+    document_id: str,
+    source_relpath: str,
+    platform_owned: bool,
+) -> dict[str, object]:
+    normalized_relpath = ArtifactPaths.for_source(source_relpath).markdown
+    unavailable = {"kind": "unavailable", "value": None}
+    not_evaluated = {"status": "not_evaluated", "value": None}
+    empty_field = {"value": None, "status": "not_evaluated"}
+    platform_identity = None
+    platform_provenance = None
+    if platform_owned:
+        platform_identity = {
+            "project_id": "proj_demo",
+            "source_document_id": "sdoc_demo",
+            "source_document_revision_id": "srev_demo",
+            "normalized_document_id": "ndoc_demo",
+            "processing_profile_id": "pp_local",
+            "processing_profile_fingerprint": _PROCESSING_PROFILE_FINGERPRINT,
+            "schema_version": "2.0",
+            "provenance": {
+                "rag_variant_id": "ragv_demo",
+                "semantic_recipe_fingerprint": _SEMANTIC_RECIPE_FINGERPRINT,
+            },
+        }
+        platform_provenance = {
+            "rag_variant_id": "ragv_demo",
+            "semantic_recipe_fingerprint": _SEMANTIC_RECIPE_FINGERPRINT,
+        }
+    return {
+        "schema_version": "2.0",
+        "document_id": document_id,
+        "document_name": Path(source_relpath).name,
+        "source_relpath": source_relpath,
+        "normalized_relpath": normalized_relpath,
+        "document_control": {
+            "title": empty_field,
+            "code": empty_field,
+            "version": empty_field,
+            "publication_date": empty_field,
+            "effective_date": empty_field,
+            "warnings": [],
+        },
+        "classification": {
+            "document_type": "otro",
+            "document_type_confidence": unavailable,
+            "topic": "general",
+            "topic_confidence": unavailable,
+            "signals": [],
+            "conflicts": [],
+            "warnings": [],
+        },
+        "page_count": 1,
+        "language": "es",
+        "extraction_method": "markdown",
+        "ocr_confidence": unavailable,
+        "handwriting": not_evaluated,
+        "tables": not_evaluated,
+        "forms": not_evaluated,
+        "feature_observations": {},
+        "source_hash": "a" * 64,
+        "corpus_version": "phase1",
+        "pipeline_version": "2.0.0",
+        "processing_status": "processed",
+        "review_reasons": [],
+        "warnings": [],
+        "platform_identity": platform_identity,
+        "platform_provenance": platform_provenance,
+    }
 
 
 

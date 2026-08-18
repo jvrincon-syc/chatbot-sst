@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+from psycopg2 import extensions, sql as pg_sql
+
+from indexing.domain.bundle_first import IndexingTarget
 from indexing.domain.profiles import ResolvedIndexingProfile
+from indexing.infrastructure.llama_index.pgvector_store import VectorStoreWriteError
 from indexing.infrastructure.postgres.settings import PostgresIndexingSettings
 from indexing.infrastructure.postgres.sql import create_vector_table_sql
 
@@ -47,20 +52,43 @@ def test_seed_migration_creates_current_embedding_profile_tables() -> None:
     assert "embedding vector(1536) NOT NULL" in sql
 
 
-def test_vector_table_sql_uses_dimension_and_cosine_ops() -> None:
+def test_create_vector_table_sql_renders_qualified_table_and_unqualified_indexes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     profile = _profile(distance_metric="cosine")
+    target = _target(schema="public", vector_table="idx_vec_llama_bge_m3_v1")
 
-    sql = create_vector_table_sql(profile)
+    statement = create_vector_table_sql(profile=profile, target=target)
+    rendered = _render(statement, monkeypatch)
 
-    assert "CREATE TABLE IF NOT EXISTS idx_vec_llama_bge_m3_v1" in sql
-    assert "embedding vector(1024) NOT NULL" in sql
-    assert "USING hnsw (embedding vector_cosine_ops)" in sql
+    assert isinstance(statement, pg_sql.Composed)
+    assert 'CREATE TABLE IF NOT EXISTS "public"."idx_vec_llama_bge_m3_v1"' in rendered
+    assert 'CREATE INDEX IF NOT EXISTS "idx_vec_llama_bge_m3_v1_document_id"' in rendered
+    assert '"public"."idx_vec_llama_bge_m3_v1_document_id"' not in rendered
+    assert "embedding vector(1024) NOT NULL" in rendered
+    assert "USING hnsw (embedding vector_cosine_ops)" in rendered
 
 
-def test_vector_table_sql_uses_inner_product_ops() -> None:
-    sql = create_vector_table_sql(_profile(distance_metric="inner_product"))
+def test_vector_table_sql_uses_inner_product_ops(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    statement = create_vector_table_sql(
+        profile=_profile(distance_metric="inner_product"),
+        target=_target(schema="public", vector_table="idx_vec_llama_bge_m3_v1"),
+    )
+    rendered = _render(statement, monkeypatch)
 
-    assert "USING hnsw (embedding vector_ip_ops)" in sql
+    assert "USING hnsw (embedding vector_ip_ops)" in rendered
+
+
+def test_create_vector_table_sql_fails_closed_on_catalog_profile_table_mismatch() -> None:
+    with pytest.raises(
+        VectorStoreWriteError, match="indexing target/catalog table mismatch"
+    ):
+        create_vector_table_sql(
+            profile=_profile(distance_metric="cosine"),
+            target=_target(schema="public", vector_table="idx_vec_other_profile_v1"),
+        )
 
 
 def test_postgres_settings_require_dsn_for_enabled_store() -> None:
@@ -93,3 +121,23 @@ def _profile(*, distance_metric: str) -> ResolvedIndexingProfile:
         active=True,
         config_hash="a" * 64,
     )
+
+
+def _target(*, schema: str, vector_table: str) -> IndexingTarget:
+    return IndexingTarget(
+        indexing_target_id="target-idx-vec-llama-bge-m3-v1",
+        postgres_schema=schema,
+        vector_table=vector_table,
+        distance_ops="vector_cosine_ops",
+        storage_schema_version="idx-vec-v1",
+        active=True,
+    )
+
+
+def _render(statement: pg_sql.Composed, monkeypatch: pytest.MonkeyPatch) -> str:
+    monkeypatch.setattr(
+        extensions,
+        "quote_ident",
+        lambda value, _context: '"' + str(value).replace('"', '""') + '"',
+    )
+    return statement.as_string(object())
