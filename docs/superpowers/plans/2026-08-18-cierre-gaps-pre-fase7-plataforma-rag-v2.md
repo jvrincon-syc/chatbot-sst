@@ -193,12 +193,9 @@ Registrados para arreglar como paso previo/paralelo a Task 5. No bloquean los ve
   contenedor (comentario `ponytail` ya lo admite en `:418`). En Postgres son coherentes por `connection`.
   **Fix:** un único factory de repos in-memory compartido inyectado en TODOS los casos de uso de plataforma
   (draft/build/validate/publish incluidos), consolidando la superficie única del plan.
-- [ ] **[MED] La DI pierde el tipado en el borde de Fase 7.** `PipelineServices.rag_platform` sigue como
-  `object | None` (`dependencies.py:167`) y `_build_rag_platform_services()` retorna `object` (`:407`),
-  aunque `RagPlatformServices` ya existe completo (`application/services.py:50`). Sin romper runtime, deja
-  sin protección estática justo la superficie que Task 3/4 buscan tipar. **Fix:** tipar
-  `rag_platform: RagPlatformServices | None` y el retorno del builder (import bajo `TYPE_CHECKING`, la
-  anotación es lazy por `from __future__ import annotations`).
+- [x] **[MED] DI tipada — CERRADO (2026-08-18).** `PipelineServices.rag_platform: RagPlatformServices | None`
+  y `_build_rag_platform_services() -> "RagPlatformServices"`; import bajo `TYPE_CHECKING` (anotación lazy por
+  `from __future__ import annotations`, sin costo de import en runtime). `py_compile` OK. Fix inline mínimo.
 - [ ] **[BAJO] `rag_platform_build/publish/rebuild/draft/validate` = compat debt.** Se desvían del "single
   surface" del plan pero no son regresión; colapsarlos dentro de `RagPlatformServices` cierra el [ALTO] de paso.
 

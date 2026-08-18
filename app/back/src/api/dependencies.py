@@ -14,7 +14,7 @@ from contextlib import nullcontext
 from dataclasses import dataclass
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Literal, TYPE_CHECKING
 
 from core.consumer_scope import ConsumerScope
 from core.feature_flags import FeatureFlags
@@ -111,6 +111,10 @@ from retrieval.infrastructure.postgres.repositories import (
 )
 
 
+if TYPE_CHECKING:
+    from rag_platform.application.services import RagPlatformServices
+
+
 logger = get_logger(__name__)
 
 PersistenceMode = Literal["memory", "postgres"]
@@ -164,7 +168,7 @@ class PipelineServices:
     rag_platform_validate: object | None = None
     # Task 3: superficie tipada de proyectos/configuración (``RagPlatformServices``).
     # Task 4 la extenderá con variantes/releases; ``None`` deja el legacy intacto.
-    rag_platform: object | None = None
+    rag_platform: RagPlatformServices | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -406,7 +410,7 @@ def build_pipeline_services(
 
 def _build_rag_platform_services(
     *, connection: object | None, data_root: Path, transactions: object
-) -> object:
+) -> "RagPlatformServices":
     """Cablea la superficie tipada única de plataforma para Fase 7 (Task 3 + Task 4).
 
     Un mismo repositorio de proyectos satisface ``ProjectRepository`` y
