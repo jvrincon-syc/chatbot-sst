@@ -11,10 +11,13 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
+import pytest
+
 from rag_platform.application.release_build_service import (
     BuildRagReleaseUseCase,
 )
 from rag_platform.application.platform_access import PlatformActor
+from rag_platform.domain.errors import ReleaseBuildTooLarge
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 from rag_platform.domain.lifecycle import RagRelease, ReleaseState
@@ -113,6 +116,7 @@ def _build(
     snapshot: CorpusSnapshot,
     resolver: InMemoryRevisionArtifactResolver,
     ledger: InMemoryRagBuildRunRepository | None = None,
+    max_build_documents: int | None = None,
 ) -> tuple[
     BuildRagReleaseUseCase,
     InMemoryRagReleaseMembershipRepository,
@@ -131,8 +135,27 @@ def _build(
         ledger=ledger,
         bindings=_StaticBindingResolver(),
         access_policy=AllowAllAccessPolicy(),
+        max_build_documents=max_build_documents,
     )
     return use_case, memberships, ledger
+
+
+def test_build_falla_cerrado_cuando_snapshot_excede_el_tope() -> None:
+    release_id = PlatformId(IdentityKind.RAG_RELEASE, "ragr_big")
+    snapshot = _snapshot(_SNAPSHOT, count=2)
+    use_case, memberships, _ = _build(
+        release=_release(release_id, _SNAPSHOT),
+        snapshot=snapshot,
+        resolver=InMemoryRevisionArtifactResolver(),
+        max_build_documents=1,
+    )
+
+    with pytest.raises(ReleaseBuildTooLarge):
+        use_case.execute(
+            rag_release_id=release_id, actor=PlatformActor(actor_id="op-1")
+        )
+    # Fail-closed antes de construir: ninguna membresía creada.
+    assert memberships.list_for_release(release_id) == []
 
 
 def test_build_crea_una_membresia_por_revision_y_audita_cada_etapa() -> None:

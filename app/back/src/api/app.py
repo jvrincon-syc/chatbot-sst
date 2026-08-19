@@ -17,6 +17,7 @@ from embedding.api.router import router as embedding_router
 from indexing.api.router import router as indexing_router
 from rag_platform.api.router import router as platform_router
 from rag_platform.domain.errors import RagPlatformError
+from rag_platform.domain.identity import InvalidIdentity
 from retrieval.api.router import router as retrieval_router
 
 
@@ -122,6 +123,20 @@ def create_app(*, services: PipelineServices) -> FastAPI:
         return _error_response(
             status_code=exc.http_status,
             code=exc.code,
+            message=str(exc),
+        )
+
+    @app.exception_handler(InvalidIdentity)
+    async def invalid_identity_handler(
+        _request,
+        exc: InvalidIdentity,
+    ) -> JSONResponse:
+        # Un ``slug``/ID de plataforma malformado (en path o en body) construye un
+        # ``PlatformId`` inválido dentro del caso de uso: se traduce a 422 estable
+        # en vez de escapar como 500. Fail-closed.
+        return _error_response(
+            status_code=422,
+            code="INVALID_PLATFORM_ID",
             message=str(exc),
         )
 

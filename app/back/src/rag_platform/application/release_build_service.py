@@ -34,7 +34,10 @@ from rag_platform.application.release_service import (
     RagReleaseRepository,
     RagVariantReader,
 )
-from rag_platform.domain.errors import IncompatibleTargetBinding
+from rag_platform.domain.errors import (
+    IncompatibleTargetBinding,
+    ReleaseBuildTooLarge,
+)
 from rag_platform.domain.identity import PlatformId, RagBuildContext
 from rag_platform.domain.lifecycle import RagReleaseMembership
 from rag_platform.domain.models import (
@@ -121,6 +124,7 @@ class BuildRagReleaseUseCase:
         ledger: RagBuildRunRepository,
         bindings: TargetBindingResolver,
         access_policy: PlatformAccessPolicy,
+        max_build_documents: int | None = None,
     ) -> None:
         self._releases = releases
         self._variants = variants
@@ -130,6 +134,9 @@ class BuildRagReleaseUseCase:
         self._ledger = ledger
         self._bindings = bindings
         self._access_policy = access_policy
+        # ``None`` = sin tope (comportamiento previo). Un entero positivo acota el
+        # número de documentos que un build síncrono procesa por request.
+        self._max_build_documents = max_build_documents
 
     def execute(
         self, *, rag_release_id: PlatformId, actor: PlatformActor
@@ -154,6 +161,14 @@ class BuildRagReleaseUseCase:
         reused = 0
         built = 0
         documents = sorted(snapshot.documents, key=lambda doc: doc.ordinal)
+        if (
+            self._max_build_documents is not None
+            and len(documents) > self._max_build_documents
+        ):
+            raise ReleaseBuildTooLarge(
+                f"corpus snapshot has {len(documents)} documents, exceeds the "
+                f"per-build limit of {self._max_build_documents}"
+            )
         for document in documents:
             revision_id = document.source_document_revision_id
             artifacts = self._resolver.resolve(

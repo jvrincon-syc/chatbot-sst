@@ -250,7 +250,7 @@
       },
       "CreateCorpusSnapshotRequestSchema": {
         "additionalProperties": false,
-        "description": "Congela un snapshot inmutable; el server valida elegibilidad fail-closed.",
+        "description": "Congela un snapshot inmutable; el server valida elegibilidad fail-closed.\n\n``project_id`` es el ID **can\u00f3nico completo** (``proj_...``), igual que en el\nresto de rutas; el server lo valida y deriva el slug. Nunca el slug crudo.",
         "properties": {
           "document_revision_ids": {
             "items": {
@@ -268,7 +268,7 @@
             "type": "object"
           },
           "project_id": {
-            "maxLength": 128,
+            "maxLength": 160,
             "minLength": 1,
             "title": "Project Id",
             "type": "string"

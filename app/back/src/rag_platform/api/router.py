@@ -59,12 +59,13 @@ from rag_platform.api.schemas import (
 from rag_platform.application.actor_provider import TrustedPlatformActorProvider
 from rag_platform.application.idempotency import IdempotencyGuard, IdempotencyStore
 from rag_platform.application.platform_access import PlatformActor
+from rag_platform.application.variant_matrix_service import platform_id_body
 from rag_platform.application.project_service import CreateProjectRequest
 from rag_platform.application.project_configuration_service import (
     UpdateProjectConfigurationRequest,
 )
 from rag_platform.application.services import RagPlatformServices
-from rag_platform.domain.identity import IdentityKind, InvalidIdentity, PlatformId
+from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import EligibilityDecision
 
 
@@ -95,16 +96,14 @@ def get_actor(
 
 
 def _parse_id(kind: IdentityKind, value: str) -> PlatformId:
-    """Parsea un ID de path a ``PlatformId`` o falla con 422 estable."""
+    """Parsea un ID (path o body) a ``PlatformId``.
 
-    try:
-        return PlatformId.parse(kind, value)
-    except InvalidIdentity as error:
-        raise http_error(
-            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
-            code="INVALID_PLATFORM_ID",
-            message=str(error),
-        ) from error
+    Un ID malformado lanza ``InvalidIdentity``, traducida a 422 estable por el
+    handler central de ``api/app.py`` (mismo punto que los IDs construidos dentro
+    de los casos de uso desde slugs de body). Sin traducción duplicada aquí.
+    """
+
+    return PlatformId.parse(kind, value)
 
 
 def _eligibility_decisions(
@@ -297,8 +296,13 @@ def create_corpus_snapshot(
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
 ) -> CorpusSnapshotSchema:
+    # Contrato externo canónico: el cliente envía el ``project_id`` completo
+    # (``proj_...``). Se valida como ``PlatformId`` (422 fail-closed) y se pasa el
+    # cuerpo/slug al caso de uso, que reañade el prefijo. Evita el doble prefijo
+    # (``proj_proj_...``) que un body con slug crudo produciría.
+    project_pid = _parse_id(IdentityKind.PROJECT, payload.project_id)
     snapshot = services.create_corpus_snapshot.execute(
-        project_id=payload.project_id,
+        project_id=platform_id_body(project_pid),
         document_revision_ids=payload.document_revision_ids,
         actor=actor,
         eligibility_decisions=_eligibility_decisions(payload.eligibility_decisions),
@@ -351,15 +355,16 @@ def _run_idempotent(
     release_id: PlatformId,
     actor: PlatformActor,
     operation,
+    request_fields: dict[str, str] | None = None,
 ) -> dict:
     """Ejecuta un comando de release una sola vez por clave/fingerprint.
 
     Centraliza la guarda de idempotencia de los cuatro comandos (build/validate/
-    publish/retire) para no duplicar el cableado. El fingerprint es ``action +
-    rag_release_id``: identifica la petición lógica sin persistir contenido
-    sensible. Un replay de un intento previo **fallido** no devuelve un 200 vacío
-    enmascarando el error; se surface con un código estable pidiendo una clave
-    nueva para reintentar.
+    publish/retire) para no duplicar el cableado. El fingerprint es ``actor +
+    action + rag_release_id`` más ``request_fields`` administrativos que cambian la
+    semántica (p. ej. ``reason`` en ``retire``); nunca contenido sensible. Un
+    replay de un intento previo **fallido** no devuelve un 200 vacío enmascarando
+    el error; se surface con un código estable pidiendo una clave nueva.
     """
 
     result = IdempotencyGuard(store=store).run(
@@ -369,6 +374,7 @@ def _run_idempotent(
         actor_id=actor.actor_id,
         response_status=status.HTTP_200_OK,
         operation=operation,
+        request_fields=request_fields,
     )
     if result.replayed and result.response_status >= 400:
         raise http_error(
@@ -496,4 +502,7 @@ def retire_release(
         release_id=release_id,
         actor=actor,
         operation=_operation,
+        # ``reason`` es material para retire: misma clave con reason distinto es
+        # otra petición lógica (fail-closed, no replay).
+        request_fields={"reason": payload.reason},
     )

@@ -25,6 +25,7 @@ estándar; ningún SDK ni cliente de BD.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from enum import Enum
 from hashlib import sha256
@@ -105,20 +106,30 @@ class IdempotencyResult(StrictModel):
 
 
 def idempotency_request_fingerprint(
-    *, action: str, resource_id: str, actor_id: str
+    *,
+    action: str,
+    resource_id: str,
+    actor_id: str,
+    request_fields: Mapping[str, str] | None = None,
 ) -> str:
-    """Fingerprint determinista de la petición lógica (principal + acción + recurso).
+    """Fingerprint determinista de la petición lógica.
 
     Scope de idempotencia = ``actor_id + action + resource_id`` (principal
-    incluido): dos principales distintos que reusen la misma ``Idempotency-Key``
-    producen fingerprints distintos, de modo que un segundo actor jamás recibe el
-    resultado replay del primero (ni salta su chequeo de autorización). Fail-closed
-    de cara a SSO/RBAC. Solo incluye campos no sensibles; nunca contenido
+    incluido) más los ``request_fields`` administrativos que cambian la semántica
+    del comando (p. ej. ``reason`` en ``retire``): dos peticiones que difieran en
+    cualquiera de ellos producen fingerprints distintos, así que ni un actor
+    distinto ni un ``reason`` distinto recibe el replay de otra petición (fail-
+    closed, ``IdempotencyKeyConflict``). Solo campos no sensibles; nunca contenido
     documental, vectores, secretos ni rutas.
     """
 
     payload = json.dumps(
-        {"action": action, "resource_id": resource_id, "actor_id": actor_id},
+        {
+            "action": action,
+            "resource_id": resource_id,
+            "actor_id": actor_id,
+            "fields": dict(request_fields or {}),
+        },
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -157,6 +168,7 @@ class IdempotencyGuard:
         actor_id: str,
         response_status: int,
         operation: Callable[[], dict[str, Any]],
+        request_fields: Mapping[str, str] | None = None,
     ) -> IdempotencyResult:
         """Ejecuta ``operation`` una sola vez por clave/fingerprint.
 
@@ -168,6 +180,8 @@ class IdempotencyGuard:
             response_status: HTTP status a devolver en éxito fresco.
             operation: Callable que ejecuta el caso de uso y devuelve un dict de
                 resultado no sensible (ids/hashes/estado).
+            request_fields: Campos administrativos no sensibles que cambian la
+                semántica del comando (p. ej. ``reason``); entran al fingerprint.
 
         Returns:
             El resultado terminal (fresco o reproducido).
@@ -180,7 +194,10 @@ class IdempotencyGuard:
 
         key_hash = _hash_key(idempotency_key)
         fingerprint = idempotency_request_fingerprint(
-            action=action, resource_id=resource_id, actor_id=actor_id
+            action=action,
+            resource_id=resource_id,
+            actor_id=actor_id,
+            request_fields=request_fields,
         )
         reservation = self._store.reserve(
             IdempotencyRecord(

@@ -421,6 +421,32 @@ def build_pipeline_services(
     return services
 
 
+def _resolve_max_build_documents(environ: Mapping[str, str]) -> int | None:
+    """Resuelve el tope de documentos por build desde el entorno (fail-closed).
+
+    ``SST_PLATFORM_MAX_BUILD_DOCUMENTS`` ausente/vacío = sin tope (comportamiento
+    previo). Un entero positivo lo acota. Un valor no numérico o <= 0 es config
+    inválida y aborta el arranque en vez de degradar a "sin tope" en silencio.
+    """
+
+    raw = (environ.get("SST_PLATFORM_MAX_BUILD_DOCUMENTS") or "").strip()
+    if not raw:
+        return None
+    try:
+        value = int(raw)
+    except ValueError as error:
+        raise ValueError(
+            "SST_PLATFORM_MAX_BUILD_DOCUMENTS must be a positive integer, got "
+            f"{raw!r}"
+        ) from error
+    if value <= 0:
+        raise ValueError(
+            "SST_PLATFORM_MAX_BUILD_DOCUMENTS must be a positive integer, got "
+            f"{value}"
+        )
+    return value
+
+
 def _build_idempotency_store(*, connection: object | None) -> object:
     """Cablea el ``IdempotencyStore`` durable (autoridad: PostgreSQL).
 
@@ -634,6 +660,7 @@ def _build_rag_platform_services(
         ledger=build_ledger,
         bindings=bindings,
         access_policy=access_policy,
+        max_build_documents=_resolve_max_build_documents(os.environ),
     )
     validate_release = ValidateRagReleaseUseCase(
         releases=releases,

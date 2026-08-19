@@ -170,9 +170,13 @@ class CorpusSnapshotSchema(StrictModel):
 
 
 class CreateCorpusSnapshotRequestSchema(StrictModel):
-    """Congela un snapshot inmutable; el server valida elegibilidad fail-closed."""
+    """Congela un snapshot inmutable; el server valida elegibilidad fail-closed.
 
-    project_id: str = Field(min_length=1, max_length=128)
+    ``project_id`` es el ID **canónico completo** (``proj_...``), igual que en el
+    resto de rutas; el server lo valida y deriva el slug. Nunca el slug crudo.
+    """
+
+    project_id: str = Field(min_length=1, max_length=160)
     document_revision_ids: list[str] = Field(min_length=1)
     #: Decisión explícita por ``revision_id`` para las revisiones que la requieran.
     eligibility_decisions: dict[str, str] = Field(default_factory=dict)

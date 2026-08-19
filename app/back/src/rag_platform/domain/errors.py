@@ -418,6 +418,19 @@ class IdempotencyKeyConflict(RagPlatformError):
     http_status = 409
 
 
+class ReleaseBuildTooLarge(RagPlatformError):
+    """El corpus snapshot de la release excede el tope de documentos por build.
+
+    Fail-closed contra agotamiento: el build es síncrono y ocupa un worker HTTP
+    mientras recorre el snapshot. Un snapshot con más documentos que
+    ``SST_PLATFORM_MAX_BUILD_DOCUMENTS`` se rechaza de forma controlada en vez de
+    programar trabajo ilimitado.
+    """
+
+    code = "RELEASE_BUILD_TOO_LARGE"
+    http_status = 422
+
+
 class IdempotencyOperationInProgress(RagPlatformError):
     """Ya hay una ejecución en curso para la misma clave (RESERVED).
 

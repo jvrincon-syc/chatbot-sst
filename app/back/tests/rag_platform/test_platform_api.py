@@ -178,6 +178,18 @@ def test_actor_de_confianza_ausente_falla_cerrado(no_actor_client: TestClient) -
     assert response.json()["error"]["code"] == "TRUSTED_ACTOR_UNAVAILABLE"
 
 
+def test_slug_de_body_invalido_da_422_no_500(client: TestClient) -> None:
+    """Un ``project_slug`` malformado construye un ``PlatformId`` inválido dentro
+    del caso de uso: el handler central lo traduce a 422, nunca 500."""
+
+    response = client.post(
+        "/api/platform/projects",
+        json={"project_slug": "Mi Proyecto", "display_name": "Demo"},
+    )
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "INVALID_PLATFORM_ID"
+
+
 def test_proyecto_inexistente_404_traducido(client: TestClient) -> None:
     response = client.get("/api/platform/projects/proj_nope")
     assert response.status_code == 404
@@ -296,6 +308,32 @@ def test_guard_scoped_por_principal_otro_actor_no_recibe_replay() -> None:
             actor_id="maria",
             response_status=200,
             operation=lambda: {"ok": True},
+        )
+
+
+def test_guard_reason_material_cambia_fingerprint_de_retire() -> None:
+    """Misma clave/actor/recurso pero ``reason`` distinto: conflicto (no replay)."""
+
+    store = InMemoryIdempotencyStore()
+    guard = IdempotencyGuard(store=store)
+    guard.run(
+        idempotency_key="k1",
+        action="retire",
+        resource_id="ragr_a",
+        actor_id="op-1",
+        response_status=200,
+        operation=lambda: {"ok": True},
+        request_fields={"reason": "deprecated"},
+    )
+    with pytest.raises(IdempotencyKeyConflict):
+        guard.run(
+            idempotency_key="k1",
+            action="retire",
+            resource_id="ragr_a",
+            actor_id="op-1",
+            response_status=200,
+            operation=lambda: {"ok": True},
+            request_fields={"reason": "security incident"},
         )
 
 
