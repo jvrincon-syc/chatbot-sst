@@ -14,7 +14,9 @@ from datetime import datetime, timezone
 from rag_platform.application.release_build_service import (
     BuildRagReleaseUseCase,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
+from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 from rag_platform.domain.lifecycle import RagRelease, ReleaseState
 from rag_platform.domain.models import (
     CorpusSnapshot,
@@ -128,6 +130,7 @@ def _build(
         memberships=memberships,
         ledger=ledger,
         bindings=_StaticBindingResolver(),
+        access_policy=AllowAllAccessPolicy(),
     )
     return use_case, memberships, ledger
 
@@ -140,7 +143,7 @@ def test_build_crea_una_membresia_por_revision_y_audita_cada_etapa() -> None:
         release=_release(release_id, _SNAPSHOT), snapshot=snapshot, resolver=resolver
     )
 
-    report = use_case.execute(rag_release_id=release_id, actor_id="op-1")
+    report = use_case.execute(rag_release_id=release_id, actor=PlatformActor(actor_id="op-1"))
 
     assert report.revisions_built == 2
     assert len(memberships.list_for_release(release_id)) == 2
@@ -162,14 +165,14 @@ def test_build_incremental_reutiliza_lo_previo_y_solo_construye_lo_nuevo() -> No
     use_case1, _, ledger1 = _build(
         release=_release(release1, _SNAPSHOT), snapshot=snapshot1, resolver=resolver
     )
-    use_case1.execute(rag_release_id=release1, actor_id="op-1")
+    use_case1.execute(rag_release_id=release1, actor=PlatformActor(actor_id="op-1"))
     use_case, memberships, ledger = _build(
         release=_release(release2, snapshot2.corpus_snapshot_id),
         snapshot=snapshot2,
         resolver=resolver,
     )
 
-    report = use_case.execute(rag_release_id=release2, actor_id="op-1")
+    report = use_case.execute(rag_release_id=release2, actor=PlatformActor(actor_id="op-1"))
 
     assert report.revisions_built == 56
     assert len(memberships.list_for_release(release2)) == 56
@@ -188,7 +191,7 @@ def test_r001_no_ve_el_documento_56() -> None:
         release=_release(release1, _SNAPSHOT), snapshot=snapshot1, resolver=resolver
     )
 
-    use_case.execute(rag_release_id=release1, actor_id="op-1")
+    use_case.execute(rag_release_id=release1, actor=PlatformActor(actor_id="op-1"))
 
     revisions = {
         member.source_document_revision_id.value

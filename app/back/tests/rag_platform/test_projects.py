@@ -11,6 +11,7 @@ from rag_platform.application.project_service import (
     CreateProjectRequest,
     CreateProjectUseCase,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.errors import ProjectAlreadyExists, UnsafeArtifactPath
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
@@ -51,7 +52,7 @@ def test_dos_proyectos_coexisten_con_taxonomia_y_config_distintas(tmp_path: Path
                 ProjectEmbeddingProfile(embedding_profile_id="bge-m3"),
             ),
         ),
-        actor_id="operator-1",
+        actor=PlatformActor(actor_id="operator-1"),
     )
     calidad = use_case.execute(
         CreateProjectRequest(
@@ -63,7 +64,7 @@ def test_dos_proyectos_coexisten_con_taxonomia_y_config_distintas(tmp_path: Path
                 ProjectEmbeddingProfile(embedding_profile_id="voyage-4"),
             ),
         ),
-        actor_id="operator-1",
+        actor=PlatformActor(actor_id="operator-1"),
     )
 
     # Taxonomías distintas: SST vs neutral.
@@ -82,11 +83,11 @@ def test_raices_de_dos_proyectos_no_se_intersectan(tmp_path: Path) -> None:
     use_case, _ = _use_case(tmp_path)
     a = use_case.execute(
         CreateProjectRequest(project_slug="proj-a", display_name="A"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     b = use_case.execute(
         CreateProjectRequest(project_slug="proj-b", display_name="B"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
 
     a_roots = {
@@ -115,7 +116,7 @@ def test_no_hay_credenciales_en_el_modelo_de_proyecto(tmp_path: Path) -> None:
     use_case, _ = _use_case(tmp_path)
     project = use_case.execute(
         CreateProjectRequest(project_slug="secure", display_name="Secure"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     serialized = project.model_dump_json().casefold()
     for marker in ("secret", "token", "password", "credential", "api_key", "apikey"):
@@ -126,7 +127,7 @@ def test_project_id_es_inmutable_tras_tener_documentos(tmp_path: Path) -> None:
     use_case, projects = _use_case(tmp_path)
     project = use_case.execute(
         CreateProjectRequest(project_slug="frozen", display_name="Frozen"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     projects.mark_has_documents(project.project_id)
 
@@ -135,7 +136,7 @@ def test_project_id_es_inmutable_tras_tener_documentos(tmp_path: Path) -> None:
     with pytest.raises(ProjectAlreadyExists):
         use_case.execute(
             CreateProjectRequest(project_slug="frozen", display_name="Renamed"),
-            actor_id="op",
+            actor=PlatformActor(actor_id="op"),
         )
     # El modelo es frozen a nivel de asignación de atributo (Pydantic + inmutable
     # por contrato); el project_id no se puede reasignar en el repositorio.

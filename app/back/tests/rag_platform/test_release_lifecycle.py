@@ -23,7 +23,9 @@ from rag_platform.domain.errors import (
     ReleaseManifestFrozen,
     ReleaseNotComplete,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
+from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 from rag_platform.domain.lifecycle import (
     RagRelease,
     RagReleaseMembership,
@@ -203,6 +205,7 @@ def _validator(
         configuration_fingerprints=StaticConfigurationFingerprintReader(
             {_PROJECT.value: _CONFIG_FP}
         ),
+        access_policy=AllowAllAccessPolicy(),
         clock=lambda: _NOW,
     )
     return use_case, releases
@@ -214,7 +217,7 @@ def test_validar_congela_manifiesto_y_pasa_a_validated() -> None:
         release=_draft_release(), snapshot=snapshot, memberships=[_membership(0)]
     )
 
-    result = use_case.execute(rag_release_id=_RELEASE, actor_id="op-1")
+    result = use_case.execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 
     assert result.state is ReleaseState.VALIDATED
     assert result.release_manifest_hash is not None
@@ -233,7 +236,7 @@ def test_validar_falla_si_falta_una_membresia() -> None:
     )
 
     with pytest.raises(ReleaseNotComplete):
-        use_case.execute(rag_release_id=_RELEASE, actor_id="op-1")
+        use_case.execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 
 
 def test_validar_rechaza_revision_blocked() -> None:
@@ -243,7 +246,7 @@ def test_validar_rechaza_revision_blocked() -> None:
     )
 
     with pytest.raises(ReleaseBlockedRevision):
-        use_case.execute(rag_release_id=_RELEASE, actor_id="op-1")
+        use_case.execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 
 
 def test_release_validada_no_se_revalida_en_sitio() -> None:
@@ -256,4 +259,4 @@ def test_release_validada_no_se_revalida_en_sitio() -> None:
     )
 
     with pytest.raises(ReleaseManifestFrozen):
-        use_case.execute(rag_release_id=_RELEASE, actor_id="op-1")
+        use_case.execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))

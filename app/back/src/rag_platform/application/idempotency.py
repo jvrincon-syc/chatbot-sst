@@ -104,15 +104,21 @@ class IdempotencyResult(StrictModel):
     replayed: bool
 
 
-def idempotency_request_fingerprint(*, action: str, resource_id: str) -> str:
-    """Fingerprint determinista de la petición lógica (acción + recurso).
+def idempotency_request_fingerprint(
+    *, action: str, resource_id: str, actor_id: str
+) -> str:
+    """Fingerprint determinista de la petición lógica (principal + acción + recurso).
 
-    Solo incluye campos no sensibles que cambian la semántica del comando; nunca
-    contenido documental, vectores, secretos ni rutas.
+    Scope de idempotencia = ``actor_id + action + resource_id`` (principal
+    incluido): dos principales distintos que reusen la misma ``Idempotency-Key``
+    producen fingerprints distintos, de modo que un segundo actor jamás recibe el
+    resultado replay del primero (ni salta su chequeo de autorización). Fail-closed
+    de cara a SSO/RBAC. Solo incluye campos no sensibles; nunca contenido
+    documental, vectores, secretos ni rutas.
     """
 
     payload = json.dumps(
-        {"action": action, "resource_id": resource_id},
+        {"action": action, "resource_id": resource_id, "actor_id": actor_id},
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -174,7 +180,7 @@ class IdempotencyGuard:
 
         key_hash = _hash_key(idempotency_key)
         fingerprint = idempotency_request_fingerprint(
-            action=action, resource_id=resource_id
+            action=action, resource_id=resource_id, actor_id=actor_id
         )
         reservation = self._store.reserve(
             IdempotencyRecord(

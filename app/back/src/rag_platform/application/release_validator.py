@@ -16,6 +16,11 @@ from datetime import datetime, timezone
 import logging
 from typing import Callable
 
+from rag_platform.application.context import PlatformAccessPolicy
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.application.release_service import (
     CorpusSnapshotReader,
     ProjectConfigurationFingerprintReader,
@@ -53,6 +58,7 @@ class ValidateRagReleaseUseCase:
         snapshots: CorpusSnapshotReader,
         memberships: RagReleaseMembershipRepository,
         configuration_fingerprints: ProjectConfigurationFingerprintReader,
+        access_policy: PlatformAccessPolicy,
         clock: Callable[[], datetime] = _now,
         logger: logging.Logger | None = None,
     ) -> None:
@@ -61,13 +67,18 @@ class ValidateRagReleaseUseCase:
         self._snapshots = snapshots
         self._memberships = memberships
         self._configuration_fingerprints = configuration_fingerprints
+        self._access_policy = access_policy
         self._clock = clock
         self._logger = logger
 
-    def execute(self, *, rag_release_id: PlatformId, actor_id: str) -> RagRelease:
+    def execute(
+        self, *, rag_release_id: PlatformId, actor: PlatformActor
+    ) -> RagRelease:
         """Valida la release y la transiciona a ``VALIDATED``.
 
         Raises:
+            PlatformAccessDenied: Si el actor no es operador o el proyecto de la
+                release está fuera de su scope.
             ReleaseManifestFrozen: Si la release ya tiene manifiesto congelado.
             ReleaseNotComplete: Si falta la membresía de alguna revisión.
             ReleaseBlockedRevision: Si el snapshot contiene una revisión ``blocked``.
@@ -75,6 +86,9 @@ class ValidateRagReleaseUseCase:
         """
 
         release = self._releases.get(rag_release_id)
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=release.project_id
+        )
         if release.is_manifest_frozen:
             raise ReleaseManifestFrozen(
                 f"release {rag_release_id.value} manifest is already frozen"

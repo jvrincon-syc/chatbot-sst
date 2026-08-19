@@ -275,6 +275,30 @@ def test_guard_conflicto_por_fingerprint_distinto() -> None:
         )
 
 
+def test_guard_scoped_por_principal_otro_actor_no_recibe_replay() -> None:
+    """Misma clave, actor distinto: conflicto (no entrega el replay del primero)."""
+
+    store = InMemoryIdempotencyStore()
+    guard = IdempotencyGuard(store=store)
+    guard.run(
+        idempotency_key="k1",
+        action="publish",
+        resource_id="ragr_a",
+        actor_id="jose",
+        response_status=200,
+        operation=lambda: {"ok": True},
+    )
+    with pytest.raises(IdempotencyKeyConflict):
+        guard.run(
+            idempotency_key="k1",
+            action="publish",
+            resource_id="ragr_a",
+            actor_id="maria",
+            response_status=200,
+            operation=lambda: {"ok": True},
+        )
+
+
 def test_guard_reserva_en_curso_no_arranca_segundo_build() -> None:
     store = InMemoryIdempotencyStore()
     key = "k1"
@@ -287,7 +311,7 @@ def test_guard_reserva_en_curso_no_arranca_segundo_build() -> None:
             action=action,
             resource_id=resource_id,
             request_fingerprint=idempotency_request_fingerprint(
-                action=action, resource_id=resource_id
+                action=action, resource_id=resource_id, actor_id=_actor_id()
             ),
             actor_id=_actor_id(),
             status=IdempotencyStatus.RESERVED,

@@ -151,7 +151,9 @@ def _build() -> tuple[
         access_policy=AllowAllAccessPolicy(),
     )
     use_case = CreateRagVariantFromMatrixCellUseCase(
-        matrix=matrix, create_variant=create_variant
+        matrix=matrix,
+        create_variant=create_variant,
+        access_policy=AllowAllAccessPolicy(),
     )
     return use_case, projects
 

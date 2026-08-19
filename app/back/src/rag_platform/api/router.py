@@ -34,7 +34,7 @@ from rag_platform.api.dependencies import (
 from rag_platform.api.schemas import (
     CorpusSnapshotSchema,
     CreateCorpusSnapshotRequestSchema,
-    CreateProjectRequest,
+    CreateProjectRequestSchema,
     CreateReleaseDraftRequestSchema,
     CreateVariantRequestSchema,
     PaginatedProjectsSchema,
@@ -44,7 +44,7 @@ from rag_platform.api.schemas import (
     ReleaseBuildReportSchema,
     ReleaseSchema,
     RetireReleaseRequestSchema,
-    UpdateProjectConfigurationRequest,
+    UpdateProjectConfigurationRequestSchema,
     UpdateProjectRequestSchema,
     VariantMatrixCellSchema,
     VariantSchema,
@@ -59,6 +59,10 @@ from rag_platform.api.schemas import (
 from rag_platform.application.actor_provider import TrustedPlatformActorProvider
 from rag_platform.application.idempotency import IdempotencyGuard, IdempotencyStore
 from rag_platform.application.platform_access import PlatformActor
+from rag_platform.application.project_service import CreateProjectRequest
+from rag_platform.application.project_configuration_service import (
+    UpdateProjectConfigurationRequest,
+)
 from rag_platform.application.services import RagPlatformServices
 from rag_platform.domain.identity import IdentityKind, InvalidIdentity, PlatformId
 from rag_platform.domain.models import EligibilityDecision
@@ -142,11 +146,20 @@ def list_projects(
     response_model=ProjectSchema,
 )
 def create_project(
-    payload: CreateProjectRequest,
+    payload: CreateProjectRequestSchema,
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
 ) -> ProjectSchema:
-    project = services.create_project.execute(payload, actor_id=actor.actor_id)
+    # El DTO HTTP no expone ``target_bindings`` (target físico): se provisionan
+    # server-side, así que la petición de aplicación se arma con bindings vacíos.
+    request = CreateProjectRequest(
+        project_slug=payload.project_slug,
+        display_name=payload.display_name,
+        document_type_template=payload.document_type_template,
+        corpus_organization_policy=payload.corpus_organization_policy,
+        embedding_profiles=payload.embedding_profiles,
+    )
+    project = services.create_project.execute(request, actor=actor)
     return project_to_schema(project)
 
 
@@ -169,7 +182,7 @@ def update_project(
     project = services.update_project_metadata.execute(
         _parse_id(IdentityKind.PROJECT, project_id),
         display_name=payload.display_name,
-        actor_id=actor.actor_id,
+        actor=actor,
     )
     return project_to_schema(project)
 
@@ -194,14 +207,21 @@ def get_project_configuration(
 )
 def update_project_configuration(
     project_id: str,
-    payload: UpdateProjectConfigurationRequest,
+    payload: UpdateProjectConfigurationRequestSchema,
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
 ) -> ProjectConfigurationSchema:
+    # ``target_bindings`` no cruza HTTP (no expone el target físico); el versionado
+    # de bindings es server-side, así que la petición se arma con bindings vacíos.
+    request = UpdateProjectConfigurationRequest(
+        corpus_organization_policy=payload.corpus_organization_policy,
+        document_types=payload.document_types,
+        embedding_profiles=payload.embedding_profiles,
+    )
     configuration = services.create_project_configuration_version.execute(
         _parse_id(IdentityKind.PROJECT, project_id),
-        request=payload,
-        actor_id=actor.actor_id,
+        request=request,
+        actor=actor,
     )
     return configuration_to_schema(configuration)
 
@@ -280,7 +300,7 @@ def create_corpus_snapshot(
     snapshot = services.create_corpus_snapshot.execute(
         project_id=payload.project_id,
         document_revision_ids=payload.document_revision_ids,
-        actor_id=actor.actor_id,
+        actor=actor,
         eligibility_decisions=_eligibility_decisions(payload.eligibility_decisions),
     )
     return snapshot_to_schema(snapshot)
@@ -307,7 +327,7 @@ def create_release_draft(
             IdentityKind.CORPUS_SNAPSHOT, payload.corpus_snapshot_id
         ),
         target_binding_key=payload.target_binding_key,
-        actor_id=actor.actor_id,
+        actor=actor,
     )
     return release_to_schema(release)
 
@@ -377,7 +397,7 @@ def build_release(
 
     def _operation() -> dict:
         report = services.build_release.execute(
-            rag_release_id=release_id, actor_id=actor.actor_id
+            rag_release_id=release_id, actor=actor
         )
         return build_report_to_schema(report).model_dump(mode="json")
 
@@ -406,7 +426,7 @@ def validate_release(
 
     def _operation() -> dict:
         release = services.validate_release.execute(
-            rag_release_id=release_id, actor_id=actor.actor_id
+            rag_release_id=release_id, actor=actor
         )
         return release_to_schema(release).model_dump(mode="json")
 

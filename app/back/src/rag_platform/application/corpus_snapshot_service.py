@@ -21,6 +21,10 @@ from rag_platform.application.context import (
     PlatformAccessPolicy,
     SourceDocumentRepository,
 )
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.domain.errors import (
     DuplicateRevisionInSnapshot,
     EmptyCorpusSnapshot,
@@ -62,7 +66,7 @@ class CreateCorpusSnapshotUseCase:
         *,
         project_id: str,
         document_revision_ids: Sequence[str],
-        actor_id: str,
+        actor: PlatformActor,
         eligibility_decisions: Mapping[str, EligibilityDecision] | None = None,
     ) -> CorpusSnapshot:
         """Congela un corpus snapshot determinista.
@@ -70,7 +74,8 @@ class CreateCorpusSnapshotUseCase:
         Args:
             project_id: Slug del proyecto propietario (sin prefijo ``proj_``).
             document_revision_ids: Ids ``srev_`` de las revisiones a incluir.
-            actor_id: Operador autenticado; autorizado por la política de acceso.
+            actor: Actor de confianza server-side; autorizado por
+                ``require_project_operator`` (operador + scope de proyecto).
             eligibility_decisions: Decisión explícita por ``revision_id`` para las
                 revisiones que la requieran (``needs_review``).
 
@@ -78,14 +83,14 @@ class CreateCorpusSnapshotUseCase:
             El ``CorpusSnapshot`` congelado (o el preexistente con el mismo hash).
 
         Raises:
+            PlatformAccessDenied: Si el actor no es operador o el proyecto está
+                fuera de su scope.
             EmptyCorpusSnapshot: Si no se pasa ninguna revisión.
             DuplicateRevisionInSnapshot: Si una revisión aparece dos veces.
             RevisionProjectMismatch: Si una revisión es de otro proyecto.
             RevisionNotReleaseEligible: Si una ``needs_review`` no tiene decisión
                 válida, o si su decisión es ``blocked``.
         """
-
-        self._access_policy.require_operator(actor_id=actor_id)
 
         if not document_revision_ids:
             raise EmptyCorpusSnapshot(project_id)
@@ -95,6 +100,9 @@ class CreateCorpusSnapshotUseCase:
         project = PlatformId(
             kind=IdentityKind.PROJECT,
             value=f"{IdentityKind.PROJECT.value}_{project_id}",
+        )
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project
         )
         decisions = eligibility_decisions or {}
 

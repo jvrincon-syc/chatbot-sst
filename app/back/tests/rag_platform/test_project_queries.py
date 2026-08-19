@@ -17,6 +17,7 @@ from rag_platform.application.project_service import (
     CreateProjectRequest,
     CreateProjectUseCase,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.errors import ProjectNotFound
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.infrastructure.in_memory.repositories import (
@@ -37,11 +38,11 @@ def _repo_with_projects(tmp_path: Path) -> InMemoryProjectRepository:
     )
     create.execute(
         CreateProjectRequest(project_slug="sst-general", display_name="SST"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     create.execute(
         CreateProjectRequest(project_slug="calidad", display_name="Calidad"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     return projects
 
@@ -73,7 +74,7 @@ def test_update_project_metadata_cambia_solo_display_name(tmp_path: Path) -> Non
     projects = _repo_with_projects(tmp_path)
     updated = UpdateProjectMetadataUseCase(
         projects=projects, access_policy=AllowAllAccessPolicy()
-    ).execute(_pid("sst-general"), display_name="SST Renombrado", actor_id="op")
+    ).execute(_pid("sst-general"), display_name="SST Renombrado", actor=PlatformActor(actor_id="op"))
     assert updated.display_name == "SST Renombrado"
     assert updated.project_id.value == "proj_sst-general"
 

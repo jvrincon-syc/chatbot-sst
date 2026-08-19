@@ -15,6 +15,10 @@ from rag_platform.application.context import (
     ProcessingProfileRepository,
     ProjectRepository,
 )
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.domain.identity import PlatformId
 from rag_platform.domain.models import (
     ChunkingProfile,
@@ -60,24 +64,28 @@ class UpdateProjectMetadataUseCase:
         self._access_policy = access_policy
 
     def execute(
-        self, project_id: PlatformId, *, display_name: str, actor_id: str
+        self, project_id: PlatformId, *, display_name: str, actor: PlatformActor
     ) -> RagProject:
         """Actualiza el ``display_name`` de un proyecto existente.
 
         Args:
             project_id: Proyecto a editar; su identidad no cambia.
             display_name: Nuevo nombre legible.
-            actor_id: Operador autenticado; autorizado por ``PlatformAccessPolicy``.
+            actor: Actor de confianza server-side; autorizado por
+                ``require_project_operator`` (operador + scope de proyecto).
 
         Returns:
             El ``RagProject`` con los metadatos actualizados.
 
         Raises:
-            PlatformAccessDenied: Si el actor no es operador autorizado.
+            PlatformAccessDenied: Si el actor no es operador o el proyecto está
+                fuera de su scope.
             ProjectNotFound: Si el proyecto no está registrado.
         """
 
-        self._access_policy.require_operator(actor_id=actor_id)
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         return self._projects.update_metadata(
             project_id, display_name=display_name
         )

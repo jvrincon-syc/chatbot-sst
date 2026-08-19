@@ -19,17 +19,15 @@ from datetime import datetime
 from ingestion.schemas.common import StrictModel
 from pydantic import Field
 
-from rag_platform.application.project_service import (  # noqa: F401 (re-export)
-    CreateProjectRequest,
-)
-from rag_platform.application.project_configuration_service import (  # noqa: F401
-    UpdateProjectConfigurationRequest,
-)
 from rag_platform.application.variant_matrix_service import VariantMatrixCell
 from rag_platform.application.release_build_service import RagReleaseBuildReport
 from rag_platform.domain.models import (
+    CorpusOrganizationPolicy,
     CorpusSnapshot,
+    DocumentTypeTemplate,
     ProjectConfiguration,
+    ProjectDocumentType,
+    ProjectEmbeddingProfile,
     RagProject,
     RagVariant,
 )
@@ -73,6 +71,42 @@ class ProjectSchema(StrictModel):
     state: str
     configuration: ProjectConfigurationSchema
     created_at: datetime
+
+
+class CreateProjectRequestSchema(StrictModel):
+    """Alta de proyecto por HTTP.
+
+    **No** expone ``target_bindings``: un binding acopla ``binding_key`` a un
+    ``indexing_target_id`` físico, y el contrato prohíbe que el cliente elija el
+    target físico (invariante §Seguridad). Los bindings se provisionan
+    server-side (seed/admin) y se leen versionados; el cliente solo declara
+    plantilla, política y perfiles de embedding (identidades lógicas globales).
+    """
+
+    project_slug: str = Field(min_length=1, max_length=128)
+    display_name: str = Field(min_length=1, max_length=256)
+    document_type_template: DocumentTypeTemplate = DocumentTypeTemplate.GENERIC
+    corpus_organization_policy: CorpusOrganizationPolicy = (
+        CorpusOrganizationPolicy.SOURCE_FOLDERS_V1
+    )
+    embedding_profiles: tuple[ProjectEmbeddingProfile, ...] = Field(
+        default_factory=tuple
+    )
+
+
+class UpdateProjectConfigurationRequestSchema(StrictModel):
+    """Nueva versión de configuración por HTTP.
+
+    Igual que el alta, **no** expone ``target_bindings`` (no filtra el target
+    físico al OpenAPI ni al frontend de Fase 8). El versionado de bindings es
+    server-side.
+    """
+
+    corpus_organization_policy: CorpusOrganizationPolicy
+    document_types: tuple[ProjectDocumentType, ...] = Field(default_factory=tuple)
+    embedding_profiles: tuple[ProjectEmbeddingProfile, ...] = Field(
+        default_factory=tuple
+    )
 
 
 class UpdateProjectRequestSchema(StrictModel):

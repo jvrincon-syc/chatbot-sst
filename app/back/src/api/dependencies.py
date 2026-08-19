@@ -622,6 +622,7 @@ def _build_rag_platform_services(
         releases=releases,
         configuration_versions=configuration_versions,
         release_id_factory=_release_id_factory,
+        access_policy=access_policy,
         logger=get_logger("rag_platform.release_draft"),
     )
     build_release = BuildRagReleaseUseCase(
@@ -632,6 +633,7 @@ def _build_rag_platform_services(
         memberships=memberships,
         ledger=build_ledger,
         bindings=bindings,
+        access_policy=access_policy,
     )
     validate_release = ValidateRagReleaseUseCase(
         releases=releases,
@@ -639,6 +641,7 @@ def _build_rag_platform_services(
         snapshots=snapshots,
         memberships=memberships,
         configuration_fingerprints=configuration_fingerprints,
+        access_policy=access_policy,
         logger=get_logger("rag_platform.release_validate"),
     )
     publish_release = PublishRagReleaseUseCase(
@@ -678,7 +681,9 @@ def _build_rag_platform_services(
         list_chunking_profiles=ListChunkingProfilesUseCase(chunking_profiles=chunking),
         get_variant_matrix=variant_matrix,
         create_variant_from_matrix_cell=CreateRagVariantFromMatrixCellUseCase(
-            matrix=variant_matrix, create_variant=create_variant
+            matrix=variant_matrix,
+            create_variant=create_variant,
+            access_policy=access_policy,
         ),
         list_project_variants=ListProjectVariantsUseCase(variants=variants),
         create_corpus_snapshot=CreateCorpusSnapshotUseCase(
@@ -711,6 +716,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
 
     from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
     from rag_platform.domain.identity import IdentityKind, PlatformId
+    from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 
     def _release_id_factory() -> PlatformId:
         return PlatformId(
@@ -735,6 +741,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
             releases=InMemoryRagReleaseRepository(),
             configuration_versions=InMemoryCurrentConfigurationVersionReader(),
             release_id_factory=_release_id_factory,
+            access_policy=AllowAllAccessPolicy(),
             logger=get_logger("rag_platform.release_draft"),
         )
 
@@ -758,6 +765,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
         # ``PostgresProjectRepository`` satisface el reader de versión vigente.
         configuration_versions=PostgresProjectRepository(connection),
         release_id_factory=_release_id_factory,
+        access_policy=AllowAllAccessPolicy(),
         logger=get_logger("rag_platform.release_draft"),
     )
 
@@ -766,6 +774,7 @@ def _build_rag_platform_validate(*, connection: object | None) -> object:
     """Cablea ``ValidateRagReleaseUseCase`` (postgres o in-memory)."""
 
     from rag_platform.application.release_validator import ValidateRagReleaseUseCase
+    from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 
     if connection is None:
         from rag_platform.infrastructure.in_memory.release_repositories import (
@@ -782,6 +791,7 @@ def _build_rag_platform_validate(*, connection: object | None) -> object:
             snapshots=InMemoryCorpusSnapshotReader(()),
             memberships=InMemoryRagReleaseMembershipRepository(),
             configuration_fingerprints=StaticConfigurationFingerprintReader(),
+            access_policy=AllowAllAccessPolicy(),
             logger=get_logger("rag_platform.release_validate"),
         )
 
@@ -805,6 +815,7 @@ def _build_rag_platform_validate(*, connection: object | None) -> object:
         configuration_fingerprints=PostgresProjectConfigurationFingerprintReader(
             connection
         ),
+        access_policy=AllowAllAccessPolicy(),
         logger=get_logger("rag_platform.release_validate"),
     )
 
@@ -880,100 +891,6 @@ def _platform_data_root(chunks_root: Path) -> Path:
         if parent.name == "projects":
             return parent.parent
     return chunks_root.parent
-
-
-def _build_rag_platform_build(*, connection: object | None, data_root: Path) -> object:
-    """Build the release planner with either in-memory or Postgres-backed adapters."""
-
-    from rag_platform.application.release_build_service import BuildRagReleaseUseCase
-    from rag_platform.infrastructure.in_memory.release_build_resolver import (
-        InMemoryRevisionArtifactResolver,
-    )
-
-    """ a futuro eliminacion del in memory y reemplazo por postgres, pero por ahora se mantiene para pruebas y demos locales """
-    from rag_platform.infrastructure.in_memory.release_repositories import (
-        InMemoryCorpusSnapshotReader,
-        InMemoryRagReleaseMembershipRepository,
-        InMemoryRagReleaseRepository,
-        InMemoryRagVariantReader,
-    )
-    from rag_platform.infrastructure.in_memory.repositories import (
-        InMemoryRagBuildRunRepository,
-        InMemoryTargetBindingResolver,
-    )
-
-    if connection is None:
-        return BuildRagReleaseUseCase(
-            releases=InMemoryRagReleaseRepository(),
-            variants=InMemoryRagVariantReader(()),
-            snapshots=InMemoryCorpusSnapshotReader(()),
-            resolver=InMemoryRevisionArtifactResolver(),
-            memberships=InMemoryRagReleaseMembershipRepository(),
-            ledger=InMemoryRagBuildRunRepository(),
-            bindings=InMemoryTargetBindingResolver(()),
-        )
-
-    from rag_platform.infrastructure.postgres.document_repositories import (
-        PostgresCorpusSnapshotRepository,
-    )
-    from rag_platform.infrastructure.postgres.project_repositories import (
-        PostgresRagVariantRepository,
-        PostgresTargetBindingResolver,
-    )
-    from rag_platform.infrastructure.postgres.release_repositories import (
-        PostgresRagReleaseMembershipRepository,
-        PostgresRagReleaseRepository,
-    )
-    from rag_platform.infrastructure.release_build_resolver import (
-        PostgresRevisionArtifactResolver,
-    )
-    from rag_platform.infrastructure.postgres.artifact_repositories import (
-        PostgresRagBuildRunRepository,
-    )
-
-    return BuildRagReleaseUseCase(
-        releases=PostgresRagReleaseRepository(connection),
-        variants=PostgresRagVariantRepository(connection),
-        snapshots=PostgresCorpusSnapshotRepository(connection),
-        resolver=PostgresRevisionArtifactResolver(
-            connection=connection,
-            data_root=data_root,
-        ),
-        memberships=PostgresRagReleaseMembershipRepository(connection),
-        ledger=PostgresRagBuildRunRepository(connection),
-        bindings=PostgresTargetBindingResolver(connection),
-    )
-
-
-def _build_rag_platform_publish(*, connection: object | None, transactions: object) -> object:
-    """Build the release publication use case (postgres or in-memory repo).
-
-    Kept out of the main wiring so the legacy surface is unchanged when the flag
-    is off. The access policy authorises any non-empty operator; a project-scoped
-    policy is layered by the API dependency (Fase 7).
-    """
-
-    from rag_platform.application.publication_service import PublishRagReleaseUseCase
-    from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
-
-    if connection is None:
-        from rag_platform.infrastructure.in_memory.release_repositories import (
-            InMemoryRagReleaseRepository,
-        )
-
-        releases: object = InMemoryRagReleaseRepository()
-    else:
-        from rag_platform.infrastructure.postgres.release_repositories import (
-            PostgresRagReleaseRepository,
-        )
-
-        releases = PostgresRagReleaseRepository(connection)
-    return PublishRagReleaseUseCase(
-        releases=releases,
-        access_policy=AllowAllAccessPolicy(),
-        transactions=transactions,
-        logger=get_logger("rag_platform.publication"),
-    )
 
 
 def _resolve_persistence_mode(environ: Mapping[str, str]) -> PersistenceMode:

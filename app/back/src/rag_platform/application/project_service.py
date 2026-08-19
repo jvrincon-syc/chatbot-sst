@@ -18,6 +18,10 @@ from rag_platform.application.context import (
     ProjectRepository,
     StorageRootsProvider,
 )
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.domain.errors import ProjectAlreadyExists, UnknownDocumentTypeTemplate
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
@@ -127,26 +131,33 @@ class CreateProjectUseCase:
         self._storage_roots = storage_roots
         self._access_policy = access_policy
 
-    def execute(self, request: CreateProjectRequest, *, actor_id: str) -> RagProject:
+    def execute(
+        self, request: CreateProjectRequest, *, actor: PlatformActor
+    ) -> RagProject:
         """Crea y persiste un proyecto nuevo.
 
         Args:
             request: Datos validados del proyecto a crear.
-            actor_id: Operador autenticado; autorizado por ``PlatformAccessPolicy``.
+            actor: Actor de confianza server-side; autorizado por
+                ``require_project_operator`` (operador + scope de proyecto).
 
         Returns:
             El ``RagProject`` persistido.
 
         Raises:
-            PlatformAccessDenied: Si el actor no es operador autorizado.
+            PlatformAccessDenied: Si el actor no es operador o el proyecto está
+                fuera de su scope.
             ProjectAlreadyExists: Si el ``project_id`` ya existe.
             UnknownDocumentTypeTemplate: Si la plantilla no está registrada.
         """
 
-        self._access_policy.require_operator(actor_id=actor_id)
-
         project_id = PlatformId(
             kind=IdentityKind.PROJECT, value=f"{IdentityKind.PROJECT.value}_{request.project_slug}"
+        )
+        # Frontera uniforme: un actor scoped no puede crear proyectos fuera de su
+        # scope (fail-closed hacia SSO/RBAC).
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
         )
         if self._projects.exists(project_id):
             raise ProjectAlreadyExists(project_id.value)

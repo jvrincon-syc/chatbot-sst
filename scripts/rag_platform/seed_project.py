@@ -37,6 +37,7 @@ sys.path.insert(0, str(_REPO_ROOT / "scripts" / "indexing"))
 
 from prepare_postgres_indexing import build_dsn_from_env, load_env_file  # noqa: E402
 
+from rag_platform.application.platform_access import PlatformActor  # noqa: E402
 from rag_platform.application.project_service import (  # noqa: E402
     CreateProjectRequest,
     CreateProjectUseCase,
@@ -324,7 +325,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 ),
                             ),
                         ),
-                        actor_id=_ACTOR,
+                        actor=PlatformActor(actor_id=_ACTOR),
                     )
                     summary["project"] = "created"
                 except ProjectAlreadyExists:

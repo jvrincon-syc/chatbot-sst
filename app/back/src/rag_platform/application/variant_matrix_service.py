@@ -20,10 +20,14 @@ from pydantic import Field
 from ingestion.schemas.common import StrictModel
 from rag_platform.application.context import (
     ChunkingProfileRepository,
+    PlatformAccessPolicy,
     ProcessingProfileRepository,
     ProjectRepository,
 )
-from rag_platform.application.platform_access import PlatformActor
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.application.recipe_service import (
     CreateRagVariantRequest,
     CreateRagVariantUseCase,
@@ -194,9 +198,11 @@ class CreateRagVariantFromMatrixCellUseCase:
         *,
         matrix: GetVariantMatrixUseCase,
         create_variant: CreateRagVariantUseCase,
+        access_policy: PlatformAccessPolicy,
     ) -> None:
         self._matrix = matrix
         self._create_variant = create_variant
+        self._access_policy = access_policy
 
     def execute(
         self,
@@ -211,9 +217,15 @@ class CreateRagVariantFromMatrixCellUseCase:
         Raises:
             InvalidVariantMatrixCell / StaleVariantMatrixCell: Celda inválida o
                 desactualizada (fail-closed).
-            PlatformAccessDenied: Si el actor no puede operar el proyecto.
+            PlatformAccessDenied: Si el actor no es operador o el proyecto está
+                fuera de su scope.
         """
 
+        # Frontera uniforme: preserva el scope del actor hasta el punto donde el
+        # project_id es conocido, antes de crear la variante.
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         cell = self._matrix.get_cell(project_id=project_id, cell_id=cell_id)
 
         processing_pid = PlatformId.parse(

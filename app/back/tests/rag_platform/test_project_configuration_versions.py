@@ -18,6 +18,7 @@ from rag_platform.application.project_service import (
     CreateProjectRequest,
     CreateProjectUseCase,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
     CorpusOrganizationPolicy,
@@ -42,7 +43,7 @@ def _seed(tmp_path: Path) -> InMemoryProjectRepository:
         access_policy=AllowAllAccessPolicy(),
     ).execute(
         CreateProjectRequest(project_slug="sst-general", display_name="SST"),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     return projects
 
@@ -71,7 +72,7 @@ def test_create_version_incrementa_monotona_y_preserva_historia(tmp_path: Path) 
                 ),
             ),
         ),
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
     )
     assert new.version == 2
 

@@ -21,7 +21,9 @@ from rag_platform.application.release_build_service import (
 )
 from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
 from rag_platform.application.release_validator import ValidateRagReleaseUseCase
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
+from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 from rag_platform.domain.lifecycle import (
     ReleaseState,
     compute_release_manifest_hash,
@@ -147,6 +149,7 @@ def test_create_release_draft_pins_current_configuration_version() -> None:
         releases=releases,
         configuration_versions=InMemoryCurrentConfigurationVersionReader(default=1),
         release_id_factory=lambda: _RELEASE,
+        access_policy=AllowAllAccessPolicy(),
         clock=lambda: _NOW,
     )
 
@@ -154,7 +157,7 @@ def test_create_release_draft_pins_current_configuration_version() -> None:
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="default",
-        actor_id="op-1",
+        actor=PlatformActor(actor_id="op-1"),
     )
 
     assert release.configuration_version == 1
@@ -181,13 +184,14 @@ def test_build_and_validate_use_the_pinned_configuration_version() -> None:
         releases=releases,
         configuration_versions=current_versions,
         release_id_factory=lambda: _RELEASE,
+        access_policy=AllowAllAccessPolicy(),
         clock=lambda: _NOW,
     )
     release = draft.execute(
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="default",
-        actor_id="op-1",
+        actor=PlatformActor(actor_id="op-1"),
     )
     assert release.configuration_version == 1
 
@@ -203,7 +207,8 @@ def test_build_and_validate_use_the_pinned_configuration_version() -> None:
         memberships=memberships,
         ledger=InMemoryRagBuildRunRepository(),
         bindings=bindings,
-    ).execute(rag_release_id=_RELEASE, actor_id="op-1")
+        access_policy=AllowAllAccessPolicy(),
+    ).execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 
     # Build derivó el target de la versión PINNEADA (v1), no de la vigente (v2).
     assert resolver.context.indexing_target_id == "idx_vec_old"
@@ -216,8 +221,9 @@ def test_build_and_validate_use_the_pinned_configuration_version() -> None:
         configuration_fingerprints=StaticConfigurationFingerprintReader(
             by_version={(_PROJECT.value, 1): _FP_V1, (_PROJECT.value, 2): _FP_V2}
         ),
+        access_policy=AllowAllAccessPolicy(),
         clock=lambda: _NOW,
-    ).execute(rag_release_id=_RELEASE, actor_id="op-1")
+    ).execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 
     assert validated.state is ReleaseState.VALIDATED
     built_memberships = memberships.list_for_release(_RELEASE)

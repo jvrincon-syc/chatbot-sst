@@ -13,6 +13,7 @@ from rag_platform.domain.errors import (
     RevisionNotReleaseEligible,
     RevisionProjectMismatch,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
     EligibilityDecision,
@@ -88,11 +89,11 @@ def test_mismo_input_produce_mismo_manifest_hash() -> None:
     use_case, snapshots = _use_case(documents)
 
     first = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[a, b], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[a, b], actor=PlatformActor(actor_id="op")
     )
     # Idempotencia: mismo conjunto ordenado => mismo snapshot (mismo hash).
     second = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[a, b], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[a, b], actor=PlatformActor(actor_id="op")
     )
     assert first.manifest_hash == second.manifest_hash
     assert first.corpus_snapshot_id == second.corpus_snapshot_id
@@ -106,10 +107,10 @@ def test_orden_distinto_produce_hash_distinto() -> None:
     use_case, _ = _use_case(documents)
 
     ab = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[a, b], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[a, b], actor=PlatformActor(actor_id="op")
     )
     ba = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[b, a], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[b, a], actor=PlatformActor(actor_id="op")
     )
     assert ab.manifest_hash != ba.manifest_hash
 
@@ -122,10 +123,10 @@ def test_cambio_material_de_seleccion_produce_snapshot_nuevo() -> None:
     use_case, _ = _use_case(documents)
 
     ab = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[a, b], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[a, b], actor=PlatformActor(actor_id="op")
     )
     abc = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[a, b, c], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[a, b, c], actor=PlatformActor(actor_id="op")
     )
     assert ab.manifest_hash != abc.manifest_hash
     assert ab.corpus_snapshot_id != abc.corpus_snapshot_id
@@ -140,7 +141,7 @@ def test_snapshot_reconstruible_solo_con_sus_rows() -> None:
     use_case, _ = _use_case(documents)
 
     snapshot = use_case.execute(
-        project_id=_PROJECT, document_revision_ids=[a, b], actor_id="op"
+        project_id=_PROJECT, document_revision_ids=[a, b], actor=PlatformActor(actor_id="op")
     )
     # Recomputar el hash solo con las membresías persistidas debe coincidir.
     recomputed = compute_corpus_manifest_hash(
@@ -158,7 +159,7 @@ def test_needs_review_sin_decision_rechaza_fail_closed() -> None:
 
     with pytest.raises(RevisionNotReleaseEligible):
         use_case.execute(
-            project_id=_PROJECT, document_revision_ids=[r], actor_id="op"
+            project_id=_PROJECT, document_revision_ids=[r], actor=PlatformActor(actor_id="op")
         )
 
 
@@ -172,7 +173,7 @@ def test_needs_review_con_approved_after_review_entra() -> None:
     snapshot = use_case.execute(
         project_id=_PROJECT,
         document_revision_ids=[r],
-        actor_id="op",
+        actor=PlatformActor(actor_id="op"),
         eligibility_decisions={r: EligibilityDecision.APPROVED_AFTER_REVIEW},
     )
     assert snapshot.document_count == 1
@@ -191,7 +192,7 @@ def test_blocked_rechaza_fail_closed() -> None:
         use_case.execute(
             project_id=_PROJECT,
             document_revision_ids=[r],
-            actor_id="op",
+            actor=PlatformActor(actor_id="op"),
             eligibility_decisions={r: EligibilityDecision.BLOCKED},
         )
 
@@ -203,5 +204,5 @@ def test_revision_de_otro_proyecto_rechaza() -> None:
 
     with pytest.raises(RevisionProjectMismatch):
         use_case.execute(
-            project_id=_PROJECT, document_revision_ids=[foreign], actor_id="op"
+            project_id=_PROJECT, document_revision_ids=[foreign], actor=PlatformActor(actor_id="op")
         )

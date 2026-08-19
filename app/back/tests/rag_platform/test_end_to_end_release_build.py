@@ -154,6 +154,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
     import os
 
     from rag_platform.application.corpus_snapshot_service import CreateCorpusSnapshotUseCase
+    from rag_platform.application.platform_access import PlatformActor
     from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
     from rag_platform.domain.identity import IdentityKind, PlatformId
     from rag_platform.infrastructure.postgres.document_repositories import (
@@ -204,7 +205,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
         ).execute(
             project_id="sst-general",
             document_revision_ids=revision_ids,
-            actor_id=_ACTOR,
+            actor=PlatformActor(actor_id=_ACTOR),
         )
         conn.commit()
 
@@ -218,11 +219,12 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
             release_id_factory=lambda: PlatformId(
                 kind=IdentityKind.RAG_RELEASE, value="ragr_" + uuid.uuid4().hex[:16]
             ),
+            access_policy=_Operator(),
         ).execute(
             rag_variant_id=PlatformId(kind=IdentityKind.RAG_VARIANT, value=_VARIANT_ID),
             corpus_snapshot_id=snapshot.corpus_snapshot_id,
             target_binding_key=_BINDING_KEY,
-            actor_id=_ACTOR,
+            actor=PlatformActor(actor_id=_ACTOR),
         )
         conn.commit()
     finally:
@@ -244,7 +246,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
     try:
         assert services.rag_platform_build is not None, "build no cableado tras el flag"
         report = services.rag_platform_build.execute(
-            rag_release_id=release.rag_release_id, actor_id=_ACTOR
+            rag_release_id=release.rag_release_id, actor=PlatformActor(actor_id=_ACTOR)
         )
         assert report.revisions_built == len(_THREE_DOCS)
         assert report.built_stages > 0, "el build debía construir (no solo reusar)"

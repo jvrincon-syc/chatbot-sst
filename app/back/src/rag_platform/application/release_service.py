@@ -20,7 +20,14 @@ from datetime import datetime, timezone
 import logging
 from typing import Callable, Protocol, Sequence, runtime_checkable
 
-from rag_platform.application.context import TargetBindingResolver
+from rag_platform.application.context import (
+    PlatformAccessPolicy,
+    TargetBindingResolver,
+)
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.domain.errors import (
     IncompatibleTargetBinding,
     ReleaseBlockedRevision,
@@ -141,6 +148,7 @@ class CreateRagReleaseDraftUseCase:
         releases: RagReleaseRepository,
         configuration_versions: CurrentProjectConfigurationVersionReader,
         release_id_factory: Callable[[], PlatformId],
+        access_policy: PlatformAccessPolicy,
         clock: Callable[[], datetime] = _now,
         logger: logging.Logger | None = None,
     ) -> None:
@@ -150,6 +158,7 @@ class CreateRagReleaseDraftUseCase:
         self._releases = releases
         self._configuration_versions = configuration_versions
         self._release_id_factory = release_id_factory
+        self._access_policy = access_policy
         self._clock = clock
         self._logger = logger
 
@@ -159,11 +168,13 @@ class CreateRagReleaseDraftUseCase:
         rag_variant_id: PlatformId,
         corpus_snapshot_id: PlatformId,
         target_binding_key: str,
-        actor_id: str,
+        actor: PlatformActor,
     ) -> RagRelease:
         """Crea la release ``DRAFT``.
 
         Raises:
+            PlatformAccessDenied: Si el actor no es operador o el proyecto de la
+                variante está fuera de su scope.
             ReleaseProjectMismatch: Si variante y snapshot son de proyectos distintos.
             IncompatibleTargetBinding: Si el binding no está en la allowlist o su
                 perfil de embedding no coincide con el de la variante.
@@ -171,6 +182,9 @@ class CreateRagReleaseDraftUseCase:
         """
 
         variant = self._variants.get(rag_variant_id)
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=variant.project_id
+        )
         snapshot = self._snapshots.get(corpus_snapshot_id)
         ensure_same_project(
             variant_project_id=variant.project_id,
@@ -210,7 +224,7 @@ class CreateRagReleaseDraftUseCase:
             configuration_version=configuration_version,
             release_number=release_number,
             state=ReleaseState.DRAFT,
-            created_by=actor_id,
+            created_by=actor.actor_id,
             created_at=self._clock(),
         )
         stored = self._releases.add(release)

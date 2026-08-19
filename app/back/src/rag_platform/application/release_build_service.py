@@ -20,7 +20,14 @@ from dataclasses import dataclass
 from typing import Protocol, runtime_checkable
 
 from rag_platform.application.artifact_reuse_service import RagBuildRunRepository
-from rag_platform.application.context import TargetBindingResolver
+from rag_platform.application.context import (
+    PlatformAccessPolicy,
+    TargetBindingResolver,
+)
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.application.release_service import (
     CorpusSnapshotReader,
     RagReleaseMembershipRepository,
@@ -113,6 +120,7 @@ class BuildRagReleaseUseCase:
         memberships: RagReleaseMembershipRepository,
         ledger: RagBuildRunRepository,
         bindings: TargetBindingResolver,
+        access_policy: PlatformAccessPolicy,
     ) -> None:
         self._releases = releases
         self._variants = variants
@@ -121,16 +129,24 @@ class BuildRagReleaseUseCase:
         self._memberships = memberships
         self._ledger = ledger
         self._bindings = bindings
+        self._access_policy = access_policy
 
-    def execute(self, *, rag_release_id: PlatformId, actor_id: str) -> RagReleaseBuildReport:
+    def execute(
+        self, *, rag_release_id: PlatformId, actor: PlatformActor
+    ) -> RagReleaseBuildReport:
         """Recorre el snapshot, resuelve artefactos y crea membresías.
 
         Raises:
+            PlatformAccessDenied: Si el actor no es operador o el proyecto de la
+                release está fuera de su scope.
             NodeProjectMismatch / CrossProjectReuseForbidden: Si un artefacto
                 resuelto pertenece a otro proyecto (fail-closed, en el resolver).
         """
 
         release = self._releases.get(rag_release_id)
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=release.project_id
+        )
         variant = self._variants.get(release.rag_variant_id)
         snapshot = self._snapshots.get(release.corpus_snapshot_id)
         context = self._build_context(release=release, variant=variant)

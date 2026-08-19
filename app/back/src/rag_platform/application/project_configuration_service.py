@@ -20,6 +20,10 @@ from rag_platform.application.context import (
     ProjectConfigurationRepository,
     ProjectRepository,
 )
+from rag_platform.application.platform_access import (
+    PlatformActor,
+    require_project_operator,
+)
 from rag_platform.domain.identity import PlatformId
 from rag_platform.domain.models import (
     CorpusOrganizationPolicy,
@@ -103,24 +107,28 @@ class CreateProjectConfigurationVersionUseCase:
         project_id: PlatformId,
         *,
         request: UpdateProjectConfigurationRequest,
-        actor_id: str,
+        actor: PlatformActor,
     ) -> ProjectConfiguration:
         """Crea y persiste una versión nueva a partir de la vigente.
 
         Args:
             project_id: Proyecto cuya configuración se edita.
             request: Datos validados de la nueva configuración.
-            actor_id: Operador autenticado; autorizado por ``PlatformAccessPolicy``.
+            actor: Actor de confianza server-side; autorizado por
+                ``require_project_operator`` (operador + scope de proyecto).
 
         Returns:
             La ``ProjectConfiguration`` recién versionada.
 
         Raises:
-            PlatformAccessDenied: Si el actor no es operador autorizado.
+            PlatformAccessDenied: Si el actor no es operador o el proyecto está
+                fuera de su scope.
             ProjectNotFound: Si el proyecto no está registrado.
         """
 
-        self._access_policy.require_operator(actor_id=actor_id)
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         current = self._projects.get(project_id).configuration
         new_configuration = ProjectConfiguration(
             version=current.version + 1,

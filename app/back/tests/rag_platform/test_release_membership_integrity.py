@@ -22,7 +22,9 @@ from rag_platform.domain.errors import (
     ReleaseBlockedRevision,
     ReleaseProjectMismatch,
 )
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
+from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 from rag_platform.domain.lifecycle import ReleaseState
 from rag_platform.domain.models import (
     CorpusSnapshot,
@@ -127,6 +129,7 @@ def _use_case(
         releases=releases,
         configuration_versions=InMemoryCurrentConfigurationVersionReader(),
         release_id_factory=_factory,
+        access_policy=AllowAllAccessPolicy(),
         clock=lambda: _NOW,
     )
     return use_case, releases
@@ -141,7 +144,7 @@ def test_crea_draft_cuando_todo_valido() -> None:
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="primary",
-        actor_id="op-1",
+        actor=PlatformActor(actor_id="op-1"),
     )
 
     assert release.state is ReleaseState.DRAFT
@@ -161,7 +164,7 @@ def test_falla_si_variante_y_snapshot_son_de_proyectos_distintos() -> None:
             rag_variant_id=_VARIANT,
             corpus_snapshot_id=_SNAPSHOT,
             target_binding_key="primary",
-            actor_id="op-1",
+            actor=PlatformActor(actor_id="op-1"),
         )
 
 
@@ -173,7 +176,7 @@ def test_falla_si_binding_no_esta_en_allowlist() -> None:
             rag_variant_id=_VARIANT,
             corpus_snapshot_id=_SNAPSHOT,
             target_binding_key="primary",
-            actor_id="op-1",
+            actor=PlatformActor(actor_id="op-1"),
         )
 
 
@@ -189,7 +192,7 @@ def test_falla_si_binding_apunta_a_otro_perfil_de_embedding() -> None:
             rag_variant_id=_VARIANT,
             corpus_snapshot_id=_SNAPSHOT,
             target_binding_key="primary",
-            actor_id="op-1",
+            actor=PlatformActor(actor_id="op-1"),
         )
 
 
@@ -205,7 +208,7 @@ def test_falla_si_snapshot_tiene_revision_blocked() -> None:
             rag_variant_id=_VARIANT,
             corpus_snapshot_id=_SNAPSHOT,
             target_binding_key="primary",
-            actor_id="op-1",
+            actor=PlatformActor(actor_id="op-1"),
         )
 
 
@@ -218,13 +221,13 @@ def test_release_number_incrementa_por_variante() -> None:
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="primary",
-        actor_id="op-1",
+        actor=PlatformActor(actor_id="op-1"),
     )
     second = use_case.execute(
         rag_variant_id=_VARIANT,
         corpus_snapshot_id=_SNAPSHOT,
         target_binding_key="primary",
-        actor_id="op-1",
+        actor=PlatformActor(actor_id="op-1"),
     )
 
     assert first.release_number == 1

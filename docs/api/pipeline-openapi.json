@@ -281,9 +281,9 @@
         "title": "CreateCorpusSnapshotRequestSchema",
         "type": "object"
       },
-      "CreateProjectRequest": {
+      "CreateProjectRequestSchema": {
         "additionalProperties": false,
-        "description": "Entrada validada para crear un proyecto.\n\n``actor_id`` no forma parte del request: se pasa como argumento expl\u00edcito del\ncaso de uso desde una identidad autenticada (invariante \u00a78 del plan).",
+        "description": "Alta de proyecto por HTTP.\n\n**No** expone ``target_bindings``: un binding acopla ``binding_key`` a un\n``indexing_target_id`` f\u00edsico, y el contrato proh\u00edbe que el cliente elija el\ntarget f\u00edsico (invariante \u00a7Seguridad). Los bindings se provisionan\nserver-side (seed/admin) y se leen versionados; el cliente solo declara\nplantilla, pol\u00edtica y perfiles de embedding (identidades l\u00f3gicas globales).",
         "properties": {
           "corpus_organization_policy": {
             "$ref": "#/components/schemas/CorpusOrganizationPolicy",
@@ -311,20 +311,13 @@
             "minLength": 1,
             "title": "Project Slug",
             "type": "string"
-          },
-          "target_bindings": {
-            "items": {
-              "$ref": "#/components/schemas/ProjectIndexingTargetBinding"
-            },
-            "title": "Target Bindings",
-            "type": "array"
           }
         },
         "required": [
           "project_slug",
           "display_name"
         ],
-        "title": "CreateProjectRequest",
+        "title": "CreateProjectRequestSchema",
         "type": "object"
       },
       "CreateReleaseDraftRequestSchema": {
@@ -2087,35 +2080,6 @@
         "title": "ProjectEmbeddingProfile",
         "type": "object"
       },
-      "ProjectIndexingTargetBinding": {
-        "additionalProperties": false,
-        "description": "Allowlist backend de una clave l\u00f3gica hacia un target global compatible.\n\nEl cliente elige un ``binding_key``; nunca un ``indexing_target_id`` ni una\ntabla vectorial (invariante \u00a71/\u00a77 del plan). La compatibilidad con el perfil\nde embedding se valida en el servidor de forma fail-closed.",
-        "properties": {
-          "binding_key": {
-            "maxLength": 128,
-            "minLength": 1,
-            "title": "Binding Key",
-            "type": "string"
-          },
-          "embedding_profile_id": {
-            "minLength": 1,
-            "title": "Embedding Profile Id",
-            "type": "string"
-          },
-          "indexing_target_id": {
-            "minLength": 1,
-            "title": "Indexing Target Id",
-            "type": "string"
-          }
-        },
-        "required": [
-          "binding_key",
-          "indexing_target_id",
-          "embedding_profile_id"
-        ],
-        "title": "ProjectIndexingTargetBinding",
-        "type": "object"
-      },
       "ProjectSchema": {
         "additionalProperties": false,
         "properties": {
@@ -2783,9 +2747,9 @@
         "title": "TargetBindingSchema",
         "type": "object"
       },
-      "UpdateProjectConfigurationRequest": {
+      "UpdateProjectConfigurationRequestSchema": {
         "additionalProperties": false,
-        "description": "Entrada validada para materializar una versi\u00f3n nueva de configuraci\u00f3n.\n\n``version`` no forma parte del request: la asigna el caso de uso de forma\nmon\u00f3tona a partir de la versi\u00f3n vigente, para que el cliente nunca elija ni\nreescriba una versi\u00f3n existente.",
+        "description": "Nueva versi\u00f3n de configuraci\u00f3n por HTTP.\n\nIgual que el alta, **no** expone ``target_bindings`` (no filtra el target\nf\u00edsico al OpenAPI ni al frontend de Fase 8). El versionado de bindings es\nserver-side.",
         "properties": {
           "corpus_organization_policy": {
             "$ref": "#/components/schemas/CorpusOrganizationPolicy"
@@ -2803,19 +2767,12 @@
             },
             "title": "Embedding Profiles",
             "type": "array"
-          },
-          "target_bindings": {
-            "items": {
-              "$ref": "#/components/schemas/ProjectIndexingTargetBinding"
-            },
-            "title": "Target Bindings",
-            "type": "array"
           }
         },
         "required": [
           "corpus_organization_policy"
         ],
-        "title": "UpdateProjectConfigurationRequest",
+        "title": "UpdateProjectConfigurationRequestSchema",
         "type": "object"
       },
       "UpdateProjectRequestSchema": {
@@ -5425,7 +5382,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProjectRequest"
+                "$ref": "#/components/schemas/CreateProjectRequestSchema"
               }
             }
           },
@@ -5809,7 +5766,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateProjectConfigurationRequest"
+                "$ref": "#/components/schemas/UpdateProjectConfigurationRequestSchema"
               }
             }
           },
