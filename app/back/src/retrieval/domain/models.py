@@ -38,6 +38,7 @@ class RetrievalProfile(StrictModel):
     """One consumer scope bound to exactly one embedding profile and target."""
 
     retrieval_profile_id: str = Field(min_length=1)
+    project_id: str = Field(min_length=1)
     consumer_scope_type: str = Field(min_length=1)
     consumer_scope_id: str = Field(min_length=1)
     corpus_version: str = Field(min_length=1)
@@ -65,6 +66,7 @@ class RetrievalProfile(StrictModel):
     def build(
         cls,
         *,
+        project_id: str,
         consumer_scope_type: str,
         consumer_scope_id: str,
         corpus_version: str,
@@ -77,6 +79,7 @@ class RetrievalProfile(StrictModel):
         digest = sha256(
             canonical_json(
                 [
+                    project_id,
                     consumer_scope_type,
                     consumer_scope_id,
                     corpus_version,
@@ -87,6 +90,7 @@ class RetrievalProfile(StrictModel):
         ).hexdigest()
         return cls(
             retrieval_profile_id=f"retrieval-profile-{digest}",
+            project_id=project_id,
             consumer_scope_type=consumer_scope_type,
             consumer_scope_id=consumer_scope_id,
             corpus_version=corpus_version,

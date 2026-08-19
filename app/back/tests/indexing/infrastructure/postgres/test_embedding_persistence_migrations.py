@@ -118,6 +118,20 @@ def test_strong_constraints_are_deferred_to_final_migration() -> None:
     assert "CREATE UNIQUE INDEX IF NOT EXISTS" in sql
 
 
+def test_retrieval_active_profile_uniqueness_is_rebuilt_with_project_scope() -> None:
+    sql = (
+        MIGRATIONS_DIR / "20260819_04_scope_active_retrieval_profiles_by_project.sql"
+    ).read_text(encoding="utf-8")
+
+    assert "DROP INDEX IF EXISTS idx_retrieval_profiles_one_active_scope_corpus" in sql
+    normalized_sql = " ".join(sql.split())
+    assert (
+        "ON retrieval_profiles (project_id, consumer_scope_type, consumer_scope_id, corpus_version)"
+        in normalized_sql
+    )
+    assert "WHERE active = true" in sql
+
+
 def _migration_text() -> str:
     return "\n".join(
         (MIGRATIONS_DIR / name).read_text(encoding="utf-8")

@@ -46,6 +46,7 @@ def http_error(
     message: str,
     run_id: str | None = None,
     details: dict[str, object] | None = None,
+    headers: dict[str, str] | None = None,
 ) -> HTTPException:
     """Build an ``HTTPException`` already carrying the shared envelope."""
 
@@ -59,6 +60,7 @@ def http_error(
                 details=details or {},
             )
         ).model_dump(),
+        headers=headers,
     )
 
 

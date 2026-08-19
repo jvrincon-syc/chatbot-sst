@@ -6,6 +6,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, Query, Request, status
 
+from api.dependencies import get_authenticated_principal, require_project_access
 from core.api.http import (
     DEFAULT_PAGE_SIZE,
     ErrorEnvelopeSchema,
@@ -15,6 +16,7 @@ from core.api.http import (
 )
 from core.consumer_scope import ConsumerScope
 from core.feature_flags import FeatureFlags
+from core.http_auth import project_in_scope
 from embedding.domain.errors import EmbeddingDomainError
 from indexing.api.schemas import (
     ActivationRequestSchema,
@@ -126,6 +128,17 @@ def _translate(error: Exception, *, run_id: str | None = None):
 _DOMAIN_ERRORS = (EmbeddingDomainError, IndexingDomainError, RetrievalDomainError)
 
 
+def _visible_indexing_run_ids(request: Request) -> set[str] | None:
+    principal = get_authenticated_principal(request)
+    if principal.project_scope is None:
+        return None
+    return {
+        run.run_id
+        for run in request.app.state.indexing_runs.list_runs()
+        if project_in_scope(principal, run.project_id)
+    }
+
+
 @router.get("/overview", response_model=IndexingOverviewSchema)
 def get_overview(service: IndexingReadService = Depends(get_read_service)) -> dict:
     return service.overview()
@@ -146,6 +159,7 @@ def list_targets(
     response_model=IndexingRunSchema,
 )
 def create_run(
+    request: Request,
     payload: IndexingRunRequestSchema,
     idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1)],
     use_case: CreateIndexingRunUseCase = Depends(get_create_run_use_case),
@@ -155,6 +169,8 @@ def create_run(
 ) -> dict:
     _require_bundle_first(flags)
     try:
+        bundle = request.app.state.embedding_bundles.get(payload.embedding_bundle_id)
+        require_project_access(request, project_id=bundle.project_id)
         run = use_case.execute(
             request=CreateIndexingRunRequest(
                 embedding_bundle_id=payload.embedding_bundle_id
@@ -170,16 +186,27 @@ def create_run(
 
 @router.get("/runs", response_model=PaginatedIndexingRunsSchema)
 def list_runs(
+    request: Request,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     service: IndexingReadService = Depends(get_read_service),
 ) -> dict:
-    return paginate(service.list_runs(), page=page, page_size=page_size)
+    items = service.list_runs()
+    visible_ids = _visible_indexing_run_ids(request)
+    if visible_ids is not None:
+        items = [item for item in items if item["run_id"] in visible_ids]
+    return paginate(items, page=page, page_size=page_size)
 
 
 @router.get("/runs/{run_id}", response_model=IndexingRunSchema)
-def get_run(run_id: str, service: IndexingReadService = Depends(get_read_service)) -> dict:
+def get_run(
+    request: Request,
+    run_id: str,
+    service: IndexingReadService = Depends(get_read_service),
+) -> dict:
     try:
+        run = request.app.state.indexing_runs.get(run_id)
+        require_project_access(request, project_id=run.project_id)
         return service.get_run(run_id)
     except _DOMAIN_ERRORS as error:
         raise _translate(error, run_id=run_id) from error
@@ -187,12 +214,15 @@ def get_run(run_id: str, service: IndexingReadService = Depends(get_read_service
 
 @router.get("/runs/{run_id}/documents", response_model=PaginatedRunDocumentsSchema)
 def list_run_documents(
+    request: Request,
     run_id: str,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     service: IndexingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        run = request.app.state.indexing_runs.get(run_id)
+        require_project_access(request, project_id=run.project_id)
         documents = service.list_run_documents(run_id)
     except _DOMAIN_ERRORS as error:
         raise _translate(error, run_id=run_id) from error
@@ -201,12 +231,15 @@ def list_run_documents(
 
 @router.get("/runs/{run_id}/errors", response_model=PaginatedRunErrorsSchema)
 def list_run_errors(
+    request: Request,
     run_id: str,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     service: IndexingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        run = request.app.state.indexing_runs.get(run_id)
+        require_project_access(request, project_id=run.project_id)
         errors = service.list_run_errors(run_id)
     except _DOMAIN_ERRORS as error:
         raise _translate(error, run_id=run_id) from error
@@ -218,10 +251,13 @@ def list_run_errors(
     response_model=IndexingRetrievalReadinessSchema,
 )
 def get_retrieval_readiness(
+    request: Request,
     run_id: str,
     service: IndexingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        run = request.app.state.indexing_runs.get(run_id)
+        require_project_access(request, project_id=run.project_id)
         return service.get_retrieval_readiness(run_id)
     except _DOMAIN_ERRORS as error:
         raise _translate(error, run_id=run_id) from error
@@ -229,6 +265,7 @@ def get_retrieval_readiness(
 
 @router.post("/activations", response_model=ActivationResultSchema)
 def activate_bundle(
+    request: Request,
     payload: ActivationRequestSchema,
     use_case: ActivateIndexedBundleUseCase = Depends(get_activate_use_case),
     flags: FeatureFlags = Depends(get_feature_flags),
@@ -236,6 +273,8 @@ def activate_bundle(
 ) -> dict:
     _require_bundle_first(flags)
     try:
+        run = request.app.state.indexing_runs.get(payload.run_id)
+        require_project_access(request, project_id=run.project_id)
         result = use_case.execute(
             ActivationRequest(
                 run_id=payload.run_id,
@@ -257,6 +296,7 @@ def activate_bundle(
 
 @router.post("/rollbacks", response_model=ActivationResultSchema)
 def rollback_bundle(
+    request: Request,
     payload: RollbackRequestSchema,
     use_case: RollbackIndexedBundleUseCase = Depends(get_rollback_use_case),
     flags: FeatureFlags = Depends(get_feature_flags),
@@ -264,6 +304,14 @@ def rollback_bundle(
 ) -> dict:
     _require_bundle_first(flags)
     try:
+        current_bundle = request.app.state.embedding_bundles.get(
+            payload.current_embedding_bundle_id
+        )
+        previous_bundle = request.app.state.embedding_bundles.get(
+            payload.previous_embedding_bundle_id
+        )
+        require_project_access(request, project_id=current_bundle.project_id)
+        require_project_access(request, project_id=previous_bundle.project_id)
         result = use_case.execute(
             RollbackRequest(
                 current_embedding_bundle_id=payload.current_embedding_bundle_id,

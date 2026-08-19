@@ -174,6 +174,7 @@ class ActivateIndexedBundleUseCase:
 
         resolved_profile = resolved_profile_from_embedding_profile(profile)
         retrieval_profile = RetrievalProfile.build(
+            project_id=bundle.project_id,
             consumer_scope_type=request.consumer_scope_type,
             consumer_scope_id=request.consumer_scope_id,
             corpus_version=bundle.corpus_version,
@@ -183,6 +184,7 @@ class ActivateIndexedBundleUseCase:
         )
         with self._transactions.transaction():
             self._vectors.activate_bundle(
+                project_id=bundle.project_id,
                 profile=resolved_profile,
                 indexing_target_id=target.indexing_target_id,
                 corpus_version=bundle.corpus_version,
@@ -207,6 +209,7 @@ class ActivateIndexedBundleUseCase:
             )
 
         activated_rows = self._vectors.count_active_rows(
+            project_id=bundle.project_id,
             profile=resolved_profile,
             indexing_target_id=target.indexing_target_id,
             corpus_version=bundle.corpus_version,
@@ -300,6 +303,7 @@ class RollbackIndexedBundleUseCase:
         resolved_profile = resolved_profile_from_embedding_profile(profile)
 
         retrieval_profile = RetrievalProfile.build(
+            project_id=previous.project_id,
             consumer_scope_type=request.consumer_scope_type,
             consumer_scope_id=request.consumer_scope_id,
             corpus_version=previous.corpus_version,
@@ -308,6 +312,7 @@ class RollbackIndexedBundleUseCase:
         )
         with self._transactions.transaction():
             self._vectors.rollback_to_bundle(
+                project_id=previous.project_id,
                 profile=resolved_profile,
                 indexing_target_id=target.indexing_target_id,
                 corpus_version=previous.corpus_version,
@@ -329,6 +334,7 @@ class RollbackIndexedBundleUseCase:
             )
 
         activated_rows = self._vectors.count_active_rows(
+            project_id=previous.project_id,
             profile=resolved_profile,
             indexing_target_id=target.indexing_target_id,
             corpus_version=previous.corpus_version,

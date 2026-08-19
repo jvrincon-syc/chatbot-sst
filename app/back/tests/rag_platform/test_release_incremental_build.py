@@ -196,6 +196,44 @@ class _FailOnSecondResolver:
         )
 
 
+class _NeverResolve:
+    def resolve(self, *, context, source_document_revision_id):
+        raise AssertionError("el resolver no debe invocarse si se excede el tope")
+
+
+def test_build_at_limit_succeeds() -> None:
+    release_id = PlatformId(IdentityKind.RAG_RELEASE, "ragr_atlimit")
+    use_case, memberships, _ = _build(
+        release=_release(release_id, _SNAPSHOT),
+        snapshot=_snapshot(_SNAPSHOT, count=2),
+        resolver=InMemoryRevisionArtifactResolver(),
+        max_build_documents=2,
+    )
+    report = use_case.execute(
+        rag_release_id=release_id, actor=PlatformActor(actor_id="op-1")
+    )
+    assert report.revisions_built == 2
+    assert len(memberships.list_for_release(release_id)) == 2
+
+
+def test_over_limit_falla_antes_de_invocar_el_resolver() -> None:
+    # El tope se comprueba ANTES de resolver/ledger/membership: si se invocara el
+    # resolver, este lanzaría AssertionError en vez de ReleaseBuildTooLarge.
+    release_id = PlatformId(IdentityKind.RAG_RELEASE, "ragr_over")
+    use_case, memberships, ledger = _build(
+        release=_release(release_id, _SNAPSHOT),
+        snapshot=_snapshot(_SNAPSHOT, count=2),
+        resolver=_NeverResolve(),
+        max_build_documents=1,
+    )
+    with pytest.raises(ReleaseBuildTooLarge):
+        use_case.execute(
+            rag_release_id=release_id, actor=PlatformActor(actor_id="op-1")
+        )
+    assert memberships.list_for_release(release_id) == []
+    assert list(ledger.steps_for(release_id)) == []
+
+
 def test_build_usa_una_transaccion_por_revision_no_una_global() -> None:
     # 2 revisiones → 2 transacciones (UoW por revisión), nunca una mega-transacción.
     release_id = PlatformId(IdentityKind.RAG_RELEASE, "ragr_tx")

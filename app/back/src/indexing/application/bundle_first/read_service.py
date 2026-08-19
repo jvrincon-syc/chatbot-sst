@@ -135,6 +135,7 @@ class IndexingReadService:
             bundle = self._bundles.get(run.embedding_bundle_id)
             profile = self._profiles.get(bundle.embedding_profile_id)
             active_rows = self._vectors.count_active_rows(
+                project_id=bundle.project_id,
                 profile=resolved_profile_from_embedding_profile(profile),
                 indexing_target_id=run.indexing_target_id,
                 corpus_version=run.corpus_version,

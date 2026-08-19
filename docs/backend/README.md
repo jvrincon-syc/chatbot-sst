@@ -100,6 +100,9 @@ El detalle de handoffs y gates esta en
 
 - `SST_FEATURE_EMBEDDING_V2`, `SST_FEATURE_INDEXING_BUNDLE_FIRST` y
   `SST_FEATURE_RETRIEVAL_V1` gobiernan la exposicion bundle-first.
+- `SST_HTTP_AUTH_CREDENTIALS_JSON` define los bearer credentials autorizados
+  para toda la superficie FastAPI; vacio o ausente deja la API en fail-closed
+  con `HTTP_AUTH_NOT_CONFIGURED`.
 - `SST_PERSISTENCE_MODE` y `SST_POSTGRES_DSN` deciden lane `memory` o
   `postgres`.
 - `SST_CONSUMER_SCOPE_TYPE` y `SST_CONSUMER_SCOPE_ID` fijan el scope durable de

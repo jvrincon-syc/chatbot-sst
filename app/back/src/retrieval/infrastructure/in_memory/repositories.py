@@ -51,6 +51,7 @@ class InMemoryRetrievalProfileRepository:
     def find_active(
         self,
         *,
+        project_id: str,
         consumer_scope_type: str,
         consumer_scope_id: str,
         corpus_version: str | None = None,
@@ -60,6 +61,7 @@ class InMemoryRetrievalProfileRepository:
         for profile in self._profiles.values():
             if (
                 profile.active
+                and profile.project_id == project_id
                 and profile.consumer_scope_type == consumer_scope_type
                 and profile.consumer_scope_id == consumer_scope_id
                 and (corpus_version is None or profile.corpus_version == corpus_version)
@@ -80,6 +82,7 @@ class InMemoryRetrievalProfileRepository:
             if (
                 other_id != retrieval_profile_id
                 and other.active
+                and other.project_id == profile.project_id
                 and other.consumer_scope_type == profile.consumer_scope_type
                 and other.consumer_scope_id == profile.consumer_scope_id
                 and other.corpus_version == profile.corpus_version
@@ -128,6 +131,7 @@ class InMemoryVectorSearch:
     def search(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -143,7 +147,8 @@ class InMemoryVectorSearch:
             if table != vector_table or not stored.is_active:
                 continue
             if (
-                stored.embedding_profile_id != embedding_profile_id
+                stored.record.project_id != project_id
+                or stored.embedding_profile_id != embedding_profile_id
                 or stored.indexing_target_id != indexing_target_id
                 or stored.record.corpus_version != corpus_version
             ):
@@ -165,6 +170,7 @@ class InMemoryVectorSearch:
     def count_active_rows(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -175,6 +181,7 @@ class InMemoryVectorSearch:
         return len(
             self._active(
                 vector_table=vector_table,
+                project_id=project_id,
                 embedding_profile_id=embedding_profile_id,
                 indexing_target_id=indexing_target_id,
                 corpus_version=corpus_version,
@@ -184,6 +191,7 @@ class InMemoryVectorSearch:
     def count_active_documents(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -196,6 +204,7 @@ class InMemoryVectorSearch:
                 stored.record.document_id
                 for stored in self._active(
                     vector_table=vector_table,
+                    project_id=project_id,
                     embedding_profile_id=embedding_profile_id,
                     indexing_target_id=indexing_target_id,
                     corpus_version=corpus_version,
@@ -206,6 +215,7 @@ class InMemoryVectorSearch:
     def active_bundle_ids(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -218,6 +228,7 @@ class InMemoryVectorSearch:
                 stored.record.embedding_bundle_id
                 for stored in self._active(
                     vector_table=vector_table,
+                    project_id=project_id,
                     embedding_profile_id=embedding_profile_id,
                     indexing_target_id=indexing_target_id,
                     corpus_version=corpus_version,
@@ -229,6 +240,7 @@ class InMemoryVectorSearch:
         self,
         *,
         vector_table: str,
+        project_id: str,
         embedding_profile_id: str,
         indexing_target_id: str,
         corpus_version: str,
@@ -238,6 +250,7 @@ class InMemoryVectorSearch:
             for (table, _bundle_id, _node_id), stored in self.vectors.rows.items()
             if table == vector_table
             and stored.is_active
+            and stored.record.project_id == project_id
             and stored.embedding_profile_id == embedding_profile_id
             and stored.indexing_target_id == indexing_target_id
             and stored.record.corpus_version == corpus_version
@@ -253,6 +266,7 @@ class InMemoryLexicalSearch:
     def search(
         self,
         *,
+        project_id: str,
         query: str,
         embedding_profile_id: str,
         corpus_version: str,
@@ -267,7 +281,11 @@ class InMemoryLexicalSearch:
         terms = {token for token in query.lower().split() if token}
         scored: list[RetrievedEvidence] = []
         for node in self.nodes.nodes.values():
-            if node.node_role != "child" or node.corpus_version != corpus_version:
+            if (
+                node.node_role != "child"
+                or node.project_id != project_id
+                or node.corpus_version != corpus_version
+            ):
                 continue
             tokens = {token for token in node.text.lower().split() if token}
             overlap = len(terms & tokens)
@@ -294,6 +312,7 @@ class InMemoryParentExpansion:
     def expand(
         self,
         *,
+        project_id: str,
         parent_node_ids: Sequence[str],
         embedding_profile_id: str,
         corpus_version: str,
@@ -303,7 +322,11 @@ class InMemoryParentExpansion:
         parents: dict[str, RetrievedEvidence] = {}
         for parent_node_id in parent_node_ids:
             node = self.nodes.nodes.get(parent_node_id)
-            if node is None or node.corpus_version != corpus_version:
+            if (
+                node is None
+                or node.project_id != project_id
+                or node.corpus_version != corpus_version
+            ):
                 continue
             parents[parent_node_id] = _evidence_from_node(
                 node=node,

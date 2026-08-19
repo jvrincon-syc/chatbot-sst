@@ -11,12 +11,38 @@ from fastapi.testclient import TestClient
 from api.app import create_app
 from api.dependencies import build_pipeline_services
 from core.feature_flags import FeatureFlags
+from core.http_auth import AUTH_CREDENTIALS_JSON_KEY, ConfiguredBearerAuth
 
 from pipeline_fixtures import build_profile, build_target, write_chunk_bundle
 
 
 SCOPE_TYPE = "chatbot"
 SCOPE_ID = "sst-default"
+AUTH_TOKEN = "token-op-1"
+SCOPED_TOKEN = "token-proj-test"
+FOREIGN_SCOPED_TOKEN = "token-proj-other"
+
+
+def _authenticator() -> ConfiguredBearerAuth:
+    return ConfiguredBearerAuth(
+        {
+            AUTH_CREDENTIALS_JSON_KEY: (
+                '[{"principal_id":"op-1","token":"'
+                + AUTH_TOKEN
+                + '"},'
+                + '{"principal_id":"proj-test","token":"'
+                + SCOPED_TOKEN
+                + '","project_scope":["proj_test"]},'
+                + '{"principal_id":"proj-other","token":"'
+                + FOREIGN_SCOPED_TOKEN
+                + '","project_scope":["proj_other"]}]'
+            )
+        }
+    )
+
+
+def _auth_headers(token: str = AUTH_TOKEN) -> dict[str, str]:
+    return {"Authorization": f"Bearer {token}"}
 
 
 @pytest.fixture
@@ -36,11 +62,13 @@ def client(tmp_path: Path) -> Iterator[TestClient]:
         seed_targets=[build_target()],
         seed_chunk_bundles=[chunk_bundle],
         lexical_profile_id=profile.profile_id,
+        http_authenticator=_authenticator(),
     )
     app = create_app(services=services)
     app.state.test_profile = profile
     app.state.test_chunk_bundle = chunk_bundle
     with TestClient(app) as test_client:
+        test_client.headers.update(_auth_headers())
         yield test_client
 
 
@@ -58,8 +86,10 @@ def blocked_client(tmp_path: Path) -> Iterator[TestClient]:
         allow_mock_engine=True,
         seed_profiles=[profile],
         seed_targets=[build_target()],
+        http_authenticator=_authenticator(),
     )
     with TestClient(create_app(services=services)) as test_client:
+        test_client.headers.update(_auth_headers())
         yield test_client
 
 
@@ -79,11 +109,56 @@ def client_default_lexical_profile(tmp_path: Path) -> Iterator[TestClient]:
         seed_profiles=[profile],
         seed_targets=[build_target()],
         seed_chunk_bundles=[chunk_bundle],
+        http_authenticator=_authenticator(),
     )
     app = create_app(services=services)
     app.state.test_profile = profile
     app.state.test_chunk_bundle = chunk_bundle
     with TestClient(app) as test_client:
+        test_client.headers.update(_auth_headers())
+        yield test_client
+
+
+@pytest.fixture
+def unauthenticated_client(tmp_path: Path) -> Iterator[TestClient]:
+    profile = build_profile()
+    chunk_bundle = write_chunk_bundle(tmp_path / "chunks")
+    services = build_pipeline_services(
+        chunks_root=tmp_path / "chunks",
+        embeddings_root=tmp_path / "embeddings",
+        feature_flags=FeatureFlags(
+            embedding_v2=True,
+            indexing_bundle_first=True,
+            retrieval_v1=True,
+        ),
+        allow_mock_engine=True,
+        seed_profiles=[profile],
+        seed_targets=[build_target()],
+        seed_chunk_bundles=[chunk_bundle],
+        lexical_profile_id=profile.profile_id,
+        http_authenticator=_authenticator(),
+    )
+    app = create_app(services=services)
+    with TestClient(app) as test_client:
+        yield test_client
+
+
+@pytest.fixture
+def auth_not_configured_client(tmp_path: Path) -> Iterator[TestClient]:
+    profile = build_profile()
+    services = build_pipeline_services(
+        chunks_root=tmp_path / "chunks",
+        embeddings_root=tmp_path / "embeddings",
+        feature_flags=FeatureFlags(
+            embedding_v2=True,
+            indexing_bundle_first=True,
+            retrieval_v1=True,
+        ),
+        allow_mock_engine=True,
+        seed_profiles=[profile],
+        seed_targets=[build_target()],
+    )
+    with TestClient(create_app(services=services)) as test_client:
         yield test_client
 
 
@@ -129,6 +204,89 @@ def test_lista_perfiles_con_paginacion_snake_case(client: TestClient) -> None:
     assert set(body) == {"items", "page", "page_size", "total_items", "total_pages"}
     assert body["items"][0]["can_embed_documents"] is True
     assert "configuration_fingerprint" in body["items"][0]
+
+
+def test_exige_bearer_token_para_lecturas_y_mutaciones(
+    unauthenticated_client: TestClient,
+) -> None:
+    read = unauthenticated_client.get("/api/embedding/profiles?page=1&page_size=10")
+    write = unauthenticated_client.post(
+        "/api/retrieval/profiles",
+        json={
+            "corpus_version": "v1",
+            "embedding_profile_id": "p",
+            "indexing_target_id": "t",
+        },
+    )
+
+    assert read.status_code == 401
+    assert read.json()["error"]["code"] == "HTTP_AUTH_REQUIRED"
+    assert write.status_code == 401
+    assert write.json()["error"]["code"] == "HTTP_AUTH_REQUIRED"
+
+
+def test_falla_cerrado_si_no_hay_credenciales_http_configuradas(
+    auth_not_configured_client: TestClient,
+) -> None:
+    response = auth_not_configured_client.get("/api/indexing/targets")
+
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "HTTP_AUTH_NOT_CONFIGURED"
+
+
+def test_scope_de_proyecto_bloquea_lecturas_y_mutaciones_legacy_ajenas(
+    client: TestClient,
+) -> None:
+    embedding_run = _run_embedding(client)
+    indexing_run = _run_indexing(client, embedding_run["produced_embedding_bundle_id"])
+    activation = client.post(
+        "/api/indexing/activations",
+        json={"run_id": indexing_run["run_id"]},
+    ).json()
+
+    listed_runs = client.get(
+        "/api/embedding/runs?page=1&page_size=10",
+        headers=_auth_headers(FOREIGN_SCOPED_TOKEN),
+    )
+    listed_profiles = client.get(
+        "/api/retrieval/profiles?page=1&page_size=10",
+        headers=_auth_headers(FOREIGN_SCOPED_TOKEN),
+    )
+    create_embedding = client.post(
+        "/api/embedding/runs",
+        json={
+            "chunk_bundle_id": client.app.state.test_chunk_bundle.chunk_bundle_id,
+            "profile_id": client.app.state.test_profile.profile_id,
+        },
+        headers={
+            **_auth_headers(FOREIGN_SCOPED_TOKEN),
+            "Idempotency-Key": "embed-foreign",
+        },
+    )
+    read_indexing_run = client.get(
+        f"/api/indexing/runs/{indexing_run['run_id']}",
+        headers=_auth_headers(FOREIGN_SCOPED_TOKEN),
+    )
+    search = client.post(
+        "/api/retrieval/search",
+        json={
+            "retrieval_profile_id": activation["retrieval_profile_id"],
+            "query": "validacion sintetica de recuperacion",
+            "top_k": 2,
+        },
+        headers=_auth_headers(FOREIGN_SCOPED_TOKEN),
+    )
+
+    assert listed_runs.status_code == 200
+    assert listed_runs.json()["items"] == []
+    assert listed_profiles.status_code == 200
+    assert listed_profiles.json()["items"] == []
+    assert create_embedding.status_code == 403
+    assert create_embedding.json()["error"]["code"] == "HTTP_PROJECT_SCOPE_FORBIDDEN"
+    assert read_indexing_run.status_code == 403
+    assert read_indexing_run.json()["error"]["code"] == "HTTP_PROJECT_SCOPE_FORBIDDEN"
+    assert search.status_code == 403
+    assert search.json()["error"]["code"] == "HTTP_PROJECT_SCOPE_FORBIDDEN"
 
 
 def test_expone_runtime_sin_secretos(client: TestClient) -> None:
@@ -274,6 +432,29 @@ def test_activation_rechaza_scope_inyectado_en_el_body(client: TestClient) -> No
     assert response.json()["error"]["code"] == "PIPELINE_INVALID_REQUEST"
 
 
+def test_retrieval_no_acepta_consumer_scope_en_el_body(client: TestClient) -> None:
+    schema = client.app.openapi()["components"]["schemas"]["CreateRetrievalProfileSchema"]
+
+    assert "consumer_scope_type" not in schema["properties"]
+    assert "consumer_scope_id" not in schema["properties"]
+
+
+def test_retrieval_rechaza_scope_inyectado_en_el_body(client: TestClient) -> None:
+    response = client.post(
+        "/api/retrieval/profiles",
+        json={
+            "consumer_scope_type": "attacker",
+            "consumer_scope_id": "other-tenant",
+            "corpus_version": client.app.state.test_chunk_bundle.corpus_version,
+            "embedding_profile_id": client.app.state.test_profile.profile_id,
+            "indexing_target_id": "target-idx-vec-test-mock-v1",
+        },
+    )
+
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "PIPELINE_INVALID_REQUEST"
+
+
 def test_activation_y_rollback_bloqueadas_con_el_flag_apagado(
     blocked_client: TestClient,
 ) -> None:
@@ -405,14 +586,14 @@ def test_bloquea_activar_un_perfil_de_retrieval_sin_filas(client: TestClient) ->
     created = client.post(
         "/api/retrieval/profiles",
         json={
-            "consumer_scope_type": SCOPE_TYPE,
-            "consumer_scope_id": "otro-scope",
             "corpus_version": client.app.state.test_chunk_bundle.corpus_version,
             "embedding_profile_id": client.app.state.test_profile.profile_id,
             "indexing_target_id": "target-idx-vec-test-mock-v1",
         },
     )
     assert created.status_code == 201
+    assert created.json()["consumer_scope_type"] == SCOPE_TYPE
+    assert created.json()["consumer_scope_id"] == SCOPE_ID
 
     response = client.post(
         f"/api/retrieval/profiles/{created.json()['retrieval_profile_id']}/activate"
@@ -436,8 +617,6 @@ def test_los_flags_apagados_bloquean_las_escrituras(blocked_client: TestClient) 
     retrieval = blocked_client.post(
         "/api/retrieval/profiles",
         json={
-            "consumer_scope_type": SCOPE_TYPE,
-            "consumer_scope_id": SCOPE_ID,
             "corpus_version": "v1",
             "embedding_profile_id": "p",
             "indexing_target_id": "t",
@@ -487,8 +666,10 @@ def platform_enabled_client(tmp_path: Path) -> Iterator[TestClient]:
         seed_targets=[build_target()],
         seed_chunk_bundles=[chunk_bundle],
         lexical_profile_id=profile.profile_id,
+        http_authenticator=_authenticator(),
     )
     with TestClient(create_app(services=services)) as test_client:
+        test_client.headers.update(_auth_headers())
         yield test_client
 
 

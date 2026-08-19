@@ -192,6 +192,7 @@ class PostgresVectorRepository:
     def activate_bundle(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -213,12 +214,14 @@ class PostgresVectorRepository:
                    SET is_active = false,
                        superseded_at = now()
                  WHERE embedding_profile_id = %s
+                   AND project_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND document_id IN (
                        SELECT DISTINCT document_id
                          FROM {}
                         WHERE embedding_profile_id = %s
+                          AND project_id = %s
                           AND indexing_target_id = %s
                           AND corpus_version = %s
                           AND embedding_bundle_id = %s
@@ -229,9 +232,11 @@ class PostgresVectorRepository:
                 ).format(table_identifier, table_identifier),
                 (
                     profile.profile_id,
+                    project_id,
                     indexing_target_id,
                     corpus_version,
                     profile.profile_id,
+                    project_id,
                     indexing_target_id,
                     corpus_version,
                     embedding_bundle_id,
@@ -245,6 +250,7 @@ class PostgresVectorRepository:
                    SET is_active = true,
                        superseded_at = NULL
                  WHERE embedding_profile_id = %s
+                   AND project_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
@@ -252,6 +258,7 @@ class PostgresVectorRepository:
                 ).format(table_identifier),
                 (
                     profile.profile_id,
+                    project_id,
                     indexing_target_id,
                     corpus_version,
                     embedding_bundle_id,
@@ -261,6 +268,7 @@ class PostgresVectorRepository:
     def count_active_rows(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -280,6 +288,7 @@ class PostgresVectorRepository:
                     """
                 SELECT count(*) FROM {}
                  WHERE embedding_profile_id = %s
+                   AND project_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
@@ -288,6 +297,7 @@ class PostgresVectorRepository:
                 ).format(table_identifier),
                 (
                     profile.profile_id,
+                    project_id,
                     indexing_target_id,
                     corpus_version,
                     embedding_bundle_id,
@@ -301,6 +311,7 @@ class PostgresVectorRepository:
     def rollback_to_bundle(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -323,6 +334,7 @@ class PostgresVectorRepository:
                    SET is_active = false,
                        superseded_at = now()
                  WHERE embedding_profile_id = %s
+                   AND project_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
@@ -330,6 +342,7 @@ class PostgresVectorRepository:
                 ).format(table_identifier),
                 (
                     profile.profile_id,
+                    project_id,
                     indexing_target_id,
                     corpus_version,
                     current_embedding_bundle_id,
@@ -342,6 +355,7 @@ class PostgresVectorRepository:
                    SET is_active = true,
                        superseded_at = NULL
                  WHERE embedding_profile_id = %s
+                   AND project_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                    AND embedding_bundle_id = %s
@@ -349,6 +363,7 @@ class PostgresVectorRepository:
                 ).format(table_identifier),
                 (
                     profile.profile_id,
+                    project_id,
                     indexing_target_id,
                     corpus_version,
                     previous_embedding_bundle_id,

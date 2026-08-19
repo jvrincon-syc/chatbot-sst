@@ -351,18 +351,8 @@
       },
       "CreateRetrievalProfileSchema": {
         "additionalProperties": false,
-        "description": "Register one retrieval profile for a generic consumer scope.",
+        "description": "Register one retrieval profile under the server-controlled consumer scope.",
         "properties": {
-          "consumer_scope_id": {
-            "minLength": 1,
-            "title": "Consumer Scope Id",
-            "type": "string"
-          },
-          "consumer_scope_type": {
-            "minLength": 1,
-            "title": "Consumer Scope Type",
-            "type": "string"
-          },
           "corpus_version": {
             "minLength": 1,
             "title": "Corpus Version",
@@ -385,8 +375,6 @@
           }
         },
         "required": [
-          "consumer_scope_type",
-          "consumer_scope_id",
           "corpus_version",
           "embedding_profile_id",
           "indexing_target_id"

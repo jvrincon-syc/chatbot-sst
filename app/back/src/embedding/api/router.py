@@ -6,6 +6,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, Query, Request, status
 
+from api.dependencies import get_authenticated_principal, require_project_access
 from core.api.http import (
     DEFAULT_PAGE_SIZE,
     ErrorEnvelopeSchema,
@@ -13,6 +14,7 @@ from core.api.http import (
     http_error,
     paginate,
 )
+from core.http_auth import project_in_scope
 from core.feature_flags import FeatureFlags
 from embedding.api.schemas import (
     ChunkBundleSummarySchema,
@@ -83,6 +85,28 @@ def _translate(error: EmbeddingDomainError, *, run_id: str | None = None):
     )
 
 
+def _visible_embedding_run_ids(request: Request) -> set[str] | None:
+    principal = get_authenticated_principal(request)
+    if principal.project_scope is None:
+        return None
+    return {
+        run.embedding_run_id
+        for run in request.app.state.embedding_runs.list_runs()
+        if project_in_scope(principal, run.project_id)
+    }
+
+
+def _visible_chunk_bundle_ids(request: Request) -> set[str] | None:
+    principal = get_authenticated_principal(request)
+    if principal.project_scope is None:
+        return None
+    return {
+        bundle.chunk_bundle_id
+        for bundle in request.app.state.chunk_bundles.list_bundles()
+        if project_in_scope(principal, bundle.project_id)
+    }
+
+
 @router.get("/profiles", response_model=PaginatedProfilesSchema)
 def list_profiles(
     page: int = Query(default=1, ge=1),
@@ -103,11 +127,16 @@ def list_runtime(
 
 @router.get("/chunk-bundles", response_model=PaginatedChunkBundlesSchema)
 def list_chunk_bundles(
+    request: Request,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
-    return paginate(service.list_chunk_bundles(), page=page, page_size=page_size)
+    items = service.list_chunk_bundles()
+    visible_ids = _visible_chunk_bundle_ids(request)
+    if visible_ids is not None:
+        items = [item for item in items if item["chunk_bundle_id"] in visible_ids]
+    return paginate(items, page=page, page_size=page_size)
 
 
 @router.get(
@@ -115,10 +144,13 @@ def list_chunk_bundles(
     response_model=ChunkBundleSummarySchema,
 )
 def get_chunk_bundle_summary(
+    request: Request,
     chunk_bundle_id: str,
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        bundle = request.app.state.chunk_bundles.get(chunk_bundle_id)
+        require_project_access(request, project_id=bundle.project_id)
         return service.get_chunk_bundle_summary(chunk_bundle_id)
     except EmbeddingDomainError as error:
         raise _translate(error) from error
@@ -130,6 +162,7 @@ def get_chunk_bundle_summary(
     response_model=EmbeddingRunSchema,
 )
 def create_run(
+    request: Request,
     payload: EmbeddingRunRequestSchema,
     idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1)],
     use_case: CreateEmbeddingRunUseCase = Depends(get_create_run_use_case),
@@ -144,6 +177,8 @@ def create_run(
             message="the embedding_v2 feature flag is off",
         )
     try:
+        chunk_bundle = request.app.state.chunk_bundles.get(payload.chunk_bundle_id)
+        require_project_access(request, project_id=chunk_bundle.project_id)
         run = use_case.execute(
             request=CreateEmbeddingRunRequest(
                 chunk_bundle_id=payload.chunk_bundle_id,
@@ -160,19 +195,27 @@ def create_run(
 
 @router.get("/runs", response_model=PaginatedEmbeddingRunsSchema)
 def list_runs(
+    request: Request,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
-    return paginate(service.list_runs(), page=page, page_size=page_size)
+    items = service.list_runs()
+    visible_ids = _visible_embedding_run_ids(request)
+    if visible_ids is not None:
+        items = [item for item in items if item["embedding_run_id"] in visible_ids]
+    return paginate(items, page=page, page_size=page_size)
 
 
 @router.get("/runs/{embedding_run_id}", response_model=EmbeddingRunSchema)
 def get_run(
+    request: Request,
     embedding_run_id: str,
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        run = request.app.state.embedding_runs.get(embedding_run_id)
+        require_project_access(request, project_id=run.project_id)
         return service.get_run(embedding_run_id)
     except EmbeddingDomainError as error:
         raise _translate(error, run_id=embedding_run_id) from error
@@ -180,10 +223,13 @@ def get_run(
 
 @router.get("/bundles/{embedding_bundle_id}", response_model=EmbeddingBundleSchema)
 def get_bundle(
+    request: Request,
     embedding_bundle_id: str,
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        bundle = request.app.state.embedding_bundles.get(embedding_bundle_id)
+        require_project_access(request, project_id=bundle.project_id)
         return service.get_bundle(embedding_bundle_id)
     except EmbeddingDomainError as error:
         raise _translate(error) from error
@@ -194,12 +240,15 @@ def get_bundle(
     response_model=PaginatedBundleChunksSchema,
 )
 def list_bundle_chunks(
+    request: Request,
     embedding_bundle_id: str,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        bundle = request.app.state.embedding_bundles.get(embedding_bundle_id)
+        require_project_access(request, project_id=bundle.project_id)
         chunks = service.list_bundle_chunks(embedding_bundle_id)
     except EmbeddingDomainError as error:
         raise _translate(error) from error
@@ -211,10 +260,13 @@ def list_bundle_chunks(
     response_model=EmbeddingBundleValidationSchema,
 )
 def get_bundle_validation(
+    request: Request,
     embedding_bundle_id: str,
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        bundle = request.app.state.embedding_bundles.get(embedding_bundle_id)
+        require_project_access(request, project_id=bundle.project_id)
         return service.get_bundle_validation(embedding_bundle_id)
     except EmbeddingDomainError as error:
         raise _translate(error) from error
@@ -225,10 +277,13 @@ def get_bundle_validation(
     response_model=EmbeddingIndexingReadinessSchema,
 )
 def get_bundle_indexing_readiness(
+    request: Request,
     embedding_bundle_id: str,
     service: EmbeddingReadService = Depends(get_read_service),
 ) -> dict:
     try:
+        bundle = request.app.state.embedding_bundles.get(embedding_bundle_id)
+        require_project_access(request, project_id=bundle.project_id)
         return service.get_bundle_indexing_readiness(embedding_bundle_id)
     except EmbeddingDomainError as error:
         raise _translate(error) from error

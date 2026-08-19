@@ -130,6 +130,7 @@ def test_postgres_vector_repository_activates_bundle_transactionally() -> None:
     repository = PostgresVectorRepository(connection)
 
     repository.activate_bundle(
+        project_id="proj_alpha",
         profile=_profile(),
         indexing_target_id="target-idx-vec-llama-bge-m3-v1",
         corpus_version="phase1",
@@ -138,9 +139,11 @@ def test_postgres_vector_repository_activates_bundle_transactionally() -> None:
 
     statements = [_render(statement, monkeypatch=None) for statement in connection.cursor_obj.statements[-2:]]
     assert "is_active = false" in statements[0]
+    assert "project_id = %s" in statements[0]
     assert "superseded_at = now()" in statements[0]
     assert "document_id IN (" in statements[0]
     assert "embedding_bundle_id <> %s" in statements[0]
+    assert "project_id = %s" in statements[1]
     assert "is_active = true" in statements[1]
     assert "embedding_bundle_id = %s" in statements[1]
 
@@ -150,6 +153,7 @@ def test_postgres_vector_repository_rolls_back_to_previous_bundle() -> None:
     repository = PostgresVectorRepository(connection)
 
     repository.rollback_to_bundle(
+        project_id="proj_alpha",
         profile=_profile(),
         indexing_target_id="target-idx-vec-llama-bge-m3-v1",
         corpus_version="phase1",
@@ -159,8 +163,10 @@ def test_postgres_vector_repository_rolls_back_to_previous_bundle() -> None:
 
     statements = [_render(statement, monkeypatch=None) for statement in connection.cursor_obj.statements[-2:]]
     assert "embedding_bundle_id = %s" in statements[0]
+    assert "project_id = %s" in statements[0]
     assert "is_active = false" in statements[0]
     assert "embedding_bundle_id = %s" in statements[1]
+    assert "project_id = %s" in statements[1]
     assert "is_active = true" in statements[1]
 
 

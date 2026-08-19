@@ -27,9 +27,14 @@ snapshots y lifecycle de releases). Está detrás del flag `SST_FEATURE_RAG_PLAT
 exportado (regenerar con `npm run python -- scripts/api/export_pipeline_openapi.py`).
 Invariantes del contrato:
 
+- **autenticación HTTP obligatoria (bearer):** toda la superficie
+  (`embedding/indexing/retrieval/platform`) exige `Authorization: Bearer <token>`
+  contra `SST_HTTP_AUTH_CREDENTIALS_JSON`; sin token válido → `401`
+  (`HTTP_AUTH_REQUIRED`/`HTTP_AUTH_INVALID_CREDENTIALS`), sin credenciales
+  configuradas en el servidor → `503 HTTP_AUTH_NOT_CONFIGURED` (fail-closed);
 - la identidad del actor **nunca** viene del cliente (ni body, ni query, ni header
-  arbitrario): la resuelve un proveedor de confianza server-side; un `actor_id` en
-  el body se rechaza con 422;
+  arbitrario): se deriva del **principal HTTP autenticado** (`principal_id`,
+  `project_scope`); un `actor_id` en el body se rechaza con 422;
 - `build/validate/publish/retire` exigen el header `Idempotency-Key`; el mismo par
   clave+petición no re-ejecuta la operación y un fingerprint distinto bajo la misma
   clave devuelve `409 IDEMPOTENCY_KEY_CONFLICT`;
@@ -41,10 +46,26 @@ Invariantes del contrato:
 - todos los IDs externos son **canónicos completos** (`proj_...`, `ragv_...`,
   `ragr_...`, `corpus_...`, `srev_...`), incluido el body de `POST /corpus-snapshots`;
   un ID/slug malformado devuelve `422 INVALID_PLATFORM_ID`, nunca 500;
-- `build/validate/publish/retire` corren bajo una unidad de trabajo transaccional
-  y son idempotentes por `Idempotency-Key` scoped por principal (más `reason` en
-  retire); un snapshot que exceda `SST_PLATFORM_MAX_BUILD_DOCUMENTS` devuelve
-  `422 RELEASE_BUILD_TOO_LARGE`;
+- **lecturas acotadas por scope:** las GET exigen el actor de confianza y un actor
+  scoped solo ve/lee sus proyectos; `GET /projects` filtra al scope (vacío = 0
+  proyectos); leer un proyecto/config/matriz/variantes/release fuera de scope da
+  `403 PLATFORM_ACCESS_DENIED`;
+- **bindings server-controlled:** el frontend nunca envía `target_bindings` ni
+  `indexing_target_id`; el server los provisiona resolviendo un target compatible
+  por perfil de embedding. La `PATCH` de configuración que omite bindings los
+  **preserva** (jamás los borra); las versiones históricas conservan los suyos;
+- **modelo transaccional:** reserva durable de idempotencia (conexión dedicada) →
+  workflow de negocio con su propia frontera transaccional → completar/fallar
+  idempotencia. `publish`/`validate`/`retire` son una transacción corta; `build` es
+  un workflow **durable incremental por revisión**, NO una transacción atómica
+  global (si una revisión falla, las previas quedan durables/reutilizables);
+- `build/validate/publish/retire` son idempotentes por `Idempotency-Key` scoped por
+  principal (más `reason` en retire); un snapshot que exceda
+  `SST_PLATFORM_MAX_BUILD_DOCUMENTS` (default finito 1000) devuelve
+  `422 RELEASE_BUILD_TOO_LARGE` antes de trabajo costoso;
+- un futuro proveedor SSO/OIDC reemplaza el autenticador bearer /
+  `AuthenticatedPrincipalActorProvider` (y la policy) sin cambiar los schemas HTTP
+  ni la intención de los casos de uso;
 - publicar una release **no** activa la recuperación legacy.
 
 La **integración frontend** de esta superficie (`platformApi.ts`/`platformTypes.ts`)
@@ -512,6 +533,11 @@ Misma response. **No regenera embeddings.**
 `consumer_scope_type` / `consumer_scope_id` son genéricos mientras no exista una
 entidad concreta de chatbot. Convención sugerida: `"chatbot"` / `"sst-default"`.
 
+El cliente **no** envÃ­a `consumer_scope_type` ni `consumer_scope_id` en
+`POST /api/retrieval/profiles`: el servidor los resuelve desde
+`SST_CONSUMER_SCOPE_TYPE` / `SST_CONSUMER_SCOPE_ID`. Si el body intenta
+inyectarlos, FastAPI responde `422 PIPELINE_INVALID_REQUEST`.
+
 ### `GET /api/retrieval/profiles` (paginado)
 
 ```json
@@ -541,8 +567,6 @@ Enums:
 
 ```json
 {
-  "consumer_scope_type": "chatbot",
-  "consumer_scope_id": "sst-default",
   "corpus_version": "phase1-main",
   "embedding_profile_id": "local-bge-m3-v1",
   "indexing_target_id": "target-idx-vec-local-bge-m3-v1",
@@ -551,6 +575,10 @@ Enums:
 ```
 
 Se crea **inactivo**.
+El `project_id` tambiÃ©n se deriva server-side desde el dueÃ±o registrado para ese
+`corpus_version`; si no hay un Ãºnico proyecto determinista, la creaciÃ³n falla
+cerrada (`409 RETRIEVAL_PROJECT_CONTEXT_UNAVAILABLE` o
+`RETRIEVAL_PROJECT_CONTEXT_AMBIGUOUS`).
 
 ### `POST /api/retrieval/profiles/{id}/activate`
 

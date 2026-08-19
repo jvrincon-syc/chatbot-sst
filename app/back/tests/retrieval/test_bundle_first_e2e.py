@@ -30,6 +30,7 @@ from indexing.domain.errors import (
 )
 from retrieval.application.retrieval_service import CreateRetrievalProfileRequest
 from retrieval.domain.errors import LexicalFallbackNotAllowed, RetrievalProfileBlocked
+from retrieval.domain.models import RetrievalProfile
 
 from pipeline_fixtures import (
     build_pipeline_stack,
@@ -84,6 +85,27 @@ def test_e2e_devuelve_evidencia_del_target_correcto(stack) -> None:
     assert len(evidence) == 3
     assert all(item.node_id != child.parent_node_id for item in evidence)
     assert stack.indexing_runs.get(run_id).activation_status == "active"
+
+
+def test_retrieval_profile_id_incluye_project_id_en_la_identidad() -> None:
+    alpha_profile = RetrievalProfile.build(
+        project_id="proj_alpha",
+        consumer_scope_type=SCOPE_TYPE,
+        consumer_scope_id=SCOPE_ID,
+        corpus_version="phase1-test",
+        embedding_profile_id="test-mock-v1",
+        indexing_target_id="target-idx-vec-test-mock-v1",
+    )
+    beta_profile = RetrievalProfile.build(
+        project_id="proj_beta",
+        consumer_scope_type=SCOPE_TYPE,
+        consumer_scope_id=SCOPE_ID,
+        corpus_version="phase1-test",
+        embedding_profile_id="test-mock-v1",
+        indexing_target_id="target-idx-vec-test-mock-v1",
+    )
+
+    assert alpha_profile.retrieval_profile_id != beta_profile.retrieval_profile_id
 
 
 def test_indexing_no_genera_embeddings_ni_toca_el_provider(stack, monkeypatch) -> None:
@@ -384,6 +406,7 @@ def test_bloquea_retrieval_cuando_el_perfil_no_esta_activo(stack) -> None:
     stack.run_indexing(stack.run_embedding())
     profile = stack.create_retrieval_profile.execute(
         CreateRetrievalProfileRequest(
+            project_id=stack.chunk_bundle.project_id,
             consumer_scope_type=SCOPE_TYPE,
             consumer_scope_id=SCOPE_ID,
             corpus_version=stack.chunk_bundle.corpus_version,
@@ -403,6 +426,7 @@ def test_no_activa_el_perfil_de_retrieval_sin_filas_activas(stack) -> None:
     stack.run_indexing(stack.run_embedding())
     profile = stack.create_retrieval_profile.execute(
         CreateRetrievalProfileRequest(
+            project_id=stack.chunk_bundle.project_id,
             consumer_scope_type=SCOPE_TYPE,
             consumer_scope_id=SCOPE_ID,
             corpus_version=stack.chunk_bundle.corpus_version,
@@ -480,6 +504,7 @@ def test_no_mezcla_espacios_de_embedding_en_la_misma_lane(stack) -> None:
     stack.profiles._profiles[other_profile.profile_id] = other_profile  # noqa: SLF001
 
     rows = stack.vector_search.search(
+        project_id=stack.chunk_bundle.project_id,
         vector_table=stack.target.vector_table,
         embedding_profile_id=other_profile.profile_id,
         indexing_target_id=stack.target.indexing_target_id,

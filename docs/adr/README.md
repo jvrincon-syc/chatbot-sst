@@ -15,6 +15,9 @@ arquitectonicas actuales.
   perfil de embedding inmutable; separacion de lanes en base de datos.
 - `ADR-006-rag-platform-project-variant-release.md`: identidad de plataforma
   multi-proyecto (project/variant/release), aditiva sobre la lane legacy.
+- `ADR-009-retrieval-per-project-tenant-isolation.md`: `project_id` de extremo a
+  extremo en el runtime de retrieval (search/lexical/parent/activación/rollback);
+  aislamiento por proyecto demostrable en SQL, fail-closed.
 
 El estado operativo corto vive en `docs/README.md`,
 `docs/ingestion/README.md` y `docs/llama_first/README.md`.

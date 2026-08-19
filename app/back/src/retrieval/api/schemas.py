@@ -9,10 +9,8 @@ from ingestion.schemas.common import StrictModel
 
 
 class CreateRetrievalProfileSchema(StrictModel):
-    """Register one retrieval profile for a generic consumer scope."""
+    """Register one retrieval profile under the server-controlled consumer scope."""
 
-    consumer_scope_type: str = Field(min_length=1)
-    consumer_scope_id: str = Field(min_length=1)
     corpus_version: str = Field(min_length=1)
     embedding_profile_id: str = Field(min_length=1)
     indexing_target_id: str = Field(min_length=1)

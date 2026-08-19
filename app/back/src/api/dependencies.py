@@ -16,8 +16,16 @@ import os
 from pathlib import Path
 from typing import Literal, TYPE_CHECKING
 
+from fastapi import Request, status
+from core.api.http import http_error
 from core.consumer_scope import ConsumerScope
 from core.feature_flags import FeatureFlags
+from core.http_auth import (
+    AuthenticatedPrincipal,
+    ConfiguredBearerAuth,
+    HttpAuthError,
+    require_project_in_scope,
+)
 from core.logging.logger import get_logger
 from core.logging.observability import (
     EventStatus,
@@ -144,9 +152,13 @@ class PipelineServices:
     consumer_scope: ConsumerScope
     persistence_mode: PersistenceMode
     embedding_read_service: EmbeddingReadService
+    chunk_bundles: object
+    embedding_runs: object
+    embedding_bundles: object
     embedding_create_run: CreateEmbeddingRunUseCase
     embedding_executor: EmbeddingRunExecutor
     indexing_read_service: IndexingReadService
+    indexing_runs: object
     indexing_create_run: CreateIndexingRunUseCase
     indexing_executor: IndexingRunExecutor
     indexing_reconciler: IndexingRunReconciler
@@ -158,6 +170,7 @@ class PipelineServices:
     retrieval_profile_status: GetRetrievalProfileStatusUseCase
     retrieval_validate: ValidateRetrievalUseCase
     retrieval_search: SearchRetrievalUseCase
+    http_authenticator: ConfiguredBearerAuth
     connection: object | None = None
     # RAG platform admin services (Fase 6). Only wired when the
     # ``rag_platform_v1`` flag is on; ``None`` keeps the legacy surface untouched.
@@ -169,10 +182,7 @@ class PipelineServices:
     # Task 3: superficie tipada de proyectos/configuración (``RagPlatformServices``).
     # Task 4 la extenderá con variantes/releases; ``None`` deja el legacy intacto.
     rag_platform: RagPlatformServices | None = None
-    # Fase 7: adaptador HTTP. Solo se cablean tras el flag ``rag_platform_v1``;
-    # ``None`` deja el legacy intacto. El provider entrega el ``PlatformActor`` de
-    # confianza server-side; el store es la autoridad durable de idempotencia.
-    platform_actor_provider: object | None = None
+    # Fase 7: autoridad durable de idempotencia para comandos de release.
     platform_idempotency_store: object | None = None
     # Conexión dedicada del store de idempotencia (Postgres). Independiente de la
     # conexión de negocio para que su commit nunca capture trabajo de negocio.
@@ -203,14 +213,14 @@ def build_pipeline_services(
     seed_targets: Iterable[IndexingTarget] = (),
     seed_chunk_bundles: Iterable[ChunkBundleRef] = (),
     lexical_profile_id: str = "",
-    platform_actor_provider: object | None = None,
+    http_authenticator: ConfiguredBearerAuth | None = None,
     idempotency_connection: object | None = None,
 ) -> PipelineServices:
     """Wire the whole bundle-first surface on PostgreSQL or on memory.
 
-    ``platform_actor_provider`` overrides the trusted-actor adapter of the Fase 7
-    HTTP layer (tests inject a stub). When omitted and the platform flag is on, it
-    defaults to a configuration-backed provider reading ``os.environ``.
+    ``http_authenticator`` overrides the shared HTTP bearer authenticator. When
+    omitted, the composition root loads it from ``os.environ`` and the API fails
+    closed if no bearer credentials are configured.
 
     ``idempotency_connection`` es la conexión **dedicada** del store de
     idempotencia (independiente de la conexión de negocio). Cuando se omite en modo
@@ -221,6 +231,7 @@ def build_pipeline_services(
 
     flags = feature_flags or FeatureFlags.from_env()
     scope = consumer_scope or ConsumerScope.from_env()
+    authenticator = http_authenticator or ConfiguredBearerAuth(os.environ)
     persistence_mode: PersistenceMode = "postgres" if connection is not None else "memory"
     registry = DefaultEmbeddingEngineRegistry(allow_mock=allow_mock_engine)
     artifacts = FilesystemEmbeddingBundleArtifactStore(root=embeddings_root)
@@ -314,6 +325,9 @@ def build_pipeline_services(
             registry=registry,
             readiness_evaluator=readiness_evaluator,
         ),
+        chunk_bundles=chunk_bundles,
+        embedding_runs=embedding_runs,
+        embedding_bundles=bundles,
         embedding_create_run=CreateEmbeddingRunUseCase(
             runs=embedding_runs,
             profiles=profiles,
@@ -340,6 +354,7 @@ def build_pipeline_services(
             vectors=vectors,
             bundle_first_enabled=flags.indexing_bundle_first,
         ),
+        indexing_runs=indexing_runs,
         indexing_create_run=CreateIndexingRunUseCase(
             runs=indexing_runs,
             bundles=bundles,
@@ -399,6 +414,7 @@ def build_pipeline_services(
             retrieval_profiles=retrieval_profiles,
             search=search,
         ),
+        http_authenticator=authenticator,
     )
     # RAG platform admin lane (Fase 6): wired only behind the flag, never touching
     # the legacy retrieval services already built above.
@@ -428,26 +444,82 @@ def build_pipeline_services(
         services.platform_idempotency_store = _build_idempotency_store(
             connection=connection,
             idempotency_connection=idempotency_connection,
-        )
-        if platform_actor_provider is None:
-            from rag_platform.api.dependencies import ConfiguredPlatformActorProvider
-
-            platform_actor_provider = ConfiguredPlatformActorProvider(os.environ)
-        services.platform_actor_provider = platform_actor_provider
+    )
     return services
 
 
-def _resolve_max_build_documents(environ: Mapping[str, str]) -> int | None:
+def get_http_authenticator(request: Request) -> ConfiguredBearerAuth:
+    """Return the configured bearer authenticator bound to the application."""
+
+    return request.app.state.http_authenticator
+
+
+def require_authenticated_principal(
+    request: Request,
+) -> AuthenticatedPrincipal:
+    """Authenticate the request at the shared HTTP boundary."""
+
+    authenticator = get_http_authenticator(request)
+    try:
+        principal = authenticator.authenticate(request.headers.get("Authorization"))
+    except HttpAuthError as error:
+        raise http_error(
+            status_code=error.http_status,
+            code=error.code,
+            message=str(error),
+            headers=error.response_headers,
+        ) from error
+    request.state.authenticated_principal = principal
+    return principal
+
+
+def get_authenticated_principal(request: Request) -> AuthenticatedPrincipal:
+    """Return the already-authenticated principal bound to the request."""
+
+    principal = getattr(request.state, "authenticated_principal", None)
+    if principal is None:
+        principal = require_authenticated_principal(request)
+    return principal
+
+
+def require_project_access(
+    request: Request,
+    *,
+    project_id: str,
+) -> AuthenticatedPrincipal:
+    """Authorize the authenticated principal for a single project."""
+
+    principal = get_authenticated_principal(request)
+    try:
+        require_project_in_scope(principal, project_id)
+    except HttpAuthError as error:
+        raise http_error(
+            status_code=error.http_status,
+            code=error.code,
+            message=str(error),
+            headers=error.response_headers,
+        ) from error
+    return principal
+
+
+#: Tope finito por defecto de documentos por build síncrono. El build es una
+#: operación HTTP administrativa síncrona: "config ausente" NO puede significar
+#: "carga ilimitada". ``SST_PLATFORM_MAX_BUILD_DOCUMENTS`` lo sobrescribe.
+DEFAULT_MAX_BUILD_DOCUMENTS = 1000
+
+
+def _resolve_max_build_documents(environ: Mapping[str, str]) -> int:
     """Resuelve el tope de documentos por build desde el entorno (fail-closed).
 
-    ``SST_PLATFORM_MAX_BUILD_DOCUMENTS`` ausente/vacío = sin tope (comportamiento
-    previo). Un entero positivo lo acota. Un valor no numérico o <= 0 es config
-    inválida y aborta el arranque en vez de degradar a "sin tope" en silencio.
+    ``SST_PLATFORM_MAX_BUILD_DOCUMENTS`` ausente/vacío = ``DEFAULT_MAX_BUILD_DOCUMENTS``
+    (tope finito seguro por defecto, no ilimitado). Un entero positivo lo acota. Un
+    valor no numérico o <= 0 es config inválida y aborta el arranque en vez de
+    degradar a "sin tope" en silencio.
     """
 
     raw = (environ.get("SST_PLATFORM_MAX_BUILD_DOCUMENTS") or "").strip()
     if not raw:
-        return None
+        return DEFAULT_MAX_BUILD_DOCUMENTS
     try:
         value = int(raw)
     except ValueError as error:

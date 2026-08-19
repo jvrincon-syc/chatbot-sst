@@ -26,6 +26,7 @@ _DISTANCE_OPERATOR = {
 
 _PROFILE_COLUMNS = (
     "retrieval_profile_id",
+    "project_id",
     "consumer_scope_type",
     "consumer_scope_id",
     "corpus_version",
@@ -69,13 +70,14 @@ class PostgresRetrievalProfileRepository:
             cursor.execute(
                 """
                 INSERT INTO retrieval_profiles (
-                    retrieval_profile_id, consumer_scope_type, consumer_scope_id,
+                    retrieval_profile_id, project_id, consumer_scope_type, consumer_scope_id,
                     corpus_version, embedding_profile_id, indexing_target_id,
                     lexical_fallback_policy, active, validation_status,
                     validated_at, last_runtime_status
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (retrieval_profile_id) DO UPDATE SET
+                    project_id = EXCLUDED.project_id,
                     lexical_fallback_policy = EXCLUDED.lexical_fallback_policy,
                     validation_status = EXCLUDED.validation_status,
                     validated_at = EXCLUDED.validated_at,
@@ -83,6 +85,7 @@ class PostgresRetrievalProfileRepository:
                 """,
                 (
                     profile.retrieval_profile_id,
+                    profile.project_id,
                     profile.consumer_scope_type,
                     profile.consumer_scope_id,
                     profile.corpus_version,
@@ -130,6 +133,7 @@ class PostgresRetrievalProfileRepository:
     def find_active(
         self,
         *,
+        project_id: str,
         consumer_scope_type: str,
         consumer_scope_id: str,
         corpus_version: str | None = None,
@@ -141,12 +145,19 @@ class PostgresRetrievalProfileRepository:
                 f"""
                 SELECT {', '.join(_PROFILE_COLUMNS)} FROM retrieval_profiles
                  WHERE consumer_scope_type = %s
+                   AND project_id = %s
                    AND consumer_scope_id = %s
                    AND (%s::text IS NULL OR corpus_version = %s)
                    AND active = true
                  LIMIT 1
                 """,
-                (consumer_scope_type, consumer_scope_id, corpus_version, corpus_version),
+                (
+                    consumer_scope_type,
+                    project_id,
+                    consumer_scope_id,
+                    corpus_version,
+                    corpus_version,
+                ),
             )
             row = cursor.fetchone()
         return (
@@ -175,6 +186,7 @@ class PostgresRetrievalProfileRepository:
                 UPDATE retrieval_profiles
                    SET active = false
                  WHERE consumer_scope_type = %s
+                   AND project_id = %s
                    AND consumer_scope_id = %s
                    AND corpus_version = %s
                    AND retrieval_profile_id <> %s
@@ -182,6 +194,7 @@ class PostgresRetrievalProfileRepository:
                 """,
                 (
                     profile.consumer_scope_type,
+                    profile.project_id,
                     profile.consumer_scope_id,
                     profile.corpus_version,
                     retrieval_profile_id,
@@ -225,6 +238,7 @@ class PostgresVectorSearch:
     def search(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -253,9 +267,11 @@ class PostgresVectorSearch:
                        1 - (vector_row.embedding {operator} %s::vector) AS score
                   FROM {table} AS vector_row
                   JOIN indexing_nodes AS node ON node.node_id = vector_row.node_id
-                  JOIN indexing_normalized_documents AS document
+                 JOIN indexing_normalized_documents AS document
                     ON document.document_id = vector_row.document_id
                  WHERE vector_row.is_active = true
+                   AND vector_row.project_id = %s
+                   AND node.project_id = %s
                    AND vector_row.embedding_profile_id = %s
                    AND vector_row.indexing_target_id = %s
                    AND vector_row.corpus_version = %s
@@ -266,6 +282,8 @@ class PostgresVectorSearch:
                 """,
                 (
                     list(query_embedding),
+                    project_id,
+                    project_id,
                     embedding_profile_id,
                     indexing_target_id,
                     corpus_version,
@@ -287,6 +305,7 @@ class PostgresVectorSearch:
     def count_active_rows(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -300,11 +319,12 @@ class PostgresVectorSearch:
                 f"""
                 SELECT count(*) FROM {table}
                  WHERE is_active = true
+                   AND project_id = %s
                    AND embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                 """,
-                (embedding_profile_id, indexing_target_id, corpus_version),
+                (project_id, embedding_profile_id, indexing_target_id, corpus_version),
             )
             row = cursor.fetchone()
         if row is None:
@@ -314,6 +334,7 @@ class PostgresVectorSearch:
     def count_active_documents(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -327,11 +348,12 @@ class PostgresVectorSearch:
                 f"""
                 SELECT count(DISTINCT document_id) FROM {table}
                  WHERE is_active = true
+                   AND project_id = %s
                    AND embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                 """,
-                (embedding_profile_id, indexing_target_id, corpus_version),
+                (project_id, embedding_profile_id, indexing_target_id, corpus_version),
             )
             row = cursor.fetchone()
         if row is None:
@@ -341,6 +363,7 @@ class PostgresVectorSearch:
     def active_bundle_ids(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -354,11 +377,12 @@ class PostgresVectorSearch:
                 f"""
                 SELECT DISTINCT embedding_bundle_id FROM {table}
                  WHERE is_active = true
+                   AND project_id = %s
                    AND embedding_profile_id = %s
                    AND indexing_target_id = %s
                    AND corpus_version = %s
                 """,
-                (embedding_profile_id, indexing_target_id, corpus_version),
+                (project_id, embedding_profile_id, indexing_target_id, corpus_version),
             )
             rows = cursor.fetchall()
         return sorted(
@@ -377,6 +401,7 @@ class PostgresLexicalSearch:
     def search(
         self,
         *,
+        project_id: str,
         query: str,
         embedding_profile_id: str,
         corpus_version: str,
@@ -402,9 +427,10 @@ class PostgresLexicalSearch:
                            plainto_tsquery('spanish', %s)
                        ) AS score
                   FROM indexing_nodes AS node
-                  JOIN indexing_normalized_documents AS document
+                 JOIN indexing_normalized_documents AS document
                     ON document.document_id = node.document_id
                  WHERE node.node_role = 'child'
+                   AND node.project_id = %s
                    AND node.corpus_version = %s
                    AND document.processing_status = 'processed'
                    AND document.review_status = 'approved'
@@ -413,7 +439,7 @@ class PostgresLexicalSearch:
                  ORDER BY score DESC
                  LIMIT %s
                 """,
-                (query, corpus_version, query, top_k),
+                (query, project_id, corpus_version, query, top_k),
             )
             rows = cursor.fetchall()
         return [
@@ -436,6 +462,7 @@ class PostgresParentExpansion:
     def expand(
         self,
         *,
+        project_id: str,
         parent_node_ids: Sequence[str],
         embedding_profile_id: str,
         corpus_version: str,
@@ -458,12 +485,13 @@ class PostgresParentExpansion:
                        node.section_path,
                        node.metadata,
                        0.0 AS score
-                  FROM indexing_nodes AS node
+                 FROM indexing_nodes AS node
                  WHERE node.node_id = ANY(%s)
+                   AND node.project_id = %s
                    AND node.node_role = 'parent'
                    AND node.corpus_version = %s
                 """,
-                (list(parent_node_ids), corpus_version),
+                (list(parent_node_ids), project_id, corpus_version),
             )
             rows = cursor.fetchall()
         parents: dict[str, RetrievedEvidence] = {}

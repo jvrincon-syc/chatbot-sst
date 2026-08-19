@@ -983,12 +983,20 @@ SQL, sin fingerprints, sin repos concretos ni derivación de target físico en e
 router. Decisiones arquitectónicas resueltas del prompt de Fase 7:
 
 - **Actor de confianza.** Puerto `TrustedPlatformActorProvider` (aplicación,
-  transport-independent) + adaptador `ConfiguredPlatformActorProvider`
-  (`rag_platform/api/dependencies.py`) que deriva `PlatformActor` de
-  `SST_PLATFORM_ACTOR_ID`/`SST_PLATFORM_ACTOR_PROJECT_SCOPE`, fail-closed
-  (`TrustedActorUnavailable` 503). El router recibe el `PlatformActor` ya
-  resuelto; una futura transición SSO/OIDC reemplaza solo el proveedor sin tocar
-  casos de uso ni schemas. La identidad nunca viene de body/query/header.
+  transport-independent). **Actualización P1 (2026-08-19): autenticación HTTP
+  real.** El `PlatformActor` ya NO se deriva de config estática de servidor; se
+  deriva del **principal HTTP autenticado**. Un boundary bearer común
+  (`core/http_auth.py::ConfiguredBearerAuth`, cargado de
+  `SST_HTTP_AUTH_CREDENTIALS_JSON`) autentica **toda** la superficie
+  (`embedding/indexing/retrieval/platform`) como dependency de app; sin
+  `Authorization: Bearer` válido → 401, sin credenciales configuradas → 503
+  `HTTP_AUTH_NOT_CONFIGURED` (fail-closed). El adaptador
+  `AuthenticatedPrincipalActorProvider` (`rag_platform/api/dependencies.py`)
+  mapea el `AuthenticatedPrincipal` (`principal_id`, `project_scope`) a
+  `PlatformActor`. La identidad nunca viene de body/query/header arbitrario. Una
+  futura transición SSO/OIDC reemplaza solo el autenticador/proveedor sin tocar
+  casos de uso ni schemas. (El `ConfiguredPlatformActorProvider` de config estática
+  quedó **retirado**; `SST_PLATFORM_ACTOR_ID`/`_PROJECT_SCOPE` obsoletos.)
 - **Idempotencia durable.** Puerto `IdempotencyStore` + `IdempotencyGuard`
   (aplicación); autoridad PostgreSQL (`PostgresIdempotencyStore` sobre
   `platform_idempotency_records`, reserva atómica `INSERT ... ON CONFLICT DO
@@ -1073,9 +1081,76 @@ con test y verde del operador:
    ya no captura trabajo de negocio parcial aunque comparta la conexión.
    `build/validate/retire` dejan de depender del commit transversal. En memoria
    (`NullTransactionManager`) es no-op.
+   **[Superado por la Ronda 2, item 9.]**
 
 Archivos nuevos del pase: `test_postgres_idempotency.py`. Migración sin cambios
 (`20260819_01`). Superficie única `services.rag_platform.*` intacta. Sin commit/push.
+
+#### Endurecimiento post-Fase 7 — Ronda 2 (2026-08-19)
+
+Segundo pase de revisión pre-Fase 8. Cuatro tareas, cada una con tests y verde del
+operador. Congela un contrato backend/OpenAPI seguro para Fase 8.
+
+1. **[Task 1] Frontera de autorización uniforme para LECTURAS.** Antes solo las
+   mutaciones enforcaban scope; ahora también las lecturas. `ListProjectsUseCase`
+   filtra por `actor.project_scope` (None=todo, tupla=subset, vacía=nada);
+   `get_project`/`get_configuration`/`variant-matrix`/`list_variants` enforcan por
+   el project_id del path; `get_release`/`list_releases` por el proyecto de la
+   entidad cargada (nunca por un project_id que el cliente suministre aparte). Las
+   GET exigen un `PlatformActor` de confianza (sin actor → 503). Concepto único de
+   autorización: `require_project_operator` (API de operador interno; un RBAC futuro
+   reemplaza policy+provider sin tocar casos de uso).
+2. **[Task 2A] La PATCH de configuración ya NO borra bindings.**
+   `UpdateProjectConfigurationRequest.target_bindings: tuple|None=None`; `None` =
+   **preservar** los bindings server-controlled de la versión vigente. El DTO HTTP
+   nunca los envía → omisión = preservar (jamás borrar). Las versiones históricas
+   conservan sus bindings originales.
+3. **[Task 2B] Provisioning server-side de bindings.** `TargetBindingProvisioner`
+   deriva un `ProjectIndexingTargetBinding` por perfil de embedding declarado
+   resolviendo un `IndexingTarget` compatible del **catálogo global** de targets
+   (`list_targets()`, sin segundo catálogo). `CreateProjectUseCase` provisiona
+   cuando el alta HTTP no trae bindings; respeta bindings explícitos (seed).
+   Fail-closed: sin target compatible, sin binding. El cliente jamás elige el
+   `indexing_target_id` físico; un proyecto nuevo obtiene una celda de matriz
+   construible cuando existe compatibilidad server-side.
+4. **[Task 3] Ownership transaccional real (corrige el item 9 de la Ronda 1).** Se
+   **eliminó** el UoW artificial del router (`_transactional_operation`,
+   `platform_transactions`, `get_platform_transactions`). El modelo real es:
+   `reserva durable de idempotencia (conexión dedicada) → workflow de negocio con
+   sus propias fronteras transaccionales → completar/fallar idempotencia (conexión
+   dedicada)`. El `PostgresIdempotencyStore` usa una **conexión física dedicada**
+   (segunda psycopg desde el mismo DSN, cerrada en `close()`), de modo que su commit
+   nunca captura trabajo de negocio. Cada caso de uso posee su transacción: `publish`
+   una corta (sin anidamiento del router), `validate`/`retire` una corta, `build`
+   **una por revisión** (workflow durable incremental; el resolver commitea sus
+   artefactos por su cuenta). El build **no** es una transacción global atómica: si
+   una revisión falla, las previas quedan durables/reutilizables por el ledger.
+5. **[Task 4] Límite de build seguro por defecto.** `DEFAULT_MAX_BUILD_DOCUMENTS`
+   finito (1000); `SST_PLATFORM_MAX_BUILD_DOCUMENTS` lo sobrescribe; ausente = default
+   finito (no ilimitado); no numérico/0/negativo aborta el arranque (fail-closed). El
+   tope se comprueba **antes** de resolver/ledger/membership/embedding/indexing;
+   `RELEASE_BUILD_TOO_LARGE` (422).
+
+Archivos nuevos: `application/target_provisioning.py`,
+`tests/rag_platform/test_target_provisioning.py`,
+`tests/rag_platform/test_transaction_ownership.py` (integrado en
+`test_release_incremental_build.py`/`test_publication_neutrality.py`/
+`test_postgres_idempotency.py`). Superficie única `services.rag_platform.*` intacta.
+OpenAPI regenerado. Sin commit/push en el pase final (Task 4).
+
+**Modelo transaccional vigente (autoritativo):**
+
+```text
+reserva durable de idempotencia (conexión dedicada, commit corto)
+        ↓
+workflow de negocio con su propia frontera transaccional
+  - publish/validate/retire: una transacción corta (dueño = el caso de uso)
+  - build: una transacción por revisión (durable, incremental, ledger-driven)
+        ↓
+completar/fallar idempotencia (conexión dedicada, commit corto)
+```
+
+El build NO es rollback-atómico global; es un workflow durable por etapas.
 
 ### Fase 8: GUI de plataforma integrada con la UI actual
 

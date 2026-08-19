@@ -188,6 +188,7 @@ class InMemoryBundleVectorRepository:
     def activate_bundle(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -201,6 +202,7 @@ class InMemoryBundleVectorRepository:
             if stored.record.embedding_bundle_id == embedding_bundle_id
             and self._same_lane(
                 stored,
+                project_id=project_id,
                 profile=profile,
                 indexing_target_id=indexing_target_id,
                 corpus_version=corpus_version,
@@ -209,6 +211,7 @@ class InMemoryBundleVectorRepository:
         for stored in self.rows.values():
             if not self._same_lane(
                 stored,
+                project_id=project_id,
                 profile=profile,
                 indexing_target_id=indexing_target_id,
                 corpus_version=corpus_version,
@@ -224,6 +227,7 @@ class InMemoryBundleVectorRepository:
     def rollback_to_bundle(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -235,6 +239,7 @@ class InMemoryBundleVectorRepository:
         for stored in self.rows.values():
             if not self._same_lane(
                 stored,
+                project_id=project_id,
                 profile=profile,
                 indexing_target_id=indexing_target_id,
                 corpus_version=corpus_version,
@@ -250,6 +255,7 @@ class InMemoryBundleVectorRepository:
     def count_active_rows(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -264,6 +270,7 @@ class InMemoryBundleVectorRepository:
             and stored.record.embedding_bundle_id == embedding_bundle_id
             and self._same_lane(
                 stored,
+                project_id=project_id,
                 profile=profile,
                 indexing_target_id=indexing_target_id,
                 corpus_version=corpus_version,
@@ -279,11 +286,14 @@ class InMemoryBundleVectorRepository:
     def _same_lane(
         stored: _StoredVector,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
     ) -> bool:
         return (
+            stored.record.project_id == project_id
+            and
             stored.embedding_profile_id == profile.profile_id
             and stored.indexing_target_id == indexing_target_id
             and stored.record.corpus_version == corpus_version

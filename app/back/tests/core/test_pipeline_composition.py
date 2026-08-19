@@ -7,7 +7,9 @@ from pathlib import Path
 import pytest
 
 from api.dependencies import (
+    DEFAULT_MAX_BUILD_DOCUMENTS,
     PostgresUnavailableAtStartup,
+    _resolve_max_build_documents,
     _resolve_persistence_mode,
     build_pipeline_services,
     build_pipeline_services_from_env,
@@ -17,6 +19,25 @@ from core.feature_flags import FeatureFlags
 
 def test_resuelve_memory_por_defecto_sin_dsn() -> None:
     assert _resolve_persistence_mode({}) == "memory"
+
+
+def test_max_build_documents_ausente_usa_default_finito() -> None:
+    # Config ausente NO es ilimitado: cae a un tope finito seguro.
+    assert _resolve_max_build_documents({}) == DEFAULT_MAX_BUILD_DOCUMENTS
+    assert isinstance(DEFAULT_MAX_BUILD_DOCUMENTS, int)
+    assert DEFAULT_MAX_BUILD_DOCUMENTS > 0
+
+
+def test_max_build_documents_override_valido_se_respeta() -> None:
+    assert (
+        _resolve_max_build_documents({"SST_PLATFORM_MAX_BUILD_DOCUMENTS": "50"}) == 50
+    )
+
+
+@pytest.mark.parametrize("raw", ["abc", "0", "-3", "3.5"])
+def test_max_build_documents_invalido_falla_cerrado(raw: str) -> None:
+    with pytest.raises(ValueError):
+        _resolve_max_build_documents({"SST_PLATFORM_MAX_BUILD_DOCUMENTS": raw})
 
 
 def test_feature_flags_quedan_activas_por_defecto_sin_env() -> None:

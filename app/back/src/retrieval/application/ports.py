@@ -24,6 +24,7 @@ class RetrievalProfileRepository(Protocol):
     def find_active(
         self,
         *,
+        project_id: str,
         consumer_scope_type: str,
         consumer_scope_id: str,
         corpus_version: str | None = None,
@@ -53,6 +54,7 @@ class VectorSearchPort(Protocol):
     def search(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -66,6 +68,7 @@ class VectorSearchPort(Protocol):
     def count_active_rows(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -76,6 +79,7 @@ class VectorSearchPort(Protocol):
     def count_active_documents(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -86,6 +90,7 @@ class VectorSearchPort(Protocol):
     def active_bundle_ids(
         self,
         *,
+        project_id: str,
         vector_table: str,
         embedding_profile_id: str,
         indexing_target_id: str,
@@ -100,6 +105,7 @@ class LexicalSearchPort(Protocol):
     def search(
         self,
         *,
+        project_id: str,
         query: str,
         embedding_profile_id: str,
         corpus_version: str,
@@ -114,6 +120,7 @@ class ParentExpansionPort(Protocol):
     def expand(
         self,
         *,
+        project_id: str,
         parent_node_ids: Sequence[str],
         embedding_profile_id: str,
         corpus_version: str,

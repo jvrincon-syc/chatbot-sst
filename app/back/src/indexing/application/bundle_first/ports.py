@@ -96,6 +96,7 @@ class BundleVectorWriter(Protocol):
     def activate_bundle(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -106,6 +107,7 @@ class BundleVectorWriter(Protocol):
     def rollback_to_bundle(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,
@@ -117,6 +119,7 @@ class BundleVectorWriter(Protocol):
     def count_active_rows(
         self,
         *,
+        project_id: str,
         profile: ResolvedIndexingProfile,
         indexing_target_id: str,
         corpus_version: str,

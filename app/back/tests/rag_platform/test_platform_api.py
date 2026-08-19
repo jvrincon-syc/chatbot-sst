@@ -24,8 +24,8 @@ from fastapi.testclient import TestClient
 
 from api.app import create_app
 from api.dependencies import build_pipeline_services
+from core.http_auth import AUTH_CREDENTIALS_JSON_KEY, ConfiguredBearerAuth
 from core.feature_flags import FeatureFlags
-from rag_platform.api.dependencies import ConfiguredPlatformActorProvider
 from rag_platform.application.idempotency import (
     IdempotencyGuard,
     IdempotencyKeyConflict,
@@ -34,74 +34,94 @@ from rag_platform.application.idempotency import (
     IdempotencyStatus,
     idempotency_request_fingerprint,
 )
-from rag_platform.application.platform_access import PlatformActor
 from rag_platform.infrastructure.in_memory.idempotency import InMemoryIdempotencyStore
 from datetime import datetime, timezone
 
+GLOBAL_TOKEN = "token-global-op"
+ALPHA_TOKEN = "token-alpha-op"
+EMPTY_SCOPE_TOKEN = "token-empty-scope"
 
-class _StubActorProvider:
-    """Proveedor de confianza de test: devuelve un actor server-side.
 
-    ``set_actor`` permite alternar la identidad entre requests para probar el
-    scope (p. ej. sembrar como operador global y luego leer como actor scoped),
-    sin que la identidad venga jamás de datos del cliente.
-    """
+def _authenticator() -> ConfiguredBearerAuth:
+    return ConfiguredBearerAuth(
+        {
+            AUTH_CREDENTIALS_JSON_KEY: (
+                "["
+                '{"principal_id":"op-1","token":"'
+                + GLOBAL_TOKEN
+                + '"},'
+                '{"principal_id":"jose","token":"'
+                + ALPHA_TOKEN
+                + '","project_scope":["proj_alpha"]},'
+                '{"principal_id":"jose","token":"'
+                + EMPTY_SCOPE_TOKEN
+                + '","project_scope":[]}'
+                "]"
+            )
+        }
+    )
 
-    def __init__(self, actor: PlatformActor) -> None:
-        self._actor = actor
 
-    def set_actor(self, actor: PlatformActor) -> None:
-        self._actor = actor
-
-    def current_actor(self) -> PlatformActor:
-        return self._actor
+def _auth_headers(token: str) -> dict[str, str]:
+    return {"Authorization": f"Bearer {token}"}
 
 
 def _build_client(
     tmp_path: Path,
     *,
     rag_platform_v1: bool,
-    actor_provider: object,
+    authenticator: ConfiguredBearerAuth | None,
 ) -> TestClient:
     services = build_pipeline_services(
         chunks_root=tmp_path / "chunks",
         embeddings_root=tmp_path / "embeddings",
         feature_flags=FeatureFlags(rag_platform_v1=rag_platform_v1),
         allow_mock_engine=True,
-        platform_actor_provider=actor_provider,
+        http_authenticator=authenticator,
     )
     return TestClient(create_app(services=services))
 
 
 @pytest.fixture
 def client(tmp_path: Path) -> Iterator[TestClient]:
-    provider = _StubActorProvider(PlatformActor(actor_id="op-1", project_scope=None))
-    with _build_client(tmp_path, rag_platform_v1=True, actor_provider=provider) as c:
+    with _build_client(
+        tmp_path, rag_platform_v1=True, authenticator=_authenticator()
+    ) as c:
+        c.headers.update(_auth_headers(GLOBAL_TOKEN))
         yield c
 
 
 @pytest.fixture
 def flag_off_client(tmp_path: Path) -> Iterator[TestClient]:
-    provider = _StubActorProvider(PlatformActor(actor_id="op-1", project_scope=None))
-    with _build_client(tmp_path, rag_platform_v1=False, actor_provider=provider) as c:
+    with _build_client(
+        tmp_path, rag_platform_v1=False, authenticator=_authenticator()
+    ) as c:
+        c.headers.update(_auth_headers(GLOBAL_TOKEN))
         yield c
 
 
 @pytest.fixture
-def no_actor_client(tmp_path: Path) -> Iterator[TestClient]:
+def unauthenticated_client(tmp_path: Path) -> Iterator[TestClient]:
     # Configuración de operador ausente: el proveedor falla cerrado.
-    provider = ConfiguredPlatformActorProvider({})
-    with _build_client(tmp_path, rag_platform_v1=True, actor_provider=provider) as c:
+    with _build_client(
+        tmp_path, rag_platform_v1=True, authenticator=_authenticator()
+    ) as c:
         yield c
 
 
 @pytest.fixture
-def scoped_env(tmp_path: Path) -> Iterator[tuple[TestClient, _StubActorProvider]]:
-    """Cliente + proveedor mutable para probar el scope de lectura/escritura."""
+def auth_not_configured_client(tmp_path: Path) -> Iterator[TestClient]:
+    with _build_client(tmp_path, rag_platform_v1=True, authenticator=None) as c:
+        yield c
 
-    provider = _StubActorProvider(PlatformActor(actor_id="op-1", project_scope=None))
-    with _build_client(tmp_path, rag_platform_v1=True, actor_provider=provider) as c:
-        yield c, provider
+
+@pytest.fixture
+def scoped_client(tmp_path: Path) -> Iterator[TestClient]:
+    with _build_client(
+        tmp_path, rag_platform_v1=True, authenticator=_authenticator()
+    ) as c:
+        c.headers.update(_auth_headers(GLOBAL_TOKEN))
+        yield c
 
 
 def _create_project(client: TestClient, slug: str = "demo") -> dict:
@@ -224,18 +244,42 @@ def test_flag_apagado_devuelve_503(flag_off_client: TestClient) -> None:
     assert response.json()["error"]["code"] == "RAG_PLATFORM_V1_DISABLED"
 
 
-def test_actor_de_confianza_ausente_falla_cerrado(no_actor_client: TestClient) -> None:
+def test_exige_bearer_token_en_plataforma(
+    unauthenticated_client: TestClient,
+) -> None:
     # Sin actor de confianza, tanto lecturas como mutaciones fallan cerrado: la
     # autorización por scope exige un ``PlatformActor`` también en las GET.
-    read = no_actor_client.get("/api/platform/projects")
-    assert read.status_code == 503
-    assert read.json()["error"]["code"] == "TRUSTED_ACTOR_UNAVAILABLE"
-    write = no_actor_client.post(
+    read = unauthenticated_client.get("/api/platform/projects")
+    assert read.status_code == 401
+    assert read.json()["error"]["code"] == "HTTP_AUTH_REQUIRED"
+    write = unauthenticated_client.post(
         "/api/platform/projects",
         json={"project_slug": "demo", "display_name": "Demo"},
     )
-    assert write.status_code == 503
-    assert write.json()["error"]["code"] == "TRUSTED_ACTOR_UNAVAILABLE"
+    assert write.status_code == 401
+    assert write.json()["error"]["code"] == "HTTP_AUTH_REQUIRED"
+
+
+def test_falla_cerrado_si_auth_http_no_esta_configurada(
+    auth_not_configured_client: TestClient,
+) -> None:
+    response = auth_not_configured_client.get("/api/platform/projects")
+
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "HTTP_AUTH_NOT_CONFIGURED"
+
+
+def test_token_bearer_invalido_da_401(
+    unauthenticated_client: TestClient,
+) -> None:
+    # Un bearer presente pero no registrado se rechaza (constant-time compare).
+    response = unauthenticated_client.get(
+        "/api/platform/projects",
+        headers=_auth_headers("token-que-no-existe"),
+    )
+    assert response.status_code == 401
+    assert response.json()["error"]["code"] == "HTTP_AUTH_INVALID_CREDENTIALS"
+    assert response.headers.get("WWW-Authenticate") == "Bearer"
 
 
 # --------------------------------------------------------------------------- #
@@ -243,11 +287,8 @@ def test_actor_de_confianza_ausente_falla_cerrado(no_actor_client: TestClient) -
 # --------------------------------------------------------------------------- #
 
 
-def _seed_two_projects(env: tuple[TestClient, _StubActorProvider]) -> TestClient:
+def _seed_two_projects(client: TestClient) -> TestClient:
     """Siembra ``proj_alpha`` y ``proj_beta`` como operador global."""
-
-    client, provider = env
-    provider.set_actor(PlatformActor(actor_id="op-1", project_scope=None))
     for slug in ("alpha", "beta"):
         assert (
             client.post(
@@ -260,72 +301,98 @@ def _seed_two_projects(env: tuple[TestClient, _StubActorProvider]) -> TestClient
 
 
 def test_list_projects_global_ve_todo(
-    scoped_env: tuple[TestClient, _StubActorProvider],
+    scoped_client: TestClient,
 ) -> None:
-    client = _seed_two_projects(scoped_env)
-    _, provider = scoped_env
-    provider.set_actor(PlatformActor(actor_id="op-1", project_scope=None))
+    client = _seed_two_projects(scoped_client)
     ids = {p["project_id"] for p in client.get("/api/platform/projects").json()["items"]}
     assert ids == {"proj_alpha", "proj_beta"}
 
 
 def test_list_projects_scoped_ve_solo_los_suyos(
-    scoped_env: tuple[TestClient, _StubActorProvider],
+    scoped_client: TestClient,
 ) -> None:
-    client = _seed_two_projects(scoped_env)
-    _, provider = scoped_env
-    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
-    ids = {p["project_id"] for p in client.get("/api/platform/projects").json()["items"]}
+    client = _seed_two_projects(scoped_client)
+    ids = {
+        p["project_id"]
+        for p in client.get(
+            "/api/platform/projects",
+            headers=_auth_headers(ALPHA_TOKEN),
+        ).json()["items"]
+    }
     assert ids == {"proj_alpha"}
 
 
 def test_list_projects_scope_vacio_ve_cero(
-    scoped_env: tuple[TestClient, _StubActorProvider],
+    scoped_client: TestClient,
 ) -> None:
-    client = _seed_two_projects(scoped_env)
-    _, provider = scoped_env
-    provider.set_actor(PlatformActor(actor_id="jose", project_scope=()))
-    assert client.get("/api/platform/projects").json()["items"] == []
+    client = _seed_two_projects(scoped_client)
+    assert (
+        client.get(
+            "/api/platform/projects",
+            headers=_auth_headers(EMPTY_SCOPE_TOKEN),
+        ).json()["items"]
+        == []
+    )
 
 
 def test_get_proyecto_en_scope_ok_fuera_de_scope_403(
-    scoped_env: tuple[TestClient, _StubActorProvider],
+    scoped_client: TestClient,
 ) -> None:
-    client = _seed_two_projects(scoped_env)
-    _, provider = scoped_env
-    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
-    assert client.get("/api/platform/projects/proj_alpha").status_code == 200
-    denied = client.get("/api/platform/projects/proj_beta")
+    client = _seed_two_projects(scoped_client)
+    assert (
+        client.get(
+            "/api/platform/projects/proj_alpha",
+            headers=_auth_headers(ALPHA_TOKEN),
+        ).status_code
+        == 200
+    )
+    denied = client.get(
+        "/api/platform/projects/proj_beta",
+        headers=_auth_headers(ALPHA_TOKEN),
+    )
     assert denied.status_code == 403
     assert denied.json()["error"]["code"] == "PLATFORM_ACCESS_DENIED"
 
 
 def test_get_configuracion_y_matriz_fuera_de_scope_403(
-    scoped_env: tuple[TestClient, _StubActorProvider],
+    scoped_client: TestClient,
 ) -> None:
-    client = _seed_two_projects(scoped_env)
-    _, provider = scoped_env
-    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
+    client = _seed_two_projects(scoped_client)
     assert (
-        client.get("/api/platform/projects/proj_beta/configuration").status_code == 403
+        client.get(
+            "/api/platform/projects/proj_beta/configuration",
+            headers=_auth_headers(ALPHA_TOKEN),
+        ).status_code
+        == 403
     )
     assert (
-        client.get("/api/platform/projects/proj_beta/variant-matrix").status_code == 403
+        client.get(
+            "/api/platform/projects/proj_beta/variant-matrix",
+            headers=_auth_headers(ALPHA_TOKEN),
+        ).status_code
+        == 403
     )
-    assert client.get("/api/platform/projects/proj_beta/variants").status_code == 403
+    assert (
+        client.get(
+            "/api/platform/projects/proj_beta/variants",
+            headers=_auth_headers(ALPHA_TOKEN),
+        ).status_code
+        == 403
+    )
 
 
 def test_get_ignora_actor_de_header_o_query(
-    scoped_env: tuple[TestClient, _StubActorProvider],
+    scoped_client: TestClient,
 ) -> None:
     """La identidad viene solo del proveedor de confianza: header/query se ignoran."""
 
-    client = _seed_two_projects(scoped_env)
-    _, provider = scoped_env
-    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
+    client = _seed_two_projects(scoped_client)
     denied = client.get(
         "/api/platform/projects/proj_beta?actor_id=superuser",
-        headers={"X-Actor-Id": "superuser"},
+        headers={
+            **_auth_headers(ALPHA_TOKEN),
+            "X-Actor-Id": "superuser",
+        },
     )
     assert denied.status_code == 403
     assert denied.json()["error"]["code"] == "PLATFORM_ACCESS_DENIED"

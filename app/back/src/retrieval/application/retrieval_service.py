@@ -57,6 +57,7 @@ def _now() -> datetime:
 class CreateRetrievalProfileRequest:
     """Public payload for registering one retrieval profile."""
 
+    project_id: str
     consumer_scope_type: str
     consumer_scope_id: str
     corpus_version: str
@@ -111,6 +112,7 @@ class CreateRetrievalProfileUseCase:
             )
         return self._retrieval_profiles.upsert(
             RetrievalProfile.build(
+                project_id=request.project_id,
                 consumer_scope_type=request.consumer_scope_type,
                 consumer_scope_id=request.consumer_scope_id,
                 corpus_version=request.corpus_version,
@@ -166,12 +168,14 @@ class RetrievalReadinessEvaluator:
             ):
                 reasons.append("INDEXING_TARGET_INCOMPATIBLE")
             active_rows = self._vector_search.count_active_rows(
+                project_id=retrieval_profile.project_id,
                 vector_table=target.vector_table,
                 embedding_profile_id=profile.profile_id,
                 indexing_target_id=target.indexing_target_id,
                 corpus_version=retrieval_profile.corpus_version,
             )
             active_documents = self._vector_search.count_active_documents(
+                project_id=retrieval_profile.project_id,
                 vector_table=target.vector_table,
                 embedding_profile_id=profile.profile_id,
                 indexing_target_id=target.indexing_target_id,
@@ -180,6 +184,7 @@ class RetrievalReadinessEvaluator:
             if active_rows == 0:
                 reasons.append("NO_ACTIVE_VECTOR_ROWS")
             bundles = self._vector_search.active_bundle_ids(
+                project_id=retrieval_profile.project_id,
                 vector_table=target.vector_table,
                 embedding_profile_id=profile.profile_id,
                 indexing_target_id=target.indexing_target_id,
@@ -375,6 +380,7 @@ class RetrievalSearchService:
             )
 
         candidates = self._vector_search.search(
+            project_id=retrieval_profile.project_id,
             vector_table=target.vector_table,
             embedding_profile_id=profile.profile_id,
             indexing_target_id=target.indexing_target_id,
@@ -389,6 +395,7 @@ class RetrievalSearchService:
         )
         return self._with_parents(
             candidates=candidates,
+            project_id=retrieval_profile.project_id,
             embedding_profile_id=profile.profile_id,
             corpus_version=retrieval_profile.corpus_version,
         )
@@ -423,6 +430,7 @@ class RetrievalSearchService:
             },
         )
         candidates = self._lexical_search.search(
+            project_id=retrieval_profile.project_id,
             query=query,
             embedding_profile_id=retrieval_profile.embedding_profile_id,
             corpus_version=retrieval_profile.corpus_version,
@@ -434,6 +442,7 @@ class RetrievalSearchService:
         )
         return self._with_parents(
             candidates=candidates,
+            project_id=retrieval_profile.project_id,
             embedding_profile_id=retrieval_profile.embedding_profile_id,
             corpus_version=retrieval_profile.corpus_version,
         )
@@ -442,6 +451,7 @@ class RetrievalSearchService:
         self,
         *,
         candidates: Sequence[RetrievedEvidence],
+        project_id: str,
         embedding_profile_id: str,
         corpus_version: str,
     ) -> list[RetrievedEvidence]:
@@ -453,6 +463,7 @@ class RetrievalSearchService:
         if not parent_ids:
             return list(candidates)
         parents = self._parent_expansion.expand(
+            project_id=project_id,
             parent_node_ids=parent_ids,
             embedding_profile_id=embedding_profile_id,
             corpus_version=corpus_version,
