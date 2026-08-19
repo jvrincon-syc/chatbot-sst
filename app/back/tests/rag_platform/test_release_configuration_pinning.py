@@ -24,6 +24,7 @@ from rag_platform.application.release_validator import ValidateRagReleaseUseCase
 from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
+from api.dependencies import NullTransactionManager
 from rag_platform.domain.lifecycle import (
     ReleaseState,
     compute_release_manifest_hash,
@@ -208,6 +209,7 @@ def test_build_and_validate_use_the_pinned_configuration_version() -> None:
         ledger=InMemoryRagBuildRunRepository(),
         bindings=bindings,
         access_policy=AllowAllAccessPolicy(),
+        transactions=NullTransactionManager(),
     ).execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 
     # Build derivó el target de la versión PINNEADA (v1), no de la vigente (v2).
@@ -222,6 +224,7 @@ def test_build_and_validate_use_the_pinned_configuration_version() -> None:
             by_version={(_PROJECT.value, 1): _FP_V1, (_PROJECT.value, 2): _FP_V2}
         ),
         access_policy=AllowAllAccessPolicy(),
+        transactions=NullTransactionManager(),
         clock=lambda: _NOW,
     ).execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
 

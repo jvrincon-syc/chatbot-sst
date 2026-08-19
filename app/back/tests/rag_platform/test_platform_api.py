@@ -40,9 +40,17 @@ from datetime import datetime, timezone
 
 
 class _StubActorProvider:
-    """Proveedor de confianza de test: devuelve un actor server-side fijo."""
+    """Proveedor de confianza de test: devuelve un actor server-side.
+
+    ``set_actor`` permite alternar la identidad entre requests para probar el
+    scope (p. ej. sembrar como operador global y luego leer como actor scoped),
+    sin que la identidad venga jamás de datos del cliente.
+    """
 
     def __init__(self, actor: PlatformActor) -> None:
+        self._actor = actor
+
+    def set_actor(self, actor: PlatformActor) -> None:
         self._actor = actor
 
     def current_actor(self) -> PlatformActor:
@@ -85,6 +93,15 @@ def no_actor_client(tmp_path: Path) -> Iterator[TestClient]:
     provider = ConfiguredPlatformActorProvider({})
     with _build_client(tmp_path, rag_platform_v1=True, actor_provider=provider) as c:
         yield c
+
+
+@pytest.fixture
+def scoped_env(tmp_path: Path) -> Iterator[tuple[TestClient, _StubActorProvider]]:
+    """Cliente + proveedor mutable para probar el scope de lectura/escritura."""
+
+    provider = _StubActorProvider(PlatformActor(actor_id="op-1", project_scope=None))
+    with _build_client(tmp_path, rag_platform_v1=True, actor_provider=provider) as c:
+        yield c, provider
 
 
 def _create_project(client: TestClient, slug: str = "demo") -> dict:
@@ -161,6 +178,46 @@ def test_actor_id_en_body_se_rechaza(client: TestClient) -> None:
     assert response.status_code == 422
 
 
+def test_create_project_rechaza_target_bindings_inyectados(client: TestClient) -> None:
+    """El DTO HTTP no acepta bindings/target físico: un intento se rechaza (422)."""
+
+    response = client.post(
+        "/api/platform/projects",
+        json={
+            "project_slug": "demo",
+            "display_name": "Demo",
+            "target_bindings": [
+                {
+                    "binding_key": "primary",
+                    "indexing_target_id": "idx_vec_hacked",
+                    "embedding_profile_id": "bge-m3",
+                }
+            ],
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_patch_configuracion_rechaza_target_bindings_inyectados(
+    client: TestClient,
+) -> None:
+    _create_project(client, "demo")
+    response = client.patch(
+        "/api/platform/projects/proj_demo/configuration",
+        json={
+            "corpus_organization_policy": "source-folders-v1",
+            "target_bindings": [
+                {
+                    "binding_key": "primary",
+                    "indexing_target_id": "idx_vec_hacked",
+                    "embedding_profile_id": "bge-m3",
+                }
+            ],
+        },
+    )
+    assert response.status_code == 422
+
+
 def test_flag_apagado_devuelve_503(flag_off_client: TestClient) -> None:
     response = flag_off_client.get("/api/platform/projects")
     assert response.status_code == 503
@@ -168,14 +225,110 @@ def test_flag_apagado_devuelve_503(flag_off_client: TestClient) -> None:
 
 
 def test_actor_de_confianza_ausente_falla_cerrado(no_actor_client: TestClient) -> None:
-    # Lectura sin actor funciona; una mutación exige actor de confianza.
-    assert no_actor_client.get("/api/platform/projects").status_code == 200
-    response = no_actor_client.post(
+    # Sin actor de confianza, tanto lecturas como mutaciones fallan cerrado: la
+    # autorización por scope exige un ``PlatformActor`` también en las GET.
+    read = no_actor_client.get("/api/platform/projects")
+    assert read.status_code == 503
+    assert read.json()["error"]["code"] == "TRUSTED_ACTOR_UNAVAILABLE"
+    write = no_actor_client.post(
         "/api/platform/projects",
         json={"project_slug": "demo", "display_name": "Demo"},
     )
-    assert response.status_code == 503
-    assert response.json()["error"]["code"] == "TRUSTED_ACTOR_UNAVAILABLE"
+    assert write.status_code == 503
+    assert write.json()["error"]["code"] == "TRUSTED_ACTOR_UNAVAILABLE"
+
+
+# --------------------------------------------------------------------------- #
+# Task 1: scope de lectura (fail-closed cross-project)                          #
+# --------------------------------------------------------------------------- #
+
+
+def _seed_two_projects(env: tuple[TestClient, _StubActorProvider]) -> TestClient:
+    """Siembra ``proj_alpha`` y ``proj_beta`` como operador global."""
+
+    client, provider = env
+    provider.set_actor(PlatformActor(actor_id="op-1", project_scope=None))
+    for slug in ("alpha", "beta"):
+        assert (
+            client.post(
+                "/api/platform/projects",
+                json={"project_slug": slug, "display_name": slug.title()},
+            ).status_code
+            == 201
+        )
+    return client
+
+
+def test_list_projects_global_ve_todo(
+    scoped_env: tuple[TestClient, _StubActorProvider],
+) -> None:
+    client = _seed_two_projects(scoped_env)
+    _, provider = scoped_env
+    provider.set_actor(PlatformActor(actor_id="op-1", project_scope=None))
+    ids = {p["project_id"] for p in client.get("/api/platform/projects").json()["items"]}
+    assert ids == {"proj_alpha", "proj_beta"}
+
+
+def test_list_projects_scoped_ve_solo_los_suyos(
+    scoped_env: tuple[TestClient, _StubActorProvider],
+) -> None:
+    client = _seed_two_projects(scoped_env)
+    _, provider = scoped_env
+    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
+    ids = {p["project_id"] for p in client.get("/api/platform/projects").json()["items"]}
+    assert ids == {"proj_alpha"}
+
+
+def test_list_projects_scope_vacio_ve_cero(
+    scoped_env: tuple[TestClient, _StubActorProvider],
+) -> None:
+    client = _seed_two_projects(scoped_env)
+    _, provider = scoped_env
+    provider.set_actor(PlatformActor(actor_id="jose", project_scope=()))
+    assert client.get("/api/platform/projects").json()["items"] == []
+
+
+def test_get_proyecto_en_scope_ok_fuera_de_scope_403(
+    scoped_env: tuple[TestClient, _StubActorProvider],
+) -> None:
+    client = _seed_two_projects(scoped_env)
+    _, provider = scoped_env
+    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
+    assert client.get("/api/platform/projects/proj_alpha").status_code == 200
+    denied = client.get("/api/platform/projects/proj_beta")
+    assert denied.status_code == 403
+    assert denied.json()["error"]["code"] == "PLATFORM_ACCESS_DENIED"
+
+
+def test_get_configuracion_y_matriz_fuera_de_scope_403(
+    scoped_env: tuple[TestClient, _StubActorProvider],
+) -> None:
+    client = _seed_two_projects(scoped_env)
+    _, provider = scoped_env
+    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
+    assert (
+        client.get("/api/platform/projects/proj_beta/configuration").status_code == 403
+    )
+    assert (
+        client.get("/api/platform/projects/proj_beta/variant-matrix").status_code == 403
+    )
+    assert client.get("/api/platform/projects/proj_beta/variants").status_code == 403
+
+
+def test_get_ignora_actor_de_header_o_query(
+    scoped_env: tuple[TestClient, _StubActorProvider],
+) -> None:
+    """La identidad viene solo del proveedor de confianza: header/query se ignoran."""
+
+    client = _seed_two_projects(scoped_env)
+    _, provider = scoped_env
+    provider.set_actor(PlatformActor(actor_id="jose", project_scope=("proj_alpha",)))
+    denied = client.get(
+        "/api/platform/projects/proj_beta?actor_id=superuser",
+        headers={"X-Actor-Id": "superuser"},
+    )
+    assert denied.status_code == 403
+    assert denied.json()["error"]["code"] == "PLATFORM_ACCESS_DENIED"
 
 
 def test_slug_de_body_invalido_da_422_no_500(client: TestClient) -> None:

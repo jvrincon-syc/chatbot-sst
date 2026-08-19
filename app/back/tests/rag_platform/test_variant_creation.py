@@ -132,6 +132,7 @@ def _build() -> tuple[
         projects=projects,
         processing_profiles=processing,
         chunking_profiles=chunking,
+        access_policy=AllowAllAccessPolicy(),
     )
     create_variant = CreateRagVariantUseCase(
         variants=InMemoryRagVariantRepository(),

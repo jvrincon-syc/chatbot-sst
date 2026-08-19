@@ -12,6 +12,10 @@ from rag_platform.application.project_service import (
     CreateProjectUseCase,
 )
 from rag_platform.application.platform_access import PlatformActor
+from rag_platform.application.target_provisioning import TargetBindingProvisioner
+from embedding.infrastructure.in_memory.repositories import (
+    InMemoryIndexingTargetRepository,
+)
 from rag_platform.domain.errors import ProjectAlreadyExists, UnsafeArtifactPath
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
@@ -35,6 +39,9 @@ def _use_case(tmp_path: Path) -> tuple[CreateProjectUseCase, InMemoryProjectRepo
         projects=projects,
         storage_roots=ProjectStorageResolver(tmp_path / "data"),
         access_policy=AllowAllAccessPolicy(),
+        binding_provisioner=TargetBindingProvisioner(
+            targets=InMemoryIndexingTargetRepository()
+        ),
     )
     return use_case, projects
 

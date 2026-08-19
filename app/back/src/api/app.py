@@ -75,7 +75,6 @@ def create_app(*, services: PipelineServices) -> FastAPI:
     app.state.rag_platform = services.rag_platform
     app.state.platform_actor_provider = services.platform_actor_provider
     app.state.platform_idempotency_store = services.platform_idempotency_store
-    app.state.platform_transactions = services.platform_transactions
 
     @app.exception_handler(HTTPException)
     async def http_exception_handler(_request, exc: HTTPException) -> JSONResponse:

@@ -40,6 +40,13 @@ class UpdateProjectConfigurationRequest(StrictModel):
     ``version`` no forma parte del request: la asigna el caso de uso de forma
     monótona a partir de la versión vigente, para que el cliente nunca elija ni
     reescriba una versión existente.
+
+    ``target_bindings`` es ``None`` por defecto y significa **preservar** los
+    bindings server-controlled de la versión vigente. Los bindings acoplan un
+    ``binding_key`` lógico a un ``indexing_target_id`` físico y NO se controlan por
+    HTTP; el DTO HTTP nunca los envía, así que la omisión jamás debe interpretarse
+    como "borrarlos". Una tupla explícita solo la usa una operación de
+    administración interna de confianza (nunca la superficie HTTP pública).
     """
 
     corpus_organization_policy: CorpusOrganizationPolicy
@@ -47,20 +54,29 @@ class UpdateProjectConfigurationRequest(StrictModel):
     embedding_profiles: tuple[ProjectEmbeddingProfile, ...] = Field(
         default_factory=tuple
     )
-    target_bindings: tuple[ProjectIndexingTargetBinding, ...] = Field(
-        default_factory=tuple
-    )
+    target_bindings: tuple[ProjectIndexingTargetBinding, ...] | None = None
 
 
 class GetProjectConfigurationUseCase:
-    """Lee la configuración **vigente** (última versión) de un proyecto."""
+    """Lee la configuración **vigente** de un proyecto (fail-closed por scope)."""
 
-    def __init__(self, *, projects: ProjectRepository) -> None:
+    def __init__(
+        self,
+        *,
+        projects: ProjectRepository,
+        access_policy: PlatformAccessPolicy,
+    ) -> None:
         self._projects = projects
+        self._access_policy = access_policy
 
-    def execute(self, project_id: PlatformId) -> ProjectConfiguration:
-        """Devuelve la configuración vigente o lanza ``ProjectNotFound``."""
+    def execute(
+        self, project_id: PlatformId, *, actor: PlatformActor
+    ) -> ProjectConfiguration:
+        """Devuelve la configuración vigente o lanza ``ProjectNotFound``/``PlatformAccessDenied``."""
 
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         return self._projects.get(project_id).configuration
 
 
@@ -130,11 +146,18 @@ class CreateProjectConfigurationVersionUseCase:
             policy=self._access_policy, actor=actor, project_id=project_id
         )
         current = self._projects.get(project_id).configuration
+        # ``None`` = preservar los bindings server-controlled de la versión vigente.
+        # La omisión desde HTTP nunca borra bindings (fail-closed hacia Fase 8).
+        target_bindings = (
+            current.target_bindings
+            if request.target_bindings is None
+            else request.target_bindings
+        )
         new_configuration = ProjectConfiguration(
             version=current.version + 1,
             document_types=request.document_types,
             embedding_profiles=request.embedding_profiles,
-            target_bindings=request.target_bindings,
+            target_bindings=target_bindings,
             corpus_organization_policy=request.corpus_organization_policy,
             created_at=datetime.now(timezone.utc),
         )

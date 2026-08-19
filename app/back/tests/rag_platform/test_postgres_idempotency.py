@@ -137,6 +137,44 @@ def test_fail_marca_failed_sin_result_json() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# Aislamiento de conexión: idempotencia no puede commitear negocio             #
+# --------------------------------------------------------------------------- #
+
+
+def test_store_usa_la_conexion_dedicada_no_la_de_negocio() -> None:
+    from api.dependencies import _build_idempotency_store
+
+    business = object()
+    dedicated = object()
+    store = _build_idempotency_store(
+        connection=business, idempotency_connection=dedicated
+    )
+    # El store solo conoce la conexión dedicada; jamás la de negocio.
+    assert store._connection is dedicated
+
+
+def test_store_cae_a_la_compartida_si_no_hay_dedicada() -> None:
+    from api.dependencies import _build_idempotency_store
+
+    business = object()
+    store = _build_idempotency_store(
+        connection=business, idempotency_connection=None
+    )
+    assert store._connection is business
+
+
+def test_reserve_no_toca_la_conexion_de_negocio() -> None:
+    # El store se cablea con SU conexión; una conexión de negocio separada no
+    # recibe sentencias ni commits del store (aislamiento físico).
+    business = RecordingConnection([])
+    idempotency = RecordingConnection([{"fetchone": ("a" * 64,)}])
+    PostgresIdempotencyStore(idempotency).reserve(_record())
+    assert business.commits == 0
+    assert business.cursor_obj.statements == []
+    assert idempotency.commits == 1
+
+
+# --------------------------------------------------------------------------- #
 # Concurrencia real (postgres_live): exactamente un dueño                       #
 # --------------------------------------------------------------------------- #
 

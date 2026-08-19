@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 
 import pytest
 
+from rag_platform.application.platform_access import PlatformActor
 from rag_platform.application.variant_matrix_service import GetVariantMatrixUseCase
 from rag_platform.domain.errors import (
     InvalidVariantMatrixCell,
@@ -36,6 +37,7 @@ from rag_platform.domain.models import (
     RagProject,
 )
 from rag_platform.infrastructure.in_memory.repositories import (
+    AllowAllAccessPolicy,
     InMemoryChunkingProfileRepository,
     InMemoryProcessingProfileRepository,
     InMemoryProjectRepository,
@@ -44,6 +46,7 @@ from rag_platform.infrastructure.in_memory.repositories import (
 _NOW = datetime(2026, 8, 18, tzinfo=timezone.utc)
 _PROJECT = PlatformId(IdentityKind.PROJECT, "proj_demo")
 _EMBEDDING = "local-bge-m3-v1"
+_ACTOR = PlatformActor(actor_id="op", project_scope=("proj_demo",))
 
 
 def _configuration(*, version: int, embedding_enabled: bool = True) -> ProjectConfiguration:
@@ -119,11 +122,12 @@ def _matrix(*, version: int, embedding_enabled: bool = True) -> GetVariantMatrix
         projects=projects,
         processing_profiles=InMemoryProcessingProfileRepository((_processing(),)),
         chunking_profiles=InMemoryChunkingProfileRepository((_chunking(),)),
+        access_policy=AllowAllAccessPolicy(),
     )
 
 
 def test_variant_matrix_expone_buildable_y_blocked_reason_cuando_hay_config() -> None:
-    cells = _matrix(version=3).execute(project_id=_PROJECT)
+    cells = _matrix(version=3).execute(project_id=_PROJECT, actor=_ACTOR)
 
     assert len(cells) == 1
     cell = cells[0]
@@ -134,7 +138,9 @@ def test_variant_matrix_expone_buildable_y_blocked_reason_cuando_hay_config() ->
 
 
 def test_variant_matrix_marca_no_buildable_cuando_embedding_deshabilitado() -> None:
-    cells = _matrix(version=3, embedding_enabled=False).execute(project_id=_PROJECT)
+    cells = _matrix(version=3, embedding_enabled=False).execute(
+        project_id=_PROJECT, actor=_ACTOR
+    )
 
     assert cells[0].buildable is False
     assert cells[0].blocked_reason == "embedding_profile_not_enabled"
@@ -146,6 +152,7 @@ def test_get_cell_reconfirma_celda_vigente() -> None:
     cell = matrix.get_cell(
         project_id=_PROJECT,
         cell_id="pp_local|cp_structural|local-bge-m3-v1|primary|3",
+        actor=_ACTOR,
     )
 
     assert cell.configuration_version == 3
@@ -160,6 +167,7 @@ def test_get_cell_de_version_obsoleta_falla_cerrado() -> None:
         matrix.get_cell(
             project_id=_PROJECT,
             cell_id="pp_local|cp_structural|local-bge-m3-v1|primary|3",
+            actor=_ACTOR,
         )
 
 
@@ -167,4 +175,6 @@ def test_get_cell_malformado_falla_cerrado() -> None:
     matrix = _matrix(version=3)
 
     with pytest.raises(InvalidVariantMatrixCell):
-        matrix.get_cell(project_id=_PROJECT, cell_id="pp_local|cp_structural")
+        matrix.get_cell(
+            project_id=_PROJECT, cell_id="pp_local|cp_structural", actor=_ACTOR
+        )

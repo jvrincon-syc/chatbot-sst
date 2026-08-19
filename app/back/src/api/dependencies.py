@@ -174,18 +174,19 @@ class PipelineServices:
     # confianza server-side; el store es la autoridad durable de idempotencia.
     platform_actor_provider: object | None = None
     platform_idempotency_store: object | None = None
-    # UoW de negocio para las mutaciones de release: el router envuelve cada
-    # operación en ``transaction()`` (commit en éxito, rollback en error) para que
-    # el commit del store de idempotencia nunca capture trabajo de negocio parcial.
-    platform_transactions: object | None = None
+    # Conexión dedicada del store de idempotencia (Postgres). Independiente de la
+    # conexión de negocio para que su commit nunca capture trabajo de negocio.
+    idempotency_connection: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
 
         self.embedding_executor.close()
         self.indexing_executor.close()
-        if self.connection is not None:
-            close = getattr(self.connection, "close", None)
+        for conn in (self.connection, self.idempotency_connection):
+            if conn is None:
+                continue
+            close = getattr(conn, "close", None)
             if callable(close):
                 close()
 
@@ -203,12 +204,19 @@ def build_pipeline_services(
     seed_chunk_bundles: Iterable[ChunkBundleRef] = (),
     lexical_profile_id: str = "",
     platform_actor_provider: object | None = None,
+    idempotency_connection: object | None = None,
 ) -> PipelineServices:
     """Wire the whole bundle-first surface on PostgreSQL or on memory.
 
     ``platform_actor_provider`` overrides the trusted-actor adapter of the Fase 7
     HTTP layer (tests inject a stub). When omitted and the platform flag is on, it
     defaults to a configuration-backed provider reading ``os.environ``.
+
+    ``idempotency_connection`` es la conexión **dedicada** del store de
+    idempotencia (independiente de la conexión de negocio). Cuando se omite en modo
+    postgres, el store cae a la conexión compartida (aceptable en tests/dry-run);
+    ``build_pipeline_services_from_env`` abre una segunda conexión real para
+    garantizar el aislamiento transaccional en producción.
     """
 
     flags = feature_flags or FeatureFlags.from_env()
@@ -404,6 +412,7 @@ def build_pipeline_services(
             profiles=profiles,
             index_bundle=index_bundle,
             run_documents=run_documents,
+            indexing_targets=targets,
         )
         services.rag_platform = platform
         # Compat legacy: los aliases apuntan a la misma composición tipada.
@@ -413,19 +422,18 @@ def build_pipeline_services(
         services.rag_platform_draft = platform.create_release_draft
         services.rag_platform_validate = platform.validate_release
         # Fase 7: adaptador HTTP. Idempotencia durable (Postgres si hay conexión,
-        # in-memory para dry-run/tests) y actor de confianza server-side.
+        # in-memory para dry-run/tests) sobre una conexión **dedicada** e
+        # independiente de la de negocio, y actor de confianza server-side.
+        services.idempotency_connection = idempotency_connection
         services.platform_idempotency_store = _build_idempotency_store(
-            connection=connection
+            connection=connection,
+            idempotency_connection=idempotency_connection,
         )
         if platform_actor_provider is None:
             from rag_platform.api.dependencies import ConfiguredPlatformActorProvider
 
             platform_actor_provider = ConfiguredPlatformActorProvider(os.environ)
         services.platform_actor_provider = platform_actor_provider
-        # Mismo TransactionManager que indexación/publicación: el router envuelve
-        # cada mutación de release para que el negocio quede commit/rollback antes
-        # de que idempotencia commitee (en memoria es un no-op).
-        services.platform_transactions = transactions
     return services
 
 
@@ -455,11 +463,16 @@ def _resolve_max_build_documents(environ: Mapping[str, str]) -> int | None:
     return value
 
 
-def _build_idempotency_store(*, connection: object | None) -> object:
+def _build_idempotency_store(
+    *, connection: object | None, idempotency_connection: object | None
+) -> object:
     """Cablea el ``IdempotencyStore`` durable (autoridad: PostgreSQL).
 
-    Sin conexión (dry-run/tests) usa el adaptador in-memory atómico; con conexión,
-    el adaptador Postgres sobre ``platform_idempotency_records``. Redis se puede
+    Sin conexión de negocio (dry-run/tests) usa el adaptador in-memory atómico. Con
+    conexión, el adaptador Postgres usa su **conexión dedicada**
+    (``idempotency_connection``) si existe, para que los commits de reserva/terminal
+    del store nunca capturen trabajo de negocio de la conexión compartida; si no se
+    proveyó una dedicada, cae a la compartida (tests/dry-run). Redis se puede
     introducir después detrás de este mismo puerto sin tocar router ni casos de uso.
     """
 
@@ -474,7 +487,7 @@ def _build_idempotency_store(*, connection: object | None) -> object:
         PostgresIdempotencyStore,
     )
 
-    return PostgresIdempotencyStore(connection)
+    return PostgresIdempotencyStore(idempotency_connection or connection)
 
 
 def _build_rag_platform_services(
@@ -487,6 +500,7 @@ def _build_rag_platform_services(
     profiles: object,
     index_bundle: object,
     run_documents: object,
+    indexing_targets: object,
 ) -> "RagPlatformServices":
     """Cablea la superficie tipada única de plataforma para Fase 7 (Task 3 + Task 4).
 
@@ -541,8 +555,13 @@ def _build_rag_platform_services(
         ProjectStorageResolver,
     )
 
+    from rag_platform.application.target_provisioning import TargetBindingProvisioner
+
     access_policy = AllowAllAccessPolicy()
     storage_roots = ProjectStorageResolver(data_root)
+    # Provisioning server-side de bindings: reusa el catálogo global de indexing
+    # targets (mismo repo que embedding/indexing), sin un segundo catálogo.
+    binding_provisioner = TargetBindingProvisioner(targets=indexing_targets)
 
     def _release_id_factory() -> object:
         from rag_platform.domain.identity import IdentityKind, PlatformId
@@ -640,6 +659,7 @@ def _build_rag_platform_services(
         projects=projects,
         processing_profiles=processing,
         chunking_profiles=chunking,
+        access_policy=access_policy,
     )
     create_variant = CreateRagVariantUseCase(
         variants=variants,
@@ -668,6 +688,7 @@ def _build_rag_platform_services(
         ledger=build_ledger,
         bindings=bindings,
         access_policy=access_policy,
+        transactions=transactions,
         max_build_documents=_resolve_max_build_documents(os.environ),
     )
     validate_release = ValidateRagReleaseUseCase(
@@ -677,6 +698,7 @@ def _build_rag_platform_services(
         memberships=memberships,
         configuration_fingerprints=configuration_fingerprints,
         access_policy=access_policy,
+        transactions=transactions,
         logger=get_logger("rag_platform.release_validate"),
     )
     publish_release = PublishRagReleaseUseCase(
@@ -696,14 +718,21 @@ def _build_rag_platform_services(
 
     return RagPlatformServices(
         create_project=CreateProjectUseCase(
-            projects=projects, storage_roots=storage_roots, access_policy=access_policy
+            projects=projects,
+            storage_roots=storage_roots,
+            access_policy=access_policy,
+            binding_provisioner=binding_provisioner,
         ),
-        get_project=GetProjectUseCase(projects=projects),
-        list_projects=ListProjectsUseCase(projects=projects),
+        get_project=GetProjectUseCase(projects=projects, access_policy=access_policy),
+        list_projects=ListProjectsUseCase(
+            projects=projects, access_policy=access_policy
+        ),
         update_project_metadata=UpdateProjectMetadataUseCase(
             projects=projects, access_policy=access_policy
         ),
-        get_project_configuration=GetProjectConfigurationUseCase(projects=projects),
+        get_project_configuration=GetProjectConfigurationUseCase(
+            projects=projects, access_policy=access_policy
+        ),
         get_project_configuration_version=GetProjectConfigurationVersionUseCase(
             configurations=projects
         ),
@@ -720,19 +749,24 @@ def _build_rag_platform_services(
             create_variant=create_variant,
             access_policy=access_policy,
         ),
-        list_project_variants=ListProjectVariantsUseCase(variants=variants),
+        list_project_variants=ListProjectVariantsUseCase(
+            variants=variants, access_policy=access_policy
+        ),
         create_corpus_snapshot=CreateCorpusSnapshotUseCase(
             snapshots=snapshots, documents=documents, access_policy=access_policy
         ),
         create_release_draft=release_draft,
-        get_release=GetReleaseUseCase(releases=releases),
-        list_project_releases=ListProjectReleasesUseCase(releases=releases),
+        get_release=GetReleaseUseCase(releases=releases, access_policy=access_policy),
+        list_project_releases=ListProjectReleasesUseCase(
+            releases=releases, access_policy=access_policy
+        ),
         build_release=build_release,
         validate_release=validate_release,
         publish_release=publish_release,
         retire_release=RetireRagReleaseUseCase(
             releases=releases,
             access_policy=access_policy,
+            transactions=transactions,
             logger=get_logger("rag_platform.release_retire"),
         ),
         rebuild_platform=rebuild_platform,
@@ -808,6 +842,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
 def _build_rag_platform_validate(*, connection: object | None) -> object:
     """Cablea ``ValidateRagReleaseUseCase`` (postgres o in-memory)."""
 
+    from indexing.infrastructure.postgres.bundle_first import PsycopgTransactionManager
     from rag_platform.application.release_validator import ValidateRagReleaseUseCase
     from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 
@@ -827,6 +862,7 @@ def _build_rag_platform_validate(*, connection: object | None) -> object:
             memberships=InMemoryRagReleaseMembershipRepository(),
             configuration_fingerprints=StaticConfigurationFingerprintReader(),
             access_policy=AllowAllAccessPolicy(),
+            transactions=NullTransactionManager(),
             logger=get_logger("rag_platform.release_validate"),
         )
 
@@ -851,6 +887,7 @@ def _build_rag_platform_validate(*, connection: object | None) -> object:
             connection
         ),
         access_policy=AllowAllAccessPolicy(),
+        transactions=PsycopgTransactionManager(connection),
         logger=get_logger("rag_platform.release_validate"),
     )
 
@@ -984,6 +1021,7 @@ def build_pipeline_services_from_env(
     flags = FeatureFlags.from_env(env)
 
     connection: object | None = None
+    idempotency_connection: object | None = None
     if mode == "postgres":
         dsn = (env.get("SST_POSTGRES_DSN") or "").strip()
         if not dsn:
@@ -991,6 +1029,10 @@ def build_pipeline_services_from_env(
                 "postgres persistence was requested but SST_POSTGRES_DSN is empty"
             )
         connection = _open_postgres_connection(dsn)
+        # Conexión dedicada del store de idempotencia: sesión/transacción
+        # independiente de la de negocio, solo si la plataforma está habilitada.
+        if flags.rag_platform_v1:
+            idempotency_connection = _open_postgres_connection(dsn)
 
     services = build_pipeline_services(
         chunks_root=chunks_root,
@@ -998,6 +1040,7 @@ def build_pipeline_services_from_env(
         connection=connection,
         feature_flags=flags,
         allow_mock_engine=allow_mock_engine,
+        idempotency_connection=idempotency_connection,
     )
     _emit_startup_observability(services, connection=connection)
     return services

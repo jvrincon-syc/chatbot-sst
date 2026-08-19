@@ -28,26 +28,51 @@ from rag_platform.domain.models import (
 
 
 class ListProjectsUseCase:
-    """Lista todos los proyectos del catálogo con su configuración vigente."""
+    """Lista el catálogo de proyectos **acotado al scope del actor**."""
 
-    def __init__(self, *, projects: ProjectRepository) -> None:
+    def __init__(
+        self,
+        *,
+        projects: ProjectRepository,
+        access_policy: PlatformAccessPolicy,
+    ) -> None:
         self._projects = projects
+        self._access_policy = access_policy
 
-    def execute(self) -> tuple[RagProject, ...]:
-        """Devuelve el catálogo completo de proyectos."""
+    def execute(self, *, actor: PlatformActor) -> tuple[RagProject, ...]:
+        """Devuelve los proyectos visibles para ``actor`` (scope-aware).
 
-        return self._projects.list_all()
+        ``project_scope is None`` (operador global) → catálogo completo; una tupla
+        → solo los proyectos dentro del scope; una tupla vacía → ninguno. Nunca
+        devuelve el catálogo completo a un actor scoped (fail-closed).
+        """
+
+        self._access_policy.require_operator(actor_id=actor.actor_id)
+        projects = self._projects.list_all()
+        if actor.project_scope is None:
+            return projects
+        scope = set(actor.project_scope)
+        return tuple(p for p in projects if p.project_id.value in scope)
 
 
 class GetProjectUseCase:
-    """Lee un proyecto por su ``project_id``."""
+    """Lee un proyecto por su ``project_id`` (fail-closed por scope)."""
 
-    def __init__(self, *, projects: ProjectRepository) -> None:
+    def __init__(
+        self,
+        *,
+        projects: ProjectRepository,
+        access_policy: PlatformAccessPolicy,
+    ) -> None:
         self._projects = projects
+        self._access_policy = access_policy
 
-    def execute(self, project_id: PlatformId) -> RagProject:
-        """Devuelve el proyecto o lanza ``ProjectNotFound``."""
+    def execute(self, project_id: PlatformId, *, actor: PlatformActor) -> RagProject:
+        """Devuelve el proyecto o lanza ``ProjectNotFound``/``PlatformAccessDenied``."""
 
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         return self._projects.get(project_id)
 
 

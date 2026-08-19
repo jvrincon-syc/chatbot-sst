@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 import logging
 from typing import Callable
 
+from indexing.application.bundle_first.ports import TransactionManager
 from rag_platform.application.context import PlatformAccessPolicy
 from rag_platform.application.platform_access import (
     PlatformActor,
@@ -59,6 +60,7 @@ class ValidateRagReleaseUseCase:
         memberships: RagReleaseMembershipRepository,
         configuration_fingerprints: ProjectConfigurationFingerprintReader,
         access_policy: PlatformAccessPolicy,
+        transactions: TransactionManager,
         clock: Callable[[], datetime] = _now,
         logger: logging.Logger | None = None,
     ) -> None:
@@ -68,6 +70,7 @@ class ValidateRagReleaseUseCase:
         self._memberships = memberships
         self._configuration_fingerprints = configuration_fingerprints
         self._access_policy = access_policy
+        self._transactions = transactions
         self._clock = clock
         self._logger = logger
 
@@ -119,12 +122,15 @@ class ValidateRagReleaseUseCase:
             target_binding_key=release.target_binding_key,
             memberships=memberships,
         )
-        validated = self._releases.update_state(
-            rag_release_id=rag_release_id,
-            state=ReleaseState.VALIDATED,
-            release_manifest_hash=manifest_hash,
-            validated_at=self._clock(),
-        )
+        # UoW propio: la transición se commitea (o hace rollback) en su propia
+        # transacción; no depende de un commit transversal externo.
+        with self._transactions.transaction():
+            validated = self._releases.update_state(
+                rag_release_id=rag_release_id,
+                state=ReleaseState.VALIDATED,
+                release_manifest_hash=manifest_hash,
+                validated_at=self._clock(),
+            )
         if self._logger is not None:
             from rag_platform.application.publication_service import (
                 EventStatus,

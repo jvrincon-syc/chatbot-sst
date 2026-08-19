@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 
+from indexing.application.bundle_first.ports import TransactionManager
 from rag_platform.application.context import PlatformAccessPolicy
 from rag_platform.application.platform_access import (
     PlatformActor,
@@ -37,10 +38,12 @@ class RetireRagReleaseUseCase:
         *,
         releases: RagReleaseRepository,
         access_policy: PlatformAccessPolicy,
+        transactions: TransactionManager,
         logger: logging.Logger | None = None,
     ) -> None:
         self._releases = releases
         self._access_policy = access_policy
+        self._transactions = transactions
         self._logger = logger
 
     def execute(
@@ -68,11 +71,13 @@ class RetireRagReleaseUseCase:
         ensure_transition_allowed(
             current=release.state, target=ReleaseState.RETIRED
         )
-        retired = self._releases.update_state(
-            rag_release_id=rag_release_id,
-            state=ReleaseState.RETIRED,
-            reason=reason,
-        )
+        # UoW propio: la transición se commitea en su propia transacción corta.
+        with self._transactions.transaction():
+            retired = self._releases.update_state(
+                rag_release_id=rag_release_id,
+                state=ReleaseState.RETIRED,
+                reason=reason,
+            )
         if self._logger is not None:
             from rag_platform.application.publication_service import (
                 EventStatus,

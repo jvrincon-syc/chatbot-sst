@@ -9,6 +9,7 @@ Cubre `BuildRagReleaseUseCase`:
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from datetime import datetime, timezone
 
 import pytest
@@ -20,6 +21,7 @@ from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.errors import ReleaseBuildTooLarge
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
+from api.dependencies import NullTransactionManager
 from rag_platform.domain.lifecycle import RagRelease, ReleaseState
 from rag_platform.domain.models import (
     CorpusSnapshot,
@@ -110,6 +112,24 @@ def _release(release_id: PlatformId, snapshot_id: PlatformId) -> RagRelease:
     )
 
 
+class RecordingTransactions:
+    """``TransactionManager`` que registra commits y rollbacks por scope."""
+
+    def __init__(self) -> None:
+        self.committed = 0
+        self.rolled_back = 0
+
+    @contextmanager
+    def transaction(self):
+        try:
+            yield
+        except BaseException:
+            self.rolled_back += 1
+            raise
+        else:
+            self.committed += 1
+
+
 def _build(
     *,
     release: RagRelease,
@@ -117,6 +137,7 @@ def _build(
     resolver: InMemoryRevisionArtifactResolver,
     ledger: InMemoryRagBuildRunRepository | None = None,
     max_build_documents: int | None = None,
+    transactions: object | None = None,
 ) -> tuple[
     BuildRagReleaseUseCase,
     InMemoryRagReleaseMembershipRepository,
@@ -135,6 +156,7 @@ def _build(
         ledger=ledger,
         bindings=_StaticBindingResolver(),
         access_policy=AllowAllAccessPolicy(),
+        transactions=transactions or NullTransactionManager(),
         max_build_documents=max_build_documents,
     )
     return use_case, memberships, ledger
@@ -156,6 +178,57 @@ def test_build_falla_cerrado_cuando_snapshot_excede_el_tope() -> None:
         )
     # Fail-closed antes de construir: ninguna membresía creada.
     assert memberships.list_for_release(release_id) == []
+
+
+class _FailOnSecondResolver:
+    """Resolver que falla en la segunda revisión (para probar durabilidad parcial)."""
+
+    def __init__(self, inner: InMemoryRevisionArtifactResolver) -> None:
+        self._inner = inner
+        self._calls = 0
+
+    def resolve(self, *, context, source_document_revision_id):
+        self._calls += 1
+        if self._calls == 2:
+            raise RuntimeError("boom en la revisión 2")
+        return self._inner.resolve(
+            context=context, source_document_revision_id=source_document_revision_id
+        )
+
+
+def test_build_usa_una_transaccion_por_revision_no_una_global() -> None:
+    # 2 revisiones → 2 transacciones (UoW por revisión), nunca una mega-transacción.
+    release_id = PlatformId(IdentityKind.RAG_RELEASE, "ragr_tx")
+    tx = RecordingTransactions()
+    use_case, memberships, _ = _build(
+        release=_release(release_id, _SNAPSHOT),
+        snapshot=_snapshot(_SNAPSHOT, count=2),
+        resolver=InMemoryRevisionArtifactResolver(),
+        transactions=tx,
+    )
+    use_case.execute(rag_release_id=release_id, actor=PlatformActor(actor_id="op-1"))
+    assert tx.committed == 2
+    assert tx.rolled_back == 0
+    assert len(memberships.list_for_release(release_id)) == 2
+
+
+def test_build_falla_en_revision_2_conserva_la_revision_1_durable() -> None:
+    # Workflow durable incremental: la revisión 1 queda commiteada aunque la 2 falle.
+    release_id = PlatformId(IdentityKind.RAG_RELEASE, "ragr_partial")
+    tx = RecordingTransactions()
+    use_case, memberships, _ = _build(
+        release=_release(release_id, _SNAPSHOT),
+        snapshot=_snapshot(_SNAPSHOT, count=2),
+        resolver=_FailOnSecondResolver(InMemoryRevisionArtifactResolver()),
+        transactions=tx,
+    )
+    with pytest.raises(RuntimeError):
+        use_case.execute(
+            rag_release_id=release_id, actor=PlatformActor(actor_id="op-1")
+        )
+    # La revisión 1 se commiteó antes de que la 2 fallara (fuera de su transacción).
+    assert tx.committed == 1
+    assert len(memberships.list_for_release(release_id)) == 1
 
 
 def test_build_crea_una_membresia_por_revision_y_audita_cada_etapa() -> None:

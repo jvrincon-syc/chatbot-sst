@@ -28,6 +28,7 @@ from rag_platform.infrastructure.in_memory.release_repositories import (
     InMemoryRagReleaseRepository,
 )
 from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
+from api.dependencies import NullTransactionManager
 
 _NOW = datetime(2026, 8, 18, tzinfo=timezone.utc)
 _PROJECT = PlatformId(IdentityKind.PROJECT, "proj_demo")
@@ -54,7 +55,9 @@ def _use_case(release: RagRelease) -> RetireRagReleaseUseCase:
     releases = InMemoryRagReleaseRepository()
     releases.add(release)
     return RetireRagReleaseUseCase(
-        releases=releases, access_policy=AllowAllAccessPolicy()
+        releases=releases,
+        access_policy=AllowAllAccessPolicy(),
+        transactions=NullTransactionManager(),
     )
 
 

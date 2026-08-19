@@ -121,14 +121,24 @@ class GetVariantMatrixUseCase:
         projects: ProjectRepository,
         processing_profiles: ProcessingProfileRepository,
         chunking_profiles: ChunkingProfileRepository,
+        access_policy: PlatformAccessPolicy,
     ) -> None:
         self._projects = projects
         self._processing_profiles = processing_profiles
         self._chunking_profiles = chunking_profiles
+        self._access_policy = access_policy
 
-    def execute(self, *, project_id: PlatformId) -> tuple[VariantMatrixCell, ...]:
-        """Devuelve las celdas ``(procesamiento × chunking × binding)`` vigentes."""
+    def execute(
+        self, *, project_id: PlatformId, actor: PlatformActor
+    ) -> tuple[VariantMatrixCell, ...]:
+        """Devuelve las celdas ``(procesamiento × chunking × binding)`` vigentes.
 
+        Fail-closed por scope: un actor fuera del scope del proyecto no lee la matriz.
+        """
+
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         configuration = self._projects.get(project_id).configuration
         version = configuration.version
         enabled_embeddings = {
@@ -168,7 +178,7 @@ class GetVariantMatrixUseCase:
         return tuple(cells)
 
     def get_cell(
-        self, *, project_id: PlatformId, cell_id: str
+        self, *, project_id: PlatformId, cell_id: str, actor: PlatformActor
     ) -> VariantMatrixCell:
         """Reconfirma que ``cell_id`` sigue en la matriz vigente (fail-closed).
 
@@ -176,10 +186,11 @@ class GetVariantMatrixUseCase:
             InvalidVariantMatrixCell: Si el ``cell_id`` está malformado.
             StaleVariantMatrixCell: Si la celda ya no aparece en la configuración
                 vigente (versión avanzada, binding retirado, perfil eliminado).
+            PlatformAccessDenied: Si el actor está fuera del scope del proyecto.
         """
 
         _parse_cell_id(cell_id)  # valida el formato antes de reconstruir la matriz.
-        for cell in self.execute(project_id=project_id):
+        for cell in self.execute(project_id=project_id, actor=actor):
             if cell.cell_id == cell_id:
                 return cell
         raise StaleVariantMatrixCell(cell_id)
@@ -226,7 +237,9 @@ class CreateRagVariantFromMatrixCellUseCase:
         require_project_operator(
             policy=self._access_policy, actor=actor, project_id=project_id
         )
-        cell = self._matrix.get_cell(project_id=project_id, cell_id=cell_id)
+        cell = self._matrix.get_cell(
+            project_id=project_id, cell_id=cell_id, actor=actor
+        )
 
         processing_pid = PlatformId.parse(
             IdentityKind.PROCESSING_PROFILE, cell.processing_profile_id

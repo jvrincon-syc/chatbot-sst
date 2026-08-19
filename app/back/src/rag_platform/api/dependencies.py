@@ -90,9 +90,3 @@ def get_idempotency_store(request: Request) -> IdempotencyStore:
     """Devuelve el almacén durable de idempotencia (autoridad: PostgreSQL)."""
 
     return request.app.state.platform_idempotency_store
-
-
-def get_platform_transactions(request: Request) -> object:
-    """Devuelve el ``TransactionManager`` de negocio (UoW de las mutaciones)."""
-
-    return request.app.state.platform_transactions

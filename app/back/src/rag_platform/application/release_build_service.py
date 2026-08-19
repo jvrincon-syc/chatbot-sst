@@ -19,6 +19,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol, runtime_checkable
 
+from indexing.application.bundle_first.ports import TransactionManager
 from rag_platform.application.artifact_reuse_service import RagBuildRunRepository
 from rag_platform.application.context import (
     PlatformAccessPolicy,
@@ -124,6 +125,7 @@ class BuildRagReleaseUseCase:
         ledger: RagBuildRunRepository,
         bindings: TargetBindingResolver,
         access_policy: PlatformAccessPolicy,
+        transactions: TransactionManager,
         max_build_documents: int | None = None,
     ) -> None:
         self._releases = releases
@@ -134,6 +136,7 @@ class BuildRagReleaseUseCase:
         self._ledger = ledger
         self._bindings = bindings
         self._access_policy = access_policy
+        self._transactions = transactions
         # ``None`` = sin tope (comportamiento previo). Un entero positivo acota el
         # número de documentos que un build síncrono procesa por request.
         self._max_build_documents = max_build_documents
@@ -171,35 +174,41 @@ class BuildRagReleaseUseCase:
             )
         for document in documents:
             revision_id = document.source_document_revision_id
+            # El resolver persiste/commitea los artefactos físicos por su cuenta
+            # (workflow durable incremental). El build NO es una transacción global.
             artifacts = self._resolver.resolve(
                 context=context, source_document_revision_id=revision_id
             )
-            for stage in _BUILD_STAGES:
-                resolution = artifacts.stage(stage)
-                step = self._ledger.start_step(context=context, stage=stage)
-                self._ledger.complete_step(
-                    step_id=step.step_id,
-                    outcome=resolution.outcome,
-                    reuse_kind=resolution.reuse_kind,
-                    source_artifact_id=resolution.artifact_id,
-                )
-                if resolution.outcome is BuildOutcome.REUSED:
-                    reused += 1
-                elif resolution.outcome is BuildOutcome.BUILT:
-                    built += 1
+            # UoW por revisión: ledger + membresía de esta revisión se commitean
+            # juntos, dejando cada revisión durable e independiente (no hay
+            # mega-transacción que sostenga toda la construcción).
+            with self._transactions.transaction():
+                for stage in _BUILD_STAGES:
+                    resolution = artifacts.stage(stage)
+                    step = self._ledger.start_step(context=context, stage=stage)
+                    self._ledger.complete_step(
+                        step_id=step.step_id,
+                        outcome=resolution.outcome,
+                        reuse_kind=resolution.reuse_kind,
+                        source_artifact_id=resolution.artifact_id,
+                    )
+                    if resolution.outcome is BuildOutcome.REUSED:
+                        reused += 1
+                    elif resolution.outcome is BuildOutcome.BUILT:
+                        built += 1
 
-            self._memberships.add(
-                RagReleaseMembership(
-                    rag_release_id=rag_release_id,
-                    project_id=release.project_id,
-                    ordinal=document.ordinal,
-                    source_document_revision_id=revision_id,
-                    normalized_document_id=artifacts.normalize.artifact_id,
-                    chunk_bundle_id=artifacts.chunk.artifact_id,
-                    embedding_bundle_id=artifacts.embed.artifact_id,
-                    materialization_id=artifacts.index.artifact_id,
+                self._memberships.add(
+                    RagReleaseMembership(
+                        rag_release_id=rag_release_id,
+                        project_id=release.project_id,
+                        ordinal=document.ordinal,
+                        source_document_revision_id=revision_id,
+                        normalized_document_id=artifacts.normalize.artifact_id,
+                        chunk_bundle_id=artifacts.chunk.artifact_id,
+                        embedding_bundle_id=artifacts.embed.artifact_id,
+                        materialization_id=artifacts.index.artifact_id,
+                    )
                 )
-            )
 
         return RagReleaseBuildReport(
             rag_release_id=rag_release_id.value,

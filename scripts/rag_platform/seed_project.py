@@ -301,10 +301,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         with connection:  # una sola transacción atómica para toda la cadena
             with connection.cursor() as cursor:
                 # 1) Proyecto con allowlist de embedding + target binding.
+                # El seed provisiona bindings explícitos, así que el provisioner
+                # queda como no-op; se cablea con el catálogo global real por
+                # consistencia (mismo repo de targets que embedding/indexing).
+                from embedding.infrastructure.postgres.repositories import (
+                    PostgresIndexingTargetRepository,
+                )
+                from rag_platform.application.target_provisioning import (
+                    TargetBindingProvisioner,
+                )
+
                 project_use_case = CreateProjectUseCase(
                     projects=PostgresProjectRepository(connection),
                     storage_roots=storage,
                     access_policy=access,
+                    binding_provisioner=TargetBindingProvisioner(
+                        targets=PostgresIndexingTargetRepository(connection)
+                    ),
                 )
                 try:
                     project_use_case.execute(

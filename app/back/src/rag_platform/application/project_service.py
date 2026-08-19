@@ -22,6 +22,7 @@ from rag_platform.application.platform_access import (
     PlatformActor,
     require_project_operator,
 )
+from rag_platform.application.target_provisioning import TargetBindingProvisioner
 from rag_platform.domain.errors import ProjectAlreadyExists, UnknownDocumentTypeTemplate
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import (
@@ -126,10 +127,12 @@ class CreateProjectUseCase:
         projects: ProjectRepository,
         storage_roots: StorageRootsProvider,
         access_policy: PlatformAccessPolicy,
+        binding_provisioner: TargetBindingProvisioner,
     ) -> None:
         self._projects = projects
         self._storage_roots = storage_roots
         self._access_policy = access_policy
+        self._binding_provisioner = binding_provisioner
 
     def execute(
         self, request: CreateProjectRequest, *, actor: PlatformActor
@@ -169,12 +172,20 @@ class CreateProjectUseCase:
                 request.document_type_template.value
             ) from error
 
+        # Bindings server-controlled: si el request trae bindings explícitos (una
+        # operación de admin/seed de confianza), se respetan; si no (alta por HTTP,
+        # que nunca envía bindings), se **provisionan** server-side resolviendo un
+        # indexing target compatible por perfil de embedding. El cliente jamás elige
+        # el ``indexing_target_id`` físico.
+        target_bindings = request.target_bindings or self._binding_provisioner.provision(
+            request.embedding_profiles
+        )
         now = datetime.now(timezone.utc)
         configuration = ProjectConfiguration(
             version=1,
             document_types=document_types,
             embedding_profiles=request.embedding_profiles,
-            target_bindings=request.target_bindings,
+            target_bindings=target_bindings,
             corpus_organization_policy=request.corpus_organization_policy,
             created_at=now,
         )

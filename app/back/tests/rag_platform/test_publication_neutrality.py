@@ -59,6 +59,17 @@ class _NullTx:
         return nullcontext()
 
 
+class _CountingTx:
+    """Cuenta cuántas transacciones de negocio se abren (una sola dueña)."""
+
+    def __init__(self) -> None:
+        self.opened = 0
+
+    def transaction(self):
+        self.opened += 1
+        return nullcontext()
+
+
 def _release(*, state: ReleaseState, manifest: str | None) -> RagRelease:
     return RagRelease(
         rag_release_id=_RELEASE,
@@ -98,6 +109,21 @@ def test_publica_release_validada() -> None:
 
     assert published.state is ReleaseState.PUBLISHED
     assert releases.get(_RELEASE).state is ReleaseState.PUBLISHED
+
+
+def test_publish_posee_una_sola_frontera_transaccional() -> None:
+    # El caso de uso es el único dueño de la transacción: el router ya no la
+    # envuelve (sin anidamiento de transacciones sobre la misma conexión).
+    releases = InMemoryRagReleaseRepository()
+    releases.add(_release(state=ReleaseState.VALIDATED, manifest="a" * 64))
+    counting = _CountingTx()
+    PublishRagReleaseUseCase(
+        releases=releases,
+        access_policy=_AllowAll(),
+        transactions=counting,
+        logger=logging.getLogger("test.publication"),
+    ).execute(rag_release_id=_RELEASE, actor=PlatformActor(actor_id="op-1"))
+    assert counting.opened == 1
 
 
 def test_no_publica_draft_sin_manifiesto() -> None:
