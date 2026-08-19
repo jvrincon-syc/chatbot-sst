@@ -939,6 +939,7 @@ por perfil/proyecto; retrieval híbrido vector+léxico. El retiro de la lane leg
 - Modify: `docs/api/BUNDLE_FIRST_FRONTEND_HANDOFF.md`
 - Modify: `docs/api/pipeline-openapi.json` (regenerar con `npm run python -- scripts/api/export_pipeline_openapi.py`)
 - Test: `app/back/tests/rag_platform/test_platform_api.py`
+- Test: `app/back/tests/rag_platform/test_postgres_idempotency.py` (contrato del adapter PostgreSQL + reserva concurrente `postgres_live`)
 
 **API contract:**
 
