@@ -174,6 +174,10 @@ class PipelineServices:
     # confianza server-side; el store es la autoridad durable de idempotencia.
     platform_actor_provider: object | None = None
     platform_idempotency_store: object | None = None
+    # UoW de negocio para las mutaciones de release: el router envuelve cada
+    # operación en ``transaction()`` (commit en éxito, rollback en error) para que
+    # el commit del store de idempotencia nunca capture trabajo de negocio parcial.
+    platform_transactions: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -418,6 +422,10 @@ def build_pipeline_services(
 
             platform_actor_provider = ConfiguredPlatformActorProvider(os.environ)
         services.platform_actor_provider = platform_actor_provider
+        # Mismo TransactionManager que indexación/publicación: el router envuelve
+        # cada mutación de release para que el negocio quede commit/rollback antes
+        # de que idempotencia commitee (en memoria es un no-op).
+        services.platform_transactions = transactions
     return services
 
 

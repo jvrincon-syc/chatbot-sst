@@ -35,6 +35,16 @@ Invariantes del contrato:
   clave devuelve `409 IDEMPOTENCY_KEY_CONFLICT`;
 - `POST /variants` solo acepta `cell_id + variant_slug` de la matriz reconfirmada;
   nunca IDs físicos de target ni nombres de tabla;
+- el alta de proyecto y la nueva versión de configuración **no** aceptan
+  `target_bindings`/`indexing_target_id` (el target físico se provisiona
+  server-side); el frontend solo declara plantilla, política y perfiles de embedding;
+- todos los IDs externos son **canónicos completos** (`proj_...`, `ragv_...`,
+  `ragr_...`, `corpus_...`, `srev_...`), incluido el body de `POST /corpus-snapshots`;
+  un ID/slug malformado devuelve `422 INVALID_PLATFORM_ID`, nunca 500;
+- `build/validate/publish/retire` corren bajo una unidad de trabajo transaccional
+  y son idempotentes por `Idempotency-Key` scoped por principal (más `reason` en
+  retire); un snapshot que exceda `SST_PLATFORM_MAX_BUILD_DOCUMENTS` devuelve
+  `422 RELEASE_BUILD_TOO_LARGE`;
 - publicar una release **no** activa la recuperación legacy.
 
 La **integración frontend** de esta superficie (`platformApi.ts`/`platformTypes.ts`)

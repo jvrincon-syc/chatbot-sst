@@ -914,13 +914,16 @@ por perfil/proyecto; retrieval híbrido vector+léxico. El retiro de la lane leg
 
 ### Fase 7: API de plataforma y contratos OpenAPI
 
-> **FASE 7 — COMPLETADA (2026-08-19).** Adaptador HTTP delgado sobre
+> **FASE 7 — COMPLETADA + ENDURECIDA (2026-08-19).** Adaptador HTTP delgado sobre
 > `services.rag_platform.*`, con actor de confianza server-side, idempotencia
-> durable en PostgreSQL y traducción central de errores. Verificado por el
-> operador: **test_platform_api 18 passed** + **test_platform_actor_provider 3
-> passed** (mismo run) y **regresión composición+HTTP legacy 38 passed**;
-> migración `20260819_01` aplicada (`status=prepared`, `base_tables_present=12`).
-> Sin commit/push (política). Cierre detallado y evidencia al final de esta sección.
+> durable en PostgreSQL, frontera de autorización uniforme (SSO-ready), UoW
+> explícito y traducción central de errores. Tras el commit inicial se cerró un
+> segundo pase de 9 hallazgos de revisión (§Endurecimiento post-Fase 7 al final de
+> esta sección). Verde final del operador (2026-08-19): **plataforma + composición
+> 217 passed** (in-memory), **API/actor/idempotencia 17 passed**, **adapter
+> PostgreSQL 4 passed + 1 passed `postgres_live`** (reserva concurrente = un único
+> dueño), OpenAPI regenerado (12 rutas `/api/platform`), `pip check` limpio,
+> migración `20260819_01` aplicada. Sin commit/push en este pase (política).
 
 **Files:**
 
@@ -992,6 +995,13 @@ router. Decisiones arquitectónicas resueltas del prompt de Fase 7:
   NOTHING` con commit corto; ejecución fuera de transacción larga) y adaptador
   in-memory atómico para dry-run/tests. Redis queda documentado como extensión
   detrás del mismo puerto, no en el critical path.
+- **Boundary transaccional (UoW explícito).** El router envuelve cada mutación de
+  release en el `TransactionManager` de negocio (`with transactions.transaction()`,
+  commit en éxito / rollback en excepción) **antes** de que el guard commitee el
+  estado terminal de idempotencia. Así el commit del store nunca captura trabajo
+  de negocio parcial aunque comparta físicamente la conexión; `build/validate/
+  retire` (que no tenían boundary propio) ya no dependen del commit transversal de
+  idempotencia. En modo memoria es un `NullTransactionManager` (no-op).
 - **Traducción central de errores.** Un único `@app.exception_handler(RagPlatformError)`
   en `api/app.py` mapea `code`/`http_status` al envelope compartido; sin
   `try/except` por endpoint.
@@ -1015,9 +1025,57 @@ router. Decisiones arquitectónicas resueltas del prompt de Fase 7:
 - `prepare_postgres_indexing.py` → `status=prepared`, 35 migraciones (incluye `20260819_01`), `base_tables_present=12`.
 - Warning `HTTP_422_UNPROCESSABLE_ENTITY` deprecado resuelto (`HTTP_422_UNPROCESSABLE_CONTENT`).
 
-**Pendiente menor (no bloquea el contrato):** regenerar `docs/api/pipeline-openapi.json`
-con `npm run python -- scripts/api/export_pipeline_openapi.py` (el alias `schemas:export`
-exporta los JSON schemas de ingestión, no el OpenAPI del pipeline).
+**Pendiente (regenerado):** `docs/api/pipeline-openapi.json` se regenera con
+`npm run python -- scripts/api/export_pipeline_openapi.py` (el alias `schemas:export`
+exporta los JSON schemas de ingestión, no el OpenAPI del pipeline). Ya regenerado en
+el pase de endurecimiento.
+
+#### Endurecimiento post-Fase 7 (2026-08-19)
+
+Segundo pase de revisión tras el commit inicial. Nueve hallazgos cerrados, cada uno
+con test y verde del operador:
+
+1. **[ALTO] Frontera de autorización uniforme (SSO-ready).** Todo caso de uso
+   project-owned preserva `PlatformActor` hasta conocer el `project_id` y enforca
+   `require_project_operator` (operador + scope), igual que ya hacían publish/retire.
+   Cambiadas firmas `actor_id: str` → `actor: PlatformActor` en
+   `create_project`/`update_project_metadata`/`create_project_configuration_version`/
+   `create_corpus_snapshot`/`create_release_draft`/`build_release`/`validate_release`;
+   `build/validate/draft` y `create_variant_from_matrix_cell` reciben `access_policy`.
+   Una futura transición SSO/OIDC reemplaza solo el provider, sin tocar casos de uso.
+   Callers (router, composición, tests, `seed_project.py`) actualizados en un solo pase.
+2. **[ALTO] DTO HTTP sin target físico.** `CreateProjectRequestSchema` /
+   `UpdateProjectConfigurationRequestSchema` no exponen `target_bindings`
+   (`indexing_target_id`); el OpenAPI no filtra el target físico a Fase 8. Los
+   bindings se provisionan server-side (seed).
+3. **[ALTO] Idempotencia scoped por principal.** El fingerprint incluye `actor_id`:
+   otro actor con la misma clave = `IDEMPOTENCY_KEY_CONFLICT` (409), nunca replay.
+4. **[ALTO/MED] `retire.reason` material.** El fingerprint incluye `request_fields`
+   (`{"reason": ...}` en retire): mismo actor/recurso con `reason` distinto = 409.
+5. **[MED] Corpus snapshots al ID canónico.** `POST /corpus-snapshots` exige
+   `project_id` completo (`proj_...`); el router valida y deriva el slug, eliminando
+   el bug de doble prefijo `proj_proj_...`.
+6. **[MED] Slugs/IDs de body inválidos → 422, no 500.** Handler central
+   `InvalidIdentity` → 422 `INVALID_PLATFORM_ID` (cubre path y body); `_parse_id` sin
+   traducción duplicada.
+7. **[MED] Tope de documentos por build.** `SST_PLATFORM_MAX_BUILD_DOCUMENTS`
+   (`_resolve_max_build_documents`, config inválida aborta el arranque); un snapshot
+   sobre el tope falla cerrado **antes** de construir con `RELEASE_BUILD_TOO_LARGE`
+   (422), sin membresías.
+8. **[MED] Cobertura del adapter PostgreSQL de idempotencia.**
+   `test_postgres_idempotency.py`: contrato con connection fake (reserva atómica
+   `ON CONFLICT DO NOTHING RETURNING`, conflicto lee estado, `complete`/`fail`
+   parametrizados + commit, `result_json` nunca en la reserva, fila→record) **4
+   passed** + reserva concurrente real `postgres_live` **1 passed** (un único dueño).
+9. **[MED] Boundary transaccional (UoW explícito).** El router envuelve cada mutación
+   de release en `transactions.transaction()` (commit en éxito / rollback en
+   excepción) dentro de la operación del guard; el commit del store de idempotencia
+   ya no captura trabajo de negocio parcial aunque comparta la conexión.
+   `build/validate/retire` dejan de depender del commit transversal. En memoria
+   (`NullTransactionManager`) es no-op.
+
+Archivos nuevos del pase: `test_postgres_idempotency.py`. Migración sin cambios
+(`20260819_01`). Superficie única `services.rag_platform.*` intacta. Sin commit/push.
 
 ### Fase 8: GUI de plataforma integrada con la UI actual
 

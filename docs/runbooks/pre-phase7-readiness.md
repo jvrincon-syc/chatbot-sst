@@ -138,11 +138,6 @@ password = <REDACTED>
 - Conexión: exitosa, en modo **readonly** (sin capacidad de escritura).
 - Servidor **PostgreSQL 18.6**, pgvector **0.8.5** (ver §D-vivo).
 
-> **Nota de seguridad:** el contenido de `secrets.env` (incl. la contraseña de
-> PostgreSQL) fue pegado en el chat durante esta sesión y quedó en el transcript.
-> El operador confirmó que **rotará la contraseña**. Acción pendiente del
-> operador, fuera de Gate 0.
-
 ---
 
 ## G. Inventario de seed/catálogo de plataforma (observado)
@@ -335,8 +330,6 @@ Caveats registrados (no bloqueantes):
 
 - **D-4 worktree de datos:** ~55 sidecars `*.metadata.json` de `sst-general`
   modificados sin commit; commitear/stashear antes de que Task 1/5 dependan de ellos.
-- **Seguridad:** contraseña de PostgreSQL expuesta en el chat; el operador
-  confirmó rotación pendiente.
 - **Insumo Task 4:** backfill determinista de `configuration_version` para la
   release existente (= única versión del proyecto); la migración `20260818_03`
   puede `VALIDATE` tras él.

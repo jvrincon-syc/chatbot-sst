@@ -29,6 +29,7 @@ from rag_platform.api.dependencies import (
     get_actor_provider,
     get_idempotency_store,
     get_platform_services,
+    get_platform_transactions,
     require_rag_platform_enabled,
 )
 from rag_platform.api.schemas import (
@@ -350,6 +351,7 @@ def get_release(
 def _run_idempotent(
     *,
     store: IdempotencyStore,
+    transactions,
     idempotency_key: str,
     action: str,
     release_id: PlatformId,
@@ -365,7 +367,16 @@ def _run_idempotent(
     semántica (p. ej. ``reason`` en ``retire``); nunca contenido sensible. Un
     replay de un intento previo **fallido** no devuelve un 200 vacío enmascarando
     el error; se surface con un código estable pidiendo una clave nueva.
+
+    UoW explícito: la operación de negocio corre dentro de ``transactions``
+    (commit en éxito, rollback en excepción) **antes** de que el guard commitee el
+    estado terminal de idempotencia; así el commit del store nunca captura trabajo
+    de negocio parcial aunque comparta la conexión (en memoria es un no-op).
     """
+
+    def _transactional_operation() -> dict:
+        with transactions.transaction():
+            return operation()
 
     result = IdempotencyGuard(store=store).run(
         idempotency_key=idempotency_key,
@@ -373,7 +384,7 @@ def _run_idempotent(
         resource_id=release_id.value,
         actor_id=actor.actor_id,
         response_status=status.HTTP_200_OK,
-        operation=operation,
+        operation=_transactional_operation,
         request_fields=request_fields,
     )
     if result.replayed and result.response_status >= 400:
@@ -398,6 +409,7 @@ def build_release(
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
     store: IdempotencyStore = Depends(get_idempotency_store),
+    transactions=Depends(get_platform_transactions),
 ) -> dict:
     release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
 
@@ -409,6 +421,7 @@ def build_release(
 
     return _run_idempotent(
         store=store,
+        transactions=transactions,
         idempotency_key=idempotency_key,
         action="build",
         release_id=release_id,
@@ -427,6 +440,7 @@ def validate_release(
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
     store: IdempotencyStore = Depends(get_idempotency_store),
+    transactions=Depends(get_platform_transactions),
 ) -> dict:
     release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
 
@@ -438,6 +452,7 @@ def validate_release(
 
     return _run_idempotent(
         store=store,
+        transactions=transactions,
         idempotency_key=idempotency_key,
         action="validate",
         release_id=release_id,
@@ -456,6 +471,7 @@ def publish_release(
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
     store: IdempotencyStore = Depends(get_idempotency_store),
+    transactions=Depends(get_platform_transactions),
 ) -> dict:
     release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
 
@@ -467,6 +483,7 @@ def publish_release(
 
     return _run_idempotent(
         store=store,
+        transactions=transactions,
         idempotency_key=idempotency_key,
         action="publish",
         release_id=release_id,
@@ -486,6 +503,7 @@ def retire_release(
     services: RagPlatformServices = Depends(get_platform_services),
     actor: PlatformActor = Depends(get_actor),
     store: IdempotencyStore = Depends(get_idempotency_store),
+    transactions=Depends(get_platform_transactions),
 ) -> dict:
     release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
 
@@ -497,6 +515,7 @@ def retire_release(
 
     return _run_idempotent(
         store=store,
+        transactions=transactions,
         idempotency_key=idempotency_key,
         action="retire",
         release_id=release_id,
