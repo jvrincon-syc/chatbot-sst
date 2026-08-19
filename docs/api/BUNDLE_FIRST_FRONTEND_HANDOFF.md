@@ -18,6 +18,28 @@ para `/api/platform/*` quedan **diferidos a Fase 8**, después de que exista un
 OpenAPI real exportado para esa superficie. Antes de eso, la persistencia del
 dashboard sigue siendo solo del workspace legacy actual.
 
+### Actualización Fase 7 (superficie administrativa `/api/platform/*`)
+
+Fase 7 **ya expone** la superficie administrativa de plataforma bajo
+`/api/platform/*` (proyectos, configuración versionada, matriz/variantes, corpus
+snapshots y lifecycle de releases). Está detrás del flag `SST_FEATURE_RAG_PLATFORM_V1`
+(apagado devuelve `503 RAG_PLATFORM_V1_DISABLED`) y ya aparece en el OpenAPI
+exportado (regenerar con `npm run python -- scripts/api/export_pipeline_openapi.py`).
+Invariantes del contrato:
+
+- la identidad del actor **nunca** viene del cliente (ni body, ni query, ni header
+  arbitrario): la resuelve un proveedor de confianza server-side; un `actor_id` en
+  el body se rechaza con 422;
+- `build/validate/publish/retire` exigen el header `Idempotency-Key`; el mismo par
+  clave+petición no re-ejecuta la operación y un fingerprint distinto bajo la misma
+  clave devuelve `409 IDEMPOTENCY_KEY_CONFLICT`;
+- `POST /variants` solo acepta `cell_id + variant_slug` de la matriz reconfirmada;
+  nunca IDs físicos de target ni nombres de tabla;
+- publicar una release **no** activa la recuperación legacy.
+
+La **integración frontend** de esta superficie (`platformApi.ts`/`platformTypes.ts`)
+sigue diferida a Fase 8; el backend HTTP ya está listo.
+
 ---
 
 ## 1. Envelope de error (idéntico a Chunking)

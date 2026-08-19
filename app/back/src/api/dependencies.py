@@ -169,6 +169,11 @@ class PipelineServices:
     # Task 3: superficie tipada de proyectos/configuración (``RagPlatformServices``).
     # Task 4 la extenderá con variantes/releases; ``None`` deja el legacy intacto.
     rag_platform: RagPlatformServices | None = None
+    # Fase 7: adaptador HTTP. Solo se cablean tras el flag ``rag_platform_v1``;
+    # ``None`` deja el legacy intacto. El provider entrega el ``PlatformActor`` de
+    # confianza server-side; el store es la autoridad durable de idempotencia.
+    platform_actor_provider: object | None = None
+    platform_idempotency_store: object | None = None
 
     def close(self) -> None:
         """Drain both bounded executors and close the database connection."""
@@ -193,8 +198,14 @@ def build_pipeline_services(
     seed_targets: Iterable[IndexingTarget] = (),
     seed_chunk_bundles: Iterable[ChunkBundleRef] = (),
     lexical_profile_id: str = "",
+    platform_actor_provider: object | None = None,
 ) -> PipelineServices:
-    """Wire the whole bundle-first surface on PostgreSQL or on memory."""
+    """Wire the whole bundle-first surface on PostgreSQL or on memory.
+
+    ``platform_actor_provider`` overrides the trusted-actor adapter of the Fase 7
+    HTTP layer (tests inject a stub). When omitted and the platform flag is on, it
+    defaults to a configuration-backed provider reading ``os.environ``.
+    """
 
     flags = feature_flags or FeatureFlags.from_env()
     scope = consumer_scope or ConsumerScope.from_env()
@@ -397,7 +408,39 @@ def build_pipeline_services(
         services.rag_platform_rebuild = platform.rebuild_platform
         services.rag_platform_draft = platform.create_release_draft
         services.rag_platform_validate = platform.validate_release
+        # Fase 7: adaptador HTTP. Idempotencia durable (Postgres si hay conexión,
+        # in-memory para dry-run/tests) y actor de confianza server-side.
+        services.platform_idempotency_store = _build_idempotency_store(
+            connection=connection
+        )
+        if platform_actor_provider is None:
+            from rag_platform.api.dependencies import ConfiguredPlatformActorProvider
+
+            platform_actor_provider = ConfiguredPlatformActorProvider(os.environ)
+        services.platform_actor_provider = platform_actor_provider
     return services
+
+
+def _build_idempotency_store(*, connection: object | None) -> object:
+    """Cablea el ``IdempotencyStore`` durable (autoridad: PostgreSQL).
+
+    Sin conexión (dry-run/tests) usa el adaptador in-memory atómico; con conexión,
+    el adaptador Postgres sobre ``platform_idempotency_records``. Redis se puede
+    introducir después detrás de este mismo puerto sin tocar router ni casos de uso.
+    """
+
+    if connection is None:
+        from rag_platform.infrastructure.in_memory.idempotency import (
+            InMemoryIdempotencyStore,
+        )
+
+        return InMemoryIdempotencyStore()
+
+    from rag_platform.infrastructure.postgres.idempotency import (
+        PostgresIdempotencyStore,
+    )
+
+    return PostgresIdempotencyStore(connection)
 
 
 def _build_rag_platform_services(

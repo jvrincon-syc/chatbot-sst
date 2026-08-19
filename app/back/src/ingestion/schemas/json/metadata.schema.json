@@ -626,6 +626,102 @@
       ],
       "title": "Observation",
       "type": "object"
+    },
+    "PlatformArtifactProvenance": {
+      "additionalProperties": false,
+      "description": "Optional semantic audit provenance shared by platform artifacts.",
+      "properties": {
+        "rag_variant_id": {
+          "anyOf": [
+            {
+              "pattern": "^ragv_[a-z0-9][a-z0-9-]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rag Variant Id"
+        },
+        "semantic_recipe_fingerprint": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Recipe Fingerprint"
+        }
+      },
+      "title": "PlatformArtifactProvenance",
+      "type": "object"
+    },
+    "PlatformDocumentIdentity": {
+      "additionalProperties": false,
+      "description": "Identidad de plataforma opcional para artefactos Schema 2.0 nuevos (ADR-006).\n\nEs **aditiva**: los artefactos legacy SST no la emiten, por lo que\n``MetadataArtifact.platform_identity`` queda ``None`` y validan sin cambios\n(ese ``None`` es el adaptador Schema 2.0 legacy). Cuando el pipeline de\nplataforma produce un normalizado, la puebla para ligar el artefacto a\nproyecto + revisión + receta, sin depender solo de ``source_relpath``\n(plan §Fase 2, §4.4).\n\n``normalized_document_id`` es opcional porque su generador con prefijo llega\nen una fase posterior; su identidad lógica ya la fijan ``project_id +\nsource_document_revision_id + processing_profile_fingerprint``.",
+      "properties": {
+        "normalized_document_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Normalized Document Id"
+        },
+        "processing_profile_fingerprint": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Processing Profile Fingerprint",
+          "type": "string"
+        },
+        "processing_profile_id": {
+          "pattern": "^pp_[a-z0-9][a-z0-9-]{0,127}$",
+          "title": "Processing Profile Id",
+          "type": "string"
+        },
+        "project_id": {
+          "pattern": "^proj_[a-z0-9][a-z0-9-]{0,127}$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/PlatformArtifactProvenance"
+        },
+        "schema_version": {
+          "const": "2.0",
+          "default": "2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_document_id": {
+          "pattern": "^sdoc_[a-z0-9][a-z0-9-]{0,127}$",
+          "title": "Source Document Id",
+          "type": "string"
+        },
+        "source_document_revision_id": {
+          "pattern": "^srev_[a-z0-9][a-z0-9-]{0,127}$",
+          "title": "Source Document Revision Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "project_id",
+        "source_document_id",
+        "source_document_revision_id",
+        "processing_profile_id",
+        "processing_profile_fingerprint"
+      ],
+      "title": "PlatformDocumentIdentity",
+      "type": "object"
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -743,6 +839,28 @@
     "pipeline_version": {
       "title": "Pipeline Version",
       "type": "string"
+    },
+    "platform_identity": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PlatformDocumentIdentity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "platform_provenance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PlatformArtifactProvenance"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "processed_at": {
       "title": "Processed At",

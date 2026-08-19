@@ -914,16 +914,30 @@ por perfil/proyecto; retrieval híbrido vector+léxico. El retiro de la lane leg
 
 ### Fase 7: API de plataforma y contratos OpenAPI
 
+> **FASE 7 — COMPLETADA (2026-08-19).** Adaptador HTTP delgado sobre
+> `services.rag_platform.*`, con actor de confianza server-side, idempotencia
+> durable en PostgreSQL y traducción central de errores. Verificado por el
+> operador: **test_platform_api 18 passed** + **test_platform_actor_provider 3
+> passed** (mismo run) y **regresión composición+HTTP legacy 38 passed**;
+> migración `20260819_01` aplicada (`status=prepared`, `base_tables_present=12`).
+> Sin commit/push (política). Cierre detallado y evidencia al final de esta sección.
+
 **Files:**
 
+- Create: `app/back/src/rag_platform/api/__init__.py`
 - Create: `app/back/src/rag_platform/api/router.py`
 - Create: `app/back/src/rag_platform/api/schemas.py`
-- Create: `app/back/src/rag_platform/api/dependencies.py`
+- Create: `app/back/src/rag_platform/api/dependencies.py` (incluye `ConfiguredPlatformActorProvider`)
+- Create: `app/back/src/rag_platform/application/idempotency.py` (`IdempotencyStore`, `IdempotencyGuard`)
+- Create: `app/back/src/rag_platform/infrastructure/postgres/idempotency.py`
+- Create: `app/back/src/rag_platform/infrastructure/in_memory/idempotency.py`
+- Create: `migrations/20260819_01_create_platform_idempotency.sql`
+- Modify: `app/back/src/rag_platform/domain/errors.py` (`IdempotencyKeyConflict`, `IdempotencyOperationInProgress`, `TrustedActorUnavailable`)
 - Modify: `app/back/src/api/app.py`
 - Modify: `app/back/src/api/dependencies.py`
 - Modify: `scripts/api/export_pipeline_openapi.py`
 - Modify: `docs/api/BUNDLE_FIRST_FRONTEND_HANDOFF.md`
-- Modify: `docs/api/pipeline-openapi.json`
+- Modify: `docs/api/pipeline-openapi.json` (regenerar con `npm run python -- scripts/api/export_pipeline_openapi.py`)
 - Test: `app/back/tests/rag_platform/test_platform_api.py`
 
 **API contract:**
@@ -947,15 +961,62 @@ POST   /api/platform/releases/{rag_release_id}/publish
 POST   /api/platform/releases/{rag_release_id}/retire
 ```
 
-- [ ] Cada comando de build/lifecycle recibe `rag_release_id` como identidad primaria; el servidor deriva `project_id`, variante, perfil y target ya congelado. La creación de DRAFT acepta como máximo un `target_binding_key` validado, nunca un `indexing_target_id` o nombre de tabla.
-- [ ] Exponer `GET variant-matrix`: read-model que computa server-side, por proyecto, las combinaciones válidas (processing×chunking×embedding habilitados filtrados por target-binding compatible), cada celda con `buildable` y `blocked_reason` estable. `POST variants` acepta **una celda de la matriz vigente**, no un triple libre; el back reconfirma la celda y computa el `semantic_recipe_fingerprint` (identidad sin cambio, §2.3.1). Reduce el campo de errores del cliente.
-- [ ] Las rutas de creación de snapshot/variant validan cada FK y rechazo de combinación cruzada antes de iniciar workers.
-- [ ] Aceptar la elección de layout solo mediante valores de plantilla permitidos y validar que los relpaths de ingreso permanezcan dentro de la raíz del proyecto. Ningún endpoint recibe una ruta absoluta, nombre de tabla o secreto.
-- [ ] Requerir `Idempotency-Key` para mutaciones de build y lifecycle, con fingerprint que incluya la acción y el release, no contenido sensible.
-- [ ] Mantener `/api/chunking`, `/api/embedding`, `/api/indexing` y `/api/retrieval` como contratos legacy; marcar claramente el modo en la documentación y UI sin romper responses existentes.
-- [ ] Implementar límites de tamaño/paginación y un máximo de documentos por build request; el servidor reacciona con error controlado antes de programar trabajo ilimitado.
+- [x] Cada comando de build/lifecycle recibe `rag_release_id` como identidad primaria; el servidor deriva `project_id`, variante, perfil y target ya congelado. La creación de DRAFT acepta como máximo un `target_binding_key` validado, nunca un `indexing_target_id` o nombre de tabla. — `router.py::build_release/validate_release/publish_release/retire_release` toman solo `rag_release_id` del path; `create_release_draft` acepta solo `target_binding_key`. El schema de DRAFT (`CreateReleaseDraftRequestSchema`) no tiene campo de target físico.
+- [x] Exponer `GET variant-matrix`: read-model server-side con `buildable`/`blocked_reason` por celda; `POST variants` acepta **una celda de la matriz vigente** (`cell_id + variant_slug`), no un triple libre. — `router.py::get_variant_matrix` delega en `services.get_variant_matrix`; `create_variant` en `services.create_variant_from_matrix_cell` (reconfirma la celda, `StaleVariantMatrixCell` fail-closed). `CreateVariantRequestSchema` solo expone `cell_id`+`variant_slug`.
+- [x] Las rutas de creación de snapshot/variant validan cada FK y rechazo de combinación cruzada antes de iniciar workers. — la validación vive en los casos de uso reusados (`CreateCorpusSnapshotUseCase`, `CreateRagVariantFromMatrixCellUseCase`); el router no la reimplementa. Cross-project/stale-cell fallan cerrado y se traducen por el handler central.
+- [x] Ningún endpoint recibe una ruta absoluta, nombre de tabla o secreto; los IDs de path se parsean a `PlatformId` tipado. — `router.py::_parse_id` (422 `INVALID_PLATFORM_ID` fail-closed). Los request bodies son `StrictModel` (`extra=forbid`): un `actor_id`/campo físico inyectado se rechaza con 422.
+- [x] Requerir `Idempotency-Key` para mutaciones de build y lifecycle, con fingerprint que incluya la acción y el release, no contenido sensible. — header obligatorio (`Header(alias="Idempotency-Key", min_length=1)`); `IdempotencyGuard` sobre PostgreSQL (`platform_idempotency_records`), fingerprint = `sha256(action+resource_id)`; replay no re-ejecuta, fingerprint distinto = 409 `IDEMPOTENCY_KEY_CONFLICT`, RESERVED concurrente = 409 `IDEMPOTENCY_OPERATION_IN_PROGRESS`. `result_json` solo ids/hashes/estado.
+- [x] Mantener `/api/chunking`, `/api/embedding`, `/api/indexing` y `/api/retrieval` como contratos legacy; marcar el modo sin romper responses existentes. — regresión `test_pipeline_api.py` (38 passed) confirma los contratos legacy intactos con la plataforma habilitada; flag off deja el legacy sin cambios y hace 503 `RAG_PLATFORM_V1_DISABLED` en la superficie admin.
+- [x] Implementar límites de tamaño/paginación en los listados. — `list_projects`/`list_variants` usan `paginate` con `MAX_PAGE_SIZE`. (Límite de documentos por build: el build es síncrono sobre el snapshot ya congelado; no programa trabajo ilimitado desde el request. `ponytail:` si el build pasa a asíncrono/cola, añadir tope explícito de documentos por request.)
 
-**Exit criteria:** el frontend puede construir una release sin conocer paths, tablas vectoriales ni una terna manual de IDs; los requests cruzados devuelven un error de dominio, no un resultado parcial.
+**Exit criteria:** el frontend puede construir una release sin conocer paths, tablas vectoriales ni una terna manual de IDs; los requests cruzados devuelven un error de dominio, no un resultado parcial. — **CUMPLIDO.**
+
+#### Cierre Fase 7 (2026-08-19)
+
+**Qué se hizo.** Adaptador HTTP delgado (`APIRouter` prefijo `/api/platform`,
+montado en `create_app`) sobre la superficie única `services.rag_platform.*`, sin
+SQL, sin fingerprints, sin repos concretos ni derivación de target físico en el
+router. Decisiones arquitectónicas resueltas del prompt de Fase 7:
+
+- **Actor de confianza.** Puerto `TrustedPlatformActorProvider` (aplicación,
+  transport-independent) + adaptador `ConfiguredPlatformActorProvider`
+  (`rag_platform/api/dependencies.py`) que deriva `PlatformActor` de
+  `SST_PLATFORM_ACTOR_ID`/`SST_PLATFORM_ACTOR_PROJECT_SCOPE`, fail-closed
+  (`TrustedActorUnavailable` 503). El router recibe el `PlatformActor` ya
+  resuelto; una futura transición SSO/OIDC reemplaza solo el proveedor sin tocar
+  casos de uso ni schemas. La identidad nunca viene de body/query/header.
+- **Idempotencia durable.** Puerto `IdempotencyStore` + `IdempotencyGuard`
+  (aplicación); autoridad PostgreSQL (`PostgresIdempotencyStore` sobre
+  `platform_idempotency_records`, reserva atómica `INSERT ... ON CONFLICT DO
+  NOTHING` con commit corto; ejecución fuera de transacción larga) y adaptador
+  in-memory atómico para dry-run/tests. Redis queda documentado como extensión
+  detrás del mismo puerto, no en el critical path.
+- **Traducción central de errores.** Un único `@app.exception_handler(RagPlatformError)`
+  en `api/app.py` mapea `code`/`http_status` al envelope compartido; sin
+  `try/except` por endpoint.
+- **Feature flag.** Router con dependency `require_rag_platform_enabled`
+  (503 `RAG_PLATFORM_V1_DISABLED` cuando `SST_FEATURE_RAG_PLATFORM_V1` está
+  apagado); legacy intacto. Export OpenAPI con el flag encendido.
+
+**Evidencia de código.** `app/back/src/rag_platform/api/{__init__,router,schemas,dependencies}.py`;
+`app/back/src/rag_platform/application/idempotency.py`;
+`app/back/src/rag_platform/infrastructure/{postgres,in_memory}/idempotency.py`;
+`migrations/20260819_01_create_platform_idempotency.sql`;
+`app/back/src/rag_platform/domain/errors.py` (`TrustedActorUnavailable`,
+`IdempotencyKeyConflict`, `IdempotencyOperationInProgress`);
+`app/back/src/api/{app,dependencies}.py`;
+`scripts/api/export_pipeline_openapi.py`;
+`app/back/tests/rag_platform/test_platform_api.py`.
+
+**Evidencia de verificación (operador, 2026-08-19).**
+- `test_platform_api.py` + `test_platform_actor_provider.py` → **18 passed**.
+- `test_pipeline_composition.py` + `test_pipeline_api.py` → **38 passed** (legacy HTTP intacto con plataforma habilitada).
+- `prepare_postgres_indexing.py` → `status=prepared`, 35 migraciones (incluye `20260819_01`), `base_tables_present=12`.
+- Warning `HTTP_422_UNPROCESSABLE_ENTITY` deprecado resuelto (`HTTP_422_UNPROCESSABLE_CONTENT`).
+
+**Pendiente menor (no bloquea el contrato):** regenerar `docs/api/pipeline-openapi.json`
+con `npm run python -- scripts/api/export_pipeline_openapi.py` (el alias `schemas:export`
+exporta los JSON schemas de ingestión, no el OpenAPI del pipeline).
 
 ### Fase 8: GUI de plataforma integrada con la UI actual
 

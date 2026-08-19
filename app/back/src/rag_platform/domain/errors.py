@@ -118,6 +118,19 @@ class UnsafeArtifactPath(RagPlatformError):
     http_status = 400
 
 
+class TrustedActorUnavailable(RagPlatformError):
+    """La plataforma exige un actor de confianza y no se pudo resolver.
+
+    Fail-closed (invariante §Actor del plan Fase 7): si el adaptador de identidad
+    server-side no entrega un ``PlatformActor`` (p. ej. configuración de operador
+    ausente), la API se abstiene en vez de operar sin autoridad. Nunca se deriva
+    identidad de un body, header o query controlado por el cliente.
+    """
+
+    code = "TRUSTED_ACTOR_UNAVAILABLE"
+    http_status = 503
+
+
 class SourceDocumentRevisionNotFound(RagPlatformError):
     """La revisión documental referenciada no está registrada."""
 
@@ -385,4 +398,33 @@ class StaleVariantMatrixCell(RagPlatformError):
     """
 
     code = "STALE_VARIANT_MATRIX_CELL"
+    http_status = 409
+
+
+# --------------------------------------------------------------------------- #
+# Fase 7: idempotencia durable de mutaciones de release                       #
+# --------------------------------------------------------------------------- #
+
+
+class IdempotencyKeyConflict(RagPlatformError):
+    """El mismo ``Idempotency-Key`` se reusó para una petición lógica distinta.
+
+    Fail-closed: una clave identifica una única (acción + recurso + fingerprint).
+    Reusarla para otra acción/recurso/payload material se rechaza en vez de
+    ejecutar una operación diferente bajo una clave ya comprometida.
+    """
+
+    code = "IDEMPOTENCY_KEY_CONFLICT"
+    http_status = 409
+
+
+class IdempotencyOperationInProgress(RagPlatformError):
+    """Ya hay una ejecución en curso para la misma clave (RESERVED).
+
+    Fail-closed contra duplicados concurrentes: una segunda petición HTTP con la
+    misma clave/fingerprint no arranca un segundo build/transición mientras la
+    primera no llega a un estado terminal.
+    """
+
+    code = "IDEMPOTENCY_OPERATION_IN_PROGRESS"
     http_status = 409

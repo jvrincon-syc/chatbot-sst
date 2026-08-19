@@ -35,6 +35,8 @@ def build_schema() -> dict:
             embedding_v2=True,
             indexing_bundle_first=True,
             retrieval_v1=True,
+            # Fase 7: exporta también la superficie administrativa de plataforma.
+            rag_platform_v1=True,
         ),
         consumer_scope=ConsumerScope(),
         allow_mock_engine=True,

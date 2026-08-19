@@ -1,0 +1,479 @@
+"""Rutas HTTP de la plataforma RAG multi-proyecto (Fase 7).
+
+Adaptador HTTP **delgado** sobre ``services.rag_platform.*``: valida entrada
+Pydantic, resuelve el actor de confianza server-side, aplica la guarda de
+idempotencia donde corresponde y delega en el caso de uso ya cableado. El router
+no ejecuta SQL, no calcula fingerprints, no resuelve tablas físicas ni deriva
+``indexing_target_id``, y no importa repositorios concretos: toda esa autoridad
+vive en la capa de aplicación.
+
+La traducción de errores de dominio (``RagPlatformError``) al envelope HTTP es
+**centralizada** en ``api/app.py`` (un solo ``exception_handler``); aquí no hay
+``try/except RagPlatformError`` repetido por endpoint.
+"""
+
+from __future__ import annotations
+
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Header, Query, status
+
+from core.api.http import (
+    DEFAULT_PAGE_SIZE,
+    ErrorEnvelopeSchema,
+    MAX_PAGE_SIZE,
+    http_error,
+    paginate,
+)
+from rag_platform.api.dependencies import (
+    get_actor_provider,
+    get_idempotency_store,
+    get_platform_services,
+    require_rag_platform_enabled,
+)
+from rag_platform.api.schemas import (
+    CorpusSnapshotSchema,
+    CreateCorpusSnapshotRequestSchema,
+    CreateProjectRequest,
+    CreateReleaseDraftRequestSchema,
+    CreateVariantRequestSchema,
+    PaginatedProjectsSchema,
+    PaginatedVariantsSchema,
+    ProjectConfigurationSchema,
+    ProjectSchema,
+    ReleaseBuildReportSchema,
+    ReleaseSchema,
+    RetireReleaseRequestSchema,
+    UpdateProjectConfigurationRequest,
+    UpdateProjectRequestSchema,
+    VariantMatrixCellSchema,
+    VariantSchema,
+    build_report_to_schema,
+    configuration_to_schema,
+    matrix_cell_to_schema,
+    project_to_schema,
+    release_to_schema,
+    snapshot_to_schema,
+    variant_to_schema,
+)
+from rag_platform.application.actor_provider import TrustedPlatformActorProvider
+from rag_platform.application.idempotency import IdempotencyGuard, IdempotencyStore
+from rag_platform.application.platform_access import PlatformActor
+from rag_platform.application.services import RagPlatformServices
+from rag_platform.domain.identity import IdentityKind, InvalidIdentity, PlatformId
+from rag_platform.domain.models import EligibilityDecision
+
+
+router = APIRouter(
+    prefix="/api/platform",
+    tags=["platform"],
+    dependencies=[Depends(require_rag_platform_enabled)],
+    responses={
+        400: {"model": ErrorEnvelopeSchema},
+        403: {"model": ErrorEnvelopeSchema},
+        404: {"model": ErrorEnvelopeSchema},
+        409: {"model": ErrorEnvelopeSchema},
+        422: {"model": ErrorEnvelopeSchema},
+        503: {"model": ErrorEnvelopeSchema},
+    },
+)
+
+#: Header de idempotencia obligatorio en mutaciones de release.
+IdempotencyKey = Annotated[str, Header(alias="Idempotency-Key", min_length=1)]
+
+
+def get_actor(
+    provider: TrustedPlatformActorProvider = Depends(get_actor_provider),
+) -> PlatformActor:
+    """Resuelve el ``PlatformActor`` de confianza (fail-closed si no hay actor)."""
+
+    return provider.current_actor()
+
+
+def _parse_id(kind: IdentityKind, value: str) -> PlatformId:
+    """Parsea un ID de path a ``PlatformId`` o falla con 422 estable."""
+
+    try:
+        return PlatformId.parse(kind, value)
+    except InvalidIdentity as error:
+        raise http_error(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            code="INVALID_PLATFORM_ID",
+            message=str(error),
+        ) from error
+
+
+def _eligibility_decisions(
+    raw: dict[str, str],
+) -> dict[str, EligibilityDecision]:
+    """Traduce las decisiones de elegibilidad del request o falla con 422."""
+
+    decisions: dict[str, EligibilityDecision] = {}
+    for revision_id, value in raw.items():
+        try:
+            decisions[revision_id] = EligibilityDecision(value)
+        except ValueError as error:
+            raise http_error(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                code="INVALID_ELIGIBILITY_DECISION",
+                message=f"unknown eligibility decision {value!r}",
+            ) from error
+    return decisions
+
+
+# --------------------------------------------------------------------------- #
+# Proyectos                                                                    #
+# --------------------------------------------------------------------------- #
+
+
+@router.get("/projects", response_model=PaginatedProjectsSchema)
+def list_projects(
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    services: RagPlatformServices = Depends(get_platform_services),
+) -> dict:
+    items = [project_to_schema(p) for p in services.list_projects.execute()]
+    return paginate(items, page=page, page_size=page_size)
+
+
+@router.post(
+    "/projects",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ProjectSchema,
+)
+def create_project(
+    payload: CreateProjectRequest,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> ProjectSchema:
+    project = services.create_project.execute(payload, actor_id=actor.actor_id)
+    return project_to_schema(project)
+
+
+@router.get("/projects/{project_id}", response_model=ProjectSchema)
+def get_project(
+    project_id: str,
+    services: RagPlatformServices = Depends(get_platform_services),
+) -> ProjectSchema:
+    project = services.get_project.execute(_parse_id(IdentityKind.PROJECT, project_id))
+    return project_to_schema(project)
+
+
+@router.patch("/projects/{project_id}", response_model=ProjectSchema)
+def update_project(
+    project_id: str,
+    payload: UpdateProjectRequestSchema,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> ProjectSchema:
+    project = services.update_project_metadata.execute(
+        _parse_id(IdentityKind.PROJECT, project_id),
+        display_name=payload.display_name,
+        actor_id=actor.actor_id,
+    )
+    return project_to_schema(project)
+
+
+@router.get(
+    "/projects/{project_id}/configuration",
+    response_model=ProjectConfigurationSchema,
+)
+def get_project_configuration(
+    project_id: str,
+    services: RagPlatformServices = Depends(get_platform_services),
+) -> ProjectConfigurationSchema:
+    configuration = services.get_project_configuration.execute(
+        _parse_id(IdentityKind.PROJECT, project_id)
+    )
+    return configuration_to_schema(configuration)
+
+
+@router.patch(
+    "/projects/{project_id}/configuration",
+    response_model=ProjectConfigurationSchema,
+)
+def update_project_configuration(
+    project_id: str,
+    payload: UpdateProjectConfigurationRequest,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> ProjectConfigurationSchema:
+    configuration = services.create_project_configuration_version.execute(
+        _parse_id(IdentityKind.PROJECT, project_id),
+        request=payload,
+        actor_id=actor.actor_id,
+    )
+    return configuration_to_schema(configuration)
+
+
+# --------------------------------------------------------------------------- #
+# Variantes                                                                    #
+# --------------------------------------------------------------------------- #
+
+
+@router.get(
+    "/projects/{project_id}/variant-matrix",
+    response_model=list[VariantMatrixCellSchema],
+)
+def get_variant_matrix(
+    project_id: str,
+    services: RagPlatformServices = Depends(get_platform_services),
+) -> list[VariantMatrixCellSchema]:
+    cells = services.get_variant_matrix.execute(
+        project_id=_parse_id(IdentityKind.PROJECT, project_id)
+    )
+    return [matrix_cell_to_schema(cell) for cell in cells]
+
+
+@router.get(
+    "/projects/{project_id}/variants",
+    response_model=PaginatedVariantsSchema,
+)
+def list_variants(
+    project_id: str,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    services: RagPlatformServices = Depends(get_platform_services),
+) -> dict:
+    variants = services.list_project_variants.execute(
+        _parse_id(IdentityKind.PROJECT, project_id)
+    )
+    items = [variant_to_schema(v) for v in variants]
+    return paginate(items, page=page, page_size=page_size)
+
+
+@router.post(
+    "/projects/{project_id}/variants",
+    status_code=status.HTTP_201_CREATED,
+    response_model=VariantSchema,
+)
+def create_variant(
+    project_id: str,
+    payload: CreateVariantRequestSchema,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> VariantSchema:
+    variant = services.create_variant_from_matrix_cell.execute(
+        project_id=_parse_id(IdentityKind.PROJECT, project_id),
+        cell_id=payload.cell_id,
+        variant_slug=payload.variant_slug,
+        actor=actor,
+    )
+    return variant_to_schema(variant)
+
+
+# --------------------------------------------------------------------------- #
+# Corpus snapshots                                                             #
+# --------------------------------------------------------------------------- #
+
+
+@router.post(
+    "/corpus-snapshots",
+    status_code=status.HTTP_201_CREATED,
+    response_model=CorpusSnapshotSchema,
+)
+def create_corpus_snapshot(
+    payload: CreateCorpusSnapshotRequestSchema,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> CorpusSnapshotSchema:
+    snapshot = services.create_corpus_snapshot.execute(
+        project_id=payload.project_id,
+        document_revision_ids=payload.document_revision_ids,
+        actor_id=actor.actor_id,
+        eligibility_decisions=_eligibility_decisions(payload.eligibility_decisions),
+    )
+    return snapshot_to_schema(snapshot)
+
+
+# --------------------------------------------------------------------------- #
+# Releases                                                                     #
+# --------------------------------------------------------------------------- #
+
+
+@router.post(
+    "/releases",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ReleaseSchema,
+)
+def create_release_draft(
+    payload: CreateReleaseDraftRequestSchema,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> ReleaseSchema:
+    release = services.create_release_draft.execute(
+        rag_variant_id=_parse_id(IdentityKind.RAG_VARIANT, payload.rag_variant_id),
+        corpus_snapshot_id=_parse_id(
+            IdentityKind.CORPUS_SNAPSHOT, payload.corpus_snapshot_id
+        ),
+        target_binding_key=payload.target_binding_key,
+        actor_id=actor.actor_id,
+    )
+    return release_to_schema(release)
+
+
+@router.get("/releases/{rag_release_id}", response_model=ReleaseSchema)
+def get_release(
+    rag_release_id: str,
+    services: RagPlatformServices = Depends(get_platform_services),
+) -> ReleaseSchema:
+    release = services.get_release.execute(
+        _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
+    )
+    return release_to_schema(release)
+
+
+def _run_idempotent(
+    *,
+    store: IdempotencyStore,
+    idempotency_key: str,
+    action: str,
+    release_id: PlatformId,
+    actor: PlatformActor,
+    operation,
+) -> dict:
+    """Ejecuta un comando de release una sola vez por clave/fingerprint.
+
+    Centraliza la guarda de idempotencia de los cuatro comandos (build/validate/
+    publish/retire) para no duplicar el cableado. El fingerprint es ``action +
+    rag_release_id``: identifica la petición lógica sin persistir contenido
+    sensible. Un replay de un intento previo **fallido** no devuelve un 200 vacío
+    enmascarando el error; se surface con un código estable pidiendo una clave
+    nueva para reintentar.
+    """
+
+    result = IdempotencyGuard(store=store).run(
+        idempotency_key=idempotency_key,
+        action=action,
+        resource_id=release_id.value,
+        actor_id=actor.actor_id,
+        response_status=status.HTTP_200_OK,
+        operation=operation,
+    )
+    if result.replayed and result.response_status >= 400:
+        raise http_error(
+            status_code=result.response_status,
+            code="IDEMPOTENT_OPERATION_FAILED",
+            message=(
+                f"a previous {action} attempt for this Idempotency-Key failed; "
+                "retry with a new Idempotency-Key"
+            ),
+        )
+    return result.result_json
+
+
+@router.post(
+    "/releases/{rag_release_id}/build",
+    response_model=ReleaseBuildReportSchema,
+)
+def build_release(
+    rag_release_id: str,
+    idempotency_key: IdempotencyKey,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+    store: IdempotencyStore = Depends(get_idempotency_store),
+) -> dict:
+    release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
+
+    def _operation() -> dict:
+        report = services.build_release.execute(
+            rag_release_id=release_id, actor_id=actor.actor_id
+        )
+        return build_report_to_schema(report).model_dump(mode="json")
+
+    return _run_idempotent(
+        store=store,
+        idempotency_key=idempotency_key,
+        action="build",
+        release_id=release_id,
+        actor=actor,
+        operation=_operation,
+    )
+
+
+@router.post(
+    "/releases/{rag_release_id}/validate",
+    response_model=ReleaseSchema,
+)
+def validate_release(
+    rag_release_id: str,
+    idempotency_key: IdempotencyKey,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+    store: IdempotencyStore = Depends(get_idempotency_store),
+) -> dict:
+    release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
+
+    def _operation() -> dict:
+        release = services.validate_release.execute(
+            rag_release_id=release_id, actor_id=actor.actor_id
+        )
+        return release_to_schema(release).model_dump(mode="json")
+
+    return _run_idempotent(
+        store=store,
+        idempotency_key=idempotency_key,
+        action="validate",
+        release_id=release_id,
+        actor=actor,
+        operation=_operation,
+    )
+
+
+@router.post(
+    "/releases/{rag_release_id}/publish",
+    response_model=ReleaseSchema,
+)
+def publish_release(
+    rag_release_id: str,
+    idempotency_key: IdempotencyKey,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+    store: IdempotencyStore = Depends(get_idempotency_store),
+) -> dict:
+    release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
+
+    def _operation() -> dict:
+        release = services.publish_release.execute(
+            rag_release_id=release_id, actor=actor
+        )
+        return release_to_schema(release).model_dump(mode="json")
+
+    return _run_idempotent(
+        store=store,
+        idempotency_key=idempotency_key,
+        action="publish",
+        release_id=release_id,
+        actor=actor,
+        operation=_operation,
+    )
+
+
+@router.post(
+    "/releases/{rag_release_id}/retire",
+    response_model=ReleaseSchema,
+)
+def retire_release(
+    rag_release_id: str,
+    payload: RetireReleaseRequestSchema,
+    idempotency_key: IdempotencyKey,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+    store: IdempotencyStore = Depends(get_idempotency_store),
+) -> dict:
+    release_id = _parse_id(IdentityKind.RAG_RELEASE, rag_release_id)
+
+    def _operation() -> dict:
+        release = services.retire_release.execute(
+            rag_release_id=release_id, actor=actor, reason=payload.reason
+        )
+        return release_to_schema(release).model_dump(mode="json")
+
+    return _run_idempotent(
+        store=store,
+        idempotency_key=idempotency_key,
+        action="retire",
+        release_id=release_id,
+        actor=actor,
+        operation=_operation,
+    )

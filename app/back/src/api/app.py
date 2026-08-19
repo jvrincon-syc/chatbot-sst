@@ -15,6 +15,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from api.dependencies import PipelineServices
 from embedding.api.router import router as embedding_router
 from indexing.api.router import router as indexing_router
+from rag_platform.api.router import router as platform_router
+from rag_platform.domain.errors import RagPlatformError
 from retrieval.api.router import router as retrieval_router
 
 
@@ -67,6 +69,11 @@ def create_app(*, services: PipelineServices) -> FastAPI:
     app.state.retrieval_profile_status = services.retrieval_profile_status
     app.state.retrieval_validate = services.retrieval_validate
     app.state.retrieval_search = services.retrieval_search
+    # Fase 7: superficie administrativa de plataforma. ``None`` cuando el flag
+    # ``rag_platform_v1`` está apagado; el router hace 503 fail-closed vía su gate.
+    app.state.rag_platform = services.rag_platform
+    app.state.platform_actor_provider = services.platform_actor_provider
+    app.state.platform_idempotency_store = services.platform_idempotency_store
 
     @app.exception_handler(HTTPException)
     async def http_exception_handler(_request, exc: HTTPException) -> JSONResponse:
@@ -104,7 +111,22 @@ def create_app(*, services: PipelineServices) -> FastAPI:
             details={"issues": exc.errors()},
         )
 
+    @app.exception_handler(RagPlatformError)
+    async def rag_platform_error_handler(
+        _request,
+        exc: RagPlatformError,
+    ) -> JSONResponse:
+        # Traducción centralizada única: el ``code``/``http_status`` estable del
+        # error de dominio se mapea al envelope compartido. Sin taxonomía nueva ni
+        # ``try/except`` duplicado por endpoint.
+        return _error_response(
+            status_code=exc.http_status,
+            code=exc.code,
+            message=str(exc),
+        )
+
     app.include_router(embedding_router)
     app.include_router(indexing_router)
     app.include_router(retrieval_router)
+    app.include_router(platform_router)
     return app

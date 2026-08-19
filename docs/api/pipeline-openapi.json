@@ -170,6 +170,192 @@
         "title": "ChunkBundleSummarySchema",
         "type": "object"
       },
+      "CorpusOrganizationPolicy": {
+        "description": "Pol\u00edtica de organizaci\u00f3n/navegaci\u00f3n del corpus de un proyecto.\n\nDefine la vista de ingreso y los relpaths l\u00f3gicos; **nunca** la identidad del\ndocumento ni la ubicaci\u00f3n can\u00f3nica de artefactos sellados (plan \u00a7Fase 1).",
+        "enum": [
+          "sst-legacy-v1",
+          "source-folders-v1",
+          "document-types-v1",
+          "hybrid-v1"
+        ],
+        "title": "CorpusOrganizationPolicy",
+        "type": "string"
+      },
+      "CorpusSnapshotDocumentSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "eligibility_decision": {
+            "title": "Eligibility Decision",
+            "type": "string"
+          },
+          "ordinal": {
+            "title": "Ordinal",
+            "type": "integer"
+          },
+          "source_document_revision_id": {
+            "title": "Source Document Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ordinal",
+          "source_document_revision_id",
+          "eligibility_decision"
+        ],
+        "title": "CorpusSnapshotDocumentSchema",
+        "type": "object"
+      },
+      "CorpusSnapshotSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "corpus_snapshot_id": {
+            "title": "Corpus Snapshot Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "document_count": {
+            "title": "Document Count",
+            "type": "integer"
+          },
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/CorpusSnapshotDocumentSchema"
+            },
+            "title": "Documents",
+            "type": "array"
+          },
+          "manifest_hash": {
+            "title": "Manifest Hash",
+            "type": "string"
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "corpus_snapshot_id",
+          "project_id",
+          "documents",
+          "document_count",
+          "manifest_hash",
+          "created_at"
+        ],
+        "title": "CorpusSnapshotSchema",
+        "type": "object"
+      },
+      "CreateCorpusSnapshotRequestSchema": {
+        "additionalProperties": false,
+        "description": "Congela un snapshot inmutable; el server valida elegibilidad fail-closed.",
+        "properties": {
+          "document_revision_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Document Revision Ids",
+            "type": "array"
+          },
+          "eligibility_decisions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Eligibility Decisions",
+            "type": "object"
+          },
+          "project_id": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Project Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "document_revision_ids"
+        ],
+        "title": "CreateCorpusSnapshotRequestSchema",
+        "type": "object"
+      },
+      "CreateProjectRequest": {
+        "additionalProperties": false,
+        "description": "Entrada validada para crear un proyecto.\n\n``actor_id`` no forma parte del request: se pasa como argumento expl\u00edcito del\ncaso de uso desde una identidad autenticada (invariante \u00a78 del plan).",
+        "properties": {
+          "corpus_organization_policy": {
+            "$ref": "#/components/schemas/CorpusOrganizationPolicy",
+            "default": "source-folders-v1"
+          },
+          "display_name": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Display Name",
+            "type": "string"
+          },
+          "document_type_template": {
+            "$ref": "#/components/schemas/DocumentTypeTemplate",
+            "default": "generic"
+          },
+          "embedding_profiles": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectEmbeddingProfile"
+            },
+            "title": "Embedding Profiles",
+            "type": "array"
+          },
+          "project_slug": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Project Slug",
+            "type": "string"
+          },
+          "target_bindings": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectIndexingTargetBinding"
+            },
+            "title": "Target Bindings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "project_slug",
+          "display_name"
+        ],
+        "title": "CreateProjectRequest",
+        "type": "object"
+      },
+      "CreateReleaseDraftRequestSchema": {
+        "additionalProperties": false,
+        "description": "DRAFT: solo la clave l\u00f3gica ``target_binding_key`` (nunca IDs f\u00edsicos).",
+        "properties": {
+          "corpus_snapshot_id": {
+            "minLength": 1,
+            "title": "Corpus Snapshot Id",
+            "type": "string"
+          },
+          "rag_variant_id": {
+            "minLength": 1,
+            "title": "Rag Variant Id",
+            "type": "string"
+          },
+          "target_binding_key": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Target Binding Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rag_variant_id",
+          "corpus_snapshot_id",
+          "target_binding_key"
+        ],
+        "title": "CreateReleaseDraftRequestSchema",
+        "type": "object"
+      },
       "CreateRetrievalProfileSchema": {
         "additionalProperties": false,
         "description": "Register one retrieval profile for a generic consumer scope.",
@@ -214,6 +400,62 @@
         ],
         "title": "CreateRetrievalProfileSchema",
         "type": "object"
+      },
+      "CreateVariantRequestSchema": {
+        "additionalProperties": false,
+        "description": "Solo selecci\u00f3n de celda de matriz reconfirmada (nunca IDs f\u00edsicos libres).",
+        "properties": {
+          "cell_id": {
+            "minLength": 1,
+            "title": "Cell Id",
+            "type": "string"
+          },
+          "variant_slug": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Variant Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "cell_id",
+          "variant_slug"
+        ],
+        "title": "CreateVariantRequestSchema",
+        "type": "object"
+      },
+      "DocumentTypeSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "template": {
+            "title": "Template",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "display_name",
+          "template"
+        ],
+        "title": "DocumentTypeSchema",
+        "type": "object"
+      },
+      "DocumentTypeTemplate": {
+        "description": "Plantillas seleccionables de taxonom\u00eda documental.\n\n``GENERIC`` es neutral y es la \u00fanica preseleccionable por defecto; ``SST`` es\nla plantilla versionada que ``sst-general`` toma como base (ADR-006, plan\n\u00a7Fase 1). Un proyecto nuevo no preselecciona ``SST``.",
+        "enum": [
+          "generic",
+          "sst"
+        ],
+        "title": "DocumentTypeTemplate",
+        "type": "string"
       },
       "EmbeddingBundleChunkSchema": {
         "additionalProperties": false,
@@ -481,131 +723,6 @@
           "status"
         ],
         "title": "EmbeddingIndexingReadinessSchema",
-        "type": "object"
-      },
-      "EmbeddingProfileSchema": {
-        "additionalProperties": false,
-        "description": "Read-only view of one durable embedding profile.",
-        "properties": {
-          "active": {
-            "title": "Active",
-            "type": "boolean"
-          },
-          "can_embed_documents": {
-            "title": "Can Embed Documents",
-            "type": "boolean"
-          },
-          "can_embed_queries": {
-            "title": "Can Embed Queries",
-            "type": "boolean"
-          },
-          "chunking_version": {
-            "title": "Chunking Version",
-            "type": "string"
-          },
-          "compatibility_status": {
-            "title": "Compatibility Status",
-            "type": "string"
-          },
-          "configuration_fingerprint": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Configuration Fingerprint"
-          },
-          "default_indexing_target_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Default Indexing Target Id"
-          },
-          "deprecated_at": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Deprecated At"
-          },
-          "dimension": {
-            "title": "Dimension",
-            "type": "integer"
-          },
-          "distance_metric": {
-            "title": "Distance Metric",
-            "type": "string"
-          },
-          "document_enabled": {
-            "title": "Document Enabled",
-            "type": "boolean"
-          },
-          "ingestion_origin": {
-            "title": "Ingestion Origin",
-            "type": "string"
-          },
-          "model": {
-            "title": "Model",
-            "type": "string"
-          },
-          "model_revision": {
-            "title": "Model Revision",
-            "type": "string"
-          },
-          "normalization": {
-            "title": "Normalization",
-            "type": "string"
-          },
-          "profile_id": {
-            "title": "Profile Id",
-            "type": "string"
-          },
-          "provider": {
-            "title": "Provider",
-            "type": "string"
-          },
-          "query_enabled": {
-            "title": "Query Enabled",
-            "type": "boolean"
-          },
-          "vector_table": {
-            "title": "Vector Table",
-            "type": "string"
-          }
-        },
-        "required": [
-          "profile_id",
-          "provider",
-          "model",
-          "model_revision",
-          "dimension",
-          "normalization",
-          "distance_metric",
-          "configuration_fingerprint",
-          "ingestion_origin",
-          "chunking_version",
-          "vector_table",
-          "default_indexing_target_id",
-          "active",
-          "document_enabled",
-          "query_enabled",
-          "compatibility_status",
-          "can_embed_documents",
-          "can_embed_queries"
-        ],
-        "title": "EmbeddingProfileSchema",
         "type": "object"
       },
       "EmbeddingRunRequestSchema": {
@@ -1551,7 +1668,7 @@
         "properties": {
           "items": {
             "items": {
-              "$ref": "#/components/schemas/EmbeddingProfileSchema"
+              "$ref": "#/components/schemas/embedding__api__schemas__EmbeddingProfileSchema"
             },
             "title": "Items",
             "type": "array"
@@ -1586,6 +1703,43 @@
           "total_pages"
         ],
         "title": "PaginatedProfilesSchema",
+        "type": "object"
+      },
+      "PaginatedProjectsSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSchema"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total_items": {
+            "title": "Total Items",
+            "type": "integer"
+          },
+          "total_pages": {
+            "title": "Total Pages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total_items",
+          "total_pages"
+        ],
+        "title": "PaginatedProjectsSchema",
         "type": "object"
       },
       "PaginatedRetrievalProfilesSchema": {
@@ -1798,6 +1952,343 @@
         "title": "PaginatedTargetsSchema",
         "type": "object"
       },
+      "PaginatedVariantsSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/VariantSchema"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total_items": {
+            "title": "Total Items",
+            "type": "integer"
+          },
+          "total_pages": {
+            "title": "Total Pages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total_items",
+          "total_pages"
+        ],
+        "title": "PaginatedVariantsSchema",
+        "type": "object"
+      },
+      "ProjectConfigurationSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "corpus_organization_policy": {
+            "title": "Corpus Organization Policy",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "document_types": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentTypeSchema"
+            },
+            "title": "Document Types",
+            "type": "array"
+          },
+          "embedding_profiles": {
+            "items": {
+              "$ref": "#/components/schemas/rag_platform__api__schemas__EmbeddingProfileSchema"
+            },
+            "title": "Embedding Profiles",
+            "type": "array"
+          },
+          "target_bindings": {
+            "items": {
+              "$ref": "#/components/schemas/TargetBindingSchema"
+            },
+            "title": "Target Bindings",
+            "type": "array"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "corpus_organization_policy",
+          "document_types",
+          "embedding_profiles",
+          "target_bindings",
+          "created_at"
+        ],
+        "title": "ProjectConfigurationSchema",
+        "type": "object"
+      },
+      "ProjectDocumentType": {
+        "additionalProperties": false,
+        "description": "Un tipo documental permitido por el cat\u00e1logo del proyecto.\n\nAttributes:\n    code: Identificador estable dentro del proyecto (slug).\n    display_name: Nombre legible mostrado en la UI.\n    template: Plantilla de la que proviene el tipo.",
+        "properties": {
+          "code": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Code",
+            "type": "string"
+          },
+          "display_name": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Display Name",
+            "type": "string"
+          },
+          "template": {
+            "$ref": "#/components/schemas/DocumentTypeTemplate"
+          }
+        },
+        "required": [
+          "code",
+          "display_name",
+          "template"
+        ],
+        "title": "ProjectDocumentType",
+        "type": "object"
+      },
+      "ProjectEmbeddingProfile": {
+        "additionalProperties": false,
+        "description": "Perfil de embedding habilitado para un proyecto.\n\n``embedding_profile_id`` referencia un recurso global (ADR-005); el proyecto\nsolo declara que puede usarlo, no lo redefine.",
+        "properties": {
+          "embedding_profile_id": {
+            "minLength": 1,
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "enabled": {
+            "default": true,
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "embedding_profile_id"
+        ],
+        "title": "ProjectEmbeddingProfile",
+        "type": "object"
+      },
+      "ProjectIndexingTargetBinding": {
+        "additionalProperties": false,
+        "description": "Allowlist backend de una clave l\u00f3gica hacia un target global compatible.\n\nEl cliente elige un ``binding_key``; nunca un ``indexing_target_id`` ni una\ntabla vectorial (invariante \u00a71/\u00a77 del plan). La compatibilidad con el perfil\nde embedding se valida en el servidor de forma fail-closed.",
+        "properties": {
+          "binding_key": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Binding Key",
+            "type": "string"
+          },
+          "embedding_profile_id": {
+            "minLength": 1,
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "indexing_target_id": {
+            "minLength": 1,
+            "title": "Indexing Target Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "binding_key",
+          "indexing_target_id",
+          "embedding_profile_id"
+        ],
+        "title": "ProjectIndexingTargetBinding",
+        "type": "object"
+      },
+      "ProjectSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration": {
+            "$ref": "#/components/schemas/ProjectConfigurationSchema"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "display_name",
+          "state",
+          "configuration",
+          "created_at"
+        ],
+        "title": "ProjectSchema",
+        "type": "object"
+      },
+      "ReleaseBuildReportSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "built_stages": {
+            "title": "Built Stages",
+            "type": "integer"
+          },
+          "rag_release_id": {
+            "title": "Rag Release Id",
+            "type": "string"
+          },
+          "reused_stages": {
+            "title": "Reused Stages",
+            "type": "integer"
+          },
+          "revisions_built": {
+            "title": "Revisions Built",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rag_release_id",
+          "revisions_built",
+          "reused_stages",
+          "built_stages"
+        ],
+        "title": "ReleaseBuildReportSchema",
+        "type": "object"
+      },
+      "ReleaseSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "configuration_version": {
+            "title": "Configuration Version",
+            "type": "integer"
+          },
+          "corpus_snapshot_id": {
+            "title": "Corpus Snapshot Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string"
+          },
+          "rag_release_id": {
+            "title": "Rag Release Id",
+            "type": "string"
+          },
+          "rag_variant_id": {
+            "title": "Rag Variant Id",
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "release_manifest_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Manifest Hash"
+          },
+          "release_number": {
+            "title": "Release Number",
+            "type": "integer"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "target_binding_key": {
+            "title": "Target Binding Key",
+            "type": "string"
+          },
+          "validated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validated At"
+          }
+        },
+        "required": [
+          "rag_release_id",
+          "project_id",
+          "rag_variant_id",
+          "corpus_snapshot_id",
+          "target_binding_key",
+          "configuration_version",
+          "release_number",
+          "state",
+          "created_by",
+          "created_at"
+        ],
+        "title": "ReleaseSchema",
+        "type": "object"
+      },
+      "RetireReleaseRequestSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "RetireReleaseRequestSchema",
+        "type": "object"
+      },
       "RetrievalProfileSchema": {
         "additionalProperties": false,
         "description": "Read-only view of one retrieval profile.",
@@ -1917,6 +2408,11 @@
         "additionalProperties": false,
         "description": "Every precondition retrieval needs, evaluated together.",
         "properties": {
+          "active_document_count": {
+            "minimum": 0.0,
+            "title": "Active Document Count",
+            "type": "integer"
+          },
           "active_vector_rows": {
             "minimum": 0.0,
             "title": "Active Vector Rows",
@@ -1952,7 +2448,8 @@
         "required": [
           "retrieval_profile_id",
           "ready",
-          "active_vector_rows"
+          "active_vector_rows",
+          "active_document_count"
         ],
         "title": "RetrievalReadinessSchema",
         "type": "object"
@@ -2013,6 +2510,34 @@
         "title": "RetrievalRuntimeSchema",
         "type": "object"
       },
+      "RetrievalSearchResponseSchema": {
+        "additionalProperties": false,
+        "description": "Evidence returned by one retrieval search.",
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RetrievedEvidenceSchema"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "retrieval_profile_id": {
+            "title": "Retrieval Profile Id",
+            "type": "string"
+          },
+          "top_k": {
+            "minimum": 1.0,
+            "title": "Top K",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "retrieval_profile_id",
+          "top_k"
+        ],
+        "title": "RetrievalSearchResponseSchema",
+        "type": "object"
+      },
       "RetrievalValidationSchema": {
         "additionalProperties": false,
         "description": "Result of a controlled smoke validation.",
@@ -2062,6 +2587,127 @@
         "title": "RetrievalValidationSchema",
         "type": "object"
       },
+      "RetrievedEvidenceSchema": {
+        "additionalProperties": false,
+        "description": "One evidence item returned by retrieval search.",
+        "properties": {
+          "child_chunk_id": {
+            "title": "Child Chunk Id",
+            "type": "string"
+          },
+          "corpus_version": {
+            "title": "Corpus Version",
+            "type": "string"
+          },
+          "document_id": {
+            "title": "Document Id",
+            "type": "string"
+          },
+          "embedding_bundle_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Bundle Id"
+          },
+          "embedding_profile_id": {
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "title": "Metadata",
+            "type": "object"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "page_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page End"
+          },
+          "page_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Start"
+          },
+          "parent_node_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Node Id"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          },
+          "section_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section Path"
+          },
+          "section_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section Title"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "node_id",
+          "document_id",
+          "child_chunk_id",
+          "text",
+          "score",
+          "source",
+          "embedding_profile_id",
+          "corpus_version"
+        ],
+        "title": "RetrievedEvidenceSchema",
+        "type": "object"
+      },
       "RollbackRequestSchema": {
         "additionalProperties": false,
         "description": "Revert one lane to a bundle that was already validated.\n\nThe consumer scope is resolved server-side (see ``ActivationRequestSchema``).",
@@ -2082,6 +2728,111 @@
           "previous_embedding_bundle_id"
         ],
         "title": "RollbackRequestSchema",
+        "type": "object"
+      },
+      "SearchRetrievalSchema": {
+        "additionalProperties": false,
+        "description": "Run one retrieval search against one retrieval profile.",
+        "properties": {
+          "query": {
+            "minLength": 1,
+            "title": "Query",
+            "type": "string"
+          },
+          "retrieval_profile_id": {
+            "minLength": 1,
+            "title": "Retrieval Profile Id",
+            "type": "string"
+          },
+          "top_k": {
+            "default": 10,
+            "maximum": 25.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "retrieval_profile_id",
+          "query"
+        ],
+        "title": "SearchRetrievalSchema",
+        "type": "object"
+      },
+      "TargetBindingSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "binding_key": {
+            "title": "Binding Key",
+            "type": "string"
+          },
+          "embedding_profile_id": {
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "indexing_target_id": {
+            "title": "Indexing Target Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "binding_key",
+          "indexing_target_id",
+          "embedding_profile_id"
+        ],
+        "title": "TargetBindingSchema",
+        "type": "object"
+      },
+      "UpdateProjectConfigurationRequest": {
+        "additionalProperties": false,
+        "description": "Entrada validada para materializar una versi\u00f3n nueva de configuraci\u00f3n.\n\n``version`` no forma parte del request: la asigna el caso de uso de forma\nmon\u00f3tona a partir de la versi\u00f3n vigente, para que el cliente nunca elija ni\nreescriba una versi\u00f3n existente.",
+        "properties": {
+          "corpus_organization_policy": {
+            "$ref": "#/components/schemas/CorpusOrganizationPolicy"
+          },
+          "document_types": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectDocumentType"
+            },
+            "title": "Document Types",
+            "type": "array"
+          },
+          "embedding_profiles": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectEmbeddingProfile"
+            },
+            "title": "Embedding Profiles",
+            "type": "array"
+          },
+          "target_bindings": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectIndexingTargetBinding"
+            },
+            "title": "Target Bindings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "corpus_organization_policy"
+        ],
+        "title": "UpdateProjectConfigurationRequest",
+        "type": "object"
+      },
+      "UpdateProjectRequestSchema": {
+        "additionalProperties": false,
+        "description": "Metadatos mutables de un proyecto (solo ``display_name``; identidad inmutable).",
+        "properties": {
+          "display_name": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Display Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "display_name"
+        ],
+        "title": "UpdateProjectRequestSchema",
         "type": "object"
       },
       "ValidateRetrievalSchema": {
@@ -2123,6 +2874,255 @@
           "passed"
         ],
         "title": "ValidationCheckSchema",
+        "type": "object"
+      },
+      "VariantMatrixCellSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "blocked_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocked Reason"
+          },
+          "buildable": {
+            "title": "Buildable",
+            "type": "boolean"
+          },
+          "cell_id": {
+            "title": "Cell Id",
+            "type": "string"
+          },
+          "chunking_profile_id": {
+            "title": "Chunking Profile Id",
+            "type": "string"
+          },
+          "configuration_version": {
+            "title": "Configuration Version",
+            "type": "integer"
+          },
+          "embedding_profile_id": {
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "processing_profile_id": {
+            "title": "Processing Profile Id",
+            "type": "string"
+          },
+          "target_binding_key": {
+            "title": "Target Binding Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "cell_id",
+          "processing_profile_id",
+          "chunking_profile_id",
+          "embedding_profile_id",
+          "target_binding_key",
+          "configuration_version",
+          "buildable"
+        ],
+        "title": "VariantMatrixCellSchema",
+        "type": "object"
+      },
+      "VariantSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "chunking_profile_id": {
+            "title": "Chunking Profile Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "embedding_profile_id": {
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "processing_profile_id": {
+            "title": "Processing Profile Id",
+            "type": "string"
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string"
+          },
+          "rag_variant_id": {
+            "title": "Rag Variant Id",
+            "type": "string"
+          },
+          "semantic_recipe_fingerprint": {
+            "title": "Semantic Recipe Fingerprint",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rag_variant_id",
+          "project_id",
+          "processing_profile_id",
+          "chunking_profile_id",
+          "embedding_profile_id",
+          "semantic_recipe_fingerprint",
+          "state",
+          "created_at"
+        ],
+        "title": "VariantSchema",
+        "type": "object"
+      },
+      "embedding__api__schemas__EmbeddingProfileSchema": {
+        "additionalProperties": false,
+        "description": "Read-only view of one durable embedding profile.",
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "can_embed_documents": {
+            "title": "Can Embed Documents",
+            "type": "boolean"
+          },
+          "can_embed_queries": {
+            "title": "Can Embed Queries",
+            "type": "boolean"
+          },
+          "chunking_version": {
+            "title": "Chunking Version",
+            "type": "string"
+          },
+          "compatibility_status": {
+            "title": "Compatibility Status",
+            "type": "string"
+          },
+          "configuration_fingerprint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Configuration Fingerprint"
+          },
+          "default_indexing_target_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Indexing Target Id"
+          },
+          "deprecated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecated At"
+          },
+          "dimension": {
+            "title": "Dimension",
+            "type": "integer"
+          },
+          "distance_metric": {
+            "title": "Distance Metric",
+            "type": "string"
+          },
+          "document_enabled": {
+            "title": "Document Enabled",
+            "type": "boolean"
+          },
+          "ingestion_origin": {
+            "title": "Ingestion Origin",
+            "type": "string"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "model_revision": {
+            "title": "Model Revision",
+            "type": "string"
+          },
+          "normalization": {
+            "title": "Normalization",
+            "type": "string"
+          },
+          "profile_id": {
+            "title": "Profile Id",
+            "type": "string"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "query_enabled": {
+            "title": "Query Enabled",
+            "type": "boolean"
+          },
+          "vector_table": {
+            "title": "Vector Table",
+            "type": "string"
+          }
+        },
+        "required": [
+          "profile_id",
+          "provider",
+          "model",
+          "model_revision",
+          "dimension",
+          "normalization",
+          "distance_metric",
+          "configuration_fingerprint",
+          "ingestion_origin",
+          "chunking_version",
+          "vector_table",
+          "default_indexing_target_id",
+          "active",
+          "document_enabled",
+          "query_enabled",
+          "compatibility_status",
+          "can_embed_documents",
+          "can_embed_queries"
+        ],
+        "title": "EmbeddingProfileSchema",
+        "type": "object"
+      },
+      "rag_platform__api__schemas__EmbeddingProfileSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "embedding_profile_id": {
+            "title": "Embedding Profile Id",
+            "type": "string"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "embedding_profile_id",
+          "enabled"
+        ],
+        "title": "EmbeddingProfileSchema",
         "type": "object"
       }
     }
@@ -4223,6 +5223,1588 @@
         ]
       }
     },
+    "/api/platform/corpus-snapshots": {
+      "post": {
+        "operationId": "create_corpus_snapshot_api_platform_corpus_snapshots_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCorpusSnapshotRequestSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorpusSnapshotSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Create Corpus Snapshot",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects": {
+      "get": {
+        "operationId": "list_projects_api_platform_projects_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedProjectsSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Projects",
+        "tags": [
+          "platform"
+        ]
+      },
+      "post": {
+        "operationId": "create_project_api_platform_projects_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Create Project",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}": {
+      "get": {
+        "operationId": "get_project_api_platform_projects__project_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Get Project",
+        "tags": [
+          "platform"
+        ]
+      },
+      "patch": {
+        "operationId": "update_project_api_platform_projects__project_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProjectRequestSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Update Project",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/configuration": {
+      "get": {
+        "operationId": "get_project_configuration_api_platform_projects__project_id__configuration_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConfigurationSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Get Project Configuration",
+        "tags": [
+          "platform"
+        ]
+      },
+      "patch": {
+        "operationId": "update_project_configuration_api_platform_projects__project_id__configuration_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProjectConfigurationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConfigurationSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Update Project Configuration",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/variant-matrix": {
+      "get": {
+        "operationId": "get_variant_matrix_api_platform_projects__project_id__variant_matrix_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VariantMatrixCellSchema"
+                  },
+                  "title": "Response Get Variant Matrix Api Platform Projects  Project Id  Variant Matrix Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Get Variant Matrix",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/variants": {
+      "get": {
+        "operationId": "list_variants_api_platform_projects__project_id__variants_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVariantsSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Variants",
+        "tags": [
+          "platform"
+        ]
+      },
+      "post": {
+        "operationId": "create_variant_api_platform_projects__project_id__variants_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVariantRequestSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VariantSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Create Variant",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/releases": {
+      "post": {
+        "operationId": "create_release_draft_api_platform_releases_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReleaseDraftRequestSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Create Release Draft",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/releases/{rag_release_id}": {
+      "get": {
+        "operationId": "get_release_api_platform_releases__rag_release_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rag_release_id",
+            "required": true,
+            "schema": {
+              "title": "Rag Release Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Get Release",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/releases/{rag_release_id}/build": {
+      "post": {
+        "operationId": "build_release_api_platform_releases__rag_release_id__build_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rag_release_id",
+            "required": true,
+            "schema": {
+              "title": "Rag Release Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseBuildReportSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Build Release",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/releases/{rag_release_id}/publish": {
+      "post": {
+        "operationId": "publish_release_api_platform_releases__rag_release_id__publish_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rag_release_id",
+            "required": true,
+            "schema": {
+              "title": "Rag Release Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Publish Release",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/releases/{rag_release_id}/retire": {
+      "post": {
+        "operationId": "retire_release_api_platform_releases__rag_release_id__retire_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rag_release_id",
+            "required": true,
+            "schema": {
+              "title": "Rag Release Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetireReleaseRequestSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Retire Release",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/releases/{rag_release_id}/validate": {
+      "post": {
+        "operationId": "validate_release_api_platform_releases__rag_release_id__validate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "rag_release_id",
+            "required": true,
+            "schema": {
+              "title": "Rag Release Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Validate Release",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
     "/api/retrieval/profiles": {
       "get": {
         "operationId": "list_profiles_api_retrieval_profiles_get",
@@ -4557,6 +7139,87 @@
           }
         },
         "summary": "Get Profile Status",
+        "tags": [
+          "retrieval"
+        ]
+      }
+    },
+    "/api/retrieval/search": {
+      "post": {
+        "operationId": "search_retrieval_api_retrieval_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRetrievalSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrievalSearchResponseSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Search Retrieval",
         "tags": [
           "retrieval"
         ]
