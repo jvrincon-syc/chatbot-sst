@@ -51,8 +51,10 @@ class EmbeddingProfileSchema(StrictModel):
 
 
 class TargetBindingSchema(StrictModel):
+    # El ``indexing_target_id`` físico NO cruza HTTP en ninguna dirección: el
+    # frontend usa solo ``binding_key`` (lógico) y el perfil de embedding. El
+    # target físico es server-controlled (invariante §Seguridad).
     binding_key: str
-    indexing_target_id: str
     embedding_profile_id: str
 
 
@@ -272,7 +274,6 @@ def configuration_to_schema(
         target_bindings=[
             TargetBindingSchema(
                 binding_key=binding.binding_key,
-                indexing_target_id=binding.indexing_target_id,
                 embedding_profile_id=binding.embedding_profile_id,
             )
             for binding in configuration.target_bindings

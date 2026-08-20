@@ -749,6 +749,7 @@ def _build_rag_platform_services(
         configuration_versions=configuration_versions,
         release_id_factory=_release_id_factory,
         access_policy=access_policy,
+        transactions=transactions,
         logger=get_logger("rag_platform.release_draft"),
     )
     build_release = BuildRagReleaseUseCase(
@@ -856,6 +857,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
     import uuid
 
     from rag_platform.application.release_service import CreateRagReleaseDraftUseCase
+    from indexing.infrastructure.postgres.bundle_first import PsycopgTransactionManager
     from rag_platform.domain.identity import IdentityKind, PlatformId
     from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
 
@@ -883,6 +885,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
             configuration_versions=InMemoryCurrentConfigurationVersionReader(),
             release_id_factory=_release_id_factory,
             access_policy=AllowAllAccessPolicy(),
+            transactions=NullTransactionManager(),
             logger=get_logger("rag_platform.release_draft"),
         )
 
@@ -907,6 +910,7 @@ def _build_rag_platform_draft(*, connection: object | None) -> object:
         configuration_versions=PostgresProjectRepository(connection),
         release_id_factory=_release_id_factory,
         access_policy=AllowAllAccessPolicy(),
+        transactions=PsycopgTransactionManager(connection),
         logger=get_logger("rag_platform.release_draft"),
     )
 

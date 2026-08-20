@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 import logging
 from typing import Callable, Protocol, Sequence, runtime_checkable
 
+from indexing.application.bundle_first.ports import TransactionManager
 from rag_platform.application.context import (
     PlatformAccessPolicy,
     TargetBindingResolver,
@@ -149,6 +150,7 @@ class CreateRagReleaseDraftUseCase:
         configuration_versions: CurrentProjectConfigurationVersionReader,
         release_id_factory: Callable[[], PlatformId],
         access_policy: PlatformAccessPolicy,
+        transactions: TransactionManager,
         clock: Callable[[], datetime] = _now,
         logger: logging.Logger | None = None,
     ) -> None:
@@ -159,6 +161,7 @@ class CreateRagReleaseDraftUseCase:
         self._configuration_versions = configuration_versions
         self._release_id_factory = release_id_factory
         self._access_policy = access_policy
+        self._transactions = transactions
         self._clock = clock
         self._logger = logger
 
@@ -227,7 +230,10 @@ class CreateRagReleaseDraftUseCase:
             created_by=actor.actor_id,
             created_at=self._clock(),
         )
-        stored = self._releases.add(release)
+        # UoW propio: el DRAFT se commitea en su propia transacción corta, sin
+        # depender de un commit externo (paridad con validate/retire/publish).
+        with self._transactions.transaction():
+            stored = self._releases.add(release)
         if self._logger is not None:
             from rag_platform.application.publication_service import (
                 EventStatus,

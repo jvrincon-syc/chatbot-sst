@@ -1152,6 +1152,23 @@ completar/fallar idempotencia (conexión dedicada, commit corto)
 
 El build NO es rollback-atómico global; es un workflow durable por etapas.
 
+#### Deudas residuales cerradas (2026-08-20)
+
+- **`CreateRagReleaseDraftUseCase` sin UoW propio → CERRADO.** El DRAFT ahora se
+  commitea en su propia transacción corta (`with self._transactions.transaction()`),
+  paridad con validate/retire/publish; `transactions` cableado en composición (main
+  + helper legacy) y tests.
+- **`indexing_target_id` en el response de configuración → CERRADO.**
+  `TargetBindingSchema` ya no expone el target físico (paridad con retrieval, que
+  elimina `project_id` de sus respuestas): la invariante "target físico nunca cruza
+  HTTP" ahora se cumple en request **y** response. Requiere regenerar el OpenAPI.
+- **Huérfanos de `retrieval_profiles` por `project_id` en el digest → SIN RIESGO
+  (verificado).** `PostgresRetrievalProfileRepository.activate()` desactiva el perfil
+  activo previo del mismo scope en la misma transacción, así que la unicidad activa
+  (migración 04) nunca ve dos activos y la transición no rompe la reactivación; el
+  posible sobrante es una fila **inactiva** que el runtime ignora (inocuo). No se
+  borra ledger.
+
 ### Fase 8: GUI de plataforma integrada con la UI actual
 
 > **Nota de frontera (2026-08-18):** `app/front/src/features/platform/platformApi.ts`,

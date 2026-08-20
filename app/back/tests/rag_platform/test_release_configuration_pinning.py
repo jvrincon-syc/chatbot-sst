@@ -151,6 +151,7 @@ def test_create_release_draft_pins_current_configuration_version() -> None:
         configuration_versions=InMemoryCurrentConfigurationVersionReader(default=1),
         release_id_factory=lambda: _RELEASE,
         access_policy=AllowAllAccessPolicy(),
+        transactions=NullTransactionManager(),
         clock=lambda: _NOW,
     )
 
@@ -186,6 +187,7 @@ def test_build_and_validate_use_the_pinned_configuration_version() -> None:
         configuration_versions=current_versions,
         release_id_factory=lambda: _RELEASE,
         access_policy=AllowAllAccessPolicy(),
+        transactions=NullTransactionManager(),
         clock=lambda: _NOW,
     )
     release = draft.execute(

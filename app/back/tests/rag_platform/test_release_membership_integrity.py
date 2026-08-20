@@ -25,6 +25,7 @@ from rag_platform.domain.errors import (
 from rag_platform.application.platform_access import PlatformActor
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
+from api.dependencies import NullTransactionManager
 from rag_platform.domain.lifecycle import ReleaseState
 from rag_platform.domain.models import (
     CorpusSnapshot,
@@ -130,6 +131,7 @@ def _use_case(
         configuration_versions=InMemoryCurrentConfigurationVersionReader(),
         release_id_factory=_factory,
         access_policy=AllowAllAccessPolicy(),
+        transactions=NullTransactionManager(),
         clock=lambda: _NOW,
     )
     return use_case, releases

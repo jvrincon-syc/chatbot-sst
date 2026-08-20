@@ -169,6 +169,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
     from rag_platform.infrastructure.postgres.release_repositories import (
         PostgresRagReleaseRepository,
     )
+    from indexing.infrastructure.postgres.bundle_first import PsycopgTransactionManager
 
     # --- 0) prerequisitos: raw + normalized en disco/BD -------------------------
     # Registra raw (crea source_document_revisions) y normaliza el corpus. El build
@@ -220,6 +221,7 @@ def test_release_build_persiste_rag_release_id(capsys) -> None:
                 kind=IdentityKind.RAG_RELEASE, value="ragr_" + uuid.uuid4().hex[:16]
             ),
             access_policy=_Operator(),
+            transactions=PsycopgTransactionManager(conn),
         ).execute(
             rag_variant_id=PlatformId(kind=IdentityKind.RAG_VARIANT, value=_VARIANT_ID),
             corpus_snapshot_id=snapshot.corpus_snapshot_id,
