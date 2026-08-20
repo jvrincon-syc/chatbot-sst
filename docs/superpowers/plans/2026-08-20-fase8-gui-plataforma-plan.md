@@ -621,7 +621,9 @@ Dentro de Legacy se renderiza `DashboardApp` exactamente como hoy.
 - `platform` no entra en `DashboardPreferences`;
 - OperatorApp puede cambiar entre Platform y Legacy.
 
-## Implementado (tsc test + tsc build + vitest verde localmente; PENDIENTE correr suite del operador)
+> **Task 6 CERRADO (2026-08-20).** Operador corrió `npm --prefix app/front run test` + `run build` en verde.
+
+## Implementado (verde)
 - [x] `features/operator/operatorNavigation.ts`: `OperatorSurface = "platform" | "legacy"` (tipo **nuevo y separado** de `AppView`), `OPERATOR_SURFACES` (fuente única), `isOperatorSurface`. No toca `dashboardTypes`/`dashboardNavigation` → `"platform"` NO entra en `DashboardPreferences`.
 - [x] `features/operator/components/OperatorSidebar.tsx`: rail primario delgado; reusa `.brand`/`.nav-item`; iconos `lucide-react` (`Layers`/`LayoutGrid`/`History`); `aria-current="page"` en activo, `aria-label` en nav.
 - [x] `features/operator/OperatorApp.tsx`: `useState<OperatorSurface>("platform")` (sesión, no persistido — ponytail YAGNI). Legacy → `<DashboardApp/>` **intacto**; Platform → placeholder con `.workspace`/`.topbar` + empty-state direccional (estética base para Task 7).
@@ -633,7 +635,7 @@ Dentro de Legacy se renderiza `DashboardApp` exactamente como hoy.
 - Verificado: `tsc -p tsconfig.test.json` OK + `tsc -p tsconfig.build.json --noEmit` OK (typecheck de los `.tsx`) + `vitest run` 16/16 verde.
 - **Pendiente correr por el operador:** `npm --prefix app/front run test` + `npm --prefix app/front run build`.
 
-**DoD** ✅ (pendiente verde del operador)
+**DoD** ✅ CERRADO
 La plataforma es una superficie nueva, no una sexta pantalla del dashboard legacy.
 
 ---
