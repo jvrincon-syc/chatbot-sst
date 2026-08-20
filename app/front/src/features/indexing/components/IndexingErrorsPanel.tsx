@@ -1,6 +1,6 @@
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import type { IndexingRunError } from "../indexingTypes.js";
-import type { PaginatedResponse } from "../../embeddingIndexing/shared/apiTypes.js";
+import type { PaginatedResponse } from "../../../shared/api/apiTypes.js";
 
 type IndexingErrorsPanelProps = {
   errorsPage: PaginatedResponse<IndexingRunError> | null;

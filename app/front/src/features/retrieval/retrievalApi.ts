@@ -3,8 +3,8 @@ import {
   getJson,
   postJson,
   toPaginatedResponse,
-} from "../embeddingIndexing/shared/apiClient.js";
-import type { PageOptions, PaginatedResponse } from "../embeddingIndexing/shared/apiTypes.js";
+} from "../../shared/api/apiClient.js";
+import type { PageOptions, PaginatedResponse } from "../../shared/api/apiTypes.js";
 import {
   toRetrievalProfile,
   toRetrievalProfileStatus,

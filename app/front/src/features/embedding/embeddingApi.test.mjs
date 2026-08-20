@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import {
   buildQuery,
   createIdempotencyKey,
-} from "../../../.tmp-tests/features/embeddingIndexing/shared/apiClient.js";
-import { mapPipelineError } from "../../../.tmp-tests/features/embeddingIndexing/shared/errorMapping.js";
+} from "../../../.tmp-tests/shared/api/apiClient.js";
+import { mapPipelineError } from "../../../.tmp-tests/shared/api/errorMapping.js";
 import {
   createEmbeddingRun,
   loadChunkBundles,

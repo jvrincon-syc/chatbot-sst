@@ -48,8 +48,8 @@ import type {
   RetrievalProfileStatus,
   RetrievalValidationResult,
 } from "../retrieval/retrievalTypes.js";
-import { mapPipelineError } from "./shared/errorMapping.js";
-import type { PaginatedResponse } from "./shared/apiTypes.js";
+import { mapPipelineError } from "../../shared/api/errorMapping.js";
+import type { PaginatedResponse } from "../../shared/api/apiTypes.js";
 import type { EmbeddingIndexingState } from "../dashboard/dashboardTypes.js";
 import { shouldAdvanceToIndexing } from "./shared/pipelineFlow.js";
 import {

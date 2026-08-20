@@ -5,7 +5,7 @@ import type {
   EmbeddingBundleValidation,
   EmbeddingIndexingReadiness,
 } from "../embeddingTypes.js";
-import type { PaginatedResponse } from "../../embeddingIndexing/shared/apiTypes.js";
+import type { PaginatedResponse } from "../../../shared/api/apiTypes.js";
 
 type EmbeddingBundleInspectorProps = {
   bundle: EmbeddingBundleSummary | null;

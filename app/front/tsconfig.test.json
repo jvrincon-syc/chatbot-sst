@@ -22,9 +22,9 @@
     "src/features/chunking/chunkingState.ts",
     "src/features/chunking/chunkingPersistence.ts",
     "src/features/chunking/chunkingApi.ts",
-    "src/features/embeddingIndexing/shared/apiTypes.ts",
-    "src/features/embeddingIndexing/shared/apiClient.ts",
-    "src/features/embeddingIndexing/shared/errorMapping.ts",
+    "src/shared/api/apiTypes.ts",
+    "src/shared/api/apiClient.ts",
+    "src/shared/api/errorMapping.ts",
     "src/features/embeddingIndexing/shared/pipelineState.ts",
     "src/features/embeddingIndexing/shared/pipelineFlow.ts",
     "src/features/embedding/embeddingTypes.ts",
@@ -38,6 +38,12 @@
     "src/features/retrieval/retrievalTypes.ts",
     "src/features/retrieval/retrievalMappers.ts",
     "src/features/retrieval/retrievalApi.ts",
-    "src/features/retrieval/retrievalState.ts"
+    "src/features/retrieval/retrievalState.ts",
+    "src/features/platform/platformOpenApi.generated.ts",
+    "src/features/platform/platformTypes.ts",
+    "src/features/platform/platformApi.ts",
+    "src/features/platform/platformState.ts",
+    "src/features/platform/platformPersistence.ts",
+    "src/features/platform/hooks/usePlatformPreferences.ts"
   ]
 }

@@ -1,0 +1,138 @@
+/* Shell de operador: rail primario delgado + superficie activa.
+   Reusa el lenguaje visual del dashboard (.brand, .nav-item, .workspace,
+   .topbar) y solo añade la columna de conmutacion entre Platform y Legacy.
+   El rail es angosto (88px) para no competir con el sidebar de 224px que el
+   DashboardApp renderiza dentro de la superficie Legacy. */
+.operator-shell {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.operator-rail {
+  align-items: stretch;
+  background: linear-gradient(180deg, #f8f8ff 0%, #fcfcff 100%);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 8px;
+}
+
+.operator-rail .brand {
+  flex-direction: column;
+  font-size: 11px;
+  gap: 6px;
+  padding: 0;
+  text-align: center;
+}
+
+.operator-rail nav {
+  display: grid;
+  gap: 8px;
+}
+
+.operator-rail .nav-item {
+  border-radius: 8px;
+  flex-direction: column;
+  font-size: 11px;
+  font-weight: 620;
+  gap: 4px;
+  justify-content: center;
+  min-height: 60px;
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.operator-rail .nav-item span {
+  line-height: 1.15;
+}
+
+/* La superficie Platform es un placeholder; establece la estetica de Task 7. */
+.operator-empty {
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 48px auto;
+  max-width: 520px;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.operator-empty-icon {
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  color: var(--accent);
+  display: inline-flex;
+  height: 56px;
+  justify-content: center;
+  width: 56px;
+}
+
+.operator-empty h2 {
+  color: var(--text);
+  font-size: 18px;
+  margin: 0;
+}
+
+.operator-empty p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 40ch;
+}
+
+@media (max-width: 1180px) {
+  .operator-shell {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .operator-rail .brand span {
+    font-size: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .operator-shell {
+    display: block;
+  }
+
+  .operator-rail {
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .operator-rail .brand {
+    flex-direction: row;
+  }
+
+  .operator-rail .brand span {
+    display: none;
+  }
+
+  .operator-rail nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .operator-rail .nav-item {
+    flex-direction: row;
+    min-height: 42px;
+  }
+
+  .operator-empty {
+    margin: 24px auto;
+    padding: 28px 20px;
+  }
+}

@@ -518,21 +518,29 @@ api:check
 ```
 
 ## Steps
-- [ ] Añadir `openapi-typescript`.
-- [ ] Generar `platformOpenApi.generated.ts`.
-- [ ] Crear aliases de schemas de plataforma.
-- [ ] Extraer/reutilizar error envelope y HTTP helpers existentes sin duplicar.
-- [ ] Implementar métodos:
-  - projects/configuration
-  - matrix/variants
-  - documents/upload/normalize
-  - snapshots
-  - releases lifecycle
-- [ ] Añadir `api:check`.
-- [ ] Tests de 401/403/409/422/503 y multipart/PATCH.
 
-**DoD**
-No existe contrato TypeScript manual paralelo al OpenAPI.
+> **Slice 1 VERDE (2026-08-20):** operador corrió `npm --prefix app/front run test` + `run build` en verde (tsc cazó un over-match del sed en `usePollingLoop`, corregido).
+
+### Slice 1 — move mecánico + extensión del cliente (verde)
+- [x] Mover `apiClient/apiTypes/errorMapping` `features/embeddingIndexing/shared/` → `shared/api/` (extracción mecánica, contenido idéntico).
+- [x] Extender `apiClient`: `credentials: "same-origin"` (default explícito; cookie Gate 3), `patchJson`, `postMultipart` (sin Content-Type manual: boundary del browser), prefijo idempotencia `"platform"`.
+- [x] Actualizar importadores: 8 fuentes por specifier + `useEmbeddingIndexingPipeline.ts` + `shared/usePollingLoop.ts` (relativos `./shared/*`, cazados en verificación exhaustiva) + `embeddingApi.test.mjs` (`.tmp-tests/shared/api/`) + `tsconfig.test.json` (3 entradas). `pipelineState/pipelineFlow/usePollingLoop` se quedan en `embeddingIndexing/shared`.
+- [x] Ponytail: `readJsonResponse` NO se movió (ya vive en `shared/`, genérico, usado por chunking/dashboard) → menos churn, hogar correcto.
+- Verificación estática: `grep` exhaustivo → 0 imports stale; todo `apiClient/apiTypes/errorMapping` resuelve a `shared/api/`; `tsconfig.build.json` usa globs (sin cambios).
+- Regresión pendiente: `npm --prefix app/front run test` + `npm --prefix app/front run build`.
+
+> **Task 4 CERRADO (2026-08-20).** Operador corrió `npm --prefix app/front run test` + `run build` + `run api:check` en verde. Slices 1 y 2 completos.
+
+### Slice 2 — codegen + platformApi (verde)
+- [x] `openapi-typescript@7.13.0` (devDep) + scripts `api:generate` (genera desde `docs/api/pipeline-openapi.json`) y `api:check` (regenera + `git diff --exit-code` = drift guard).
+- [x] `platformOpenApi.generated.ts` (5874 líneas, auto-generado) + `platformTypes.ts` (aliases `components["schemas"][...]`, **cero tipos manuales**).
+- [x] `platformApi.ts`: projects/configuration (GET/POST/PATCH), matrix/variants, documents (list/upload multipart/normalize), corpus-snapshots, releases lifecycle (build/validate/publish/retire con Idempotency-Key auto). Adaptador delgado sobre `shared/api` (reuso, sin duplicar cliente); sin bearer/localStorage; `credentials:"same-origin"`.
+- [x] `platformApi.test.mjs`: GET+query, POST JSON, PATCH, multipart sin Content-Type manual, Idempotency-Key (auto + replay provisto), envelope de error 401/403/409/422/503. Encadenado en `test`; 3 archivos añadidos a `tsconfig.test.json`.
+- Verificado por mí (estático): `tsc -p tsconfig.test.json` sin errores + `node platformApi.test.mjs` 11/11 verde.
+- Pendiente operador: `npm --prefix app/front run test` + `run build` + `run api:check`.
+
+**DoD** ✅ CERRADO
+No existe contrato TypeScript manual paralelo al OpenAPI: los tipos salen de `platformOpenApi.generated.ts` y `api:check` detecta drift.
 
 ---
 
@@ -573,7 +581,17 @@ validate persisted selections
 clear stale/out-of-scope IDs
 ```
 
-**DoD**
+> **Task 5 CERRADO (2026-08-20).** Operador corrió `npm --prefix app/front run test` + `run build` en verde.
+
+## Implementado (verde)
+- [x] `platformState.ts`: `PlatformPreferences` (4 IDs), `DEFAULT_PLATFORM_PREFERENCES`, `PlatformSelectionScope`, `platformPreferencesEqual`, y `resolvePlatformPreferences({stored, scope})` puro — `scope:null` preserva (sin borrar por falta de evidencia); con scope, proyecto fuera-de-scope limpia TODO (cascada), dependientes obsoletos se limpian individualmente.
+- [x] `platformPersistence.ts`: espejo de `dashboardPersistence` (STORAGE_KEY `chatbot-sst.platform.preferences.v1`, guard SSR, try/catch silencioso, coerción `toStringOrNull`). **Solo serializa los 4 IDs** (objeto explícito → no filtra campos extra).
+- [x] `hooks/usePlatformPreferences.ts`: espejo de `useDashboardPreferences` — init read+resolve, re-resolve al llegar `scope`, persiste en cambio, setters con `setSelectedProject` cascada-limpia dependientes; guarda `platformPreferencesEqual` evita re-render/persist loops.
+- [x] Tests: `platformState.test.mjs` (6: preserva/cascada/limpieza/equal) + `platformPersistence.test.mjs` (5: round-trip, **no filtra bearer/idempotency**, SSR null, corrupto→null, serialize). Cableados en `test` + `tsconfig.test.json`.
+- Reuso (ponytail/SOLID): 0 helpers de storage nuevos; mismo patrón/estilo que dashboard; `resolve` pura (SRP), sin reducer ni estado global (4 IDs no lo justifican).
+- Verificado por mí: `tsc -p tsconfig.test.json` sin errores + 11/11 `.test.mjs` verde.
+
+**DoD** ✅ (pendiente verde del operador)
 Refresh conserva navegación útil sin preservar autoridad obsoleta ni secretos.
 
 ---
@@ -603,7 +621,19 @@ Dentro de Legacy se renderiza `DashboardApp` exactamente como hoy.
 - `platform` no entra en `DashboardPreferences`;
 - OperatorApp puede cambiar entre Platform y Legacy.
 
-**DoD**
+## Implementado (tsc test + tsc build + vitest verde localmente; PENDIENTE correr suite del operador)
+- [x] `features/operator/operatorNavigation.ts`: `OperatorSurface = "platform" | "legacy"` (tipo **nuevo y separado** de `AppView`), `OPERATOR_SURFACES` (fuente única), `isOperatorSurface`. No toca `dashboardTypes`/`dashboardNavigation` → `"platform"` NO entra en `DashboardPreferences`.
+- [x] `features/operator/components/OperatorSidebar.tsx`: rail primario delgado; reusa `.brand`/`.nav-item`; iconos `lucide-react` (`Layers`/`LayoutGrid`/`History`); `aria-current="page"` en activo, `aria-label` en nav.
+- [x] `features/operator/OperatorApp.tsx`: `useState<OperatorSurface>("platform")` (sesión, no persistido — ponytail YAGNI). Legacy → `<DashboardApp/>` **intacto**; Platform → placeholder con `.workspace`/`.topbar` + empty-state direccional (estética base para Task 7).
+- [x] `styles/operator.css`: `.operator-shell` (grid rail 88px + 1fr), `.operator-rail` (reusa lenguaje de `.sidebar`), empty-state con tokens (`--panel`/`--accent-soft`/`--muted`/`--shadow`); responsive 1180px (rail 72px) y 760px (barra horizontal), espejo de `shell.css`. `@import` añadido a `styles.css`.
+- [x] `App.tsx`: default export ahora `OperatorApp` (mount en `main.tsx` intacto). `DashboardApp` sin cambios (boundary Legacy preservado).
+- [x] `OperatorApp.test.tsx` (vitest + testing-library, `fetch` mockeado): 5 `DASHBOARD_VIEWS` intactas, `isDashboardView("platform")===false`, label "Legacy pipeline" en el rail, conmutación Platform↔Legacy.
+- Diseño (frontend-design): rail 88px slim (no compite con sidebar 224px del dashboard); **cero hex de marca nuevos** (solo tokens de `theme.css`); consistente/responsive/dinámico/accesible. La firma visual (riel de linaje) llega en Task 7 (workspaces); Task 6 es solo el shell/boundary.
+- Reuso/SOLID (ponytail-audit): reusa clases y patrón de `DashboardSidebar`/`shell.css`; un componente = una responsabilidad (rail / shell / placeholder); sin duplicar botones/tarjetas; sin estado global (surface local); `DashboardApp` no se modifica.
+- Verificado: `tsc -p tsconfig.test.json` OK + `tsc -p tsconfig.build.json --noEmit` OK (typecheck de los `.tsx`) + `vitest run` 16/16 verde.
+- **Pendiente correr por el operador:** `npm --prefix app/front run test` + `npm --prefix app/front run build`.
+
+**DoD** ✅ (pendiente verde del operador)
 La plataforma es una superficie nueva, no una sexta pantalla del dashboard legacy.
 
 ---

@@ -1,1 +1,1 @@
-export { DashboardApp as default } from "./features/dashboard/DashboardApp";
+export { OperatorApp as default } from "./features/operator/OperatorApp";

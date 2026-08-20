@@ -1,7 +1,7 @@
 import { AlertCircle, CheckCircle2, Clock3, Loader2 } from "lucide-react";
 import { indexingDocumentIsCommitted } from "../indexingState.js";
 import type { IndexingRunDocument } from "../indexingTypes.js";
-import type { PaginatedResponse } from "../../embeddingIndexing/shared/apiTypes.js";
+import type { PaginatedResponse } from "../../../shared/api/apiTypes.js";
 
 type IndexingDocumentsTableProps = {
   documentsPage: PaginatedResponse<IndexingRunDocument> | null;

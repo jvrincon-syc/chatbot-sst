@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { mapPipelineError } from "./errorMapping.js";
-import type { PipelineUiError } from "./apiTypes.js";
+import { mapPipelineError } from "../../../shared/api/errorMapping.js";
+import type { PipelineUiError } from "../../../shared/api/apiTypes.js";
 
 const DEFAULT_POLL_INTERVAL_MS = 1000;
 const DEFAULT_TIMEOUT_MS = 5 * 60 * 1000;

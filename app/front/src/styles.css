@@ -9,6 +9,7 @@
    pipeline  -> stepper y resumen de embedding/indexing/retrieval */
 @import "./styles/base.css";
 @import "./styles/shell.css";
+@import "./styles/operator.css";
 @import "./styles/ui.css";
 @import "./styles/provider.css";
 @import "./styles/documents.css";

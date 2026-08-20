@@ -3,7 +3,7 @@ import type {
   PaginatedResponse,
   PipelineHttpError,
 } from "./apiTypes.js";
-import { readJsonResponse } from "../../../shared/readJsonResponse.js";
+import { readJsonResponse } from "../readJsonResponse.js";
 
 function toErrorEnvelope(payload: unknown): ApiErrorEnvelope {
   return payload && typeof payload === "object" ? (payload as ApiErrorEnvelope) : {};
@@ -41,7 +41,7 @@ export function buildQuery(params: Record<string, string | number | null | undef
   return query ? `?${query}` : "";
 }
 
-export function createIdempotencyKey(prefix: "embedding" | "indexing"): string {
+export function createIdempotencyKey(prefix: "embedding" | "indexing" | "platform"): string {
   const cryptoObject = globalThis.crypto as Crypto | undefined;
   if (cryptoObject?.randomUUID) {
     return `${prefix}-${cryptoObject.randomUUID()}`;
@@ -66,12 +66,17 @@ export function toPaginatedResponse<T>(
   };
 }
 
+// Same-origin auth: the operator session travels as an HttpOnly cookie (Gate 3),
+// never a bearer in JS. `same-origin` is the fetch default, set explicitly so the
+// cookie contract is visible at the call site.
+const CREDENTIALS: RequestCredentials = "same-origin";
+
 export type PipelineGetOptions = {
   signal?: AbortSignal;
 };
 
 export async function getJson<T>(path: string, options?: PipelineGetOptions): Promise<T> {
-  const response = await fetch(path, { signal: options?.signal });
+  const response = await fetch(path, { credentials: CREDENTIALS, signal: options?.signal });
   return readJson<T>(response);
 }
 
@@ -95,6 +100,49 @@ export async function postJson<T>(
     method: "POST",
     headers,
     body: JSON.stringify(body),
+    credentials: CREDENTIALS,
+    signal: options?.signal,
+  });
+  return readJson<T>(response);
+}
+
+export async function patchJson<T>(
+  path: string,
+  body: Record<string, unknown>,
+  options?: PipelinePostOptions,
+): Promise<T> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (options?.idempotencyKey) {
+    headers["Idempotency-Key"] = options.idempotencyKey;
+  }
+  const response = await fetch(path, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify(body),
+    credentials: CREDENTIALS,
+    signal: options?.signal,
+  });
+  return readJson<T>(response);
+}
+
+// Multipart upload: the browser sets the multipart boundary Content-Type from the
+// FormData, so we must NOT set it by hand (a manual header omits the boundary).
+export async function postMultipart<T>(
+  path: string,
+  form: FormData,
+  options?: PipelinePostOptions,
+): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (options?.idempotencyKey) {
+    headers["Idempotency-Key"] = options.idempotencyKey;
+  }
+  const response = await fetch(path, {
+    method: "POST",
+    headers,
+    body: form,
+    credentials: CREDENTIALS,
     signal: options?.signal,
   });
   return readJson<T>(response);
