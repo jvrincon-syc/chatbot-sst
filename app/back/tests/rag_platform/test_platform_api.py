@@ -423,6 +423,90 @@ def test_id_malformado_422(client: TestClient) -> None:
 
 
 # --------------------------------------------------------------------------- #
+# Gate 2: read-models rehidratables (snapshots, releases, perfiles)            #
+# --------------------------------------------------------------------------- #
+
+
+def test_list_corpus_snapshots_vacio_ok(client: TestClient) -> None:
+    _create_project(client, "demo")
+    response = client.get("/api/platform/projects/proj_demo/corpus-snapshots")
+    assert response.status_code == 200
+    assert response.json()["items"] == []
+
+
+def test_list_corpus_snapshots_muestra_creado(client: TestClient) -> None:
+    _create_project(client, "demo")
+    srev = client.post(
+        "/api/platform/projects/proj_demo/documents",
+        files={"file": ("a.md", b"contenido", "text/markdown")},
+        data={"source_relpath": "a.md"},
+    ).json()["source_document_revision_id"]
+    created = client.post(
+        "/api/platform/corpus-snapshots",
+        json={"project_id": "proj_demo", "document_revision_ids": [srev]},
+    )
+    assert created.status_code == 201, created.text
+
+    items = client.get(
+        "/api/platform/projects/proj_demo/corpus-snapshots"
+    ).json()["items"]
+    assert len(items) == 1
+    assert items[0]["project_id"] == "proj_demo"
+    # Read-model sin rutas físicas (StrictModel del snapshot ya lo garantiza).
+    assert "artifact_relpath" not in items[0]
+
+
+def test_list_corpus_snapshots_fuera_de_scope_403(scoped_client: TestClient) -> None:
+    client = _seed_two_projects(scoped_client)
+    denied = client.get(
+        "/api/platform/projects/proj_beta/corpus-snapshots",
+        headers=_auth_headers(ALPHA_TOKEN),
+    )
+    assert denied.status_code == 403
+    assert denied.json()["error"]["code"] == "PLATFORM_ACCESS_DENIED"
+
+
+def test_list_releases_vacio_ok(client: TestClient) -> None:
+    _create_project(client, "demo")
+    response = client.get("/api/platform/projects/proj_demo/releases")
+    assert response.status_code == 200
+    assert response.json()["items"] == []
+
+
+def test_list_releases_fuera_de_scope_403(scoped_client: TestClient) -> None:
+    client = _seed_two_projects(scoped_client)
+    denied = client.get(
+        "/api/platform/projects/proj_beta/releases",
+        headers=_auth_headers(ALPHA_TOKEN),
+    )
+    assert denied.status_code == 403
+
+
+def test_list_processing_profiles_vacio_ok(client: TestClient) -> None:
+    _create_project(client, "demo")
+    response = client.get("/api/platform/projects/proj_demo/processing-profiles")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_list_chunking_profiles_vacio_ok(client: TestClient) -> None:
+    _create_project(client, "demo")
+    response = client.get("/api/platform/projects/proj_demo/chunking-profiles")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_list_profiles_fuera_de_scope_403(scoped_client: TestClient) -> None:
+    client = _seed_two_projects(scoped_client)
+    for suffix in ("processing-profiles", "chunking-profiles"):
+        denied = client.get(
+            f"/api/platform/projects/proj_beta/{suffix}",
+            headers=_auth_headers(ALPHA_TOKEN),
+        )
+        assert denied.status_code == 403, suffix
+
+
+# --------------------------------------------------------------------------- #
 # Idempotencia sobre comandos de release (nivel HTTP)                          #
 # --------------------------------------------------------------------------- #
 

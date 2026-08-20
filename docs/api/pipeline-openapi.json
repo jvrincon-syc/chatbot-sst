@@ -58,6 +58,27 @@
         "title": "ActivationResultSchema",
         "type": "object"
       },
+      "Body_upload_project_document_api_platform_projects__project_id__documents_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          },
+          "source_relpath": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Source Relpath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "source_relpath"
+        ],
+        "title": "Body_upload_project_document_api_platform_projects__project_id__documents_post",
+        "type": "object"
+      },
       "ChunkBundleSchema": {
         "additionalProperties": false,
         "description": "Read-only view of one registered chunk bundle.",
@@ -168,6 +189,35 @@
           "profile_fingerprint"
         ],
         "title": "ChunkBundleSummarySchema",
+        "type": "object"
+      },
+      "ChunkingProfileReadSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "chunking_profile_id": {
+            "title": "Chunking Profile Id",
+            "type": "string"
+          },
+          "fingerprint": {
+            "title": "Fingerprint",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "strategy": {
+            "title": "Strategy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "chunking_profile_id",
+          "strategy",
+          "fingerprint",
+          "status"
+        ],
+        "title": "ChunkingProfileReadSchema",
         "type": "object"
       },
       "CorpusOrganizationPolicy": {
@@ -1476,6 +1526,36 @@
         "title": "IndexingTargetSchema",
         "type": "object"
       },
+      "NormalizeProjectDocumentsRequestSchema": {
+        "additionalProperties": false,
+        "description": "Normalizaci\u00f3n por variante de un conjunto de revisiones del proyecto.\n\n``rag_variant_id`` es obligatorio para la GUI (aporta perfil de procesamiento y\nprovenance de receta). ``force`` re-normaliza aunque el hash de origen no haya\ncambiado.",
+        "properties": {
+          "document_revision_ids": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Document Revision Ids",
+            "type": "array"
+          },
+          "force": {
+            "default": false,
+            "title": "Force",
+            "type": "boolean"
+          },
+          "rag_variant_id": {
+            "minLength": 1,
+            "title": "Rag Variant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rag_variant_id",
+          "document_revision_ids"
+        ],
+        "title": "NormalizeProjectDocumentsRequestSchema",
+        "type": "object"
+      },
       "PaginatedBundleChunksSchema": {
         "additionalProperties": false,
         "properties": {
@@ -1558,6 +1638,43 @@
           "total_pages"
         ],
         "title": "PaginatedChunkBundlesSchema",
+        "type": "object"
+      },
+      "PaginatedCorpusSnapshotsSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CorpusSnapshotSchema"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total_items": {
+            "title": "Total Items",
+            "type": "integer"
+          },
+          "total_pages": {
+            "title": "Total Pages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total_items",
+          "total_pages"
+        ],
+        "title": "PaginatedCorpusSnapshotsSchema",
         "type": "object"
       },
       "PaginatedEmbeddingRunsSchema": {
@@ -1686,6 +1803,43 @@
         "title": "PaginatedProfilesSchema",
         "type": "object"
       },
+      "PaginatedProjectDocumentsSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectDocumentRevisionSchema"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total_items": {
+            "title": "Total Items",
+            "type": "integer"
+          },
+          "total_pages": {
+            "title": "Total Pages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total_items",
+          "total_pages"
+        ],
+        "title": "PaginatedProjectDocumentsSchema",
+        "type": "object"
+      },
       "PaginatedProjectsSchema": {
         "additionalProperties": false,
         "properties": {
@@ -1721,6 +1875,43 @@
           "total_pages"
         ],
         "title": "PaginatedProjectsSchema",
+        "type": "object"
+      },
+      "PaginatedReleasesSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseSchema"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "total_items": {
+            "title": "Total Items",
+            "type": "integer"
+          },
+          "total_pages": {
+            "title": "Total Pages",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total_items",
+          "total_pages"
+        ],
+        "title": "PaginatedReleasesSchema",
         "type": "object"
       },
       "PaginatedRetrievalProfilesSchema": {
@@ -1970,6 +2161,40 @@
         "title": "PaginatedVariantsSchema",
         "type": "object"
       },
+      "ProcessingProfileReadSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "fingerprint": {
+            "title": "Fingerprint",
+            "type": "string"
+          },
+          "processing_profile_id": {
+            "title": "Processing Profile Id",
+            "type": "string"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "processing_profile_id",
+          "provider",
+          "engine",
+          "fingerprint",
+          "status"
+        ],
+        "title": "ProcessingProfileReadSchema",
+        "type": "object"
+      },
       "ProjectConfigurationSchema": {
         "additionalProperties": false,
         "properties": {
@@ -2019,6 +2244,62 @@
         "title": "ProjectConfigurationSchema",
         "type": "object"
       },
+      "ProjectDocumentRevisionSchema": {
+        "additionalProperties": false,
+        "description": "Fila de documento del proyecto para la GUI. **Nunca** expone rutas f\u00edsicas.",
+        "properties": {
+          "file_size": {
+            "title": "File Size",
+            "type": "integer"
+          },
+          "logical_document_id": {
+            "title": "Logical Document Id",
+            "type": "string"
+          },
+          "normalized_registered": {
+            "title": "Normalized Registered",
+            "type": "boolean"
+          },
+          "processing_status": {
+            "title": "Processing Status",
+            "type": "string"
+          },
+          "raw_registered": {
+            "title": "Raw Registered",
+            "type": "boolean"
+          },
+          "review_state": {
+            "title": "Review State",
+            "type": "string"
+          },
+          "source_document_revision_id": {
+            "title": "Source Document Revision Id",
+            "type": "string"
+          },
+          "source_relpath": {
+            "title": "Source Relpath",
+            "type": "string"
+          },
+          "uploaded_at": {
+            "format": "date-time",
+            "title": "Uploaded At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_document_revision_id",
+          "logical_document_id",
+          "source_relpath",
+          "file_size",
+          "review_state",
+          "uploaded_at",
+          "raw_registered",
+          "normalized_registered",
+          "processing_status"
+        ],
+        "title": "ProjectDocumentRevisionSchema",
+        "type": "object"
+      },
       "ProjectDocumentType": {
         "additionalProperties": false,
         "description": "Un tipo documental permitido por el cat\u00e1logo del proyecto.\n\nAttributes:\n    code: Identificador estable dentro del proyecto (slug).\n    display_name: Nombre legible mostrado en la UI.\n    template: Plantilla de la que proviene el tipo.",
@@ -2066,6 +2347,48 @@
           "embedding_profile_id"
         ],
         "title": "ProjectEmbeddingProfile",
+        "type": "object"
+      },
+      "ProjectNormalizeReportSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "failed": {
+            "title": "Failed",
+            "type": "integer"
+          },
+          "needs_review": {
+            "title": "Needs Review",
+            "type": "integer"
+          },
+          "processed": {
+            "title": "Processed",
+            "type": "integer"
+          },
+          "rag_variant_id": {
+            "title": "Rag Variant Id",
+            "type": "string"
+          },
+          "revision_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Revision Ids",
+            "type": "array"
+          },
+          "skipped": {
+            "title": "Skipped",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rag_variant_id",
+          "processed",
+          "needs_review",
+          "skipped",
+          "failed",
+          "revision_ids"
+        ],
+        "title": "ProjectNormalizeReportSchema",
         "type": "object"
       },
       "ProjectSchema": {
@@ -2721,15 +3044,10 @@
           "embedding_profile_id": {
             "title": "Embedding Profile Id",
             "type": "string"
-          },
-          "indexing_target_id": {
-            "title": "Indexing Target Id",
-            "type": "string"
           }
         },
         "required": [
           "binding_key",
-          "indexing_target_id",
           "embedding_profile_id"
         ],
         "title": "TargetBindingSchema",
@@ -5646,6 +5964,102 @@
         ]
       }
     },
+    "/api/platform/projects/{project_id}/chunking-profiles": {
+      "get": {
+        "operationId": "list_chunking_profiles_api_platform_projects__project_id__chunking_profiles_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ChunkingProfileReadSchema"
+                  },
+                  "title": "Response List Chunking Profiles Api Platform Projects  Project Id  Chunking Profiles Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Chunking Profiles",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
     "/api/platform/projects/{project_id}/configuration": {
       "get": {
         "operationId": "get_project_configuration_api_platform_projects__project_id__configuration_get",
@@ -5833,6 +6247,649 @@
           }
         },
         "summary": "Update Project Configuration",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/corpus-snapshots": {
+      "get": {
+        "operationId": "list_project_corpus_snapshots_api_platform_projects__project_id__corpus_snapshots_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedCorpusSnapshotsSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Project Corpus Snapshots",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/documents": {
+      "get": {
+        "operationId": "list_project_documents_api_platform_projects__project_id__documents_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedProjectDocumentsSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Project Documents",
+        "tags": [
+          "platform"
+        ]
+      },
+      "post": {
+        "operationId": "upload_project_document_api_platform_projects__project_id__documents_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_project_document_api_platform_projects__project_id__documents_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDocumentRevisionSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Upload Project Document",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/normalize": {
+      "post": {
+        "operationId": "normalize_project_documents_api_platform_projects__project_id__normalize_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NormalizeProjectDocumentsRequestSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectNormalizeReportSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Normalize Project Documents",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/processing-profiles": {
+      "get": {
+        "operationId": "list_processing_profiles_api_platform_projects__project_id__processing_profiles_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProcessingProfileReadSchema"
+                  },
+                  "title": "Response List Processing Profiles Api Platform Projects  Project Id  Processing Profiles Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Processing Profiles",
+        "tags": [
+          "platform"
+        ]
+      }
+    },
+    "/api/platform/projects/{project_id}/releases": {
+      "get": {
+        "operationId": "list_project_releases_api_platform_projects__project_id__releases_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedReleasesSchema"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelopeSchema"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "List Project Releases",
         "tags": [
           "platform"
         ]

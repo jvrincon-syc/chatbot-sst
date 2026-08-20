@@ -17,6 +17,7 @@ from urllib.parse import unquote, urlparse
 from time import perf_counter
 from uuid import uuid4
 
+from core.http_auth import ConfiguredBearerAuth, HttpAuthError
 from core.logging.logger import configure_structured_logging
 from core.logging.observability import measure_duration_ms
 from ingestion.config.env import load_runtime_llama_settings, load_secrets_env
@@ -24,6 +25,14 @@ from ingestion.config.llama_settings import LlamaSettings
 from api.app import create_app
 from api.dependencies import build_pipeline_services_from_env
 from ingestion.gui.asgi_bridge import AsgiBridge
+from ingestion.gui.auth_session import (
+    SESSION_COOKIE_NAME,
+    GuiAuthCoordinator,
+    GuiSessionStore,
+    build_expired_cookie,
+    build_session_cookie,
+    parse_cookie,
+)
 from ingestion.gui.chunking_adapter import ChunkingApiBridge
 from ingestion.gui.review_store import (
     ReviewDecision,
@@ -43,13 +52,25 @@ DOCS_RAW = ROOT / "data" / "docs_raw"
 DOCS_NORMALIZED = ROOT / "data" / "docs_normalized"
 CHUNKING_ROOT = ROOT / "data" / "chunks"
 EMBEDDINGS_ROOT = ROOT / "data" / "embeddings"
-#: Domains served by the FastAPI routers through the ASGI bridge.
-PIPELINE_API_PREFIXES = ("/api/embedding", "/api/indexing", "/api/retrieval")
+#: Domains served by the FastAPI routers through the ASGI bridge. ``/api/platform``
+#: (Fase 7/8) atraviesa el mismo bridge: la autoridad de auth/scope/idempotencia
+#: sigue en FastAPI; el bridge solo reenvía método, headers y body sin reimplementar
+#: negocio.
+PIPELINE_API_PREFIXES = (
+    "/api/embedding",
+    "/api/indexing",
+    "/api/retrieval",
+    "/api/platform",
+)
 MANIFESTS_DIR = DOCS_NORMALIZED / "_manifests"
 REVIEW_DECISIONS_PATH = MANIFESTS_DIR / "review_decisions.json"
 GUI_SETTINGS_PATH = MANIFESTS_DIR / "gui_settings.json"
 ALLOWED_UPLOAD_SUFFIXES = {".pdf", ".md", ".markdown"}
 ALLOWED_CORS_HEADERS = ("Content-Type", "Idempotency-Key", "Authorization")
+#: Orígenes de confianza para las rutas de auth de la GUI local (guarda CSRF).
+#: Un ``Origin`` presente que no esté aquí se rechaza; ausente (curl/same-origin)
+#: se permite. La cookie SameSite=Strict ya impide el envío cross-site.
+TRUSTED_GUI_ORIGINS = ("http://127.0.0.1:5173", "http://localhost:5173")
 DEFAULT_LLAMA_ROUTE = "classify,parse,extract"
 ALLOWED_LLAMA_ROUTES = {
     "parse",
@@ -78,6 +99,12 @@ class ValidationTarget:
 
 def _now() -> str:
     return datetime.now(timezone.utc).astimezone().isoformat()
+
+
+def _utcnow() -> datetime:
+    """Instante UTC actual (costura para el TTL de sesión GUI)."""
+
+    return datetime.now(timezone.utc)
 
 
 def _redact_client_address(client_address: tuple[str, int] | None) -> str | None:
@@ -421,6 +448,8 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         try:
             if path == "/api/status":
                 self._send_json(build_status_payload())
+            elif path == "/api/auth/session":
+                self._handle_auth_session()
             elif path.startswith("/api/chunking"):
                 self._handle_chunking_get()
             elif path.startswith(PIPELINE_API_PREFIXES):
@@ -445,7 +474,11 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         self._begin_http_request("POST")
         path = urlparse(self.path).path
         try:
-            if path == "/api/upload":
+            if path == "/api/auth/login":
+                self._handle_auth_login()
+            elif path == "/api/auth/logout":
+                self._handle_auth_logout()
+            elif path == "/api/upload":
                 self._handle_upload()
             elif path.startswith("/api/review/"):
                 document_id = unquote(path.removeprefix("/api/review/"))
@@ -478,8 +511,35 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         else:
             self._finalize_http_request()
 
+    def do_PATCH(self) -> None:
+        self._begin_http_request("PATCH")
+        path = urlparse(self.path).path
+        try:
+            if path.startswith(PIPELINE_API_PREFIXES):
+                self._handle_pipeline_api("PATCH")
+            else:
+                self._send_error(HTTPStatus.NOT_FOUND, "endpoint not found")
+        except Exception as exc:
+            self._response_status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+            self._log_http_event(
+                event="http_request_failed",
+                status="failed",
+                level=logging.ERROR,
+                message="HTTP request failed",
+                duration_ms=measure_duration_ms(self._request_started_at),
+                exception=exc,
+            )
+            raise
+        else:
+            self._finalize_http_request()
+
     def _handle_pipeline_api(self, method: str) -> None:
-        """Forward Embedding, Indexing and Retrieval requests into FastAPI."""
+        """Forward Embedding, Indexing, Retrieval and Platform requests into FastAPI.
+
+        Reenvía método/headers/body tal cual y preserva el status + envelope de
+        error exacto de FastAPI. Los headers ``Authorization`` e ``Idempotency-Key``
+        se propagan intactos; el bridge nunca inventa un actor ni parsea negocio.
+        """
 
         bridge = getattr(self.server, "pipeline_api", None)
         if bridge is None:
@@ -497,10 +557,29 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             return
         length = int(self.headers.get("Content-Length") or 0)
         body = self.rfile.read(length) if length else b""
+        headers = {name: value for name, value in self.headers.items()}
+        # Gate 3: si hay cookie de sesión, el bearer se inyecta server-side y se
+        # descarta cualquier Authorization del cliente (evita confusión de headers).
+        # Sin cookie se reenvía tal cual (back-compat con clientes/herramientas que
+        # ya presentan bearer directo; FastAPI sigue siendo la autoridad de auth).
+        coordinator = getattr(self.server, "gui_auth", None)
+        if coordinator is not None:
+            session_id = parse_cookie(self.headers.get("Cookie"), SESSION_COOKIE_NAME)
+            if session_id is not None:
+                session = coordinator.resolve(session_id, now=_utcnow())
+                if session is None:
+                    self._send_gui_auth_required()
+                    return
+                headers = {
+                    name: value
+                    for name, value in headers.items()
+                    if name.lower() != "authorization"
+                }
+                headers["Authorization"] = f"Bearer {session.bearer_credential}"
         response = bridge.handle(
             method=method,
             path=self.path,
-            headers={name: value for name, value in self.headers.items()},
+            headers=headers,
             body=body,
         )
         self._response_status_code = HTTPStatus(response.status)
@@ -512,6 +591,123 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(response.body)))
         self.end_headers()
         self.wfile.write(response.body)
+
+    def _gui_auth(self) -> GuiAuthCoordinator | None:
+        return getattr(self.server, "gui_auth", None)
+
+    def _handle_auth_login(self) -> None:
+        """Valida el token y abre una sesión GUI (cookie opaca server-side)."""
+
+        coordinator = self._gui_auth()
+        if coordinator is None:
+            self._send_error(
+                HTTPStatus.SERVICE_UNAVAILABLE, "gui auth is not configured"
+            )
+            return
+        if not self._origin_is_trusted():
+            self._send_error(HTTPStatus.FORBIDDEN, "untrusted origin")
+            return
+        try:
+            body = self._read_json_body()
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
+            return
+        token = body.get("token")
+        if not isinstance(token, str) or not token.strip():
+            self._send_error(HTTPStatus.BAD_REQUEST, "token is required")
+            return
+        try:
+            # El token nunca se loggea; solo su resultado de identidad.
+            session = coordinator.login(token.strip(), now=_utcnow())
+        except HttpAuthError as exc:
+            self._send_auth_error(exc)
+            return
+        server_logger.info(
+            "GUI session opened",
+            extra={
+                "request_id": getattr(self, "_request_id", None),
+                "stage": "auth",
+                "event": "gui_session_opened",
+                "status": "completed",
+                "principal_id": session.principal_id,
+            },
+        )
+        self._send_json(
+            session.public_metadata(),
+            extra_headers={
+                "Set-Cookie": build_session_cookie(
+                    session.session_id, max_age=coordinator.cookie_max_age
+                )
+            },
+        )
+
+    def _handle_auth_session(self) -> None:
+        """Devuelve la metadata pública de la sesión vigente o 401."""
+
+        coordinator = self._gui_auth()
+        if coordinator is None:
+            self._send_error(
+                HTTPStatus.SERVICE_UNAVAILABLE, "gui auth is not configured"
+            )
+            return
+        session_id = parse_cookie(self.headers.get("Cookie"), SESSION_COOKIE_NAME)
+        session = (
+            coordinator.resolve(session_id, now=_utcnow())
+            if session_id is not None
+            else None
+        )
+        if session is None:
+            self._send_json({"authenticated": False}, status=HTTPStatus.UNAUTHORIZED)
+            return
+        self._send_json(session.public_metadata())
+
+    def _handle_auth_logout(self) -> None:
+        """Revoca la sesión y expira la cookie (idempotente)."""
+
+        coordinator = self._gui_auth()
+        if coordinator is None:
+            self._send_error(
+                HTTPStatus.SERVICE_UNAVAILABLE, "gui auth is not configured"
+            )
+            return
+        if not self._origin_is_trusted():
+            self._send_error(HTTPStatus.FORBIDDEN, "untrusted origin")
+            return
+        session_id = parse_cookie(self.headers.get("Cookie"), SESSION_COOKIE_NAME)
+        if session_id is not None:
+            coordinator.logout(session_id)
+        self._send_json(
+            {"ok": True},
+            extra_headers={"Set-Cookie": build_expired_cookie()},
+        )
+
+    def _origin_is_trusted(self) -> bool:
+        """``Origin`` ausente (curl/same-origin) o en la allowlist local."""
+
+        origin = self.headers.get("Origin")
+        return origin is None or origin in TRUSTED_GUI_ORIGINS
+
+    def _send_gui_auth_required(self) -> None:
+        """401 fail-closed cuando la cookie de sesión es inválida/expirada."""
+
+        self._send_json(
+            {
+                "error": {
+                    "code": "GUI_SESSION_REQUIRED",
+                    "message": "a valid gui session cookie is required",
+                    "run_id": None,
+                    "details": {},
+                }
+            },
+            status=HTTPStatus.UNAUTHORIZED,
+        )
+
+    def _send_auth_error(self, exc: HttpAuthError) -> None:
+        self._send_json(
+            {"error": {"code": exc.code, "message": str(exc)}},
+            status=HTTPStatus(exc.http_status),
+            extra_headers=dict(exc.response_headers) or None,
+        )
 
     def _handle_chunking_get(self) -> None:
         bridge = self._chunking_api()
@@ -814,11 +1010,19 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         payload = self.rfile.read(length)
         return json.loads(payload.decode("utf-8"))
 
-    def _send_json(self, payload: Any, *, status: HTTPStatus = HTTPStatus.OK) -> None:
+    def _send_json(
+        self,
+        payload: Any,
+        *,
+        status: HTTPStatus = HTTPStatus.OK,
+        extra_headers: dict[str, str] | None = None,
+    ) -> None:
         encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self._response_status_code = status
         self.send_response(status)
         self._send_common_headers()
+        for name, value in (extra_headers or {}).items():
+            self.send_header(name, value)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(encoded)))
         self.end_headers()
@@ -835,7 +1039,10 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
 
     def _send_common_headers(self) -> None:
         self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1:5173")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        # Necesario para que la cookie de sesión viaje en fetch cross-origin de dev
+        # (5173 → 8765, mismo site): sin esto el browser descarta la cookie.
+        self.send_header("Access-Control-Allow-Credentials", "true")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS")
         self.send_header(
             "Access-Control-Allow-Headers",
             ", ".join(ALLOWED_CORS_HEADERS),
@@ -1292,6 +1499,13 @@ def main() -> int:
     server = ThreadingHTTPServer((host, port), Phase1GuiHandler)
     server.chunking_api = chunking_api
     server.pipeline_api = AsgiBridge(create_app(services=pipeline_services))
+    # Sesión GUI local: el bearer se valida con la MISMA autoridad que FastAPI
+    # (SST_HTTP_AUTH_CREDENTIALS_JSON) y vive server-side; el browser solo recibe
+    # la cookie opaca.
+    server.gui_auth = GuiAuthCoordinator(
+        authenticator=ConfiguredBearerAuth(),
+        store=GuiSessionStore(),
+    )
     server_logger.info(
         "Backend ready",
         extra={

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header, Query, status
+from fastapi import APIRouter, Depends, File, Form, Header, Query, UploadFile, status
 
 from core.api.http import (
     DEFAULT_PAGE_SIZE,
@@ -32,14 +32,22 @@ from rag_platform.api.dependencies import (
     require_rag_platform_enabled,
 )
 from rag_platform.api.schemas import (
+    ChunkingProfileReadSchema,
     CorpusSnapshotSchema,
     CreateCorpusSnapshotRequestSchema,
     CreateProjectRequestSchema,
     CreateReleaseDraftRequestSchema,
     CreateVariantRequestSchema,
+    NormalizeProjectDocumentsRequestSchema,
+    PaginatedCorpusSnapshotsSchema,
+    PaginatedProjectDocumentsSchema,
     PaginatedProjectsSchema,
+    PaginatedReleasesSchema,
     PaginatedVariantsSchema,
+    ProcessingProfileReadSchema,
     ProjectConfigurationSchema,
+    ProjectDocumentRevisionSchema,
+    ProjectNormalizeReportSchema,
     ProjectSchema,
     ReleaseBuildReportSchema,
     ReleaseSchema,
@@ -49,11 +57,16 @@ from rag_platform.api.schemas import (
     VariantMatrixCellSchema,
     VariantSchema,
     build_report_to_schema,
+    chunking_profile_to_schema,
     configuration_to_schema,
+    document_row_to_schema,
     matrix_cell_to_schema,
+    normalize_outcome_to_schema,
+    processing_profile_to_schema,
     project_to_schema,
     release_to_schema,
     snapshot_to_schema,
+    uploaded_revision_to_schema,
     variant_to_schema,
 )
 from rag_platform.application.actor_provider import TrustedPlatformActorProvider
@@ -232,6 +245,36 @@ def update_project_configuration(
     return configuration_to_schema(configuration)
 
 
+@router.get(
+    "/projects/{project_id}/processing-profiles",
+    response_model=list[ProcessingProfileReadSchema],
+)
+def list_processing_profiles(
+    project_id: str,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> list[ProcessingProfileReadSchema]:
+    profiles = services.list_processing_profiles.execute(
+        _parse_id(IdentityKind.PROJECT, project_id), actor=actor
+    )
+    return [processing_profile_to_schema(p) for p in profiles]
+
+
+@router.get(
+    "/projects/{project_id}/chunking-profiles",
+    response_model=list[ChunkingProfileReadSchema],
+)
+def list_chunking_profiles(
+    project_id: str,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> list[ChunkingProfileReadSchema]:
+    profiles = services.list_chunking_profiles.execute(
+        _parse_id(IdentityKind.PROJECT, project_id), actor=actor
+    )
+    return [chunking_profile_to_schema(p) for p in profiles]
+
+
 # --------------------------------------------------------------------------- #
 # Variantes                                                                    #
 # --------------------------------------------------------------------------- #
@@ -291,8 +334,95 @@ def create_variant(
 
 
 # --------------------------------------------------------------------------- #
+# Documentos (intake project-aware)                                            #
+# --------------------------------------------------------------------------- #
+
+
+@router.get(
+    "/projects/{project_id}/documents",
+    response_model=PaginatedProjectDocumentsSchema,
+)
+def list_project_documents(
+    project_id: str,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> dict:
+    rows = services.list_project_documents.execute(
+        _parse_id(IdentityKind.PROJECT, project_id), actor=actor
+    )
+    items = [document_row_to_schema(row) for row in rows]
+    return paginate(items, page=page, page_size=page_size)
+
+
+@router.post(
+    "/projects/{project_id}/documents",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ProjectDocumentRevisionSchema,
+)
+def upload_project_document(
+    project_id: str,
+    file: UploadFile = File(...),
+    source_relpath: str = Form(..., min_length=1, max_length=1024),
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> ProjectDocumentRevisionSchema:
+    # El servidor calcula hash/tamaño y persiste bytes server-side; el actor viene
+    # del principal autenticado, nunca del form (invariante §Actor).
+    content = file.file.read()
+    revision = services.upload_project_document.execute(
+        project_id=_parse_id(IdentityKind.PROJECT, project_id),
+        source_relpath=source_relpath,
+        content=content,
+        actor=actor,
+    )
+    return uploaded_revision_to_schema(revision)
+
+
+@router.post(
+    "/projects/{project_id}/normalize",
+    response_model=ProjectNormalizeReportSchema,
+)
+def normalize_project_documents(
+    project_id: str,
+    payload: NormalizeProjectDocumentsRequestSchema,
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> ProjectNormalizeReportSchema:
+    # Normalización síncrona reutilizando run_pipeline (on-prem por defecto). El
+    # actor viene del principal; la variante ata el perfil de procesamiento.
+    outcome = services.normalize_project_documents.execute(
+        project_id=_parse_id(IdentityKind.PROJECT, project_id),
+        rag_variant_id=_parse_id(IdentityKind.RAG_VARIANT, payload.rag_variant_id),
+        document_revision_ids=payload.document_revision_ids,
+        force=payload.force,
+        actor=actor,
+    )
+    return normalize_outcome_to_schema(outcome)
+
+
+# --------------------------------------------------------------------------- #
 # Corpus snapshots                                                             #
 # --------------------------------------------------------------------------- #
+
+
+@router.get(
+    "/projects/{project_id}/corpus-snapshots",
+    response_model=PaginatedCorpusSnapshotsSchema,
+)
+def list_project_corpus_snapshots(
+    project_id: str,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> dict:
+    snapshots = services.list_project_corpus_snapshots.execute(
+        _parse_id(IdentityKind.PROJECT, project_id), actor=actor
+    )
+    items = [snapshot_to_schema(s) for s in snapshots]
+    return paginate(items, page=page, page_size=page_size)
 
 
 @router.post(
@@ -343,6 +473,24 @@ def create_release_draft(
         actor=actor,
     )
     return release_to_schema(release)
+
+
+@router.get(
+    "/projects/{project_id}/releases",
+    response_model=PaginatedReleasesSchema,
+)
+def list_project_releases(
+    project_id: str,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    services: RagPlatformServices = Depends(get_platform_services),
+    actor: PlatformActor = Depends(get_actor),
+) -> dict:
+    releases = services.list_project_releases.execute(
+        _parse_id(IdentityKind.PROJECT, project_id), actor=actor
+    )
+    items = [release_to_schema(r) for r in releases]
+    return paginate(items, page=page, page_size=page_size)
 
 
 @router.get("/releases/{rag_release_id}", response_model=ReleaseSchema)

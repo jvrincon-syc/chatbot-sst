@@ -121,15 +121,27 @@ def test_update_project_metadata_cambia_solo_display_name(tmp_path: Path) -> Non
 
 
 def test_list_profiles_vacio_cuando_no_hay_perfiles(tmp_path: Path) -> None:
+    actor = PlatformActor(actor_id="op")
     assert (
         ListProcessingProfilesUseCase(
-            processing_profiles=InMemoryProcessingProfileRepository()
-        ).execute(_pid("sst-general"))
+            processing_profiles=InMemoryProcessingProfileRepository(),
+            access_policy=AllowAllAccessPolicy(),
+        ).execute(_pid("sst-general"), actor=actor)
         == ()
     )
     assert (
         ListChunkingProfilesUseCase(
-            chunking_profiles=InMemoryChunkingProfileRepository()
-        ).execute(_pid("sst-general"))
+            chunking_profiles=InMemoryChunkingProfileRepository(),
+            access_policy=AllowAllAccessPolicy(),
+        ).execute(_pid("sst-general"), actor=actor)
         == ()
     )
+
+
+def test_list_profiles_fuera_de_scope_falla_cerrado(tmp_path: Path) -> None:
+    scoped = PlatformActor(actor_id="op", project_scope=("proj_otro",))
+    with pytest.raises(PlatformAccessDenied):
+        ListProcessingProfilesUseCase(
+            processing_profiles=InMemoryProcessingProfileRepository(),
+            access_policy=AllowAllAccessPolicy(),
+        ).execute(_pid("sst-general"), actor=scoped)

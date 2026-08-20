@@ -134,6 +134,9 @@ class RagVariantRepository(Protocol):
     def add(self, variant: RagVariant) -> RagVariant:
         """Inserta una variante o lanza ``DuplicateVariantRecipe``."""
 
+    def get(self, rag_variant_id: PlatformId) -> RagVariant:
+        """Devuelve la variante por id o lanza ``RagVariantNotFound``."""
+
     def list_for_project(self, project_id: PlatformId) -> tuple[RagVariant, ...]:
         """Devuelve las variantes del proyecto en orden estable (por id)."""
 
@@ -192,6 +195,15 @@ class SourceDocumentRepository(Protocol):
     ) -> SourceDocumentRevision:
         """Inserta una revisión inmutable nueva; nunca sobreescribe la anterior."""
 
+    def list_revisions_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[SourceDocumentRevision, ...]:
+        """Devuelve las revisiones del proyecto en orden estable (read-model GUI).
+
+        El orden es determinista (``uploaded_at`` y luego id) para que la lista de
+        documentos de la GUI sobreviva a un refresh sin reordenarse.
+        """
+
 
 @runtime_checkable
 class NormalizedArtifactRepository(Protocol):
@@ -211,6 +223,15 @@ class NormalizedArtifactRepository(Protocol):
     ) -> NormalizedDocumentArtifact:
         """Registra un normalizado recién construido."""
 
+    def list_normalized_revision_ids(
+        self, project_id: PlatformId
+    ) -> frozenset[str]:
+        """Devuelve los ``srev_`` del proyecto que ya tienen normalizado registrado.
+
+        Alimenta el flag ``normalized_registered`` del read-model de documentos sin
+        exponer identidad física ni fingerprints: solo la pertenencia por revisión.
+        """
+
 
 @runtime_checkable
 class RawArtifactCatalogRepository(Protocol):
@@ -218,6 +239,26 @@ class RawArtifactCatalogRepository(Protocol):
 
     def upsert(self, record: RawDocumentArtifactRecord) -> RawDocumentArtifactRecord:
         """Registra el sidecar físico raw por su revisión inmutable."""
+
+
+@runtime_checkable
+class ProjectRawStorage(Protocol):
+    """Escribe los bytes originales subidos bajo la raíz ``raw`` del proyecto.
+
+    Es el único puerto de plataforma que persiste bytes en disco: aísla el sistema
+    de archivos del caso de uso de upload para que el router siga siendo un
+    adaptador HTTP delgado. La implementación valida contención (sin traversal)
+    antes de escribir (frontera de confianza).
+    """
+
+    def write_raw_bytes(
+        self, project: RagProject, source_relpath: str, content: bytes
+    ) -> None:
+        """Persiste ``content`` en ``{raw_root}/{source_relpath}`` de forma segura.
+
+        Raises:
+            UnsafeArtifactPath: Si ``source_relpath`` intenta escapar de la raíz.
+        """
 
 
 @runtime_checkable
@@ -255,3 +296,8 @@ class CorpusSnapshotRepository(Protocol):
 
     def add(self, snapshot: CorpusSnapshot) -> CorpusSnapshot:
         """Inserta un corpus snapshot inmutable."""
+
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[CorpusSnapshot, ...]:
+        """Devuelve los snapshots del proyecto en orden estable (read-model GUI)."""

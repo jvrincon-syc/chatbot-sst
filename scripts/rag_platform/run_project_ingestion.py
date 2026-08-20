@@ -341,48 +341,26 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
 
     if normalize_plan is not None:
-        # run_pipeline lee LlamaSettings del entorno; carga secrets como el CLI legacy.
-        import shutil
+        # Orquestación física compartida con el endpoint HTTP de normalize (única
+        # fuente de la lógica staging/promote/cloud-gating). `--force` reprocesa
+        # aunque el hash no cambie para sellar la provenance por el path de plataforma.
+        from rag_platform.infrastructure.normalization.run_pipeline_normalizer import (
+            execute_normalize_pipeline,
+        )
 
-        from ingestion.config.env import load_secrets_env
-        from ingestion.pipeline import run_pipeline
-
-        load_secrets_env(Path(args.env_file))
-        # On-prem por defecto: los PDFs corporativos se parsean localmente (pdfium +
-        # tesseract OCR), nunca se envían a LlamaParse cloud sin autorización explícita
-        # (SECURITY_AND_DATA §3). `load_secrets_env` usa setdefault, así que forzamos
-        # aquí para ganarle a un `LLAMA_CLOUD_ENABLED=true` heredado del entorno.
-        if not args.allow_cloud:
-            os.environ["LLAMA_CLOUD_ENABLED"] = "false"
         normalized_root = normalize_plan["normalized_root"]
-        # promote=True exige un `staging_root` DISTINTO del root live: el pipeline
-        # escribe/valida en staging y luego hace el swap atómico staging -> normalized
-        # (renombra live a backup y copia). Sin staging, `output_root == normalized`
-        # y `promote_candidate` mueve el candidate antes de copiarlo (FileNotFoundError).
-        staging_root = normalized_root.parent / f".{normalized_root.name}.staging"
-        if staging_root.exists():
-            shutil.rmtree(staging_root)
-        # promote=True: valida estructuralmente el árbol staged (gate de elegibilidad).
-        # `--force` reprocesa aunque el hash no cambie: los manifests existentes son de
-        # la lane legacy, así que hay que re-normalizar por el path de plataforma para
-        # que la provenance quede sellada por este flujo, no heredada del legacy.
-        try:
-            pipeline_summary = run_pipeline(
-                docs_raw=raw_root,
-                docs_normalized=normalized_root,  # type: ignore[arg-type]
-                staging_root=staging_root,
-                promote=True,
-                force=args.force,
-                only_sources=args.only_source,
-                corpus_version=args.corpus_version,
-                pipeline_version=args.pipeline_version,
-                platform_context_resolver=normalize_plan["resolver"],  # type: ignore[arg-type]
-                request_id=f"platform_normalize_{args.project_id}",
-            )
-        finally:
-            # El árbol staged ya se copió a normalized al promover; no dejar duplicado.
-            if staging_root.exists():
-                shutil.rmtree(staging_root)
+        pipeline_summary = execute_normalize_pipeline(
+            raw_root=raw_root,
+            normalized_root=normalized_root,  # type: ignore[arg-type]
+            resolver=normalize_plan["resolver"],  # type: ignore[arg-type]
+            only_sources=tuple(args.only_source or ()),
+            force=args.force,
+            corpus_version=args.corpus_version,
+            pipeline_version=args.pipeline_version,
+            request_id=f"platform_normalize_{args.project_id}",
+            allow_cloud=args.allow_cloud,
+            env_file=args.env_file,
+        )
         summary["status"] = "normalized"
         summary["rag_variant_id"] = normalize_plan["rag_variant_id"]
         summary["normalized_root"] = str(normalized_root)

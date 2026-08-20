@@ -114,6 +114,19 @@ class PostgresSourceDocumentRepository:
             )
         return revision
 
+    def list_revisions_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[SourceDocumentRevision, ...]:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"SELECT {_REVISION_COLUMNS} FROM source_document_revisions"
+                " WHERE project_id = %s"
+                " ORDER BY uploaded_at, source_document_revision_id",
+                (project_id.value,),
+            )
+            rows = cursor.fetchall()
+        return tuple(self._row_to_revision(row) for row in rows)
+
     @staticmethod
     def _row_to_document(row: Sequence[object]) -> SourceDocument:
         return SourceDocument(
@@ -184,6 +197,18 @@ class PostgresNormalizedArtifactRepository:
             schema_version=str(row[3]),
             artifact_relpath=None if row[4] is None else str(row[4]),
         )
+
+    def list_normalized_revision_ids(
+        self, project_id: PlatformId
+    ) -> frozenset[str]:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT DISTINCT source_document_revision_id"
+                " FROM project_normalized_documents WHERE project_id = %s",
+                (project_id.value,),
+            )
+            rows = cursor.fetchall()
+        return frozenset(str(row[0]) for row in rows)
 
     def add(
         self, artifact: NormalizedDocumentArtifact
@@ -259,6 +284,30 @@ class PostgresCorpusSnapshotRepository:
             )
             member_rows = cursor.fetchall()
         return self._row_to_snapshot(row, member_rows)
+
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[CorpusSnapshot, ...]:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT corpus_snapshot_id, project_id, manifest_hash,"
+                " document_count, created_at FROM corpus_snapshots"
+                " WHERE project_id = %s ORDER BY created_at, corpus_snapshot_id",
+                (project_id.value,),
+            )
+            snapshot_rows = cursor.fetchall()
+            snapshots: list[CorpusSnapshot] = []
+            for row in snapshot_rows:
+                # N+1 acotado: un read-model de snapshots por proyecto es pequeño.
+                # ponytail: si crece, un JOIN ordenado reemplaza el bucle.
+                cursor.execute(
+                    "SELECT ordinal, source_document_revision_id,"
+                    " eligibility_decision FROM corpus_snapshot_documents"
+                    " WHERE corpus_snapshot_id = %s ORDER BY ordinal",
+                    (str(row[0]),),
+                )
+                snapshots.append(self._row_to_snapshot(row, cursor.fetchall()))
+        return tuple(snapshots)
 
     def add(self, snapshot: CorpusSnapshot) -> CorpusSnapshot:
         with self._connection.cursor() as cursor:

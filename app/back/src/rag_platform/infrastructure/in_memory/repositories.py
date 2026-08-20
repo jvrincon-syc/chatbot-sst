@@ -12,6 +12,7 @@ import threading
 import uuid
 
 from rag_platform.application.context import PlatformAccessPolicy
+from rag_platform.domain.artifact_catalog import RawDocumentArtifactRecord
 from rag_platform.domain.errors import (
     BuildStepNotFound,
     ChunkingProfileNotFound,
@@ -359,6 +360,21 @@ class InMemorySourceDocumentRepository:
             )
         return self._revisions[revision.source_document_revision_id.value]
 
+    def list_revisions_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[SourceDocumentRevision, ...]:
+        with self._lock:
+            revisions = [
+                revision
+                for revision in self._revisions.values()
+                if revision.project_id == project_id
+            ]
+        # Orden estable espejo del adaptador Postgres (uploaded_at, luego id).
+        revisions.sort(
+            key=lambda r: (r.uploaded_at, r.source_document_revision_id.value)
+        )
+        return tuple(revisions)
+
 
 class InMemoryNormalizedArtifactRepository:
     """Normalizados por identidad exacta en memoria (Fase 2)."""
@@ -404,6 +420,29 @@ class InMemoryNormalizedArtifactRepository:
         self._by_key.setdefault(key, artifact)
         return self._by_key[key]
 
+    def list_normalized_revision_ids(
+        self, project_id: PlatformId
+    ) -> frozenset[str]:
+        # key = (project_id, source_document_revision_id, fingerprint)
+        return frozenset(
+            revision_id
+            for (pid, revision_id, _fp) in self._by_key
+            if pid == project_id.value
+        )
+
+
+class InMemoryRawArtifactCatalogRepository:
+    """Catálogo físico raw en memoria, idempotente por revisión inmutable."""
+
+    def __init__(self) -> None:
+        self._rows: dict[str, RawDocumentArtifactRecord] = {}
+
+    def upsert(
+        self, record: RawDocumentArtifactRecord
+    ) -> RawDocumentArtifactRecord:
+        self._rows[record.source_document_revision_id] = record
+        return record
+
 
 class InMemoryCorpusSnapshotRepository:
     """Corpus snapshots inmutables en memoria (Fase 2)."""
@@ -428,6 +467,19 @@ class InMemoryCorpusSnapshotRepository:
             if snapshot.corpus_snapshot_id == corpus_snapshot_id:
                 return snapshot
         raise CorpusSnapshotNotFound(corpus_snapshot_id.value)
+
+    def list_for_project(
+        self, project_id: PlatformId
+    ) -> tuple[CorpusSnapshot, ...]:
+        snapshots = [
+            snapshot
+            for snapshot in self._by_manifest.values()
+            if snapshot.project_id == project_id
+        ]
+        snapshots.sort(
+            key=lambda s: (s.created_at, s.corpus_snapshot_id.value)
+        )
+        return tuple(snapshots)
 
 
 class InMemoryChunkBundleReuseRepository:

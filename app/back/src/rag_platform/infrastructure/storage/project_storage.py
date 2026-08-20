@@ -135,6 +135,39 @@ class ProjectStorageResolver:
         return candidate
 
 
+class FilesystemProjectRawStorage:
+    """Escribe bytes subidos bajo la raíz ``raw`` declarada del proyecto.
+
+    Adaptador del puerto ``ProjectRawStorage``: resuelve la raíz ``raw`` desde el
+    catálogo (``resolve_declared_root``, la misma autoridad que usa el sidecar
+    físico) y persiste el ``source_relpath`` validando contención, de modo que la
+    ubicación física coincida con el ``artifact_relpath`` catalogado.
+    """
+
+    def __init__(self, resolver: ProjectStorageResolver) -> None:
+        self._resolver = resolver
+
+    def write_raw_bytes(
+        self, project: RagProject, source_relpath: str, content: bytes
+    ) -> None:
+        raw_root = self._resolver.resolve_declared_root(project, "raw")
+        if not source_relpath or "\\" in source_relpath or source_relpath.startswith("/"):
+            raise UnsafeArtifactPath(
+                f"source_relpath must be relative POSIX: {source_relpath!r}"
+            )
+        if any(part in {"", ".", ".."} for part in source_relpath.split("/")):
+            raise UnsafeArtifactPath(
+                f"source_relpath has unsafe component: {source_relpath!r}"
+            )
+        destination = (raw_root / source_relpath).resolve()
+        if raw_root != destination and raw_root not in destination.parents:
+            raise UnsafeArtifactPath(
+                f"source_relpath escapes raw root: {source_relpath!r}"
+            )
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+
+
 class LegacySstReadAdapter:
     """Vista de **lectura** de rutas legacy para ``sst-general`` (bootstrap).
 

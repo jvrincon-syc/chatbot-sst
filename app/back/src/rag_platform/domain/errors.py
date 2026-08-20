@@ -145,6 +145,29 @@ class RevisionProjectMismatch(RagPlatformError):
     http_status = 409
 
 
+class VariantProjectMismatch(RagPlatformError):
+    """La variante indicada para normalizar pertenece a otro proyecto.
+
+    Fail-closed: una variante aporta el perfil de procesamiento y la provenance de
+    receta; usar una de otro proyecto sellaría identidad ajena en el normalizado.
+    """
+
+    code = "VARIANT_PROJECT_MISMATCH"
+    http_status = 409
+
+
+class ProjectNormalizationIncomplete(RagPlatformError):
+    """Un documento seleccionado para normalizar no tiene bytes raw o revisión.
+
+    Fail-closed (misma guarda que el CLI): la identidad de plataforma se resuelve
+    para *todos* los documentos seleccionados antes de leer, escribir o promover
+    ninguno; si a alguno le faltan los bytes raw o la revisión, se aborta entero.
+    """
+
+    code = "PROJECT_NORMALIZATION_INCOMPLETE"
+    http_status = 422
+
+
 class NormalizedArtifactNotBuilt(RagPlatformError):
     """No existe un normalizado para la identidad exacta y no hay build resuelto."""
 

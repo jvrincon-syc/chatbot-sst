@@ -117,28 +117,46 @@ class UpdateProjectMetadataUseCase:
 
 
 class ListProcessingProfilesUseCase:
-    """Lista los perfiles de procesamiento declarados por un proyecto."""
+    """Lista los perfiles de procesamiento declarados por un proyecto (scope-aware)."""
 
     def __init__(
-        self, *, processing_profiles: ProcessingProfileRepository
+        self,
+        *,
+        processing_profiles: ProcessingProfileRepository,
+        access_policy: PlatformAccessPolicy,
     ) -> None:
         self._processing_profiles = processing_profiles
+        self._access_policy = access_policy
 
     def execute(
-        self, project_id: PlatformId
+        self, project_id: PlatformId, *, actor: PlatformActor
     ) -> tuple[DocumentProcessingProfile, ...]:
-        """Devuelve los perfiles de procesamiento del proyecto."""
+        """Devuelve los perfiles del proyecto; actor fuera de scope falla cerrado."""
 
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         return self._processing_profiles.list_for_project(project_id)
 
 
 class ListChunkingProfilesUseCase:
-    """Lista los perfiles de chunking declarados por un proyecto."""
+    """Lista los perfiles de chunking declarados por un proyecto (scope-aware)."""
 
-    def __init__(self, *, chunking_profiles: ChunkingProfileRepository) -> None:
+    def __init__(
+        self,
+        *,
+        chunking_profiles: ChunkingProfileRepository,
+        access_policy: PlatformAccessPolicy,
+    ) -> None:
         self._chunking_profiles = chunking_profiles
+        self._access_policy = access_policy
 
-    def execute(self, project_id: PlatformId) -> tuple[ChunkingProfile, ...]:
-        """Devuelve los perfiles de chunking del proyecto."""
+    def execute(
+        self, project_id: PlatformId, *, actor: PlatformActor
+    ) -> tuple[ChunkingProfile, ...]:
+        """Devuelve los perfiles del proyecto; actor fuera de scope falla cerrado."""
 
+        require_project_operator(
+            policy=self._access_policy, actor=actor, project_id=project_id
+        )
         return self._chunking_profiles.list_for_project(project_id)

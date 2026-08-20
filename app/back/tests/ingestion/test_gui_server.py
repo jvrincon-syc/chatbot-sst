@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from http import HTTPStatus
 from io import BytesIO
 
 import pytest
@@ -141,7 +142,7 @@ def test_gui_common_headers_allow_pipeline_idempotency_and_auth_headers() -> Non
 
     headers = dict(sent_headers)
     assert headers["Access-Control-Allow-Origin"] == "http://127.0.0.1:5173"
-    assert headers["Access-Control-Allow-Methods"] == "GET, POST, OPTIONS"
+    assert headers["Access-Control-Allow-Methods"] == "GET, POST, PATCH, OPTIONS"
     allowed_headers = headers["Access-Control-Allow-Headers"]
     assert "Content-Type" in allowed_headers
     assert "Idempotency-Key" in allowed_headers
@@ -541,3 +542,125 @@ def test_gui_backend_builds_chunking_bridge_without_sharing_pipeline_connection(
     assert captured_chunking_kwargs["docs_normalized"] == gui_server.DOCS_NORMALIZED
     assert captured_chunking_kwargs["chunks_root"] == gui_server.CHUNKING_ROOT
     assert "connection" not in captured_chunking_kwargs
+
+
+# --------------------------------------------------------------------------- #
+# Gate 0 (Fase 8): bridge GUI -> FastAPI para /api/platform incluido PATCH     #
+# --------------------------------------------------------------------------- #
+
+
+class _BridgeResponse:
+    def __init__(self, status, body, headers=None):
+        self.status = status
+        self.body = body
+        self.headers = headers or {"content-type": "application/json"}
+
+
+class _RecordingBridge:
+    """Doble del ``AsgiBridge``: registra la llamada y devuelve una respuesta fija."""
+
+    def __init__(self, response: _BridgeResponse) -> None:
+        self._response = response
+        self.calls: list[dict] = []
+
+    def handle(self, *, method, path, headers, body):
+        self.calls.append(
+            {"method": method, "path": path, "headers": headers, "body": body}
+        )
+        return self._response
+
+
+def _make_handler(*, path, headers, body, bridge):
+    handler = Phase1GuiHandler.__new__(Phase1GuiHandler)
+    handler.path = path
+    handler.headers = dict(headers)
+    handler.rfile = BytesIO(body)
+    handler.wfile = BytesIO()
+    handler.client_address = None
+    handler._response_status_code = None
+    handler.sent_headers = {}
+    handler.send_response = lambda status, *a: None
+    handler.send_header = lambda name, value: handler.sent_headers.__setitem__(name, value)
+    handler.end_headers = lambda: None
+
+    class _Server:
+        pass
+
+    server = _Server()
+    server.pipeline_api = bridge
+    handler.server = server
+    return handler
+
+
+def test_platform_prefix_is_in_the_bridge_allowlist() -> None:
+    assert "/api/platform/projects".startswith(gui_server.PIPELINE_API_PREFIXES)
+
+
+def test_platform_get_is_forwarded_to_fastapi_bridge() -> None:
+    bridge = _RecordingBridge(_BridgeResponse(200, b'{"items":[]}'))
+    handler = _make_handler(
+        path="/api/platform/projects", headers={}, body=b"", bridge=bridge
+    )
+    handler._handle_pipeline_api("GET")
+    assert bridge.calls[0]["method"] == "GET"
+    assert bridge.calls[0]["path"] == "/api/platform/projects"
+    assert handler.wfile.getvalue() == b'{"items":[]}'
+    assert handler._response_status_code == HTTPStatus(200)
+
+
+def test_platform_post_is_forwarded_to_fastapi_bridge() -> None:
+    bridge = _RecordingBridge(_BridgeResponse(201, b'{"project_id":"proj_demo"}'))
+    body = b'{"project_slug":"demo","display_name":"Demo"}'
+    handler = _make_handler(
+        path="/api/platform/projects",
+        headers={"Content-Length": str(len(body))},
+        body=body,
+        bridge=bridge,
+    )
+    handler._handle_pipeline_api("POST")
+    assert bridge.calls[0]["method"] == "POST"
+    assert bridge.calls[0]["body"] == body
+    assert handler._response_status_code == HTTPStatus(201)
+
+
+def test_platform_patch_is_forwarded_with_headers_and_body() -> None:
+    bridge = _RecordingBridge(_BridgeResponse(200, b'{"display_name":"x"}'))
+    body = b'{"display_name":"x"}'
+    handler = _make_handler(
+        path="/api/platform/projects/proj_demo",
+        headers={"Content-Length": str(len(body)), "Authorization": "Bearer tk"},
+        body=body,
+        bridge=bridge,
+    )
+    handler.do_PATCH()
+    call = bridge.calls[0]
+    assert call["method"] == "PATCH"
+    assert call["path"] == "/api/platform/projects/proj_demo"
+    assert call["body"] == body
+    assert handler._response_status_code == HTTPStatus(200)
+
+
+def test_platform_bridge_preserves_auth_and_idempotency_headers() -> None:
+    bridge = _RecordingBridge(_BridgeResponse(200, b"{}"))
+    handler = _make_handler(
+        path="/api/platform/releases/ragr_x/build",
+        headers={"Authorization": "Bearer tk", "Idempotency-Key": "key-1"},
+        body=b"",
+        bridge=bridge,
+    )
+    handler._handle_pipeline_api("POST")
+    forwarded = bridge.calls[0]["headers"]
+    assert forwarded["Authorization"] == "Bearer tk"
+    assert forwarded["Idempotency-Key"] == "key-1"
+
+
+@pytest.mark.parametrize("status_code", [401, 403, 409, 422, 503])
+def test_platform_bridge_preserves_error_status_and_envelope(status_code: int) -> None:
+    envelope = b'{"error":{"code":"X","message":"m","run_id":null,"details":{}}}'
+    bridge = _RecordingBridge(_BridgeResponse(status_code, envelope))
+    handler = _make_handler(
+        path="/api/platform/projects", headers={}, body=b"", bridge=bridge
+    )
+    handler._handle_pipeline_api("GET")
+    assert handler._response_status_code == HTTPStatus(status_code)
+    assert handler.wfile.getvalue() == envelope

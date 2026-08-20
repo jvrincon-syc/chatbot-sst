@@ -589,6 +589,9 @@ def _build_rag_platform_services(
     from rag_platform.application.corpus_snapshot_service import (
         CreateCorpusSnapshotUseCase,
     )
+    from rag_platform.application.corpus_snapshot_query_service import (
+        ListProjectCorpusSnapshotsUseCase,
+    )
     from rag_platform.application.project_configuration_service import (
         CreateProjectConfigurationVersionUseCase,
         GetProjectConfigurationUseCase,
@@ -622,8 +625,27 @@ def _build_rag_platform_services(
     from rag_platform.application.variant_query_service import (
         ListProjectVariantsUseCase,
     )
+    from rag_platform.application.document_query_service import (
+        ListProjectDocumentsUseCase,
+    )
+    from rag_platform.application.document_revision_service import (
+        CreateSourceDocumentRevisionUseCase,
+    )
+    from rag_platform.application.project_normalization_service import (
+        NormalizeProjectDocumentsUseCase,
+    )
+    from rag_platform.application.project_raw_upload_service import (
+        UploadProjectRawDocumentUseCase,
+    )
+    from rag_platform.application.raw_ingestion_service import (
+        RegisterProjectRawArtifactUseCase,
+    )
+    from rag_platform.infrastructure.normalization.run_pipeline_normalizer import (
+        RunPipelineProjectNormalizer,
+    )
     from rag_platform.infrastructure.in_memory.repositories import AllowAllAccessPolicy
     from rag_platform.infrastructure.storage.project_storage import (
+        FilesystemProjectRawStorage,
         ProjectStorageResolver,
     )
 
@@ -653,10 +675,12 @@ def _build_rag_platform_services(
         from rag_platform.infrastructure.in_memory.repositories import (
             InMemoryChunkingProfileRepository,
             InMemoryCorpusSnapshotRepository,
+            InMemoryNormalizedArtifactRepository,
             InMemoryProcessingProfileRepository,
             InMemoryProjectRepository,
             InMemoryRagBuildRunRepository,
             InMemoryRagVariantRepository,
+            InMemoryRawArtifactCatalogRepository,
             InMemorySourceDocumentRepository,
             InMemoryTargetBindingResolver,
         )
@@ -673,6 +697,8 @@ def _build_rag_platform_services(
         releases: object = InMemoryRagReleaseRepository()
         snapshots: object = InMemoryCorpusSnapshotRepository()
         documents: object = InMemorySourceDocumentRepository()
+        normalized: object = InMemoryNormalizedArtifactRepository()
+        raw_catalog: object = InMemoryRawArtifactCatalogRepository()
         embedding_profiles: object = InMemoryEmbeddingProfileRepository()
         bindings: object = InMemoryTargetBindingResolver()
         memberships: object = InMemoryRagReleaseMembershipRepository()
@@ -687,8 +713,12 @@ def _build_rag_platform_services(
         from rag_platform.infrastructure.postgres.artifact_repositories import (
             PostgresRagBuildRunRepository,
         )
+        from rag_platform.infrastructure.postgres.artifact_catalog_repositories import (
+            PostgresRawArtifactCatalogRepository,
+        )
         from rag_platform.infrastructure.postgres.document_repositories import (
             PostgresCorpusSnapshotRepository,
+            PostgresNormalizedArtifactRepository,
             PostgresSourceDocumentRepository,
         )
         from rag_platform.infrastructure.postgres.project_repositories import (
@@ -714,6 +744,8 @@ def _build_rag_platform_services(
         releases = PostgresRagReleaseRepository(connection)
         snapshots = PostgresCorpusSnapshotRepository(connection)
         documents = PostgresSourceDocumentRepository(connection)
+        normalized = PostgresNormalizedArtifactRepository(connection)
+        raw_catalog = PostgresRawArtifactCatalogRepository(connection)
         embedding_profiles = PostgresEmbeddingProfileRepository(connection)
         bindings = PostgresTargetBindingResolver(connection)
         memberships = PostgresRagReleaseMembershipRepository(connection)
@@ -726,6 +758,34 @@ def _build_rag_platform_services(
             connection=connection,
             data_root=data_root,
         )
+
+    # Intake documental project-aware (Gate 1 Fase 8): el upload compone el
+    # registro raw ya existente con un writer de bytes; el listado es read-model.
+    upload_document = UploadProjectRawDocumentUseCase(
+        projects=projects,
+        storage=FilesystemProjectRawStorage(storage_roots),
+        register=RegisterProjectRawArtifactUseCase(
+            projects=projects,
+            revisions=CreateSourceDocumentRevisionUseCase(
+                documents=documents, access_policy=access_policy
+            ),
+            raw_catalog=raw_catalog,
+        ),
+        access_policy=access_policy,
+    )
+    list_documents = ListProjectDocumentsUseCase(
+        documents=documents, normalized=normalized, access_policy=access_policy
+    )
+    # Normalize síncrono reutilizando run_pipeline (on-prem: LLAMA_CLOUD_ENABLED=false).
+    # env_file=None: el proceso servidor ya trae el entorno cargado al arrancar.
+    normalize_documents = NormalizeProjectDocumentsUseCase(
+        projects=projects,
+        documents=documents,
+        variants=variants,
+        processing_profiles=processing,
+        normalizer=RunPipelineProjectNormalizer(storage_roots),
+        access_policy=access_policy,
+    )
 
     variant_matrix = GetVariantMatrixUseCase(
         projects=projects,
@@ -813,9 +873,11 @@ def _build_rag_platform_services(
             projects=projects, configurations=projects, access_policy=access_policy
         ),
         list_processing_profiles=ListProcessingProfilesUseCase(
-            processing_profiles=processing
+            processing_profiles=processing, access_policy=access_policy
         ),
-        list_chunking_profiles=ListChunkingProfilesUseCase(chunking_profiles=chunking),
+        list_chunking_profiles=ListChunkingProfilesUseCase(
+            chunking_profiles=chunking, access_policy=access_policy
+        ),
         get_variant_matrix=variant_matrix,
         create_variant_from_matrix_cell=CreateRagVariantFromMatrixCellUseCase(
             matrix=variant_matrix,
@@ -825,8 +887,14 @@ def _build_rag_platform_services(
         list_project_variants=ListProjectVariantsUseCase(
             variants=variants, access_policy=access_policy
         ),
+        list_project_documents=list_documents,
+        upload_project_document=upload_document,
+        normalize_project_documents=normalize_documents,
         create_corpus_snapshot=CreateCorpusSnapshotUseCase(
             snapshots=snapshots, documents=documents, access_policy=access_policy
+        ),
+        list_project_corpus_snapshots=ListProjectCorpusSnapshotsUseCase(
+            snapshots=snapshots, access_policy=access_policy
         ),
         create_release_draft=release_draft,
         get_release=GetReleaseUseCase(releases=releases, access_policy=access_policy),

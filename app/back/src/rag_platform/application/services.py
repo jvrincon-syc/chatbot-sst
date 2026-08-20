@@ -14,6 +14,18 @@ from dataclasses import dataclass
 from rag_platform.application.corpus_snapshot_service import (
     CreateCorpusSnapshotUseCase,
 )
+from rag_platform.application.corpus_snapshot_query_service import (
+    ListProjectCorpusSnapshotsUseCase,
+)
+from rag_platform.application.document_query_service import (
+    ListProjectDocumentsUseCase,
+)
+from rag_platform.application.project_normalization_service import (
+    NormalizeProjectDocumentsUseCase,
+)
+from rag_platform.application.project_raw_upload_service import (
+    UploadProjectRawDocumentUseCase,
+)
 from rag_platform.application.project_configuration_service import (
     CreateProjectConfigurationVersionUseCase,
     GetProjectConfigurationUseCase,
@@ -73,8 +85,14 @@ class RagPlatformServices:
     create_variant_from_matrix_cell: CreateRagVariantFromMatrixCellUseCase
     list_project_variants: ListProjectVariantsUseCase
 
+    # Documentos (intake project-aware) — Gate 1 Fase 8
+    list_project_documents: ListProjectDocumentsUseCase
+    upload_project_document: UploadProjectRawDocumentUseCase
+    normalize_project_documents: NormalizeProjectDocumentsUseCase
+
     # Corpus snapshot — Task 4
     create_corpus_snapshot: CreateCorpusSnapshotUseCase
+    list_project_corpus_snapshots: ListProjectCorpusSnapshotsUseCase
 
     # Releases — Task 4
     create_release_draft: CreateRagReleaseDraftUseCase

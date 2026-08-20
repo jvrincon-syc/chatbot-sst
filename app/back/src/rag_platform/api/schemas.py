@@ -19,17 +19,24 @@ from datetime import datetime
 from ingestion.schemas.common import StrictModel
 from pydantic import Field
 
+from rag_platform.application.document_query_service import ProjectDocumentRevisionRow
+from rag_platform.application.project_normalization_service import (
+    ProjectNormalizeOutcome,
+)
 from rag_platform.application.variant_matrix_service import VariantMatrixCell
 from rag_platform.application.release_build_service import RagReleaseBuildReport
 from rag_platform.domain.models import (
+    ChunkingProfile,
     CorpusOrganizationPolicy,
     CorpusSnapshot,
+    DocumentProcessingProfile,
     DocumentTypeTemplate,
     ProjectConfiguration,
     ProjectDocumentType,
     ProjectEmbeddingProfile,
     RagProject,
     RagVariant,
+    SourceDocumentRevision,
 )
 from rag_platform.domain.lifecycle import RagRelease
 
@@ -185,6 +192,57 @@ class CreateCorpusSnapshotRequestSchema(StrictModel):
 
 
 # --------------------------------------------------------------------------- #
+# Documentos (intake project-aware)                                            #
+# --------------------------------------------------------------------------- #
+
+
+class ProjectDocumentRevisionSchema(StrictModel):
+    """Fila de documento del proyecto para la GUI. **Nunca** expone rutas físicas."""
+
+    source_document_revision_id: str
+    logical_document_id: str
+    source_relpath: str
+    file_size: int
+    review_state: str
+    uploaded_at: datetime
+    raw_registered: bool
+    normalized_registered: bool
+    processing_status: str
+
+
+class UploadProjectDocumentRequestSchema(StrictModel):
+    """Metadata lógica del upload multipart (los bytes viajan en ``file``).
+
+    ``source_relpath`` es lógico/canónico (POSIX relativo, sin traversal); el
+    servidor calcula hash y tamaño, nunca los acepta del cliente.
+    """
+
+    source_relpath: str = Field(min_length=1, max_length=1024)
+
+
+class NormalizeProjectDocumentsRequestSchema(StrictModel):
+    """Normalización por variante de un conjunto de revisiones del proyecto.
+
+    ``rag_variant_id`` es obligatorio para la GUI (aporta perfil de procesamiento y
+    provenance de receta). ``force`` re-normaliza aunque el hash de origen no haya
+    cambiado.
+    """
+
+    rag_variant_id: str = Field(min_length=1)
+    document_revision_ids: list[str] = Field(min_length=1)
+    force: bool = False
+
+
+class ProjectNormalizeReportSchema(StrictModel):
+    rag_variant_id: str
+    processed: int
+    needs_review: int
+    skipped: int
+    failed: int
+    revision_ids: list[str]
+
+
+# --------------------------------------------------------------------------- #
 # Releases                                                                     #
 # --------------------------------------------------------------------------- #
 
@@ -243,6 +301,50 @@ class PaginatedVariantsSchema(StrictModel):
     page_size: int
     total_items: int
     total_pages: int
+
+
+class PaginatedProjectDocumentsSchema(StrictModel):
+    items: list[ProjectDocumentRevisionSchema]
+    page: int
+    page_size: int
+    total_items: int
+    total_pages: int
+
+
+class PaginatedCorpusSnapshotsSchema(StrictModel):
+    items: list[CorpusSnapshotSchema]
+    page: int
+    page_size: int
+    total_items: int
+    total_pages: int
+
+
+class PaginatedReleasesSchema(StrictModel):
+    items: list[ReleaseSchema]
+    page: int
+    page_size: int
+    total_items: int
+    total_pages: int
+
+
+# --------------------------------------------------------------------------- #
+# Perfiles (read-model para no mostrar IDs opacos en la GUI)                    #
+# --------------------------------------------------------------------------- #
+
+
+class ProcessingProfileReadSchema(StrictModel):
+    processing_profile_id: str
+    provider: str
+    engine: str
+    fingerprint: str
+    status: str
+
+
+class ChunkingProfileReadSchema(StrictModel):
+    chunking_profile_id: str
+    strategy: str
+    fingerprint: str
+    status: str
 
 
 # --------------------------------------------------------------------------- #
@@ -351,6 +453,86 @@ def release_to_schema(release: RagRelease) -> ReleaseSchema:
         created_at=release.created_at,
         validated_at=release.validated_at,
         reason=release.reason,
+    )
+
+
+def document_row_to_schema(
+    row: ProjectDocumentRevisionRow,
+) -> ProjectDocumentRevisionSchema:
+    return ProjectDocumentRevisionSchema(
+        source_document_revision_id=row.source_document_revision_id,
+        logical_document_id=row.logical_document_id,
+        source_relpath=row.source_relpath,
+        file_size=row.file_size,
+        review_state=row.review_state,
+        uploaded_at=row.uploaded_at,
+        raw_registered=row.raw_registered,
+        normalized_registered=row.normalized_registered,
+        processing_status=row.processing_status,
+    )
+
+
+def uploaded_revision_to_schema(
+    revision: SourceDocumentRevision,
+) -> ProjectDocumentRevisionSchema:
+    """Mapea la revisión recién subida a la fila del read-model.
+
+    Un raw recién registrado tiene sidecar físico pero aún no normalizado, así que
+    el estado es ``registered`` de forma determinista (sin releer el catálogo).
+    """
+
+    return ProjectDocumentRevisionSchema(
+        source_document_revision_id=revision.source_document_revision_id.value,
+        logical_document_id=revision.logical_document_id.value,
+        source_relpath=revision.source_relpath,
+        file_size=revision.file_size,
+        review_state=revision.review_state.value,
+        uploaded_at=revision.uploaded_at,
+        raw_registered=True,
+        normalized_registered=False,
+        processing_status="registered",
+    )
+
+
+def _enum_value(value: object) -> str:
+    """Devuelve ``.value`` si es enum, o ``str(value)`` (perfiles mezclan ambos)."""
+
+    return str(getattr(value, "value", value))
+
+
+def processing_profile_to_schema(
+    profile: DocumentProcessingProfile,
+) -> ProcessingProfileReadSchema:
+    return ProcessingProfileReadSchema(
+        processing_profile_id=profile.processing_profile_id.value,
+        provider=_enum_value(profile.provider),
+        engine=_enum_value(profile.engine),
+        fingerprint=profile.fingerprint,
+        status=_enum_value(profile.status),
+    )
+
+
+def chunking_profile_to_schema(
+    profile: ChunkingProfile,
+) -> ChunkingProfileReadSchema:
+    return ChunkingProfileReadSchema(
+        chunking_profile_id=profile.chunking_profile_id.value,
+        strategy=_enum_value(profile.strategy),
+        fingerprint=profile.fingerprint,
+        status=_enum_value(profile.status),
+    )
+
+
+def normalize_outcome_to_schema(
+    outcome: ProjectNormalizeOutcome,
+) -> ProjectNormalizeReportSchema:
+    return ProjectNormalizeReportSchema(
+        rag_variant_id=outcome.rag_variant_id,
+        processed=outcome.processed,
+        needs_review=outcome.needs_review,
+        skipped=outcome.skipped,
+        failed=outcome.failed,
+        revision_ids=list(outcome.revision_ids),
     )
 
 
