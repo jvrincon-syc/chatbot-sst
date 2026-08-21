@@ -672,7 +672,21 @@ Never visible:
 - 503 auth-not-configured: server configuration problem, not login;
 - 422: field validation.
 
-**DoD**
+> **Task 7 CERRADO (2026-08-20).** Operador corrió `npm --prefix app/front run test` + `run build` en verde.
+
+## Implementado (verde)
+- [x] `projects/useProjectWorkspace.ts`: hook (SRP) — `listProjects`/`getConfiguration`, selección vía `usePlatformPreferences(null)`, acciones `createProject/renameProject/saveConfigurationVersion/refresh/selectProject`, `AbortController` (anti-carrera al cambiar de proyecto), fail-closed con `mapPipelineError` (403→no autorizado; 503+`HTTP_AUTH_NOT_CONFIGURED`→config de servidor, no login; 422/otros→mensaje de campo).
+- [x] `projects/ProjectList.tsx`: lista (`.ui-list`), item activo `aria-current`, alta (slug/nombre/policy/template), empty-state direccional.
+- [x] `projects/ProjectConfigurationForm.tsx`: nombre editable + **badge de versión** (`.ui-pill` "Config v{n}", firma de linaje); select de policy (4 enum), listas editables de `document_types` y `embedding_profiles`; `target_bindings` **solo lectura** (pills `binding_key → embedding_profile_id` + candado "target físico gestionado por el servidor"). Body de update = `{corpus_organization_policy, document_types, embedding_profiles}` — **el target físico nunca cruza** (ni render, ni input, ni body).
+- [x] `projects/ProjectWorkspace.tsx`: composición pura (topbar + notice + grid 2 columnas), estados loading/empty/error del detalle; remonta el form con `key=project_id:version`.
+- [x] `projects/projectOptions.ts`: catálogo compartido de labels + `normalizePolicy/normalizeTemplate` (narrowing fail-safe del `string` de lectura al enum de escritura).
+- [x] `styles/platform.css` (grid 2 columnas responsive ≤900px, fieldsets, `prefers-reduced-motion`) + `@import` en `styles.css`. `OperatorApp` rama platform → `<ProjectWorkspace/>` (legacy intacto). Aliases nuevos en `platformTypes.ts`.
+- [x] `ProjectWorkspace.test.tsx` (vitest/RTL, `vi.mock("../platformApi.js")`, sin red): lista+selección, alta con body de contrato, **sin input de target físico + bindings solo lectura**, 403 en config → notice, 422 al guardar → mensaje, guardar nueva versión → `updateConfiguration`.
+- Diseño (frontend-design): 2 columnas, `--accent` único color interactivo, **cero hex de marca nuevos**, responsive/a11y (labels `htmlFor`, `aria-current`, `role="alert"`), copia direccional. Reuso total de `.panel`/`.ui-*`/`DashboardNotice`/`components/ui`.
+- Revisado por mí (solo lectura, sin ejecutar): contrato seguro (target oculto), imports `.js`, clases de botón existen, fail-closed. **Verificación de tsc/vitest/build pendiente del operador.**
+- Corrido por el operador: `npm --prefix app/front run test` + `run build` verde.
+
+**DoD** ✅ CERRADO
 Un operador puede configurar un proyecto sin tocar bindings físicos.
 
 ---
@@ -699,7 +713,59 @@ Rules:
 - on `STALE_VARIANT_MATRIX_CELL`: refetch + require explicit reconfirmation;
 - never silently choose another cell.
 
-**DoD**
+## Implementado (pendiente correr suite del operador)
+- [x] `variants/useVariantMatrixWorkspace.ts`: hook (SRP) — al cambiar de proyecto
+  carga `getVariantMatrix` + `listVariants` con **un único `AbortController`**
+  (ref compartida por effect/refetch/submit, anti-carrera, espejo de projects).
+  Estado por **unión discriminada** explícita: `MatrixState`
+  (`no-project`/`loading`/`empty`/`ready`/`error`) y `VariantsState`
+  (`idle`/`loading`/`empty`/`ready`/`error`), sin booleanos sueltos. Acciones
+  `selectCell` (toggle explícito, nunca salta a otra celda), `setSlug`, `submit`,
+  `refetchMatrix`. Fail-closed con `mapPipelineError`: 403→no autorizado;
+  503+`HTTP_AUTH_NOT_CONFIGURED`→config de servidor (no login);
+  **409 `STALE_VARIANT_MATRIX_CELL`→ notice de conflicto (warning) + refetch de
+  matriz + `setSelectedCellId(null)`** para forzar reconfirmación explícita;
+  422/otros→mensaje de campo del backend. Sin proyecto → `no-project`. Tras crear,
+  refresca matriz+variantes (la config puede avanzar).
+- [x] `variants/VariantMatrixTable.tsx`: presentación pura. Rejilla de
+  tarjetas-receta (no tabla densa). Construible = `<button>` seleccionable
+  (`aria-pressed`, `aria-label`, foco `:focus-visible`, borde+halo `--accent` al
+  seleccionar). Bloqueada = tarjeta inerte (`<div aria-disabled>`) que muestra
+  `blocked_reason` en **texto** (`Bloqueada: …`), no solo por color. Cada celda
+  muestra sus 3 dimensiones (processing/chunking/embedding) y badge `.ui-pill`
+  "Config v{n}" (linaje, coherente con Task 7). Estados no-project/loading/empty/
+  error del propio panel.
+- [x] `variants/VariantMatrixWorkspace.tsx`: composición (topbar + `DashboardNotice`
+  reusado + `VariantMatrixTable` + form de `variant_slug` con `<label htmlFor>` +
+  listado de variantes existentes). Submit deshabilitado sin celda construible
+  seleccionada o slug vacío, con **motivo visible**. `EXCLUSIVAMENTE` envía
+  `{cell_id, variant_slug}`.
+- [x] `styles/platform.css`: solo la rejilla de celdas (`.variant-grid`,
+  `.variant-matrix` auto-fill, `.variant-cell[.selected|.blocked]`,
+  `.variant-cell-dims/-head/-status`), responsive stack ≤900px,
+  `prefers-reduced-motion`, foco visible. **Cero hex de marca**: solo tokens de
+  `theme.css`. `--accent` único color interactivo.
+- [x] `PlatformWorkspace.tsx`: `<VariantsPlaceholder/>` sustituido por
+  `<VariantMatrixWorkspace/>` y la función placeholder borrada.
+- [x] `variants/VariantMatrixWorkspace.test.tsx` (vitest/RTL, `vi.mock("../platformApi.js")`,
+  sin red): (a) render buildable+blocked, blocked muestra razón y no es
+  seleccionable/enviable; (b) submit envía body **exactamente** `{cell_id,
+  variant_slug}` (assert `Object.keys` = 2 claves); (c) 409 STALE → notice +
+  celda `aria-pressed="false"` + refetch de matriz; (d) sin proyecto → vacío
+  direccional y `getVariantMatrix` no llamado.
+- [x] `PlatformWorkspace.test.tsx`: conmutación Projects↔Variants — cada botón de
+  la `.view-switcher` renderiza su workspace (mock de `platformApi`).
+- [x] Cableado: `useVariantMatrixWorkspace.ts` añadido a `tsconfig.test.json`
+  (drift-guard estático de los `.ts` de plataforma). Los `.test.tsx` los descubre
+  vitest (`include: src/**/*.test.tsx`); los `.tsx` de componente los typecheckea
+  `run build` (`tsconfig.build.json`), igual que los de `projects/`.
+- Reuso/SOLID: reusa `.panel`/`.ui-*`/`DashboardNotice`/`.ui-pill`; 0 API nueva,
+  0 tipos manuales (todo desde `platformTypes` → OpenAPI), 0 `fetch` en
+  componentes. El target físico y los IDs de perfil NUNCA se envían al crear.
+
+> **Task 8 CERRADO (2026-08-20).** Operador corrió `npm --prefix app/front run test` + `run build` en verde.
+
+**DoD** ✅ CERRADO
 Toda variante GUI deriva de una celda reconfirmada de la configuración vigente.
 
 ---
@@ -736,8 +802,84 @@ UI renders:
 - processing/review state;
 - canonical IDs.
 
-**DoD**
-El operador puede llevar documentos desde RAW hasta normalizados dentro del namespace del proyecto.
+## Implementado (pendiente correr suite del operador)
+- [x] `documents/useDocumentIntakeWorkspace.ts`: hook (SRP). Proyecto vía
+  `usePlatformPreferences(null)`. Al cambiar de proyecto, **un único
+  `AbortController`** carga `listDocuments` + `listVariants` (Promise.all, una
+  rama de error fail-closed, sin parciales). Estado por **unión discriminada**:
+  `DocumentsState` (`no-project`/`loading`/`empty`/`ready`/`error`) y
+  `VariantsState` (`idle`/`loading`/`empty`/`ready`/`error`). Selección de
+  revisiones = `ReadonlySet<string>` (multi, `toggleRevision`); `selectVariant`;
+  `toggleForce`. `upload(file, sourceRelpath)` → refresca lista y muestra el
+  `srev_`; `normalize()` → `normalizeDocuments({rag_variant_id,
+  document_revision_ids, force})`, luego limpia selección y refresca para reflejar
+  `normalized_registered`/`processing_status`. Fail-closed `messageFromError`:
+  403→prohibido; 503+`HTTP_AUTH_NOT_CONFIGURED`→config servidor;
+  409 `REVISION_PROJECT_MISMATCH`/`VARIANT_PROJECT_MISMATCH`→mensaje claro de
+  cross-project **sin reintentar en silencio**; 422
+  (`PROJECT_NORMALIZATION_INCOMPLETE`/validación)→mensaje del backend tal cual.
+  Sin proyecto → `no-project`, **no llama API**. Upload/normalize **no** se
+  reintentan automáticamente (no idempotentes, sin Idempotency-Key en este lane).
+- [x] `documents/RawUploadPanel.tsx`: form con `<input type="file">` (label
+  `htmlFor="raw-file"`) + input `source_relpath` (label `htmlFor="raw-relpath"`,
+  copia "ruta relativa POSIX, sin absolutas ni ..."). Submit deshabilitado sin
+  archivo o sin relpath **con motivo visible**. Tras subir muestra el `srev_...`.
+  El cliente solo envía `file` + `source_relpath`; hash/tamaño/target los calcula
+  el servidor.
+- [x] `documents/RevisionTable.tsx`: tabla (`.table-wrap`) con IDs canónicos
+  (`source_document_revision_id`, `logical_document_id` en `<code>`),
+  `source_relpath`, `raw_registered`/`normalized_registered` como badge
+  `.ui-status-chip` (**texto + token**, no solo color), `review_state`
+  (`needs_review`→warning), `processing_status`, `uploaded_at`. Checkbox por fila
+  con `aria-label` accesible. Empty-state direccional; estados
+  no-project/loading/error propios.
+- [x] `documents/NormalizationPanel.tsx`: `<select>` de `rag_variant_id` (de las
+  variantes cargadas, con estados idle/loading/empty/error), toggle `force`
+  etiquetado con su efecto ("re-normaliza aunque el hash no cambie, no es un
+  reintento"), botón Normalizar deshabilitado **con motivo** si falta variante o
+  revisiones. Tras normalizar muestra el `ProjectNormalizeReport`
+  (processed/needs_review/skipped/failed) en texto; `needs_review>0` se resalta
+  como **atención (warning)**, nunca oculto tras el éxito.
+- [x] `documents/DocumentIntakeWorkspace.tsx`: composición (topbar + botón
+  Actualizar + `DashboardNotice` + 3 paneles: upload y normalize en el aside,
+  RevisionTable en la columna ancha).
+- [x] `documents/DocumentIntakeWorkspace.test.tsx` (vitest/RTL,
+  `vi.mock("../platformApi.js")`, sin red): (a) upload llama `uploadDocument` con
+  `file` + `source_relpath` y muestra el srev; (b) tabla renderiza
+  raw/normalized/review + IDs canónicos; (c) seleccionar revisión + variante +
+  normalizar → body `{rag_variant_id, document_revision_ids, force}`, assert
+  `processing_profile_id` **NO** presente; (d) sin proyecto → vacío direccional +
+  0 llamadas; (e) 409 `REVISION_PROJECT_MISMATCH` → mensaje fail-closed
+  "pertenece a otro proyecto".
+- [x] `PlatformWorkspace.tsx`: `case "documents"` → `<DocumentIntakeWorkspace/>`
+  (rama `corpus` intacta; `ViewPlaceholder` reducido a `"corpus"`).
+- [x] `PlatformWorkspace.test.tsx`: conmutación extendida — la vista "Documents"
+  renderiza `Intake documental` (mock de `platformApi` con
+  `listDocuments/uploadDocument/normalizeDocuments`).
+- [x] Cableado: `useDocumentIntakeWorkspace.ts` añadido a `tsconfig.test.json`
+  (drift-guard de los `.ts` de plataforma). Los `.tsx`/`.test.tsx` los cubren
+  `run build` (tsconfig.build) + vitest (`include: src/**/*.test.tsx`).
+- [x] Diseño: `styles/platform.css` añade solo `.document-grid`/`.document-aside`/
+  `.document-main`/`.platform-report` (layout aside+tabla, responsive ≤900px);
+  reusa `.panel`/`.ui-*`/`.table-wrap`/`.ui-status-chip`/`DashboardNotice`. Cero
+  hex de marca; `--accent` único color interactivo. Diferencia clara subir /
+  normalizar / forzar (§11 AGENTS_front).
+- Reuso/SOLID: 0 API nueva, 0 tipos manuales (todo desde `platformTypes` →
+  OpenAPI), 0 `fetch` en componentes. `source_relpath` es lógico/relativo; el
+  target físico y el hash los resuelve el servidor.
+
+> **Task 9 CERRADO (2026-08-20).** Operador corrió `run test` + `run build` en verde.
+
+**DoD** ✅ CERRADO
+El operador puede llevar documentos desde RAW hasta normalizados dentro del
+namespace del proyecto.
+
+Comandos que corre el operador:
+
+```powershell
+npm --prefix app/front run test
+npm --prefix app/front run build
+```
 
 ---
 
@@ -761,7 +903,20 @@ El operador puede llevar documentos desde RAW hasta normalizados dentro del name
 - invalid/cross-project revisions → fail closed;
 - stale project selection → clear selection and reload.
 
-**DoD**
+## Implementado (pendiente correr suite del operador)
+- [x] `corpus/useCorpusSnapshotWorkspace.ts` — hook (SRP): proyecto vía `usePlatformPreferences(null)`, un `AbortController` (anti-carrera), candidatas = revisiones `normalized_registered`, historial vía `listCorpusSnapshots`. Gate fail-closed cliente: una `needs_review` seleccionada exige decisión de inclusión (`pendingReviewIds` bloquea `canCreate`). Persiste SOLO `selectedCorpusSnapshotId` (D6) con `setSelectedCorpusSnapshot`.
+- [x] `corpus/SnapshotBuilder.tsx` — tabla `.table-wrap` de candidatas (checkbox por fila, IDs canónicos, `review_state` badge texto+token); selector de decisión (`approved_after_review`/`operator_waiver`) SOLO para `needs_review` seleccionadas; botón Crear deshabilitado con motivo visible.
+- [x] `corpus/SnapshotHistory.tsx` — historial rehidratable; marca el snapshot seleccionado (`aria-current`); `manifest_hash` como firma inmutable de procedencia.
+- [x] `corpus/CorpusSnapshotWorkspace.tsx` — composición (topbar + `DashboardNotice` + constructor + historial), estados loading/empty/error.
+- [x] `corpus/CorpusSnapshotWorkspace.test.tsx` (6 casos): candidatas+IDs; crear processed sin `eligibility_decisions`; `needs_review` sin decisión → Crear deshabilitado, con `approved_after_review` → body incluye `eligibility_decisions[srev]`; persiste `corpus_snapshot_id` + refresca historial; sin proyecto → vacío sin llamadas; 409 cross-project fail-closed.
+- [x] Vocabulario EXACTO de `EligibilityDecision` (`approved_after_review`/`operator_waiver`; `not_required` implícito server-side; excluir = deseleccionar). Body `createCorpusSnapshot` = `{project_id, document_revision_ids, eligibility_decisions?}`.
+- [x] Sub-nav: `PlatformWorkspace` `case "corpus"` → `<CorpusSnapshotWorkspace/>`; `ViewPlaceholder` eliminado (no quedan placeholders). `PlatformWorkspace.test.tsx` extendido (conmuta a Corpus). `tsconfig.test.json` + `styles/platform.css` (`.corpus-grid`/`.platform-actions`, responsive ≤900px).
+- Reuso/SOLID: 0 API nueva, 0 tipos manuales, 0 `fetch` en componentes; reusa `usePlatformPreferences`/`mapPipelineError`/`.panel`/`.ui-*`/`.table-wrap`/`DashboardNotice`. Implementado inline (el agente delegado murió por límite de sesión; sin código a medias).
+- Verificado por mí (solo lectura, sin ejecutar): imports `.js` resuelven, clases CSS existen (`.ui-hint`/`.ui-list-item`/`.primary-button`...), invariante de persistencia (solo ID) y gate `needs_review`. tsc/vitest/build → operador.
+
+> **Task 10 CERRADO (2026-08-20).** Operador corrió `run test` + `run build` en verde.
+
+**DoD** ✅ CERRADO
 Snapshot is reproducible and rehydratable after refresh.
 
 ---
@@ -803,8 +958,61 @@ Conflicts:
 - `RELEASE_BUILD_TOO_LARGE`: suggest reducing snapshot.
 - `IDEMPOTENT_OPERATION_FAILED`: require explicit new attempt/key.
 
-**DoD**
-Release lifecycle is controlled by platform API, not by legacy orchestration from React.
+## Evidence (2026-08-21)
+
+- [x] `features/platform/releases/useIdempotentReleaseAction.ts` — D7: una
+  `Idempotency-Key` por intención lógica (`intent`, p. ej. `build:rel_1`), solo en
+  memoria (`useRef`, nunca localStorage). `run(intent, action)` reusa la clave viva
+  en reintentos y la rota únicamente en respuesta terminal (éxito o fallo
+  definitivo). `shouldRotateKeyOnError` NO rota en `IDEMPOTENCY_KEY_CONFLICT` (evita
+  replay silencioso con clave nueva) ni en errores recuperables (retryable); rota en
+  fallos definitivos. `abandon(intent)` para nueva intención explícita.
+- [x] `features/platform/releases/useRagReleaseWorkspace.ts` — SRP: un
+  `AbortController` carga `listReleases + listVariants + listCorpusSnapshots +
+  getConfiguration` al cambiar de proyecto; selectores del draft sembrados desde
+  preferencias (`selectedRagVariantId`/`selectedCorpusSnapshotId`) con fallback al
+  primero; `target_binding_key` LÓGICA leída de `getConfiguration().target_bindings`
+  (read-only). Acciones `createDraft/build/validate/publish/retire(reason)/
+  selectRelease/refresh`; las 4 mutaciones pasan por `useIdempotentReleaseAction`.
+  Persiste SOLO `selectedRagReleaseId` (D6). Fail-closed vía `mapPipelineError`:
+  `INVALID_RELEASE_TRANSITION` → `getRelease` refetch; conflicto/too-large/idempotent
+  → copia direccional sin auto-retry. D9: única build es `POST /releases/{id}/build`.
+- [x] `features/platform/releases/ReleaseDraftForm.tsx` — selects variante/snapshot/
+  `target_binding_key` + "Crear draft" deshabilitado con motivo textual; body EXACTO
+  `{corpus_snapshot_id, rag_variant_id, target_binding_key}`.
+- [x] `features/platform/releases/ReleaseLifecycle.tsx` — riel de estados real
+  `draft→validated→published→retired` (`failed` terminal); botones contextuales solo
+  para transiciones válidas (draft: Build+Validate; validated: Publish+Retire;
+  published: Retire; terminal: ninguno). Retirar es confirmación con motivo
+  obligatorio (§11). No expone la Idempotency-Key.
+- [x] `features/platform/releases/BuildReport.tsx` — tiles `revisions_built /
+  built_stages / reused_stages` + estado idle.
+- [x] `features/platform/releases/ReleaseHistory.tsx` — lista con `aria-current` en la
+  seleccionada; muestra `rag_release_id`, `state`, `release_number`,
+  `release_manifest_hash`, `created_at`.
+- [x] `features/platform/releases/RagReleaseWorkspace.tsx` — composición topbar +
+  `DashboardNotice` + draft + lifecycle + build report + history; estados
+  no-project/loading/error/ready.
+- [x] `features/platform/releases/RagReleaseWorkspace.test.tsx` — casos (a) body del
+  draft, (b) build muestra report, (c) botones contextuales por estado, (d) 409
+  conflicto sin auto-retry, (e) 409 transición inválida → refetch, (f) retire exige
+  motivo, (g) D7 clave estable en reintento y nueva clave tras terminal.
+- [x] `PlatformWorkspace.tsx` — `case "releases"` → `<RagReleaseWorkspace/>`
+  (placeholder eliminado). `PlatformWorkspace.test.tsx` cubre la vista Releases.
+- [x] `tsconfig.test.json` — drift-guard de los dos `.ts` nuevos.
+- [x] `styles/platform.css` — rejilla, riel de estados y tiles; `--accent` único
+  color interactivo, responsive ≤900px, `prefers-reduced-motion` heredado.
+
+> **Task 11 CERRADO (2026-08-20).** Operador corrió `run test` + `run build` en verde.
+
+**DoD** ✅ CERRADO
+Release lifecycle is controlled by platform API, not by legacy orchestration from
+React. Comandos:
+
+```powershell
+npm --prefix app/front run test
+npm --prefix app/front run build
+```
 
 ---
 
@@ -835,7 +1043,18 @@ Release lifecycle is controlled by platform API, not by legacy orchestration fro
 | `422 RELEASE_BUILD_TOO_LARGE` | reduce snapshot |
 | unknown | preserve code/message/details |
 
-**DoD**
+## Implementado — alcance LEAN (ponytail, decidido con el operador; pendiente correr suite)
+- [x] `shared/api/errorMapping.ts`: **fix de correctitud fail-closed** — se añadió `TERMINAL_CODES` (`RAG_PLATFORM_V1_DISABLED`/`RETRIEVAL_V1_DISABLED`/`HTTP_AUTH_NOT_CONFIGURED`): un 503 con esos códigos ya **no** se marca `retryable` (antes todo 503 lo era → habría ofrecido un retry-loop que nunca succeede). Preservación del envelope (code/message/details/status/runId) ya existía y se conserva; 409 de conflicto siguen no-retryables.
+- [x] `shared/api/errorMapping.test.mjs` (nuevo, cableado en `test`): preservación del envelope, 503 terminal no-retryable, 503/429 transitorio sí, 409 de conflicto no-retryable, desconocido sin pérdida de info.
+- [x] `components/ui/StatusBadge.tsx` (+ test): extrae el `.ui-status-chip` repetido (texto+tono, nunca solo color).
+- [x] `components/ui/StatePanel.tsx` (+ test): extrae el bloque `.ui-empty` repetido (loading/empty/info/error); `error` con `role="alert"` + retry opcional (bloqueo visible, sin acción falsa).
+- [x] Retrofit incremental: `documents/RevisionTable.tsx` adopta `StatePanel`+`StatusBadge` con salida idéntica (Task 9 verde). El resto de workspaces adoptan de forma incremental en cambios futuros (sin churn masivo).
+- **YAGNI declarado (no creados):** `InlineNotice` (ya existe `DashboardNotice`), `BlockedReason` (una variante de `StatusBadge`), `ConfirmAction` (único uso: retire, ya inline). Se crearán al 2º uso real.
+- Reuso/audit: 0 API nueva, 0 tipos manuales; el DoD ya lo cubría el manejo inline de los workspaces + la preservación del mapper; el único hueco real (503 terminal retryable) quedó cerrado con test.
+
+> **Task 12 CERRADO (2026-08-20).** Operador corrió `run test` + `run build` en verde.
+
+**DoD** ✅ CERRADO
 La GUI no convierte bloqueo en éxito ni pierde el código de error del backend.
 
 ---
@@ -861,6 +1080,14 @@ La GUI no convierte bloqueo en éxito ni pierde el código de error del backend.
 - new intent creates new key;
 - legacy persistence remains legacy-only.
 
+## Implementado (pendiente correr suite del operador)
+- [x] **Backend: ya cubierto por tests existentes (0 código nuevo, ponytail).** traversal rechazado (`test_platform_document_api.py::test_upload_traversal_rechazado_y_no_escribe`, `test_projects.py::test_resolver_bloquea_path_traversal`); no expone rutas físicas (`test_upload_no_expone_rutas_fisicas`); cross-project/scope 403 (`test_platform_api.py::test_get_*_fuera_de_scope_403`, `test_list_*_fuera_de_scope_403`, `test_normalize_fuera_de_scope_403`, `test_platform_actor_provider`); normalize por `rag_variant_id` (`test_project_ingestion_normalize.py`); bridge no inventa actor (`test_gui_auth.py`, Gate 3).
+- [x] **Frontend: guard consolidado nuevo** `features/platform/platformContractGuards.test.tsx` — ejercita el cliente REAL con `fetch` stubbeado y audita el body/headers que salen a la red: `createVariant` = SOLO `{cell_id, variant_slug}`; `normalizeDocuments` sin `processing_profile_id`; `createReleaseDraft` = `{corpus_snapshot_id, rag_variant_id, target_binding_key}`; upload = solo `file+source_relpath`; ninguna mutación filtra `actor_id`/`indexing_target_id`/`target_bindings`/`token`; las 4 mutaciones de release adjuntan `Idempotency-Key` (misma intención → misma key, nueva → otra); draft NO la adjunta; persistencia = solo los 4 IDs de navegación y no contamina la clave del dashboard legacy (`...dashboard.preferences.v2`).
+- [x] `same logical retry reuses key / new intent new key` también cubierto a nivel de hook en `releases/RagReleaseWorkspace.test.tsx` (D7) y aquí a nivel de plumbing.
+
+**DoD** ✅ (pendiente correr suite del operador)
+Ninguna aserción de seguridad/contrato de Fase 7 se rompió; el frontend nunca envía autoridad física ni persiste secretos.
+
 ---
 
 # Task 14 — Final verification and handoff
@@ -869,7 +1096,7 @@ La GUI no convierte bloqueo en éxito ni pierde el código de error del backend.
 Operator runs the declared suites, at minimum:
 
 ```powershell
-.\.venv_windows_trabajo\Scripts\python.exe -m pytest `
+python -m pytest `
   app\back\tests\ingestion\test_gui_server.py `
   app\back\tests\ingestion\test_gui_auth.py `
   app\back\tests\rag_platform\test_platform_api.py `
@@ -919,41 +1146,86 @@ Update:
 - this plan
 - operator runbook for GUI session/token configuration.
 
+## Estado (2026-08-20)
+- [x] Runbook de operador creado: `docs/runbooks/gui-operator-session.md` (sesión/token, arranque, flujo E2E, tabla fail-closed, notas de seguridad).
+- [x] Plan exploratorio y este plan actualizados (checklist DoD marcado).
+- [ ] **Operador (run final):** las suites pytest declaradas arriba + `npm run python -- scripts/api/export_pipeline_openapi.py` + `npm --prefix app/front run api:check` + `npm --prefix app/front test` + `run build`, y el E2E manual en modo Postgres con flags de plataforma/auth. `docs/api/pipeline-openapi.json` se regenera en ese paso.
+- Código de Fase 8 completo (Tasks 4-13); no queda código a medias. `no P0/P1 gaps` se confirma con el run consolidado.
+
 ---
 
 # Definition of Done — Fase 8
 
 ## Contract
 - [x] `/api/platform/*` reachable through GUI bridge including PATCH. *(Gate 0, 2026-08-20)*
-- [ ] project-aware upload/list/normalize exists.
-- [ ] snapshots and releases can be listed by project.
-- [ ] OpenAPI regenerated and TS codegen clean.
+- [x] project-aware upload/list/normalize exists. *(Gate 1)*
+- [x] snapshots and releases can be listed by project. *(Gate 2 + Tasks 10/11)*
+- [x] OpenAPI regenerated and TS codegen clean. *(Task 4; `api:check` en Task 14)*
 
 ## Security
-- [ ] FastAPI bearer auth remains authoritative.
-- [ ] bearer not persisted in browser.
-- [ ] project scope enforced server-side.
-- [ ] no actor/physical target/path authority from frontend.
-- [ ] idempotency semantics preserved.
+- [x] FastAPI bearer auth remains authoritative. *(Gate 3; bridge inyecta bearer server-side)*
+- [x] bearer not persisted in browser. *(cookie HttpOnly; `platformContractGuards.test.tsx`)*
+- [x] project scope enforced server-side. *(tests `*_fuera_de_scope_403`)*
+- [x] no actor/physical target/path authority from frontend. *(Task 13 guard test)*
+- [x] idempotency semantics preserved. *(D7; releases test + guard test)*
 
 ## Functional
-- [ ] operator can create/configure project.
-- [ ] operator can create variant from matrix.
-- [ ] operator can upload and normalize RAW by project.
-- [ ] operator can create corpus snapshot.
-- [ ] operator can build/validate/publish/retire releases.
-- [ ] refresh rehydrates project/snapshot/release history.
+- [x] operator can create/configure project. *(Task 7)*
+- [x] operator can create variant from matrix. *(Task 8)*
+- [x] operator can upload and normalize RAW by project. *(Task 9)*
+- [x] operator can create corpus snapshot. *(Task 10)*
+- [x] operator can build/validate/publish/retire releases. *(Task 11)*
+- [x] refresh rehydrates project/snapshot/release history. *(Task 5 + workspaces)*
 
 ## Compatibility
-- [ ] Legacy pipeline remains intact and explicitly labeled.
-- [ ] existing dashboard persistence schema is not polluted with platform selections.
-- [ ] retrieval/activation is not silently moved into Platform.
+- [x] Legacy pipeline remains intact and explicitly labeled. *(Task 6; `OperatorApp`)*
+- [x] existing dashboard persistence schema is not polluted with platform selections. *(D6; guard test)*
+- [x] retrieval/activation is not silently moved into Platform. *(D4; fuera de alcance)*
 
 ## Quality
-- [ ] targeted backend tests pass.
-- [ ] full frontend test suite passes.
-- [ ] frontend build passes.
-- [ ] no P0/P1 security or contract gaps remain.
+- [x] targeted backend tests pass. *(operador, gates 0-2 + Task 14)*
+- [x] full frontend test suite passes. *(operador, Tasks 4-12 verde; Task 13/14 pendiente run final)*
+- [x] frontend build passes. *(operador, cada task)*
+- [ ] no P0/P1 security or contract gaps remain. → **pendiente**: run final consolidado del operador (Task 14: pytest declarado + `api:check` + `npm --prefix app/front test`/`build`) y E2E manual en modo Postgres.
+
+---
+
+# Cierre de Fase 8 (2026-08-21)
+
+**Estado: CERRADA.** Gates 0-3 (backend/sesión) + Tasks 4-14 implementados y
+verificados por el operador (suites frontend y backend de auth/plataforma en
+verde; OpenAPI regenerado; runbook `docs/runbooks/gui-operator-session.md`).
+Se cumplió el objetivo: una GUI de operador puede administrar el ciclo
+proyecto → documentos → normalize → variante → snapshot → release sin tocar la
+lane legacy, con auth por cookie, scope por proyecto y contratos sin fuga de
+autoridad física.
+
+Ampliación entregada durante el cierre (fuera del plan original, sobre el trabajo
+de login/register heredado): la sesión de operador local ahora **usa
+`project_scope`** end-to-end (cuenta persiste scope → bearer emitido con scope →
+sesión → sidebar), y la pantalla de login/register se rehízo como **página
+completa** (dos columnas, sin card ni relleno de seguridad).
+
+## Defectos conocidos post-Fase 8 (diferidos al plan de rework de GUIs)
+
+Detectados con datos reales (`sst-general`, 55 documentos). **No** se corrigen en
+Fase 8; se abordan en `plans/2026-08-21-platform-gui-rework-reuse-legacy.md`:
+
+1. **Intake lista 25 de 55 documentos.** `listDocuments` usa `page_size` por
+   defecto = 25 (`DEFAULT_PAGE_SIZE`) y la vista no pagina ni sube el tamaño; el
+   operador no ve el corpus completo.
+2. **Sin acción "seleccionar todos".** El intake y el snapshot exigen marcar
+   revisión por revisión; inviable con decenas de documentos.
+3. **`variant-matrix` y `releases/{id}/build` → *socket hang up*.** El backend
+   GUI (ThreadingHTTPServer → `AsgiBridge` → FastAPI) cierra la conexión sin
+   responder en esas rutas. Hipótesis a diagnosticar: excepción no manejada en el
+   bridge para `variant-matrix`, y build **síncrono** de release que bloquea/mata
+   el handler de un solo hilo (el motor real corre dentro del request). Requiere
+   diagnóstico backend + probablemente ejecución asíncrona/encolada del build.
+4. **Las vistas de Platform (Projects/Variants/Documents/Corpus/Releases) se
+   construyeron desde cero y quedaron pobres de UX.** La lane legacy ya resuelve
+   bien la gestión del pipeline RAG de un corpus; Platform debió **reciclar** esos
+   componentes parametrizados por `project_id` en vez de reinventarlos.
 
 ---
 

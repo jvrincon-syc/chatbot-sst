@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
+from types import SimpleNamespace
 
 import pytest
 
@@ -9,10 +11,14 @@ from indexing.application.embedding_provider import (
     EmbeddingInputError,
     EmbeddingProviderAuthenticationError,
     EmbeddingProviderRateLimitError,
+    EmbeddingProviderResponseError,
     EmbeddingProviderTimeoutError,
 )
 from indexing.domain.models import IndexingProfile
-from indexing.infrastructure.embeddings.bge import BgeEmbeddingProvider
+from indexing.infrastructure.embeddings.bge import (
+    BgeEmbeddingProvider,
+    _load_bge_model,
+)
 from indexing.infrastructure.embeddings.settings import EmbeddingSettings
 from indexing.infrastructure.embeddings.voyage import VoyageEmbeddingProvider
 
@@ -70,6 +76,78 @@ def test_bge_rejects_empty_texts_and_dimension_mismatch() -> None:
         provider.embed_documents([""])
     with pytest.raises(EmbeddingDimensionError):
         provider.embed_queries(["consulta"])
+
+
+def test_bge_fallback_a_encode_generico_y_respeta_batching_y_max_length() -> None:
+    fake_model = FakeEncodeOnlyBgeModel()
+    provider = BgeEmbeddingProvider(
+        profile=_profile(provider="bge", model="BAAI/bge-m3"),
+        settings=EmbeddingSettings(
+            provider="bge",
+            batch_size=2,
+            bge_document_max_length=99,
+            bge_query_max_length=7,
+        ),
+        model_loader=lambda _settings: fake_model,
+    )
+
+    provider.embed_documents([" doc uno ", "doc dos", "doc tres"])
+    provider.embed_queries([" consulta uno ", "consulta dos", "consulta tres"])
+
+    assert fake_model.calls == [
+        {"texts": ["doc uno", "doc dos"], "batch_size": 2, "max_length": 99},
+        {"texts": ["doc tres"], "batch_size": 2, "max_length": 99},
+        {"texts": ["consulta uno", "consulta dos"], "batch_size": 2, "max_length": 7},
+        {"texts": ["consulta tres"], "batch_size": 2, "max_length": 7},
+    ]
+
+
+def test_bge_detecta_respuesta_con_conteo_inconsistente() -> None:
+    provider = BgeEmbeddingProvider(
+        profile=_profile(provider="bge", model="BAAI/bge-m3"),
+        settings=EmbeddingSettings(provider="bge", batch_size=4),
+        model_loader=lambda _settings: FakeBgeCountMismatchModel(),
+    )
+
+    with pytest.raises(EmbeddingProviderResponseError, match="count does not match"):
+        provider.embed_documents(["doc uno", "doc dos"])
+
+
+def test_load_bge_model_pasa_device_cache_y_fp16_solo_en_cuda(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, object] = {}
+
+    class FakeBGEM3FlagModel:
+        def __init__(self, model_name: str, **kwargs) -> None:
+            captured["model_name"] = model_name
+            captured["kwargs"] = kwargs
+
+    monkeypatch.setitem(
+        sys.modules,
+        "FlagEmbedding",
+        SimpleNamespace(BGEM3FlagModel=FakeBGEM3FlagModel),
+    )
+
+    model = _load_bge_model(
+        _profile(provider="bge", model="BAAI/bge-m3"),
+        EmbeddingSettings(
+            provider="bge",
+            device="cuda:0",
+            bge_use_fp16=True,
+            hf_hub_cache="/tmp/hf-cache",
+        ),
+    )
+
+    assert isinstance(model, FakeBGEM3FlagModel)
+    assert captured == {
+        "model_name": "BAAI/bge-m3",
+        "kwargs": {
+            "use_fp16": True,
+            "devices": "cuda:0",
+            "cache_dir": "/tmp/hf-cache",
+        },
+    }
 
 
 def test_voyage_sets_document_and_query_input_type_and_reuses_client() -> None:
@@ -178,6 +256,26 @@ class FakeBgeModel:
     def encode_queries(self, texts, *, batch_size, max_length, **kwargs):
         self.query_calls.append((list(texts), batch_size))
         return {"dense_vecs": [[0.0, 1.0, 0.0] for _ in texts]}
+
+
+class FakeEncodeOnlyBgeModel:
+    def __init__(self) -> None:
+        self.calls: list[dict[str, object]] = []
+
+    def encode(self, texts, *, batch_size, max_length, **kwargs):
+        self.calls.append(
+            {
+                "texts": list(texts),
+                "batch_size": batch_size,
+                "max_length": max_length,
+            }
+        )
+        return {"dense_vecs": [[1.0, 0.0, 0.0] for _ in texts]}
+
+
+class FakeBgeCountMismatchModel:
+    def encode_corpus(self, texts, *, batch_size, max_length, **kwargs):
+        return {"dense_vecs": [[1.0, 0.0, 0.0]]}
 
 
 class FakeVoyageResult:

@@ -13,6 +13,15 @@ const RETRYABLE_CODES = new Set<string>([
   "PGVECTOR_UNAVAILABLE",
 ]);
 
+// Terminal 503 codes: retrying will not help (feature disabled, server auth
+// misconfigured). Fail-closed: they must NOT be flagged retryable just for being
+// 503, or the UI would offer a retry loop that can never succeed.
+const TERMINAL_CODES = new Set<string>([
+  "RAG_PLATFORM_V1_DISABLED",
+  "RETRIEVAL_V1_DISABLED",
+  "HTTP_AUTH_NOT_CONFIGURED",
+]);
+
 export function isPipelineHttpError(error: unknown): error is PipelineHttpError {
   return error instanceof Error && typeof (error as PipelineHttpError).status === "number";
 }
@@ -80,6 +89,9 @@ export function mapPipelineError(error: unknown): PipelineUiError {
 }
 
 function isRetryableCode(code: string, status: number | null): boolean {
+  if (TERMINAL_CODES.has(code)) {
+    return false;
+  }
   if (RETRYABLE_CODES.has(code)) {
     return true;
   }

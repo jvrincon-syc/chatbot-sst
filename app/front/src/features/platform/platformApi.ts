@@ -122,6 +122,27 @@ export function listDocuments(
   return getJson<PaginatedProjectDocuments>(`${BASE}/projects/${projectId}/documents${pageQuery(params)}`, options);
 }
 
+// El read-model paginado devuelve 25 por defecto; el operador necesita el corpus
+// completo (p. ej. 55 documentos). Recorre todas las páginas al máximo permitido
+// (MAX_PAGE_SIZE=100) y devuelve el listado plano.
+export async function listAllDocuments(
+  projectId: string,
+  options?: PipelineGetOptions,
+): Promise<ProjectDocumentRevision[]> {
+  const items: ProjectDocumentRevision[] = [];
+  let page = 1;
+  // Cota dura por si el backend reportara total_pages inconsistente (fail-safe).
+  for (let guard = 0; guard < 1000; guard += 1) {
+    const response = await listDocuments(projectId, { page, pageSize: 100 }, options);
+    items.push(...response.items);
+    if (page >= response.total_pages || response.items.length === 0) {
+      break;
+    }
+    page += 1;
+  }
+  return items;
+}
+
 export function uploadDocument(
   projectId: string,
   file: File,

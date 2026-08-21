@@ -34,6 +34,7 @@ from ingestion.gui.auth_session import (
     parse_cookie,
 )
 from ingestion.gui.chunking_adapter import ChunkingApiBridge
+from ingestion.gui.local_operator_auth import LocalOperatorDirectory
 from ingestion.gui.review_store import (
     ReviewDecision,
     load_review_decisions,
@@ -65,6 +66,7 @@ PIPELINE_API_PREFIXES = (
 MANIFESTS_DIR = DOCS_NORMALIZED / "_manifests"
 REVIEW_DECISIONS_PATH = MANIFESTS_DIR / "review_decisions.json"
 GUI_SETTINGS_PATH = MANIFESTS_DIR / "gui_settings.json"
+GUI_AUTH_USERS_PATH = MANIFESTS_DIR / "gui_auth_users.json"
 ALLOWED_UPLOAD_SUFFIXES = {".pdf", ".md", ".markdown"}
 ALLOWED_CORS_HEADERS = ("Content-Type", "Idempotency-Key", "Authorization")
 #: Orígenes de confianza para las rutas de auth de la GUI local (guarda CSRF).
@@ -105,6 +107,21 @@ def _utcnow() -> datetime:
     """Instante UTC actual (costura para el TTL de sesión GUI)."""
 
     return datetime.now(timezone.utc)
+
+
+def _parse_project_scope(raw: object) -> tuple[str, ...] | None:
+    """Valida el ``project_scope`` opcional del registro (lista de IDs de proyecto).
+
+    Ausente/``None`` o lista vacía = operador global. Fail-closed: cualquier forma
+    que no sea una lista de strings se rechaza con 400 en vez de asumir un scope.
+    """
+
+    if raw is None:
+        return None
+    if not isinstance(raw, list) or not all(isinstance(item, str) for item in raw):
+        raise ValueError("project_scope must be a list of project ids")
+    cleaned = tuple(item.strip() for item in raw if item.strip())
+    return cleaned or None
 
 
 def _redact_client_address(client_address: tuple[str, int] | None) -> str | None:
@@ -476,6 +493,8 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
         try:
             if path == "/api/auth/login":
                 self._handle_auth_login()
+            elif path == "/api/auth/register":
+                self._handle_auth_register()
             elif path == "/api/auth/logout":
                 self._handle_auth_logout()
             elif path == "/api/upload":
@@ -576,12 +595,40 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
                     if name.lower() != "authorization"
                 }
                 headers["Authorization"] = f"Bearer {session.bearer_credential}"
-        response = bridge.handle(
-            method=method,
-            path=self.path,
-            headers=headers,
-            body=body,
-        )
+        try:
+            response = bridge.handle(
+                method=method,
+                path=self.path,
+                headers=headers,
+                body=body,
+            )
+        except Exception as exc:  # noqa: BLE001 — frontera de proceso, fail-closed
+            # El bridge NUNCA debe colgar el socket ("socket hang up" en el proxy):
+            # cualquier excepción que escape del ASGI app se traduce a un 500 con
+            # envelope para que el frontend vea el error real. El traceback queda en
+            # el log del wrapper externo (`_begin_http_request`) para diagnóstico.
+            server_logger.exception(
+                "Pipeline bridge raised; returning 500 envelope",
+                extra={
+                    "request_id": getattr(self, "_request_id", None),
+                    "stage": "pipeline_bridge",
+                    "event": "pipeline_bridge_error",
+                    "status": "failed",
+                    "path": urlparse(self.path).path,
+                },
+            )
+            self._send_json(
+                {
+                    "error": {
+                        "code": "PIPELINE_BRIDGE_ERROR",
+                        "message": f"pipeline bridge failed: {type(exc).__name__}",
+                        "run_id": None,
+                        "details": {},
+                    }
+                },
+                status=HTTPStatus.INTERNAL_SERVER_ERROR,
+            )
+            return
         self._response_status_code = HTTPStatus(response.status)
         self.send_response(response.status)
         self.send_header(
@@ -609,16 +656,21 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             return
         try:
             body = self._read_json_body()
+            username = body.get("username")
+            password = body.get("password")
+            if not isinstance(username, str) or not username.strip():
+                raise ValueError("username is required")
+            if not isinstance(password, str) or not password:
+                raise ValueError("password is required")
         except (json.JSONDecodeError, ValueError) as exc:
             self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
             return
-        token = body.get("token")
-        if not isinstance(token, str) or not token.strip():
-            self._send_error(HTTPStatus.BAD_REQUEST, "token is required")
-            return
         try:
-            # El token nunca se loggea; solo su resultado de identidad.
-            session = coordinator.login(token.strip(), now=_utcnow())
+            session = coordinator.login(
+                username=username.strip(),
+                password=password,
+                now=_utcnow(),
+            )
         except HttpAuthError as exc:
             self._send_auth_error(exc)
             return
@@ -637,6 +689,60 @@ class Phase1GuiHandler(BaseHTTPRequestHandler):
             extra_headers={
                 "Set-Cookie": build_session_cookie(
                     session.session_id, max_age=coordinator.cookie_max_age
+                )
+            },
+        )
+
+    def _handle_auth_register(self) -> None:
+        """Crea un usuario local de la GUI, emite token y abre la sesión."""
+
+        coordinator = self._gui_auth()
+        if coordinator is None:
+            self._send_error(
+                HTTPStatus.SERVICE_UNAVAILABLE, "gui auth is not configured"
+            )
+            return
+        if not self._origin_is_trusted():
+            self._send_error(HTTPStatus.FORBIDDEN, "untrusted origin")
+            return
+        try:
+            body = self._read_json_body()
+            username = body.get("username")
+            password = body.get("password")
+            if not isinstance(username, str) or not username.strip():
+                raise ValueError("username is required")
+            if not isinstance(password, str) or not password:
+                raise ValueError("password is required")
+            project_scope = _parse_project_scope(body.get("project_scope"))
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_error(HTTPStatus.BAD_REQUEST, str(exc))
+            return
+        try:
+            session = coordinator.register(
+                username=username.strip(),
+                password=password,
+                project_scope=project_scope,
+                now=_utcnow(),
+            )
+        except HttpAuthError as exc:
+            self._send_auth_error(exc)
+            return
+        server_logger.info(
+            "GUI local principal registered",
+            extra={
+                "request_id": getattr(self, "_request_id", None),
+                "stage": "auth",
+                "event": "gui_principal_registered",
+                "status": "completed",
+                "principal_id": session.principal_id,
+            },
+        )
+        self._send_json(
+            session.public_metadata(),
+            extra_headers={
+                "Set-Cookie": build_session_cookie(
+                    session.session_id,
+                    max_age=coordinator.cookie_max_age,
                 )
             },
         )
@@ -1503,8 +1609,9 @@ def main() -> int:
     # (SST_HTTP_AUTH_CREDENTIALS_JSON) y vive server-side; el browser solo recibe
     # la cookie opaca.
     server.gui_auth = GuiAuthCoordinator(
-        authenticator=ConfiguredBearerAuth(),
+        authenticator=pipeline_services.http_authenticator,
         store=GuiSessionStore(),
+        directory=LocalOperatorDirectory(GUI_AUTH_USERS_PATH),
     )
     server_logger.info(
         "Backend ready",

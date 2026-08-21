@@ -12,6 +12,13 @@ export type ProjectConfiguration = Schemas["ProjectConfigurationSchema"];
 export type CreateProjectRequest = Schemas["CreateProjectRequestSchema"];
 export type UpdateProjectRequest = Schemas["UpdateProjectRequestSchema"];
 export type UpdateProjectConfigurationRequest = Schemas["UpdateProjectConfigurationRequestSchema"];
+export type CorpusOrganizationPolicy = Schemas["CorpusOrganizationPolicy"];
+export type DocumentTypeTemplate = Schemas["DocumentTypeTemplate"];
+// Tipo editable de la config (union estricta de template), distinto del de lectura
+// `DocumentTypeSchema` cuyo `template` es un `string` libre.
+export type ProjectDocumentType = Schemas["ProjectDocumentType"];
+export type ProjectEmbeddingProfile = Schemas["ProjectEmbeddingProfile"];
+export type TargetBinding = Schemas["TargetBindingSchema"];
 
 // Variantes
 export type Variant = Schemas["VariantSchema"];

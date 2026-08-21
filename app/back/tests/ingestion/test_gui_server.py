@@ -507,6 +507,9 @@ def test_gui_backend_builds_chunking_bridge_without_sharing_pipeline_connection(
             self.connection = object()
             self.indexing_reconciler = _FakeReconciler()
             self.embedding_executor = _FakeExecutor()
+            # main() cablea la sesión GUI con la MISMA autoridad de auth que FastAPI;
+            # el doble debe exponerla igual que el PipelineServices real.
+            self.http_authenticator = object()
 
         def close(self) -> None:
             return None
@@ -537,6 +540,11 @@ def test_gui_backend_builds_chunking_bridge_without_sharing_pipeline_connection(
     monkeypatch.setattr(gui_server, "create_app", lambda **_kwargs: object())
     monkeypatch.setattr(gui_server, "AsgiBridge", lambda _app: object())
     monkeypatch.setattr(gui_server, "ThreadingHTTPServer", _FakeServer)
+    # La sesión GUI (auth por cookie + directorio local de operadores) se aísla
+    # como el resto de dependencias pesadas: este test solo verifica el wiring del
+    # chunking bridge, no el registro de operadores en disco.
+    monkeypatch.setattr(gui_server, "LocalOperatorDirectory", lambda _path: object())
+    monkeypatch.setattr(gui_server, "GuiAuthCoordinator", lambda **_kwargs: object())
 
     assert gui_server.main() == 0
     assert captured_chunking_kwargs["docs_normalized"] == gui_server.DOCS_NORMALIZED

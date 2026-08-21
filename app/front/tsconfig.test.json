@@ -39,11 +39,17 @@
     "src/features/retrieval/retrievalMappers.ts",
     "src/features/retrieval/retrievalApi.ts",
     "src/features/retrieval/retrievalState.ts",
+    "src/features/operator/operatorAuthApi.ts",
     "src/features/platform/platformOpenApi.generated.ts",
     "src/features/platform/platformTypes.ts",
     "src/features/platform/platformApi.ts",
     "src/features/platform/platformState.ts",
     "src/features/platform/platformPersistence.ts",
-    "src/features/platform/hooks/usePlatformPreferences.ts"
+    "src/features/platform/hooks/usePlatformPreferences.ts",
+    "src/features/platform/variants/useVariantMatrixWorkspace.ts",
+    "src/features/platform/documents/useDocumentIntakeWorkspace.ts",
+    "src/features/platform/corpus/useCorpusSnapshotWorkspace.ts",
+    "src/features/platform/releases/useIdempotentReleaseAction.ts",
+    "src/features/platform/releases/useRagReleaseWorkspace.ts"
   ]
 }

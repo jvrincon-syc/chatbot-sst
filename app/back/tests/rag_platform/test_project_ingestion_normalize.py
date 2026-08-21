@@ -24,6 +24,7 @@ from rag_platform.application.project_normalization_service import (
     ProjectNormalizeOutcome,
 )
 from rag_platform.domain.errors import (
+    PlatformAccessDenied,
     RevisionProjectMismatch,
     VariantProjectMismatch,
 )
@@ -274,4 +275,46 @@ def test_normalize_revision_de_otro_proyecto_falla_cerrado() -> None:
             force=False,
             actor=_ACTOR,
         )
+    assert normalizer.captured is None
+
+
+def test_normalize_deduplica_revisiones_antes_de_delegar_al_motor() -> None:
+    normalizer = _RecordingNormalizer()
+    use_case = _use_case(
+        variant=_variant(),
+        revisions=[_revision(rid="srev_a"), _revision(rid="srev_b")],
+        normalizer=normalizer,
+    )
+
+    outcome = use_case.execute(
+        project_id=_PROJ,
+        rag_variant_id=_VARIANT,
+        document_revision_ids=["srev_a", "srev_a", "srev_b"],
+        force=True,
+        actor=_ACTOR,
+    )
+
+    assert outcome.revision_ids == ("srev_a", "srev_b")
+    assert [
+        revision.source_document_revision_id.value
+        for revision in normalizer.captured["revisions"]
+    ] == ["srev_a", "srev_b"]
+    assert normalizer.captured["force"] is True
+
+
+def test_normalize_actor_fuera_de_scope_falla_antes_de_tocar_motor() -> None:
+    normalizer = _RecordingNormalizer()
+    use_case = _use_case(
+        variant=_variant(), revisions=[_revision()], normalizer=normalizer
+    )
+
+    with pytest.raises(PlatformAccessDenied):
+        use_case.execute(
+            project_id=_PROJ,
+            rag_variant_id=_VARIANT,
+            document_revision_ids=["srev_a"],
+            force=False,
+            actor=PlatformActor(actor_id="op-1", project_scope=("proj_otro",)),
+        )
+
     assert normalizer.captured is None

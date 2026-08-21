@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "password_hash": "f00802ed9f81c5d89d495fe6bdbe398c64bcb70e85acc8cbc7f2cdbea8492067",
+      "password_salt": "qSDdcD6v+GgidC7MFv67xQ==",
+      "project_scope": null,
+      "username": "prueba1"
+    },
+    {
+      "password_hash": "7ad70f497ee51a932602b5be26cd6e910689ccca1e44f9167d10f3ab98539ac3",
+      "password_salt": "zjvsWs4ZApgGISmk9sFVJw==",
+      "project_scope": null,
+      "username": "prueba2"
+    },
+    {
+      "password_hash": "736563f2bd388382ca0c922fc5a503237b54e83c52950690fcf31a2f6a98dd29",
+      "password_salt": "IIddeXxTyn9B6wqR/mIUuQ==",
+      "project_scope": null,
+      "username": "prueba3"
+    }
+  ]
+}

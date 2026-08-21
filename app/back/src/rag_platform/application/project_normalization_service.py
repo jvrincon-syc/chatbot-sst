@@ -11,6 +11,7 @@ sin pdfium/tesseract y la capa de aplicación no importe el engine.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import logging
 from typing import Protocol, Sequence, runtime_checkable
 
 from rag_platform.application.context import (
@@ -30,6 +31,9 @@ from rag_platform.domain.errors import (
 )
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import RagProject, SourceDocumentRevision
+
+
+_LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -113,6 +117,16 @@ class NormalizeProjectDocumentsUseCase:
         project = self._projects.get(project_id)
         variant = self._variants.get(rag_variant_id)
         if variant.project_id != project_id:
+            _LOGGER.warning(
+                "project normalization rejected variant from another project",
+                extra={
+                    "project_id": project_id.value,
+                    "rag_variant_id": rag_variant_id.value,
+                    "variant_project_id": variant.project_id.value,
+                    "capability": "ingestion.project_normalize",
+                    "status": "rejected",
+                },
+            )
             raise VariantProjectMismatch(
                 f"variant {rag_variant_id.value} is not owned by {project_id.value}"
             )
@@ -129,12 +143,35 @@ class NormalizeProjectDocumentsUseCase:
             seen.add(revision_id.value)
             revision = self._documents.get_revision(revision_id)
             if revision.project_id != project_id:
+                _LOGGER.warning(
+                    "project normalization rejected revision from another project",
+                    extra={
+                        "project_id": project_id.value,
+                        "rag_variant_id": rag_variant_id.value,
+                        "source_document_revision_id": revision_id.value,
+                        "revision_project_id": revision.project_id.value,
+                        "capability": "ingestion.project_normalize",
+                        "status": "rejected",
+                    },
+                )
                 raise RevisionProjectMismatch(
                     f"revision {revision_id.value} is not owned by {project_id.value}"
                 )
             revisions.append(revision)
 
-        return self._normalizer.normalize(
+        _LOGGER.info(
+            "starting project normalization",
+            extra={
+                "project_id": project_id.value,
+                "rag_variant_id": rag_variant_id.value,
+                "processing_profile_id": variant.processing_profile_id.value,
+                "revision_count": len(revisions),
+                "force": force,
+                "capability": "ingestion.project_normalize",
+                "status": "started",
+            },
+        )
+        outcome = self._normalizer.normalize(
             project=project,
             revisions=tuple(revisions),
             processing_profile_id=variant.processing_profile_id.value,
@@ -143,3 +180,18 @@ class NormalizeProjectDocumentsUseCase:
             semantic_recipe_fingerprint=variant.semantic_recipe_fingerprint,
             force=force,
         )
+        _LOGGER.info(
+            "completed project normalization",
+            extra={
+                "project_id": project_id.value,
+                "rag_variant_id": outcome.rag_variant_id,
+                "revision_count": len(revisions),
+                "processed": outcome.processed,
+                "needs_review": outcome.needs_review,
+                "skipped": outcome.skipped,
+                "failed": outcome.failed,
+                "capability": "ingestion.project_normalize",
+                "status": "completed",
+            },
+        )
+        return outcome

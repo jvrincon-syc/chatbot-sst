@@ -501,7 +501,6 @@ def require_project_access(
         ) from error
     return principal
 
-
 #: Tope finito por defecto de documentos por build síncrono. El build es una
 #: operación HTTP administrativa síncrona: "config ausente" NO puede significar
 #: "carga ilimitada". ``SST_PLATFORM_MAX_BUILD_DOCUMENTS`` lo sobrescribe.
@@ -1144,6 +1143,12 @@ def _open_postgres_connection(dsn: str) -> object:
         ) from error
 
 
+def _default_gui_auth_registry_path(chunks_root: Path) -> Path:
+    """Return the runtime JSON registry for local GUI operators."""
+
+    return chunks_root.parent / "docs_normalized" / "_manifests" / "gui_auth_registry.json"
+
+
 def build_pipeline_services_from_env(
     *,
     chunks_root: Path,
@@ -1178,12 +1183,18 @@ def build_pipeline_services_from_env(
         if flags.rag_platform_v1:
             idempotency_connection = _open_postgres_connection(dsn)
 
+    http_authenticator = ConfiguredBearerAuth(
+        env,
+        local_registry_path=_default_gui_auth_registry_path(chunks_root),
+    )
+
     services = build_pipeline_services(
         chunks_root=chunks_root,
         embeddings_root=embeddings_root,
         connection=connection,
         feature_flags=flags,
         allow_mock_engine=allow_mock_engine,
+        http_authenticator=http_authenticator,
         idempotency_connection=idempotency_connection,
     )
     _emit_startup_observability(services, connection=connection)

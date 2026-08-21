@@ -1,16 +1,4 @@
-"""Sesión GUI local de operador por cookie opaca (Gate 3, Fase 8).
-
-El browser nunca posee el bearer: hace ``login`` con el token una vez, el servidor
-lo valida contra la **misma** ``ConfiguredBearerAuth`` que FastAPI y guarda una
-sesión en memoria de proceso indexada por un id opaco. El bridge resuelve la
-cookie y **inyecta el bearer server-side** en las peticiones ``/api/platform/*``;
-FastAPI vuelve a autenticar y autorizar igual que en Fase 7 (frontera de confianza
-intacta). Sin persistir en archivos, sin loggear el bearer.
-
-Ceiling (ponytail): store monoproceso con lock, TTL fijo, sin rotación. Es
-correcto para una GUI local; un despliegue multiproceso pediría un store
-compartido y se documentaría en un ADR.
-"""
+"""Sesión GUI local por cookie opaca para usuarios locales con contraseña."""
 
 from __future__ import annotations
 
@@ -20,17 +8,17 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from core.http_auth import ConfiguredBearerAuth
+from ingestion.gui.local_operator_auth import (
+    LocalOperatorAccount,
+    LocalOperatorDirectory,
+)
 
-#: Nombre de la cookie de sesión (opaca, HttpOnly, SameSite=Strict).
 SESSION_COOKIE_NAME = "chatbot_sst_gui_session"
-#: TTL por defecto de una sesión GUI (12 h).
 DEFAULT_SESSION_TTL_SECONDS = 12 * 60 * 60
 
 
 @dataclass(frozen=True)
 class GuiSession:
-    """Sesión GUI viva: identidad pública + bearer server-side (nunca al browser)."""
-
     session_id: str
     principal_id: str
     project_scope: tuple[str, ...] | None
@@ -42,14 +30,10 @@ class GuiSession:
         return now >= self.expires_at
 
     def public_metadata(self) -> dict[str, object]:
-        """Metadata pública (sin bearer): lo único que cruza al browser."""
-
         return {
             "authenticated": True,
             "principal_id": self.principal_id,
-            "project_scope": (
-                None if self.project_scope is None else list(self.project_scope)
-            ),
+            "project_scope": None if self.project_scope is None else list(self.project_scope),
         }
 
 
@@ -82,31 +66,29 @@ class GuiSessionStore:
         return session
 
     def resolve(self, session_id: str, *, now: datetime) -> GuiSession | None:
-        """Devuelve la sesión viva o ``None``; purga la entrada si expiró."""
-
         with self._lock:
             session = self._sessions.get(session_id)
             if session is None:
                 return None
             if session.is_expired(now=now):
-                # Fail-closed: una sesión expirada se elimina y no autoriza nada.
                 del self._sessions[session_id]
                 return None
             return session
 
-    def revoke(self, session_id: str) -> None:
+    def revoke(self, session_id: str) -> GuiSession | None:
         with self._lock:
-            self._sessions.pop(session_id, None)
+            return self._sessions.pop(session_id, None)
 
-    def purge_expired(self, *, now: datetime) -> None:
+    def purge_expired(self, *, now: datetime) -> tuple[GuiSession, ...]:
         with self._lock:
             expired = [
-                sid
-                for sid, session in self._sessions.items()
+                session
+                for session in self._sessions.values()
                 if session.is_expired(now=now)
             ]
-            for sid in expired:
-                del self._sessions[sid]
+            for session in expired:
+                del self._sessions[session.session_id]
+            return tuple(expired)
 
     @property
     def ttl_seconds(self) -> int:
@@ -114,53 +96,71 @@ class GuiSessionStore:
 
 
 class GuiAuthCoordinator:
-    """Une la validación de token (``ConfiguredBearerAuth``) con el store de sesión."""
+    """Une directorio local de usuarios, bearer interno y cookie GUI."""
 
     def __init__(
         self,
         *,
         authenticator: ConfiguredBearerAuth,
         store: GuiSessionStore,
+        directory: LocalOperatorDirectory,
     ) -> None:
         self._authenticator = authenticator
         self._store = store
+        self._directory = directory
 
-    def login(self, token: str, *, now: datetime) -> GuiSession:
-        """Valida el token y crea una sesión. Propaga ``HttpAuthError`` si falla.
+    def login(self, *, username: str, password: str, now: datetime) -> GuiSession:
+        account = self._directory.authenticate(username=username, password=password)
+        return self._open_session(account, now=now)
 
-        El token se valida con la misma autoridad que FastAPI (compare constant-time)
-        y se guarda como bearer server-side para inyectarlo luego; nunca vuelve al
-        browser ni se loggea.
-        """
+    def register(
+        self,
+        *,
+        username: str,
+        password: str,
+        project_scope: tuple[str, ...] | None = None,
+        now: datetime,
+    ) -> GuiSession:
+        account = self._directory.register(
+            username=username, password=password, project_scope=project_scope
+        )
+        return self._open_session(account, now=now)
 
-        principal = self._authenticator.authenticate(f"Bearer {token}")
-        # Barrido oportunista de expiradas en cada login (n pequeño en GUI local).
-        self._store.purge_expired(now=now)
+    def _open_session(self, account: LocalOperatorAccount, *, now: datetime) -> GuiSession:
+        # El scope del operador viaja del directorio → bearer emitido → sesión →
+        # /api/platform/*: FastAPI lo aplica sin que el frontend lo re-declare.
+        self._revoke_expired_sessions(now=now)
+        credential = self._authenticator.issue_session_credential(
+            principal_id=account.username,
+            project_scope=account.project_scope,
+        )
         return self._store.create(
-            principal_id=principal.principal_id,
-            project_scope=principal.project_scope,
-            bearer_credential=token,
+            principal_id=account.username,
+            project_scope=account.project_scope,
+            bearer_credential=credential.token,
             now=now,
         )
 
     def resolve(self, session_id: str, *, now: datetime) -> GuiSession | None:
+        self._revoke_expired_sessions(now=now)
         return self._store.resolve(session_id, now=now)
 
     def logout(self, session_id: str) -> None:
-        self._store.revoke(session_id)
+        session = self._store.revoke(session_id)
+        if session is not None:
+            self._authenticator.revoke_session_credential(session.bearer_credential)
 
     @property
     def cookie_max_age(self) -> int:
         return self._store.ttl_seconds
 
+    def _revoke_expired_sessions(self, *, now: datetime) -> None:
+        expired_sessions = self._store.purge_expired(now=now)
+        for session in expired_sessions:
+            self._authenticator.revoke_session_credential(session.bearer_credential)
+
 
 def parse_cookie(cookie_header: str | None, name: str) -> str | None:
-    """Extrae el valor de una cookie por nombre de un header ``Cookie`` crudo.
-
-    Parser mínimo (stdlib ``SimpleCookie`` toleraría metadatos que no necesitamos):
-    separa por ``;`` y ``=``. Devuelve ``None`` si no está.
-    """
-
     if not cookie_header:
         return None
     for pair in cookie_header.split(";"):
@@ -171,12 +171,6 @@ def parse_cookie(cookie_header: str | None, name: str) -> str | None:
 
 
 def build_session_cookie(session_id: str, *, max_age: int) -> str:
-    """Construye el ``Set-Cookie`` opaco, HttpOnly y SameSite=Strict.
-
-    Sin ``Secure`` porque la GUI local corre sobre ``http://127.0.0.1``; en un
-    despliegue TLS se añadiría (ADR).
-    """
-
     return (
         f"{SESSION_COOKIE_NAME}={session_id}; HttpOnly; SameSite=Strict; "
         f"Path=/; Max-Age={max_age}"
@@ -184,6 +178,4 @@ def build_session_cookie(session_id: str, *, max_age: int) -> str:
 
 
 def build_expired_cookie() -> str:
-    """``Set-Cookie`` que expira la cookie de sesión (logout)."""
-
     return f"{SESSION_COOKIE_NAME}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0"

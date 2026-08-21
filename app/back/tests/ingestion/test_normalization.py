@@ -1,4 +1,5 @@
-from ingestion.normalization.text import normalize_text
+from ingestion.normalization.text import normalize_indexable_text, normalize_text
+from ingestion.schemas.common import RemovedSpan
 
 
 def test_normalization_preserves_dates_codes_percentages_and_identifiers() -> None:
@@ -19,3 +20,22 @@ def test_normalization_reconstructs_words_split_by_line_break() -> None:
 
     assert "prevencion" in normalized
     assert "espacios duplicados" in normalized
+
+
+def test_normalization_elimina_control_chars_y_colapsa_saltos_excesivos() -> None:
+    raw = "Titulo\x00\t \n\n\nContenido\x1f final"
+
+    normalized = normalize_text(raw)
+
+    assert normalized == "Titulo\n\nContenido final"
+
+
+def test_normalize_indexable_text_remueve_solo_la_primera_ocurrencia_del_span() -> None:
+    text = "Encabezado repetido\nContenido util\nEncabezado repetido"
+
+    normalized = normalize_indexable_text(
+        text,
+        removed_spans=[RemovedSpan(text="Encabezado repetido", reason="boilerplate")],
+    )
+
+    assert normalized == "Contenido util\nEncabezado repetido"

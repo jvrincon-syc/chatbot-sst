@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import logging
 from typing import Callable, Protocol
 
 from indexing.application.embedding_provider import (
@@ -24,6 +25,7 @@ class BgeRuntimeModel(Protocol):
 
 
 BgeModelLoader = Callable[[EmbeddingSettings], BgeRuntimeModel]
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -97,6 +99,17 @@ class BgeEmbeddingProvider:
         method = getattr(model, method_name, None)
         if method is None:
             method = model.encode
+        logger.debug(
+            "embedding bge batch started",
+            extra={
+                "provider": self.provider_name,
+                "model": self.model_name,
+                "method": method_name,
+                "text_count": len(batch_texts),
+                "batch_size": self._settings.batch_size,
+                "max_length": max_length,
+            },
+        )
         vectors: list[list[float]] = []
         for chunk in _chunks(batch_texts, self._settings.batch_size):
             output = method(
@@ -109,7 +122,7 @@ class BgeEmbeddingProvider:
             )
             chunk_vectors = output.get("dense_vecs") if isinstance(output, dict) else output
             vectors.extend(chunk_vectors)
-        return embedding_batch(
+        batch = embedding_batch(
             vectors=vectors,
             expected_count=len(batch_texts),
             profile=self.profile,
@@ -117,9 +130,29 @@ class BgeEmbeddingProvider:
             normalized=self.normalized,
             capabilities=self.capabilities,
         )
+        logger.debug(
+            "embedding bge batch completed",
+            extra={
+                "provider": batch.provider,
+                "model": batch.model,
+                "method": method_name,
+                "vector_count": len(batch.vectors),
+                "dimension": batch.dimension,
+            },
+        )
+        return batch
 
     def _get_model(self) -> BgeRuntimeModel:
         if self._model is None:
+            logger.info(
+                "loading bge embedding runtime",
+                extra={
+                    "provider": self.provider_name,
+                    "model": self.model_name,
+                    "device": self._settings.device,
+                    "batch_size": self._settings.batch_size,
+                },
+            )
             self._model = (
                 self.model_loader(self._settings)
                 if self.model_loader is not None

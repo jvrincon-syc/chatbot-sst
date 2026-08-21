@@ -12,6 +12,7 @@ principal autenticado, nunca del form (invariante §Actor). Fail-closed:
 from __future__ import annotations
 
 from hashlib import sha256
+import logging
 
 from rag_platform.application.context import (
     PlatformAccessPolicy,
@@ -28,6 +29,9 @@ from rag_platform.application.raw_ingestion_service import (
 )
 from rag_platform.domain.identity import IdentityKind, PlatformId
 from rag_platform.domain.models import SourceDocumentRevision
+
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class UploadProjectRawDocumentUseCase:
@@ -70,12 +74,23 @@ class UploadProjectRawDocumentUseCase:
         project = self._projects.get(project_id)
 
         raw_content_hash = sha256(content).hexdigest()
+        _LOGGER.info(
+            "uploading project raw document",
+            extra={
+                "project_id": project_id.value,
+                "source_relpath": source_relpath,
+                "file_size": len(content),
+                "actor_id": actor.actor_id,
+                "capability": "ingestion.raw_upload",
+                "status": "started",
+            },
+        )
         # Escribe validando contención (traversal → UnsafeArtifactPath) antes de
         # crear identidad lógica.
         self._storage.write_raw_bytes(project, source_relpath, content)
 
         slug = project_id.value[len(f"{IdentityKind.PROJECT.value}_") :]
-        return self._register.execute(
+        revision = self._register.execute(
             RegisterProjectRawArtifactRequest(
                 project_id=slug,
                 source_relpath=source_relpath,
@@ -84,3 +99,16 @@ class UploadProjectRawDocumentUseCase:
             ),
             actor_id=actor.actor_id,
         )
+        _LOGGER.info(
+            "uploaded project raw document",
+            extra={
+                "project_id": revision.project_id.value,
+                "logical_document_id": revision.logical_document_id.value,
+                "source_document_revision_id": revision.source_document_revision_id.value,
+                "source_relpath": revision.source_relpath,
+                "raw_content_hash": raw_content_hash,
+                "capability": "ingestion.raw_upload",
+                "status": "completed",
+            },
+        )
+        return revision

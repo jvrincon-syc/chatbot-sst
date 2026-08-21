@@ -1,42 +1,40 @@
 import { useState } from "react";
-import { FolderPlus } from "lucide-react";
 import { DashboardApp } from "../dashboard/DashboardApp.js";
+import { PlatformWorkspace } from "../platform/PlatformWorkspace.js";
+import { OperatorAuthWorkspace } from "./components/OperatorAuthWorkspace.js";
 import { OperatorSidebar } from "./components/OperatorSidebar.js";
 import type { OperatorSurface } from "./operatorNavigation.js";
+import { useOperatorSession } from "./useOperatorSession.js";
 
-// La superficie activa es estado de sesion: no se persiste. Task 7 reemplaza el
-// placeholder de "platform" por el ProjectWorkspace real.
 export function OperatorApp() {
   const [surface, setSurface] = useState<OperatorSurface>("platform");
+  const operatorSession = useOperatorSession();
+
+  if (operatorSession.state.status !== "authenticated") {
+    return (
+      <div className="operator-auth-shell">
+        <OperatorAuthWorkspace
+          state={operatorSession.state}
+          onLogin={operatorSession.login}
+          onRegister={operatorSession.register}
+          onRetry={() => void operatorSession.refresh()}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="operator-shell">
-      <OperatorSidebar activeSurface={surface} onSurfaceChange={setSurface} />
-      {surface === "legacy" ? <DashboardApp /> : <PlatformPlaceholder />}
+      <OperatorSidebar
+        activeSurface={surface}
+        onSurfaceChange={setSurface}
+        session={operatorSession.state.session}
+        loggingOut={operatorSession.state.loggingOut}
+        onLogout={() => void operatorSession.logout()}
+      />
+      <div className="operator-surface">
+        {surface === "legacy" ? <DashboardApp /> : <PlatformWorkspace />}
+      </div>
     </div>
-  );
-}
-
-function PlatformPlaceholder() {
-  return (
-    <main className="workspace operator-workspace">
-      <header className="topbar">
-        <div>
-          <h1>RAG Platform</h1>
-          <p>Administracion de proyectos, normalizacion, variantes y releases.</p>
-        </div>
-      </header>
-
-      <section className="operator-empty" aria-label="Estado inicial de RAG Platform">
-        <span className="operator-empty-icon" aria-hidden="true">
-          <FolderPlus size={28} />
-        </span>
-        <h2>Selecciona o crea un proyecto para empezar</h2>
-        <p>
-          Aqui se administra el ciclo completo: proyecto, normalizacion, variante,
-          snapshot y release.
-        </p>
-      </section>
-    </main>
   );
 }

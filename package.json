@@ -26,6 +26,8 @@
     "test:pipeline": "npm run python -- -m pytest app/back/tests/embedding app/back/tests/indexing app/back/tests/retrieval",
     "embedding:verify-profile": "npm run python -- scripts/embedding/verify_profile.py",
     "schemas:export": "npm run python -- scripts/ingestion/export_schemas.py",
+    "platform:seed": "npm run python -- scripts/rag_platform/seed_project.py",
+    "platform:ingest": "npm run python -- scripts/rag_platform/run_project_ingestion.py",
     "gui:api": "npm run python -- -m ingestion.gui.server",
     "gui:front": "npm --prefix app/front run dev",
     "gui:dev": "node -e \"const { spawn } = require('child_process'); const api = spawn('npm', ['run', 'gui:api'], { stdio: 'inherit' }); const front = spawn('npm', ['run', 'gui:front'], { stdio: 'inherit' }); const stop = () => { api.kill('SIGTERM'); front.kill('SIGTERM'); }; process.on('SIGINT', stop); process.on('SIGTERM', stop);\"",
