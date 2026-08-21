@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   listAllDocuments,
-  listVariants,
+  listAllVariants,
   normalizeDocuments,
   uploadDocument,
 } from "../platformApi.js";
@@ -40,6 +40,12 @@ export type VariantsState =
 export type DocumentWorkspaceNotice =
   | { tone: "info" | "success" | "warning" | "danger"; message: string }
   | null;
+
+function isBulkSelectableRevision(revision: ProjectDocumentRevision): boolean {
+  // Fail-closed: una revisión que ya exige atención humana (`needs_review`) nunca
+  // entra en "seleccionar todos" por defecto. El operador puede marcarla manualmente.
+  return revision.review_state !== "needs_review";
+}
 
 // Traducción fail-closed de errores de transporte a copia de UI. Cada rama surfacea
 // el motivo real; nunca se oculta un bloqueo tras un genérico ni tras un éxito.
@@ -92,11 +98,11 @@ export function useDocumentIntakeWorkspace() {
     try {
       // Documentos y variantes del mismo proyecto/scope comparten fallo de auth:
       // una sola rama de error fail-closed basta y no muestra parciales.
-      // `listAllDocuments` recorre TODAS las páginas: el operador ve el corpus
-      // completo, no solo los primeros 25.
-      const [allRevisions, variantPage] = await Promise.all([
+      // Ambos listados recorren TODAS las páginas: el operador ve el corpus y las
+      // variantes completas, no solo los primeros 25.
+      const [allRevisions, allVariants] = await Promise.all([
         listAllDocuments(pid, { signal }),
-        listVariants(pid, undefined, { signal }),
+        listAllVariants(pid, { signal }),
       ]);
       if (signal.aborted) {
         return;
@@ -105,7 +111,7 @@ export function useDocumentIntakeWorkspace() {
       setDocuments(
         revisions.length === 0 ? { status: "empty" } : { status: "ready", revisions },
       );
-      const items = Array.isArray(variantPage.items) ? variantPage.items : [];
+      const items = Array.isArray(allVariants) ? allVariants : [];
       setVariants(items.length === 0 ? { status: "empty" } : { status: "ready", variants: items });
     } catch (error) {
       if (signal.aborted) {
@@ -163,12 +169,17 @@ export function useDocumentIntakeWorkspace() {
   }, []);
 
   // Selección masiva sobre el corpus cargado (todas las páginas). Sin esto,
-  // marcar decenas de revisiones a mano es inviable.
+  // marcar decenas de revisiones a mano es inviable. Fail-closed: `needs_review`
+  // queda fuera y exige selección explícita.
   const selectAllRevisions = useCallback(() => {
     setNotice(null);
     setSelectedRevisionIds(
       documents.status === "ready"
-        ? new Set(documents.revisions.map((r) => r.source_document_revision_id))
+        ? new Set(
+            documents.revisions
+              .filter(isBulkSelectableRevision)
+              .map((r) => r.source_document_revision_id),
+          )
         : new Set(),
     );
   }, [documents]);
@@ -265,6 +276,16 @@ export function useDocumentIntakeWorkspace() {
 
   const canNormalize =
     selectedVariantId !== null && selectedRevisionIds.size > 0 && !normalizing;
+  const bulkSelectableRevisionIds =
+    documents.status === "ready"
+      ? documents.revisions
+          .filter(isBulkSelectableRevision)
+          .map((revision) => revision.source_document_revision_id)
+      : [];
+  const bulkSelectableRevisionCount = bulkSelectableRevisionIds.length;
+  const allBulkSelectableSelected =
+    bulkSelectableRevisionCount > 0 &&
+    bulkSelectableRevisionIds.every((revisionId) => selectedRevisionIds.has(revisionId));
 
   return {
     projectId,
@@ -279,6 +300,8 @@ export function useDocumentIntakeWorkspace() {
     lastUploadedRevisionId,
     report,
     canNormalize,
+    bulkSelectableRevisionCount,
+    allBulkSelectableSelected,
     upload,
     toggleRevision,
     selectAllRevisions,

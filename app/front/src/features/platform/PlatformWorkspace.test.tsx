@@ -5,11 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { PlatformWorkspace } from "./PlatformWorkspace.js";
 import * as platformApi from "./platformApi.js";
 import type {
-  PaginatedCorpusSnapshots,
-  PaginatedProjectDocuments,
   PaginatedProjects,
-  PaginatedReleases,
-  PaginatedVariants,
   ProjectConfiguration,
 } from "./platformTypes.js";
 
@@ -22,15 +18,14 @@ vi.mock("./platformApi.js", () => ({
   updateProject: vi.fn(),
   updateConfiguration: vi.fn(),
   getVariantMatrix: vi.fn(),
-  listVariants: vi.fn(),
+  listAllVariants: vi.fn(),
   createVariant: vi.fn(),
-  listDocuments: vi.fn(),
   listAllDocuments: vi.fn(),
   uploadDocument: vi.fn(),
   normalizeDocuments: vi.fn(),
-  listCorpusSnapshots: vi.fn(),
+  listAllCorpusSnapshots: vi.fn(),
   createCorpusSnapshot: vi.fn(),
-  listReleases: vi.fn(),
+  listAllReleases: vi.fn(),
   getRelease: vi.fn(),
   createReleaseDraft: vi.fn(),
   buildRelease: vi.fn(),
@@ -42,34 +37,6 @@ vi.mock("./platformApi.js", () => ({
 const api = vi.mocked(platformApi);
 
 const emptyProjects: PaginatedProjects = {
-  items: [],
-  page: 1,
-  page_size: 25,
-  total_items: 0,
-  total_pages: 1,
-};
-const emptyVariants: PaginatedVariants = {
-  items: [],
-  page: 1,
-  page_size: 25,
-  total_items: 0,
-  total_pages: 1,
-};
-const emptyDocuments: PaginatedProjectDocuments = {
-  items: [],
-  page: 1,
-  page_size: 25,
-  total_items: 0,
-  total_pages: 1,
-};
-const emptyCorpusSnapshots: PaginatedCorpusSnapshots = {
-  items: [],
-  page: 1,
-  page_size: 25,
-  total_items: 0,
-  total_pages: 1,
-};
-const emptyReleases: PaginatedReleases = {
   items: [],
   page: 1,
   page_size: 25,
@@ -89,11 +56,10 @@ beforeEach(() => {
   window.localStorage.clear();
   api.listProjects.mockResolvedValue(emptyProjects);
   api.getVariantMatrix.mockResolvedValue([]);
-  api.listVariants.mockResolvedValue(emptyVariants);
-  api.listDocuments.mockResolvedValue(emptyDocuments);
+  api.listAllVariants.mockResolvedValue([]);
   api.listAllDocuments.mockResolvedValue([]);
-  api.listCorpusSnapshots.mockResolvedValue(emptyCorpusSnapshots);
-  api.listReleases.mockResolvedValue(emptyReleases);
+  api.listAllCorpusSnapshots.mockResolvedValue([]);
+  api.listAllReleases.mockResolvedValue([]);
   api.getConfiguration.mockResolvedValue(emptyConfiguration);
 });
 

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   createVariant as apiCreateVariant,
   getVariantMatrix,
-  listVariants,
+  listAllVariants,
 } from "../platformApi.js";
 import { usePlatformPreferences } from "../hooks/usePlatformPreferences.js";
 import { mapPipelineError } from "../../../shared/api/errorMapping.js";
@@ -76,15 +76,17 @@ export function useVariantMatrixWorkspace() {
     try {
       // Matriz y variantes del mismo proyecto/scope: comparten fallo de auth, así
       // que una sola rama de error fail-closed es suficiente y no muestra parciales.
-      const [cells, page] = await Promise.all([
+      // El listado de variantes recorre TODAS las páginas (fail-closed: nunca se
+      // opera sobre una primera página truncada).
+      const [cells, allVariants] = await Promise.all([
         getVariantMatrix(pid, { signal }),
-        listVariants(pid, undefined, { signal }),
+        listAllVariants(pid, { signal }),
       ]);
       if (signal.aborted) {
         return;
       }
       setMatrix(cells.length === 0 ? { status: "empty" } : { status: "ready", cells });
-      const items = Array.isArray(page.items) ? page.items : [];
+      const items = Array.isArray(allVariants) ? allVariants : [];
       setVariants(
         items.length === 0 ? { status: "empty" } : { status: "ready", variants: items },
       );

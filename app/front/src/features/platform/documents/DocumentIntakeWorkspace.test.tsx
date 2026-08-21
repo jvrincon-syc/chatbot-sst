@@ -6,17 +6,12 @@ import { DocumentIntakeWorkspace } from "./DocumentIntakeWorkspace.js";
 import { writePlatformPreferences } from "../platformPersistence.js";
 import { DEFAULT_PLATFORM_PREFERENCES } from "../platformState.js";
 import * as platformApi from "../platformApi.js";
-import type {
-  PaginatedVariants,
-  ProjectDocumentRevision,
-  ProjectNormalizeReport,
-  Variant,
-} from "../platformTypes.js";
+import type { ProjectDocumentRevision, ProjectNormalizeReport, Variant } from "../platformTypes.js";
 
 // Se mockea el cliente HTTP tipado en el límite de red: ningún test toca fetch.
 vi.mock("../platformApi.js", () => ({
   listAllDocuments: vi.fn(),
-  listVariants: vi.fn(),
+  listAllVariants: vi.fn(),
   uploadDocument: vi.fn(),
   normalizeDocuments: vi.fn(),
 }));
@@ -52,10 +47,6 @@ function makeVariant(overrides: Partial<Variant> = {}): Variant {
   };
 }
 
-function paginateVariants(items: Variant[]): PaginatedVariants {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-
 function makeReport(overrides: Partial<ProjectNormalizeReport> = {}): ProjectNormalizeReport {
   return {
     rag_variant_id: "ragv_1",
@@ -75,7 +66,7 @@ function selectProjectInStorage(projectId: string): void {
 beforeEach(() => {
   window.localStorage.clear();
   api.listAllDocuments.mockResolvedValue([]);
-  api.listVariants.mockResolvedValue(paginateVariants([]));
+  api.listAllVariants.mockResolvedValue([]);
   api.uploadDocument.mockResolvedValue(makeRevision({ source_document_revision_id: "srev_new" }));
   api.normalizeDocuments.mockResolvedValue(makeReport());
 });
@@ -133,11 +124,15 @@ describe("DocumentIntakeWorkspace", () => {
     expect(screen.getByText("normalized")).toBeTruthy();
   });
 
-  it("selecciona todas las revisiones cargadas con un solo control", async () => {
+  it("selecciona en bloque solo las revisiones que no requieren decision manual", async () => {
     selectProjectInStorage("proj_alpha");
     api.listAllDocuments.mockResolvedValue([
       makeRevision({ source_document_revision_id: "srev_1" }),
-      makeRevision({ source_document_revision_id: "srev_2", logical_document_id: "ldoc_2" }),
+      makeRevision({
+        source_document_revision_id: "srev_2",
+        logical_document_id: "ldoc_2",
+        review_state: "needs_review",
+      }),
     ]);
 
     const user = userEvent.setup();
@@ -145,9 +140,10 @@ describe("DocumentIntakeWorkspace", () => {
 
     await user.click(await screen.findByRole("button", { name: "Seleccionar todos" }));
 
-    expect(screen.getByText("2 de 2 seleccionadas")).toBeTruthy();
+    expect(screen.getByText("1 de 2 seleccionadas")).toBeTruthy();
     const checkboxes = screen.getAllByRole("checkbox", { name: /Seleccionar revisión/ });
-    expect(checkboxes.every((box) => (box as HTMLInputElement).checked)).toBe(true);
+    expect((checkboxes[0] as HTMLInputElement).checked).toBe(true);
+    expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
   });
 
   it("normaliza enviando { rag_variant_id, document_revision_ids } sin processing_profile_id", async () => {

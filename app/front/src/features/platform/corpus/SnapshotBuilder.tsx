@@ -13,9 +13,13 @@ export function SnapshotBuilder({
   selectedRevisionIds,
   decisions,
   pendingReviewIds,
+  bulkSelectableRevisionCount,
+  allBulkSelectableSelected,
   creating,
   canCreate,
   onToggleRevision,
+  onSelectAllEligible,
+  onClearSelection,
   onSetDecision,
   onCreate,
   onRetry,
@@ -24,9 +28,13 @@ export function SnapshotBuilder({
   selectedRevisionIds: ReadonlySet<string>;
   decisions: Readonly<Record<string, EligibilityDecision>>;
   pendingReviewIds: string[];
+  bulkSelectableRevisionCount: number;
+  allBulkSelectableSelected: boolean;
   creating: boolean;
   canCreate: boolean;
   onToggleRevision: (revisionId: string) => void;
+  onSelectAllEligible: () => void;
+  onClearSelection: () => void;
   onSetDecision: (revisionId: string, decision: EligibilityDecision) => void;
   onCreate: () => void;
   onRetry: () => void;
@@ -81,6 +89,28 @@ export function SnapshotBuilder({
 
   return (
     <>
+      <div className="platform-bulk-actions">
+        <span className="ui-hint">
+          {selectedRevisionIds.size} de {state.revisions.length} seleccionadas
+        </span>
+        <button
+          className="ghost-button"
+          type="button"
+          onClick={onSelectAllEligible}
+          disabled={bulkSelectableRevisionCount === 0 || allBulkSelectableSelected}
+        >
+          Seleccionar todas las elegibles
+        </button>
+        <button
+          className="ghost-button"
+          type="button"
+          onClick={onClearSelection}
+          disabled={selectedRevisionIds.size === 0}
+        >
+          Limpiar
+        </button>
+      </div>
+
       <div className="table-wrap">
         <table aria-label="Revisiones elegibles para el snapshot">
           <thead>

@@ -108,7 +108,9 @@ export function DocumentIntakeWorkspace() {
                   className="ghost-button"
                   type="button"
                   onClick={workspace.selectAllRevisions}
-                  disabled={workspace.selectedRevisionIds.size === revisions.length}
+                  disabled={
+                    workspace.bulkSelectableRevisionCount === 0 || workspace.allBulkSelectableSelected
+                  }
                 >
                   Seleccionar todos
                 </button>

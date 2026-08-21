@@ -50,6 +50,26 @@ function pageQuery(params?: PageParams): string {
   return buildQuery({ page: params?.page, page_size: params?.pageSize });
 }
 
+async function collectAllPages<T>(
+  fetchPage: (params: PageParams) => Promise<{
+    items: T[];
+    total_pages: number;
+  }>,
+): Promise<T[]> {
+  const items: T[] = [];
+  let page = 1;
+  // Cota dura por si el backend reportara total_pages inconsistente (fail-safe).
+  for (let guard = 0; guard < 1000; guard += 1) {
+    const response = await fetchPage({ page, pageSize: 100 });
+    items.push(...response.items);
+    if (page >= response.total_pages || response.items.length === 0) {
+      break;
+    }
+    page += 1;
+  }
+  return items;
+}
+
 // Las mutaciones de release exigen `Idempotency-Key`. Se genera una por intento
 // salvo que el caller reuse una para reintentar la MISMA operación (replay seguro).
 function withIdempotency(options?: PipelinePostOptions): PipelinePostOptions {
@@ -104,6 +124,12 @@ export function listVariants(
   return getJson<PaginatedVariants>(`${BASE}/projects/${projectId}/variants${pageQuery(params)}`, options);
 }
 
+// Mismo criterio que documents/corpus: las vistas de variantes operan sobre el
+// listado completo del proyecto, nunca sobre la primera página (25 ítems).
+export async function listAllVariants(projectId: string, options?: PipelineGetOptions): Promise<Variant[]> {
+  return collectAllPages((params) => listVariants(projectId, params, options));
+}
+
 export function createVariant(
   projectId: string,
   body: CreateVariantRequest,
@@ -129,18 +155,7 @@ export async function listAllDocuments(
   projectId: string,
   options?: PipelineGetOptions,
 ): Promise<ProjectDocumentRevision[]> {
-  const items: ProjectDocumentRevision[] = [];
-  let page = 1;
-  // Cota dura por si el backend reportara total_pages inconsistente (fail-safe).
-  for (let guard = 0; guard < 1000; guard += 1) {
-    const response = await listDocuments(projectId, { page, pageSize: 100 }, options);
-    items.push(...response.items);
-    if (page >= response.total_pages || response.items.length === 0) {
-      break;
-    }
-    page += 1;
-  }
-  return items;
+  return collectAllPages((params) => listDocuments(projectId, params, options));
 }
 
 export function uploadDocument(
@@ -176,6 +191,13 @@ export function listCorpusSnapshots(
   );
 }
 
+export async function listAllCorpusSnapshots(
+  projectId: string,
+  options?: PipelineGetOptions,
+): Promise<CorpusSnapshot[]> {
+  return collectAllPages((params) => listCorpusSnapshots(projectId, params, options));
+}
+
 export function createCorpusSnapshot(
   body: CreateCorpusSnapshotRequest,
   options?: PipelinePostOptions,
@@ -191,6 +213,12 @@ export function listReleases(
   options?: PipelineGetOptions,
 ): Promise<PaginatedReleases> {
   return getJson<PaginatedReleases>(`${BASE}/projects/${projectId}/releases${pageQuery(params)}`, options);
+}
+
+// El historial de releases es la evidencia del ciclo RAG por proyecto: se carga
+// completo (todas las páginas) para que ninguna quede invisible al operador.
+export async function listAllReleases(projectId: string, options?: PipelineGetOptions): Promise<Release[]> {
+  return collectAllPages((params) => listReleases(projectId, params, options));
 }
 
 export function getRelease(releaseId: string, options?: PipelineGetOptions): Promise<Release> {

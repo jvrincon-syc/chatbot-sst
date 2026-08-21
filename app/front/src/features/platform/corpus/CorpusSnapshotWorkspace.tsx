@@ -51,9 +51,13 @@ export function CorpusSnapshotWorkspace() {
               selectedRevisionIds={workspace.selectedRevisionIds}
               decisions={workspace.decisions}
               pendingReviewIds={workspace.pendingReviewIds}
+              bulkSelectableRevisionCount={workspace.bulkSelectableRevisionCount}
+              allBulkSelectableSelected={workspace.allBulkSelectableSelected}
               creating={workspace.creating}
               canCreate={workspace.canCreate}
               onToggleRevision={workspace.toggleRevision}
+              onSelectAllEligible={workspace.selectAllEligibleRevisions}
+              onClearSelection={workspace.clearRevisionSelection}
               onSetDecision={workspace.setDecision}
               onCreate={workspace.createSnapshot}
               onRetry={workspace.refresh}

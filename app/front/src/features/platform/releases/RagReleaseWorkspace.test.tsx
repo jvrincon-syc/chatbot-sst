@@ -8,9 +8,6 @@ import { DEFAULT_PLATFORM_PREFERENCES } from "../platformState.js";
 import * as platformApi from "../platformApi.js";
 import type {
   CorpusSnapshot,
-  PaginatedCorpusSnapshots,
-  PaginatedReleases,
-  PaginatedVariants,
   ProjectConfiguration,
   Release,
   ReleaseBuildReport,
@@ -19,9 +16,9 @@ import type {
 
 // Cliente HTTP mockeado en el límite de red: ningún test toca fetch.
 vi.mock("../platformApi.js", () => ({
-  listReleases: vi.fn(),
-  listVariants: vi.fn(),
-  listCorpusSnapshots: vi.fn(),
+  listAllReleases: vi.fn(),
+  listAllVariants: vi.fn(),
+  listAllCorpusSnapshots: vi.fn(),
   getConfiguration: vi.fn(),
   getRelease: vi.fn(),
   createReleaseDraft: vi.fn(),
@@ -100,16 +97,7 @@ function makeReport(overrides: Partial<ReleaseBuildReport> = {}): ReleaseBuildRe
   };
 }
 
-function paginateReleases(items: Release[]): PaginatedReleases {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-function paginateVariants(items: Variant[]): PaginatedVariants {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-function paginateSnapshots(items: CorpusSnapshot[]): PaginatedCorpusSnapshots {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-
+// Los clientes `listAll*` devuelven el listado completo (array plano), no una página.
 function selectInStorage(projectId: string, releaseId?: string): void {
   writePlatformPreferences({
     ...DEFAULT_PLATFORM_PREFERENCES,
@@ -120,9 +108,9 @@ function selectInStorage(projectId: string, releaseId?: string): void {
 
 beforeEach(() => {
   window.localStorage.clear();
-  api.listReleases.mockResolvedValue(paginateReleases([]));
-  api.listVariants.mockResolvedValue(paginateVariants([makeVariant()]));
-  api.listCorpusSnapshots.mockResolvedValue(paginateSnapshots([makeSnapshot()]));
+  api.listAllReleases.mockResolvedValue([]);
+  api.listAllVariants.mockResolvedValue([makeVariant()]);
+  api.listAllCorpusSnapshots.mockResolvedValue([makeSnapshot()]);
   api.getConfiguration.mockResolvedValue(makeConfiguration());
   api.getRelease.mockResolvedValue(makeRelease());
   api.createReleaseDraft.mockResolvedValue(makeRelease());
@@ -156,7 +144,7 @@ describe("RagReleaseWorkspace", () => {
 
   it("(b) build muestra el informe (revisions_built / reused / built)", async () => {
     selectInStorage("proj_alpha", "rel_1");
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease()]));
+    api.listAllReleases.mockResolvedValue([makeRelease()]);
     const user = userEvent.setup();
     render(<RagReleaseWorkspace />);
 
@@ -178,7 +166,7 @@ describe("RagReleaseWorkspace", () => {
   it("(c) ofrece solo las acciones válidas por estado", async () => {
     // draft → Build + Validate; no Publicar/Retirar.
     selectInStorage("proj_alpha", "rel_1");
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease({ state: "draft" })]));
+    api.listAllReleases.mockResolvedValue([makeRelease({ state: "draft" })]);
     const draft = render(<RagReleaseWorkspace />);
     expect(await screen.findByRole("button", { name: /Construir \(build\)/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Validar/ })).toBeTruthy();
@@ -187,7 +175,7 @@ describe("RagReleaseWorkspace", () => {
     draft.unmount();
 
     // validated → Publicar + Retirar; no Build/Validate.
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease({ state: "validated" })]));
+    api.listAllReleases.mockResolvedValue([makeRelease({ state: "validated" })]);
     const validated = render(<RagReleaseWorkspace />);
     expect(await screen.findByRole("button", { name: /Publicar/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Retirar/ })).toBeTruthy();
@@ -196,7 +184,7 @@ describe("RagReleaseWorkspace", () => {
     validated.unmount();
 
     // published → solo Retirar.
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease({ state: "published" })]));
+    api.listAllReleases.mockResolvedValue([makeRelease({ state: "published" })]);
     render(<RagReleaseWorkspace />);
     expect(await screen.findByRole("button", { name: /Retirar/ })).toBeTruthy();
     expect(screen.queryByRole("button", { name: /Publicar/ })).toBeNull();
@@ -204,7 +192,7 @@ describe("RagReleaseWorkspace", () => {
 
   it("(d) 409 IDEMPOTENCY_KEY_CONFLICT: muestra conflicto y no reintenta solo", async () => {
     selectInStorage("proj_alpha", "rel_1");
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease()]));
+    api.listAllReleases.mockResolvedValue([makeRelease()]);
     api.buildRelease.mockRejectedValue({ status: 409, code: "IDEMPOTENCY_KEY_CONFLICT" });
     const user = userEvent.setup();
     render(<RagReleaseWorkspace />);
@@ -218,7 +206,7 @@ describe("RagReleaseWorkspace", () => {
 
   it("(e) 409 INVALID_RELEASE_TRANSITION: refetch de la release", async () => {
     selectInStorage("proj_alpha", "rel_1");
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease()]));
+    api.listAllReleases.mockResolvedValue([makeRelease()]);
     api.validateRelease.mockRejectedValue({ status: 409, code: "INVALID_RELEASE_TRANSITION" });
     api.getRelease.mockResolvedValue(makeRelease({ state: "validated" }));
     const user = userEvent.setup();
@@ -231,7 +219,7 @@ describe("RagReleaseWorkspace", () => {
 
   it("(f) retirar exige un motivo explícito", async () => {
     selectInStorage("proj_alpha", "rel_1");
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease({ state: "published" })]));
+    api.listAllReleases.mockResolvedValue([makeRelease({ state: "published" })]);
     const user = userEvent.setup();
     render(<RagReleaseWorkspace />);
 
@@ -253,7 +241,7 @@ describe("RagReleaseWorkspace", () => {
 
   it("(g) D7: el reintento de la misma intención reusa la clave; una nueva intención acuña otra", async () => {
     selectInStorage("proj_alpha", "rel_1");
-    api.listReleases.mockResolvedValue(paginateReleases([makeRelease()]));
+    api.listAllReleases.mockResolvedValue([makeRelease()]);
     // 1er intento: fallo recuperable (no rota clave); 2º y 3º: éxito.
     api.buildRelease
       .mockRejectedValueOnce({ status: 503, code: "POSTGRES_UNAVAILABLE" })
@@ -289,7 +277,7 @@ describe("RagReleaseWorkspace", () => {
     expect(
       await screen.findByText(/Selecciona un proyecto para gestionar sus releases/),
     ).toBeTruthy();
-    expect(api.listReleases).not.toHaveBeenCalled();
+    expect(api.listAllReleases).not.toHaveBeenCalled();
     expect(api.getConfiguration).not.toHaveBeenCalled();
   });
 });

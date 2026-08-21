@@ -662,6 +662,31 @@ def test_platform_bridge_preserves_auth_and_idempotency_headers() -> None:
     assert forwarded["Idempotency-Key"] == "key-1"
 
 
+def test_platform_bridge_exception_returns_500_envelope_instead_of_resetting_socket() -> None:
+    class _ExplodingBridge:
+        def handle(self, **_kwargs):
+            raise RuntimeError("boom")
+
+    handler = _make_handler(
+        path="/api/platform/projects/proj_demo/variant-matrix",
+        headers={},
+        body=b"",
+        bridge=_ExplodingBridge(),
+    )
+
+    handler._handle_pipeline_api("GET")
+
+    assert handler._response_status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert json.loads(handler.wfile.getvalue().decode("utf-8")) == {
+        "error": {
+            "code": "PIPELINE_BRIDGE_ERROR",
+            "message": "pipeline bridge failed: RuntimeError",
+            "run_id": None,
+            "details": {},
+        }
+    }
+
+
 @pytest.mark.parametrize("status_code", [401, 403, 409, 422, 503])
 def test_platform_bridge_preserves_error_status_and_envelope(status_code: int) -> None:
     envelope = b'{"error":{"code":"X","message":"m","run_id":null,"details":{}}}'

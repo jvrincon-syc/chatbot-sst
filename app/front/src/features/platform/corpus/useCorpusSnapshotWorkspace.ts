@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { createCorpusSnapshot, listCorpusSnapshots, listDocuments } from "../platformApi.js";
+import {
+  createCorpusSnapshot,
+  listAllCorpusSnapshots,
+  listAllDocuments,
+} from "../platformApi.js";
 import { usePlatformPreferences } from "../hooks/usePlatformPreferences.js";
 import { mapPipelineError } from "../../../shared/api/errorMapping.js";
 import type { CorpusSnapshot, ProjectDocumentRevision } from "../platformTypes.js";
@@ -37,6 +41,12 @@ function isNeedsReview(revision: ProjectDocumentRevision): boolean {
   // `review_state` es la autoridad de elegibilidad de release (RevisionReviewState);
   // una revisión `needs_review` no es releaseable solo por estar normalizada.
   return revision.review_state === "needs_review";
+}
+
+function isBulkSelectableCandidate(revision: ProjectDocumentRevision): boolean {
+  // Fail-closed: una revisión `needs_review` solo entra al snapshot con inclusión
+  // explícita del operador; "seleccionar todos" nunca la auto-incluye.
+  return !isNeedsReview(revision);
 }
 
 // Traducción fail-closed de errores de transporte a copia de UI. Nunca oculta un
@@ -84,20 +94,18 @@ export function useCorpusSnapshotWorkspace() {
     setCandidates({ status: "loading" });
     setHistory({ status: "loading" });
     try {
-      const [docPage, snapPage] = await Promise.all([
-        listDocuments(pid, undefined, { signal }),
-        listCorpusSnapshots(pid, undefined, { signal }),
+      const [allRevisions, snapshots] = await Promise.all([
+        listAllDocuments(pid, { signal }),
+        listAllCorpusSnapshots(pid, { signal }),
       ]);
       if (signal.aborted) {
         return;
       }
-      const allRevisions = Array.isArray(docPage.items) ? docPage.items : [];
       // Solo las normalizadas pueden entrar a un snapshot.
       const eligible = allRevisions.filter((revision) => revision.normalized_registered);
       setCandidates(
         eligible.length === 0 ? { status: "empty" } : { status: "ready", revisions: eligible },
       );
-      const snapshots = Array.isArray(snapPage.items) ? snapPage.items : [];
       setHistory(
         snapshots.length === 0 ? { status: "empty" } : { status: "ready", snapshots },
       );
@@ -169,6 +177,28 @@ export function useCorpusSnapshotWorkspace() {
     setDecisions((current) => ({ ...current, [revisionId]: decision }));
   }, []);
 
+  const selectAllEligibleRevisions = useCallback(() => {
+    setNotice(null);
+    setSelectedRevisionIds(
+      candidates.status === "ready"
+        ? new Set(
+            candidates.revisions
+              .filter(isBulkSelectableCandidate)
+              .map((revision) => revision.source_document_revision_id),
+          )
+        : new Set(),
+    );
+    // La selección masiva fail-closed nunca incluye `needs_review`, así que toda
+    // decisión previa asociada a revisiones no seleccionadas deja de aplicar.
+    setDecisions({});
+  }, [candidates]);
+
+  const clearRevisionSelection = useCallback(() => {
+    setNotice(null);
+    setSelectedRevisionIds(new Set());
+    setDecisions({});
+  }, []);
+
   // Revisiones `needs_review` seleccionadas que aún no tienen decisión de inclusión:
   // el snapshot no puede crearse hasta resolverlas (gate fail-closed cliente).
   const pendingReviewIds = useMemo(() => {
@@ -182,6 +212,16 @@ export function useCorpusSnapshotWorkspace() {
   }, [candidates, selectedRevisionIds, decisions]);
 
   const canCreate = selectedRevisionIds.size > 0 && pendingReviewIds.length === 0 && !creating;
+  const bulkSelectableRevisionIds =
+    candidates.status === "ready"
+      ? candidates.revisions
+          .filter(isBulkSelectableCandidate)
+          .map((revision) => revision.source_document_revision_id)
+      : [];
+  const bulkSelectableRevisionCount = bulkSelectableRevisionIds.length;
+  const allBulkSelectableSelected =
+    bulkSelectableRevisionCount > 0 &&
+    bulkSelectableRevisionIds.every((revisionId) => selectedRevisionIds.has(revisionId));
 
   const createSnapshot = useCallback(async (): Promise<boolean> => {
     if (!projectId || selectedRevisionIds.size === 0 || pendingReviewIds.length > 0) {
@@ -245,7 +285,11 @@ export function useCorpusSnapshotWorkspace() {
     notice,
     creating,
     canCreate,
+    bulkSelectableRevisionCount,
+    allBulkSelectableSelected,
     toggleRevision,
+    selectAllEligibleRevisions,
+    clearRevisionSelection,
     setDecision,
     createSnapshot,
     refresh,

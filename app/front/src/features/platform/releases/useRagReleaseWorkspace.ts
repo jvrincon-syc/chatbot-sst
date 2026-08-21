@@ -5,9 +5,9 @@ import {
   createReleaseDraft,
   getConfiguration,
   getRelease,
-  listCorpusSnapshots,
-  listReleases,
-  listVariants,
+  listAllCorpusSnapshots,
+  listAllReleases,
+  listAllVariants,
   publishRelease,
   retireRelease,
   validateRelease,
@@ -103,10 +103,13 @@ export function useRagReleaseWorkspace() {
   const fetchAll = useCallback(async (pid: string, signal: AbortSignal) => {
     setLoad({ status: "loading" });
     try {
-      const [releasePage, variantPage, snapshotPage, configuration] = await Promise.all([
-        listReleases(pid, undefined, { signal }),
-        listVariants(pid, undefined, { signal }),
-        listCorpusSnapshots(pid, undefined, { signal }),
+      // Los tres listados recorren TODAS las páginas: releases, variantes y
+      // snapshots son la evidencia del ciclo RAG y ninguna puede quedar truncada
+      // en la primera página (25 ítems).
+      const [allReleases, allVariants, allSnapshots, configuration] = await Promise.all([
+        listAllReleases(pid, { signal }),
+        listAllVariants(pid, { signal }),
+        listAllCorpusSnapshots(pid, { signal }),
         getConfiguration(pid, { signal }),
       ]);
       if (signal.aborted) {
@@ -115,9 +118,9 @@ export function useRagReleaseWorkspace() {
       setLoad({
         status: "ready",
         data: {
-          releases: Array.isArray(releasePage.items) ? releasePage.items : [],
-          variants: Array.isArray(variantPage.items) ? variantPage.items : [],
-          snapshots: Array.isArray(snapshotPage.items) ? snapshotPage.items : [],
+          releases: Array.isArray(allReleases) ? allReleases : [],
+          variants: Array.isArray(allVariants) ? allVariants : [],
+          snapshots: Array.isArray(allSnapshots) ? allSnapshots : [],
           // `target_binding_key` es una clave LÓGICA; nunca el `indexing_target_id`
           // físico. Se leen de la configuración versionada (read-only).
           bindingKeys: Array.isArray(configuration.target_bindings)

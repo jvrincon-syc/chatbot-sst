@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import {
   buildRelease,
   createProject,
+  listAllReleases,
+  listAllVariants,
   listProjects,
   normalizeDocuments,
   updateProject,
@@ -41,6 +43,58 @@ await test("listProjects hace GET same-origin con query paginada", async () => {
   assert.equal(url, "/api/platform/projects?page=2&page_size=10");
   assert.equal(init.method, undefined); // GET por defecto
   assert.equal(init.credentials, "same-origin");
+});
+
+// --- Carga completa paginada: variants y releases (D-1) --------------------- //
+// Ninguna vista de plataforma puede operar sobre la primera página (25 ítems)
+// como si fuera el corpus completo: fail-closed exige ver TODO el listado.
+
+function captureSequentialFetch(responses) {
+  const calls = [];
+  let index = 0;
+  globalThis.fetch = async (input, init) => {
+    calls.push([input, init]);
+    const response = responses[Math.min(index, responses.length - 1)];
+    index += 1;
+    return response;
+  };
+  return calls;
+}
+
+await test("listAllVariants recorre todas las páginas al máximo permitido", async () => {
+  const calls = captureSequentialFetch([
+    jsonResponse({ items: [{ rag_variant_id: "var_1" }], page: 1, page_size: 100, total_items: 2, total_pages: 2 }),
+    jsonResponse({ items: [{ rag_variant_id: "var_2" }], page: 2, page_size: 100, total_items: 2, total_pages: 2 }),
+  ]);
+  const variants = await listAllVariants("proj_demo");
+  assert.deepEqual(variants.map((variant) => variant.rag_variant_id), ["var_1", "var_2"]);
+  assert.equal(calls.length, 2);
+  assert.equal(calls[0][0], "/api/platform/projects/proj_demo/variants?page=1&page_size=100");
+  assert.equal(calls[1][0], "/api/platform/projects/proj_demo/variants?page=2&page_size=100");
+});
+
+await test("listAllReleases recorre todas las páginas al máximo permitido", async () => {
+  const calls = captureSequentialFetch([
+    jsonResponse({ items: [{ rag_release_id: "ragr_1" }], page: 1, page_size: 100, total_items: 3, total_pages: 2 }),
+    jsonResponse({ items: [{ rag_release_id: "ragr_2" }, { rag_release_id: "ragr_3" }], page: 2, page_size: 100, total_items: 3, total_pages: 2 }),
+  ]);
+  const releases = await listAllReleases("proj_demo");
+  assert.deepEqual(
+    releases.map((release) => release.rag_release_id),
+    ["ragr_1", "ragr_2", "ragr_3"],
+  );
+  assert.equal(calls.length, 2);
+  assert.equal(calls[0][0], "/api/platform/projects/proj_demo/releases?page=1&page_size=100");
+  assert.equal(calls[1][0], "/api/platform/projects/proj_demo/releases?page=2&page_size=100");
+});
+
+await test("listAllVariants con listado vacío hace una sola petición", async () => {
+  const calls = captureSequentialFetch([
+    jsonResponse({ items: [], page: 1, page_size: 100, total_items: 0, total_pages: 0 }),
+  ]);
+  const variants = await listAllVariants("proj_demo");
+  assert.deepEqual(variants, []);
+  assert.equal(calls.length, 1);
 });
 
 // --- POST JSON ------------------------------------------------------------- //

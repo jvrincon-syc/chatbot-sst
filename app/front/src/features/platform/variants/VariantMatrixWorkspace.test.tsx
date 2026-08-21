@@ -6,12 +6,12 @@ import { VariantMatrixWorkspace } from "./VariantMatrixWorkspace.js";
 import { writePlatformPreferences } from "../platformPersistence.js";
 import { DEFAULT_PLATFORM_PREFERENCES } from "../platformState.js";
 import * as platformApi from "../platformApi.js";
-import type { PaginatedVariants, Variant, VariantMatrixCell } from "../platformTypes.js";
+import type { Variant, VariantMatrixCell } from "../platformTypes.js";
 
 // Se mockea el cliente HTTP tipado en el límite de red: ningún test toca fetch.
 vi.mock("../platformApi.js", () => ({
   getVariantMatrix: vi.fn(),
-  listVariants: vi.fn(),
+  listAllVariants: vi.fn(),
   createVariant: vi.fn(),
 }));
 
@@ -45,10 +45,6 @@ function makeVariant(overrides: Partial<Variant> = {}): Variant {
   };
 }
 
-function paginate(items: Variant[]): PaginatedVariants {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-
 function selectProjectInStorage(projectId: string): void {
   writePlatformPreferences({ ...DEFAULT_PLATFORM_PREFERENCES, selectedProjectId: projectId });
 }
@@ -56,7 +52,7 @@ function selectProjectInStorage(projectId: string): void {
 beforeEach(() => {
   window.localStorage.clear();
   api.getVariantMatrix.mockResolvedValue([]);
-  api.listVariants.mockResolvedValue(paginate([]));
+  api.listAllVariants.mockResolvedValue([]);
   api.createVariant.mockResolvedValue(makeVariant());
 });
 

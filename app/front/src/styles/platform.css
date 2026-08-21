@@ -269,9 +269,23 @@ button.variant-cell.selected {
   margin-top: 12px;
 }
 
+.platform-bulk-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
 @media (max-width: 900px) {
   .corpus-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .platform-bulk-actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 

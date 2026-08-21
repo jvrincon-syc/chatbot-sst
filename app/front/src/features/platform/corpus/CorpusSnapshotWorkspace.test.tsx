@@ -8,15 +8,13 @@ import { DEFAULT_PLATFORM_PREFERENCES } from "../platformState.js";
 import * as platformApi from "../platformApi.js";
 import type {
   CorpusSnapshot,
-  PaginatedCorpusSnapshots,
-  PaginatedProjectDocuments,
   ProjectDocumentRevision,
 } from "../platformTypes.js";
 
 // Cliente HTTP mockeado en el límite de red: ningún test toca fetch.
 vi.mock("../platformApi.js", () => ({
-  listDocuments: vi.fn(),
-  listCorpusSnapshots: vi.fn(),
+  listAllDocuments: vi.fn(),
+  listAllCorpusSnapshots: vi.fn(),
   createCorpusSnapshot: vi.fn(),
 }));
 
@@ -49,29 +47,21 @@ function makeSnapshot(overrides: Partial<CorpusSnapshot> = {}): CorpusSnapshot {
   };
 }
 
-function paginateDocs(items: ProjectDocumentRevision[]): PaginatedProjectDocuments {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-
-function paginateSnapshots(items: CorpusSnapshot[]): PaginatedCorpusSnapshots {
-  return { items, page: 1, page_size: 25, total_items: items.length, total_pages: 1 };
-}
-
 function selectProjectInStorage(projectId: string): void {
   writePlatformPreferences({ ...DEFAULT_PLATFORM_PREFERENCES, selectedProjectId: projectId });
 }
 
 beforeEach(() => {
   window.localStorage.clear();
-  api.listDocuments.mockResolvedValue(paginateDocs([]));
-  api.listCorpusSnapshots.mockResolvedValue(paginateSnapshots([]));
+  api.listAllDocuments.mockResolvedValue([]);
+  api.listAllCorpusSnapshots.mockResolvedValue([]);
   api.createCorpusSnapshot.mockResolvedValue(makeSnapshot());
 });
 
 describe("CorpusSnapshotWorkspace", () => {
   it("renderiza las revisiones normalizadas candidatas con sus IDs", async () => {
     selectProjectInStorage("proj_alpha");
-    api.listDocuments.mockResolvedValue(paginateDocs([makeRevision()]));
+    api.listAllDocuments.mockResolvedValue([makeRevision()]);
 
     render(<CorpusSnapshotWorkspace />);
 
@@ -81,7 +71,7 @@ describe("CorpusSnapshotWorkspace", () => {
 
   it("crea un snapshot de revisiones processed sin eligibility_decisions", async () => {
     selectProjectInStorage("proj_alpha");
-    api.listDocuments.mockResolvedValue(paginateDocs([makeRevision()]));
+    api.listAllDocuments.mockResolvedValue([makeRevision()]);
 
     const user = userEvent.setup();
     render(<CorpusSnapshotWorkspace />);
@@ -101,9 +91,7 @@ describe("CorpusSnapshotWorkspace", () => {
 
   it("exige decisión explícita para una revisión needs_review antes de crear", async () => {
     selectProjectInStorage("proj_alpha");
-    api.listDocuments.mockResolvedValue(
-      paginateDocs([makeRevision({ review_state: "needs_review" })]),
-    );
+    api.listAllDocuments.mockResolvedValue([makeRevision({ review_state: "needs_review" })]);
 
     const user = userEvent.setup();
     render(<CorpusSnapshotWorkspace />);
@@ -132,7 +120,7 @@ describe("CorpusSnapshotWorkspace", () => {
 
   it("tras crear, persiste solo el corpus_snapshot_id y refresca el historial", async () => {
     selectProjectInStorage("proj_alpha");
-    api.listDocuments.mockResolvedValue(paginateDocs([makeRevision()]));
+    api.listAllDocuments.mockResolvedValue([makeRevision()]);
 
     const user = userEvent.setup();
     render(<CorpusSnapshotWorkspace />);
@@ -145,8 +133,8 @@ describe("CorpusSnapshotWorkspace", () => {
     await waitFor(() =>
       expect(readPlatformPreferences().selectedCorpusSnapshotId).toBe("corpus_new"),
     );
-    // El historial se recarga tras crear (segunda llamada a listCorpusSnapshots).
-    await waitFor(() => expect(api.listCorpusSnapshots.mock.calls.length).toBeGreaterThan(1));
+    // El historial se recarga tras crear (segunda llamada al helper plano).
+    await waitFor(() => expect(api.listAllCorpusSnapshots.mock.calls.length).toBeGreaterThan(1));
     // No se filtró nada sensible: solo el ID de navegación.
     const stored = readPlatformPreferences();
     expect(Object.keys(stored)).not.toContain("manifest_hash");
@@ -158,13 +146,13 @@ describe("CorpusSnapshotWorkspace", () => {
     expect(
       await screen.findByText(/Selecciona un proyecto para construir un snapshot/),
     ).toBeTruthy();
-    expect(api.listDocuments).not.toHaveBeenCalled();
-    expect(api.listCorpusSnapshots).not.toHaveBeenCalled();
+    expect(api.listAllDocuments).not.toHaveBeenCalled();
+    expect(api.listAllCorpusSnapshots).not.toHaveBeenCalled();
   });
 
   it("ante 409 cross-project surfacea un mensaje fail-closed", async () => {
     selectProjectInStorage("proj_alpha");
-    api.listDocuments.mockResolvedValue(paginateDocs([makeRevision()]));
+    api.listAllDocuments.mockResolvedValue([makeRevision()]);
     api.createCorpusSnapshot.mockRejectedValue({
       status: 409,
       code: "REVISION_PROJECT_MISMATCH",
@@ -179,5 +167,29 @@ describe("CorpusSnapshotWorkspace", () => {
     await user.click(screen.getByRole("button", { name: /Crear snapshot/ }));
 
     expect(await screen.findByText(/inválida o pertenece a otro proyecto/)).toBeTruthy();
+  });
+
+  it("selecciona en bloque solo las revisiones elegibles sin auto-incluir needs_review", async () => {
+    selectProjectInStorage("proj_alpha");
+    api.listAllDocuments.mockResolvedValue([
+      makeRevision({ source_document_revision_id: "srev_1", review_state: "processed" }),
+      makeRevision({
+        source_document_revision_id: "srev_2",
+        logical_document_id: "ldoc_2",
+        review_state: "needs_review",
+      }),
+    ]);
+
+    const user = userEvent.setup();
+    render(<CorpusSnapshotWorkspace />);
+
+    await user.click(
+      await screen.findByRole("button", { name: "Seleccionar todas las elegibles" }),
+    );
+
+    expect(screen.getByText("1 de 2 seleccionadas")).toBeTruthy();
+    const checkboxes = screen.getAllByRole("checkbox", { name: /Incluir revisión/ });
+    expect((checkboxes[0] as HTMLInputElement).checked).toBe(true);
+    expect((checkboxes[1] as HTMLInputElement).checked).toBe(false);
   });
 });
